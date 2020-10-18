@@ -2,30 +2,11 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-import plotly.express as px
-import pandas as pd
+
 from extract_df import create_df
+import graphs
 
 app = dash.Dash(__name__)
-
-url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-epw_df, location_name = create_df(url)
-
-# Color scheme and templates
-DBT_color='Reds'
-RH_color='GnBu'
-GHrad_color='YlOrRd_r'
-Wspeed_color='Blues_r'
-template="ggplot2"
-
-# First violin plot 
-def create_violin():
-    custom_ylim = (-40, 50)
-    Title = "Temperature" + " profile<br>" + location_name
-    fig = px.violin(data_frame = epw_df, x = None, y = "DBT", template = template, 
-        range_y = custom_ylim, height = 1000, width = 350, points = False, box = False, 
-        title = Title, labels = dict(DBT = "Temperature (degC)"))
-    return fig
 
 def build_banner():
     return html.Div(
@@ -68,6 +49,40 @@ def build_tabs():
         html.Div(id = 'tabs-example-content')
     ])
 
+def tab_two():
+    # return html.H2("Hello")
+    return html.Div(
+            children = [
+                html.Div(
+                    className = "container-col",
+                    children = [
+                        html.H3('Climate Profiles'),
+                        html.Div(
+                            className = "container-row",
+                            children = [
+                                dcc.Graph(
+                                    id = 'temp-profile-graph',
+                                    figure = graphs.create_violin_temperature()
+                                ), 
+                                dcc.Graph(
+                                    id = 'humidity-profile-graph',
+                                    figure = graphs.create_violin_humidity()
+                                ), 
+                                dcc.Graph(
+                                    id = 'solar-radiation-graph',
+                                    figure = graphs.create_violin_solar()
+                                ), 
+                                dcc.Graph(
+                                    id = 'wind-speed-graph',
+                                    figure = graphs.create_violin_wind()
+                                )
+                            ]
+                        )
+                    ]
+                )
+            ]
+        )
+
 @app.callback(Output('tabs-example-content', 'children'),
               [Input('tabs-example', 'value')])
 
@@ -79,15 +94,7 @@ def render_content(tab):
             ]
         )
     elif tab == 'tab-2':
-        return html.Div(
-            children = [
-                html.H3('Tab content 2'),
-                dcc.Graph(
-                    id = 'example-graph',
-                    figure = create_violin()
-                )
-            ]
-        )
+        return tab_two()
     elif tab == 'tab-3':
         return html.Div(
             children = [
