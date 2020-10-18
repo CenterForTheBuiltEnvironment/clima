@@ -1,0 +1,24 @@
+.container-col {
+    display: flex; 
+    flex-direction: column;
+}
+
+.container-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/**Banner**/
+#banner { 
+    margin: 24px 14px 14px 24px;
+}
+
+#banner-text-left * {
+    margin: 6px;
+}
+
+#banner-text-right * {
+    margin: 6px;
+}
