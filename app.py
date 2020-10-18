@@ -22,9 +22,9 @@ template="ggplot2"
 def create_violin():
     custom_ylim = (-40, 50)
     Title = "Temperature" + " profile<br>" + location_name
-    fig = px.violin(data_frame=epw_df, x=None, y="DBT", template=template, 
-        range_y=custom_ylim, height=1000, width=350, points=False, box=False, 
-        title=Title, labels=dict(DBT="Temperature (degC)"))
+    fig = px.violin(data_frame = epw_df, x = None, y = "DBT", template = template, 
+        range_y = custom_ylim, height = 1000, width = 350, points = False, box = False, 
+        title = Title, labels = dict(DBT = "Temperature (degC)"))
     return fig
 
 def build_banner():
@@ -73,43 +73,57 @@ def build_tabs():
 
 def render_content(tab):
     if tab == 'tab-1':
-        return html.Div([
-            html.H3('Tab content 1')
-        ])
+        return html.Div(
+            children = [
+                html.H3('Tab content 1')
+            ]
+        )
     elif tab == 'tab-2':
-        return html.Div([
-            html.H3('Tab content 2')
-        ])
+        return html.Div(
+            children = [
+                html.H3('Tab content 2'),
+                dcc.Graph(
+                    id = 'example-graph',
+                    figure = create_violin()
+                )
+            ]
+        )
     elif tab == 'tab-3':
-        return html.Div([
-            html.H3('Tab content 3')
-        ])
+        return html.Div(
+            children = [
+                html.H3('Tab content 3')
+            ]
+        )
     elif tab == 'tab-4':
-        return html.Div([
-            html.H3('Tab content 4')
-        ])
+        return html.Div(
+            children = [
+                html.H3('Tab content 4')
+            ]
+        )
     elif tab == 'tab-5':
-        return html.Div([
-            html.H3('Tab content 5')
-        ])
+        return html.Div(
+            children = [
+                html.H3('Tab content 5')
+            ]
+        )
     elif tab == 'tab-6':
-        return html.Div([
+        return html.Div(
+            children = [
             html.H3('Tab content 6')
-        ])
+            ]
+        )
     elif tab == 'tab-7':
-        return html.Div([
+        return html.Div(
+            children = [
             html.H3('Tab content 7')
-        ])
+            ]
+        )
 
 app.layout = html.Div(
-    id='big-container',
-    children=[
+    id = 'big-container',
+    children = [
         build_banner(),
-        build_tabs(),
-        dcc.Graph(
-            id='example-graph',
-            figure=create_violin()
-        )
+        build_tabs()
     ]
 )
 
