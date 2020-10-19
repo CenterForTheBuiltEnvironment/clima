@@ -1,4 +1,4 @@
-# ewp_viz
+# epw_viz
 
 **How to use this app**
 ```
