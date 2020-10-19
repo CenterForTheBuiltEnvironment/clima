@@ -1,0 +1,29 @@
+/**Banner**/
+#banner { 
+    padding: 24px;
+}
+
+#banner-text-left * {
+    margin: 6px;
+}
+
+#banner-text-right * {
+    margin: 6px;
+    text-align: right;
+
+}
+
+#banner-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+}
+
+#banner-subtitle { 
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+
+#banner-text-right * {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}

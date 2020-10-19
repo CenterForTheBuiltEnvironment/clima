@@ -19,8 +19,12 @@ def build_banner():
                 id = "banner-text-left",
                 className = "container-col",
                 children = [
-                    html.H1("EPW Viz Tool"),
-                    html.H4("Subtitle"),
+                    html.H1(
+                        id = "banner-title",
+                        children = ["EPW Viz Tool"]),
+                    html.H4(
+                        id = "banner-subtitle",
+                        children = ["Subtitle"]),
                 ]
             ),
             html.Div(
@@ -42,15 +46,44 @@ def build_tabs():
         children = [
             dcc.Tabs(
                 id = 'tabs', 
+                parent_className = 'custom-tabs',
                 value = 'tab-1', 
                 children = [
-                    dcc.Tab(label = 'Select Weather File', value = 'tab-1'),
-                    dcc.Tab(label = 'Climate Summary', value = 'tab-2'),
-                    dcc.Tab(label = 'Temperature and Humidity', value = 'tab-3'),
-                    dcc.Tab(label = 'Sun and Rain', value = 'tab-4'),
-                    dcc.Tab(label = 'Wind', value = 'tab-5'),
-                    dcc.Tab(label = 'Outdoor Comfort', value = 'tab-6'),
-                    dcc.Tab(label = 'Natural Ventilation', value = 'tab-7'),
+                    dcc.Tab(
+                        label = 'Select Weather File', 
+                        value = 'tab-1',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Climate Summary', 
+                        value = 'tab-2',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Temperature/Humidity', 
+                        value = 'tab-3',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Sun and Rain', 
+                        value = 'tab-4',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Wind', 
+                        value = 'tab-5',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Outdoor Comfort', 
+                        value = 'tab-6',
+                        className='custom-tab',
+                        selected_className='custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Natural Ventilation', 
+                        value = 'tab-7',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
                 ]
             ),
             html.Div(id = 'tabs-content')
@@ -77,36 +110,36 @@ def tab_one():
 
 def tab_two():
     return html.Div(
-            children = [
-                html.Div(
-                    className = "container-col",
-                    children = [
-                        html.H3('Climate Profiles'),
-                        html.Div(
-                            className = "container-row",
-                            children = [
-                                dcc.Graph(
-                                    id = 'temp-profile-graph',
-                                    figure = graphs.create_violin_temperature()
-                                ), 
-                                dcc.Graph(
-                                    id = 'humidity-profile-graph',
-                                    figure = graphs.create_violin_humidity()
-                                ), 
-                                dcc.Graph(
-                                    id = 'solar-radiation-graph',
-                                    figure = graphs.create_violin_solar()
-                                ), 
-                                dcc.Graph(
-                                    id = 'wind-speed-graph',
-                                    figure = graphs.create_violin_wind()
-                                )
-                            ]
-                        )
-                    ]
-                )
-            ]
-        )
+        children = [
+            html.Div(
+                className = "container-col",
+                children = [
+                    html.H3('Climate Profiles'),
+                    html.Div(
+                        className = "container-row",
+                        children = [
+                            dcc.Graph(
+                                id = 'temp-profile-graph',
+                                figure = graphs.create_violin_temperature()
+                            ), 
+                            dcc.Graph(
+                                id = 'humidity-profile-graph',
+                                figure = graphs.create_violin_humidity()
+                            ), 
+                            dcc.Graph(
+                                id = 'solar-radiation-graph',
+                                figure = graphs.create_violin_solar()
+                            ), 
+                            dcc.Graph(
+                                id = 'wind-speed-graph',
+                                figure = graphs.create_violin_wind()
+                            )
+                        ]
+                    )
+                ]
+            )
+        ]
+    )
 
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
