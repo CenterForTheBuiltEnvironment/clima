@@ -6,11 +6,11 @@ url = "https://energyplus.net/weather-download/north_and_central_america_wmo_reg
 epw_df, location_name = create_df(url)
 
 # Color scheme and templates
-DBT_color='Reds'
-RH_color='GnBu'
-GHrad_color='YlOrRd_r'
-Wspeed_color='Blues_r'
-template="ggplot2"
+DBT_color = 'Reds'
+RH_color = 'GnBu'
+GHrad_color = 'YlOrRd_r'
+Wspeed_color = 'Blues_r'
+template = "ggplot2"
 
 ### Violin Graphs ###
 def create_violin(custom_ylim, title, y, height, width, labels):

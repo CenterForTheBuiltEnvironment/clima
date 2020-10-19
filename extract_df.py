@@ -7,38 +7,38 @@ def create_df(url):
     location_name = create_columns(get_data(url))
     epw_df = pd.DataFrame(
         {
-            "year":year,
-            "fake_year":fake_year,
-            "DOY":DOY,
-            "month":month,
-            "month_names_long":month_names_long,
-            "day":day,
-            "hour":hour,
-            "DBT":DBT,
-            "DPT":DPT,
-            "RH":RH,
-            "Apressure":Apressure,
-            "EHrad":EHrad,
-            "HIRrad":HIRrad,
-            "GHrad":GHrad,
-            "DNrad":DNrad,
-            "DifHrad":DifHrad,
-            "GHillum":GHillum,
-            "DNillum":DNillum,
-            "DifHillum":DifHillum,
-            "Zlumi":Zlumi,
-            "Wdir":Wdir,
-            "Wspeed":Wspeed,
-            "Tskycover":Tskycover,
-            "Oskycover":Oskycover,
-            "Vis":Vis,
-            "Cheight":Cheight,
-            "PWobs":PWobs,
-            "PWcodes":PWcodes,
-            "Pwater":Pwater,
-            "AsolOptD":AsolOptD,
-            "SnowD":SnowD,
-            "DaySSnow":DaySSnow
+            "year": year,
+            "fake_year": fake_year,
+            "DOY": DOY,
+            "month": month,
+            "month_names_long": month_names_long,
+            "day": day,
+            "hour": hour,
+            "DBT": DBT,
+            "DPT": DPT,
+            "RH": RH,
+            "Apressure": Apressure,
+            "EHrad": EHrad,
+            "HIRrad": HIRrad,
+            "GHrad": GHrad,
+            "DNrad": DNrad,
+            "DifHrad": DifHrad,
+            "GHillum": GHillum,
+            "DNillum": DNillum,
+            "DifHillum": DifHillum,
+            "Zlumi": Zlumi,
+            "Wdir": Wdir,
+            "Wspeed": Wspeed,
+            "Tskycover": Tskycover,
+            "Oskycover": Oskycover,
+            "Vis": Vis,
+            "Cheight": Cheight,
+            "PWobs": PWobs,
+            "PWcodes": PWcodes,
+            "Pwater": Pwater,
+            "AsolOptD": AsolOptD,
+            "SnowD": SnowD,
+            "DaySSnow": DaySSnow
         }
     )
     return epw_df, location_name
@@ -48,8 +48,8 @@ def create_columns(lines):
     """
     for i, line in enumerate(lines):
         if i == 0: #read header and site info
-            line=line.strip()
-            line01=line.split(',')
+            line = line.strip()
+            line01 = line.split(',')
 
             #print (line01)
 
@@ -119,41 +119,41 @@ def get_data(url):
     """ Return a list of the data from api call. 
     """
     headers = {'User-Agent': 'Mozilla/5.0'}
-    req = Request(url, headers=headers)
+    req = Request(url, headers = headers)
     epw = urlopen(req).read().decode()
     lines = epw.split("\n")
     return lines
 
-year=[]
-month=[]
-day=[]
-hour=[]
-DBT=[]
-DPT=[]
-RH=[]
-Apressure=[]
-EHrad=[]
-EDNrad=[]
-HIRrad=[]
-GHrad=[]
-DNrad=[]
-DifHrad=[]
-GHillum=[]
-DNillum=[]
-DifHillum=[]
-Zlumi=[]
-Wdir=[]
-Wspeed=[]
-Tskycover=[]
-Oskycover=[]
-Vis=[]
-Cheight=[]
-PWobs=[]
-PWcodes=[]
-Pwater=[]
-AsolOptD=[]
-SnowD=[]
-DaySSnow=[]
+year = []
+month = []
+day = []
+hour = []
+DBT = []
+DPT = []
+RH = []
+Apressure = []
+EHrad = []
+EDNrad = []
+HIRrad = []
+GHrad = []
+DNrad = []
+DifHrad = []
+GHillum = []
+DNillum = []
+DifHillum = []
+Zlumi = []
+Wdir = []
+Wspeed = []
+Tskycover = []
+Oskycover = []
+Vis = []
+Cheight = []
+PWobs = []
+PWcodes = []
+Pwater = []
+AsolOptD = []
+SnowD = []
+DaySSnow = []
 month_names_long = []
 DOY = []
 fake_year = []

@@ -91,6 +91,8 @@ def build_tabs():
     )
 
 def tab_one():
+    """ Contents in the first tab 'Select Weather File'
+    """
     return html.Div(
         id = "tab-one-container",
         className = "container-col",
@@ -109,6 +111,8 @@ def tab_one():
     )
 
 def tab_two():
+    """ Contents in the second tab 'Climate Summary'.
+    """
     return html.Div(
         children = [
             html.Div(
