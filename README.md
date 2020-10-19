@@ -2,7 +2,7 @@
 
 **How to use this app**
 ```
-git clone https://github.com/chrlng/ewp_viz
+git clone https://github.com/chrlng/epw_viz
 cd epw_viz
 ```
 Run this app locally by:
