@@ -4,7 +4,8 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 from extract_df import create_df
-import graphs
+from tabs import tab_one
+from tabs import tab_two
 
 app = dash.Dash(__name__)
 
@@ -90,69 +91,14 @@ def build_tabs():
         ]
     )
 
-def tab_one():
-    """ Contents in the first tab 'Select Weather File'
-    """
-    return html.Div(
-        id = "tab-one-container",
-        className = "container-col",
-        children = [
-            html.Label('Copy paste a link from the map below'),
-            dcc.Input(
-                id = "input-url",
-                value = 'https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw', 
-                type = 'text'
-            ),
-            html.Embed(
-                id = "tab-one-map",
-                src = "https://www.ladybug.tools/epwmap/"
-            )
-        ]
-    )
-
-def tab_two():
-    """ Contents in the second tab 'Climate Summary'.
-    """
-    return html.Div(
-        children = [
-            html.Div(
-                className = "container-col",
-                children = [
-                    html.H3('Climate Profiles'),
-                    html.Div(
-                        className = "container-row",
-                        children = [
-                            dcc.Graph(
-                                id = 'temp-profile-graph',
-                                figure = graphs.create_violin_temperature()
-                            ), 
-                            dcc.Graph(
-                                id = 'humidity-profile-graph',
-                                figure = graphs.create_violin_humidity()
-                            ), 
-                            dcc.Graph(
-                                id = 'solar-radiation-graph',
-                                figure = graphs.create_violin_solar()
-                            ), 
-                            dcc.Graph(
-                                id = 'wind-speed-graph',
-                                figure = graphs.create_violin_wind()
-                            )
-                        ]
-                    )
-                ]
-            )
-        ]
-    )
-
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
 
 def render_content(tab):
     if tab == 'tab-1':
-        return tab_one()
+        return tab_one.tab_one()
     elif tab == 'tab-2':
-        return tab_two()
+        return tab_two.tab_two()
     elif tab == 'tab-3':
         return html.Div(
             children = [

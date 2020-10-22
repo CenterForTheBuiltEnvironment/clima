@@ -16,7 +16,7 @@ template = "ggplot2"
 def create_violin(custom_ylim, title, y, height, width, labels):
     """ General function to create a violin plot. 
     """
-    fig = px.violin(data_frame = epw_df, x = None, y = "DBT", template = template, 
+    fig = px.violin(data_frame = epw_df, x = None, y = y, template = template, 
         range_y = custom_ylim, height = height, width = width, points = False, box = False, 
         title = title, labels = labels)
     return fig
