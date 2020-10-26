@@ -58,10 +58,10 @@ def create_violin_wind():
     """ Violin plot for Wind Speed.
     """
     custom_ylim = (0, 25)
-    title= ("Wind Speed"+" profile<br>"+location_name+"")
+    title = ("Wind Speed" + " profile<br>" + location_name + "")
     y = "Wspeed"
     height = 1000
     width = 350 
-    labels = dict(Wspeed="Wind Speed (m/s)")
+    labels = dict(Wspeed = "Wind Speed (m/s)")
     return create_violin(custom_ylim, title, y, height, width, labels)
 
