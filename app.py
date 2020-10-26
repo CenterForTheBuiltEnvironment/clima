@@ -8,6 +8,7 @@ from tabs import tab_one
 from tabs import tab_two
 
 app = dash.Dash(__name__)
+app.title = "EPW Viz"
 
 def build_banner():
     """ Build the banner at the top of the page.
@@ -140,3 +141,4 @@ app.layout = html.Div(
 
 if __name__ == '__main__':
     app.run_server(debug = True)
+    

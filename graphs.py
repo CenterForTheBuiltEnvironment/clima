@@ -2,8 +2,8 @@ import pandas as pd
 import plotly.express as px
 from extract_df import create_df
 
-url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-epw_df, location_name = create_df(url)
+default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
+epw_df, location_name = create_df(default_url)
 
 # Color scheme and templates
 DBT_color = 'Reds'
@@ -48,7 +48,7 @@ def create_violin_solar():
     """
     custom_ylim = (0, 1200)
     title = ("Solar Radiation" + " profile<br>" + location_name + "")
-    y = epw_df.loc[epw_df["GHrad"]>0, "GHrad"]
+    y = epw_df.loc[epw_df["GHrad"] > 0, "GHrad"]
     height = 1000
     width = 350
     labels = dict(y = "Global Horizontal Solar Radiation (W/h m^2)")
