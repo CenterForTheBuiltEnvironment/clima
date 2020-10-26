@@ -1,6 +1,8 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
+
 import graphs 
 
 def tab_two():
@@ -11,7 +13,28 @@ def tab_two():
             html.Div(
                 className = "container-col",
                 children = [
-                    html.H3('Climate Profiles'),
+                    html.Div(
+                        id = "tooltip-title-container",
+                        className = "container-row",
+                        children = [
+                            html.H5('Climate Profiles'),
+                            html.Div([
+                                html.Span(
+                                    "?",
+                                    id = "tooltip-target",
+                                    style = {
+                                            "textAlign": "center", 
+                                            "color": "white"
+                                    },
+                                    className = "dot"),
+                                dbc.Tooltip(
+                                    "Some information text",
+                                    target = "tooltip-target",
+                                    placement = "right"
+                                )
+                            ])
+                        ]
+                    ),
                     html.Div(
                         className = "container-row",
                         children = [

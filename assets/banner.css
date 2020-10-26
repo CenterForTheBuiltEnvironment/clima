@@ -1,6 +1,8 @@
 /**Banner**/
 #banner { 
     padding: 24px;
+    justify-content: space-between;
+    
 }
 
 #banner-text-left * {

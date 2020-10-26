@@ -1,13 +1,15 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
 from extract_df import create_df
+
 from tabs import tab_one
 from tabs import tab_two
 
-app = dash.Dash(__name__)
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.title = "EPW Viz"
 
 def build_banner():
@@ -21,10 +23,10 @@ def build_banner():
                 id = "banner-text-left",
                 className = "container-col",
                 children = [
-                    html.H1(
+                    html.H3(
                         id = "banner-title",
                         children = ["EPW Viz Tool"]),
-                    html.H4(
+                    html.H6(
                         id = "banner-subtitle",
                         children = ["Subtitle"]),
                 ]
@@ -33,8 +35,8 @@ def build_banner():
                 id = "banner-text-right",
                 className = "container-col",
                 children = [
-                    html.H4("Some text"),
-                    html.H4("More text"),
+                    html.H6("Some text"),
+                    html.H6("More text"),
                 ]
             )
         ]

@@ -47,7 +47,30 @@
     margin: 10px;
 }
 
+#tab-one-form-container {
+    justify-content: space-between;
+}
+
+#input-url {
+    width: 90%;
+}
+#submit-button {
+    width: 10%;
+}
+
 #tab-one-map {
     height: 100%;
     width: 100%;
+}
+
+#tooltip-title-container {
+    padding: 10px;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
 }
