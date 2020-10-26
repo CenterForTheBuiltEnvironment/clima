@@ -120,13 +120,13 @@ def render_content(tab):
     elif tab == 'tab-6':
         return html.Div(
             children = [
-            html.H3('Tab content 6')
+                html.H3('Tab content 6')
             ]
         )
     elif tab == 'tab-7':
         return html.Div(
             children = [
-            html.H3('Tab content 7')
+                html.H3('Tab content 7')
             ]
         )
 
