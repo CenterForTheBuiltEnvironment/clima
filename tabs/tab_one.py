@@ -8,8 +8,7 @@ def tab_one():
     """ Contents in the first tab 'Select Weather File'
     """
     return html.Div(
-        id = "tab-one-container",
-        className = "container-col",
+        className = "container-col tab-container",
         children = [
             html.Label('Copy paste a link from the map below'),
             html.Div(

@@ -9,6 +9,7 @@ def tab_two():
     """ Contents in the second tab 'Climate Summary'.
     """
     return html.Div(
+        className = "tab-container",
         children = [
             html.Div(
                 className = "container-col",

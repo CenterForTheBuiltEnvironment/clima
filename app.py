@@ -9,7 +9,7 @@ from extract_df import create_df
 from tabs import tab_one
 from tabs import tab_two
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP])
 app.title = "EPW Viz"
 
 def build_banner():

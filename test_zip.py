@@ -11,3 +11,4 @@ for i in zf.namelist():
         epw_name = i
 data = zf.read(epw_name)
 print(data)
+
