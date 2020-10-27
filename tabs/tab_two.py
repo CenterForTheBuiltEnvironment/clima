@@ -11,7 +11,7 @@ def tab_two():
     return html.Div(
         children = [
             html.Div(
-                className = "container-col",
+                className = "container-col tab-container",
                 children = [
                     html.Div(
                         id = "tooltip-title-container",
