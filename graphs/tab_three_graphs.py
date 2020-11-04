@@ -2,11 +2,9 @@ import pandas as pd
 import plotly.express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
 from pprint import pprint
-
 from extract_df import create_df
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
