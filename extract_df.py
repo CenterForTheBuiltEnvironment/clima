@@ -1,119 +1,7 @@
 from urllib.request import Request, urlopen
 import pandas as pd
 
-def create_df(url):
-    """ Return the dataframe from the url and the location name. 
-    """
-    location_name = create_columns(get_data(url))
-    epw_df = pd.DataFrame(
-        {
-            "year": year,
-            "fake_year": fake_year,
-            "DOY": DOY,
-            "month": month,
-            "month_names_long": month_names_long,
-            "day": day,
-            "hour": hour,
-            "DBT": DBT,
-            "DPT": DPT,
-            "RH": RH,
-            "Apressure": Apressure,
-            "EHrad": EHrad,
-            "HIRrad": HIRrad,
-            "GHrad": GHrad,
-            "DNrad": DNrad,
-            "DifHrad": DifHrad,
-            "GHillum": GHillum,
-            "DNillum": DNillum,
-            "DifHillum": DifHillum,
-            "Zlumi": Zlumi,
-            "Wdir": Wdir,
-            "Wspeed": Wspeed,
-            "Tskycover": Tskycover,
-            "Oskycover": Oskycover,
-            "Vis": Vis,
-            "Cheight": Cheight,
-            "PWobs": PWobs,
-            "PWcodes": PWcodes,
-            "Pwater": Pwater,
-            "AsolOptD": AsolOptD,
-            "SnowD": SnowD,
-            "DaySSnow": DaySSnow
-        }
-    )
-    return epw_df, location_name
-
-def create_columns(lines):
-    """ Populate the column lists.
-    """
-    for i, line in enumerate(lines):
-        if i == 0: #read header and site info
-            line = line.strip()
-            line01 = line.split(',')
-
-            #print (line01)
-
-            City = line01[1]
-            Country = line01[3]
-            latitude = float(line01[-4])
-            longitude = float(line01[-3])
-            time_zone = float(line01[-2])
-            site_elevation = line01[-1]
-
-            station = City + '_' + Country
-            latitude = latitude
-            longitude = longitude
-            time_zone = time_zone
-            site_elevation = site_elevation
-
-            location = 'Location: ' + City + '_' + Country + ', Latitude:' + str(latitude) + ', Longitude:' + str(longitude) + ', Time Zone:' + str(time_zone) + ', ' + site_elevation + 'm above sea level'
-
-        elif i > 7 and i - 7 <= 8760: # Read all the individual data columns in the weather file
-
-            line = line.strip()
-            epwdata = line.split(",")
-            
-            year.append(int(epwdata[0]))
-            day.append(int(epwdata[2]))
-            month.append(int(epwdata[1]))
-            hour.append(int(epwdata[3]))
-            DBT.append(float(epwdata[6]))
-            DPT.append(float(epwdata[7]))
-            RH.append(float(epwdata[8]))
-            Apressure.append(float(epwdata[9]))
-            EHrad.append(float(epwdata[10]))
-            EDNrad.append(float(epwdata[11]))
-            HIRrad.append(float(epwdata[12]))
-            GHrad.append(float(epwdata[13]))
-            DNrad.append(float(epwdata[14]))
-            DifHrad.append(float(epwdata[15]))
-            GHillum.append(float(epwdata[16]))
-            DNillum.append(float(epwdata[17]))
-            DifHillum.append(float(epwdata[18]))
-            Zlumi.append(float(epwdata[19]))
-            Wdir.append(float(epwdata[20]))
-            Wspeed.append(float(epwdata[21]))
-            Tskycover.append(float(epwdata[22]))
-            Oskycover.append(float(epwdata[23]))
-            Vis.append(float(epwdata[24]))
-            Cheight.append(float(epwdata[25]))
-            PWobs.append(float(epwdata[26]))
-            PWcodes.append(float(epwdata[27]))
-            Pwater.append(float(epwdata[28]))
-            AsolOptD.append(float(epwdata[29]))
-            SnowD.append(float(epwdata[30]))
-            DaySSnow.append(float(epwdata[31]))
-
-    month_names = ["Jan", "Feb","Mar","Apr","May","Jun", "Jul", "Aug","Sep","Oct","Nov","Dec"]
-    doy = 1
-    for i, h in enumerate(hour):
-        DOY.append(doy)
-        fake_year.append("year")
-        month_names_long.append(month_names[month[i]-1])
-        if h == 24:
-            doy += 1
-    location_name = (City + ", " + Country)
-    return location_name
+default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 
 def get_data(url):
     """ Return a list of the data from api call. 
@@ -124,38 +12,88 @@ def get_data(url):
     lines = epw.split("\n")
     return lines
 
-year = []
-month = []
-day = []
-hour = []
-DBT = []
-DPT = []
-RH = []
-Apressure = []
-EHrad = []
-EDNrad = []
-HIRrad = []
-GHrad = []
-DNrad = []
-DifHrad = []
-GHillum = []
-DNillum = []
-DifHillum = []
-Zlumi = []
-Wdir = []
-Wspeed = []
-Tskycover = []
-Oskycover = []
-Vis = []
-Cheight = []
-PWobs = []
-PWcodes = []
-Pwater = []
-AsolOptD = []
-SnowD = []
-DaySSnow = []
-month_names_long = []
-DOY = []
-fake_year = []
+def create_df(default_url):
+    """ Extract and clean the data. Return a pandas data from a url. 
+    """
+    lst = get_data(default_url)
+    meta = lst[0].strip().split(',')
+    city = meta[1]
+    country = meta[3]
+    location_name = (city + ", " + country)
 
- 
+    lst = lst[8:len(lst) - 1]
+    lst = [line.strip().split(',') for line in lst]
+
+    # Each data row exlude index 4 and 5, and everything afterdayssnow
+    for line in lst:
+        del line[4:6]
+        del line[-1]
+        del line[-1]
+        del line[-1]
+
+    col_names = ['year', 'month', 'day', 'hour', 'DBT', 'DPT', 'RH', 
+                'Apressure', 'EHrad', 'EDNrad', 'HIRrad', 'GHrad',
+                'DNrad', 'DifHrad', 'GHillum', 'DNillum', 'DifHillum',
+                'Zlumi', 'Wdir', 'Wspeed', 'Tskycover', 'Oskycover',
+                'Vis', 'Cheight', 'PWobs', 'PWcodes', 'Pwater',
+                'AsolOptD', 'SnowD', 'DaySSnow']
+
+    epw_df = pd.DataFrame(columns = col_names, data = lst)
+
+    # Add in month names 
+    month_look_up = {'1': 'Jan', '2': 'Feb', '3': 'Mar', '4': 'Apr', '5': 'May',
+            '6': 'Jun', '7': 'Jul', '8': 'Aug', '9': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'}
+    epw_df['month_names'] = epw_df['month'].apply(lambda x: month_look_up[x])
+
+    # Add in DOY
+    def doy_helper(row):
+        """ Helper function for the DOY column.
+        """
+        month = int(row['month'])
+        year = int(row['year'])
+        day = int(row['day'])
+        period = pd.Period(day = day, month = month, year = year, freq = 'D')
+        return period.dayofyear
+
+    epw_df['DOY'] = epw_df.apply(lambda row: doy_helper(row), axis = 1)
+
+    # Change to int type
+    epw_df['year'] = epw_df['year'].astype(int)
+    epw_df['day'] = epw_df['day'].astype(int)
+    epw_df['month'] = epw_df['month'].astype(int)
+    epw_df['hour'] = epw_df['hour'].astype(int)
+
+    # Change to float type 
+    epw_df['DBT'] = epw_df['DBT'].astype(float)
+    epw_df['DPT'] = epw_df['DPT'].astype(float)
+    epw_df['RH'] = epw_df['RH'].astype(float)
+    epw_df['Apressure'] = epw_df['Apressure'].astype(float)
+    epw_df['EHrad'] = epw_df['EHrad'].astype(float)
+    epw_df['EDNrad'] = epw_df['EDNrad'].astype(float)
+    epw_df['HIRrad'] = epw_df['HIRrad'].astype(float)
+    epw_df['GHrad'] = epw_df['GHrad'].astype(float)
+    epw_df['DNrad'] = epw_df['DNrad'].astype(float)
+    epw_df['DifHrad'] = epw_df['DifHrad'].astype(float)
+    epw_df['GHillum'] = epw_df['GHillum'].astype(float)
+    epw_df['DNillum'] = epw_df['DNillum'].astype(float)
+    epw_df['DifHillum'] = epw_df['DifHillum'].astype(float)
+    epw_df['Zlumi'] = epw_df['Zlumi'].astype(float)
+    epw_df['Wdir'] = epw_df['Wdir'].astype(float)
+    epw_df['Wspeed'] = epw_df['Wspeed'].astype(float)
+    epw_df['Tskycover'] = epw_df['Tskycover'].astype(float)
+    epw_df['Oskycover'] = epw_df['Oskycover'].astype(float)
+    epw_df['Vis'] = epw_df['Vis'].astype(float)
+    epw_df['Cheight'] = epw_df['Cheight'].astype(float)
+    epw_df['PWobs'] = epw_df['PWobs'].astype(float)
+    epw_df['PWcodes'] = epw_df['PWcodes'].astype(float)
+    epw_df['Pwater'] = epw_df['Pwater'].astype(float)
+    epw_df['AsolOptD'] = epw_df['AsolOptD'].astype(float)
+    epw_df['SnowD'] = epw_df['SnowD'].astype(float)
+    epw_df['DaySSnow'] = epw_df['DaySSnow'].astype(float)
+
+    return epw_df, location_name
+
+
+# month_names_long, fake_year 
+# because in og code months_name_long is same as month_names
+# and fake year is just a string 'year'
