@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+
 from graphs import tab_three_graphs
 
 def tab_three():
@@ -9,11 +10,27 @@ def tab_three():
         className = "container-col", 
         children = [
             dcc.Graph(
+                figure = tab_three_graphs.version03(),
+                config = config
+            ), 
+            dcc.Graph(
                 figure = tab_three_graphs.daily_dbt(),
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.version03(),
+                figure = tab_three_graphs.heatmap_dbt(),
+                config = config
+            ), 
+            dcc.Graph(
+                figure = tab_three_graphs.humidity(), 
+                config = config
+            ), 
+            dcc.Graph(
+                figure = tab_three_graphs.daily_humidity(),
+                config = config
+            ), 
+            dcc.Graph(
+                figure = tab_three_graphs.heatmap_humidity(),
                 config = config
             )
         ]
