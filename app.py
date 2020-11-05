@@ -11,7 +11,7 @@ from tabs import tab_two
 from tabs import tab_three
 from graphs import tab_four_graphs
 
-app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
+app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP])
 app.title = "EPW Viz"
 
 def build_banner():
@@ -119,9 +119,8 @@ def build_tabs():
 
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
+
 def render_content(tab):
-    """ Callback function for displaying contents of each tab.
-    """
     if tab == 'tab-1':
         return tab_one.tab_one()
     elif tab == 'tab-2':

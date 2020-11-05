@@ -19,7 +19,7 @@ country = meta[3]
 latitude = float(meta[-4])
 longitude = float(meta[-3])
 time_zone = float(meta[-2])
-location_name = (city + ", " + country)
+location_name = city + ", " + country
 
 # def average_MaxMin(val):
 #     """ Helper function for daily(). 

@@ -19,9 +19,6 @@ def create_df(default_url):
     meta = lst[0].strip().split(',')
     city = meta[1]
     country = meta[3]
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    timezone = float(meta[-2])
     location_name = (city + ", " + country)
 
     lst = lst[8:len(lst) - 1]

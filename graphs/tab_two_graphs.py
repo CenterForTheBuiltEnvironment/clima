@@ -13,7 +13,7 @@ country = meta[3]
 latitude = float(meta[-4])
 longitude = float(meta[-3])
 time_zone = float(meta[-2])
-location_name = (city + ", " + country)
+location_name = city + ", " + country
 
 # Color scheme and templates
 DBT_color = 'Reds'
@@ -79,7 +79,7 @@ def monthly_dbt():
     """
     """
     month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype = 'rgb')
+    colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype='rgb')
     fig = go.Figure()
     for i in range(0,12):
         data_line = epw_df.loc[epw_df["month"] == i + 1, "DBT"]
@@ -90,8 +90,8 @@ def monthly_dbt():
 def monthly_dbt_day_night():
     fig = go.Figure()
 
-    maskDay = (epw_df["GHrad"] > 0)
-    maskNight = (epw_df["GHrad"] <= 0)
+    maskDay = (epw_df["GHrad"]>0)
+    maskNight = (epw_df["GHrad"]<=0)
 
     data_day = epw_df.loc[maskDay, "DBT"]
     data_night = epw_df.loc[maskNight, "DBT"]
@@ -103,7 +103,7 @@ def monthly_dbt_day_night():
     fig.add_trace(go.Violin(x = monthNames_nigth, y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
 
 
-    fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
+    fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False,)
     fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay')
     return fig 
 
