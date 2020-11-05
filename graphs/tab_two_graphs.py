@@ -5,7 +5,15 @@ import plotly.graph_objects as go
 from plotly.colors import n_colors
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-epw_df, location_name = create_df(default_url)
+epw_df, meta = create_df(default_url)
+
+# Meta data
+city = meta[1]
+country = meta[3]
+latitude = float(meta[-4])
+longitude = float(meta[-3])
+time_zone = float(meta[-2])
+location_name = city + ", " + country
 
 # Color scheme and templates
 DBT_color = 'Reds'

@@ -91,7 +91,7 @@ def create_df(default_url):
     epw_df['SnowD'] = epw_df['SnowD'].astype(float)
     epw_df['DaySSnow'] = epw_df['DaySSnow'].astype(float)
 
-    return epw_df, location_name
+    return epw_df, meta
 
 
 # month_names_long, fake_year 
