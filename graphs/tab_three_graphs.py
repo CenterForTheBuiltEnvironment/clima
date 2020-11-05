@@ -7,34 +7,41 @@ from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
 from pprint import pprint
 from extract_df import create_df
 import math
+import numpy as np
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 epw_df, location_name = create_df(default_url)
-
-# Color scheme 
-BlueRedYellow = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
-DBT_color = BlueRedYellow
 template = "ggplot2"
 
+# def average_MaxMin(val):
+#     """ Helper function for daily(). 
 
-def average_MaxMin(val):
-    val_days = [val[x:x+24] for x in range(0, len(val), 24)]
+#     Args: 
+#         val -- list of values 
+#     Returns:
+#         dataframe
+#     """
+#     val_days = [val[x:x+24] for x in range(0, len(val), 24)]
+#     val_day_max = []
+#     val_day_min = []
+#     val_day_ave = []
+#     for i in range(len(val_days)):
+#         val_day_max.append(max(val_days[i]))
+#         val_day_min.append(min(val_days[i]))
+#         val_day_ave.append(sum(val_days[i])/len(val_days[i]))
+#     val_day = pd.DataFrame(
+#         {"Max": val_day_max,
+#         "Min": val_day_min,
+#         "Ave": val_day_ave}
+#     )
+#     return val_day
 
-    val_day_max=[]
-    val_day_min=[]
-    val_day_ave=[]
-    for i in range(len(val_days)):
-        val_day_max.append(max(val_days[i]))
-        val_day_min.append(min(val_days[i]))
-        val_day_ave.append(sum(val_days[i])/len(val_days[i]))
+# Testing better way to do average_maxmin
+# exp_df = average_MaxMin(epw_df["RH"])
+# actual_df = epw_df.groupby(np.arange(len(epw_df.index)) // 24)['RH'].agg(['min', 'max', 'mean'])
 
-    val_day = pd.DataFrame(
-        {"Max": val_day_max,
-        "Min": val_day_min,
-        "Ave": val_day_ave}
-    )
-    return val_day
-
+# print(exp_df.tail())
+# print(actual_df.tail())
 
 def calculate_ashrae():
     """ Helper function used in the montly_dbt(). 
@@ -67,9 +74,9 @@ def calculate_ashrae():
 
     return lo80, hi80
 
-########################
+#########################
 ### MONTHLY FUNCTIONS ###
-#######################
+#########################
 
 def monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim):
     """ General function for the daily graphs.
@@ -83,14 +90,14 @@ def monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim):
         xlim = list of a range for the x axis
         ylim = list of a range for the y axis 
     """
-    monthList = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    month_list = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
 
     for i in range(12):
         fig.add_trace(
             go.Scatter(x = df.loc[df["month"] == i + 1, "hour"], y = df.loc[df["month"] == i + 1, col],
                         mode = "markers", marker_color = marker_color,
-                        marker_size = 2, name = monthList[i], showlegend = False),
+                        marker_size = 2, name = month_list[i], showlegend = False),
                         row = 1, col = i + 1,
         )
         fig.add_trace(
@@ -153,16 +160,17 @@ def daily(x, col, marker_colors, names, xlim, ylim, lo, hi):
     name_two = names[1]
     name_three = names[2]
 
-    ## Need to create df w avg, min, and max of these values from col
-    day_df = average_MaxMin(epw_df[col])
+    # Get min, max, and mean of each day
+    day_df = epw_df.groupby(np.arange(len(epw_df.index)) // 24)[col].agg(['min', 'max', 'mean'])
+
     ones = [1] * 365
 
-    trace1 = go.Bar(x = x, y = day_df['Max'] - day_df['Min'],
-                    base = day_df['Min'],
+    trace1 = go.Bar(x = x, y = day_df['max'] - day_df['min'],
+                    base = day_df['min'],
                     marker_color = marker_color_one,
                     name = name_one)
 
-    trace2 = go.Bar(x = x, y = ones, base = day_df['Ave'], 
+    trace2 = go.Bar(x = x, y = ones, base = day_df['mean'], 
                     name = name_two,
                     marker_color = marker_color_two)
 
