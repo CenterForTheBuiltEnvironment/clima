@@ -9,6 +9,7 @@ from extract_df import create_df
 from tabs import tab_one
 from tabs import tab_two
 from tabs import tab_three
+from tabs import tab_four
 
 app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP])
 app.title = "EPW Viz"
@@ -106,11 +107,7 @@ def render_content(tab):
     elif tab == 'tab-3':
         return tab_three.tab_three()
     elif tab == 'tab-4':
-        return html.Div(
-            children = [
-                html.H3('Tab content 4')
-            ]
-        )
+        return tab_four.tab_four()
     elif tab == 'tab-5':
         return html.Div(
             children = [

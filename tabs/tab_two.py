@@ -4,6 +4,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 
 from graphs import tab_two_graphs
+from graphs import config
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
@@ -14,10 +15,10 @@ def tab_two():
             section_one(), 
             dcc.Graph(
                 figure = tab_two_graphs.monthly_dbt(),
-                config = config
+                config = config.config()
             ), dcc.Graph(
                 figure = tab_two_graphs.monthly_dbt_day_night(),
-                config = config
+                config = config.config()
             )
         ]
     )
@@ -92,40 +93,3 @@ def climate_profiles_graphs():
                 )
             ]
         )
-
-
-# Configurations for the graph
-config = dict({
-    'toImageButtonOptions' : {
-        'format': 'svg', 
-        'scale': 2 # Multiply title/legend/axis/canvas sizes by this factor
-    },
-    'displaylogo' : False,
-    'modeBarButtonsToRemove' : [
-        "zoom2d", 
-        "pan2d", 
-        "select2d", 
-        "lasso2d", 
-        "zoomIn2d", 
-        "zoomOut2d",
-        "hoverClosestCartesian", 
-        "hoverCompareCartesian", 
-        "zoom3d", 
-        "pan3d", 
-        "orbitRotation", 
-        "tableRotation", 
-        "handleDrag3d", 
-        "resetCameraDefault3d", 
-        "resetCameraLastSave3d", 
-        "hoverClosest3d",
-        "zoomInGeo", 
-        "zoomOutGeo", 
-        "resetGeo", 
-        "hoverClosestGeo", 
-        "hoverClosestGl2d", 
-        "hoverClosestPie", 
-        "toggleHover", 
-        "resetViews"
-    ]
-  }  
-)

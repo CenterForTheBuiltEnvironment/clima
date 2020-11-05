@@ -4,10 +4,21 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from pvlib import solarposition
 from datetime import time, datetime, timedelta, timezone
+import numpy as np
+import math 
 from extract_df import create_df
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-epw_df, location_name = create_df(default_url)
+epw_df, meta = create_df(default_url)
+template = "ggplot2"
+
+# Meta data
+city = meta[1]
+country = meta[3]
+latitude = float(meta[-4])
+longitude = float(meta[-3])
+time_zone = float(meta[-2])
+location_name = (city + ", " + country)
 
 # Adjust dateime based on timezone
 date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
@@ -26,11 +37,10 @@ def lat_long_solar():
     solpos = solarposition.get_solarposition(times, latitude, longitude)
     # remove nighttime
     solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
-    #print(solpos)
 
     fig = go.Figure()
 
-    #draw annalemma
+    # draw annalemma
     fig.add_trace(go.Scatter(
         y = (90 - solpos.apparent_zenith),
         x = solpos.azimuth ,

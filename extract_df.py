@@ -19,6 +19,9 @@ def create_df(default_url):
     meta = lst[0].strip().split(',')
     city = meta[1]
     country = meta[3]
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    timezone = float(meta[-2])
     location_name = (city + ", " + country)
 
     lst = lst[8:len(lst) - 1]
@@ -91,7 +94,7 @@ def create_df(default_url):
     epw_df['SnowD'] = epw_df['SnowD'].astype(float)
     epw_df['DaySSnow'] = epw_df['DaySSnow'].astype(float)
 
-    return epw_df, location_name
+    return epw_df, meta
 
 
 # month_names_long, fake_year 
