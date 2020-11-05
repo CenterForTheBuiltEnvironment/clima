@@ -45,7 +45,7 @@ def build_banner():
     )
 
 def tab_four():
-    """
+    """ Contents of tab four.
     """
     return html.Div(
         className = "container-col",
@@ -62,18 +62,6 @@ def tab_four():
             dcc.Graph(
                 id = 'solar-dropdown-output'
             )
-            # dcc.Graph(
-            #     figure = tab_four_graphs.lat_long_solar(), 
-            #     config = config.config()
-            # ), 
-            # dcc.Graph(
-            #     figure = tab_four_graphs.polar_solar(), 
-            #     config = config.config()
-            # ), 
-            # dcc.Graph(
-            #     figure = tab_four_graphs.daily_solar(),
-            #     config = config.config()
-            # )
         ]
     )
 
@@ -131,8 +119,9 @@ def build_tabs():
 
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
-
 def render_content(tab):
+    """ Callback function for displaying contents of each tab.
+    """
     if tab == 'tab-1':
         return tab_one.tab_one()
     elif tab == 'tab-2':
@@ -140,35 +129,7 @@ def render_content(tab):
     elif tab == 'tab-3':
         return tab_three.tab_three()
     elif tab == 'tab-4':
-        return html.Div(
-        className = "container-col",
-        children = [
-            dcc.Dropdown(
-                id = "solar-dropdown", 
-                options = [
-                    {'label': 'Polar', 'value': 'polar'},
-                    {'label': 'Latitude/Longitude', 'value': 'lat/long'},
-                    {'label': 'Daily', 'value': 'daily'}
-                ], 
-                value = 'polar'
-            ),
-            dcc.Graph(
-                id = 'solar-dropdown-output'
-            )
-            # dcc.Graph(
-            #     figure = tab_four_graphs.lat_long_solar(), 
-            #     config = config.config()
-            # ), 
-            # dcc.Graph(
-            #     figure = tab_four_graphs.polar_solar(), 
-            #     config = config.config()
-            # ), 
-            # dcc.Graph(
-            #     figure = tab_four_graphs.daily_solar(),
-            #     config = config.config()
-            # )
-        ]
-    )
+        return tab_four()
     elif tab == 'tab-5':
         return html.Div(
             children = [
