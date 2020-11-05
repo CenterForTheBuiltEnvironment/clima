@@ -17,32 +17,6 @@ DBT_color = BlueRedYellow
 template = "ggplot2"
 
 
-#### TEMPERATURE ###
-
-def daily_dbt():
-    DBT_df = epw_df[['month', 'day', 'hour', 'DBT']]
-
-    DBT_month_ave = DBT_df.groupby(['month','hour'])['DBT'].median().reset_index()
-    monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-
-    for i in range(12):
-        # add for loop here and change mode from marker to lines have each line for like each day or something 
-        fig.add_trace(
-            go.Scatter(x = DBT_df.loc[DBT_df["month"] == i + 1, "hour"], y = DBT_df.loc[DBT_df["month"] == i + 1, "DBT"],
-                        mode = "markers", marker_color = "orange",
-                        marker_size = 2, name = monthList[i], showlegend = False),
-                        row = 1, col = i + 1,
-            )
-        fig.add_trace(
-            go.Scatter(x = DBT_month_ave.loc[DBT_month_ave["month"] == i + 1, "hour"], y = DBT_month_ave.loc[DBT_month_ave["month"] == i + 1, "DBT"],
-                        mode = "lines", line_color = "red", line_width = 3, name = None, showlegend = False),
-                        row = 1, col = i + 1,
-        )
-        fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
-        fig.update_yaxes(range = [-50, 50], row = 1, col = i + 1)
-    return fig
-
 def average_MaxMin(val):
     val_days = [val[x:x+24] for x in range(0, len(val), 24)]
 
@@ -62,76 +36,15 @@ def average_MaxMin(val):
     return val_day
 
 
-def version03():
-
-    lo80, hi80 = calculate_ashrae()
-
-    custom_xlim = [0, 365]
-    custom_ylim = [-40, 50]
-
-    days = []
-
-    for i in range(365):
-        days.append(i)
-
-    DBT_day = average_MaxMin(epw_df['DBT'])
-
-    ones = [1] * 365
-
-    trace1 = go.Bar(x = days, y = DBT_day['Max'] - DBT_day['Min'],
-                    base = DBT_day['Min'],
-                    marker_color = 'orange',
-                    name = 'Temperature Range'
-                )
-
-    trace2 = go.Bar(x = days, y = ones, base = DBT_day['Ave'], 
-                        name = 'Average Temperature',
-                        marker_color = 'red',
-                        )
-
-
-    ## plot ashrae adaptive comfort limits (80%)
-    lo80_df = pd.DataFrame({"lo80": lo80})
-    hi80_df = pd.DataFrame({"hi80": hi80})
-
-
-    trace3 = go.Bar(x = days, y = hi80_df["hi80"] - lo80_df["lo80"], base = lo80_df["lo80"],
-                name = 'ashrae adaptive comfort (80%)',
-                marker_color = "silver")
-    data = [trace3, trace1,trace2]
-
-    layout = go.Layout(
-        barmode = 'overlay',
-        bargap = 0
-    )
-
-    fig = go.Figure(data = data, layout = layout)
- 
-    fig.update_xaxes(range = custom_xlim)
-    fig.update_yaxes(range = custom_ylim)
-
-    fig.update_traces(opacity = 0.6)
-
-    fig.update_layout(legend = dict(
-        orientation = "h",
-        yanchor = "bottom",
-        y = 1.02,
-        xanchor = "right",
-        x = 1    
-    ))
-    fig.update_layout(template = template)
-    return fig
-
-
 def calculate_ashrae():
-
+    """ Helper function used in the montly_dbt(). 
+    """
     DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
     DBT_day_ave = DBT_day_ave['DBT'].tolist()
 
     n = 7  # number of days for running average
     hi80 = []
     lo80 = []
-    fail = 0
     for i in range(len(DBT_day_ave)):
         if i < n:
             lastDays = DBT_day_ave[-n + i:] + DBT_day_ave[0:i]
@@ -154,78 +67,122 @@ def calculate_ashrae():
 
     return lo80, hi80
 
-def heatmap_dbt():
-    BlueRedYellow = ["#00b3ff","#000082","#ff0000","#ffff00"]
-    DBT_color = BlueRedYellow
-    Title = "Dry Bulb Temperatures (degC)"
+########################
+### MONTHLY FUNCTIONS ###
+#######################
 
-    # Set maximum and minimum according to data
-    dataMax = (5 * math.ceil(epw_df["DBT"].max() / 5))
-    dataMin = (5 * math.floor(epw_df["DBT"].min() / 5))
+def monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim):
+    """ General function for the daily graphs.
 
-    fig = go.Figure(data=go.Heatmap(y = epw_df["hour"], x = epw_df["DOY"],
-                                    z = epw_df["DBT"], colorscale = DBT_color,
-                                    zmin = dataMin, zmax = dataMax,
-                                    hovertemplate = 'DOY: %{x}<br>hour: %{y}<br>Temp: %{z}<extra></extra>'))
-    fig.update_layout(
-        template = template,
-        title = Title,
-        xaxis_nticks = 53,
-        yaxis_nticks = 13,
-    )
+    Args:
+        df -- pandas df
+        grouped_df -- pandas df 
+        line_color -- string of the line color 
+        marker_color -- string of the marker color
+        col -- string for the column used (either "RH" or "DBT")
+        xlim = list of a range for the x axis
+        ylim = list of a range for the y axis 
+    """
+    monthList = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
+
+    for i in range(12):
+        fig.add_trace(
+            go.Scatter(x = df.loc[df["month"] == i + 1, "hour"], y = df.loc[df["month"] == i + 1, col],
+                        mode = "markers", marker_color = marker_color,
+                        marker_size = 2, name = monthList[i], showlegend = False),
+                        row = 1, col = i + 1,
+        )
+        fig.add_trace(
+            go.Scatter(x = grouped_df.loc[grouped_df["month"] == i + 1,"hour"], 
+                        y = grouped_df.loc[grouped_df["month"] == i + 1, col],
+                        mode = "lines", line_color = line_color, line_width = 3, 
+                        name = None, showlegend = False), row = 1, col = i + 1
+        )
+        # fig.update_xaxes(range = xlim, row = 1, col = i + 1)
+        # fig.update_yaxes(range = ylim, row = 1, col = i + 1)
+    
+    fig.update_layout(template = template)
     return fig
 
+def monthly_dbt():
+    """ Return the daily graph for the DBT
+    """
+    df = epw_df[['month', 'day', 'hour', 'DBT']]
+    grouped_df = df.groupby(['month','hour'])['DBT'].median().reset_index()
+    line_color = "red"
+    marker_color = "orange"
+    col = "DBT"
+    xlim = [0, 25]
+    ylim = [-50, 50]
+    return monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim)
 
+def monthly_humidity():
+    """ Return the daily graph for humidity.
+    """
+    df = epw_df[['month', 'day', 'hour', 'RH']]
+    grouped_df = df.groupby(['month','hour'])['RH'].median().reset_index()
+    line_color = "dodgerblue"
+    marker_color = "skyblue"
+    col = "RH"
+    xlim = [0, 25]
+    ylim = [0, 100]
+    return monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim)
 
-### HUMIDITY ###
+#########################
+### DAILY FUNCTIONS ###
+#########################
+def daily(x, col, marker_colors, names, xlim, ylim, lo, hi):
+    """ General function for a monthly graph.
 
-def humidity():
-    days = []
-    custom_xlim = (0,365)
-    custom_ylim = (-40, 50)
+    Args:
+        x -- list of the x values 
+        col -- string (either "RH" or "DBT")
+        marker_colors -- list of marker colors for each trace 
+        names -- list of names for each trace
+        xlim -- tuple of the x axes limits
+        ylim -- tuple of the y axes limits
+        lo -- list of values 
+        hi -- list of values 
+    """
+    marker_color_one = marker_colors[0]
+    marker_color_two = marker_colors[1]
+    marker_color_three = marker_colors[2]
 
-    for i in range(365):
-        days.append(i)
+    name_one = names[0]
+    name_two = names[1]
+    name_three = names[2]
 
-    RH_day = average_MaxMin(epw_df['RH'])
-
+    ## Need to create df w avg, min, and max of these values from col
+    day_df = average_MaxMin(epw_df[col])
     ones = [1] * 365
 
-    trace1 = go.Bar(x = days, y = RH_day['Max'] - RH_day['Min'],
-                    base = RH_day['Min'],
-                    marker_color = 'dodgerblue',
-                    name = 'Relative Humidity Range')
-    "#00c8ff",
-    trace2 = go.Bar(x = days, y = ones, base = RH_day['Ave'], 
-                    name = 'Average Relative Humidity',
-                    marker_color = 'blue')
+    trace1 = go.Bar(x = x, y = day_df['Max'] - day_df['Min'],
+                    base = day_df['Min'],
+                    marker_color = marker_color_one,
+                    name = name_one)
 
+    trace2 = go.Bar(x = x, y = ones, base = day_df['Ave'], 
+                    name = name_two,
+                    marker_color = marker_color_two)
 
-    ## plot relative Humidity limits (30-70%)
-    loRH = [30] * 365
-    hiRH = [70] * 365
-    loRH_df = pd.DataFrame({"loRH": loRH})
-    hiRH_df = pd.DataFrame({"hiRH": hiRH})
+    lo_df = pd.DataFrame({"lo": lo})
+    hi_df = pd.DataFrame({"hi": hi})
 
+    trace3 = go.Bar(x = x, y = hi_df["hi"] - lo_df["lo"], 
+                    base = lo_df["lo"],
+                    name = name_three,
+                    marker_color = marker_color_three)
 
-    trace3 = go.Bar(x = days, y = hiRH_df["hiRH"] - loRH_df["loRH"], base = loRH_df["loRH"],
-                name = 'humidity comfort band',
-                marker_color = "silver")
-
-    data = [trace3, trace1,trace2]
-
+    data = [trace3, trace1, trace2]
     layout = go.Layout(
         barmode = 'overlay',
         bargap = 0
     )
-
     fig = go.Figure(data = data, layout = layout)
-
-    fig.update_xaxes(range = custom_xlim)
-    fig.update_yaxes(range = (0, 100))
-
+    # fig.update_xaxes(range = xlim)
+    # fig.update_yaxes(range = ylim)
     fig.update_traces(opacity = 0.6)
-
     fig.update_layout(legend = dict(
         orientation = "h",
         yanchor = "bottom",
@@ -233,63 +190,76 @@ def humidity():
         xanchor = "right",
         x = 1    
     ))
-
     fig.update_layout(template = template)
     return fig
 
+def daily_dbt():
+    """ Returns the graph for the monthly dbt.
+    """
+    x = [i for i in range(365)]
+    col = "RH"
+    marker_colors = ['orange', 'red', "silver"]
+    names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
+    xlim = (0, 365)
+    ylim = (-40, 50)
+    lo, hi = calculate_ashrae()
+    return daily(x, col, marker_colors, names, xlim, ylim, lo, hi)
+
 def daily_humidity():
-    RH_df = epw_df[['month', 'day', 'hour', 'RH']]
+    """ Returns the graph for the monthly humidity 
+    """
+    x = [i for i in range(365)]
+    col = "RH"
+    marker_colors = ['dodgerblue', 'blue', "silver"]
+    names = ['Relative Humidity Range', 'Average Relative Humidity', 'Humidity Comfort Band']
+    xlim = (0, 365)
+    ylim = (0, 100)
+    lo = [30] * 365
+    hi = [70] * 365
+    return daily(x, col, marker_colors, names, xlim, ylim, lo, hi)
 
-    RH_month_ave = RH_df.groupby(['month','hour'])['RH'].median().reset_index()
-    monthList = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
+#########################
+### HEATMAP FUNCTIONS ### 
+#########################
 
-    for i in range(12):
-        fig.add_trace(
-            go.Scatter(x = RH_df.loc[RH_df["month"] == i + 1, "hour"], y = RH_df.loc[RH_df["month"] == i + 1, "RH"],
-                        mode = "markers", marker_color = "skyblue",
-                        marker_size = 2, name = monthList[i], showlegend = False),
-                        row = 1, col = i + 1,
-        )
-        fig.add_trace(
-            go.Scatter(x=RH_month_ave.loc[RH_month_ave["month"]==i+1,"hour"],y=RH_month_ave.loc[RH_month_ave["month"]==i+1,"RH"],
-                        mode="lines",line_color="dodgerblue",line_width=3,name=None,showlegend=False),
-            row=1, col=i+1,
-        )
-        fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
-        fig.update_yaxes(range=[0, 100], row = 1, col = i + 1)
-    
+def heatmap(colors, title, data_min, data_max, z_vals):
+    """ General function for a heatmap graph. X axis is hour, Y axis is DOY.
 
-    fig.update_layout(template=template)
+    Args: 
+        colors -- List of colors to use
+        title -- title for the graph 
+        data_min -- int for the min
+        data_max -- int for the max
+    """
 
-    return fig
-
-def heatmap_humidity():
-    DryHumid = ["#ffe600", "#00c8ff", "#0000ff"]
-    RH_color = DryHumid
-    #RH_heat=heatmap(epw_df,"RH")
-    Title = "Relative Humiditys (degC)"
-
-    ##Set maximumand minimum according to data
-    """dataMax=(5*math.ceil(epw_df["RH"].max()/5))
-    dataMin=(5*math.floor(epw_df["RH"].min()/5))
-    print(dataMax)
-    print(dataMin)"""
-
-    ##Set Global avlues for Max and minimum
-    dataMax = 100
-    dataMin = 0
-
-    fig = go.Figure(data=go.Heatmap(y = epw_df["hour"], x = epw_df["DOY"],
-                                    z = epw_df["RH"], colorscale = RH_color,
-                                    zmin = dataMin, zmax = dataMax,
-                                    hovertemplate = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'))
+    fig = go.Figure(data = go.Heatmap(y = epw_df["hour"], x = epw_df["DOY"],
+                    z = z_vals, colorscale = colors,
+                    zmin = data_min, zmax = data_max,
+                    hovertemplate = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'))
     fig.update_layout(
         template = template,
-        title = Title,
+        title = title,
         xaxis_nticks = 53,
         yaxis_nticks = 13,
     )
-
     return fig
 
+def heatmap_dbt():
+    """ Return a figure of the heatmap for DBT
+    """
+    colors = ["#00b3ff","#000082","#ff0000","#ffff00"]
+    title = "Dry Bulb Temperatures (degC)"
+    data_max = (5 * math.ceil(epw_df["DBT"].max() / 5))
+    data_min = (5 * math.floor(epw_df["DBT"].min() / 5))
+    z_vals = epw_df["DBT"]
+    return heatmap(colors, title, data_min, data_max, z_vals)
+
+def heatmap_humidity():
+    """ Return a figure of the heatmap for humidity. 
+    """
+    colors = ["#ffe600", "#00c8ff", "#0000ff"]
+    title = "Relative Humiditys (degC)"
+    data_max = 100
+    data_min = 0
+    z_vals = epw_df["RH"]
+    return heatmap(colors, title, data_min, data_max, z_vals)

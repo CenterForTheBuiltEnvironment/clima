@@ -10,23 +10,23 @@ def tab_three():
         className = "container-col", 
         children = [
             dcc.Graph(
-                figure = tab_three_graphs.version03(),
-                config = config
-            ), 
-            dcc.Graph(
                 figure = tab_three_graphs.daily_dbt(),
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.heatmap_dbt(),
-                config = config
-            ), 
-            dcc.Graph(
-                figure = tab_three_graphs.humidity(), 
-                config = config
-            ), 
-            dcc.Graph(
                 figure = tab_three_graphs.daily_humidity(),
+                config = config
+            ), 
+            dcc.Graph(
+                figure = tab_three_graphs.monthly_dbt(),
+                config = config
+            ), 
+            dcc.Graph(
+                figure = tab_three_graphs.monthly_humidity(), 
+                config = config
+            ), 
+            dcc.Graph(
+                figure = tab_three_graphs.heatmap_dbt(),
                 config = config
             ), 
             dcc.Graph(
