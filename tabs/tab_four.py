@@ -11,16 +11,18 @@ def tab_four():
     return html.Div(
         className = "container-col",
         children = [
+            dcc.Dropdown(
+                id = "solar-dropdown", 
+                options = [
+                    {'label': 'Polar', 'value': 'polar'},
+                    {'label': 'Latitude/Longitude', 'value': 'lat/long'},
+                    {'label': 'Daily', 'value': 'daily'}
+                ], 
+                value = 'polar', 
+                searchable = False
+            ),
             dcc.Graph(
-                figure = tab_four_graphs.lat_long_solar(), 
-                config = config.config()
-            ), 
-            dcc.Graph(
-                figure = tab_four_graphs.polar_solar(), 
-                config = config.config()
-            ), 
-            dcc.Graph(
-                figure = tab_four_graphs.daily_solar(),
+                id = 'solar-dropdown-output', 
                 config = config.config()
             )
         ]

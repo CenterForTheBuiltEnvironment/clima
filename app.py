@@ -9,9 +9,9 @@ from extract_df import create_df
 from tabs import tab_one
 from tabs import tab_two
 from tabs import tab_three
-from tabs import tab_four
+from graphs import tab_four_graphs
 
-app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP])
+app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 app.title = "EPW Viz"
 
 def build_banner():
@@ -41,6 +41,39 @@ def build_banner():
                     html.H6("More text"),
                 ]
             )
+        ]
+    )
+
+def tab_four():
+    """
+    """
+    return html.Div(
+        className = "container-col",
+        children = [
+            dcc.Dropdown(
+                id = "solar-dropdown", 
+                options = [
+                    {'label': 'Polar', 'value': 'polar'},
+                    {'label': 'Latitude/Longitude', 'value': 'lat/long'},
+                    {'label': 'Daily', 'value': 'daily'}
+                ], 
+                value = 'polar'
+            ),
+            dcc.Graph(
+                id = 'solar-dropdown-output'
+            )
+            # dcc.Graph(
+            #     figure = tab_four_graphs.lat_long_solar(), 
+            #     config = config.config()
+            # ), 
+            # dcc.Graph(
+            #     figure = tab_four_graphs.polar_solar(), 
+            #     config = config.config()
+            # ), 
+            # dcc.Graph(
+            #     figure = tab_four_graphs.daily_solar(),
+            #     config = config.config()
+            # )
         ]
     )
 
@@ -107,7 +140,35 @@ def render_content(tab):
     elif tab == 'tab-3':
         return tab_three.tab_three()
     elif tab == 'tab-4':
-        return tab_four.tab_four()
+        return html.Div(
+        className = "container-col",
+        children = [
+            dcc.Dropdown(
+                id = "solar-dropdown", 
+                options = [
+                    {'label': 'Polar', 'value': 'polar'},
+                    {'label': 'Latitude/Longitude', 'value': 'lat/long'},
+                    {'label': 'Daily', 'value': 'daily'}
+                ], 
+                value = 'polar'
+            ),
+            dcc.Graph(
+                id = 'solar-dropdown-output'
+            )
+            # dcc.Graph(
+            #     figure = tab_four_graphs.lat_long_solar(), 
+            #     config = config.config()
+            # ), 
+            # dcc.Graph(
+            #     figure = tab_four_graphs.polar_solar(), 
+            #     config = config.config()
+            # ), 
+            # dcc.Graph(
+            #     figure = tab_four_graphs.daily_solar(),
+            #     config = config.config()
+            # )
+        ]
+    )
     elif tab == 'tab-5':
         return html.Div(
             children = [
@@ -126,6 +187,18 @@ def render_content(tab):
                 html.H3('Tab content 7')
             ]
         )
+
+@app.callback(
+    Output('solar-dropdown-output', 'figure'),
+    [Input("solar-dropdown", 'value')]
+)
+def update_tab_four_solar(value):
+    if value == 'polar':
+        return tab_four_graphs.polar_solar()
+    elif value == 'lat/long':
+        return tab_four_graphs.lat_long_solar()
+    else:
+        return tab_four_graphs.daily_solar()
 
 app.layout = html.Div(
     id = 'big-container',
