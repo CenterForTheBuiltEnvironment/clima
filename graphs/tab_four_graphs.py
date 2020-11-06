@@ -18,7 +18,6 @@ latitude = float(meta[-4])
 longitude = float(meta[-3])
 time_zone = float(meta[-2])
 location_name = city + ", " + country
-print(type(location_name))
 
 # Adjust dateime based on timezone
 date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)

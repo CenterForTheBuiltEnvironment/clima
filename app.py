@@ -11,7 +11,7 @@ from tabs import tab_two
 from tabs import tab_three
 from graphs import tab_four_graphs
 
-app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP])
+app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 app.title = "EPW Viz"
 
 def build_banner():
@@ -48,7 +48,8 @@ def tab_four():
     """ Contents of tab four.
     """
     return html.Div(
-        className = "container-col",
+        className = "container-col tab-container",
+        id = "tab-four-container",
         children = [
             dcc.Dropdown(
                 id = "solar-dropdown", 
@@ -121,6 +122,8 @@ def build_tabs():
               [Input('tabs', 'value')])
 
 def render_content(tab):
+    """ Update the contents of the page depending on what tab the user selects.
+    """
     if tab == 'tab-1':
         return tab_one.tab_one()
     elif tab == 'tab-2':
@@ -153,6 +156,8 @@ def render_content(tab):
     [Input("solar-dropdown", 'value')]
 )
 def update_tab_four_solar(value):
+    """ Updating the button in tab four to change the solar graph. 
+    """
     if value == 'polar':
         return tab_four_graphs.polar_solar()
     elif value == 'lat/long':
