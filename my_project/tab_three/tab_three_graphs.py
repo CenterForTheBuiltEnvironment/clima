@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
 from pprint import pprint
-from extract_df import create_df
+from my_project.extract_df import create_df
 import math
 import numpy as np
 

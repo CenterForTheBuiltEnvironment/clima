@@ -2,35 +2,35 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from .tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt, monthly_humidity, heatmap_dbt, heatmap_humidity
 
-from graphs import tab_three_graphs
 
 def tab_three():
     return html.Div(
         className = "container-col", 
         children = [
             dcc.Graph(
-                figure = tab_three_graphs.daily_dbt(),
+                figure = daily_dbt(),
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.daily_humidity(),
+                figure = daily_humidity(),
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.monthly_dbt(),
+                figure = monthly_dbt(),
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.monthly_humidity(), 
+                figure = monthly_humidity(), 
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.heatmap_dbt(),
+                figure = heatmap_dbt(),
                 config = config
             ), 
             dcc.Graph(
-                figure = tab_three_graphs.heatmap_humidity(),
+                figure = heatmap_humidity(),
                 config = config
             )
         ]

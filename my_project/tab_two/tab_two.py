@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 
-from graphs import tab_two_graphs
+from .tab_two_graphs import monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
@@ -13,10 +13,10 @@ def tab_two():
         children = [
             section_one(), 
             dcc.Graph(
-                figure = tab_two_graphs.monthly_dbt(),
+                figure = monthly_dbt(),
                 config = config
             ), dcc.Graph(
-                figure = tab_two_graphs.monthly_dbt_day_night(),
+                figure = monthly_dbt_day_night(),
                 config = config
             )
         ]
@@ -72,22 +72,22 @@ def climate_profiles_graphs():
             children = [
                 dcc.Graph(
                     id = 'temp-profile-graph',
-                    figure = tab_two_graphs.temperature(),
+                    figure = temperature(),
                     config = config
                 ), 
                 dcc.Graph(
                     id = 'humidity-profile-graph',
-                    figure = tab_two_graphs.humidity(),
+                    figure = humidity(),
                     config = config
                 ), 
                 dcc.Graph(
                     id = 'solar-radiation-graph',
-                    figure = tab_two_graphs.solar(),
+                    figure = solar(),
                     config = config
                 ), 
                 dcc.Graph(
                     id = 'wind-speed-graph',
-                    figure = tab_two_graphs.wind(),
+                    figure = wind(),
                     config = config
                 )
             ]

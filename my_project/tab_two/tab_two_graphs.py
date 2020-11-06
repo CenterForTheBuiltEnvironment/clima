@@ -1,6 +1,6 @@
 import pandas as pd
 import plotly.express as px
-from extract_df import create_df
+from my_project.extract_df import create_df
 import plotly.graph_objects as go
 from plotly.colors import n_colors
 

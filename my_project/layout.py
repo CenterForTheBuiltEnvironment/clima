@@ -4,15 +4,12 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-from extract_df import create_df
-
-from tabs import tab_one
-from tabs import tab_two
-from tabs import tab_three
-from graphs import tab_four_graphs
-
-app = dash.Dash(external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
-app.title = "EPW Viz"
+from .extract_df import create_df
+from .tab_one import tab_one
+from .tab_two import tab_two
+from .tab_three import tab_three
+from .tab_four import tab_four_graphs
+from .server import app 
 
 def build_banner():
     """ Build the banner at the top of the page.
@@ -164,15 +161,3 @@ def update_tab_four_solar(value):
         return tab_four_graphs.lat_long_solar()
     else:
         return tab_four_graphs.daily_solar()
-
-app.layout = html.Div(
-    id = 'big-container',
-    children = [
-        build_banner(),
-        build_tabs()
-    ]
-)
-
-if __name__ == '__main__':
-    app.run_server(debug = True)
-    
