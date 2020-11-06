@@ -8,7 +8,7 @@ from .extract_df import create_df
 from .tab_one import tab_one
 from .tab_two import tab_two
 from .tab_three import tab_three
-from .tab_four import tab_four_graphs
+from .tab_four import tab_four
 from .server import app 
 
 def build_banner():
@@ -37,28 +37,6 @@ def build_banner():
                     html.H6("Some text"),
                     html.H6("More text"),
                 ]
-            )
-        ]
-    )
-
-def tab_four():
-    """ Contents of tab four.
-    """
-    return html.Div(
-        className = "container-col tab-container",
-        id = "tab-four-container",
-        children = [
-            dcc.Dropdown(
-                id = "solar-dropdown", 
-                options = [
-                    {'label': 'Polar', 'value': 'polar'},
-                    {'label': 'Latitude/Longitude', 'value': 'lat/long'},
-                    {'label': 'Daily', 'value': 'daily'}
-                ], 
-                value = 'polar'
-            ),
-            dcc.Graph(
-                id = 'solar-dropdown-output'
             )
         ]
     )
@@ -128,7 +106,7 @@ def render_content(tab):
     elif tab == 'tab-3':
         return tab_three.tab_three()
     elif tab == 'tab-4':
-        return tab_four()
+        return tab_four.tab_four()
     elif tab == 'tab-5':
         return html.Div(
             children = [
@@ -147,17 +125,3 @@ def render_content(tab):
                 html.H3('Tab content 7')
             ]
         )
-
-@app.callback(
-    Output('solar-dropdown-output', 'figure'),
-    [Input("solar-dropdown", 'value')]
-)
-def update_tab_four_solar(value):
-    """ Updating the button in tab four to change the solar graph. 
-    """
-    if value == 'polar':
-        return tab_four_graphs.polar_solar()
-    elif value == 'lat/long':
-        return tab_four_graphs.lat_long_solar()
-    else:
-        return tab_four_graphs.daily_solar()
