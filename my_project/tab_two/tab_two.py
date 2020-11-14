@@ -2,7 +2,8 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
+import pandas as pd
 
 from my_project.server import app 
 from .tab_two_graphs import monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind
@@ -15,21 +16,28 @@ def tab_two():
         children = [
             section_one(), 
             dcc.Graph(
-                figure = monthly_dbt(),
+                id = 'monthly-dbt',
                 config = config
             ), dcc.Graph(
-                figure = monthly_dbt_day_night(),
+                id = 'monthly-dbt-day-night',
                 config = config
             ), 
             html.Div(id = 'testing')
         ]
     )
 
-# @app.callback(Output('testing', 'children'),
-#             [Input('store-test', 'children')])
-# def submit_button(value):
-#     # epw_df, meta = create_df(value)
-#     return value
+@app.callback(Output('temp-profile-graph', 'figure'),
+                Output('humidity-profile-graph', 'figure'),
+                Output('solar-radiation-graph', 'figure'),
+                Output('wind-speed-graph', 'figure'),
+                Output('monthly-dbt', 'figure'),
+                Output('monthly-dbt-day-night', 'figure'),
+                [Input('df-store', 'modified_timestamp')],
+                [State('df-store', 'data')],
+                [State('meta-store', 'data')])
+def update_tab_two(ts, df, meta):
+    df = pd.read_json(df, orient = 'split')
+    return temperature(df, meta), humidity(df, meta), solar(df, meta), wind(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)
     
 def section_one():
     """
@@ -81,22 +89,18 @@ def climate_profiles_graphs():
             children = [
                 dcc.Graph(
                     id = 'temp-profile-graph',
-                    figure = temperature(),
                     config = config
                 ), 
                 dcc.Graph(
                     id = 'humidity-profile-graph',
-                    figure = humidity(),
                     config = config
                 ), 
                 dcc.Graph(
                     id = 'solar-radiation-graph',
-                    figure = solar(),
                     config = config
                 ), 
                 dcc.Graph(
                     id = 'wind-speed-graph',
-                    figure = wind(),
                     config = config
                 )
             ]

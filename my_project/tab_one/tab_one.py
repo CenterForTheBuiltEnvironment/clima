@@ -34,43 +34,21 @@ def tab_one():
         ]
     )
 
-@app.callback(Output('session', 'data'),
+@app.callback(Output('df-store', 'data'),
+                Output('meta-store', 'data'),
                 [Input('submit-button', 'n_clicks')],
                 [State('input-url', 'value')])
 def submit_button(n_clicks, value):
     if n_clicks is None:
         raise PreventUpdate
-    return value
+    df, meta = create_df(value)
+    df = df.to_json(date_format = 'iso', orient = 'split')
+    return df, meta
 
-@app.callback(Output('session-clicks', 'children'),
-                [Input('session', 'modified_timestamp')],
-                [State('session', 'data')])
-def update_url(ts, data):
-    if ts is None:
-        raise PreventUpdate
-    return data
-
-
-# # add a click to the appropriate store.
-# @app.callback(Output('session', 'data'),
-#                 [Input('session-button', 'n_clicks')],
-#                 [State('session', 'data')])
-# def on_click(n_clicks, data):
-#     if n_clicks is None:
-#         # prevent the None callbacks is important with the store component.
-#         # you don't want to update the store for nothing.
-#         raise PreventUpdate
-#     # Give a default data dict with 0 clicks if there's no data.
-#     data = data or {'clicks': 0}
-#     data['clicks'] = data['clicks'] + 1
-#     return data
-
-# # output the stored clicks in the table cell.
-# @app.callback(Output('session-clicks', 'children'),
-#                 [Input('session', 'modified_timestamp')],
-#                 [State('session', 'data')])
-# def on_data(ts, data):
+# @app.callback(Output('hidden-div', 'children'),
+#                 [Input('df-store', 'modified_timestamp')],
+#                 [State('df-store', 'data')])
+# def update_url(ts, data):
 #     if ts is None:
 #         raise PreventUpdate
-#     data = data or {}
-#     return data.get('clicks', 0)
+#     return data
