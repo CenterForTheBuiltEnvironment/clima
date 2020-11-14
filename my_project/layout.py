@@ -2,7 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 from .extract_df import create_df
 from .tab_one import tab_one
@@ -89,9 +89,25 @@ def build_tabs():
                         selected_className = 'custom-tab--selected'),
                 ]
             ),
-            html.Div(id = 'tabs-content')
+            html.Div(
+                id = 'store-container', 
+                children = [
+                    store(),
+                    html.Div(
+                        id = 'tabs-content'
+                    )
+                ]), 
         ]
     )
+
+def store():
+    return html.Div(
+        id = "store",
+        children = [
+            dcc.Store(id='session', storage_type='session'),
+            html.Button('sessionStorage', id='session-button'),
+            html.Div(0, id='session-clicks')
+        ])
 
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])

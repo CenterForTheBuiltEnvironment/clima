@@ -1,4 +1,5 @@
 from urllib.request import Request, urlopen
+import requests, zipfile, io
 import pandas as pd
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
@@ -6,6 +7,15 @@ default_url = "https://energyplus.net/weather-download/north_and_central_america
 def get_data(url):
     """ Return a list of the data from api call. 
     """
+    if url[-3:] == "zip":
+        request = requests.get(url)
+        zf = zipfile.ZipFile(io.BytesIO(request.content))
+        for i in zf.namelist():
+            if i[-3:] == 'epw':
+                epw_name = i
+        data = zf.read(epw_name).split("\n")
+        print(type(data))
+        return data
     headers = {'User-Agent': 'Mozilla/5.0'}
     req = Request(url, headers = headers)
     epw = urlopen(req).read().decode()

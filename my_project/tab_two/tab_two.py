@@ -2,7 +2,9 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+from dash.dependencies import Input, Output
 
+from my_project.server import app 
 from .tab_two_graphs import monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind
 
 def tab_two():
@@ -18,9 +20,16 @@ def tab_two():
             ), dcc.Graph(
                 figure = monthly_dbt_day_night(),
                 config = config
-            )
+            ), 
+            html.Div(id = 'testing')
         ]
     )
+
+# @app.callback(Output('testing', 'children'),
+#             [Input('store-test', 'children')])
+# def submit_button(value):
+#     # epw_df, meta = create_df(value)
+#     return value
     
 def section_one():
     """
