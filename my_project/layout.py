@@ -104,9 +104,8 @@ def store():
     return html.Div(
         id = "store",
         children = [
-            dcc.Store(id='session', storage_type='session'),
-            html.Button('sessionStorage', id='session-button'),
-            html.Div(0, id='session-clicks')
+            dcc.Store(id = 'session', storage_type = 'session'),
+            html.Div(0, id = 'session-clicks')
         ])
 
 @app.callback(Output('tabs-content', 'children'),
