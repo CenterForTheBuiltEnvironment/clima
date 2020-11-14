@@ -9,49 +9,9 @@ from my_project.extract_df import create_df
 import math
 import numpy as np
 
-default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-epw_df, meta = create_df(default_url)
 template = "ggplot2"
 
-# Meta data
-city = meta[1]
-country = meta[3]
-latitude = float(meta[-4])
-longitude = float(meta[-3])
-time_zone = float(meta[-2])
-location_name = city + ", " + country
-
-# def average_MaxMin(val):
-#     """ Helper function for daily(). 
-
-#     Args: 
-#         val -- list of values 
-#     Returns:
-#         dataframe
-#     """
-#     val_days = [val[x:x+24] for x in range(0, len(val), 24)]
-#     val_day_max = []
-#     val_day_min = []
-#     val_day_ave = []
-#     for i in range(len(val_days)):
-#         val_day_max.append(max(val_days[i]))
-#         val_day_min.append(min(val_days[i]))
-#         val_day_ave.append(sum(val_days[i])/len(val_days[i]))
-#     val_day = pd.DataFrame(
-#         {"Max": val_day_max,
-#         "Min": val_day_min,
-#         "Ave": val_day_ave}
-#     )
-#     return val_day
-
-# Testing better way to do average_maxmin
-# exp_df = average_MaxMin(epw_df["RH"])
-# actual_df = epw_df.groupby(np.arange(len(epw_df.index)) // 24)['RH'].agg(['min', 'max', 'mean'])
-
-# print(exp_df.tail())
-# print(actual_df.tail())
-
-def calculate_ashrae():
+def calculate_ashrae(epw_df):
     """ Helper function used in the montly_dbt(). 
     """
     DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
@@ -120,7 +80,7 @@ def monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim):
     fig.update_layout(template = template)
     return fig
 
-def monthly_dbt():
+def monthly_dbt3(epw_df, meta):
     """ Return the daily graph for the DBT
     """
     df = epw_df[['month', 'day', 'hour', 'DBT']]
@@ -132,7 +92,7 @@ def monthly_dbt():
     ylim = [-50, 50]
     return monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim)
 
-def monthly_humidity():
+def monthly_humidity(epw_df, meta):
     """ Return the daily graph for humidity.
     """
     df = epw_df[['month', 'day', 'hour', 'RH']]
@@ -147,7 +107,7 @@ def monthly_humidity():
 #########################
 ### DAILY FUNCTIONS ###
 #########################
-def daily(x, col, marker_colors, names, xlim, ylim, lo, hi):
+def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
     """ General function for a monthly graph.
 
     Args:
@@ -209,7 +169,7 @@ def daily(x, col, marker_colors, names, xlim, ylim, lo, hi):
     fig.update_layout(template = template)
     return fig
 
-def daily_dbt():
+def daily_dbt(epw_df, meta):
     """ Returns the graph for the monthly dbt.
     """
     x = [i for i in range(365)]
@@ -218,10 +178,10 @@ def daily_dbt():
     names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
     xlim = (0, 365)
     ylim = (-40, 50)
-    lo, hi = calculate_ashrae()
-    return daily(x, col, marker_colors, names, xlim, ylim, lo, hi)
+    lo, hi = calculate_ashrae(epw_df)
+    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
 
-def daily_humidity():
+def daily_humidity(epw_df, meta):
     """ Returns the graph for the monthly humidity 
     """
     x = [i for i in range(365)]
@@ -232,13 +192,13 @@ def daily_humidity():
     ylim = (0, 100)
     lo = [30] * 365
     hi = [70] * 365
-    return daily(x, col, marker_colors, names, xlim, ylim, lo, hi)
+    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
 
 #########################
 ### HEATMAP FUNCTIONS ### 
 #########################
 
-def heatmap(colors, title, data_min, data_max, z_vals):
+def heatmap(epw_df, colors, title, data_min, data_max, z_vals):
     """ General function for a heatmap graph. X axis is hour, Y axis is DOY.
 
     Args: 
@@ -260,7 +220,7 @@ def heatmap(colors, title, data_min, data_max, z_vals):
     )
     return fig
 
-def heatmap_dbt():
+def heatmap_dbt(epw_df, meta):
     """ Return a figure of the heatmap for DBT
     """
     colors = ["#00b3ff","#000082","#ff0000","#ffff00"]
@@ -268,9 +228,9 @@ def heatmap_dbt():
     data_max = (5 * math.ceil(epw_df["DBT"].max() / 5))
     data_min = (5 * math.floor(epw_df["DBT"].min() / 5))
     z_vals = epw_df["DBT"]
-    return heatmap(colors, title, data_min, data_max, z_vals)
+    return heatmap(epw_df, colors, title, data_min, data_max, z_vals)
 
-def heatmap_humidity():
+def heatmap_humidity(epw_df, meta):
     """ Return a figure of the heatmap for humidity. 
     """
     colors = ["#ffe600", "#00c8ff", "#0000ff"]
@@ -278,4 +238,4 @@ def heatmap_humidity():
     data_max = 100
     data_min = 0
     z_vals = epw_df["RH"]
-    return heatmap(colors, title, data_min, data_max, z_vals)
+    return heatmap(epw_df, colors, title, data_min, data_max, z_vals)
