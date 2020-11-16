@@ -13,7 +13,6 @@ def tab_one():
     return html.Div(
         className = "container-col tab-container",
         children = [
-            html.Label('Copy paste a link from the map below'),
             alert(),
             html.Div(
                 id = "tab-one-form-container",
@@ -76,8 +75,8 @@ def submit_button(n_clicks, value):
 def alert_display(data, n_clicks):
     """ Displays the alert. 
     """
-    if n_clicks is  None:
-        raise PreventUpdate
+    if n_clicks is None:
+        return True, "To start, submit a link below!", "primary"
     if data is None and n_clicks > 0:
         return True, "This link is not available. Please choose another one.", "warning"
     else:
