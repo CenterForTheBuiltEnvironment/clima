@@ -14,6 +14,7 @@ def tab_one():
         className = "container-col tab-container",
         children = [
             html.Label('Copy paste a link from the map below'),
+            alert(),
             html.Div(
                 id = "tab-one-form-container",
                 className = "container-row",
@@ -33,14 +34,39 @@ def tab_one():
             
         ]
     )
+      
+def alert():
+    return html.Div(
+        [
+            dbc.Alert(
+                "This link is not available. Please choose another one.",
+                id = "alert-fade",
+                dismissable = True,
+                is_open = False,
+                color = "warning"
+            )
+        ]
+    )
 
 @app.callback(Output('df-store', 'data'),
                 Output('meta-store', 'data'),
                 [Input('submit-button', 'n_clicks')],
                 [State('input-url', 'value')])
 def submit_button(n_clicks, value):
-    if n_clicks is None:
+    try:
+        if n_clicks is None:
+            raise PreventUpdate
+        df, meta = create_df(value)
+        df = df.to_json(date_format = 'iso', orient = 'split')
+        return df, meta
+    except:
+        return None, None
+
+@app.callback(Output("alert-fade", 'is_open'),
+                [Input('df-store', 'data')],
+                [Input('submit-button', 'n_clicks')])
+def alert_function(data, n_clicks):
+    if n_clicks is  None:
         raise PreventUpdate
-    df, meta = create_df(value)
-    df = df.to_json(date_format = 'iso', orient = 'split')
-    return df, meta
+    if data is None and n_clicks > 0:
+        return True

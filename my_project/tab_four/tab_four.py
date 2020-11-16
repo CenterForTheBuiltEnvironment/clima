@@ -32,20 +32,6 @@ def tab_four():
         ]
     )
 
-# @app.callback(
-#     Output('solar-dropdown-output', 'figure'),
-#     [Input("solar-dropdown", 'value')]
-# )
-# def update_tab_four_solar(value):
-#     """ Updating the button in tab four to change the solar graph. 
-#     """
-#     if value == 'polar':
-#         return polar_solar()
-#     elif value == 'lat/long':
-#         return lat_long_solar()
-#     else:
-#         return daily_solar()
-
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
     Output('daily-solar', 'figure'),
