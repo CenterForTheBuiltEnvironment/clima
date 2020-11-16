@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
-from .tab_two_graphs import world_map, monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind
+from .tab_two_graphs import world_map, monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind, dbt_violin, humidity_violin, wind_violin
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
@@ -43,7 +43,7 @@ def tab_two():
 )
 def update_tab_two(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return world_map(df, meta), temperature(df, meta), humidity(df, meta), solar(df, meta), wind(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)
+    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar(df, meta), wind_violin(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)
     
 def section_one():
     """
@@ -91,6 +91,7 @@ def climate_profiles_graphs():
     """
     """
     return html.Div(
+            id = "tab-two-4-container",
             className = "container-row",
             children = [
                 dcc.Graph(

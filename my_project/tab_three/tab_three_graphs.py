@@ -43,6 +43,118 @@ def calculate_ashrae(epw_df):
     return lo80, hi80
 
 #########################
+### DAILY FUNCTIONS ###
+#########################
+def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
+    """ General function for a monthly graph.
+
+    Args:
+        x -- list of the x values 
+        col -- string (either "RH" or "DBT")
+        marker_colors -- list of marker colors for each trace 
+        names -- list of names for each trace
+        xlim -- tuple of the x axes limits
+        ylim -- tuple of the y axes limits
+        lo -- list of values 
+        hi -- list of values 
+    """
+    marker_color_one = marker_colors[0]
+    marker_color_two = marker_colors[1]
+    marker_color_three = marker_colors[2]
+
+    name_one = names[0]
+    name_two = names[1]
+    name_three = names[2]
+
+    # Get min, max, and mean of each day
+    day_df = epw_df.groupby(np.arange(len(epw_df.index)) // 24)[col].agg(['min', 'max', 'mean'])
+
+    ones = [1] * 365
+
+    trace1 = go.Bar(x = x, y = day_df['max'] - day_df['min'],
+                    base = day_df['min'],
+                    marker_color = marker_color_one,
+                    name = name_one,
+                    customdata = np.stack((day_df['mean'], epw_df.iloc[::24, :]['month_names'], epw_df.iloc[::24, :]['day']), axis =- 1),
+                    hovertemplate = ('Max: %{y:.2f} &#8451;<br>'+\
+                                'Min: %{base:.2f} &#8451;<br>'+\
+                                '<b>Mean : %{customdata[0]:.2f} &#8451;</b><br>'+\
+                                'Month: %{customdata[1]}<br>'+\
+                                'Day: %{customdata[2]}<br>'))
+
+    trace2 = go.Bar(x = x, y = ones, base = day_df['mean'], 
+                    name = name_two,
+                    marker_color = marker_color_two,
+                    customdata = np.stack((day_df['mean'], epw_df.iloc[::24, :]['month_names'], epw_df.iloc[::24, :]['day']), axis =- 1),
+                    hovertemplate = ('<b>Mean : %{customdata[0]:.2f} &#8451;</b><br>'+\
+                                'Month: %{customdata[1]}<br>'+\
+                                'Day: %{customdata[2]}<br>'))
+
+    lo_df = pd.DataFrame({"lo": lo})
+    hi_df = pd.DataFrame({"hi": hi})
+
+    ## plot ashrae adaptive comfort limits (80%)
+    trace3 = go.Bar(x = x, y = hi_df["hi"] - lo_df["lo"], 
+                    base = lo_df["lo"],
+                    name = name_three,
+                    marker_color = marker_color_three,
+                    hovertemplate = ('Max: %{y:.2f} &#8451;<br>'+\
+                    'Min: %{base:.2f} &#8451;<br>'))
+
+    # ## plot ashrae adaptive comfort limits (90%)
+    # lo90_df = pd.DataFrame({"lo90": lo90})
+    # hi90_df = pd.DataFrame({"hi90": hi90})
+
+    # trace4=go.Bar(x = days, y = hi90_df["hi90"] - lo90_df["lo90"], base = lo90_df["lo90"],
+    #             name = name_four,
+    #             marker_color = "silver",
+    #             hovertemplate = ('Max: %{y:.2f} &#8451;<br>'+\
+    #                                 'Min: %{base:.2f} &#8451;<br>')
+    #             )
+
+    data = [trace3, trace1, trace2]
+    layout = go.Layout(
+        barmode = 'overlay',
+        bargap = 0
+    )
+    fig = go.Figure(data = data, layout = layout)
+    fig.update_traces(opacity = 0.6)
+    fig.update_layout(legend = dict(
+        orientation = "h",
+        yanchor = "bottom",
+        y = 1.02,
+        xanchor = "right",
+        x = 1    
+    ))
+    fig.update_layout(template = template)
+    return fig
+
+def daily_dbt(epw_df, meta):
+    """ Returns the graph for the monthly dbt.
+    """
+    x = [i for i in range(365)]
+    col = "RH"
+    marker_colors = ['orange', 'red', "silver"]
+    names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
+    xlim = (0, 365)
+    ylim = (-40, 50)
+    lo, hi = calculate_ashrae(epw_df)
+    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
+
+def daily_humidity(epw_df, meta):
+    """ Returns the graph for the monthly humidity 
+    """
+    x = [i for i in range(365)]
+    col = "RH"
+    marker_colors = ['dodgerblue', 'blue', "silver"]
+    names = ['Relative Humidity Range', 'Average Relative Humidity', 'Humidity Comfort Band']
+    xlim = (0, 365)
+    ylim = (0, 100)
+    lo = [30] * 365
+    hi = [70] * 365
+    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
+
+#########################
 ### MONTHLY FUNCTIONS ###
 #########################
 
@@ -103,96 +215,6 @@ def monthly_humidity(epw_df, meta):
     xlim = [0, 25]
     ylim = [0, 100]
     return monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim)
-
-#########################
-### DAILY FUNCTIONS ###
-#########################
-def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
-    """ General function for a monthly graph.
-
-    Args:
-        x -- list of the x values 
-        col -- string (either "RH" or "DBT")
-        marker_colors -- list of marker colors for each trace 
-        names -- list of names for each trace
-        xlim -- tuple of the x axes limits
-        ylim -- tuple of the y axes limits
-        lo -- list of values 
-        hi -- list of values 
-    """
-    marker_color_one = marker_colors[0]
-    marker_color_two = marker_colors[1]
-    marker_color_three = marker_colors[2]
-
-    name_one = names[0]
-    name_two = names[1]
-    name_three = names[2]
-
-    # Get min, max, and mean of each day
-    day_df = epw_df.groupby(np.arange(len(epw_df.index)) // 24)[col].agg(['min', 'max', 'mean'])
-
-    ones = [1] * 365
-
-    trace1 = go.Bar(x = x, y = day_df['max'] - day_df['min'],
-                    base = day_df['min'],
-                    marker_color = marker_color_one,
-                    name = name_one)
-
-    trace2 = go.Bar(x = x, y = ones, base = day_df['mean'], 
-                    name = name_two,
-                    marker_color = marker_color_two)
-
-    lo_df = pd.DataFrame({"lo": lo})
-    hi_df = pd.DataFrame({"hi": hi})
-
-    trace3 = go.Bar(x = x, y = hi_df["hi"] - lo_df["lo"], 
-                    base = lo_df["lo"],
-                    name = name_three,
-                    marker_color = marker_color_three)
-
-    data = [trace3, trace1, trace2]
-    layout = go.Layout(
-        barmode = 'overlay',
-        bargap = 0
-    )
-    fig = go.Figure(data = data, layout = layout)
-    # fig.update_xaxes(range = xlim)
-    # fig.update_yaxes(range = ylim)
-    fig.update_traces(opacity = 0.6)
-    fig.update_layout(legend = dict(
-        orientation = "h",
-        yanchor = "bottom",
-        y = 1.02,
-        xanchor = "right",
-        x = 1    
-    ))
-    fig.update_layout(template = template)
-    return fig
-
-def daily_dbt(epw_df, meta):
-    """ Returns the graph for the monthly dbt.
-    """
-    x = [i for i in range(365)]
-    col = "RH"
-    marker_colors = ['orange', 'red', "silver"]
-    names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
-    xlim = (0, 365)
-    ylim = (-40, 50)
-    lo, hi = calculate_ashrae(epw_df)
-    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
-
-def daily_humidity(epw_df, meta):
-    """ Returns the graph for the monthly humidity 
-    """
-    x = [i for i in range(365)]
-    col = "RH"
-    marker_colors = ['dodgerblue', 'blue', "silver"]
-    names = ['Relative Humidity Range', 'Average Relative Humidity', 'Humidity Comfort Band']
-    xlim = (0, 365)
-    ylim = (0, 100)
-    lo = [30] * 365
-    hi = [70] * 365
-    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
 
 #########################
 ### HEATMAP FUNCTIONS ### 

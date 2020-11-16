@@ -12,7 +12,117 @@ GHrad_color = 'YlOrRd_r'
 Wspeed_color = 'Blues_r'
 template = "ggplot2"
 
-### Violin Graphs ###
+##################
+### WORLD MAP ###
+#################
+def world_map(df, meta): 
+    """ Return the world map showing the current location. 
+    """
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    city = meta[1]
+    country = meta[3]
+    time_zone = float(meta[-2])
+    lat_long_df = pd.DataFrame(data = {"Lat": [latitude], "Long":[longitude], "City": [city], 
+    "Country": [country], "Time Zone" :[time_zone], "Size": [10]})
+
+    fig = px.scatter_mapbox(lat_long_df, lat = "Lat", lon = "Long", hover_name = "City", hover_data = ["Country", "Time Zone"],
+                        color_discrete_sequence = ["fuchsia"], zoom = 5, height = 300, size = "Size")
+    fig.update_layout(
+        mapbox_style = "white-bg",
+        mapbox_layers = [
+            {
+                "below": 'traces',
+                "sourcetype": "raster",
+                "sourceattribution": "United States Geological Survey",
+                "source": [
+                    "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
+                ]
+            }
+        ])
+    fig.update_layout(margin = {"r":0,"t":0,"l":0,"b":0})
+    return fig
+
+###################################
+### DAY VS NIGHT VIOLIN GRAPHS ###
+##################################
+def create_day_night_violin(df, col, title, y_title):
+    """ General function to create a violin plot. 
+    """
+    colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype = 'rgb')
+    fig = go.Figure()
+    maskDay = (df["hour"] >= 8) & (df["hour"] < 20)
+    maskNight = (df["hour"] < 8) | (df["hour"] >= 20)
+    data_day = df.loc[maskDay, col]
+    data_night = df.loc[maskNight, col]
+    fig.add_trace(go.Violin(x = df["fake_year"], y = data_day, line_color = 'rgb(200, 10, 10)', 
+        name = "Day", side = 'negative'))
+    fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = 'rgb(0, 200, 200)', 
+        name = "Night", side = 'positive'))
+    fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
+    fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, 
+        violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title)
+    return fig
+
+def dbt_violin(df, meta):
+    city = meta[1]
+    country = meta[3]
+    location_name = city + ", " + country
+    title = {
+        'text': "Temperature" + " profile<br>" + location_name,
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    }
+    y_title = "Temperature (degC)"
+    return create_day_night_violin(df, "DBT", title, y_title)
+
+def humidity_violin(df, meta):
+    city = meta[1]
+    country = meta[3]
+    location_name = city + ", " + country
+    title = {
+        'text': "Relative Humidity" + " profile<br>" + location_name + "",
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    }
+    y_title = "Relative Humitdity (%)"
+    return create_day_night_violin(df, "RH", title, y_title)
+
+# def solar_violin(df, meta):
+#     city = meta[1]
+#     country = meta[3]
+#     location_name = city + ", " + country
+#     title = {
+#         'text': "Solar Radiation" + " profile<br>" + location_name + "",
+#         'y': 0.95,
+#         'x': 0.5,
+#         'xanchor': 'center',
+#         'yanchor': 'top'
+#     }
+#     y_title = "Global Horizontal Solar Radiation (W/h m^2)"
+#     return create_day_night_violin(df, "", title, y_title)
+
+def wind_violin(df, meta):
+    city = meta[1]
+    country = meta[3]
+    location_name = city + ", " + country
+    title = {
+        'text': "Wind Speed" + " profile<br>" + location_name + "",
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    }
+    y_title = "Wind Speed (m/s)"
+    return create_day_night_violin(df, "Wspeed", title, y_title)
+
+########################
+### 4 VIOLIN GRAPHS ###
+######################
 def create_violin(df, custom_ylim, title, y, height, width, labels):
     """ General function to create a violin plot. 
     """
@@ -77,6 +187,9 @@ def wind(df, meta):
     labels = dict(Wspeed = "Wind Speed (m/s)")
     return create_violin(df, custom_ylim, title, y, height, width, labels)
 
+#########################
+### 2 MONTHLY GRAPHS ###
+#######################
 def monthly_dbt(df, meta):
     """
     """
@@ -108,27 +221,4 @@ def monthly_dbt_day_night(df, meta):
     fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay')
     return fig 
 
-def world_map(df, meta): 
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    city = meta[1]
-    country = meta[3]
-    time_zone = float(meta[-2])
-    lat_long_df = pd.DataFrame(data = {"Lat": [latitude], "Long":[longitude], "City": [city], "Country": [country], "Time Zone" :[time_zone], "Size": [10]})
 
-    fig = px.scatter_mapbox(lat_long_df, lat = "Lat", lon = "Long", hover_name = "City", hover_data = ["Country", "Time Zone"],
-                        color_discrete_sequence = ["fuchsia"], zoom = 5, height = 300, size = "Size")
-    fig.update_layout(
-        mapbox_style = "white-bg",
-        mapbox_layers = [
-            {
-                "below": 'traces',
-                "sourcetype": "raster",
-                "sourceattribution": "United States Geological Survey",
-                "source": [
-                    "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
-                ]
-            }
-        ])
-    fig.update_layout(margin = {"r":0,"t":0,"l":0,"b":0})
-    return fig

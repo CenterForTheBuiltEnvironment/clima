@@ -50,6 +50,9 @@ def create_df(default_url):
 
     epw_df = pd.DataFrame(columns = col_names, data = lst)
 
+    # Add fake_year
+    epw_df['fake_year'] = 'year'
+
     # Add in month names 
     month_look_up = {'1': 'Jan', '2': 'Feb', '3': 'Mar', '4': 'Apr', '5': 'May',
             '6': 'Jun', '7': 'Jul', '8': 'Aug', '9': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Dec'}
@@ -78,7 +81,7 @@ def create_df(default_url):
     'Oskycover', 'Vis', 'Cheight', 'PWobs', 'PWcodes', 'Pwater', 'AsolOptD', 'SnowD', 'DaySSnow']
     for col in change_to_float:
         epw_df[col] = epw_df[col].astype(float)
-
+    print(epw_df.head)
     return epw_df, meta
 
 #test
