@@ -8,27 +8,38 @@ import numpy as np
 import math 
 from my_project.extract_df import create_df
 
-default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-epw_df, meta = create_df(default_url)
+# default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
+# epw_df, meta = create_df(default_url)
 template = "ggplot2"
 # Meta data
-city = meta[1]
-country = meta[3]
-latitude = float(meta[-4])
-longitude = float(meta[-3])
-time_zone = float(meta[-2])
-location_name = city + ", " + country
+# city = meta[1]
+# country = meta[3]
+# latitude = float(meta[-4])
+# longitude = float(meta[-3])
+# time_zone = float(meta[-2])
+# location_name = city + ", " + country
 
 # Adjust dateime based on timezone
-date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
-tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-date = date-tz
+# date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
+# tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+# date = date-tz
 
-def lat_long_solar():
+def lat_long_solar(epw_df, meta):
     """ Return a graph of a latitude and longitude solar diagram. 
     """
-
+    # Meta data
+    city = meta[1]
+    country = meta[3]
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    time_zone = float(meta[-2])
+    location_name = city + ", " + country
+    # Adjust dateime based on timezone
+    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
+    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    date = date-tz
     tz = 'UTC'
+
     times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed = 'left',
                         freq = 'H', tz = tz)
     delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
@@ -86,9 +97,21 @@ def lat_long_solar():
 
     return fig 
 
-def polar_solar():
+def polar_solar(epw_df, meta):
     """
     """
+    # Meta data
+    city = meta[1]
+    country = meta[3]
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    time_zone = float(meta[-2])
+    location_name = city + ", " + country
+    # Adjust dateime based on timezone
+    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
+    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    date = date-tz
+
     tz = 'UTC'
     times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed='left',
                         freq = 'H', tz = tz)
@@ -166,7 +189,7 @@ def polar_solar():
 
     return fig
 
-def daily_solar():
+def daily_solar(epw_df, meta):
     """
     """
     GHrad_month_ave = epw_df.groupby(['month','hour'])['GHrad'].median().reset_index()

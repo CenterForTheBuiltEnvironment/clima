@@ -44,11 +44,3 @@ def submit_button(n_clicks, value):
     df, meta = create_df(value)
     df = df.to_json(date_format = 'iso', orient = 'split')
     return df, meta
-
-# @app.callback(Output('hidden-div', 'children'),
-#                 [Input('df-store', 'modified_timestamp')],
-#                 [State('df-store', 'data')])
-# def update_url(ts, data):
-#     if ts is None:
-#         raise PreventUpdate
-#     return data

@@ -7,14 +7,14 @@ default_url = "https://energyplus.net/weather-download/north_and_central_america
 def get_data(url):
     """ Return a list of the data from api call. 
     """
-    if url[-3:] == "zip":
+    if url[-3:] == "zip" or url[-3:] == "all":
         request = requests.get(url)
         zf = zipfile.ZipFile(io.BytesIO(request.content))
         for i in zf.namelist():
             if i[-3:] == 'epw':
                 epw_name = i
-        data = zf.read(epw_name).split("\n")
-        print(type(data))
+        data = zf.read(epw_name)
+        data = repr(data).split("\\n")
         return data
     headers = {'User-Agent': 'Mozilla/5.0'}
     req = Request(url, headers = headers)
@@ -68,42 +68,21 @@ def create_df(default_url):
     epw_df['DOY'] = epw_df.apply(lambda row: doy_helper(row), axis = 1)
 
     # Change to int type
-    epw_df['year'] = epw_df['year'].astype(int)
-    epw_df['day'] = epw_df['day'].astype(int)
-    epw_df['month'] = epw_df['month'].astype(int)
-    epw_df['hour'] = epw_df['hour'].astype(int)
+    change_to_int = ['year', 'day', 'month', 'hour']
+    for col in change_to_int:
+        epw_df[col] = epw_df[col].astype(int)
 
     # Change to float type 
-    epw_df['DBT'] = epw_df['DBT'].astype(float)
-    epw_df['DPT'] = epw_df['DPT'].astype(float)
-    epw_df['RH'] = epw_df['RH'].astype(float)
-    epw_df['Apressure'] = epw_df['Apressure'].astype(float)
-    epw_df['EHrad'] = epw_df['EHrad'].astype(float)
-    epw_df['EDNrad'] = epw_df['EDNrad'].astype(float)
-    epw_df['HIRrad'] = epw_df['HIRrad'].astype(float)
-    epw_df['GHrad'] = epw_df['GHrad'].astype(float)
-    epw_df['DNrad'] = epw_df['DNrad'].astype(float)
-    epw_df['DifHrad'] = epw_df['DifHrad'].astype(float)
-    epw_df['GHillum'] = epw_df['GHillum'].astype(float)
-    epw_df['DNillum'] = epw_df['DNillum'].astype(float)
-    epw_df['DifHillum'] = epw_df['DifHillum'].astype(float)
-    epw_df['Zlumi'] = epw_df['Zlumi'].astype(float)
-    epw_df['Wdir'] = epw_df['Wdir'].astype(float)
-    epw_df['Wspeed'] = epw_df['Wspeed'].astype(float)
-    epw_df['Tskycover'] = epw_df['Tskycover'].astype(float)
-    epw_df['Oskycover'] = epw_df['Oskycover'].astype(float)
-    epw_df['Vis'] = epw_df['Vis'].astype(float)
-    epw_df['Cheight'] = epw_df['Cheight'].astype(float)
-    epw_df['PWobs'] = epw_df['PWobs'].astype(float)
-    epw_df['PWcodes'] = epw_df['PWcodes'].astype(float)
-    epw_df['Pwater'] = epw_df['Pwater'].astype(float)
-    epw_df['AsolOptD'] = epw_df['AsolOptD'].astype(float)
-    epw_df['SnowD'] = epw_df['SnowD'].astype(float)
-    epw_df['DaySSnow'] = epw_df['DaySSnow'].astype(float)
+    change_to_float = ['DBT', 'DPT', 'RH', 'Apressure', 'EHrad', 'EDNrad', 'HIRrad', 'GHrad', 
+    'DNrad', 'DifHrad', 'GHillum', 'DNillum', 'DifHillum', 'Zlumi', 'Wdir', 'Wspeed', 'Tskycover',
+    'Oskycover', 'Vis', 'Cheight', 'PWobs', 'PWcodes', 'Pwater', 'AsolOptD', 'SnowD', 'DaySSnow']
+    for col in change_to_float:
+        epw_df[col] = epw_df[col].astype(float)
 
     return epw_df, meta
 
+#test
+# url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/RUS//RUS_Moscow.276120_IWEC/all"
+# df, meta = create_df(url)
+# print(df.head)
 
-# month_names_long, fake_year 
-# because in og code months_name_long is same as month_names
-# and fake year is just a string 'year'

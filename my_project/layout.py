@@ -106,9 +106,6 @@ def store():
         children = [
             dcc.Store(id = 'df-store', storage_type = 'session'),
             dcc.Store(id = 'meta-store', storage_type = 'session'),
-            # html.Div(
-            #     id = 'hidden-div',
-            #     style = {'display' : 'none'})
         ])
 
 @app.callback(Output('tabs-content', 'children'),
