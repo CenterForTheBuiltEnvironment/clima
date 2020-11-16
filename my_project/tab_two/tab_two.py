@@ -29,16 +29,18 @@ def tab_two():
         ]
     )
 
-@app.callback(Output('world-map', 'figure'),
-                Output('temp-profile-graph', 'figure'),
-                Output('humidity-profile-graph', 'figure'),
-                Output('solar-radiation-graph', 'figure'),
-                Output('wind-speed-graph', 'figure'),
-                Output('monthly-dbt', 'figure'),
-                Output('monthly-dbt-day-night', 'figure'),
-                [Input('df-store', 'modified_timestamp')],
-                [State('df-store', 'data')],
-                [State('meta-store', 'data')])
+@app.callback(
+    Output('world-map', 'figure'),
+    Output('temp-profile-graph', 'figure'),
+    Output('humidity-profile-graph', 'figure'),
+    Output('solar-radiation-graph', 'figure'),
+    Output('wind-speed-graph', 'figure'),
+    Output('monthly-dbt', 'figure'),
+    Output('monthly-dbt-day-night', 'figure'),
+    [Input('df-store', 'modified_timestamp')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
 def update_tab_two(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
     return world_map(df, meta), temperature(df, meta), humidity(df, meta), solar(df, meta), wind(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)

@@ -36,6 +36,8 @@ def tab_one():
     )
       
 def alert():
+    """ Alert layout for the submit button.
+    """
     return html.Div(
         [
             dbc.Alert(
@@ -46,11 +48,15 @@ def alert():
         ]
     )
 
-@app.callback(Output('df-store', 'data'),
-                Output('meta-store', 'data'),
-                [Input('submit-button', 'n_clicks')],
-                [State('input-url', 'value')])
+@app.callback(
+    Output('df-store', 'data'),
+    Output('meta-store', 'data'),
+    [Input('submit-button', 'n_clicks')],
+    [State('input-url', 'value')]
+)
 def submit_button(n_clicks, value):
+    """ Takes the input once submitted and stores it.
+    """
     try:
         if n_clicks is None:
             raise PreventUpdate
@@ -60,12 +66,16 @@ def submit_button(n_clicks, value):
     except:
         return None, None
 
-@app.callback(Output("alert", 'is_open'),
-                Output("alert", 'children'),
-                Output("alert", "color"),
-                [Input('df-store', 'data')],
-                [Input('submit-button', 'n_clicks')])
+@app.callback(
+    Output("alert", 'is_open'),
+    Output("alert", 'children'),
+    Output("alert", "color"),
+    [Input('df-store', 'data')],
+    [Input('submit-button', 'n_clicks')]
+)
 def alert_display(data, n_clicks):
+    """ Displays the alert. 
+    """
     if n_clicks is  None:
         raise PreventUpdate
     if data is None and n_clicks > 0:

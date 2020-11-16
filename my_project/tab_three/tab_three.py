@@ -40,15 +40,17 @@ def tab_three():
         ]
     )
 
-@app.callback(Output('daily-dbt', 'figure'),
-                Output('daily-humidity', 'figure'),
-                Output('monthly-dbt-3', 'figure'),
-                Output('monthly-humidity', 'figure'),
-                Output('heatmap-dbt', 'figure'),
-                Output('heatmap-humidity', 'figure'),
-                [Input('df-store', 'modified_timestamp')],
-                [State('df-store', 'data')],
-                [State('meta-store', 'data')])
+@app.callback(
+    Output('daily-dbt', 'figure'),
+    Output('daily-humidity', 'figure'),
+    Output('monthly-dbt-3', 'figure'),
+    Output('monthly-humidity', 'figure'),
+    Output('heatmap-dbt', 'figure'),
+    Output('heatmap-humidity', 'figure'),
+    [Input('df-store', 'modified_timestamp')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
 def update_tab_three(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
     return daily_dbt(df, meta), daily_humidity(df, meta), monthly_dbt3(df, meta), monthly_humidity(df, meta), heatmap_dbt(df, meta), heatmap_humidity(df, meta)
