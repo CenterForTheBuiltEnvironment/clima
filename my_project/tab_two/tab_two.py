@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
-from .tab_two_graphs import monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind
+from .tab_two_graphs import world_map, monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
@@ -14,6 +14,9 @@ def tab_two():
     return html.Div(
         className = "container-col", 
         children = [
+            dcc.Graph(
+                id = "world-map"
+            ),
             section_one(), 
             dcc.Graph(
                 id = 'monthly-dbt',
@@ -26,7 +29,8 @@ def tab_two():
         ]
     )
 
-@app.callback(Output('temp-profile-graph', 'figure'),
+@app.callback(Output('world-map', 'figure'),
+                Output('temp-profile-graph', 'figure'),
                 Output('humidity-profile-graph', 'figure'),
                 Output('solar-radiation-graph', 'figure'),
                 Output('wind-speed-graph', 'figure'),
@@ -37,7 +41,7 @@ def tab_two():
                 [State('meta-store', 'data')])
 def update_tab_two(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return temperature(df, meta), humidity(df, meta), solar(df, meta), wind(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)
+    return world_map(df, meta), temperature(df, meta), humidity(df, meta), solar(df, meta), wind(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)
     
 def section_one():
     """

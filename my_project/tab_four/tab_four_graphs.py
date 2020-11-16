@@ -8,21 +8,7 @@ import numpy as np
 import math 
 from my_project.extract_df import create_df
 
-# default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-# epw_df, meta = create_df(default_url)
 template = "ggplot2"
-# Meta data
-# city = meta[1]
-# country = meta[3]
-# latitude = float(meta[-4])
-# longitude = float(meta[-3])
-# time_zone = float(meta[-2])
-# location_name = city + ", " + country
-
-# Adjust dateime based on timezone
-# date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
-# tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-# date = date-tz
 
 def lat_long_solar(epw_df, meta):
     """ Return a graph of a latitude and longitude solar diagram. 

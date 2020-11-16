@@ -39,11 +39,9 @@ def alert():
     return html.Div(
         [
             dbc.Alert(
-                "This link is not available. Please choose another one.",
-                id = "alert-fade",
+                id = "alert",
                 dismissable = True,
                 is_open = False,
-                color = "warning"
             )
         ]
     )
@@ -62,11 +60,16 @@ def submit_button(n_clicks, value):
     except:
         return None, None
 
-@app.callback(Output("alert-fade", 'is_open'),
+@app.callback(Output("alert", 'is_open'),
+                Output("alert", 'children'),
+                Output("alert", "color"),
                 [Input('df-store', 'data')],
                 [Input('submit-button', 'n_clicks')])
-def alert_function(data, n_clicks):
+def alert_display(data, n_clicks):
     if n_clicks is  None:
         raise PreventUpdate
     if data is None and n_clicks > 0:
-        return True
+        return True, "This link is not available. Please choose another one.", "warning"
+    else:
+        return True, "Successfully loaded data. Check out the other tabs!", "success"
+

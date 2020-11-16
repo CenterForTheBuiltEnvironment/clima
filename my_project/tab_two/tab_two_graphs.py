@@ -3,6 +3,7 @@ import plotly.express as px
 from my_project.extract_df import create_df
 import plotly.graph_objects as go
 from plotly.colors import n_colors
+import plotly.express as px
 
 # Color scheme and templates
 DBT_color = 'Reds'
@@ -103,8 +104,31 @@ def monthly_dbt_day_night(df, meta):
     fig.add_trace(go.Violin(x = monthNames_day, y = data_day, line_color = 'rgb(200, 10, 10)', name = "Day", side = 'negative'))
     fig.add_trace(go.Violin(x = monthNames_nigth, y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
 
-
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False,)
     fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay')
     return fig 
 
+def world_map(df, meta): 
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    city = meta[1]
+    country = meta[3]
+    time_zone = float(meta[-2])
+    lat_long_df = pd.DataFrame(data = {"Lat": [latitude], "Long":[longitude], "City": [city], "Country": [country], "Time Zone" :[time_zone], "Size": [10]})
+
+    fig = px.scatter_mapbox(lat_long_df, lat = "Lat", lon = "Long", hover_name = "City", hover_data = ["Country", "Time Zone"],
+                        color_discrete_sequence = ["fuchsia"], zoom = 5, height = 300, size = "Size")
+    fig.update_layout(
+        mapbox_style = "white-bg",
+        mapbox_layers = [
+            {
+                "below": 'traces',
+                "sourcetype": "raster",
+                "sourceattribution": "United States Geological Survey",
+                "source": [
+                    "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
+                ]
+            }
+        ])
+    fig.update_layout(margin = {"r":0,"t":0,"l":0,"b":0})
+    return fig
