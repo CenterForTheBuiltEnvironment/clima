@@ -81,7 +81,6 @@ def create_df(default_url):
     'Oskycover', 'Vis', 'Cheight', 'PWobs', 'PWcodes', 'Pwater', 'AsolOptD', 'SnowD', 'DaySSnow']
     for col in change_to_float:
         epw_df[col] = epw_df[col].astype(float)
-    print(epw_df.head)
     return epw_df, meta
 
 #test

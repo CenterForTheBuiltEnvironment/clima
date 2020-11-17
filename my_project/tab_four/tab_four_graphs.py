@@ -10,6 +10,9 @@ from my_project.extract_df import create_df
 
 template = "ggplot2"
 
+####################################
+### POLAR/LAT-LONG GRAPH SELECT ###
+###################################
 def lat_long_solar(epw_df, meta):
     """ Return a graph of a latitude and longitude solar diagram. 
     """
@@ -175,12 +178,15 @@ def polar_solar(epw_df, meta):
 
     return fig
 
+####################
+### DAILY GRAPHS ###
+####################
 def daily_solar(epw_df, meta):
     """
     """
     GHrad_month_ave = epw_df.groupby(['month','hour'])['GHrad'].median().reset_index()
     monthList = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
+    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
     for i in range(12):
         fig.add_trace(
             go.Scatter(x = epw_df.loc[epw_df["month"] == i + 1,"hour"], 
@@ -199,3 +205,112 @@ def daily_solar(epw_df, meta):
         fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
     fig.update_layout(template = template)
     return fig
+
+def monthly_solar(epw_df, meta):
+    """
+    """
+    GHrad_month_ave = epw_df.groupby(['month','hour'])['GHrad'].median().reset_index()
+    DifHrad_month_ave = epw_df.groupby(['month','hour'])['DifHrad'].median().reset_index()
+    monthList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+
+    for i in range(12):
+        
+        fig.add_trace(
+            go.Scatter(
+                x = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1,"hour"], 
+                y = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "GHrad"], fill = 'tozeroy',
+                mode = "lines", line_color = "orange", line_width = 2, name = None, showlegend = False
+            ),
+            row = 1, col = i + 1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x = DifHrad_month_ave.loc[DifHrad_month_ave["month"] == i + 1, "hour"], 
+                y = DifHrad_month_ave.loc[DifHrad_month_ave["month"] == i + 1, "DifHrad"], fill = "tozeroy",
+                mode = "lines", line_color = "dodgerblue", line_width = 2, name = None, showlegend = False
+            ),
+            row = 1, col = i + 1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x = epw_df.loc[epw_df["month"] == i + 1, "hour"], 
+                y = epw_df.loc[epw_df["month"] == i + 1, "GHrad"],
+                mode="markers",marker_color="#ff8400",
+                marker_size = 2, name = monthList[i], showlegend = False
+            ),
+            row = 1, col = i + 1,
+        )
+        fig.add_trace(
+            go.Scatter(
+                x = epw_df.loc[epw_df["month"] == i + 1, "hour"],
+                y = epw_df.loc[epw_df["month"] == i + 1, "DifHrad"],
+                mode = "markers", marker_color = "skyblue",
+                marker_size = 2, name = monthList[i], showlegend = False
+            ),
+            row = 1, col = i + 1,
+        )
+        fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
+        fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
+    
+    fig.update_layout(template = template)
+    return fig
+
+#################
+### HEATMAPS ###
+################
+def create_solar_heatmap(epw_df, colors, title, data_max, data_min, z_col, hover):
+    """ General function to create the heatmaps.
+    """
+    fig = go.Figure(
+        data = go.Heatmap(
+            y = epw_df["hour"], x = epw_df["DOY"],
+            z = epw_df[z_col], colorscale = colors,
+            zmin = data_min, zmax = data_max,
+            hovertemplate = hover
+        )
+    )
+    fig.update_layout(
+        template = template,
+        title = title,
+        xaxis_nticks = 53,
+        yaxis_nticks = 13,
+    )
+    return fig
+
+
+def horizontal_solar(epw_df, meta):
+    sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
+    title = "Global Horizontal Solar Radiation (Wh/m2)"
+    data_max = (5 * math.ceil(epw_df["GHrad"].max() / 5))
+    data_min = (5 * math.floor(epw_df["GHrad"].min() / 5))
+    z_col = "GHrad"
+    hover = 'DOY: %{x}<br>hour: %{y}<br>GHrad: %{z}<extra></extra>'
+    return create_solar_heatmap(epw_df, sun_colors, title, data_max, data_min, z_col, hover)
+
+def diffuse_solar(epw_df, meta):
+    sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
+    title = "Diffuse Horizontal Solar Radiation (Wh/m2)"
+    data_max = 1000
+    data_min = 0
+    z_col = "DifHrad"
+    hover = 'DOY: %{x}<br>hour: %{y}<br>DifHrad: %{z}<extra></extra>'
+    return create_solar_heatmap(epw_df, sun_colors, title, data_max, data_min, z_col, hover)
+
+def direct_solar(epw_df, meta):
+    sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
+    title = "Direct Normal Solar Radiation (Wh/m2)"
+    data_max = 1000
+    data_min = 0
+    z_col = "DNrad"
+    hover = 'DOY: %{x}<br>hour: %{y}<br>DNrad: %{z}<extra></extra>'
+    return create_solar_heatmap(epw_df, sun_colors, title, data_max, data_min, z_col, hover)
+
+def cloud_cover(epw_df, meta):
+    colors = ["#00aaff","#ffffff","#c2c2c2"]
+    title = "Cloud Cover (%)"
+    data_max = 10
+    data_min = 0
+    z_col = "Oskycover"
+    hover = 'DOY: %{x}<br>hour: %{y}<br>Tskycover: %{z}<extra></extra>'
+    return create_solar_heatmap(epw_df, colors, title, data_max, data_min, z_col, hover)
