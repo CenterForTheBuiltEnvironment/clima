@@ -61,7 +61,7 @@ def create_day_night_violin(df, col, title, y_title):
         name = "Night", side = 'positive'))
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
     fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, 
-        violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title)
+        violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title, template = template)
     return fig
 
 def dbt_violin(df, meta):
@@ -200,6 +200,7 @@ def monthly_dbt(df, meta):
         data_line = df.loc[df["month"] == i + 1, "DBT"]
         fig.add_trace(go.Violin(y = data_line, line_color = colors[i], name = month_names[i]))
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
+    fig.update_layout(template = template)
     return fig
 
 def monthly_dbt_day_night(df, meta):
@@ -218,7 +219,7 @@ def monthly_dbt_day_night(df, meta):
     fig.add_trace(go.Violin(x = monthNames_nigth, y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
 
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False,)
-    fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay')
+    fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay', template = template)
     return fig 
 
 
