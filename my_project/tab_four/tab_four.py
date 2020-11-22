@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from .tab_four_graphs import polar_solar, lat_long_solar, daily_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
+from .tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
 from my_project.server import app 
 
 def tab_four():
@@ -25,10 +25,6 @@ def tab_four():
             ),
             dcc.Graph(
                 id = 'solar-dropdown-output',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'daily-solar',
                 config = config
             ), 
             dcc.Graph(
@@ -56,7 +52,6 @@ def tab_four():
 
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
-    Output('daily-solar', 'figure'),
     Output('monthly-solar', 'figure'),
     Output('horizontal-solar', 'figure'),
     Output('diffuse-solar', 'figure'),
@@ -70,9 +65,9 @@ def tab_four():
 def update_tab_four(value, ts, df, meta):
     df = pd.read_json(df, orient = 'split')
     if value == 'polar':
-        return polar_solar(df, meta), daily_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
+        return polar_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
     else:
-        return lat_long_solar(df, meta), daily_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
+        return lat_long_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
 
 
 # Configurations for the graph

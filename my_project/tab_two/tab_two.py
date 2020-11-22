@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
-from .tab_two_graphs import world_map, monthly_dbt, monthly_dbt_day_night, temperature, humidity, solar, wind, dbt_violin, humidity_violin, wind_violin
+from .tab_two_graphs import world_map, temperature, humidity, solar, wind, dbt_violin, humidity_violin, solar_violin, wind_violin
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
@@ -17,16 +17,8 @@ def tab_two():
             dcc.Graph(
                 id = "world-map"
             ),
-            section_one(), 
-            dcc.Graph(
-                id = 'monthly-dbt',
-                config = config
-            ), dcc.Graph(
-                id = 'monthly-dbt-day-night',
-                config = config
-            ), 
-            html.Div(id = 'testing')
-        ]
+            section_one()
+        ]        
     )
 
 @app.callback(
@@ -35,15 +27,13 @@ def tab_two():
     Output('humidity-profile-graph', 'figure'),
     Output('solar-radiation-graph', 'figure'),
     Output('wind-speed-graph', 'figure'),
-    Output('monthly-dbt', 'figure'),
-    Output('monthly-dbt-day-night', 'figure'),
     [Input('df-store', 'modified_timestamp')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
 def update_tab_two(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar(df, meta), wind_violin(df, meta), monthly_dbt(df, meta), monthly_dbt_day_night(df, meta)
+    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
     
 def section_one():
     """

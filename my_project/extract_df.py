@@ -83,8 +83,3 @@ def create_df(default_url):
         epw_df[col] = epw_df[col].astype(float)
     return epw_df, meta
 
-#test
-# url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/RUS//RUS_Moscow.276120_IWEC/all"
-# df, meta = create_df(url)
-# print(df.head)
-

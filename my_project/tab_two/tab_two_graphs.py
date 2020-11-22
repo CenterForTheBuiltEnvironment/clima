@@ -59,6 +59,8 @@ def create_day_night_violin(df, col, title, y_title):
         name = "Day", side = 'negative'))
     fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = 'rgb(0, 200, 200)', 
         name = "Night", side = 'positive'))
+    if col == "GHrad":
+        fig.update_yaxes(range = [0,1200])
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
     fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, 
         violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title, template = template)
@@ -92,19 +94,19 @@ def humidity_violin(df, meta):
     y_title = "Relative Humitdity (%)"
     return create_day_night_violin(df, "RH", title, y_title)
 
-# def solar_violin(df, meta):
-#     city = meta[1]
-#     country = meta[3]
-#     location_name = city + ", " + country
-#     title = {
-#         'text': "Solar Radiation" + " profile<br>" + location_name + "",
-#         'y': 0.95,
-#         'x': 0.5,
-#         'xanchor': 'center',
-#         'yanchor': 'top'
-#     }
-#     y_title = "Global Horizontal Solar Radiation (W/h m^2)"
-#     return create_day_night_violin(df, "", title, y_title)
+def solar_violin(df, meta):
+    city = meta[1]
+    country = meta[3]
+    location_name = city + ", " + country
+    title = {
+        'text': "Global Horizontal Solar Radiation" + " profile<br>" + location_name + "",
+        'y': 0.95,
+        'x': 0.5,
+        'xanchor': 'center',
+        'yanchor': 'top'
+    }
+    y_title = "Global Horizontal Solar Radiation (W/h m^2)"
+    return create_day_night_violin(df, "GHrad", title, y_title)
 
 def wind_violin(df, meta):
     city = meta[1]
@@ -190,36 +192,36 @@ def wind(df, meta):
 #########################
 ### 2 MONTHLY GRAPHS ###
 #######################
-def monthly_dbt(df, meta):
-    """
-    """
-    month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype='rgb')
-    fig = go.Figure()
-    for i in range(0,12):
-        data_line = df.loc[df["month"] == i + 1, "DBT"]
-        fig.add_trace(go.Violin(y = data_line, line_color = colors[i], name = month_names[i]))
-    fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
-    fig.update_layout(template = template)
-    return fig
+# def monthly_dbt(df, meta):
+#     """
+#     """
+#     month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+#     colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype='rgb')
+#     fig = go.Figure()
+#     for i in range(0,12):
+#         data_line = df.loc[df["month"] == i + 1, "DBT"]
+#         fig.add_trace(go.Violin(y = data_line, line_color = colors[i], name = month_names[i]))
+#     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
+#     fig.update_layout(template = template)
+#     return fig
 
-def monthly_dbt_day_night(df, meta):
-    fig = go.Figure()
+# def monthly_dbt_day_night(df, meta):
+#     fig = go.Figure()
 
-    maskDay = (df["GHrad"]>0)
-    maskNight = (df["GHrad"]<=0)
+#     maskDay = (df["GHrad"]>0)
+#     maskNight = (df["GHrad"]<=0)
 
-    data_day = df.loc[maskDay, "DBT"]
-    data_night = df.loc[maskNight, "DBT"]
+#     data_day = df.loc[maskDay, "DBT"]
+#     data_night = df.loc[maskNight, "DBT"]
 
-    monthNames_day = df.loc[maskDay, "month_names"]
-    monthNames_nigth = df.loc[maskNight, "month_names"]
+#     monthNames_day = df.loc[maskDay, "month_names"]
+#     monthNames_nigth = df.loc[maskNight, "month_names"]
 
-    fig.add_trace(go.Violin(x = monthNames_day, y = data_day, line_color = 'rgb(200, 10, 10)', name = "Day", side = 'negative'))
-    fig.add_trace(go.Violin(x = monthNames_nigth, y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
+#     fig.add_trace(go.Violin(x = monthNames_day, y = data_day, line_color = 'rgb(200, 10, 10)', name = "Day", side = 'negative'))
+#     fig.add_trace(go.Violin(x = monthNames_nigth, y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
 
-    fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False,)
-    fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay', template = template)
-    return fig 
+#     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False,)
+#     fig.update_layout(xaxis_showgrid = True, xaxis_zeroline = True, violinmode = 'overlay', template = template)
+#     return fig 
 
 

@@ -181,30 +181,30 @@ def polar_solar(epw_df, meta):
 ####################
 ### DAILY GRAPHS ###
 ####################
-def daily_solar(epw_df, meta):
-    """
-    """
-    GHrad_month_ave = epw_df.groupby(['month','hour'])['GHrad'].median().reset_index()
-    monthList = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-    for i in range(12):
-        fig.add_trace(
-            go.Scatter(x = epw_df.loc[epw_df["month"] == i + 1,"hour"], 
-                        y = epw_df.loc[epw_df["month"] == i + 1, "GHrad"],
-                        mode = "markers", marker_color = "#ffbb00",
-                        marker_size = 2, name = monthList[i], showlegend = False),
-                        row = 1, col = i + 1
-            )
-        fig.add_trace(
-            go.Scatter(x = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "hour"], 
-                        y = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "GHrad"],
-                        mode = "lines", line_color = "orange", line_width = 2, name = None, 
-                        showlegend = False), row = 1, col = i + 1,
-        )
-        fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
-        fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
-    fig.update_layout(template = template)
-    return fig
+# def daily_solar(epw_df, meta):
+#     """
+#     """
+#     GHrad_month_ave = epw_df.groupby(['month','hour'])['GHrad'].median().reset_index()
+#     monthList = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+#     fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+#     for i in range(12):
+#         fig.add_trace(
+#             go.Scatter(x = epw_df.loc[epw_df["month"] == i + 1,"hour"], 
+#                         y = epw_df.loc[epw_df["month"] == i + 1, "GHrad"],
+#                         mode = "markers", marker_color = "#ffbb00",
+#                         marker_size = 2, name = monthList[i], showlegend = False),
+#                         row = 1, col = i + 1
+#             )
+#         fig.add_trace(
+#             go.Scatter(x = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "hour"], 
+#                         y = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "GHrad"],
+#                         mode = "lines", line_color = "orange", line_width = 2, name = None, 
+#                         showlegend = False), row = 1, col = i + 1,
+#         )
+#         fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
+#         fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
+#     fig.update_layout(template = template)
+#     return fig
 
 def monthly_solar(epw_df, meta):
     """

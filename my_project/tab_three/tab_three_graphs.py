@@ -14,33 +14,65 @@ template = "ggplot2"
 def calculate_ashrae(epw_df):
     """ Helper function used in the montly_dbt(). 
     """
+    # DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
+    # DBT_day_ave = DBT_day_ave['DBT'].tolist()
+
+    # n = 7  # number of days for running average
+    # hi80 = []
+    # lo80 = []
+    # for i in range(len(DBT_day_ave)):
+    #     if i < n:
+    #         lastDays = DBT_day_ave[-n + i:] + DBT_day_ave[0:i]
+    #     else:
+    #         lastDays = DBT_day_ave[i - n:i]
+
+    #     lastDays.reverse()
+    #     lastDays = [10 if x <= 10 else x for x in lastDays]
+    #     lastDays = [32 if x >= 32 else x for x in lastDays]
+    #     rmt = running_mean_outdoor_temperature(lastDays, alpha = 0.8)
+
+    #     if DBT_day_ave[i] >= 40: 
+    #         DBT_day_ave[i] = 40
+    #     elif DBT_day_ave[i] <= 10: 
+    #         DBT_day_ave[i] = 10
+    #     r = adaptive_ashrae(tdb = DBT_day_ave[i], tr = DBT_day_ave[i], t_running_mean = rmt, v = 0.5)
+
+    #     lo80.append(r['tmp_cmf_80_low'])
+    #     hi80.append(r['tmp_cmf_80_up'])
+
+    # return lo80, hi80
+
     DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
     DBT_day_ave = DBT_day_ave['DBT'].tolist()
-
-    n = 7  # number of days for running average
+    n = 7  #number of days for running average
+    cmf55 = []
     hi80 = []
     lo80 = []
+    hi90 = []
+    lo90 = []
+    fail = 0
     for i in range(len(DBT_day_ave)):
         if i < n:
             lastDays = DBT_day_ave[-n + i:] + DBT_day_ave[0:i]
         else:
             lastDays = DBT_day_ave[i - n:i]
-
         lastDays.reverse()
         lastDays = [10 if x <= 10 else x for x in lastDays]
         lastDays = [32 if x >= 32 else x for x in lastDays]
-        rmt = running_mean_outdoor_temperature(lastDays, alpha = 0.8)
-
+        rmt = running_mean_outdoor_temperature(lastDays, alpha = 0.9)
         if DBT_day_ave[i] >= 40: 
             DBT_day_ave[i] = 40
         elif DBT_day_ave[i] <= 10: 
             DBT_day_ave[i] = 10
         r = adaptive_ashrae(tdb = DBT_day_ave[i], tr = DBT_day_ave[i], t_running_mean = rmt, v = 0.5)
-
+        cmf55.append(r['tmp_cmf'])
         lo80.append(r['tmp_cmf_80_low'])
         hi80.append(r['tmp_cmf_80_up'])
+        lo90.append(r['tmp_cmf_90_low'])
+        hi90.append(r['tmp_cmf_90_up'])
 
-    return lo80, hi80
+    return lo80, hi80, lo90, hi90
+
 
 #########################
 ### DAILY FUNCTIONS ###
@@ -132,14 +164,73 @@ def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
 def daily_dbt(epw_df, meta):
     """ Returns the graph for the monthly dbt.
     """
-    x = [i for i in range(365)]
-    col = "RH"
-    marker_colors = ['orange', 'red', "silver"]
-    names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
-    xlim = (0, 365)
-    ylim = (-40, 50)
-    lo, hi = calculate_ashrae(epw_df)
-    return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
+    # x = [i for i in range(365)]
+    # col = "DBT"
+    # marker_colors = ['orange', 'red', "silver"]
+    # names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
+    # xlim = (0, 365)
+    # ylim = (-40, 50)
+    # lo, hi = calculate_ashrae(epw_df)
+    # return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
+    days = [i for i in range(365)]
+    DBT_day = epw_df.groupby(np.arange(len(epw_df.index)) // 24)["DBT"].agg(['min', 'max', 'mean'])
+    ones = [1]*365
+    trace1 = go.Bar(x = days, y = DBT_day['max'] - DBT_day['min'],
+                    base = DBT_day['min'],
+                    marker_color = 'orange',
+                    name = 'Temperature Range',
+                    customdata = np.stack((DBT_day['mean'], epw_df.iloc[::24, :]['month_names'], epw_df.iloc[::24, :]['day']), axis = -1),
+                    hovertemplate = ('Max: %{y:.2f} &#8451;<br>'+\
+                                    'Min: %{base:.2f} &#8451;<br>'+\
+                                    '<b>Ave : %{customdata[0]:.2f} &#8451;</b><br>'+\
+                                    'Month: %{customdata[1]}<br>'+\
+                                    'Day: %{customdata[2]}<br>')
+                )
+    trace2 = go.Bar(x = days, y = ones, base = DBT_day['mean'], 
+                name = 'Average Temperature',
+                marker_color = 'red',
+                customdata = np.stack((DBT_day['mean'], epw_df.iloc[::24, :]['month_names'], epw_df.iloc[::24, :]['day']), axis = -1),
+                hovertemplate = ('<b>Ave : %{customdata[0]:.2f} &#8451;</b><br>'+\
+                                    'Month: %{customdata[1]}<br>'+\
+                                    'Day: %{customdata[2]}<br>')
+                    )
+    ## plot ashrae adaptive comfort limits (80%)
+    lo80, hi80, lo90, hi90 = calculate_ashrae(epw_df)
+    lo80_df = pd.DataFrame({"lo80": lo80})
+    hi80_df = pd.DataFrame({"hi80": hi80})
+    trace3 = go.Bar(x = days, y = hi80_df["hi80"] - lo80_df["lo80"], base = lo80_df["lo80"],
+                name = 'ashrae adaptive comfort (80%)',
+                marker_color = "silver",
+                hovertemplate = ('Max: %{y:.2f} &#8451;<br>'+\
+                                    'Min: %{base:.2f} &#8451;<br>')
+                )
+    ## plot ashrae adaptive comfort limits (90%)
+    lo90_df = pd.DataFrame({"lo90": lo90})
+    hi90_df = pd.DataFrame({"hi90": hi90})
+    trace4 = go.Bar(x = days, y = hi90_df["hi90"] - lo90_df["lo90"], base = lo90_df["lo90"],
+                name = 'ashrae adaptive comfort (90%)',
+                marker_color = "silver",
+                hovertemplate = ('Max: %{y:.2f} &#8451;<br>'+\
+                                    'Min: %{base:.2f} &#8451;<br>')
+                )
+    data = [trace3, trace4, trace1, trace2]
+    layout = go.Layout(
+        barmode = 'overlay',
+        bargap = 0
+    )
+    fig = go.Figure(data = data, layout = layout)
+    fig.update_xaxes(range = [0, 365])
+    # fig.update_yaxes(range = [-40, 50])
+    fig.update_traces(opacity = 0.6)
+    fig.update_layout(legend = dict(
+        orientation = "h",
+        yanchor = "bottom",
+        y = 1.02,
+        xanchor = "right",
+        x = 1    
+    ))
+    fig.update_layout(template = template)
+    return fig
 
 def daily_humidity(epw_df, meta):
     """ Returns the graph for the monthly humidity 
