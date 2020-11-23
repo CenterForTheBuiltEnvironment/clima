@@ -1,6 +1,8 @@
 from urllib.request import Request, urlopen
 import requests, zipfile, io
 import pandas as pd
+from pvlib import solarposition
+from datetime import time, datetime, timedelta, timezone
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 
@@ -29,6 +31,10 @@ def create_df(default_url):
     meta = lst[0].strip().split(',')
     city = meta[1]
     country = meta[3]
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    time_zone = float(meta[-2])
+    site_elevation = meta[-1]
     location_name = (city + ", " + country)
 
     lst = lst[8:len(lst) - 1]
@@ -37,12 +43,13 @@ def create_df(default_url):
     # Each data row exlude index 4 and 5, and everything afterdayssnow
     for line in lst:
         del line[4:6]
+        del line[9]
         del line[-1]
         del line[-1]
         del line[-1]
 
     col_names = ['year', 'month', 'day', 'hour', 'DBT', 'DPT', 'RH', 
-                'Apressure', 'EHrad', 'EDNrad', 'HIRrad', 'GHrad',
+                'Apressure', 'EHrad', 'HIRrad', 'GHrad',
                 'DNrad', 'DifHrad', 'GHillum', 'DNillum', 'DifHillum',
                 'Zlumi', 'Wdir', 'Wspeed', 'Tskycover', 'Oskycover',
                 'Vis', 'Cheight', 'PWobs', 'PWcodes', 'Pwater',
@@ -76,10 +83,36 @@ def create_df(default_url):
         epw_df[col] = epw_df[col].astype(int)
 
     # Change to float type 
-    change_to_float = ['DBT', 'DPT', 'RH', 'Apressure', 'EHrad', 'EDNrad', 'HIRrad', 'GHrad', 
+    change_to_float = ['DBT', 'DPT', 'RH', 'Apressure', 'EHrad', 'HIRrad', 'GHrad', 
     'DNrad', 'DifHrad', 'GHillum', 'DNillum', 'DifHillum', 'Zlumi', 'Wdir', 'Wspeed', 'Tskycover',
     'Oskycover', 'Vis', 'Cheight', 'PWobs', 'PWcodes', 'Pwater', 'AsolOptD', 'SnowD', 'DaySSnow']
     for col in change_to_float:
         epw_df[col] = epw_df[col].astype(float)
+
+    # Add in times df 
+    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
+    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    date = date - tz
+    tz = 'UTC'
+    times = pd.date_range(
+                '2019-01-01 00:00:00', 
+                '2020-01-01', 
+                closed = 'left',
+                freq = 'H', 
+                tz = tz
+            )
+    delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    times = times - delta
+    times_df = pd.DataFrame(times, columns = ['times'])
+    epw_df = pd.concat([epw_df, times_df], axis = 1)
+    epw_df.set_index("times", drop = False, append = False, inplace = True, verify_integrity = False)
+
+    # Add in solpos df
+    solpos = solarposition.get_solarposition(times, latitude, longitude)
+    epw_df = pd.concat([epw_df, solpos], axis = 1)
+
     return epw_df, meta
+
+df, meta = create_df(default_url)
+print((df['SnowD']))
 
