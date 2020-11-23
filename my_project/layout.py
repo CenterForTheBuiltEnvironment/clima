@@ -9,6 +9,7 @@ from .tab_one import tab_one
 from .tab_two import tab_two
 from .tab_three import tab_three
 from .tab_four import tab_four
+from .tab_eight import tab_eight
 from .server import app 
 
 def build_banner():
@@ -87,6 +88,11 @@ def build_tabs():
                         value = 'tab-7',
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
+                    dcc.Tab(
+                        label = 'Interactive', 
+                        value = 'tab-8',
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
                 ]
             ),
             html.Div(
@@ -140,3 +146,5 @@ def render_content(tab):
                 html.H3('Tab content 7')
             ]
         )
+    elif tab == 'tab-8':
+        return tab_eight.tab_eight()
