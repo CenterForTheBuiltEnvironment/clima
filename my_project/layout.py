@@ -35,8 +35,15 @@ def build_banner():
                 id = "banner-text-right",
                 className = "container-col",
                 children = [
-                    html.H6("Some text"),
-                    html.H6("More text"),
+                    dbc.RadioItems(
+                        options = [
+                            {"label": "International System", "value": "international"},
+                            {"label": "Imperical Units", "value": "imperical"},
+                        ],
+                        value = 1,
+                        id = "radioitems-inline-input",
+                        inline = True
+                    ),
                 ]
             )
         ]

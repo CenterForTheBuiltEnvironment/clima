@@ -23,7 +23,7 @@ def tab_one():
                         value = 'https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw', 
                         type = 'text'
                     ),
-                    html.Button("Submit", id = 'submit-button'),
+                    dbc.Button("Submit", color = "primary", className = "mr-1", id = 'submit-button'),
                 ]
             ),
             html.Embed(

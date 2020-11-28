@@ -113,6 +113,4 @@ def create_df(default_url):
 
     return epw_df, meta
 
-df, meta = create_df(default_url)
-print((df['SnowD']))
 

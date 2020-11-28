@@ -14,34 +14,6 @@ template = "ggplot2"
 def calculate_ashrae(epw_df):
     """ Helper function used in the montly_dbt(). 
     """
-    # DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
-    # DBT_day_ave = DBT_day_ave['DBT'].tolist()
-
-    # n = 7  # number of days for running average
-    # hi80 = []
-    # lo80 = []
-    # for i in range(len(DBT_day_ave)):
-    #     if i < n:
-    #         lastDays = DBT_day_ave[-n + i:] + DBT_day_ave[0:i]
-    #     else:
-    #         lastDays = DBT_day_ave[i - n:i]
-
-    #     lastDays.reverse()
-    #     lastDays = [10 if x <= 10 else x for x in lastDays]
-    #     lastDays = [32 if x >= 32 else x for x in lastDays]
-    #     rmt = running_mean_outdoor_temperature(lastDays, alpha = 0.8)
-
-    #     if DBT_day_ave[i] >= 40: 
-    #         DBT_day_ave[i] = 40
-    #     elif DBT_day_ave[i] <= 10: 
-    #         DBT_day_ave[i] = 10
-    #     r = adaptive_ashrae(tdb = DBT_day_ave[i], tr = DBT_day_ave[i], t_running_mean = rmt, v = 0.5)
-
-    #     lo80.append(r['tmp_cmf_80_low'])
-    #     hi80.append(r['tmp_cmf_80_up'])
-
-    # return lo80, hi80
-
     DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
     DBT_day_ave = DBT_day_ave['DBT'].tolist()
     n = 7  #number of days for running average

@@ -13,6 +13,14 @@ def tab_eight():
     return html.Div(
         className = 'container-col',
         children = [
+            dcc.Dropdown(
+                id = "solar-dropdown", 
+                options = [
+                    {'label': 'Polar', 'value': 'polar'},
+                    {'label': 'Latitude/Longitude', 'value': 'lat/long'}
+                ], 
+                value = 'polar'
+            ),
             dcc.Graph(
                 id = 'three-vars',
                 config = config

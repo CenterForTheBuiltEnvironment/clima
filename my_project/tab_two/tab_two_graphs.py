@@ -27,7 +27,7 @@ def world_map(df, meta):
     "Country": [country], "Time Zone" :[time_zone], "Size": [10]})
 
     fig = px.scatter_mapbox(lat_long_df, lat = "Lat", lon = "Long", hover_name = "City", hover_data = ["Country", "Time Zone"],
-                        color_discrete_sequence = ["fuchsia"], zoom = 5, height = 300, size = "Size")
+                        color_discrete_sequence = ["red"], zoom = 5, height = 300, size = "Size")
     fig.update_layout(
         mapbox_style = "white-bg",
         mapbox_layers = [
@@ -40,7 +40,7 @@ def world_map(df, meta):
                 ]
             }
         ])
-    fig.update_layout(margin = {"r":0,"t":0,"l":0,"b":0})
+    fig.update_layout(margin = {"r":0, "t":0, "l":0, "b":0})
     return fig
 
 ###################################
