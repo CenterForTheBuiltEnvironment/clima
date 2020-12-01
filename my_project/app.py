@@ -9,7 +9,7 @@ from .tab_one import tab_one
 from .tab_two import tab_two
 from .tab_three import tab_three
 from .tab_four import tab_four_graphs
-from .layout import build_banner, build_tabs
+from .layout import build_banner, build_tabs, build_footer
 from .server import app 
 
 
@@ -18,6 +18,6 @@ app.layout = html.Div(
     id = 'big-container',
     children = [
         build_banner(),
-        build_tabs()
+        build_tabs(), 
     ]
 )

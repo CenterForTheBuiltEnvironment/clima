@@ -1,0 +1,12 @@
+#footer-container {
+    height: 30%;
+    background-color: #003262;
+}
+
+#logo {
+    width: 20%;
+}
+
+#footer-text * {
+    color: white;
+}

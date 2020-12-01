@@ -12,6 +12,29 @@ from .tab_four import tab_four
 from .tab_eight import tab_eight
 from .server import app 
 
+def build_footer():
+    """ Build the footer at the bottom of the page
+    """
+    return html.Div(
+        id = "footer-container",
+        className = "container-col",
+        children = [
+            # html.Img(
+            #     id = "logo", 
+            #     src = "assets/img/logo.png"
+            # ),
+            html.Div(
+                className = "container-row",
+                id = "footer-text",
+                children = [
+                    html.H3(
+                        children = ["Hi"]
+                    ), 
+                ]
+            )
+        ]
+    )
+
 def build_banner():
     """ Build the banner at the top of the page.
     """
@@ -109,7 +132,9 @@ def build_tabs():
                     html.Div(
                         id = 'tabs-content'
                     )
-                ]), 
+                ]
+            ),
+            build_footer(), 
         ]
     )
 

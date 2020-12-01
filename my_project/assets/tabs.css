@@ -1,7 +1,7 @@
 /**Tabs**/
 #tabs-container {
     height: 100vh;
-    padding: 24px;
+    padding: 0px;
     padding-top: 0px;
 }
 
@@ -19,10 +19,15 @@
 }
 
 #tabs-parent {
-    padding: 0px;
+    padding: 0px 24px 0px 24px;
 }
 
-#custom-tab {
+#store-container { 
+    padding: 0px 24px 48px 24px;
+}
+
+
+/* #custom-tab {
     border-top-left-radius: 3px;
     background-color: #f9f9f9;
     padding: 0px 24px;
@@ -48,7 +53,7 @@
     border-left: 1px solid lightgrey;
     border-right: 1px solid lightgrey;
     border-top: 4px solid #54a0f7;
-}
+} */
 
 /**Tab One**/
 #tab-one-container {
@@ -88,6 +93,7 @@
     border-radius: 50%;
     display: inline-block;
 }
+
 
 /**Tab Two**/
 #tooltip-title-container {
