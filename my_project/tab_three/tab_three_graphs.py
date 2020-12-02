@@ -1,13 +1,13 @@
 import pandas as pd
 import plotly.express as px
-from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
-from pprint import pprint
-from my_project.extract_df import create_df
-import math
+from math import ceil, floor
 import numpy as np
+
+from my_project.extract_df import create_df
+from my_project.template_graphs import heatmap, monthly
 
 template = "ggplot2"
 
@@ -16,7 +16,7 @@ def calculate_ashrae(epw_df):
     """
     DBT_day_ave = epw_df.groupby(['DOY'])['DBT'].mean().reset_index()
     DBT_day_ave = DBT_day_ave['DBT'].tolist()
-    n = 7  #number of days for running average
+    n = 7  # number of days for running average
     cmf55 = []
     hi80 = []
     lo80 = []
@@ -52,6 +52,8 @@ def calculate_ashrae(epw_df):
 def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
     """ General function for a monthly graph.
 
+    TO DO: add global and local ranges 
+
     Args:
         x -- list of the x values 
         col -- string (either "RH" or "DBT")
@@ -62,6 +64,8 @@ def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
         lo -- list of values 
         hi -- list of values 
     """
+    xlim = (0, 365)
+    ylim = (-40, 50)
     marker_color_one = marker_colors[0]
     marker_color_two = marker_colors[1]
     marker_color_three = marker_colors[2]
@@ -140,10 +144,10 @@ def daily_dbt(epw_df, meta):
     # col = "DBT"
     # marker_colors = ['orange', 'red', "silver"]
     # names = ['Temperature Range', 'Average Temperature', 'Ashrae Adaptive Comfort (80%)']
-    # xlim = (0, 365)
-    # ylim = (-40, 50)
     # lo, hi = calculate_ashrae(epw_df)
     # return daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi)
+    xlim = (0, 365)
+    ylim = (-40, 50)
     days = [i for i in range(365)]
     DBT_day = epw_df.groupby(np.arange(len(epw_df.index)) // 24)["DBT"].agg(['min', 'max', 'mean'])
     ones = [1]*365
@@ -220,41 +224,6 @@ def daily_humidity(epw_df, meta):
 #########################
 ### MONTHLY FUNCTIONS ###
 #########################
-
-def monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim):
-    """ General function for the daily graphs.
-
-    Args:
-        df -- pandas df
-        grouped_df -- pandas df 
-        line_color -- string of the line color 
-        marker_color -- string of the marker color
-        col -- string for the column used (either "RH" or "DBT")
-        xlim = list of a range for the x axis
-        ylim = list of a range for the y axis 
-    """
-    month_list = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    fig = make_subplots(rows = 1, cols = 12, subplot_titles = ("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"))
-
-    for i in range(12):
-        fig.add_trace(
-            go.Scatter(x = df.loc[df["month"] == i + 1, "hour"], y = df.loc[df["month"] == i + 1, col],
-                        mode = "markers", marker_color = marker_color,
-                        marker_size = 2, name = month_list[i], showlegend = False),
-                        row = 1, col = i + 1,
-        )
-        fig.add_trace(
-            go.Scatter(x = grouped_df.loc[grouped_df["month"] == i + 1,"hour"], 
-                        y = grouped_df.loc[grouped_df["month"] == i + 1, col],
-                        mode = "lines", line_color = line_color, line_width = 3, 
-                        name = None, showlegend = False), row = 1, col = i + 1
-        )
-        # fig.update_xaxes(range = xlim, row = 1, col = i + 1)
-        # fig.update_yaxes(range = ylim, row = 1, col = i + 1)
-    
-    fig.update_layout(template = template)
-    return fig
-
 def monthly_dbt3(epw_df, meta):
     """ Return the daily graph for the DBT
     """
@@ -282,38 +251,16 @@ def monthly_humidity(epw_df, meta):
 #########################
 ### HEATMAP FUNCTIONS ### 
 #########################
-
-def heatmap(epw_df, colors, title, data_min, data_max, z_vals):
-    """ General function for a heatmap graph. X axis is hour, Y axis is DOY.
-
-    Args: 
-        colors -- List of colors to use
-        title -- title for the graph 
-        data_min -- int for the min
-        data_max -- int for the max
-    """
-
-    fig = go.Figure(data = go.Heatmap(y = epw_df["hour"], x = epw_df["DOY"],
-                    z = z_vals, colorscale = colors,
-                    zmin = data_min, zmax = data_max,
-                    hovertemplate = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'))
-    fig.update_layout(
-        template = template,
-        title = title,
-        xaxis_nticks = 53,
-        yaxis_nticks = 13,
-    )
-    return fig
-
 def heatmap_dbt(epw_df, meta):
     """ Return a figure of the heatmap for DBT
     """
     colors = ["#00b3ff","#000082","#ff0000","#ffff00"]
     title = "Dry Bulb Temperatures (degC)"
-    data_max = (5 * math.ceil(epw_df["DBT"].max() / 5))
-    data_min = (5 * math.floor(epw_df["DBT"].min() / 5))
+    data_max = (5 * ceil(epw_df["DBT"].max() / 5))
+    data_min = (5 * floor(epw_df["DBT"].min() / 5))
     z_vals = epw_df["DBT"]
-    return heatmap(epw_df, colors, title, data_min, data_max, z_vals)
+    hover = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'
+    return heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover)
 
 def heatmap_humidity(epw_df, meta):
     """ Return a figure of the heatmap for humidity. 
@@ -323,4 +270,5 @@ def heatmap_humidity(epw_df, meta):
     data_max = 100
     data_min = 0
     z_vals = epw_df["RH"]
-    return heatmap(epw_df, colors, title, data_min, data_max, z_vals)
+    hover = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'
+    return heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover)

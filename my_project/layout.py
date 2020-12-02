@@ -37,6 +37,8 @@ def build_footer():
 
 def build_banner():
     """ Build the banner at the top of the page.
+
+    TO DO: add in global and local buttons 
     """
     return html.Div(
         id = "banner",
@@ -61,10 +63,19 @@ def build_banner():
                     dbc.RadioItems(
                         options = [
                             {"label": "International System", "value": "international"},
-                            {"label": "Imperical Units", "value": "imperical"},
+                            {"label": "Imperial Units", "value": "imperial"},
                         ],
                         value = 1,
-                        id = "radioitems-inline-input",
+                        id = "units-radio-input",
+                        inline = True
+                    ),
+                    dbc.RadioItems(
+                        options = [
+                            {"label": "Global", "value": "global"},
+                            {"label": "Local", "value": "local"},
+                        ],
+                        value = 1,
+                        id = "global-local-radio-input",
                         inline = True
                     ),
                 ]
@@ -131,10 +142,11 @@ def build_tabs():
                     store(),
                     html.Div(
                         id = 'tabs-content'
-                    )
+                    ), 
+                    build_footer(), 
                 ]
             ),
-            build_footer(), 
+            
         ]
     )
 

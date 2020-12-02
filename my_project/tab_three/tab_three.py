@@ -8,7 +8,6 @@ import pandas as pd
 from my_project.server import app
 from .tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt3, monthly_humidity, heatmap_dbt, heatmap_humidity
 
-
 def tab_three():
     return html.Div(
         className = "container-col", 

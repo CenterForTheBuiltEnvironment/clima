@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
-from .tab_two_graphs import world_map, temperature, humidity, solar, wind, dbt_violin, humidity_violin, solar_violin, wind_violin
+from .tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
