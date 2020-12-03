@@ -6,13 +6,13 @@ import plotly.express as px
 
 from my_project.extract_df import create_df
 from my_project.template_graphs import create_violin
+from my_project.global_scheme import template
 
 # Color scheme and templates
 DBT_color = 'Reds'
 RH_color = 'GnBu'
 GHrad_color = 'YlOrRd_r'
 Wspeed_color = 'Blues_r'
-template = "ggplot2"
 
 ##################
 ### WORLD MAP ###

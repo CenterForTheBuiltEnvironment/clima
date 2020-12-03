@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app
+from my_project.global_scheme import config
 from .tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt3, monthly_humidity, heatmap_dbt, heatmap_humidity
 
 def tab_three():
@@ -38,54 +39,3 @@ def tab_three():
             )
         ]
     )
-
-# @app.callback(
-#     Output('daily-dbt', 'figure'),
-#     Output('daily-humidity', 'figure'),
-#     Output('monthly-dbt-3', 'figure'),
-#     Output('monthly-humidity', 'figure'),
-#     Output('heatmap-dbt', 'figure'),
-#     Output('heatmap-humidity', 'figure'),
-#     [Input('df-store', 'modified_timestamp')],
-#     [State('df-store', 'data')],
-#     [State('meta-store', 'data')]
-# )
-# def update_tab_three(ts, df, meta):
-#     df = pd.read_json(df, orient = 'split')
-#     return daily_dbt(df, meta), daily_humidity(df, meta), monthly_dbt3(df, meta), monthly_humidity(df, meta), heatmap_dbt(df, meta), heatmap_humidity(df, meta)
-
-# Configurations for the graph
-config = dict({
-    'toImageButtonOptions' : {
-        'format': 'svg', 
-        'scale': 2 # Multiply title/legend/axis/canvas sizes by this factor
-    },
-    'displaylogo' : False,
-    'modeBarButtonsToRemove' : [
-        "zoom2d", 
-        "pan2d", 
-        "select2d", 
-        "lasso2d", 
-        "zoomIn2d", 
-        "zoomOut2d",
-        "hoverClosestCartesian", 
-        "hoverCompareCartesian", 
-        "zoom3d", 
-        "pan3d", 
-        "orbitRotation", 
-        "tableRotation", 
-        "handleDrag3d", 
-        "resetCameraDefault3d", 
-        "resetCameraLastSave3d", 
-        "hoverClosest3d",
-        "zoomInGeo", 
-        "zoomOutGeo", 
-        "resetGeo", 
-        "hoverClosestGeo", 
-        "hoverClosestGl2d", 
-        "hoverClosestPie", 
-        "toggleHover", 
-        "resetViews"
-    ]
-  }  
-)

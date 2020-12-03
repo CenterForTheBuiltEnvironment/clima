@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
+from my_project.global_scheme import config
 from .tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 
 def tab_two():
@@ -20,20 +21,6 @@ def tab_two():
             section_one()
         ]        
     )
-
-# @app.callback(
-#     Output('world-map', 'figure'),
-#     Output('temp-profile-graph', 'figure'),
-#     Output('humidity-profile-graph', 'figure'),
-#     Output('solar-radiation-graph', 'figure'),
-#     Output('wind-speed-graph', 'figure'),
-#     [Input('df-store', 'modified_timestamp')],
-#     [State('df-store', 'data')],
-#     [State('meta-store', 'data')]
-# )
-# def update_tab_two(ts, df, meta):
-#     df = pd.read_json(df, orient = 'split')
-#     return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
     
 def section_one():
     """
@@ -102,40 +89,3 @@ def climate_profiles_graphs():
                 )
             ]
         )
-
-
-# Configurations for the graph
-config = dict({
-    'toImageButtonOptions' : {
-        'format': 'svg', 
-        'scale': 2 # Multiply title/legend/axis/canvas sizes by this factor
-    },
-    'displaylogo' : False,
-    'modeBarButtonsToRemove' : [
-        "zoom2d", 
-        "pan2d", 
-        "select2d", 
-        "lasso2d", 
-        "zoomIn2d", 
-        "zoomOut2d",
-        "hoverClosestCartesian", 
-        "hoverCompareCartesian", 
-        "zoom3d", 
-        "pan3d", 
-        "orbitRotation", 
-        "tableRotation", 
-        "handleDrag3d", 
-        "resetCameraDefault3d", 
-        "resetCameraLastSave3d", 
-        "hoverClosest3d",
-        "zoomInGeo", 
-        "zoomOutGeo", 
-        "resetGeo", 
-        "hoverClosestGeo", 
-        "hoverClosestGl2d", 
-        "hoverClosestPie", 
-        "toggleHover", 
-        "resetViews"
-    ]
-  }  
-)

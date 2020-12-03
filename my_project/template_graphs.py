@@ -2,6 +2,8 @@ from plotly.colors import n_colors
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+from .global_scheme import template
+
 def create_violin(df, col, title, y_title, y_lim):
     """ General function to create a day/night violin plot. 
     """
@@ -17,7 +19,7 @@ def create_violin(df, col, title, y_title, y_lim):
     fig.update_yaxes(range = y_lim)
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
     fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, 
-        violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title, template = "ggplot2")
+        violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title, template = template)
     return fig
 
 def heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover):
@@ -38,7 +40,7 @@ def heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover):
             zmax = data_max,
             hovertemplate = hover))
     fig.update_layout(
-        template = "ggplot2",
+        template = template,
         title = title,
         xaxis_nticks = 53,
         yaxis_nticks = 13,
@@ -76,5 +78,5 @@ def monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim):
         fig.update_xaxes(range = xlim, row = 1, col = i + 1)
         fig.update_yaxes(range = ylim, row = 1, col = i + 1)
     
-    fig.update_layout(template = "ggplot2")
+    fig.update_layout(template = template)
     return fig

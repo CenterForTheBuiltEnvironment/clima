@@ -46,39 +46,3 @@ def alert():
             )
         ]
     )
-
-# @app.callback(
-#     Output('df-store', 'data'),
-#     Output('meta-store', 'data'),
-#     [Input('submit-button', 'n_clicks')],
-#     [State('input-url', 'value')]
-# )
-# def submit_button(n_clicks, value):
-#     """ Takes the input once submitted and stores it.
-#     """
-#     try:
-#         if n_clicks is None:
-#             raise PreventUpdate
-#         df, meta = create_df(value)
-#         df = df.to_json(date_format = 'iso', orient = 'split')
-#         return df, meta
-#     except:
-#         return None, None
-
-# @app.callback(
-#     Output("alert", 'is_open'),
-#     Output("alert", 'children'),
-#     Output("alert", "color"),
-#     [Input('df-store', 'data')],
-#     [Input('submit-button', 'n_clicks')]
-# )
-# def alert_display(data, n_clicks):
-#     """ Displays the alert. 
-#     """
-#     if n_clicks is None:
-#         return True, "To start, submit a link below!", "primary"
-#     if data is None and n_clicks > 0:
-#         return True, "This link is not available. Please choose another one.", "warning"
-#     else:
-#         return True, "Successfully loaded data. Check out the other tabs!", "success"
-

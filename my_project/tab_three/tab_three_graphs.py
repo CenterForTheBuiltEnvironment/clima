@@ -8,8 +8,7 @@ import numpy as np
 
 from my_project.extract_df import create_df
 from my_project.template_graphs import heatmap, monthly
-
-template = "ggplot2"
+from my_project.global_scheme import template
 
 def calculate_ashrae(epw_df):
     """ Helper function used in the montly_dbt(). 

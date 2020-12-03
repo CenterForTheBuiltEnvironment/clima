@@ -8,8 +8,7 @@ import numpy as np
 import math 
 from my_project.extract_df import create_df
 from my_project.template_graphs import heatmap
-
-template = "ggplot2"
+from my_project.global_scheme import template
 
 ####################################
 ### POLAR/LAT-LONG GRAPH SELECT ###

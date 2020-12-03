@@ -17,6 +17,9 @@ from .tab_three.tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt3,
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
 
 
+#####################
+### TAB SELECTION ###        
+#####################
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
 
@@ -52,21 +55,9 @@ def render_content(tab):
     elif tab == 'tab-8':
         return tab_eight()
 
-
-@app.callback(
-    Output('world-map', 'figure'),
-    Output('temp-profile-graph', 'figure'),
-    Output('humidity-profile-graph', 'figure'),
-    Output('solar-radiation-graph', 'figure'),
-    Output('wind-speed-graph', 'figure'),
-    [Input('df-store', 'modified_timestamp')],
-    [State('df-store', 'data')],
-    [State('meta-store', 'data')]
-)
-def update_tab_two(ts, df, meta):
-    df = pd.read_json(df, orient = 'split')
-    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
-
+#####################
+### SUBMIT BUTTON ###        
+#####################
 @app.callback(
     Output('df-store', 'data'),
     Output('meta-store', 'data'),
@@ -93,7 +84,7 @@ def submit_button(n_clicks, value):
     [Input('submit-button', 'n_clicks')]
 )
 def alert_display(data, n_clicks):
-    """ Displays the alert. 
+    """ Displays the alert for the submit button. 
     """
     if n_clicks is None:
         return True, "To start, submit a link below!", "primary"
@@ -102,6 +93,27 @@ def alert_display(data, n_clicks):
     else:
         return True, "Successfully loaded data. Check out the other tabs!", "success"
 
+
+################################
+### UPDATE DATAFRAME TO TABS ###        
+################################
+
+### TAB TWO ###
+@app.callback(
+    Output('world-map', 'figure'),
+    Output('temp-profile-graph', 'figure'),
+    Output('humidity-profile-graph', 'figure'),
+    Output('solar-radiation-graph', 'figure'),
+    Output('wind-speed-graph', 'figure'),
+    [Input('df-store', 'modified_timestamp')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_two(ts, df, meta):
+    df = pd.read_json(df, orient = 'split')
+    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
+
+### TAB THREE ###
 @app.callback(
     Output('daily-dbt', 'figure'),
     Output('daily-humidity', 'figure'),
@@ -117,6 +129,7 @@ def update_tab_three(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
     return daily_dbt(df, meta), daily_humidity(df, meta), monthly_dbt3(df, meta), monthly_humidity(df, meta), heatmap_dbt(df, meta), heatmap_humidity(df, meta)
 
+### TAB FOUR ###
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
     Output('monthly-solar', 'figure'),
