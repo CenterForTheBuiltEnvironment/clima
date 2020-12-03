@@ -13,7 +13,7 @@ from .tab_four.tab_four import tab_four
 from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
-from .tab_three.tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt3, monthly_humidity, heatmap_dbt, heatmap_humidity
+from .tab_three.tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt, monthly_humidity, heatmap_dbt, heatmap_humidity
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
 
 
@@ -112,7 +112,8 @@ def alert_display(data, n_clicks):
 )
 def update_tab_two(ts, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
+    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), \
+        solar_violin(df, meta), wind_violin(df, meta)
 
 ### TAB THREE ###
 @app.callback(
@@ -130,7 +131,9 @@ def update_tab_two(ts, df, meta):
 )
 def update_tab_three(ts, units, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return daily_dbt(df, meta), daily_humidity(df, meta), monthly_dbt3(df, meta, units, global_local), monthly_humidity(df, meta, units, global_local), heatmap_dbt(df, meta, units, global_local), heatmap_humidity(df, meta, units, global_local)
+    return daily_dbt(df, meta, units), daily_humidity(df, meta, units), \
+        monthly_dbt(df, meta, units, global_local), monthly_humidity(df, meta, units, global_local), \
+        heatmap_dbt(df, meta, units, global_local), heatmap_humidity(df, meta, units, global_local)
 
 ### TAB FOUR ###
 @app.callback(
@@ -142,12 +145,18 @@ def update_tab_three(ts, units, global_local, df, meta):
     Output('cloud-cover', 'figure'),
     [Input("solar-dropdown", 'value')],
     [Input('df-store', 'modified_timestamp')],
+    [Input('units-radio-input', 'value')],
+    [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_four(value, ts, df, meta):
+def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
-    if value == 'polar':
-        return polar_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
+    if solar_dropdown == 'polar':
+        return polar_solar(df, meta, units), monthly_solar(df, meta, units), \
+            horizontal_solar(df, meta, units), diffuse_solar(df, meta, units), \
+            direct_solar(df, meta, units), cloud_cover(df, meta, units)
     else:
-        return lat_long_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
+        return lat_long_solar(df, meta, units), monthly_solar(df, meta, units), \
+            horizontal_solar(df, meta, units), diffuse_solar(df, meta, units), \
+            direct_solar(df, meta, units), cloud_cover(df, meta, units)

@@ -136,7 +136,7 @@ def daily(epw_df, x, col, marker_colors, names, xlim, ylim, lo, hi):
     fig.update_layout(template = template)
     return fig
 
-def daily_dbt(epw_df, meta):
+def daily_dbt(epw_df, meta, units):
     """ Returns the graph for the monthly dbt.
     """
     # x = [i for i in range(365)]
@@ -207,7 +207,7 @@ def daily_dbt(epw_df, meta):
     fig.update_layout(template = template)
     return fig
 
-def daily_humidity(epw_df, meta):
+def daily_humidity(epw_df, meta, units):
     """ Returns the graph for the monthly humidity 
     """
     x = [i for i in range(365)]
@@ -223,7 +223,7 @@ def daily_humidity(epw_df, meta):
 #########################
 ### MONTHLY FUNCTIONS ###
 #########################
-def monthly_dbt3(epw_df, meta, units, global_local):
+def monthly_dbt(epw_df, meta, units, global_local):
     """ Return the daily graph for the DBT
     """
     df = epw_df[['month', 'day', 'hour', 'DBT']]

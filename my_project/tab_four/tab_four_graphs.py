@@ -13,7 +13,7 @@ from my_project.global_scheme import template
 ####################################
 ### POLAR/LAT-LONG GRAPH SELECT ###
 ###################################
-def lat_long_solar(epw_df, meta):
+def lat_long_solar(epw_df, meta, units):
     """ Return a graph of a latitude and longitude solar diagram. 
     """
     # Meta data
@@ -86,7 +86,7 @@ def lat_long_solar(epw_df, meta):
 
     return fig 
 
-def polar_solar(epw_df, meta):
+def polar_solar(epw_df, meta, units):
     """
     """
     # Meta data
@@ -178,7 +178,7 @@ def polar_solar(epw_df, meta):
 
     return fig
 
-def monthly_solar(epw_df, meta):
+def monthly_solar(epw_df, meta, units):
     """
     """
     GHrad_month_ave = epw_df.groupby(['month','hour'])['GHrad'].median().reset_index()
@@ -231,7 +231,7 @@ def monthly_solar(epw_df, meta):
 #################
 ### HEATMAPS ###
 ################
-def horizontal_solar(epw_df, meta):
+def horizontal_solar(epw_df, meta, units):
     sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
     title = "Global Horizontal Solar Radiation (Wh/m2)"
     data_max = (5 * math.ceil(epw_df["GHrad"].max() / 5))
@@ -240,7 +240,7 @@ def horizontal_solar(epw_df, meta):
     hover = 'DOY: %{x}<br>hour: %{y}<br>GHrad: %{z}<extra></extra>'
     return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
 
-def diffuse_solar(epw_df, meta):
+def diffuse_solar(epw_df, meta, units):
     sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
     title = "Diffuse Horizontal Solar Radiation (Wh/m2)"
     data_max = 1000
@@ -249,7 +249,7 @@ def diffuse_solar(epw_df, meta):
     hover = 'DOY: %{x}<br>hour: %{y}<br>DifHrad: %{z}<extra></extra>'
     return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
 
-def direct_solar(epw_df, meta):
+def direct_solar(epw_df, meta, units):
     sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
     title = "Direct Normal Solar Radiation (Wh/m2)"
     data_max = 1000
@@ -258,7 +258,7 @@ def direct_solar(epw_df, meta):
     hover = 'DOY: %{x}<br>hour: %{y}<br>DNrad: %{z}<extra></extra>'
     return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
 
-def cloud_cover(epw_df, meta):
+def cloud_cover(epw_df, meta, units):
     colors = ["#00aaff","#ffffff","#c2c2c2"]
     title = "Cloud Cover (%)"
     data_max = 10
