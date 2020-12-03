@@ -21,19 +21,19 @@ def tab_two():
         ]        
     )
 
-@app.callback(
-    Output('world-map', 'figure'),
-    Output('temp-profile-graph', 'figure'),
-    Output('humidity-profile-graph', 'figure'),
-    Output('solar-radiation-graph', 'figure'),
-    Output('wind-speed-graph', 'figure'),
-    [Input('df-store', 'modified_timestamp')],
-    [State('df-store', 'data')],
-    [State('meta-store', 'data')]
-)
-def update_tab_two(ts, df, meta):
-    df = pd.read_json(df, orient = 'split')
-    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
+# @app.callback(
+#     Output('world-map', 'figure'),
+#     Output('temp-profile-graph', 'figure'),
+#     Output('humidity-profile-graph', 'figure'),
+#     Output('solar-radiation-graph', 'figure'),
+#     Output('wind-speed-graph', 'figure'),
+#     [Input('df-store', 'modified_timestamp')],
+#     [State('df-store', 'data')],
+#     [State('meta-store', 'data')]
+# )
+# def update_tab_two(ts, df, meta):
+#     df = pd.read_json(df, orient = 'split')
+#     return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), solar_violin(df, meta), wind_violin(df, meta)
     
 def section_one():
     """

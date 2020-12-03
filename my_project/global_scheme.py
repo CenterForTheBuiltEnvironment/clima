@@ -34,17 +34,25 @@ brightColors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"
 Zlumi_color = brightColors
 
 # WIND
-Wspeed_color = ["#94f3ff", "#30b3ff", "#6f02c2", "#c20202"]
-Wdir_color = ["#1690c4", "#4bad54", "#fae978", "#fae978", "#d90012", "#1690c4"]
+Wspeed_color = ["#ffffff", "#b2f2ff", "#33ddff", "#00aaff", "#0055ff", "#0000ff", "#aa00ff", "#ff00ff", "#cc0000", "#ffaa00"]
+Wdir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
 
-# Clouds #Visibility
+# Clouds # Visibility
 CloudColors = ["#00aaff", "#ffffff", "#c2c2c2"]
 Tskycover_color = CloudColors
 Oskycover_color = CloudColors
 Vis_color = CloudColors
 
-hour_color = ["#000000", "#355e7e", "#6b5c7b", "#c06c84", "#f8b195", "#c92a42", "#c92a42", "#c92a42", "#000000"]
+# Global Value Ranges
+DBT_range=[-40,50]
+DPT_range=[-50,35]
+RH_range=[0,100]
+GHrad_range=[0,1200]
+DNrad_range=GHrad_range
+DifHrad_range=GHrad_range
+Wspeed_range=[0,20]
 
+hour_color = ["#000000", "#355e7e", "#6b5c7b", "#c06c84", "#f8b195", "#c92a42", "#c92a42", "#c92a42", "#000000"]
 template = "ggplot2"
 
 config = {

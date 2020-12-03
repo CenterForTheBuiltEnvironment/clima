@@ -7,6 +7,7 @@ from datetime import time, datetime, timedelta, timezone
 import numpy as np
 import math 
 from my_project.extract_df import create_df
+from my_project.template_graphs import heatmap
 
 template = "ggplot2"
 
@@ -236,33 +237,33 @@ def horizontal_solar(epw_df, meta):
     title = "Global Horizontal Solar Radiation (Wh/m2)"
     data_max = (5 * math.ceil(epw_df["GHrad"].max() / 5))
     data_min = (5 * math.floor(epw_df["GHrad"].min() / 5))
-    z_col = "GHrad"
+    z_col = epw_df["GHrad"]
     hover = 'DOY: %{x}<br>hour: %{y}<br>GHrad: %{z}<extra></extra>'
-    return create_solar_heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
+    return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
 
 def diffuse_solar(epw_df, meta):
     sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
     title = "Diffuse Horizontal Solar Radiation (Wh/m2)"
     data_max = 1000
     data_min = 0
-    z_col = "DifHrad"
+    z_col = epw_df["DifHrad"]
     hover = 'DOY: %{x}<br>hour: %{y}<br>DifHrad: %{z}<extra></extra>'
-    return create_solar_heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
+    return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
 
 def direct_solar(epw_df, meta):
     sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
     title = "Direct Normal Solar Radiation (Wh/m2)"
     data_max = 1000
     data_min = 0
-    z_col = "DNrad"
+    z_col = epw_df["DNrad"]
     hover = 'DOY: %{x}<br>hour: %{y}<br>DNrad: %{z}<extra></extra>'
-    return create_solar_heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
+    return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
 
 def cloud_cover(epw_df, meta):
     colors = ["#00aaff","#ffffff","#c2c2c2"]
     title = "Cloud Cover (%)"
     data_max = 10
     data_min = 0
-    z_col = "Oskycover"
+    z_col = epw_df["Oskycover"]
     hover = 'DOY: %{x}<br>hour: %{y}<br>Tskycover: %{z}<extra></extra>'
-    return create_solar_heatmap(epw_df, colors, title, data_min, data_max, z_col, hover)
+    return heatmap(epw_df, colors, title, data_min, data_max, z_col, hover)

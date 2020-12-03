@@ -50,24 +50,24 @@ def tab_four():
         ]
     )
 
-@app.callback(
-    Output('solar-dropdown-output', 'figure'),
-    Output('monthly-solar', 'figure'),
-    Output('horizontal-solar', 'figure'),
-    Output('diffuse-solar', 'figure'),
-    Output('direct-solar', 'figure'),
-    Output('cloud-cover', 'figure'),
-    [Input("solar-dropdown", 'value')],
-    [Input('df-store', 'modified_timestamp')],
-    [State('df-store', 'data')],
-    [State('meta-store', 'data')]
-)
-def update_tab_four(value, ts, df, meta):
-    df = pd.read_json(df, orient = 'split')
-    if value == 'polar':
-        return polar_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
-    else:
-        return lat_long_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
+# @app.callback(
+#     Output('solar-dropdown-output', 'figure'),
+#     Output('monthly-solar', 'figure'),
+#     Output('horizontal-solar', 'figure'),
+#     Output('diffuse-solar', 'figure'),
+#     Output('direct-solar', 'figure'),
+#     Output('cloud-cover', 'figure'),
+#     [Input("solar-dropdown", 'value')],
+#     [Input('df-store', 'modified_timestamp')],
+#     [State('df-store', 'data')],
+#     [State('meta-store', 'data')]
+# )
+# def update_tab_four(value, ts, df, meta):
+#     df = pd.read_json(df, orient = 'split')
+#     if value == 'polar':
+#         return polar_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
+#     else:
+#         return lat_long_solar(df, meta), monthly_solar(df, meta), horizontal_solar(df, meta), diffuse_solar(df, meta), direct_solar(df, meta), cloud_cover(df, meta)
 
 
 # Configurations for the graph
