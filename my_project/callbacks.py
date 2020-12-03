@@ -168,18 +168,16 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
 ### TAB FIVE ###
 @app.callback(
     Output('wind-rose', 'figure'),
-    [Input('start-month-slider', 'value')],
-    [Input('end-month-slider', 'value')],
-    [Input('start-hour-slider', 'value')],
-    [Input('end-hour-slider', 'value')],
+    [Input('month-slider', 'value')],
+    [Input('hour-slider', 'value')],
     [Input('df-store', 'modified_timestamp')],
     [Input('units-radio-input', 'value')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_five(start_month, end_month, start_hour, end_hour, ts, units, global_local, df, meta):
+def update_tab_five(month, hour, ts, units, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return wind_rose(df, meta, units, start_month, end_month, start_hour, end_hour)
+    return wind_rose(df, meta, units, month, hour)

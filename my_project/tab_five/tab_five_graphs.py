@@ -35,11 +35,15 @@ def _convert_dir(directions, N = None):
     barWidth = 2 * np.pi / N
     return barDir, barWidth
 
-def wind_rose(df, meta, units, start_month, end_month, start_hour, end_hour):
+def wind_rose(df, meta, units, month, hour):
     """ Return the wind rose figure.
 
     based on:  https://gist.github.com/phobson/41b41bdd157a2bcf6e14
     """
+    start_month = month[0]
+    end_month = month[1]
+    start_hour = hour[0]
+    end_hour = hour[1]
     spd_colors = colors['Wspeed_color']
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units = 'm/s')
