@@ -157,38 +157,3 @@ def store():
             dcc.Store(id = 'df-store', storage_type = 'session'),
             dcc.Store(id = 'meta-store', storage_type = 'session'),
         ])
-
-# @app.callback(Output('tabs-content', 'children'),
-#               [Input('tabs', 'value')])
-
-# def render_content(tab):
-#     """ Update the contents of the page depending on what tab the user selects.
-#     """
-#     if tab == 'tab-1':
-#         return tab_one.tab_one()
-#     elif tab == 'tab-2':
-#         return tab_two.tab_two()
-#     elif tab == 'tab-3':
-#         return tab_three.tab_three()
-#     elif tab == 'tab-4':
-#         return tab_four.tab_four()
-#     elif tab == 'tab-5':
-#         return html.Div(
-#             children = [
-#                 html.H3('Tab content 5')
-#             ]
-#         )
-#     elif tab == 'tab-6':
-#         return html.Div(
-#             children = [
-#                 html.H3('Tab content 6')
-#             ]
-#         )
-#     elif tab == 'tab-7':
-#         return html.Div(
-#             children = [
-#                 html.H3('Tab content 7')
-#             ]
-#         )
-#     elif tab == 'tab-8':
-#         return tab_eight.tab_eight()

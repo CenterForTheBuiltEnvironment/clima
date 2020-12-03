@@ -8,7 +8,7 @@ import numpy as np
 
 from my_project.extract_df import create_df
 from my_project.template_graphs import heatmap, monthly
-from my_project.global_scheme import template
+from my_project.global_scheme import template, DBT_range, RH_range
 
 def calculate_ashrae(epw_df):
     """ Helper function used in the montly_dbt(). 
@@ -223,7 +223,7 @@ def daily_humidity(epw_df, meta):
 #########################
 ### MONTHLY FUNCTIONS ###
 #########################
-def monthly_dbt3(epw_df, meta):
+def monthly_dbt3(epw_df, meta, units, global_local):
     """ Return the daily graph for the DBT
     """
     df = epw_df[['month', 'day', 'hour', 'DBT']]
@@ -232,10 +232,17 @@ def monthly_dbt3(epw_df, meta):
     marker_color = "orange"
     col = "DBT"
     xlim = [0, 25]
-    ylim = [-50, 50]
+    if global_local == "global":
+        # Set Global values for max and min
+        ylim = DBT_range
+    else:
+        # Set maximum and minimum according to data
+        dataMax = (5 * ceil(df[col].max() / 5))
+        dataMin = (5 * floor(df[col].min() / 5))
+        ylim = [dataMin, dataMax]
     return monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim)
 
-def monthly_humidity(epw_df, meta):
+def monthly_humidity(epw_df, meta, units, global_local):
     """ Return the daily graph for humidity.
     """
     df = epw_df[['month', 'day', 'hour', 'RH']]
@@ -244,30 +251,49 @@ def monthly_humidity(epw_df, meta):
     marker_color = "skyblue"
     col = "RH"
     xlim = [0, 25]
-    ylim = [0, 100]
+    if global_local == "global":
+        # Set Global values for max and min
+        ylim = RH_range
+    else:
+        # Set maximum and minimum according to data
+        dataMax = (5 * ceil(df[col].max() / 5))
+        dataMin = (5 * floor(df[col].min() / 5))
+        ylim = [dataMin, dataMax]
     return monthly(df, grouped_df, line_color, marker_color, col, xlim, ylim)
 
 #########################
 ### HEATMAP FUNCTIONS ### 
 #########################
-def heatmap_dbt(epw_df, meta):
+def heatmap_dbt(epw_df, meta, units, global_local):
     """ Return a figure of the heatmap for DBT
     """
-    colors = ["#00b3ff","#000082","#ff0000","#ffff00"]
+    colors = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
     title = "Dry Bulb Temperatures (degC)"
-    data_max = (5 * ceil(epw_df["DBT"].max() / 5))
-    data_min = (5 * floor(epw_df["DBT"].min() / 5))
+    if global_local == "global":
+        # Set Global values for max and min
+        data_min = DBT_range[0]
+        data_max = DBT_range[1]
+    else:
+        # Set maximum and minimum according to data
+        data_min = (5 * floor(epw_df["DBT"].min() / 5))
+        data_max = (5 * ceil(epw_df["DBT"].max() / 5))
     z_vals = epw_df["DBT"]
     hover = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'
     return heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover)
 
-def heatmap_humidity(epw_df, meta):
+def heatmap_humidity(epw_df, meta, units, global_local):
     """ Return a figure of the heatmap for humidity. 
     """
     colors = ["#ffe600", "#00c8ff", "#0000ff"]
     title = "Relative Humiditys (degC)"
-    data_max = 100
-    data_min = 0
+    if global_local == "global":
+        # Set Global values for max and min
+        data_min = RH_range[0]
+        data_max = RH_range[1]
+    else:
+        # Set maximum and minimum according to data
+        data_min = (5 * floor(epw_df["RH"].min() / 5))
+        data_max = (5 * ceil(epw_df["RH"].max() / 5))
     z_vals = epw_df["RH"]
     hover = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'
     return heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover)

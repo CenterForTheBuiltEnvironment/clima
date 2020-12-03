@@ -44,13 +44,13 @@ Oskycover_color = CloudColors
 Vis_color = CloudColors
 
 # Global Value Ranges
-DBT_range=[-40,50]
-DPT_range=[-50,35]
-RH_range=[0,100]
-GHrad_range=[0,1200]
-DNrad_range=GHrad_range
-DifHrad_range=GHrad_range
-Wspeed_range=[0,20]
+DBT_range = [-40,50]
+DPT_range = [-50,35]
+RH_range = [0,100]
+GHrad_range = [0,1200]
+DNrad_range = GHrad_range
+DifHrad_range = GHrad_range
+Wspeed_range = [0,20]
 
 hour_color = ["#000000", "#355e7e", "#6b5c7b", "#c06c84", "#f8b195", "#c92a42", "#c92a42", "#c92a42", "#000000"]
 template = "ggplot2"

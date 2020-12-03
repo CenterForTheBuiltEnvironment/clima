@@ -1,6 +1,7 @@
 from plotly.colors import n_colors
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from math import ceil, floor
 
 from .global_scheme import template
 

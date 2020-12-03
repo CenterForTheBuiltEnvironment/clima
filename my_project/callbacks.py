@@ -20,6 +20,7 @@ from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar
 #####################
 ### TAB SELECTION ###        
 #####################
+
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
 
@@ -58,6 +59,7 @@ def render_content(tab):
 #####################
 ### SUBMIT BUTTON ###        
 #####################
+
 @app.callback(
     Output('df-store', 'data'),
     Output('meta-store', 'data'),
@@ -93,7 +95,6 @@ def alert_display(data, n_clicks):
     else:
         return True, "Successfully loaded data. Check out the other tabs!", "success"
 
-
 ################################
 ### UPDATE DATAFRAME TO TABS ###        
 ################################
@@ -122,12 +123,14 @@ def update_tab_two(ts, df, meta):
     Output('heatmap-dbt', 'figure'),
     Output('heatmap-humidity', 'figure'),
     [Input('df-store', 'modified_timestamp')],
+    [Input('units-radio-input', 'value')],
+    [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_three(ts, df, meta):
+def update_tab_three(ts, units, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return daily_dbt(df, meta), daily_humidity(df, meta), monthly_dbt3(df, meta), monthly_humidity(df, meta), heatmap_dbt(df, meta), heatmap_humidity(df, meta)
+    return daily_dbt(df, meta), daily_humidity(df, meta), monthly_dbt3(df, meta, units, global_local), monthly_humidity(df, meta, units, global_local), heatmap_dbt(df, meta, units, global_local), heatmap_humidity(df, meta, units, global_local)
 
 ### TAB FOUR ###
 @app.callback(
