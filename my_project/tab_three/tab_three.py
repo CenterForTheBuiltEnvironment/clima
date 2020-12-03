@@ -7,7 +7,7 @@ import pandas as pd
 
 from my_project.server import app
 from my_project.global_scheme import config
-from .tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt3, monthly_humidity, heatmap_dbt, heatmap_humidity
+from .tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt, monthly_humidity, heatmap_dbt, heatmap_humidity
 
 def tab_three():
     return html.Div(

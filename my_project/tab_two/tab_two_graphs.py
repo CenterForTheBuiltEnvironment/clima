@@ -4,17 +4,10 @@ import plotly.graph_objects as go
 from plotly.colors import n_colors
 import plotly.express as px
 
-from my_project.extract_df import create_df
 from my_project.template_graphs import create_violin
 from my_project.global_scheme import template
 
-# Color scheme and templates
-DBT_color = 'Reds'
-RH_color = 'GnBu'
-GHrad_color = 'YlOrRd_r'
-Wspeed_color = 'Blues_r'
-
-##################
+#################
 ### WORLD MAP ###
 #################
 def world_map(df, meta): 
@@ -45,7 +38,7 @@ def world_map(df, meta):
     fig.update_layout(margin = {"r":0, "t":0, "l":0, "b":0})
     return fig
 
-###################################
+##################################
 ### DAY VS NIGHT VIOLIN GRAPHS ###
 ##################################
 def dbt_violin(df, meta):

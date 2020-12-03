@@ -15,7 +15,7 @@ from .tab_eight.tab_eight import tab_eight
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 from .tab_three.tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt, monthly_humidity, heatmap_dbt, heatmap_humidity
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
-
+from .tab_five.tab_five_graphs import wind_rose
 
 #####################
 ### TAB SELECTION ###        
@@ -56,9 +56,9 @@ def render_content(tab):
     elif tab == 'tab-8':
         return tab_eight()
 
-#####################
-### SUBMIT BUTTON ###        
-#####################
+##############################
+### TAB ONE: SUBMIT BUTTON ###        
+##############################
 
 @app.callback(
     Output('df-store', 'data'),
@@ -95,6 +95,7 @@ def alert_display(data, n_clicks):
     else:
         return True, "Successfully loaded data. Check out the other tabs!", "success"
 
+
 ################################
 ### UPDATE DATAFRAME TO TABS ###        
 ################################
@@ -111,6 +112,8 @@ def alert_display(data, n_clicks):
     [State('meta-store', 'data')]
 )
 def update_tab_two(ts, df, meta):
+    """ Update the contents of tab two. Passing in the general info (df, meta).
+    """
     df = pd.read_json(df, orient = 'split')
     return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), \
         solar_violin(df, meta), wind_violin(df, meta)
@@ -130,6 +133,8 @@ def update_tab_two(ts, df, meta):
     [State('meta-store', 'data')]
 )
 def update_tab_three(ts, units, global_local, df, meta):
+    """ Update the contents of tab three. Passing in general info (df, meta).
+    """
     df = pd.read_json(df, orient = 'split')
     return daily_dbt(df, meta, units), daily_humidity(df, meta, units), \
         monthly_dbt(df, meta, units, global_local), monthly_humidity(df, meta, units, global_local), \
@@ -151,6 +156,8 @@ def update_tab_three(ts, units, global_local, df, meta):
     [State('meta-store', 'data')]
 )
 def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
+    """ Update the contents of tab four. Passing in the polar selection and the general info (df, meta).
+    """
     df = pd.read_json(df, orient = 'split')
     if solar_dropdown == 'polar':
         return polar_solar(df, meta, units), monthly_solar(df, meta, units), \
@@ -160,3 +167,21 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
         return lat_long_solar(df, meta, units), monthly_solar(df, meta, units), \
             horizontal_solar(df, meta, units), diffuse_solar(df, meta, units), \
             direct_solar(df, meta, units), cloud_cover(df, meta, units)
+
+### TAB FIVE ###
+@app.callback(
+    Output('wind-rose', 'figure'),
+    [Input('start-month-slider', 'value')],
+    [Input('end-month-slider', 'value')],
+    [Input('start-hour-slider', 'value')],
+    [Input('end-hour-slider', 'value')],
+    [Input('df-store', 'modified_timestamp')],
+    [Input('units-radio-input', 'value')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_five(start_month, end_month, start_hour, end_hour, ts, units, global_local, df, meta):
+    """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
+    """
+    return wind_rose(df, meta, units, start_month, end_month, start_hour, end_hour)

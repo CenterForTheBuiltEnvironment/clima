@@ -1,9 +1,9 @@
-##########################
+#########################
 ### Colors Dictionary ###
 #########################
 colors = {
     # TEMP
-    'BlueRedYellow' ; ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    'BlueRedYellow' : ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
     'DBT_color' : ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
     'DPT_color' : ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
 
@@ -43,13 +43,45 @@ colors = {
 
     # Clouds # Visibility
     'CloudColors' : ["#00aaff", "#ffffff", "#c2c2c2"],
-    'Tskycover_color' = ["#00aaff", "#ffffff", "#c2c2c2"],
-    'Oskycover_color' = ["#00aaff", "#ffffff", "#c2c2c2"],
-    'Vis_color' = ["#00aaff", "#ffffff", "#c2c2c2"],
+    'Tskycover_color' : ["#00aaff", "#ffffff", "#c2c2c2"],
+    'Oskycover_color' : ["#00aaff", "#ffffff", "#c2c2c2"],
+    'Vis_color' : ["#00aaff", "#ffffff", "#c2c2c2"],
 
     'hour_color' : ["#000000", "#355e7e", "#6b5c7b", "#c06c84", "#f8b195", "#c92a42", "#c92a42", "#c92a42", "#000000"]
-
 }
+
+########################
+### Units Dictionary ###
+########################
+# unit_dict = {
+#   "DOY_unit" : DOY_unit,
+#   "month_unit" : month_unit,
+#   "hour_unit" : hour_unit,
+#   "DBT_unit" : DBT_unit,
+#   "DPT_unit" : DPT_unit,
+#   "RH_unit" : RH_unit,
+#   "Apressure_unit" : Apressure_unit,
+#   "EHrad_unit" : EHrad_unit,
+#   "HIRrad_unit" : HIRrad_unit,
+#   "GHrad_unit" : GHrad_unit,
+#   "DNrad_unit" : DNrad_unit,
+#   "DifHrad_unit" : DifHrad_unit,
+#   "GHillum_unit" : GHillum_unit,
+#   "DNillum_unit" : DNillum_unit,
+#   "DifHillum_unit" : DifHillum_unit,
+#   "Zlumim_unit" : Zlumim_unit,
+#   "Wdir_unit" : Wdir_unit,
+#   "Wspeed_unit" : Wspeed_unit,
+#   "Tskycover_unit" : Tskycover_unit,
+#   "Oskycover_unit" : Oskycover_unit,
+#   "Vis_unit" : Vis_unit,
+#   "apparent_zenith_unit" : apparent_zenith_unit,
+#   "zenith_unit" : zenith_unit,
+#   "apparent_elevation_unit" : apparent_elevation_unit,
+#   "elevation_unit" : elevation_unit,
+#   "azimuth_unit" : azimuth_unit,
+#   "equation_of_time_unit" : equation_of_time_unit
+# }
 
 ###########################
 ### Global Value Ranges ###
