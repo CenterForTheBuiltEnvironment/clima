@@ -40,7 +40,7 @@ def month_sliders():
                     9: '9',
                     12: '12'
                 },
-                value = 3
+                value = 1
             ),  
             dcc.Slider(
                 id = 'end-month-slider',
@@ -54,7 +54,7 @@ def month_sliders():
                     9: '9',
                     12: '12'
                 },
-                value = 3
+                value = 12
             ) 
         ]
     )
@@ -77,10 +77,10 @@ def hour_sliders():
                     18: '18',
                     24: '24'
                 },
-                value = 3
+                value = 1
             ),  
             dcc.Slider(
-                id = 'end-month-slider',
+                id = 'end-hour-slider',
                 min = 1,
                 max = 24,
                 step = None,
@@ -91,7 +91,7 @@ def hour_sliders():
                     18: '18',
                     24: '24'
                 },
-                value = 3
+                value = 24
             ) 
         ]
     )

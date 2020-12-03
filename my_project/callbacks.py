@@ -10,6 +10,7 @@ from .tab_one.tab_one import tab_one
 from .tab_two.tab_two import tab_two
 from .tab_three.tab_three import tab_three
 from .tab_four.tab_four import tab_four
+from .tab_five.tab_five import tab_five
 from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
@@ -36,11 +37,7 @@ def render_content(tab):
     elif tab == 'tab-4':
         return tab_four()
     elif tab == 'tab-5':
-        return html.Div(
-            children = [
-                html.H3('Tab content 5')
-            ]
-        )
+        return tab_five()
     elif tab == 'tab-6':
         return html.Div(
             children = [
@@ -184,4 +181,5 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
 def update_tab_five(start_month, end_month, start_hour, end_hour, ts, units, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
+    df = pd.read_json(df, orient = 'split')
     return wind_rose(df, meta, units, start_month, end_month, start_hour, end_hour)
