@@ -34,7 +34,7 @@ def sliders():
         id = 'slider-container',
         children = [
             html.Div(
-                className = 'container-row',
+                className = 'container-row each-slider',
                 children = [
                     html.P("Month Range"),
                     dcc.RangeSlider(
@@ -56,7 +56,7 @@ def sliders():
                 ]
             ),
             html.Div(
-                className = 'container-row',
+                className = 'container-row each-slider',
                 children = [
                     html.P("Hour Range"),
                     dcc.RangeSlider(

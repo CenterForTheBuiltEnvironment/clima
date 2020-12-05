@@ -17,21 +17,31 @@ def build_footer():
     """
     return html.Div(
         id = "footer-container",
-        className = "container-col",
+        className = "container-row",
         children = [
-            # html.Img(
-            #     id = "logo", 
-            #     src = "assets/img/logo.png"
-            # ),
-            html.Div(
-                className = "container-row",
-                id = "footer-text",
+            html.A(
                 children = [
-                    html.H3(
-                        children = ["Hi"]
-                    ), 
+                    html.Img(
+                        id = "cbe-logo", 
+                        src = "assets/img/cbe-logo.png"
+                    )
+                ],
+                href = 'https://cbe.berkeley.edu/'
+            ),
+            html.Div(
+                className = "container-col",
+                children = [
+                    html.P("Contact"),
+                    html.P("Filler text"),
                 ]
-            )
+            ),
+            html.Div(
+                className = "container-col",
+                children = [
+                    html.P("Filler text"),
+                    html.P("Filler text")
+                ]
+            ),
         ]
     )
 
@@ -48,7 +58,7 @@ def build_banner():
                 id = "banner-text-left",
                 className = "container-col",
                 children = [
-                    html.H3(
+                    html.H1(
                         id = "banner-title",
                         children = ["EPW Viz Tool"]),
                     html.H6(

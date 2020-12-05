@@ -22,7 +22,7 @@ def tab_four():
                     {'label': 'Polar', 'value': 'polar'},
                     {'label': 'Latitude/Longitude', 'value': 'lat/long'}
                 ], 
-                value = 'polar'
+                value = 'lat/long'
             ),
             dcc.Graph(
                 id = 'solar-dropdown-output',

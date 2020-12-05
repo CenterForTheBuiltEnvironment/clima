@@ -104,7 +104,7 @@ def polar_solar(epw_df, meta, units):
     tz = 'UTC'
     times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed='left',
                         freq = 'H', tz = tz)
-    delta=timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
     times = times - delta
     solpos = solarposition.get_solarposition(times, latitude, longitude)
     # remove nighttime
@@ -164,8 +164,8 @@ def polar_solar(epw_df, meta, units):
                     line_color = "orange",
                     line_width = 1
                 )) 
-    
     fig.update_layout(
+        template = template,
         showlegend = False,
         polar = dict(
         radialaxis_tickfont_size = 10,
@@ -175,7 +175,6 @@ def polar_solar(epw_df, meta, units):
             direction = "counterclockwise"
         )
     ))
-
     return fig
 
 def monthly_solar(epw_df, meta, units):
@@ -224,7 +223,6 @@ def monthly_solar(epw_df, meta, units):
         )
         fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
         fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
-    
     fig.update_layout(template = template)
     return fig
 

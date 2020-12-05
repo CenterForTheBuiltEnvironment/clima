@@ -104,6 +104,10 @@ def alert_display(data, n_clicks):
     Output('humidity-profile-graph', 'figure'),
     Output('solar-radiation-graph', 'figure'),
     Output('wind-speed-graph', 'figure'),
+    Output('tab-two-location', 'children'),
+    Output('tab-two-long', 'children'),
+    Output('tab-two-lat', 'children'),
+    Output('tab-two-elevation', 'children'),
     [Input('df-store', 'modified_timestamp')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
@@ -112,8 +116,12 @@ def update_tab_two(ts, df, meta):
     """ Update the contents of tab two. Passing in the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
+    location = "Location: " + meta[1] + " , " + meta[3]
+    lon = "Longitude: " + str(meta[-3])
+    lat = "Longitude: " + str(meta[-3])
+    elevation = "Elevation above sea level: " + meta[-1]
     return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), \
-        solar_violin(df, meta), wind_violin(df, meta)
+        solar_violin(df, meta), wind_violin(df, meta), location, lon, lat, elevation
 
 ### TAB THREE ###
 @app.callback(

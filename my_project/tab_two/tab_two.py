@@ -14,19 +14,52 @@ def tab_two():
     """
     return html.Div(
         className = "container-col", 
+        id = 'tab-two-container',
         children = [
-            dcc.Graph(
-                id = "world-map"
-            ),
-            section_one()
+            map_section(),
+            graph_section()
         ]        
     )
-    
-def section_one():
-    """
+
+def map_section():
+    """ Returns the contents of the map section which includes
+    location information, world map, location description.
     """
     return html.Div(
-            className = "tab-container",
+        className = 'container-col tab-two-section',
+        children = [
+            html.Div(
+                className = 'container-col tab-two-section',
+                id = 'location-info',
+                children = [
+                    html.B(id = 'tab-two-location'),
+                    html.P(id = 'tab-two-long'),
+                    html.P(id = 'tab-two-lat'),
+                    html.P(id = 'tab-two-elevation')
+                ]
+            ),
+            dcc.Graph(
+                className = 'tab-two-section',
+                id = "world-map"
+            ),
+            html.Div(
+                className = 'container-col tab-two-section',
+                id = 'location-description',
+                children = [
+                    html.P('Koeppen Geiger Climate Classification: '),
+                    html.P('Filler text'),
+                    html.P('Filler text')
+                ]
+            ),
+        ]
+    )
+    
+def graph_section():
+    """ Returns the contents of the graph section which includes 
+    the 'Climate Profiles' title and the graphs. 
+    """
+    return html.Div(
+            className = "tab-container tab-two-section",
             children = [
                 html.Div(
                     className = "container-col",
@@ -68,7 +101,7 @@ def climate_profiles_graphs():
     """
     """
     return html.Div(
-            id = "tab-two-4-container",
+            id = "graph-container",
             className = "container-row",
             children = [
                 dcc.Graph(

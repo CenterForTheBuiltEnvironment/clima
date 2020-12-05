@@ -1,12 +1,18 @@
 #footer-container {
-    height: 30%;
-    background-color: #003262;
-}
-
-#logo {
-    width: 20%;
-}
-
-#footer-text * {
+    justify-content: center;
+    align-items: center;
     color: white;
+    background-color: #003262;
+    height: 30%;
 }
+
+#footer-container * {
+    margin: 10px;
+}
+
+#cbe-logo {
+    height: 80px;
+}
+
+
+

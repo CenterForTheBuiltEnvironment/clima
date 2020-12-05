@@ -5,18 +5,13 @@
     padding-top: 0px;
 }
 
-.tab-container {
-    height: 100%;
-    margin-top: 22px;
-}
-
 #tabs {
     margin: 0px;
 }
 
 #tabs-content {
     height: auto;
-    padding: 0px 24px 50px 24px;
+    padding: 30px 24px 50px 24px;
 }
 
 #tabs-parent {
@@ -30,7 +25,7 @@
 /* Tab One */
 #tab-one-container {
     height: 100%;
-    margin-top: 22px;
+    padding-top: 0px;
 }
 
 #tab-one-form-container {
@@ -68,6 +63,22 @@
 
 
 /* Tab Two */
+#tab-two-container {
+    justify-content: space-between;
+}
+
+.tab-two-section {
+    padding-bottom: 24px;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+#world-map {
+    height: 65%;
+}
+
 #tooltip-title-container {
     padding: 0px;
 }
@@ -76,22 +87,33 @@
     margin-right: 10px;
 }
 
-#tab-four-container {
-    margin-top: 24px; 
+#graph-container {
+    justify-content: space-between;
 }
 
-#tab-two-4-container {
-    justify-content: space-between;
+/* Tab Four */
+#solar-dropdown {
+    width: 15%;
 }
 
 /* Tab Five */
 #tab-five-container {
-    margin-top: 24px;
     justify-content: center;
+    align-items: center;
+}
+
+#slider-container {
+    width: 50%;
+    margin: 24px;
 }
 
 #slider-container * {
     justify-content: center;
+    
+}
+
+.each-slider {
+    padding-bottom: 24px;
 }
 
 #hour-slider, #month-slider {
