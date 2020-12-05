@@ -1,6 +1,7 @@
 #########################
 ### Colors Dictionary ###
 #########################
+
 colors = {
     # TEMP
     'BlueRedYellow' : ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
@@ -53,35 +54,56 @@ colors = {
 ########################
 ### Units Dictionary ###
 ########################
-# unit_dict = {
-#   "DOY_unit" : DOY_unit,
-#   "month_unit" : month_unit,
-#   "hour_unit" : hour_unit,
-#   "DBT_unit" : DBT_unit,
-#   "DPT_unit" : DPT_unit,
-#   "RH_unit" : RH_unit,
-#   "Apressure_unit" : Apressure_unit,
-#   "EHrad_unit" : EHrad_unit,
-#   "HIRrad_unit" : HIRrad_unit,
-#   "GHrad_unit" : GHrad_unit,
-#   "DNrad_unit" : DNrad_unit,
-#   "DifHrad_unit" : DifHrad_unit,
-#   "GHillum_unit" : GHillum_unit,
-#   "DNillum_unit" : DNillum_unit,
-#   "DifHillum_unit" : DifHillum_unit,
-#   "Zlumim_unit" : Zlumim_unit,
-#   "Wdir_unit" : Wdir_unit,
-#   "Wspeed_unit" : Wspeed_unit,
-#   "Tskycover_unit" : Tskycover_unit,
-#   "Oskycover_unit" : Oskycover_unit,
-#   "Vis_unit" : Vis_unit,
-#   "apparent_zenith_unit" : apparent_zenith_unit,
-#   "zenith_unit" : zenith_unit,
-#   "apparent_elevation_unit" : apparent_elevation_unit,
-#   "elevation_unit" : elevation_unit,
-#   "azimuth_unit" : azimuth_unit,
-#   "equation_of_time_unit" : equation_of_time_unit
-# }
+
+unit_dict = {
+    "DOY_unit" : "days",
+    "month_unit" : "months",
+    "hour_unit" : "h",
+
+    # Temp
+    "DBT_unit" : "\u00B0 C" #"&#8451",
+    "DPT_unit" : "\u00B0 C" #"&#8451",
+
+    # Humidity
+    "RH_unit" : "%",
+
+    # Pressure
+    "Apressure_unit" : "Pa",
+
+    # Radiation
+    "EHrad_unit" : "Wh/m<sup>2</sup>",
+    "HIRrad_unit" : "Wh/m<sup>2</sup>",
+    "GHrad_unit" : "Wh/m<sup>2</sup>",
+    "DNrad_unit" : "Wh/m<sup>2</sup>",
+    "DifHrad_unit" : "Wh/m<sup>2</sup>",
+
+    # Illuminance
+    "GHillum_unit" : "lux",
+    "DNillum_unit" : "lux",
+    "DifHillum_unit" : "lux",
+
+    # Luminance
+    "Zlumim_unit" : "cd/m<sup>2</sup>",
+
+    # Wind
+    "Wdir_unit" : "\u00B0 deg",
+    "Wspeed_unit" : "m/s",
+
+    # Clouds
+    "Tskycover_unit" : "tenths",
+    "Oskycover_unit" : "tenths",
+
+    #Visibility
+    "Vis_unit" : "Km",
+
+    # Solar position
+    "apparent_zenith_unit" : "\u00B0 deg",
+    "zenith_unit" : "\u00B0 deg",
+    "apparent_elevation_unit" : "\u00B0 deg",
+    "elevation_unit" : "\u00B0 deg",
+    "azimuth_unit" : "\u00B0 deg",
+    "equation_of_time_unit" : "\u00B0 deg"
+}
 
 ###########################
 ### Global Value Ranges ###

@@ -44,28 +44,15 @@ def wind_rose(df, meta, units, month, hour):
     spd_colors = colors['Wspeed_color']
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units = 'm/s')
-
     dir_bins = np.arange(-22.5 / 2, 370, 22.5)
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
-
-    if start_month > 12 or start_month < 1 or end_month > 12 or end_month < 1:
-        start_month = 1
-        end_month = 12
-        print("please select a month by inputting a value between 1 and 12")
-
-    if start_month <= end_month:
-        df = df.loc[(df['month'] >= start_month) & (df['month'] <= end_month)]
-    else:
-        df = df.loc[ (df['month'] <= end_month) | (df['month'] >= start_month)]
-
-    if start_hour <= end_hour:
-        df = df.loc[(df['hour'] >= start_hour) & (df['hour'] <= end_hour)]
-    else:
-        df = df.loc[(df['hour'] <= end_hour ) | (df['hour'] >= start_hour)]
+    df = df.loc[(df['month'] >= start_month) & (df['month'] <= end_month)]
+    df = df.loc[(df['hour'] >= start_hour) & (df['hour'] <= end_hour)]
     total_count = df.shape[0]
     calm_count = df.query("Wspeed == 0").shape[0]
     rose = (
-        df.assign(WindSpd_bins = lambda df:
+        df.assign(
+            WindSpd_bins = lambda df:
                 pd.cut(df['Wspeed'], bins = spd_bins, labels = spd_labels, right = True)
             )
             .assign(WindDir_bins = lambda df:
@@ -90,7 +77,26 @@ def wind_rose(df, meta, units, month, hour):
                 marker_color = spd_colors[i]
             )
         )
-    fig.update_traces(text = ['North', 'N-N-E','N-E','E-N-E', 'East','E-S-E', 'S-E','S-S-E', 'South','S-S-W','S-W','W-S-W', 'West','W-N-W', 'N-W','N-N-W'])
+    fig.update_traces(
+        text = [
+            'North', 
+            'N-N-E',
+            'N-E',
+            'E-N-E', 
+            'East',
+            'E-S-E', 
+            'S-E',
+            'S-S-E', 
+            'South',
+            'S-S-W',
+            'S-W',
+            'W-S-W', 
+            'West',
+            'W-N-W', 
+            'N-W',
+            'N-N-W'
+        ]
+    )
     fig.update_layout(
         polar_angularaxis_rotation = 90,
     )
