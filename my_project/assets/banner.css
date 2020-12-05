@@ -2,6 +2,8 @@
 #banner { 
     padding: 24px;
     justify-content: space-between;
+    background-color: #003262;
+    color: white;
 }
 
 #banner-text-left * {

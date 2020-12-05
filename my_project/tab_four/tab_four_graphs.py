@@ -79,6 +79,7 @@ def lat_long_solar(epw_df, meta, units):
                     )) 
 
     fig.update_layout(
+        template = template,
         showlegend = False, xaxis_range = [0, 360], 
         yaxis_range = [0, 90], xaxis_tickmode = "array", 
         xaxis_tickvals = [0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360]

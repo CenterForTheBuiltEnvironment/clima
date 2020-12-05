@@ -12,7 +12,6 @@ from .tab_four import tab_four_graphs
 from .layout import build_banner, build_tabs, build_footer
 from .server import app 
 
-
 app.title = "EPW Viz"
 app.layout = html.Div(
     id = 'big-container',
