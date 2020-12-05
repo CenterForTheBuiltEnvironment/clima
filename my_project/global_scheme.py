@@ -61,8 +61,8 @@ unit_dict = {
     "hour_unit" : "h",
 
     # Temp
-    "DBT_unit" : "\u00B0 C" #"&#8451",
-    "DPT_unit" : "\u00B0 C" #"&#8451",
+    "DBT_unit" : '\u00B0 C" #"&#8451',
+    "DPT_unit" : '\u00B0 C" #"&#8451',
 
     # Humidity
     "RH_unit" : "%",
