@@ -89,6 +89,10 @@
     margin-top: 24px;
 }
 
+#slider-container * {
+    justify-content: center;
+}
+
 #hour-slider, #month-slider {
     width: 60%;
 }

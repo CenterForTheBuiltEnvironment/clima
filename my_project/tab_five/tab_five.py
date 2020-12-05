@@ -15,6 +15,20 @@ def tab_five():
         className = 'container-col',
         id = 'tab-five-container',
         children = [
+            sliders(),
+            dcc.Graph(
+                id = 'wind-rose'
+            )
+        ]
+    )
+
+def sliders():
+    """ Returns 2 sliders for the hour
+    """
+    return html.Div(
+        className = 'container-col',
+        id = 'slider-container',
+        children = [
             html.Div(
                 className = 'container-row',
                 children = [
@@ -28,6 +42,10 @@ def tab_five():
                         marks = {
                             1: '1',
                             12: '12'
+                        },
+                        tooltip = {
+                            'always_visible': False,
+                            'placement' : 'top'
                         },
                         allowCross = False
                     ),
@@ -47,72 +65,13 @@ def tab_five():
                             1: '1',
                             24: '24'
                         },
+                        tooltip = {
+                            'always_visible': False,
+                            'placement' : 'topLeft'
+                        },
                         allowCross = False
                     )
                 ]
             ),
-            dcc.Graph(
-                id = 'wind-rose'
-            )
         ]
     )
-
-def sliders():
-    """ Returns 2 sliders for the hour
-    """
-    return html.Div(
-        className = 'container-col',
-        children = [
-            dcc.RangeSlider(
-                id = 'month-slider',
-                min = 1,
-                max = 12,
-                step = 1,
-                value = [1, 12]
-            ),
-            dcc.RangeSlider(
-                id = 'hour-slider',
-                min = 1,
-                max = 24,
-                step = 1,
-                value = [1, 24]
-            )
-        ]
-    )
-
-# def sliders():
-#     """ Returns 2 sliders for the hour
-#     """
-#     return html.Div(
-#         className = 'container-col',
-#         children = [
-#             html.Div(
-#                 className = 'container-row',
-#                 children = [
-#                     html.H3("Month Range"),
-#                     dcc.RangeSlider(
-#                         id = 'month-slider',
-#                         min = 1,
-#                         max = 12,
-#                         step = 1,
-#                         value = [1, 12], 
-#                         allowCross = False
-#                     ),
-#                 ]
-#             ),
-#             html.Div(
-#                 className = 'container-row',
-#                 children = [
-#                     html.H3("Hour Range"),
-#                     dcc.RangeSlider(
-#                         id = 'hour-slider',
-#                         min = 1,
-#                         max = 24,
-#                         step = 1,
-#                         value = [1, 24],
-#                         allowCross = False
-#                     )
-#                 ]
-#             )
-#         ]
-#     )
