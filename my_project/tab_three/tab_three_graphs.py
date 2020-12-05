@@ -8,7 +8,7 @@ import numpy as np
 
 from my_project.extract_df import create_df
 from my_project.template_graphs import heatmap, monthly
-from my_project.global_scheme import template, DBT_range, RH_range
+from my_project.global_scheme import template, ranges
 
 def calculate_ashrae(epw_df):
     """ Helper function used in the montly_dbt(). 
@@ -234,7 +234,7 @@ def monthly_dbt(epw_df, meta, units, global_local):
     xlim = [0, 25]
     if global_local == "global":
         # Set Global values for max and min
-        ylim = DBT_range
+        ylim = ranges['DBT_range']
     else:
         # Set maximum and minimum according to data
         dataMax = (5 * ceil(df[col].max() / 5))
@@ -253,7 +253,7 @@ def monthly_humidity(epw_df, meta, units, global_local):
     xlim = [0, 25]
     if global_local == "global":
         # Set Global values for max and min
-        ylim = RH_range
+        ylim = ranges['RH_range']
     else:
         # Set maximum and minimum according to data
         dataMax = (5 * ceil(df[col].max() / 5))
@@ -271,8 +271,8 @@ def heatmap_dbt(epw_df, meta, units, global_local):
     title = "Dry Bulb Temperatures (degC)"
     if global_local == "global":
         # Set Global values for max and min
-        data_min = DBT_range[0]
-        data_max = DBT_range[1]
+        data_min = ranges['DBT_range'][0]
+        data_max = ranges['DBT_range'][1]
     else:
         # Set maximum and minimum according to data
         data_min = (5 * floor(epw_df["DBT"].min() / 5))
@@ -288,8 +288,8 @@ def heatmap_humidity(epw_df, meta, units, global_local):
     title = "Relative Humiditys (degC)"
     if global_local == "global":
         # Set Global values for max and min
-        data_min = RH_range[0]
-        data_max = RH_range[1]
+        data_min = ranges['RH_range'][0]
+        data_max = ranges['RH_range'][1]
     else:
         # Set maximum and minimum according to data
         data_min = (5 * floor(epw_df["RH"].min() / 5))

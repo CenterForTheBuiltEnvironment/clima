@@ -16,7 +16,7 @@ from .tab_eight.tab_eight import tab_eight
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 from .tab_three.tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt, monthly_humidity, heatmap_dbt, heatmap_humidity
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
-from .tab_five.tab_five_graphs import wind_rose
+from .tab_five.tab_five_graphs import wind_rose, wind_heatmap
 
 #####################
 ### TAB SELECTION ###        
@@ -168,6 +168,7 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
 ### TAB FIVE ###
 @app.callback(
     Output('wind-rose', 'figure'),
+    Output('wind-heatmap', 'figure'),
     [Input('month-slider', 'value')],
     [Input('hour-slider', 'value')],
     [Input('df-store', 'modified_timestamp')],
@@ -180,4 +181,4 @@ def update_tab_five(month, hour, ts, units, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return wind_rose(df, meta, units, month, hour)
+    return wind_rose(df, meta, units, month, hour), wind_heatmap(df, meta)

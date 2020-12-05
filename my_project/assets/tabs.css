@@ -87,6 +87,7 @@
 /* Tab Five */
 #tab-five-container {
     margin-top: 24px;
+    justify-content: center;
 }
 
 #slider-container * {

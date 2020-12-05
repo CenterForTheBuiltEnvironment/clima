@@ -5,7 +5,8 @@ import plotly.graph_objects as go
 from plotly.colors import n_colors
 import plotly.express as px
 
-from my_project.global_scheme import template, colors
+from my_project.global_scheme import template, colors, ranges
+from my_project.template_graphs import heatmap
 
 
 #################
@@ -108,3 +109,15 @@ def wind_rose(df, meta, units, month, hour):
     return fig
         
 
+################
+### HEAT MAP ###
+################
+
+def wind_heatmap(df, meta):
+    title = "Wind Speed"
+    colorscale = colors['Wspeed_color']
+    data_min = ranges['Wspeed_range'][0]
+    data_max = ranges['Wspeed_range'][1]
+    z_vals = df['Wspeed']
+    hover = ''
+    return heatmap(df, colorscale, title, data_min, data_max, z_vals, hover)

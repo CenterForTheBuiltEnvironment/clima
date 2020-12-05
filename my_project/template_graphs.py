@@ -32,14 +32,28 @@ def heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover):
         data_min -- int for the min
         data_max -- int for the max
     """
-    fig = go.Figure(
-        data = go.Heatmap(
-            y = epw_df["hour"], 
-            x = epw_df["DOY"],
-            z = z_vals, colorscale = colors,
-            zmin = data_min, 
-            zmax = data_max,
-            hovertemplate = hover))
+    if hover == '':
+        fig = go.Figure(
+            data = go.Heatmap(
+                y = epw_df["hour"], 
+                x = epw_df["DOY"],
+                z = z_vals, 
+                colorscale = colors,
+                zmin = data_min, 
+                zmax = data_max,
+            )
+        )
+    else:
+        fig = go.Figure(
+            data = go.Heatmap(
+                y = epw_df["hour"], 
+                x = epw_df["DOY"],
+                z = z_vals, 
+                colorscale = colors,
+                zmin = data_min, 
+                zmax = data_max,
+                hovertemplate = hover)
+        )
     fig.update_layout(
         template = template,
         title = title,

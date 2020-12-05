@@ -18,6 +18,10 @@ def tab_five():
             sliders(),
             dcc.Graph(
                 id = 'wind-rose'
+            ), 
+            dcc.Graph(
+                id = 'wind-heatmap',
+                config = config
             )
         ]
     )

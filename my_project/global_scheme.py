@@ -108,14 +108,15 @@ unit_dict = {
 ###########################
 ### Global Value Ranges ###
 ###########################
-DBT_range = [-40, 50]
-DPT_range = [-50, 35]
-RH_range = [0, 100]
-GHrad_range = [0, 1200]
-DNrad_range = GHrad_range
-DifHrad_range = GHrad_range
-Wspeed_range = [0, 20]
-
+ranges = {
+    'DBT_range' : [-40, 50],
+    'DPT_range' : [-50, 35],
+    'RH_range' : [0, 100],
+    'GHrad_range' : [0, 1200],
+    'DNrad_range' : [0, 1200],
+    'DifHrad_range' : [0, 1200],
+    'Wspeed_range' : [0, 20],
+}
 
 ###################################
 ### Template and Configurations ###
