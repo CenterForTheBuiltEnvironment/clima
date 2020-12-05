@@ -84,5 +84,14 @@
     justify-content: space-between;
 }
 
+/* Tab Five */
+#tab-five-container {
+    margin-top: 24px;
+}
+
+#hour-slider, #month-slider {
+    width: 60%;
+}
+
 
 

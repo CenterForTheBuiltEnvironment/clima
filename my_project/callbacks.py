@@ -94,7 +94,7 @@ def alert_display(data, n_clicks):
 
 
 ################################
-### UPDATE DATAFRAME TO TABS ###        
+### UPDATE INFO TO TABS ###        
 ################################
 
 ### TAB TWO ###

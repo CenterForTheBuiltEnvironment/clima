@@ -13,7 +13,7 @@ from my_project.global_scheme import template, colors
 #################
 
 def speed_labels(bins, units):  
-    """ Define a function that will give us nice labels for a wind speed range.
+    """ Return nice labels for a wind speed range.
     """ 
     labels = []
     for left, right in zip(bins[:-1], bins[1:]):
@@ -23,22 +23,19 @@ def speed_labels(bins, units):
             labels.append('>{} {}'.format(left, units))
         else:
             labels.append('{} - {} {}'.format(left, right, units))
+    return labels
 
-    return list(labels)
-
-def _convert_dir(directions, N = None):
-    """ Define a function to convert centered angles to left-edge radians. 
-    """
-    if N is None:
-        N = directions.shape[0]
-    barDir = directions * np.pi / 180. - np.pi / N
-    barWidth = 2 * np.pi / N
-    return barDir, barWidth
+# def _convert_dir(directions, N = directions.shape[0]):
+#     """ Convert centered angles to left-edge radians. 
+#     """
+#     barDir = directions * np.pi / 180. - np.pi / N
+#     barWidth = 2 * np.pi / N
+#     return barDir, barWidth
 
 def wind_rose(df, meta, units, month, hour):
     """ Return the wind rose figure.
 
-    based on:  https://gist.github.com/phobson/41b41bdd157a2bcf6e14
+    Based on:  https://gist.github.com/phobson/41b41bdd157a2bcf6e14
     """
     start_month = month[0]
     end_month = month[1]
