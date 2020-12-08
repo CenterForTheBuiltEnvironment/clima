@@ -109,10 +109,12 @@ def alert_display(data, n_clicks):
     Output('tab-two-lat', 'children'),
     Output('tab-two-elevation', 'children'),
     [Input('df-store', 'modified_timestamp')],
+    [Input('units-radio-input', 'value')],
+    [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_two(ts, df, meta):
+def update_tab_two(ts, units, global_local, df, meta):
     """ Update the contents of tab two. Passing in the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
@@ -120,8 +122,8 @@ def update_tab_two(ts, df, meta):
     lon = "Longitude: " + str(meta[-3])
     lat = "Longitude: " + str(meta[-3])
     elevation = "Elevation above sea level: " + meta[-1]
-    return world_map(df, meta), dbt_violin(df, meta), humidity_violin(df, meta), \
-        solar_violin(df, meta), wind_violin(df, meta), location, lon, lat, elevation
+    return world_map(df, meta), dbt_violin(df, meta, global_local), humidity_violin(df, meta, global_local), \
+        solar_violin(df, meta, global_local), wind_violin(df, meta, global_local), location, lon, lat, elevation
 
 ### TAB THREE ###
 @app.callback(

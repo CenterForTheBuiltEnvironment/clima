@@ -4,23 +4,38 @@ from plotly.subplots import make_subplots
 from math import ceil, floor
 
 from .global_scheme import template
+from my_project.global_scheme import unit_dict, range_dict, name_dict
 
-def create_violin(df, col, title, y_title, y_lim):
-    """ General function to create a day/night violin plot. 
+def violin(df, var, global_local):
+    """ Return day night violin based on the var col
     """
+    mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
+    mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
+    var_unit = str(var) + "_unit"
+    var_unit = unit_dict[var_unit]
+    var_range = str(var) + "_range"
+    var_range = range_dict[var_range]
+    var_name = str(var) + "_name"
+    var_name = name_dict[var_name]
+    if global_local == "global":
+        # Set Global values for Max and minimum
+        range_y = var_range
+    else:
+        # Set maximumand minimum according to data
+        data_min = (5 * ceil(df[var].max() / 5))
+        data_max = (5 * floor(df[var].min() / 5))
+        range_y = [data_min, data_max]
+    colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype = 'rgb')
+    data_day = df.loc[mask_day, var]
+    data_night = df.loc[mask_night, var]
     fig = go.Figure()
-    maskDay = (df["hour"] >= 8) & (df["hour"] < 20)
-    maskNight = (df["hour"] < 8) | (df["hour"] >= 20)
-    data_day = df.loc[maskDay, col]
-    data_night = df.loc[maskNight, col]
-    fig.add_trace(go.Violin(x = df["fake_year"], y = data_day, line_color = 'rgb(200, 10, 10)', 
-        name = "Day", side = 'negative'))
-    fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = 'rgb(0, 200, 200)', 
-        name = "Night", side = 'positive'))
-    fig.update_yaxes(range = y_lim)
+    fig.add_trace(go.Violin(x = df["fake_year"], y = data_day, line_color = 'rgb(200, 10, 10)', name = "Day", side = 'negative'))
+    fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
+    fig.update_yaxes(range = var_range)
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
-    fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, 
-        violingap = 0, violingroupgap = 0, violinmode = 'overlay', title = title, yaxis_title = y_title, template = template)
+    fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, violingap = 0, violingroupgap = 0, violinmode = 'overlay')
+    title = var_name + " (" + var_unit + ")"
+    fig.update_layout(template = template, title = title)
     return fig
 
 def heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover):

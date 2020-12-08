@@ -61,7 +61,7 @@ def build_banner():
                     html.H1(
                         id = "banner-title",
                         children = ["EPW Viz Tool"]),
-                    html.H6(
+                    html.H5(
                         id = "banner-subtitle",
                         children = ["Subtitle"]),
                 ]

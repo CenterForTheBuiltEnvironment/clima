@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from plotly.colors import n_colors
 import plotly.express as px
 
-from my_project.template_graphs import create_violin
+from my_project.template_graphs import violin
 from my_project.global_scheme import template
 
 #################
@@ -41,64 +41,24 @@ def world_map(df, meta):
 ##################################
 ### DAY VS NIGHT VIOLIN GRAPHS ###
 ##################################
-def dbt_violin(df, meta):
-    city = meta[1]
-    country = meta[3]
-    location_name = city + ", " + country
-    title = {
-        'text': "Temperature" + " profile<br>" + location_name,
-        'y': 0.95,
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'
-    }
-    y_title = "Temperature (degC)"
-    y_lim = (-40, 50)
-    return create_violin(df, "DBT", title, y_title, y_lim)
+def dbt_violin(df, meta, global_local):
+    """ Return the day night violin graph for temperature variable
+    """
+    return violin(df, "DBT", global_local)
 
-def humidity_violin(df, meta):
-    city = meta[1]
-    country = meta[3]
-    location_name = city + ", " + country
-    title = {
-        'text': "Relative Humidity" + " profile<br>" + location_name + "",
-        'y': 0.95,
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'
-    }
-    y_title = "Relative Humitdity (%)"
-    y_lim = [0, 100]
-    return create_violin(df, "RH", title, y_title, y_lim)
+def humidity_violin(df, meta, global_local):
+    """ Return the day night violin graph for relative humidity variable
+    """
+    return violin(df, "RH", global_local)
 
-def solar_violin(df, meta):
-    city = meta[1]
-    country = meta[3]
-    location_name = city + ", " + country
-    title = {
-        'text': "Global Horizontal Solar Radiation" + " profile<br>" + location_name + "",
-        'y': 0.95,
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'
-    }
-    y_title = "Global Horizontal Solar Radiation (W/h m^2)"
-    y_lim = [0, 1200]
-    return create_violin(df, "GHrad", title, y_title, y_lim)
+def solar_violin(df, meta, global_local):
+    """ Return the day night violin graph for solar radiation variable
+    """
+    return violin(df, "GHrad", global_local)
 
-def wind_violin(df, meta):
-    city = meta[1]
-    country = meta[3]
-    location_name = city + ", " + country
-    title = {
-        'text': "Wind Speed" + " profile<br>" + location_name + "",
-        'y': 0.95,
-        'x': 0.5,
-        'xanchor': 'center',
-        'yanchor': 'top'
-    }
-    y_title = "Wind Speed (m/s)"
-    y_lim = [0, 35]
-    return create_violin(df, "Wspeed", title, y_title, y_lim)
+def wind_violin(df, meta, global_local):
+    """ Return the day night violin graph for wind speed variable
+    """
+    return violin(df, "Wspeed", global_local)
 
 

@@ -61,8 +61,8 @@ unit_dict = {
     "hour_unit" : "h",
 
     # Temp
-    "DBT_unit" : '\u00B0 C" #"&#8451',
-    "DPT_unit" : '\u00B0 C" #"&#8451',
+    "DBT_unit" : "\u00B0 C", # "&#8451"
+    "DPT_unit" : "\u00B0 C", # "&#8451"
 
     # Humidity
     "RH_unit" : "%",
@@ -105,10 +105,64 @@ unit_dict = {
     "equation_of_time_unit" : "\u00B0 deg"
 }
 
+####################
+### Global Names ###
+####################
+name_dict = {
+    "DOY_name": "Day of the year",
+    "day_name": "day",
+    "month_name": "months",
+    "hour_name": "hours of the day",
+
+    # Temp
+    "DBT_name": "Dry bulb temperature",
+    "DPT_name": "Dew point temperature",
+
+    # Humidity
+    "RH_name": "Relative humidity",
+
+    # Pressure
+    "Apressure_name": "Atmospheric pressure",
+
+    # Radiation
+    "EHrad_name": "Extraterrestrial horizontal irradiation",
+    "HIRrad_name": "´Horizontal infrared radiation",
+    "GHrad_name": "Global horizontal radiation",
+    "DNrad_name": "Direct normal radiation",
+    "DifHrad_name": "Diffuse horizontal radiation",
+
+    # Illuminance
+    "GHillum_name": "Global horizontal iluminance",
+    "DNillum_name": "Direct normal iluminance",
+    "DifHillum_name": "Diffuse horizontal iluminance",
+
+    # Luminance
+    "Zlumi_name": "Zenith luminance",
+
+    # Wind
+    "Wdir_name": "Wind direction",
+    "Wspeed_name": "Wind speed",
+
+    # Clouds
+    "Tskycover_name": "Total sky cover",
+    "Oskycover_name": "Opaque sky cover",
+
+    # Visibility
+    "Vis_name": "Visibility",
+
+    # Solar position
+    "apparent_zenith_name": "Apparent zenith",
+    "zenith_name": "Zenith",
+    "apparent_elevation_name": "Apparent elevation",
+    "elevation_name": "Elevation",
+    "azimuth_name": "Azimuth",
+    "equation_of_time_name": "Equation of time"
+}
+
 ###########################
 ### Global Value Ranges ###
 ###########################
-ranges = {
+range_dict = {
     'DBT_range' : [-40, 50],
     'DPT_range' : [-50, 35],
     'RH_range' : [0, 100],
