@@ -12,6 +12,7 @@ def tab_three():
     return html.Div(
         className = "container-col", 
         children = [
+            html.H5('Dry Bulb Temperature'),
             dcc.Graph(
                 id = 'yearly-dbt',
                 config = config
@@ -24,6 +25,7 @@ def tab_three():
                 id = 'heatmap-dbt',
                 config = config
             ), 
+            html.H5('Relative Humidity'),
             dcc.Graph(
                 id = 'yearly-rh',
                 config = config

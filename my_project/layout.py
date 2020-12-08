@@ -63,7 +63,7 @@ def build_banner():
                         children = ["EPW Viz Tool"]),
                     html.H5(
                         id = "banner-subtitle",
-                        children = ["Subtitle"]),
+                        children = ["Current Location: "]),
                 ]
             ),
             html.Div(
