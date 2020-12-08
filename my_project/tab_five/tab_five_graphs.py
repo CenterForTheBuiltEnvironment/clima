@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from plotly.colors import n_colors
 import plotly.express as px
 
-from my_project.global_scheme import template, colors, range_dict
+from my_project.global_scheme import template, color_dict, range_dict
 from my_project.template_graphs import heatmap
 
 

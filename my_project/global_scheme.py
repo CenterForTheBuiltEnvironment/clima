@@ -2,7 +2,7 @@
 ### Colors Dictionary ###
 #########################
 
-colors = {
+color_dict = {
     # TEMP
     'BlueRedYellow' : ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
     'DBT_color' : ["#00b3ff", "#000082", "#ff0000", "#ffff00"],

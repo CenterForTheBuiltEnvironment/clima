@@ -14,7 +14,7 @@ from .tab_five.tab_five import tab_five
 from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
-from .tab_three.tab_three_graphs import daily_dbt, daily_humidity, monthly_dbt, monthly_humidity, heatmap_dbt, heatmap_humidity
+from .tab_three.tab_three_graphs import yearly_profile_dbt, yearly_profile_rh, daily_profile_dbt, daily_profile_rh, heatmap_rh, heatmap_dbt
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
 from .tab_five.tab_five_graphs import wind_rose, wind_heatmap
 
@@ -93,9 +93,9 @@ def alert_display(data, n_clicks):
         return True, "Successfully loaded data. Check out the other tabs!", "success"
 
 
-################################
+###########################
 ### UPDATE INFO TO TABS ###        
-################################
+###########################
 
 ### TAB TWO ###
 @app.callback(
@@ -127,12 +127,12 @@ def update_tab_two(ts, units, global_local, df, meta):
 
 ### TAB THREE ###
 @app.callback(
+    Output('yearly-dbt', 'figure'),
     Output('daily-dbt', 'figure'),
-    Output('daily-humidity', 'figure'),
-    Output('monthly-dbt-3', 'figure'),
-    Output('monthly-humidity', 'figure'),
     Output('heatmap-dbt', 'figure'),
-    Output('heatmap-humidity', 'figure'),
+    Output('yearly-rh', 'figure'),
+    Output('daily-rh', 'figure'),
+    Output('heatmap-rh', 'figure'),
     [Input('df-store', 'modified_timestamp')],
     [Input('units-radio-input', 'value')],
     [Input('global-local-radio-input', 'value')],
@@ -143,9 +143,9 @@ def update_tab_three(ts, units, global_local, df, meta):
     """ Update the contents of tab three. Passing in general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return daily_dbt(df, meta, units), daily_humidity(df, meta, units), \
-        monthly_dbt(df, meta, units, global_local), monthly_humidity(df, meta, units, global_local), \
-        heatmap_dbt(df, meta, units, global_local), heatmap_humidity(df, meta, units, global_local)
+    return yearly_profile_dbt(df, global_local), daily_profile_dbt(df, global_local), \
+        heatmap_dbt(df, global_local), yearly_profile_rh(df, global_local), \
+        daily_profile_rh(df, global_local), heatmap_rh(df, global_local)
 
 ### TAB FOUR ###
 @app.callback(
