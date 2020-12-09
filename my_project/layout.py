@@ -4,12 +4,6 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 
-from .extract_df import create_df
-from .tab_one import tab_one
-from .tab_two import tab_two
-from .tab_three import tab_three
-from .tab_four import tab_four
-from .tab_eight import tab_eight
 from .server import app 
 
 def build_footer():
@@ -130,17 +124,17 @@ def build_tabs():
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Outdoor Comfort', 
+                        label = 'Query Data', 
                         value = 'tab-6',
                         className='custom-tab',
                         selected_className='custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Natural Ventilation', 
+                        label = 'Outdoor Comfort', 
                         value = 'tab-7',
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Interactive', 
+                        label = 'Natural Ventilation', 
                         value = 'tab-8',
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),

@@ -26,13 +26,6 @@ def speed_labels(bins, units):
             labels.append('{} - {} {}'.format(left, right, units))
     return labels
 
-# def _convert_dir(directions, N = directions.shape[0]):
-#     """ Convert centered angles to left-edge radians. 
-#     """
-#     barDir = directions * np.pi / 180. - np.pi / N
-#     barWidth = 2 * np.pi / N
-#     return barDir, barWidth
-
 def wind_rose(df, meta, units, month, hour):
     """ Return the wind rose figure.
 

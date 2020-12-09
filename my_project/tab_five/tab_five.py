@@ -5,7 +5,6 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from my_project.server import app 
 from my_project.global_scheme import config
 
 def tab_five():

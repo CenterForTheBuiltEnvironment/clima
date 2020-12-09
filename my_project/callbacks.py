@@ -11,6 +11,7 @@ from .tab_two.tab_two import tab_two
 from .tab_three.tab_three import tab_three
 from .tab_four.tab_four import tab_four
 from .tab_five.tab_five import tab_five
+from .tab_six.tab_six import tab_six
 from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
@@ -21,7 +22,6 @@ from .tab_five.tab_five_graphs import wind_rose, wind_speed_heatmap, wind_direct
 #####################
 ### TAB SELECTION ###        
 #####################
-
 @app.callback(Output('tabs-content', 'children'),
               [Input('tabs', 'value')])
 
@@ -39,11 +39,7 @@ def render_content(tab):
     elif tab == 'tab-5':
         return tab_five()
     elif tab == 'tab-6':
-        return html.Div(
-            children = [
-                html.H3('Tab content 6')
-            ]
-        )
+        return tab_six()
     elif tab == 'tab-7':
         return html.Div(
             children = [
@@ -53,10 +49,9 @@ def render_content(tab):
     elif tab == 'tab-8':
         return tab_eight()
 
-##############################
-### TAB ONE: SUBMIT BUTTON ###        
-##############################
-
+#######################
+### TAB ONE: SELECT ###        
+#######################
 @app.callback(
     Output('df-store', 'data'),
     Output('meta-store', 'data'),
@@ -93,11 +88,9 @@ def alert_display(data, n_clicks):
         return True, "Successfully loaded data. Check out the other tabs!", "success"
 
 
-###########################
-### UPDATE INFO TO TABS ###        
-###########################
-
-### TAB TWO ###
+########################
+### TAB TWO: CLIMATE ###        
+########################
 @app.callback(
     Output('world-map', 'figure'),
     Output('temp-profile-graph', 'figure'),
@@ -125,7 +118,9 @@ def update_tab_two(ts, units, global_local, df, meta):
     return world_map(df, meta), dbt_violin(df, meta, global_local), humidity_violin(df, meta, global_local), \
         solar_violin(df, meta, global_local), wind_violin(df, meta, global_local), location, lon, lat, elevation
 
-### TAB THREE ###
+####################################
+### TAB THREE: TEMP AND HUMIDITY ###
+####################################
 @app.callback(
     Output('yearly-dbt', 'figure'),
     Output('daily-dbt', 'figure'),
@@ -147,7 +142,9 @@ def update_tab_three(ts, units, global_local, df, meta):
         heatmap_dbt(df, global_local), yearly_profile_rh(df, global_local), \
         daily_profile_rh(df, global_local), heatmap_rh(df, global_local)
 
-### TAB FOUR ###
+#####################
+### TAB FOUR: SUN ###
+#####################
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
     Output('monthly-solar', 'figure'),
@@ -181,7 +178,9 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
             daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
             daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
 
-### TAB FIVE ###
+######################
+### TAB FIVE: WIND ###
+######################
 @app.callback(
     Output('wind-rose', 'figure'),
     Output('wind-speed', 'figure'),
@@ -199,3 +198,22 @@ def update_tab_five(month, hour, ts, units, global_local, df, meta):
     """
     df = pd.read_json(df, orient = 'split')
     return wind_rose(df, meta, units, month, hour), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local)
+
+###########################
+### TAB SIX: QUERY DATA ###
+###########################
+# @app.callback(
+#     Output('', 'figure'),
+#     Output('', 'figure'),
+#     Output('', 'figure'),
+#     [Input('query-var-dropdown', 'modified_timestamp')],
+#     [Input('df-store', 'modified_timestamp')],
+#     [Input('units-radio-input', 'value')],
+#     [Input('global-local-radio-input', 'value')],
+#     [State('df-store', 'data')],
+#     [State('meta-store', 'data')]
+# )
+# def update_tab_six(var, ts, units, global_local, df, meta):
+#     """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
+#     """
+#     return 
