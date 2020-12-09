@@ -170,12 +170,13 @@ range_dict = {
     'DNrad_range' : [0, 1200],
     'DifHrad_range' : [0, 1200],
     'Wspeed_range' : [0, 20],
+    'Wdir_range' : [0, 20],
 }
 
 ###################################
 ### Template and Configurations ###
 ###################################
-template = "ggplot2"
+template = "plotly"
 config = {
     'modeBarButtonsToRemove': ['toggleSpikelines', 'hoverCompareCartesian', "pan2d", "lasso2d", "zoomIn2d", "zoomOut2d", "hoverClosestCartesian"],
     "modeBarButtonsToAdd": ["select2d"],

@@ -7,7 +7,7 @@ from datetime import time, datetime, timedelta, timezone
 import numpy as np
 import math 
 from my_project.extract_df import create_df
-from my_project.template_graphs import heatmap
+from my_project.template_graphs import heatmap, daily_profile
 from my_project.global_scheme import template
 
 ####################################
@@ -166,6 +166,7 @@ def polar_solar(epw_df, meta, units):
                     line_width = 1
                 )) 
     fig.update_layout(
+        height = 600,
         template = template,
         showlegend = False,
         polar = dict(
@@ -178,6 +179,9 @@ def polar_solar(epw_df, meta, units):
     ))
     return fig
 
+#######################
+### SOLAR RADIATION ###
+#######################
 def monthly_solar(epw_df, meta, units):
     """
     """
@@ -227,41 +231,69 @@ def monthly_solar(epw_df, meta, units):
     fig.update_layout(template = template)
     return fig
 
-#################
+def yearly_solar_radiation(df):
+    """ Return the figure with yearly solar radiation split. 
+    """
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x = [0],
+            y = [0],
+            mode = "markers", 
+            marker_size = df["GHrad"].sum() / (8760 / 2),
+            marker_sizemode = "area",
+            marker_color = "#f9c74f",
+            text = [str(df["GHrad"].sum()) + " KW/h/m2"],
+            name = "Global Solar Radiation"
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x = [0],
+            y = [0],
+            mode = "markers",
+            marker_size = (df["GHrad"].sum() - df["DifHrad"].sum()) / (8760 / 2),
+            marker_sizemode = "area",
+            marker_color = "#f3722c",
+            text = [str(df["DifHrad"].sum()) + " KW/h/m2"],
+            name = "Direct Solar Radiation"
+        )
+    )
+    fig.update_layout(template = template)
+    return fig
+
+################
 ### HEATMAPS ###
 ################
-def horizontal_solar(epw_df, meta, units):
-    sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
-    title = "Global Horizontal Solar Radiation (Wh/m2)"
-    data_max = (5 * math.ceil(epw_df["GHrad"].max() / 5))
-    data_min = (5 * math.floor(epw_df["GHrad"].min() / 5))
-    z_col = epw_df["GHrad"]
-    hover = 'DOY: %{x}<br>hour: %{y}<br>GHrad: %{z}<extra></extra>'
-    return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
+def heatmap_ghrad(df, global_local):
+    """ Return the heatmap for GHrad
+    """
+    return heatmap(df, "GHrad", global_local)
 
-def diffuse_solar(epw_df, meta, units):
-    sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
-    title = "Diffuse Horizontal Solar Radiation (Wh/m2)"
-    data_max = 1000
-    data_min = 0
-    z_col = epw_df["DifHrad"]
-    hover = 'DOY: %{x}<br>hour: %{y}<br>DifHrad: %{z}<extra></extra>'
-    return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
+def heatmap_dnrad(df, global_local):
+    """ Return the heatmap for DNrad
+    """
+    return heatmap(df, "DNrad", global_local)
 
-def direct_solar(epw_df, meta, units):
-    sun_colors = ["#293a59","#ff0000","#ffff00","#ffffff"]
-    title = "Direct Normal Solar Radiation (Wh/m2)"
-    data_max = 1000
-    data_min = 0
-    z_col = epw_df["DNrad"]
-    hover = 'DOY: %{x}<br>hour: %{y}<br>DNrad: %{z}<extra></extra>'
-    return heatmap(epw_df, sun_colors, title, data_min, data_max, z_col, hover)
+def heatmap_difhrad(df, global_local):
+    """ Return the heatmap for DifHrad
+    """
+    return heatmap(df, "DifHrad", global_local)
 
-def cloud_cover(epw_df, meta, units):
-    colors = ["#00aaff","#ffffff","#c2c2c2"]
-    title = "Cloud Cover (%)"
-    data_max = 10
-    data_min = 0
-    z_col = epw_df["Oskycover"]
-    hover = 'DOY: %{x}<br>hour: %{y}<br>Tskycover: %{z}<extra></extra>'
-    return heatmap(epw_df, colors, title, data_min, data_max, z_col, hover)
+#######################
+### DAILY PROFILES  ###
+#######################
+def daily_profile_ghrad(df, global_local):
+    """ Return the figure for the yearly profile for RH variable 
+    """
+    return daily_profile(df, "GHrad", global_local)
+
+def daily_profile_dnrad(df, global_local):
+    """ Return the figure for the yearly profile for RH variable 
+    """
+    return daily_profile(df, "DNrad", global_local)
+
+def daily_profile_difhrad(df, global_local):
+    """ Return the figure for the yearly profile for RH variable 
+    """
+    return daily_profile(df, "DifHrad", global_local)

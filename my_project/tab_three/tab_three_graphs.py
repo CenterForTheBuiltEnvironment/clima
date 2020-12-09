@@ -81,37 +81,3 @@ def heatmap_rh(df, global_local):
     """ Return the figure for the heatmap for RH variable.
     """
     return heatmap(df, "RH", global_local)
-
-# def heatmap_dbt(epw_df, meta, units, global_local):
-#     """ Return a figure of the heatmap for DBT
-#     """
-#     colors = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
-#     title = "Dry Bulb Temperatures (degC)"
-#     if global_local == "global":
-#         # Set Global values for max and min
-#         data_min = range_dict['DBT_range'][0]
-#         data_max = range_dict['DBT_range'][1]
-#     else:
-#         # Set maximum and minimum according to data
-#         data_min = (5 * floor(epw_df["DBT"].min() / 5))
-#         data_max = (5 * ceil(epw_df["DBT"].max() / 5))
-#     z_vals = epw_df["DBT"]
-#     hover = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'
-#     return heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover)
-
-# def heatmap_humidity(epw_df, meta, units, global_local):
-#     """ Return a figure of the heatmap for humidity. 
-#     """
-#     colors = ["#ffe600", "#00c8ff", "#0000ff"]
-#     title = "Relative Humiditys (degC)"
-#     if global_local == "global":
-#         # Set Global values for max and min
-#         data_min = range_dict['RH_range'][0]
-#         data_max = range_dict['RH_range'][1]
-#     else:
-#         # Set maximum and minimum according to data
-#         data_min = (5 * floor(epw_df["RH"].min() / 5))
-#         data_max = (5 * ceil(epw_df["RH"].max() / 5))
-#     z_vals = epw_df["RH"]
-#     hover = 'DOY: %{x}<br>hour: %{y}<br>RH: %{z}<extra></extra>'
-#     return heatmap(epw_df, colors, title, data_min, data_max, z_vals, hover)

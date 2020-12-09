@@ -42,7 +42,7 @@ def wind_rose(df, meta, units, month, hour):
     end_month = month[1]
     start_hour = hour[0]
     end_hour = hour[1]
-    spd_colors = colors['Wspeed_color']
+    spd_colors = color_dict['Wspeed_color']
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units = 'm/s')
     dir_bins = np.arange(-22.5 / 2, 370, 22.5)
@@ -112,12 +112,8 @@ def wind_rose(df, meta, units, month, hour):
 ################
 ### HEAT MAP ###
 ################
+def wind_speed_heatmap(df, global_local):
+    return heatmap(df, 'Wspeed', global_local)
 
-def wind_heatmap(df, meta):
-    title = "Wind Speed"
-    colorscale = colors['Wspeed_color']
-    data_min = range_dict['Wspeed_range'][0]
-    data_max = range_dict['Wspeed_range'][1]
-    z_vals = df['Wspeed']
-    hover = ''
-    return heatmap(df, colorscale, title, data_min, data_max, z_vals, hover)
+def wind_direction_heatmap(df, global_local):
+    return heatmap(df, 'Wdir', global_local)

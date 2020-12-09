@@ -7,7 +7,6 @@ import pandas as pd
 
 from my_project.server import app 
 from my_project.global_scheme import config
-from .tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
 
 def tab_four():
     """ Contents of tab four.
@@ -22,30 +21,48 @@ def tab_four():
                     {'label': 'Polar', 'value': 'polar'},
                     {'label': 'Latitude/Longitude', 'value': 'lat/long'}
                 ], 
-                value = 'lat/long'
+                value = 'polar'
             ),
             dcc.Graph(
                 id = 'solar-dropdown-output',
                 config = config
             ), 
+            html.Div(
+                className = 'container-row',
+                id = 'tab-four-subcontainer',
+                children = [
+                    dcc.Graph(
+                        id = 'yearly-solar',
+                        config = config
+                    ),
+                    dcc.Graph(
+                        id = 'monthly-solar',
+                        config = config
+                    ), 
+                ]
+            ),
             dcc.Graph(
-                id = 'monthly-solar',
+                id = 'daily-ghrad',
                 config = config
             ), 
             dcc.Graph(
-                id = 'horizontal-solar',
+                id = 'heatmap-ghrad',
                 config = config
             ), 
             dcc.Graph(
-                id = 'diffuse-solar',
+                id = 'daily-dnrad',
                 config = config
             ), 
             dcc.Graph(
-                id = 'direct-solar',
+                id = 'heatmap-dnrad',
+                config = config
+            ),
+            dcc.Graph(
+                id = 'daily-difhrad',
                 config = config
             ), 
             dcc.Graph(
-                id = 'cloud-cover',
+                id = 'heatmap-difhrad',
                 config = config
             )
         ]

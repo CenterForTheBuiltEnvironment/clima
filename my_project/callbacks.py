@@ -15,8 +15,8 @@ from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 from .tab_three.tab_three_graphs import yearly_profile_dbt, yearly_profile_rh, daily_profile_dbt, daily_profile_rh, heatmap_rh, heatmap_dbt
-from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, horizontal_solar, diffuse_solar, direct_solar, cloud_cover
-from .tab_five.tab_five_graphs import wind_rose, wind_heatmap
+from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, yearly_solar_radiation, heatmap_ghrad, heatmap_difhrad, heatmap_dnrad, daily_profile_ghrad, daily_profile_difhrad, daily_profile_dnrad
+from .tab_five.tab_five_graphs import wind_rose, wind_speed_heatmap, wind_direction_heatmap
 
 #####################
 ### TAB SELECTION ###        
@@ -151,10 +151,13 @@ def update_tab_three(ts, units, global_local, df, meta):
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
     Output('monthly-solar', 'figure'),
-    Output('horizontal-solar', 'figure'),
-    Output('diffuse-solar', 'figure'),
-    Output('direct-solar', 'figure'),
-    Output('cloud-cover', 'figure'),
+    Output('yearly-solar', 'figure'),
+    Output('daily-ghrad', 'figure'),
+    Output('heatmap-ghrad', 'figure'),
+    Output('daily-dnrad', 'figure'),
+    Output('heatmap-dnrad', 'figure'),
+    Output('daily-difhrad', 'figure'),
+    Output('heatmap-difhrad', 'figure'),
     [Input("solar-dropdown", 'value')],
     [Input('df-store', 'modified_timestamp')],
     [Input('units-radio-input', 'value')],
@@ -167,18 +170,22 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
     """
     df = pd.read_json(df, orient = 'split')
     if solar_dropdown == 'polar':
-        return polar_solar(df, meta, units), monthly_solar(df, meta, units), \
-            horizontal_solar(df, meta, units), diffuse_solar(df, meta, units), \
-            direct_solar(df, meta, units), cloud_cover(df, meta, units)
+        return polar_solar(df, meta, units), monthly_solar(df, meta, units), yearly_solar_radiation(df), \
+            daily_profile_ghrad(df, global_local), heatmap_ghrad(df, global_local), \
+            daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
+            daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
+            
     else:
-        return lat_long_solar(df, meta, units), monthly_solar(df, meta, units), \
-            horizontal_solar(df, meta, units), diffuse_solar(df, meta, units), \
-            direct_solar(df, meta, units), cloud_cover(df, meta, units)
+        return lat_long_solar(df, meta, units), monthly_solar(df, meta, units), yearly_solar_radiation(df), \
+            daily_profile_ghrad(df, global_local), heatmap_ghrad(df, global_local), \
+            daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
+            daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
 
 ### TAB FIVE ###
 @app.callback(
     Output('wind-rose', 'figure'),
-    Output('wind-heatmap', 'figure'),
+    Output('wind-speed', 'figure'),
+    Output('wind-direction', 'figure'),
     [Input('month-slider', 'value')],
     [Input('hour-slider', 'value')],
     [Input('df-store', 'modified_timestamp')],
@@ -191,4 +198,4 @@ def update_tab_five(month, hour, ts, units, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return wind_rose(df, meta, units, month, hour), wind_heatmap(df, meta)
+    return wind_rose(df, meta, units, month, hour), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local)

@@ -5,7 +5,6 @@ from plotly.colors import n_colors
 import plotly.express as px
 
 from my_project.template_graphs import violin
-from my_project.global_scheme import template
 
 #################
 ### WORLD MAP ###

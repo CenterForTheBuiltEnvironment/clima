@@ -20,7 +20,11 @@ def tab_five():
                 id = 'wind-rose'
             ), 
             dcc.Graph(
-                id = 'wind-heatmap',
+                id = 'wind-speed',
+                config = config
+            ), 
+            dcc.Graph(
+                id = 'wind-direction',
                 config = config
             )
         ]
