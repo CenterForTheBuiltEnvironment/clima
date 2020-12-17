@@ -197,14 +197,54 @@ var_name_lst = [
 ### Global Value Ranges ###
 ###########################
 range_dict = {
-    'DBT_range' : [-40, 50],
-    'DPT_range' : [-50, 35],
-    'RH_range' : [0, 100],
-    'GHrad_range' : [0, 1200],
-    'DNrad_range' : [0, 1200],
-    'DifHrad_range' : [0, 1200],
-    'Wspeed_range' : [0, 20],
-    'Wdir_range' : [0, 20],
+    "DOY_range" : [0, 365],
+    "month_range" : [1, 12],
+    "day_range" : [1, 31],
+    "hour_range" : [1, 24],
+
+    # Temp
+    "DBT_range" : [-40, 50],
+    "DPT_range" : [-50, 35],
+
+    # Humidity
+    "RH_range" : [0, 100],
+
+    # Pressure
+    "Apressure_range" : [95000, 105000],
+
+    # Radiation
+    "EHrad_range" : [0, 1200],
+    "HIRrad_range" : [0, 500],
+    "GHrad_range" : [0, 1200],
+    "DNrad_range" : [0, 1200],
+    "DifHrad_range" : [0, 1200],
+
+    # Illuminance
+    "GHillum_range" : [0,120000],
+    "DNillum_range" : [0,120000],
+    "DifHillum_range" : [0,120000],
+
+    # Luminance
+    "Zlumi_range" : [0,60000],
+
+    # Wind
+    "Wdir_range" : [0,360],
+    "Wspeed_range" : [0,20],
+
+    # Clouds
+    "Tskycover_range" : [0,10],
+    "Oskycover_range" : [0,10],
+
+    # Visibility
+    "Vis_range" : [0,100],
+
+    # Solar position
+    "apparent_zenith_range" : [0,180],
+    "zenith_range" : [0,180],
+    "apparent_elevation_range" : [-90,90],
+    "elevation_range" : [-90,90],
+    "azimuth_range" : [0,360],
+    "equation_of_time_range" : [-20,20],
 }
 
 ###################################

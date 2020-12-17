@@ -5,6 +5,7 @@ import pandas as pd
 
 from .server import app 
 from .extract_df import create_df
+from .template_graphs import wind_rose, heatmap
 
 from .tab_one.tab_one import tab_one
 from .tab_two.tab_two import tab_two
@@ -17,7 +18,6 @@ from .tab_eight.tab_eight import tab_eight
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 from .tab_three.tab_three_graphs import yearly_profile_dbt, yearly_profile_rh, daily_profile_dbt, daily_profile_rh, heatmap_rh, heatmap_dbt
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation, heatmap_ghrad, heatmap_difhrad, heatmap_dnrad, daily_profile_ghrad, daily_profile_difhrad, daily_profile_dnrad
-from .tab_five.tab_five_graphs import custom_wind_rose, wind_speed_heatmap, wind_direction_heatmap
 
 #####################
 ### TAB SELECTION ###        
@@ -207,10 +207,23 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return custom_wind_rose(df, meta, [1, 12], [1, 24]), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local), \
-        custom_wind_rose(df, meta, [12, 2], [1, 24]), custom_wind_rose(df, meta, [3, 5], [1, 24]), custom_wind_rose(df, meta, [6, 8], [1, 24]), custom_wind_rose(df, meta, [9, 12], [1, 24]), \
-        custom_wind_rose(df, meta, [1, 12], [6, 13]), custom_wind_rose(df, meta, [1, 12], [14, 21]), custom_wind_rose(df, meta, [1, 12], [22, 5]), \
-        custom_wind_rose(df, meta, month, hour)
+
+    # Heatmap Graphs
+    speed = heatmap(df, 'Wspeed', global_local)
+    direction = heatmap(df, 'Wdir', global_local)
+
+    # Wind Rose Graphs
+    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24])
+    winter = wind_rose(df, meta, "", [12, 2], [1, 24])
+    spring = wind_rose(df, meta, "", [3, 5], [1, 24])
+    summer = wind_rose(df, meta, "", [6, 8], [1, 24])
+    fall = wind_rose(df, meta, "", [9, 12], [1, 24])
+    morning = wind_rose(df, meta, "", [1, 12], [6, 13])
+    noon = wind_rose(df, meta, "", [1, 12], [14, 21])
+    night = wind_rose(df, meta, "", [1, 12], [22, 5])
+    custom = wind_rose(df, meta, "", month, hour)
+
+    return annual, speed, direction, winter, spring, summer, fall, morning, noon, night, custom
 
 ###########################
 ### TAB SIX: QUERY DATA ###

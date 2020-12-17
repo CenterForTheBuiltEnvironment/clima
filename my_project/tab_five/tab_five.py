@@ -139,7 +139,6 @@ def tab_five():
         className = 'container-col',
         id = 'tab-five-container',
         children = [
-            html.H5("Annual Wind Rose"),
             dcc.Graph(
                 id = 'wind-rose'
             ), 
