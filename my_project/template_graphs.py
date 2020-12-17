@@ -27,8 +27,8 @@ def violin(df, var, global_local):
         range_y = var_range
     else:
         # Set maximumand minimum according to data
-        data_min = (5 * ceil(df[var].max() / 5))
-        data_max = (5 * floor(df[var].min() / 5))
+        data_max = (5 * ceil(df[var].max() / 5))
+        data_min = (5 * floor(df[var].min() / 5))
         range_y = [data_min, data_max]
     colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype = 'rgb')
     data_day = df.loc[mask_day, var]
@@ -36,7 +36,7 @@ def violin(df, var, global_local):
     fig = go.Figure()
     fig.add_trace(go.Violin(x = df["fake_year"], y = data_day, line_color = 'rgb(200, 10, 10)', name = "Day", side = 'negative'))
     fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
-    fig.update_yaxes(range = var_range)
+    fig.update_yaxes(range = range_y)
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
     fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, violingap = 0, violingroupgap = 0, violinmode = 'overlay')
     title = var_name + " (" + var_unit + ")"
@@ -58,11 +58,11 @@ def yearly_profile(df, var, global_local, lo80, hi80, lo90, hi90):
         range_y = var_range
     else:
         # Set maximumand minimum according to data
-        data_min = (5 * ceil(df[var].max() / 5))
-        data_max = (5 * floor(df[var].min() / 5))
+        data_max = (5 * ceil(df[var].max() / 5))
+        data_min = (5 * floor(df[var].min() / 5))
         range_y = [data_min, data_max]
     var_single_color = var_color[len(var_color) // 2]
-    custom_xlim = [0,365]
+    custom_xlim = [0, 365]
     custom_ylim = range_y
     days = [i for i in range(365)]
     # Get min, max, and mean of each day
@@ -176,8 +176,8 @@ def daily_profile(df, var, global_local):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_min = (5 * ceil(df[var].max() / 5))
-        data_max = (5 * floor(df[var].min() / 5))
+        data_max = (5 * ceil(df[var].max() / 5))
+        data_min = (5 * floor(df[var].min() / 5))
         range_y = [data_min, data_max]
     var_single_color = var_color[len(var_color) // 2]
     var_month_ave = df.groupby(['month','hour'])[var].median().reset_index()

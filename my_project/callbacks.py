@@ -16,8 +16,8 @@ from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 from .tab_three.tab_three_graphs import yearly_profile_dbt, yearly_profile_rh, daily_profile_dbt, daily_profile_rh, heatmap_rh, heatmap_dbt
-from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, yearly_solar_radiation, heatmap_ghrad, heatmap_difhrad, heatmap_dnrad, daily_profile_ghrad, daily_profile_difhrad, daily_profile_dnrad
-from .tab_five.tab_five_graphs import wind_rose, wind_speed_heatmap, wind_direction_heatmap
+from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation, heatmap_ghrad, heatmap_difhrad, heatmap_dnrad, daily_profile_ghrad, daily_profile_difhrad, daily_profile_dnrad
+from .tab_five.tab_five_graphs import custom_wind_rose, wind_speed_heatmap, wind_direction_heatmap
 
 #####################
 ### TAB SELECTION ###        
@@ -74,18 +74,22 @@ def submit_button(n_clicks, value):
     Output("alert", 'is_open'),
     Output("alert", 'children'),
     Output("alert", "color"),
+    Output("banner-subtitle", "children"),
     [Input('df-store', 'data')],
-    [Input('submit-button', 'n_clicks')]
+    [Input('submit-button', 'n_clicks')],
+    [State('meta-store', 'data')]
 )
-def alert_display(data, n_clicks):
+def alert_display(data, n_clicks, meta):
     """ Displays the alert for the submit button. 
     """
+    default = "Current Location: N/A"
     if n_clicks is None:
-        return True, "To start, submit a link below!", "primary"
+        return True, "To start, submit a link below!", "primary", default
     if data is None and n_clicks > 0:
-        return True, "This link is not available. Please choose another one.", "warning"
+        return True, "This link is not available. Please choose another one.", "warning", default
     else:
-        return True, "Successfully loaded data. Check out the other tabs!", "success"
+        subtitle = "Current Location: " + meta[1] + ", " + meta[3]
+        return True, "Successfully loaded data. Check out the other tabs!", "success", subtitle
 
 
 ########################
@@ -102,12 +106,11 @@ def alert_display(data, n_clicks):
     Output('tab-two-lat', 'children'),
     Output('tab-two-elevation', 'children'),
     [Input('df-store', 'modified_timestamp')],
-    [Input('units-radio-input', 'value')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_two(ts, units, global_local, df, meta):
+def update_tab_two(ts, global_local, df, meta):
     """ Update the contents of tab two. Passing in the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
@@ -129,12 +132,11 @@ def update_tab_two(ts, units, global_local, df, meta):
     Output('daily-rh', 'figure'),
     Output('heatmap-rh', 'figure'),
     [Input('df-store', 'modified_timestamp')],
-    [Input('units-radio-input', 'value')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_three(ts, units, global_local, df, meta):
+def update_tab_three(ts, global_local, df, meta):
     """ Update the contents of tab three. Passing in general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
@@ -149,6 +151,7 @@ def update_tab_three(ts, units, global_local, df, meta):
     Output('solar-dropdown-output', 'figure'),
     Output('monthly-solar', 'figure'),
     Output('yearly-solar', 'figure'),
+    Output('custom-sunpath', 'figure'),
     Output('daily-ghrad', 'figure'),
     Output('heatmap-ghrad', 'figure'),
     Output('daily-dnrad', 'figure'),
@@ -157,23 +160,23 @@ def update_tab_three(ts, units, global_local, df, meta):
     Output('heatmap-difhrad', 'figure'),
     [Input("solar-dropdown", 'value')],
     [Input('df-store', 'modified_timestamp')],
-    [Input('units-radio-input', 'value')],
     [Input('global-local-radio-input', 'value')],
+    [Input('custom-sun-var-dropdown', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
+def update_tab_four(solar_dropdown, ts, global_local, custom_sun_var, df, meta):
     """ Update the contents of tab four. Passing in the polar selection and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
     if solar_dropdown == 'polar':
-        return polar_solar(df, meta, units), monthly_solar(df, meta, units), yearly_solar_radiation(df), \
+        return polar_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), custom_sunpath(df, meta, global_local, custom_sun_var), \
             daily_profile_ghrad(df, global_local), heatmap_ghrad(df, global_local), \
             daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
             daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
             
     else:
-        return lat_long_solar(df, meta, units), monthly_solar(df, meta, units), yearly_solar_radiation(df), \
+        return lat_long_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), custom_sunpath(df, meta, global_local, custom_sun_var), \
             daily_profile_ghrad(df, global_local), heatmap_ghrad(df, global_local), \
             daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
             daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
@@ -182,22 +185,21 @@ def update_tab_four(solar_dropdown, ts, units, global_local, df, meta):
 ### TAB FIVE: WIND ###
 ######################
 @app.callback(
-    Output('wind-rose', 'figure'),
+    Output('custom-wind-rose', 'figure'),
     Output('wind-speed', 'figure'),
     Output('wind-direction', 'figure'),
     [Input('month-slider', 'value')],
     [Input('hour-slider', 'value')],
     [Input('df-store', 'modified_timestamp')],
-    [Input('units-radio-input', 'value')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_five(month, hour, ts, units, global_local, df, meta):
+def update_tab_five(month, hour, ts, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return wind_rose(df, meta, units, month, hour), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local)
+    return custom_wind_rose(df, meta, month, hour), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local)
 
 ###########################
 ### TAB SIX: QUERY DATA ###

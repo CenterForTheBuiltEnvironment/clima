@@ -57,7 +57,7 @@ def build_banner():
                         children = ["EPW Viz Tool"]),
                     html.H5(
                         id = "banner-subtitle",
-                        children = ["Current Location: "]),
+                        children = ["Current Location: N/A"]),
                 ]
             ),
             html.Div(
@@ -66,17 +66,8 @@ def build_banner():
                 children = [
                     dbc.RadioItems(
                         options = [
-                            {"label": "International System", "value": "international"},
-                            {"label": "Imperial Units", "value": "imperial"},
-                        ],
-                        value = "international",
-                        id = "units-radio-input",
-                        inline = True
-                    ),
-                    dbc.RadioItems(
-                        options = [
-                            {"label": "Global", "value": "global"},
-                            {"label": "Local", "value": "local"},
+                            {"label": "Global Value Ranges", "value": "global"},
+                            {"label": "Local Value Ranges", "value": "local"},
                         ],
                         value = "global",
                         id = "global-local-radio-input",

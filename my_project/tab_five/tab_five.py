@@ -14,10 +14,6 @@ def tab_five():
         className = 'container-col',
         id = 'tab-five-container',
         children = [
-            sliders(),
-            dcc.Graph(
-                id = 'wind-rose'
-            ), 
             dcc.Graph(
                 id = 'wind-speed',
                 config = config
@@ -25,7 +21,11 @@ def tab_five():
             dcc.Graph(
                 id = 'wind-direction',
                 config = config
-            )
+            ),
+            sliders(),
+            dcc.Graph(
+                id = 'custom-wind-rose'
+            ), 
         ]
     )
 
@@ -54,7 +54,7 @@ def sliders():
                             'always_visible': False,
                             'placement' : 'top'
                         },
-                        allowCross = False
+                        allowCross = True
                     ),
                 ]
             ),

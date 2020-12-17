@@ -30,7 +30,11 @@ def tab_one():
                 id = "tab-one-map",
                 src = "https://www.ladybug.tools/epwmap/"
             ), 
-            
+            html.A(
+                'Map Credits', 
+                href = "https://www.ladybug.tools/epwmap/",
+                id = 'map-credits'
+            )
         ]
     )
       

@@ -6,7 +6,29 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
-from my_project.global_scheme import config
+from my_project.global_scheme import config, var_name_lst
+
+def custom():
+    """ Return the layout for the custom sunpath and its dropdowns.
+    """
+    return html.Div(
+        className = 'container-col',
+        id = "tab-four-custom-sun-container",
+        children = [
+            dcc.Dropdown(
+                id = "custom-sun-var-dropdown", 
+                options = [
+                    {'label': i, 'value': i} for i in var_name_lst
+                ], 
+                value = 'RH'
+            ),
+            dcc.Graph(
+                id = 'custom-sunpath',
+                config = config
+            )
+        ]
+    )
+
 
 def tab_four():
     """ Contents of tab four.
@@ -41,6 +63,11 @@ def tab_four():
                     ), 
                 ]
             ),
+            dcc.Graph(
+                id = 'cloud-cover',
+                config = config
+            ),
+            custom(),
             dcc.Graph(
                 id = 'daily-ghrad',
                 config = config

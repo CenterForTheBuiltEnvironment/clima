@@ -159,6 +159,40 @@ name_dict = {
     "equation_of_time_name": "Equation of time"
 }
 
+######################
+### Variable Names ###
+######################
+var_name_lst = [
+    "DOY",
+    "day",
+    "month",
+    "hour",
+    "DBT",
+    "DPT",
+    "RH",
+    "Apressure",
+    "EHrad",
+    "HIRrad",
+    "GHrad",
+    "DNrad",
+    "DifHrad",
+    "GHillum",
+    "DNillum",
+    "DifHillum",
+    "Zlumi",
+    "Wdir",
+    "Wspeed",
+    "Tskycover",
+    "Oskycover",
+    "Vis",
+    "apparent",
+    "zenith",
+    "apparent_elevation",
+    "elevation",
+    "azimuth",
+    "equation_of_time"
+]
+
 ###########################
 ### Global Value Ranges ###
 ###########################
