@@ -185,9 +185,17 @@ def update_tab_four(solar_dropdown, ts, global_local, custom_sun_var, df, meta):
 ### TAB FIVE: WIND ###
 ######################
 @app.callback(
-    Output('custom-wind-rose', 'figure'),
+    Output('wind-rose', 'figure'),
     Output('wind-speed', 'figure'),
     Output('wind-direction', 'figure'),
+    Output('winter-wind-rose', 'figure'),
+    Output('spring-wind-rose', 'figure'),
+    Output('summer-wind-rose', 'figure'),
+    Output('fall-wind-rose', 'figure'),
+    Output('morning-wind-rose', 'figure'),
+    Output('noon-wind-rose', 'figure'),
+    Output('night-wind-rose', 'figure'),
+    Output('custom-wind-rose', 'figure'),
     [Input('month-slider', 'value')],
     [Input('hour-slider', 'value')],
     [Input('df-store', 'modified_timestamp')],
@@ -199,7 +207,10 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return custom_wind_rose(df, meta, month, hour), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local)
+    return custom_wind_rose(df, meta, [1, 12], [1, 24]), wind_speed_heatmap(df, global_local), wind_direction_heatmap(df, global_local), \
+        custom_wind_rose(df, meta, [12, 2], [1, 24]), custom_wind_rose(df, meta, [3, 5], [1, 24]), custom_wind_rose(df, meta, [6, 8], [1, 24]), custom_wind_rose(df, meta, [9, 12], [1, 24]), \
+        custom_wind_rose(df, meta, [1, 12], [6, 13]), custom_wind_rose(df, meta, [1, 12], [14, 21]), custom_wind_rose(df, meta, [1, 12], [22, 5]), \
+        custom_wind_rose(df, meta, month, hour)
 
 ###########################
 ### TAB SIX: QUERY DATA ###

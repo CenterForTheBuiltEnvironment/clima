@@ -181,13 +181,28 @@ p {
     margin: 24px;
 }
 
+#custom-wind-rose, #wind-rose {
+    width: 1200px;
+    height: 800px
+}
+
+.seasonal-graph {
+    width: 800px;
+    height: 600px;
+}
+
+.daily-wind-graph {
+    width: 650px;
+    height: 600px;
+}
+
 #slider-container * {
     justify-content: center;
-    
 }
 
 .each-slider {
-    padding-bottom: 24px;
+    padding: 32px 0px 0px 0px;
+    width: 60%;
 }
 
 #hour-slider, #month-slider {

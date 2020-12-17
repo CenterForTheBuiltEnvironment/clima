@@ -7,35 +7,14 @@ import pandas as pd
 
 from my_project.global_scheme import config
 
-def tab_five():
-    """ Contents in the fifth tab 'Wind'.
-    """
-    return html.Div(
-        className = 'container-col',
-        id = 'tab-five-container',
-        children = [
-            dcc.Graph(
-                id = 'wind-speed',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'wind-direction',
-                config = config
-            ),
-            sliders(),
-            dcc.Graph(
-                id = 'custom-wind-rose'
-            ), 
-        ]
-    )
-
 def sliders():
     """ Returns 2 sliders for the hour
     """
     return html.Div(
-        className = 'container-col',
+        className = 'container-col container-center',
         id = 'slider-container',
         children = [
+            html.H3("Customizable Wind Rose"),
             html.Div(
                 className = 'container-row each-slider',
                 children = [
@@ -80,5 +59,103 @@ def sliders():
                     )
                 ]
             ),
+        ]
+    )
+
+def seasonal_wind_rose():
+    """ Return the section with the 4 seasonal wind rose graphs.
+    """
+    return html.Div(
+        className = "container-col full-width",
+        children = [
+            html.H5("Seasonal Wind Rose"),
+            html.Div(
+                className = "container-row container-center",
+                children = [
+                    dcc.Graph(
+                        className = "seasonal-graph",
+                        id = "winter-wind-rose",
+                        config = config 
+                    ),
+                    dcc.Graph(
+                        className = "seasonal-graph",
+                        id = "spring-wind-rose",
+                        config = config 
+                    ),
+                ]
+            ),
+            html.Div(
+                className = "container-row container-center",
+                children = [
+                    dcc.Graph(
+                        className = "seasonal-graph",
+                        id = "summer-wind-rose",
+                        config = config 
+                    ),
+                    dcc.Graph(
+                        className = "seasonal-graph",
+                        id = "fall-wind-rose",
+                        config = config 
+                    )
+                ]
+            )
+        ]
+    )
+
+def daily_wind_rose():
+    """ Return the section for the 3 daily wind rose graphs.
+    """
+    return html.Div(
+        className = "container-col full-width",
+        children = [
+            html.H5("Daily Wind Rose"),
+            html.Div(
+                className = "container-row full-width container-center",
+                children = [
+                    dcc.Graph(
+                        className = "daily-wind-graph",
+                        id = "morning-wind-rose",
+                        config = config
+                    ),
+                    dcc.Graph(
+                        className = "daily-wind-graph",
+                        id = "noon-wind-rose",
+                        config = config
+                    ),
+                    dcc.Graph(
+                        className = "daily-wind-graph",
+                        id = "night-wind-rose",
+                        config = config
+                    ),
+                ]
+            ),
+        ]
+    )
+
+def tab_five():
+    """ Contents in the fifth tab 'Wind'.
+    """
+    return html.Div(
+        className = 'container-col',
+        id = 'tab-five-container',
+        children = [
+            html.H5("Annual Wind Rose"),
+            dcc.Graph(
+                id = 'wind-rose'
+            ), 
+            dcc.Graph(
+                id = 'wind-speed',
+                config = config
+            ), 
+            dcc.Graph(
+                id = 'wind-direction',
+                config = config
+            ),
+            seasonal_wind_rose(),
+            daily_wind_rose(),
+            sliders(),
+            dcc.Graph(
+                id = 'custom-wind-rose'
+            ), 
         ]
     )

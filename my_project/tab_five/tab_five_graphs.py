@@ -35,13 +35,20 @@ def custom_wind_rose(df, meta, month, hour):
     end_month = month[1]
     start_hour = hour[0]
     end_hour = hour[1]
+    if start_month <= end_month:
+        df = df.loc[(df['month'] >= start_month) & (df['month'] <= end_month)]
+    else:
+        df = df.loc[(df['month'] <= end_month) | (df['month'] >= start_month)]
+    if start_hour <= end_hour:
+        df = df.loc[(df['hour'] >= start_hour) & (df['hour'] <= end_hour)]
+    else:
+        df = df.loc[(df['hour'] <= end_hour) | (df['hour'] >= start_hour)]
+
     spd_colors = color_dict['Wspeed_color']
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units = 'm/s')
     dir_bins = np.arange(-22.5 / 2, 370, 22.5)
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
-    df = df.loc[(df['month'] >= start_month) & (df['month'] <= end_month)]
-    df = df.loc[(df['hour'] >= start_hour) & (df['hour'] <= end_hour)]
     total_count = df.shape[0]
     calm_count = df.query("Wspeed == 0").shape[0]
     rose = (
@@ -95,9 +102,7 @@ def custom_wind_rose(df, meta, month, hour):
         polar_angularaxis_rotation = 90,
     )
     fig.update_layout(
-        autosize = False,
-        width = 1200,
-        height = 800,
+        autosize = True,
     )
     return fig
         
