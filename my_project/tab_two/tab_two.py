@@ -7,7 +7,6 @@ import pandas as pd
 
 from my_project.server import app 
 from my_project.global_scheme import config
-from .tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
 
 def tab_two():
     """ Contents in the second tab 'Climate Summary'.
