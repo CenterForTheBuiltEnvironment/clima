@@ -101,7 +101,6 @@ def yearly_profile(df, var, global_local):
     days = [i for i in range(365)]
     # Get min, max, and mean of each day
     DBT_day = df.groupby(np.arange(len(df.index)) // 24)[var].agg(['min', 'max', 'mean'])
-    ones = [1] * 365
     trace1 = go.Bar(
                 x = days, 
                 y = DBT_day['max'] - DBT_day['min'],
