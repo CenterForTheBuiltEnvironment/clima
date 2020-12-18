@@ -214,15 +214,20 @@ p {
 }
 
 /* Tab Six */
+
 #first-var-dropdown {
-    width: 20%;
+    width: 15%;
 }
 
-#query-month-slider, #query-hour-slider {
-    width: 40%;
+.month-hour-slider {
+    width: 15%;
 }
 
-#second-var-dropdown, #second-filter-var-dropdown {
+.var-dropdown {
+    width: 15%;
+}
+
+.num-input {
     width: 15%;
 }
 

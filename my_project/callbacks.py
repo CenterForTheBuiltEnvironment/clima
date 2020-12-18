@@ -17,7 +17,7 @@ from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation
-from .tab_six.tab_six_graphs import custom_heatmap, custom_summary
+from .tab_six.tab_six_graphs import custom_heatmap, custom_summary, three_var_graph, two_var_graph
 
 #####################
 ### TAB SELECTION ###        
@@ -258,7 +258,13 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     Output('query-heatmap', 'figure'),
     Output('custom-heatmap', 'figure'),
     # Output('custom-summary', 'figure'),
+    Output('three-var', 'figure'),
+    Output('two-var', 'figure'),
+
+    # Section One
     [Input('first-var-dropdown', 'value')],
+
+    # Section Two
     [Input('time-filter-input', 'value')],
     [Input('query-month-slider', 'value')],
     [Input('query-hour-slider', 'value')],
@@ -267,17 +273,38 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     [Input('min-val', 'value')],
     [Input('max-val', 'value')],
     [Input('normalize', 'value')],
+
+    # Section Three
+    [Input('var-x-dropdown', 'value')],
+    [Input('var-y-dropdown', 'value')],
+    [Input('colorby-dropdown', 'value')],
+    [Input('sec3-time-filter-input', 'value')],
+    [Input('sec3-query-month-slider', 'value')],
+    [Input('sec3-query-hour-slider', 'value')],
+    [Input('sec3-data-filter-input', 'value')],
+    [Input('sec3-filter-var-dropdown', 'value')],
+    [Input('sec3-min-val', 'value')],
+    [Input('sec3-max-val', 'value')],
+
+    # General 
     [Input('df-store', 'modified_timestamp')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_six(first_var, time_filter, month, hour, data_filter, second_var, min_val, max_val, normalize, ts, global_local, df, meta):
+def update_tab_six(first_var, time_filter, month, hour, data_filter, \
+    second_var, min_val, max_val, normalize, var_x, var_y, colorby, time_filter3, \
+    month3, hour3, data_filter3, data_filter_var3, min_val3, max_val3, \
+    ts, global_local, df, meta):
     """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
     """
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, second_var, min_val, max_val]
+    time_filter_info3 = [time_filter3, month3, hour3]
+    data_filter_info3 = [data_filter3, data_filter_var3, min_val3, max_val3]
+    # custom_summary(df, global_local, first_var, time_filter_info, data_filter_info, normalize)
     return yearly_profile(df, first_var, global_local), daily_profile(df, first_var, global_local), heatmap(df, first_var, global_local), \
         custom_heatmap(df, global_local, first_var, time_filter_info, data_filter_info), \
-            # custom_summary(df, global_local, first_var, time_filter_info, data_filter_info, normalize)
+        three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3), \
+        two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
