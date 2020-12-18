@@ -17,7 +17,7 @@ from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation
-from .tab_six.tab_six_graphs import custom_heatmap
+from .tab_six.tab_six_graphs import custom_heatmap, custom_summary
 
 #####################
 ### TAB SELECTION ###        
@@ -266,16 +266,18 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     [Input('second-var-dropdown', 'value')],
     [Input('min-val', 'value')],
     [Input('max-val', 'value')],
+    [Input('normalize', 'value')],
     [Input('df-store', 'modified_timestamp')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_six(first_var, time_filter, month, hour, data_filter, second_var, min_val, max_val, ts, global_local, df, meta):
+def update_tab_six(first_var, time_filter, month, hour, data_filter, second_var, min_val, max_val, normalize, ts, global_local, df, meta):
     """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
     """
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, second_var, min_val, max_val]
     return yearly_profile(df, first_var, global_local), daily_profile(df, first_var, global_local), heatmap(df, first_var, global_local), \
-        custom_heatmap(df, global_local, first_var, time_filter_info, data_filter_info)
+        custom_heatmap(df, global_local, first_var, time_filter_info, data_filter_info), \
+            # custom_summary(df, global_local, first_var, time_filter_info, data_filter_info, normalize)

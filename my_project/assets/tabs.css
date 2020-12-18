@@ -214,9 +214,20 @@ p {
 }
 
 /* Tab Six */
-
 #first-var-dropdown {
     width: 20%;
+}
+
+#query-month-slider, #query-hour-slider {
+    width: 40%;
+}
+
+#second-var-dropdown, #second-filter-var-dropdown {
+    width: 15%;
+}
+
+#min-val, #max-val {
+    width: 15%;
 }
 
 

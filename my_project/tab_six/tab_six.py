@@ -38,102 +38,119 @@ def section_one():
         ]
     )
 
+def section_two_inputs():
+    """ Return all the input forms from section two.
+    """
+    return html.Div(
+            className = "container-col full-width",
+            children = [
+                dcc.Dropdown(
+                    id = "second-var-dropdown", 
+                    options = [
+                        {'label': i, 'value': i} for i in var_name_lst
+                    ], 
+                    value = 'RH'
+                ),
+                dbc.Checklist(
+                    options = [
+                        {"label": "Apply Time Filters", "value": "time"},
+                    ],
+                    value = ["time"],
+                    id = "time-filter-input",
+                ),
+                html.Div(
+                    className = 'container-row full-width',
+                    children = [
+                        html.P("Month Range"),
+                        dcc.RangeSlider(
+                            id = 'query-month-slider',
+                            min = 1,
+                            max = 12,
+                            step = 1,
+                            value = [1, 12], 
+                            marks = {
+                                1: '1',
+                                12: '12'
+                            },
+                            tooltip = {
+                                'always_visible': False,
+                                'placement' : 'top'
+                            },
+                            allowCross = True
+                        ),
+                    ]
+                ),
+                html.Div(
+                    className = 'container-row full-width',
+                    children = [
+                        html.P("Hour Range"),
+                        dcc.RangeSlider(
+                            id = 'query-hour-slider',
+                            min = 1,
+                            max = 24,
+                            step = 1,
+                            value = [6, 20],
+                            marks = {
+                                1: '1',
+                                24: '24'
+                            },
+                            tooltip = {
+                                'always_visible': False,
+                                'placement' : 'topLeft'
+                            },
+                            allowCross = False
+                        )
+                    ]
+                ),
+                dbc.Checklist(
+                    options = [
+                        {"label": "Apply Data Filters", "value": "data"},
+                    ],
+                    value = [],
+                    id = "data-filter-input",
+                ),
+                dcc.Dropdown(
+                    id = "second-filter-var-dropdown", 
+                    options = [
+                        {'label': i, 'value': i} for i in var_name_lst
+                    ], 
+                    value = 'RH'
+                ),
+                dbc.Input(
+                    id = "min-val",
+                    placeholder = "Enter a number for the min val",
+                    type = "number", 
+                    min = 0, 
+                    step = 1
+                ),
+                dbc.Input(
+                    id = "max-val",
+                    placeholder = "Enter a number for the max val",
+                    type = "number", 
+                    min = 0, 
+                    step = 1
+                ),
+            ]
+    )
+
 def section_two():
     """ Return the two graphs in section two.
     """
     return html.Div(
         className = "container-col container-center full-width",
         children = [
-            dcc.Dropdown(
-                id = "second-var-dropdown", 
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'RH'
-            ),
-            dbc.Checklist(
-                options = [
-                    {"label": "Apply Time Filters", "value": "time"},
-                ],
-                value = [],
-                id = "time-filter-input",
-            ),
-            html.Div(
-                className = 'container-row each-slider',
-                children = [
-                    html.P("Month Range"),
-                    dcc.RangeSlider(
-                        id = 'query-month-slider',
-                        min = 1,
-                        max = 12,
-                        step = 1,
-                        value = [1, 12], 
-                        marks = {
-                            1: '1',
-                            12: '12'
-                        },
-                        tooltip = {
-                            'always_visible': False,
-                            'placement' : 'top'
-                        },
-                        allowCross = True
-                    ),
-                ]
-            ),
-            html.Div(
-                className = 'container-row each-slider',
-                children = [
-                    html.P("Hour Range"),
-                    dcc.RangeSlider(
-                        id = 'query-hour-slider',
-                        min = 1,
-                        max = 24,
-                        step = 1,
-                        value = [6, 20],
-                        marks = {
-                            1: '1',
-                            24: '24'
-                        },
-                        tooltip = {
-                            'always_visible': False,
-                            'placement' : 'topLeft'
-                        },
-                        allowCross = False
-                    )
-                ]
-            ),
-            dbc.Checklist(
-                options = [
-                    {"label": "Apply Data Filters", "value": "data"},
-                ],
-                value = [],
-                id = "data-filter-input",
-            ),
-            dcc.Dropdown(
-                id = "second-filter-var-dropdown", 
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'RH'
-            ),
-            dbc.Input(
-                id = "min-val",
-                placeholder = "Enter a number for the min val",
-                type = "number", 
-                min = 0, 
-                step = 1
-            ),
-            dbc.Input(
-                id = "max-val",
-                placeholder = "Enter a number for the max val",
-                type = "number", 
-                min = 0, 
-                step = 1
-            ),
+            section_two_inputs(),
             dcc.Graph(
                 className = "full-width",
                 id = 'custom-heatmap',
                 config = config
+            ),
+            dbc.Checklist(
+                options = [
+                    {"label": "Normalize", "value": "normal"},
+                ],
+                value = [],
+                id = "normalize",
             ),
             dcc.Graph(
                 className = "full-width",
