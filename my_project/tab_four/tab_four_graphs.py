@@ -386,39 +386,3 @@ def custom_sunpath(df, meta, global_local, var):
         title_x = 0.5,
     )
     return fig
-
-################
-### HEATMAPS ###
-################
-def heatmap_ghrad(df, global_local):
-    """ Return the heatmap for GHrad
-    """
-    return heatmap(df, "GHrad", global_local)
-
-def heatmap_dnrad(df, global_local):
-    """ Return the heatmap for DNrad
-    """
-    return heatmap(df, "DNrad", global_local)
-
-def heatmap_difhrad(df, global_local):
-    """ Return the heatmap for DifHrad
-    """
-    return heatmap(df, "DifHrad", global_local)
-
-#######################
-### DAILY PROFILES  ###
-#######################
-def daily_profile_ghrad(df, global_local):
-    """ Return the figure for the yearly profile for RH variable 
-    """
-    return daily_profile(df, "GHrad", global_local)
-
-def daily_profile_dnrad(df, global_local):
-    """ Return the figure for the yearly profile for RH variable 
-    """
-    return daily_profile(df, "DNrad", global_local)
-
-def daily_profile_difhrad(df, global_local):
-    """ Return the figure for the yearly profile for RH variable 
-    """
-    return daily_profile(df, "DifHrad", global_local)

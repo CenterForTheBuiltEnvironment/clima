@@ -4,6 +4,8 @@ from plotly.subplots import make_subplots
 from math import ceil, floor
 import pandas as pd
 import numpy as np
+from pythermalcomfort.models import adaptive_ashrae
+from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
 
 from .global_scheme import template
 from my_project.global_scheme import unit_dict, range_dict, name_dict, color_dict
@@ -46,7 +48,39 @@ def violin(df, var, global_local):
 ###############################
 ### YEARLY PROFILE TEMPLATE ###
 ###############################
-def yearly_profile(df, var, global_local, lo80, hi80, lo90, hi90):
+def get_ashrae(df):
+    """ calculate the ashrae for the yearly DBT. Helper function for yearly_profile
+    """
+    DBT_day_ave = df.groupby(['DOY'])['DBT'].mean().reset_index()
+    DBT_day_ave = DBT_day_ave['DBT'].tolist()
+    n = 7  
+    cmf55 = []
+    lo80 = []
+    hi80 = []
+    lo90 = []
+    hi90 = []
+    for i in range(len(DBT_day_ave)):
+        if i < n:
+            lastDays = DBT_day_ave[-n + i:]+DBT_day_ave[0:i]
+        else:
+            lastDays = DBT_day_ave[i - n:i]
+        lastDays.reverse()
+        lastDays = [10 if x <= 10 else x for x in lastDays]
+        lastDays = [32 if x >= 32 else x for x in lastDays]
+        rmt = running_mean_outdoor_temperature(lastDays, alpha = 0.9)
+        if DBT_day_ave[i] >= 40: 
+            DBT_day_ave[i] = 40
+        elif DBT_day_ave[i] <= 10: 
+            DBT_day_ave[i] = 10
+        r = adaptive_ashrae(tdb = DBT_day_ave[i], tr = DBT_day_ave[i], t_running_mean = rmt, v = 0.5)
+        cmf55.append(r['tmp_cmf'])
+        lo80.append(r['tmp_cmf_80_low'])
+        hi80.append(r['tmp_cmf_80_up'])
+        lo90.append(r['tmp_cmf_90_low'])
+        hi90.append(r['tmp_cmf_90_up'])
+    return lo80, hi80, lo90, hi90
+
+def yearly_profile(df, var, global_local):
     """ Return yearly profile figure based on the 'var' col.
     """
     var_unit = unit_dict[str(var) + "_unit"]
@@ -98,6 +132,7 @@ def yearly_profile(df, var, global_local, lo80, hi80, lo90, hi90):
             )
     data = [trace1, trace2]
     if var == "DBT":
+        lo80, hi80, lo90, hi90 = get_ashrae(df)
         ## plot ashrae adaptive comfort limits (80%)
         lo80_df = pd.DataFrame({"lo80": lo80})
         hi80_df = pd.DataFrame({"hi80": hi80})

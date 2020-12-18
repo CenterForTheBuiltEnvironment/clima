@@ -37,27 +37,5 @@ def world_map(df, meta):
     fig.update_layout(margin = {"r":0, "t":0, "l":0, "b":0})
     return fig
 
-##################################
-### DAY VS NIGHT VIOLIN GRAPHS ###
-##################################
-def dbt_violin(df, meta, global_local):
-    """ Return the day night violin graph for temperature variable
-    """
-    return violin(df, "DBT", global_local)
-
-def humidity_violin(df, meta, global_local):
-    """ Return the day night violin graph for relative humidity variable
-    """
-    return violin(df, "RH", global_local)
-
-def solar_violin(df, meta, global_local):
-    """ Return the day night violin graph for solar radiation variable
-    """
-    return violin(df, "GHrad", global_local)
-
-def wind_violin(df, meta, global_local):
-    """ Return the day night violin graph for wind speed variable
-    """
-    return violin(df, "Wspeed", global_local)
 
 

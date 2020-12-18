@@ -5,7 +5,7 @@ import pandas as pd
 
 from .server import app 
 from .extract_df import create_df
-from .template_graphs import wind_rose, heatmap
+from .template_graphs import violin, wind_rose, heatmap, daily_profile, heatmap, yearly_profile
 
 from .tab_one.tab_one import tab_one
 from .tab_two.tab_two import tab_two
@@ -15,9 +15,8 @@ from .tab_five.tab_five import tab_five
 from .tab_six.tab_six import tab_six
 from .tab_eight.tab_eight import tab_eight
 
-from .tab_two.tab_two_graphs import world_map, dbt_violin, humidity_violin, solar_violin, wind_violin
-from .tab_three.tab_three_graphs import yearly_profile_dbt, yearly_profile_rh, daily_profile_dbt, daily_profile_rh, heatmap_rh, heatmap_dbt
-from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation, heatmap_ghrad, heatmap_difhrad, heatmap_dnrad, daily_profile_ghrad, daily_profile_difhrad, daily_profile_dnrad
+from .tab_two.tab_two_graphs import world_map
+from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation
 
 #####################
 ### TAB SELECTION ###        
@@ -118,8 +117,14 @@ def update_tab_two(ts, global_local, df, meta):
     lon = "Longitude: " + str(meta[-3])
     lat = "Longitude: " + str(meta[-3])
     elevation = "Elevation above sea level: " + meta[-1]
-    return world_map(df, meta), dbt_violin(df, meta, global_local), humidity_violin(df, meta, global_local), \
-        solar_violin(df, meta, global_local), wind_violin(df, meta, global_local), location, lon, lat, elevation
+
+    # Violin Graphs 
+    dbt = violin(df, "DBT", global_local)
+    rh = violin(df, "RH", global_local)
+    ghrad = violin(df, "GHrad", global_local)
+    wspeed = violin(df, "Wspeed", global_local)
+
+    return world_map(df, meta), dbt, rh, ghrad, wspeed, location, lon, lat, elevation
 
 ####################################
 ### TAB THREE: TEMP AND HUMIDITY ###
@@ -140,9 +145,20 @@ def update_tab_three(ts, global_local, df, meta):
     """ Update the contents of tab three. Passing in general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-    return yearly_profile_dbt(df, global_local), daily_profile_dbt(df, global_local), \
-        heatmap_dbt(df, global_local), yearly_profile_rh(df, global_local), \
-        daily_profile_rh(df, global_local), heatmap_rh(df, global_local)
+
+    # Yearly Graphs 
+    dbt_yearly = yearly_profile(df, "DBT", global_local)
+    rh_yearly = yearly_profile(df, "RH", global_local)
+
+    # Daily Profile Graphs
+    dbt_daily = daily_profile(df, "DBT", global_local)
+    rh_daily = daily_profile(df, "RH", global_local)
+
+    # Heatmap Graphs 
+    dbt_heatmap = heatmap(df, "DBT", global_local)
+    rh_heatmap = heatmap(df, "RH", global_local)
+    
+    return dbt_yearly, dbt_daily, dbt_heatmap, rh_yearly, rh_daily, rh_heatmap
 
 #####################
 ### TAB FOUR: SUN ###
@@ -169,17 +185,24 @@ def update_tab_four(solar_dropdown, ts, global_local, custom_sun_var, df, meta):
     """ Update the contents of tab four. Passing in the polar selection and the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
+
+    # Heatmap Graphs
+    ghrad_heatmap = heatmap(df, "GHrad", global_local)
+    dnrad_heatmap = heatmap(df, "DNrad", global_local)
+    difhrad_heatmap = heatmap(df, "DifHrad", global_local)
+
+    # Daily Profiler Graphs 
+    ghrad_daily = daily_profile(df, "GHrad", global_local)
+    dnrad_profile = daily_profile(df, "DNrad", global_local)
+    difhrad_profile = daily_profile(df, "DifHrad", global_local)
+
     if solar_dropdown == 'polar':
         return polar_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), custom_sunpath(df, meta, global_local, custom_sun_var), \
-            daily_profile_ghrad(df, global_local), heatmap_ghrad(df, global_local), \
-            daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
-            daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
+            ghrad_daily, ghrad_heatmap, dnrad_profile, dnrad_heatmap, difhrad_profile, difhrad_heatmap
             
     else:
         return lat_long_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), custom_sunpath(df, meta, global_local, custom_sun_var), \
-            daily_profile_ghrad(df, global_local), heatmap_ghrad(df, global_local), \
-            daily_profile_dnrad(df, global_local), heatmap_dnrad(df, global_local), \
-            daily_profile_difhrad(df, global_local), heatmap_difhrad(df, global_local)
+            ghrad_daily, ghrad_heatmap, dnrad_profile, dnrad_heatmap, difhrad_profile, difhrad_heatmap
 
 ######################
 ### TAB FIVE: WIND ###
