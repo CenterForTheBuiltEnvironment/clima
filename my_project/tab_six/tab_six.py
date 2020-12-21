@@ -14,7 +14,7 @@ def section_one():
         className = "container-col container-center full-width",
         children = [
             dcc.Dropdown(
-                id = "first-var-dropdown", 
+                id = "sec-one-var-dropdown", 
                 options = [
                     {'label': i, 'value': i} for i in var_name_lst
                 ], 
@@ -46,7 +46,7 @@ def section_two_inputs():
             children = [
                 dcc.Dropdown(
                     className = "var-dropdown",
-                    id = "second-var-dropdown", 
+                    id = "sec-two-var-dropdown", 
                     options = [
                         {'label': i, 'value': i} for i in var_name_lst
                     ], 
@@ -57,14 +57,14 @@ def section_two_inputs():
                         {"label": "Apply Time Filters", "value": "time"},
                     ],
                     value = ["time"],
-                    id = "time-filter-input",
+                    id = "sec-two-time-filter-input",
                 ),
                 html.Div(
                     className = 'container-row full-width',
                     children = [
                         html.P("Month Range"),
                         dcc.RangeSlider(
-                            id = 'query-month-slider',
+                            id = 'sec-two-month-slider',
                             className = "month-hour-slider",
                             min = 1,
                             max = 12,
@@ -88,7 +88,7 @@ def section_two_inputs():
                         html.P("Hour Range"),
                         dcc.RangeSlider(
                             className = "var-dropdown",
-                            id = 'query-hour-slider',
+                            id = 'sec-two-hour-slider',
                             min = 1,
                             max = 24,
                             step = 1,
@@ -110,25 +110,25 @@ def section_two_inputs():
                         {"label": "Apply Data Filters", "value": "data"},
                     ],
                     value = [],
-                    id = "data-filter-input",
+                    id = "sec-two-data-filter-input",
                 ),
                 dcc.Dropdown(
                     className = "var-dropdown",
-                    id = "second-filter-var-dropdown", 
+                    id = "sec-two-data-filter-var", 
                     options = [
                         {'label': i, 'value': i} for i in var_name_lst
                     ], 
                     value = 'RH'
                 ),
                 dbc.Input(
-                    id = "min-val",
+                    id = "sec-two-min-val",
                     placeholder = "Enter a number for the min val",
                     type = "number", 
                     min = 0, 
                     step = 1
                 ),
                 dbc.Input(
-                    id = "max-val",
+                    id = "sec-two-max-val",
                     placeholder = "Enter a number for the max val",
                     type = "number", 
                     min = 0, 
