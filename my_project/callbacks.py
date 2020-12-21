@@ -260,7 +260,7 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     Output('query-heatmap', 'figure'),
 
     # Section One
-    [Input('sec-one-var-dropdown', 'value')],
+    [Input('sec1-var-dropdown', 'value')],
 
     # General 
     [Input('df-store', 'modified_timestamp')],
@@ -281,14 +281,14 @@ def update_tab_six_one(var, ts, global_local, df, meta):
     # Output('custom-summary', 'figure'),
 
     # Section Two
-    [Input('sec-two-var-dropdown', 'value')],
-    [Input('sec-two-time-filter-input', 'value')],
-    [Input('sec-two-month-slider', 'value')],
-    [Input('sec-two-hour-slider', 'value')],
-    [Input('sec-two-data-filter-input', 'value')],
-    [Input('sec-two-data-filter-var', 'value')],
-    [Input('sec-two-min-val', 'value')],
-    [Input('sec-two-max-val', 'value')],
+    [Input('sec2-var-dropdown', 'value')],
+    [Input('sec2-time-filter-input', 'value')],
+    [Input('sec2-month-slider', 'value')],
+    [Input('sec2-hour-slider', 'value')],
+    [Input('sec2-data-filter-input', 'value')],
+    [Input('sec2-data-filter-var', 'value')],
+    [Input('sec2-min-val', 'value')],
+    [Input('sec2-max-val', 'value')],
     [Input('normalize', 'value')],
 
     # General 
