@@ -213,9 +213,6 @@ def three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, 
     var_name = name_dict[var_name]
     var_color = str(colorby) + "_color"
     var_color = color_dict[var_color]
-
-    nbinsx = "auto"
-    nbinsy = "auto"
     colorscale = var_color
 
     if time_filter:

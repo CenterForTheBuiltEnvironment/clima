@@ -115,10 +115,10 @@ def build_tabs():
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Query Data', 
+                        label = 'Custom Data', 
                         value = 'tab-6',
-                        className='custom-tab',
-                        selected_className='custom-tab--selected'),
+                        className = 'custom-tab',
+                        selected_className = 'custom-tab--selected'),
                     dcc.Tab(
                         label = 'Outdoor Comfort', 
                         value = 'tab-7',

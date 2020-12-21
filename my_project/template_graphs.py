@@ -32,7 +32,6 @@ def violin(df, var, global_local):
         data_max = (5 * ceil(df[var].max() / 5))
         data_min = (5 * floor(df[var].min() / 5))
         range_y = [data_min, data_max]
-    colors = n_colors('rgb(0, 200, 200)', 'rgb(200, 10, 10)', 12, colortype = 'rgb')
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
     fig = go.Figure()
