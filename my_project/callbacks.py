@@ -252,27 +252,66 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
 ###########################
 ### TAB SIX: QUERY DATA ###
 ###########################
+
+### Section One ###
 @app.callback(
     Output('query-yearly', 'figure'),
     Output('query-daily', 'figure'),
     Output('query-heatmap', 'figure'),
-    Output('custom-heatmap', 'figure'),
-    # Output('custom-summary', 'figure'),
-    Output('three-var', 'figure'),
-    Output('two-var', 'figure'),
 
     # Section One
-    [Input('first-var-dropdown', 'value')],
+    [Input('sec1-var-dropdown', 'value')],
+
+    # General 
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_six_one(var, ts, global_local, df, meta):
+    """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
+    """
+    df = pd.read_json(df, orient = 'split')
+    return yearly_profile(df, var, global_local), daily_profile(df, var, global_local), \
+        heatmap(df, var, global_local)
+
+### Section Two ###
+@app.callback(
+    Output('custom-heatmap', 'figure'),
+    # Output('custom-summary', 'figure'),
 
     # Section Two
-    [Input('time-filter-input', 'value')],
-    [Input('query-month-slider', 'value')],
-    [Input('query-hour-slider', 'value')],
-    [Input('data-filter-input', 'value')],
-    [Input('second-var-dropdown', 'value')],
-    [Input('min-val', 'value')],
-    [Input('max-val', 'value')],
+    [Input('sec2-var-dropdown', 'value')],
+    [Input('sec2-time-filter-input', 'value')],
+    [Input('sec2-month-slider', 'value')],
+    [Input('sec2-hour-slider', 'value')],
+    [Input('sec2-data-filter-input', 'value')],
+    [Input('sec2-data-filter-var', 'value')],
+    [Input('sec2-min-val', 'value')],
+    [Input('sec2-max-val', 'value')],
     [Input('normalize', 'value')],
+
+    # General 
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_six_two(var, time_filter, month, hour, data_filter, \
+    filter_var, min_val, max_val, normalize, \
+    ts, global_local, df, meta):
+    """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
+    """
+    df = pd.read_json(df, orient = 'split')
+    time_filter_info = [time_filter, month, hour]
+    data_filter_info = [data_filter, filter_var, min_val, max_val]
+    # custom_summary(df, global_local, first_var, time_filter_info, data_filter_info, normalize)
+    return custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+
+### Section Three ###
+@app.callback(
+    Output('three-var', 'figure'),
+    Output('two-var', 'figure'),
 
     # Section Three
     [Input('var-x-dropdown', 'value')],
@@ -292,19 +331,13 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_six(first_var, time_filter, month, hour, data_filter, \
-    second_var, min_val, max_val, normalize, var_x, var_y, colorby, time_filter3, \
+def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
     month3, hour3, data_filter3, data_filter_var3, min_val3, max_val3, \
     ts, global_local, df, meta):
     """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
     """
     df = pd.read_json(df, orient = 'split')
-    time_filter_info = [time_filter, month, hour]
-    data_filter_info = [data_filter, second_var, min_val, max_val]
     time_filter_info3 = [time_filter3, month3, hour3]
     data_filter_info3 = [data_filter3, data_filter_var3, min_val3, max_val3]
-    # custom_summary(df, global_local, first_var, time_filter_info, data_filter_info, normalize)
-    return yearly_profile(df, first_var, global_local), daily_profile(df, first_var, global_local), heatmap(df, first_var, global_local), \
-        custom_heatmap(df, global_local, first_var, time_filter_info, data_filter_info), \
-        three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3), \
+    return three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3), \
         two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
