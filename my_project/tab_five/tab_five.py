@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from my_project.global_scheme import config
+from my_project.global_scheme import config, month_lst
 
 def sliders():
     """ Returns 2 sliders for the hour
@@ -176,6 +176,65 @@ def daily_wind_rose():
         ]
     )
 
+def custom_windrose():
+    """
+    """
+    return html.Div(
+        className = "container-col container-center full-width",
+        children = [
+            html.Div(
+                className = "container-row full-width",
+                children = [
+                    html.Div(
+                        className = "container-col full-width",
+                        children = [
+                            dcc.Dropdown(
+                                className = "tab5-custom-dropdowns",
+                                id = "tab5-custom-start-month", 
+                                options = [
+                                    {'label': j, 'value': i + 1} for i, j in enumerate(month_lst)
+                                ], 
+                                value = '1'
+                            ),
+                            dcc.Dropdown(
+                                className = "tab5-custom-dropdowns",
+                                id = "tab5-custom-start-hour", 
+                                options = [
+                                    {'label': str(i) + ":00", 'value': i} for i in range(1, 25)
+                                ], 
+                                value = '1'
+                            ),
+                        ]
+                    ), 
+                    html.Div(
+                        className = "container-col full-width",
+                        children = [
+                            dcc.Dropdown(
+                                className = "tab5-custom-dropdowns",
+                                id = "tab5-custom-end-month", 
+                                options = [
+                                    {'label': j, 'value': i + 1} for i, j in enumerate(month_lst)
+                                ], 
+                                value = '12'
+                            ),
+                            dcc.Dropdown(
+                                className = "tab5-custom-dropdowns",
+                                id = "tab5-custom-end-hour", 
+                                options = [
+                                    {'label': str(i) + ":00", 'value': i} for i in range(1, 25)
+                                ], 
+                                value = '24'
+                            ),
+                        ]
+                    )
+                ]
+            ),
+            dcc.Graph(
+                id = 'custom-wind-rose'
+            ), 
+        ]
+    )
+
 def tab_five():
     """ Contents in the fifth tab 'Wind'.
     """
@@ -196,9 +255,6 @@ def tab_five():
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),
-            sliders(),
-            dcc.Graph(
-                id = 'custom-wind-rose'
-            ), 
+            custom_windrose(),
         ]
     )

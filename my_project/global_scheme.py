@@ -247,9 +247,10 @@ range_dict = {
     "equation_of_time_range" : [-20,20],
 }
 
-###################################
-### Template and Configurations ###
-###################################
+#############
+### Misc. ###
+#############
+month_lst = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 template = "plotly"
 config = {
     'modeBarButtonsToRemove': ['toggleSpikelines', 'hoverCompareCartesian', "pan2d", "lasso2d", "zoomIn2d", "zoomOut2d", "hoverClosestCartesian"],
