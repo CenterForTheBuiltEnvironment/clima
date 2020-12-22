@@ -6,7 +6,7 @@ import pandas as pd
 from .server import app 
 from .extract_df import create_df
 from .global_scheme import month_lst
-from .template_graphs import violin, wind_rose, heatmap, daily_profile, heatmap, yearly_profile
+from .template_graphs import violin, wind_rose, heatmap, daily_profile, heatmap, yearly_profile, barchart
 
 from .tab_one.tab_one import tab_one
 from .tab_two.tab_two import tab_two
@@ -18,7 +18,7 @@ from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation
-from .tab_six.tab_six_graphs import custom_heatmap, custom_summary, three_var_graph, two_var_graph
+from .tab_six.tab_six_graphs import custom_heatmap, three_var_graph, two_var_graph
 
 #####################
 ### TAB SELECTION ###        
@@ -453,8 +453,8 @@ def update_tab_six_two(var, time_filter, month, hour, data_filter, \
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
-    # custom_summary(df, global_local, first_var, time_filter_info, data_filter_info, normalize)
     return custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+# barchart(df, global_local, var, time_filter_info, data_filter_info, normalize)
 
 ### Section Three ###
 @app.callback(

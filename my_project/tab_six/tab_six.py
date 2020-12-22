@@ -53,10 +53,10 @@ def section_two_inputs():
     """ Return all the input forms from section two.
     """
     return html.Div(
-            className = "container-col full-width",
+            className = "container-col full-width container-center",
             children = [
                 html.Div(
-                    className = "container-row row-center",
+                    className = "container-row row-center full-width",
                     children = [
                         html.H6(
                             className = "text-next-to-input", 
@@ -79,7 +79,7 @@ def section_two_inputs():
                     id = "sec2-time-filter-input",
                 ),
                 html.Div(
-                    className = 'container-row',
+                    className = 'container-row full-width container-center',
                     children = [
                         html.H6("Month Range"),
                         dcc.RangeSlider(
@@ -102,7 +102,7 @@ def section_two_inputs():
                     ]
                 ),
                 html.Div(
-                    className = 'container-row',
+                    className = 'container-row full-width container-center',
                     children = [
                         html.H6("Hour Range"),
                         dcc.RangeSlider(
@@ -132,7 +132,7 @@ def section_two_inputs():
                     id = "sec2-data-filter-input",
                 ),
                 html.Div(
-                    className = "container-row row-center",
+                    className = "container-row row-center full-width",
                     children = [
                         html.H6(
                             className = "text-next-to-input", 
@@ -148,7 +148,7 @@ def section_two_inputs():
                     ]
                 ),
                 html.Div(
-                    className = "container-row row-center",
+                    className = "container-row row-center full-width",
                     children = [
                         html.H6(
                             className = "text-next-to-input",
@@ -165,7 +165,7 @@ def section_two_inputs():
                     ]
                 ),
                 html.Div(
-                    className = "container-row row-center",
+                    className = "container-row row-center full-width",
                     children = [
                         html.H6(
                             className = "text-next-to-input",
@@ -215,10 +215,10 @@ def section_three_inputs():
     """
     """
     return html.Div(
-        className = "container-col",
+        className = "container-col container-center full-width",
         children = [
             html.Div(
-                className = "container-row row-center",
+                className = "container-row row-center full-width",
                 children = [
                     html.H6(
                         className = "text-next-to-input", 
@@ -234,7 +234,7 @@ def section_three_inputs():
                 ]
             ),
             html.Div(
-                className = "container-row row-center",
+                className = "container-row row-center full-width",
                 children = [
                     html.H6(
                         className = "text-next-to-input", 
@@ -250,7 +250,7 @@ def section_three_inputs():
                 ]
             ),
             html.Div(
-                className = "container-row row-center",
+                className = "container-row row-center full-width",
                 children = [
                     html.H6(
                         className = "text-next-to-input", 
@@ -273,7 +273,7 @@ def section_three_inputs():
                 id = "sec3-time-filter-input",
             ),
             html.Div(
-                className = 'container-row full-width',
+                className = 'container-row full-width container-center',
                 children = [
                     html.H6("Month Range"),
                     dcc.RangeSlider(
@@ -296,7 +296,7 @@ def section_three_inputs():
                 ]
             ),
             html.Div(
-                className = 'container-row full-width',
+                className = 'container-row full-width container-center',
                 children = [
                     html.H6("Hour Range"),
                     dcc.RangeSlider(
@@ -326,7 +326,7 @@ def section_three_inputs():
                 id = "sec3-data-filter-input",
             ),
             html.Div(
-                className = "container-row row-center",
+                className = "container-row row-center full-width",
                 children = [
                     html.H6(
                         className = "text-next-to-input", 
@@ -342,7 +342,7 @@ def section_three_inputs():
                 ]
             ),
             html.Div(
-                className = "container-row row-center",
+                className = "container-row row-center full-width",
                 children = [
                     html.H6(
                         className = "text-next-to-input",
@@ -359,7 +359,7 @@ def section_three_inputs():
                 ]
             ),
             html.Div(
-                className = "container-row row-center",
+                className = "container-row row-center full-width",
                 children = [
                     html.H6(
                         className = "text-next-to-input",
