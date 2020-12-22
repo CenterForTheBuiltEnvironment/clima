@@ -75,23 +75,23 @@ def seasonal_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "winter-wind-rose-text"),
                             dcc.Graph(
                                 className = "seasonal-graph",
                                 id = "winter-wind-rose",
                                 config = config
-                            )
+                            ), 
+                            html.P(className = "seasonal-text", id = "winter-wind-rose-text"),
                         ]
                     ),
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "spring-wind-rose-text"),
                             dcc.Graph(
                                 className = "seasonal-graph",
                                 id = "spring-wind-rose",
                                 config = config
-                            )
+                            ), 
+                            html.P(className = "seasonal-text", id = "spring-wind-rose-text"),
                         ]
                     ),
                 ]
@@ -102,23 +102,24 @@ def seasonal_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "summer-wind-rose-text"),
                             dcc.Graph(
                                 className = "seasonal-graph",
                                 id = "summer-wind-rose",
                                 config = config
-                            )
+                            ), 
+                            html.P(className = "seasonal-text", id = "summer-wind-rose-text"),
+
                         ]
                     ),
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "fall-wind-rose-text"),
                             dcc.Graph(
                                 className = "seasonal-graph",
                                 id = "fall-wind-rose",
                                 config = config
-                            )
+                            ), 
+                            html.P(className = "seasonal-text", id = "fall-wind-rose-text"),
                         ]
                     ),
                 ]
@@ -131,6 +132,7 @@ def daily_wind_rose():
     """
     return html.Div(
         className = "container-col full-width",
+        id = "tab5-daily-container",
         children = [
             html.H5("Daily Wind Rose"),
             html.Div(
@@ -139,34 +141,34 @@ def daily_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "morning-windrose-text"),
                             dcc.Graph(
                                 className = "daily-wind-graph",
                                 id = "morning-wind-rose",
                                 config = config
-                            )
+                            ), 
+                            html.P(className = "daily-text", id = "morning-windrose-text"),
                         ]
                     ),
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "noon-windrose-text"),
                             dcc.Graph(
                                 className = "daily-wind-graph",
                                 id = "noon-wind-rose",
                                 config = config
-                            )
+                            ),
+                            html.P(className = "daily-text", id = "noon-windrose-text"),
                         ]
                     ),
                     html.Div(
                         className = "container-col",
                         children = [
-                            html.P(id = "night-windrose-text"),
                             dcc.Graph(
                                 className = "daily-wind-graph",
                                 id = "night-wind-rose",
                                 config = config
-                            )
+                            ), 
+                            html.P(className = "daily-text", id = "night-windrose-text"),
                         ]
                     )
                 ]

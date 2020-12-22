@@ -280,28 +280,41 @@ def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
     fall = wind_rose(df, meta, "", fall_months, hours)
 
     # Text 
-    total_count = df.shape[0]
-    calm_count = df.query("Wspeed == 0").shape[0]
+    winter_df = df.loc[(df['month'] <= winter_months[1]) | (df['month'] >= winter_months[0])]
+    winter_total_count = winter_df.shape[0]
+    winter_calm_count = winter_df.query("Wspeed == 0").shape[0]
+
+    spring_df = df.loc[ (df['month'] >= spring_months[0]) & (df['month'] <= spring_months[1])]
+    spring_total_count = spring_df.shape[0]
+    spring_calm_count = spring_df.query("Wspeed == 0").shape[0]
+
+    summer_df = df.loc[(df['month'] >= summer_months[0]) & (df['month'] <= summer_months[1])]
+    summer_total_count = summer_df.shape[0]
+    summer_calm_count = summer_df.query("Wspeed == 0").shape[0]
+
+    fall_df = df.loc[(df['month'] >= fall_months[0]) & (df['month'] <= fall_months[1])]
+    fall_total_count = fall_df.shape[0]
+    fall_calm_count = fall_df.query("Wspeed == 0").shape[0]
 
     winter_text = "Observations between the months of " + month_lst[winter_months[0] - 1] + \
-    " and " + month_lst[winter_months[1] - 1] + '<b>' + "between " + str(hours[0]) + ":00 hours and " \
-    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
-    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+    " and " + month_lst[winter_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
+    + str(hours[1])+":00 hours. Selected observations " + str(winter_total_count) + " of 8760, or " \
+    + str(int(100 * (winter_total_count / 8760))) + "%. " + str(winter_calm_count) + " observations have calm winds."
     
     spring_text = "Observations between the months of " + month_lst[spring_months[0] - 1] + \
     " and " + month_lst[spring_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
-    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
-    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+    + str(hours[1])+":00 hours. Selected observations " + str(spring_total_count) + " of 8760, or " \
+    + str(int(100 * (spring_total_count / 8760))) + "%. " + str(spring_calm_count) + " observations have calm winds."
 
     summer_text = "Observations between the months of " + month_lst[summer_months[0] - 1] + \
     " and " + month_lst[summer_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
-    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
-    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+    + str(hours[1])+":00 hours. Selected observations " + str(summer_total_count) + " of 8760, or " \
+    + str(int(100 * (summer_total_count / 8760))) + "%. " + str(summer_calm_count) + " observations have calm winds."
 
     fall_text = "Observations between the months of " + month_lst[fall_months[0] - 1] + \
     " and " + month_lst[fall_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
-    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
-    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+    + str(hours[1])+":00 hours. Selected observations " + str(fall_total_count) + " of 8760, or " \
+    + str(int(100 * (fall_total_count / 8760))) + "%. " + str(fall_calm_count) + " observations have calm winds."
 
     return winter, spring, summer, fall, winter_text, spring_text, summer_text, fall_text
 

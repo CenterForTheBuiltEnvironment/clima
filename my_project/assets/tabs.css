@@ -176,6 +176,10 @@ p {
     align-items: center;
 }
 
+#tab5-daily-container {
+    margin-top: 60px;
+}
+
 #slider-container {
     width: 50%;
     margin: 24px;
@@ -192,7 +196,7 @@ p {
 }
 
 .daily-wind-graph {
-    width: 650px;
+    width: 600px;
     height: 600px;
 }
 
@@ -211,6 +215,14 @@ p {
 
 #wind-speed, #wind-direction {
     width: 100%;
+}
+
+.seasonal-text {
+    width: 75%;
+}
+
+.daily-text {
+    width: 65%;
 }
 
 /* Tab Six */
