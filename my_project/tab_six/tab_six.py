@@ -7,12 +7,13 @@ import pandas as pd
 
 from my_project.global_scheme import config, var_name_lst
 
-def section_one():
-    """ Return the graphs for section one
+def section_one_inputs():
+    """ Return the inputs from section one.
     """
     return html.Div(
-        className = "container-col container-center full-width",
+        className = "container-row full-width row-center",
         children = [
+            html.H6(className = "text-next-to-input", children = ["Variable:"]),
             dcc.Dropdown(
                 id = "sec1-var-dropdown", 
                 options = [
@@ -20,6 +21,16 @@ def section_one():
                 ], 
                 value = 'RH'
             ),
+        ]
+    )
+
+def section_one():
+    """ Return the graphs for section one
+    """
+    return html.Div(
+        className = "container-col full-width",
+        children = [
+            section_one_inputs(),
             dcc.Graph(
                 className = "full-width",
                 id = 'query-yearly',
@@ -44,13 +55,21 @@ def section_two_inputs():
     return html.Div(
             className = "container-col full-width",
             children = [
-                dcc.Dropdown(
-                    className = "var-dropdown",
-                    id = "sec2-var-dropdown", 
-                    options = [
-                        {'label': i, 'value': i} for i in var_name_lst
-                    ], 
-                    value = 'RH'
+                html.Div(
+                    className = "container-row row-center",
+                    children = [
+                        html.H6(
+                            className = "text-next-to-input", 
+                            children = ["Variable:"]
+                        ),
+                        dcc.Dropdown(
+                            id = "sec2-var-dropdown", 
+                            options = [
+                                {'label': i, 'value': i} for i in var_name_lst
+                            ], 
+                            value = 'RH'
+                        ),
+                    ]
                 ),
                 dbc.Checklist(
                     options = [
@@ -60,9 +79,9 @@ def section_two_inputs():
                     id = "sec2-time-filter-input",
                 ),
                 html.Div(
-                    className = 'container-row full-width',
+                    className = 'container-row',
                     children = [
-                        html.P("Month Range"),
+                        html.H6("Month Range"),
                         dcc.RangeSlider(
                             id = 'sec2-month-slider',
                             className = "month-hour-slider",
@@ -83,9 +102,9 @@ def section_two_inputs():
                     ]
                 ),
                 html.Div(
-                    className = 'container-row full-width',
+                    className = 'container-row',
                     children = [
-                        html.P("Hour Range"),
+                        html.H6("Hour Range"),
                         dcc.RangeSlider(
                             className = "var-dropdown",
                             id = 'sec2-hour-slider',
@@ -112,27 +131,55 @@ def section_two_inputs():
                     value = [],
                     id = "sec2-data-filter-input",
                 ),
-                dcc.Dropdown(
-                    className = "var-dropdown",
-                    id = "sec2-data-filter-var", 
-                    options = [
-                        {'label': i, 'value': i} for i in var_name_lst
-                    ], 
-                    value = 'RH'
+                html.Div(
+                    className = "container-row row-center",
+                    children = [
+                        html.H6(
+                            className = "text-next-to-input", 
+                            children = ["Filter Variable:"]
+                        ),
+                        dcc.Dropdown(
+                            id = "sec2-data-filter-var", 
+                            options = [
+                                {'label': i, 'value': i} for i in var_name_lst
+                            ], 
+                            value = 'RH'
+                        ),
+                    ]
                 ),
-                dbc.Input(
-                    id = "sec2-min-val",
-                    placeholder = "Enter a number for the min val",
-                    type = "number", 
-                    min = 0, 
-                    step = 1
+                html.Div(
+                    className = "container-row row-center",
+                    children = [
+                        html.H6(
+                            className = "text-next-to-input",
+                            children = ["Max Value:"]
+                        ),
+                        dbc.Input(
+                            className = "num-input",
+                            id = "sec2-max-val",
+                            placeholder = "Enter a number for the max val",
+                            type = "number", 
+                            min = 0, 
+                            step = 1
+                        ),
+                    ]
                 ),
-                dbc.Input(
-                    id = "sec2-max-val",
-                    placeholder = "Enter a number for the max val",
-                    type = "number", 
-                    min = 0, 
-                    step = 1
+                html.Div(
+                    className = "container-row row-center",
+                    children = [
+                        html.H6(
+                            className = "text-next-to-input",
+                            children = ["Min Value:"]
+                        ),
+                        dbc.Input(
+                            className = "num-input",
+                            id = "sec2-min-val",
+                            placeholder = "Enter a number for the min val",
+                            type = "number", 
+                            min = 0, 
+                            step = 1
+                        ),
+                    ]
                 ),
             ]
     )

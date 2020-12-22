@@ -220,11 +220,11 @@ p {
 }
 
 .month-hour-slider {
-    width: 15%;
+    width: 25%;
 }
 
 .var-dropdown {
-    width: 15%;
+    width: 35%;
 }
 
 .num-input {
@@ -234,6 +234,20 @@ p {
 #min-val, #max-val {
     width: 15%;
 }
+
+.row-center {
+    align-items: center;
+}
+
+.text-next-to-input {
+    margin-bottom: 0px;
+    margin-right: 18px;
+}
+
+#sec2-var-dropdown, #sec2-data-filter-var, #sec1-var-dropdown {
+    width: 15%;
+}
+
 
 
 
