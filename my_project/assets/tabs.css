@@ -225,8 +225,20 @@ p {
     width: 65%;
 }
 
-.tab5-custom-dropdowns {
-    width: 25%;
+#custom-windrose-container {
+    margin-top: 80px;
+}
+
+#tab5-custom-dropdown-container {
+    margin-top: 30px;
+}
+
+#tab5-custom-start-month, #tab5-custom-start-hour, #tab5-custom-end-month, #tab5-custom-end-hour {
+    width: 35%;
+}
+
+.tab5-custom-half-container {
+    width: 20%;
 }
 
 /* Tab Six */
@@ -253,6 +265,7 @@ p {
 
 .row-center {
     align-items: center;
+    justify-content: center;
 }
 
 .text-next-to-input {

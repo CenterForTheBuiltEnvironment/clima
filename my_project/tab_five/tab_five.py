@@ -181,49 +181,84 @@ def custom_windrose():
     """
     return html.Div(
         className = "container-col container-center full-width",
+        id = "custom-windrose-container",
         children = [
+            html.H4("Customizable Windrose"),
             html.Div(
-                className = "container-row full-width",
+                className = "container-row full-width container-center",
+                id = "tab5-custom-dropdown-container",
                 children = [
                     html.Div(
-                        className = "container-col full-width",
+                        className = "container-col container-center tab5-custom-half-container",
                         children = [
-                            dcc.Dropdown(
-                                className = "tab5-custom-dropdowns",
-                                id = "tab5-custom-start-month", 
-                                options = [
-                                    {'label': j, 'value': i + 1} for i, j in enumerate(month_lst)
-                                ], 
-                                value = '1'
+                            html.Div(
+                                className = "container-row row-center full-width",
+                                children = [
+                                    html.H6(
+                                        className = "text-next-to-input",
+                                        children = ["Start Month:"]
+                                    ),
+                                    dcc.Dropdown(
+                                        id = "tab5-custom-start-month", 
+                                        options = [
+                                            {'label': j, 'value': i + 1} for i, j in enumerate(month_lst)
+                                        ], 
+                                        value = '1'
+                                    ),
+                                ]
                             ),
-                            dcc.Dropdown(
-                                className = "tab5-custom-dropdowns",
-                                id = "tab5-custom-start-hour", 
-                                options = [
-                                    {'label': str(i) + ":00", 'value': i} for i in range(1, 25)
-                                ], 
-                                value = '1'
+                            html.Div(
+                                className = "container-row row-center full-width",
+                                children = [
+                                    html.H6(
+                                        className = "text-next-to-input",
+                                        children = ["Start Hour:"]
+                                    ),
+                                    dcc.Dropdown(
+                                        id = "tab5-custom-start-hour", 
+                                        options = [
+                                            {'label': str(i) + ":00", 'value': i} for i in range(1, 25)
+                                        ], 
+                                        value = '1'
+                                    ),
+                                ]
                             ),
                         ]
                     ), 
                     html.Div(
-                        className = "container-col full-width",
+                        className = "container-col tab5-custom-half-container container-center",
                         children = [
-                            dcc.Dropdown(
-                                className = "tab5-custom-dropdowns",
-                                id = "tab5-custom-end-month", 
-                                options = [
-                                    {'label': j, 'value': i + 1} for i, j in enumerate(month_lst)
-                                ], 
-                                value = '12'
+                            html.Div(
+                                className = "container-row row-center full-width",
+                                children = [
+                                    html.H6(
+                                        className = "text-next-to-input",
+                                        children = ["End Month:"]
+                                    ),
+                                    dcc.Dropdown(
+                                        id = "tab5-custom-end-month", 
+                                        options = [
+                                            {'label': j, 'value': i + 1} for i, j in enumerate(month_lst)
+                                        ], 
+                                        value = '12'
+                                    ),
+                                ]
                             ),
-                            dcc.Dropdown(
-                                className = "tab5-custom-dropdowns",
-                                id = "tab5-custom-end-hour", 
-                                options = [
-                                    {'label': str(i) + ":00", 'value': i} for i in range(1, 25)
-                                ], 
-                                value = '24'
+                            html.Div(
+                                className = "container-row row-center full-width",
+                                children = [
+                                    html.H6(
+                                        className = "text-next-to-input",
+                                        children = ["End Hour:"]
+                                    ),
+                                    dcc.Dropdown(
+                                        id = "tab5-custom-end-hour", 
+                                        options = [
+                                            {'label': str(i) + ":00", 'value': i} for i in range(1, 25)
+                                        ], 
+                                        value = '24'
+                                    ),
+                                ]
                             ),
                         ]
                     )
