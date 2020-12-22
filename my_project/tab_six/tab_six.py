@@ -106,7 +106,7 @@ def section_two_inputs():
                     children = [
                         html.H6("Hour Range"),
                         dcc.RangeSlider(
-                            className = "var-dropdown",
+                            className = "month-hour-slider",
                             id = 'sec2-hour-slider',
                             min = 1,
                             max = 24,
@@ -217,29 +217,53 @@ def section_three_inputs():
     return html.Div(
         className = "container-col",
         children = [
-            dcc.Dropdown(
-                className = "var-dropdown",
-                id = "var-x-dropdown", 
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'DBT'
+            html.Div(
+                className = "container-row row-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input", 
+                        children = ["X Variable:"]
+                    ),
+                    dcc.Dropdown(
+                        id = "var-x-dropdown", 
+                        options = [
+                            {'label': i, 'value': i} for i in var_name_lst
+                        ], 
+                        value = 'DBT'
+                    ),
+                ]
             ),
-            dcc.Dropdown(
-                className = "var-dropdown",
-                id = "var-y-dropdown", 
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'RH'
+            html.Div(
+                className = "container-row row-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input", 
+                        children = ["Y Variable:"]
+                    ),
+                    dcc.Dropdown(
+                        id = "var-y-dropdown", 
+                        options = [
+                            {'label': i, 'value': i} for i in var_name_lst
+                        ], 
+                        value = 'RH'
+                    ),
+                ]
             ),
-            dcc.Dropdown(
-                id = "colorby-dropdown", 
-                className = "var-dropdown",
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'GHrad'
+            html.Div(
+                className = "container-row row-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input", 
+                        children = ["Color By:"]
+                    ),
+                    dcc.Dropdown(
+                        id = "colorby-dropdown", 
+                        options = [
+                            {'label': i, 'value': i} for i in var_name_lst
+                        ], 
+                        value = 'GHrad'
+                    ),
+                ]
             ),
             dbc.Checklist(
                 options = [
@@ -251,7 +275,7 @@ def section_three_inputs():
             html.Div(
                 className = 'container-row full-width',
                 children = [
-                    html.P("Month Range"),
+                    html.H6("Month Range"),
                     dcc.RangeSlider(
                         className = "month-hour-slider",
                         id = "sec3-query-month-slider",
@@ -274,7 +298,7 @@ def section_three_inputs():
             html.Div(
                 className = 'container-row full-width',
                 children = [
-                    html.P("Hour Range"),
+                    html.H6("Hour Range"),
                     dcc.RangeSlider(
                         className = "month-hour-slider",
                         id = "sec3-query-hour-slider",
@@ -301,29 +325,55 @@ def section_three_inputs():
                 value = [],
                 id = "sec3-data-filter-input",
             ),
-            dcc.Dropdown(
-                className = "var-dropdown",
-                id = "sec3-filter-var-dropdown", 
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'RH'
+            html.Div(
+                className = "container-row row-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input", 
+                        children = ["Filter Variable:"]
+                    ),
+                    dcc.Dropdown(
+                        id = "sec3-filter-var-dropdown", 
+                        options = [
+                            {'label': i, 'value': i} for i in var_name_lst
+                        ], 
+                        value = 'RH'
+                    ),
+                ]
             ),
-            dbc.Input(
-                id = "sec3-min-val",
-                className = "num-input",
-                placeholder = "Enter a number for the min val",
-                type = "number", 
-                min = 0, 
-                step = 1
+            html.Div(
+                className = "container-row row-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input",
+                        children = ["Max Value:"]
+                    ),
+                    dbc.Input(
+                        className = "num-input",
+                        id = "sec3-max-val",
+                        placeholder = "Enter a number for the max val",
+                        type = "number", 
+                        min = 0, 
+                        step = 1
+                    ),
+                ]
             ),
-            dbc.Input(
-                id = "sec3-max-val",
-                className = "num-input",
-                placeholder = "Enter a number for the max val",
-                type = "number", 
-                min = 0, 
-                step = 1
+            html.Div(
+                className = "container-row row-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input",
+                        children = ["Min Value:"]
+                    ),
+                    dbc.Input(
+                        className = "num-input",
+                        id = "sec3-min-val",
+                        placeholder = "Enter a number for the min val",
+                        type = "number", 
+                        min = 0, 
+                        step = 1
+                    ),
+                ]
             ),
         ]
     )

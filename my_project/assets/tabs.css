@@ -244,7 +244,7 @@ p {
     margin-right: 18px;
 }
 
-#sec2-var-dropdown, #sec2-data-filter-var, #sec1-var-dropdown {
+#sec3-filter-var-dropdown, #sec2-var-dropdown, #sec2-data-filter-var, #sec1-var-dropdown, #var-x-dropdown, #var-y-dropdown, #colorby-dropdown {
     width: 15%;
 }
 
