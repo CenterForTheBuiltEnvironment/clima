@@ -19,6 +19,8 @@ from .tab_two.tab_two_graphs import world_map
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation
 from .tab_six.tab_six_graphs import custom_heatmap, custom_summary, three_var_graph, two_var_graph
 
+month_lst = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+
 #####################
 ### TAB SELECTION ###        
 #####################
@@ -208,20 +210,18 @@ def update_tab_four(solar_dropdown, ts, global_local, custom_sun_var, df, meta):
 ######################
 ### TAB FIVE: WIND ###
 ######################
+### Annual + Custom Windrose and Heatmaps ### 
 @app.callback(
     Output('wind-rose', 'figure'),
     Output('wind-speed', 'figure'),
     Output('wind-direction', 'figure'),
-    Output('winter-wind-rose', 'figure'),
-    Output('spring-wind-rose', 'figure'),
-    Output('summer-wind-rose', 'figure'),
-    Output('fall-wind-rose', 'figure'),
-    Output('morning-wind-rose', 'figure'),
-    Output('noon-wind-rose', 'figure'),
-    Output('night-wind-rose', 'figure'),
     Output('custom-wind-rose', 'figure'),
+
+    # Custom Sliders
     [Input('month-slider', 'value')],
     [Input('hour-slider', 'value')],
+
+    # General
     [Input('df-store', 'modified_timestamp')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
@@ -238,16 +238,124 @@ def update_tab_five(month, hour, ts, global_local, df, meta):
 
     # Wind Rose Graphs
     annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24])
-    winter = wind_rose(df, meta, "", [12, 2], [1, 24])
-    spring = wind_rose(df, meta, "", [3, 5], [1, 24])
-    summer = wind_rose(df, meta, "", [6, 8], [1, 24])
-    fall = wind_rose(df, meta, "", [9, 12], [1, 24])
-    morning = wind_rose(df, meta, "", [1, 12], [6, 13])
-    noon = wind_rose(df, meta, "", [1, 12], [14, 21])
-    night = wind_rose(df, meta, "", [1, 12], [22, 5])
     custom = wind_rose(df, meta, "", month, hour)
 
-    return annual, speed, direction, winter, spring, summer, fall, morning, noon, night, custom
+    return annual, speed, direction, custom
+
+### Seasonal Graphs ###
+@app.callback(
+    # Graphs
+    Output('winter-wind-rose', 'figure'),
+    Output('spring-wind-rose', 'figure'),
+    Output('summer-wind-rose', 'figure'),
+    Output('fall-wind-rose', 'figure'),
+
+    # Text 
+    Output('winter-wind-rose-text', 'children'),
+    Output('spring-wind-rose-text', 'children'),
+    Output('summer-wind-rose-text', 'children'),
+    Output('fall-wind-rose-text', 'children'),
+
+    # General
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
+    """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
+    """
+    df = pd.read_json(df, orient = 'split')
+
+    hours = [1, 24]
+    winter_months = [12, 2]
+    spring_months = [3, 5]
+    summer_months = [6, 8]
+    fall_months = [9, 12]
+
+    # Wind Rose Graphs
+    winter = wind_rose(df, meta, "", winter_months, hours)
+    spring = wind_rose(df, meta, "", spring_months, hours)
+    summer = wind_rose(df, meta, "", summer_months, hours)
+    fall = wind_rose(df, meta, "", fall_months, hours)
+
+    # Text 
+    total_count = df.shape[0]
+    calm_count = df.query("Wspeed == 0").shape[0]
+
+    winter_text = "Observations between the months of " + month_lst[winter_months[0] - 1] + \
+    " and " + month_lst[winter_months[1] - 1] + '<b>' + "between " + str(hours[0]) + ":00 hours and " \
+    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+    
+    spring_text = "Observations between the months of " + month_lst[spring_months[0] - 1] + \
+    " and " + month_lst[spring_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
+    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+
+    summer_text = "Observations between the months of " + month_lst[summer_months[0] - 1] + \
+    " and " + month_lst[summer_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
+    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+
+    fall_text = "Observations between the months of " + month_lst[fall_months[0] - 1] + \
+    " and " + month_lst[fall_months[1] - 1] + " between " + str(hours[0]) + ":00 hours and " \
+    + str(hours[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+    + str(int(100 * (total_count / 8760))) + "%. " + str(calm_count) + " observations have calm winds."
+
+    return winter, spring, summer, fall, winter_text, spring_text, summer_text, fall_text
+
+### Daily Graphs ###
+@app.callback(
+    # Daily Graphs 
+    Output('morning-wind-rose', 'figure'),
+    Output('noon-wind-rose', 'figure'),
+    Output('night-wind-rose', 'figure'),
+
+    # Text 
+    Output('morning-windrose-text', 'children'),
+    Output('noon-windrose-text', 'children'),
+    Output('night-windrose-text', 'children'),
+
+    # General 
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_five_daily_graphs(ts, global_local, df, meta):
+    """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
+    """
+    df = pd.read_json(df, orient = 'split')
+
+    months = [1, 12]
+    morning_times = [6, 13]
+    noon_times = [14, 21]
+    night_times = [22, 5]
+
+    # Wind Rose Graphs
+    morning = wind_rose(df, meta, "", months, morning_times)
+    noon = wind_rose(df, meta, "", months, noon_times)
+    night = wind_rose(df, meta, "", months, night_times)
+
+    # Text 
+    total_count = df.shape[0]
+    calm_count = df.query("Wspeed == 0").shape[0]
+    morning_text = "Observations between the months of " + month_lst[months[0] - 1] + \
+        " and " + month_lst[months[1] - 1] + " between " + str(morning_times[0]) + ":00 hours and " \
+        + str(morning_times[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+        + str(int(100 * (total_count / 8760))) + "% " + str(calm_count) + " observations have calm winds."
+    noon_text = "Observations between the months of " + month_lst[months[0] - 1] + \
+        " and " + month_lst[months[1] - 1] + " between " + str(noon_times[0]) + ":00 hours and " \
+        + str(noon_times[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+        + str(int(100 * (total_count / 8760))) + "% " + str(calm_count) + " observations have calm winds."
+    night_text = "Observations between the months of " + month_lst[months[0] - 1] + \
+        " and " + month_lst[months[1] - 1] + " between " + str(night_times[0]) + ":00 hours and " \
+        + str(night_times[1])+":00 hours. Selected observations " + str(total_count) + " of 8760, or " \
+        + str(int(100 * (total_count / 8760))) + "% " + str(calm_count) + " observations have calm winds."
+
+    return morning, noon, night, morning_text, noon_text, night_text
+
 
 ###########################
 ### TAB SIX: QUERY DATA ###
