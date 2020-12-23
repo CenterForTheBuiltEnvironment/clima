@@ -39,7 +39,8 @@ def map_section():
             ),
             dcc.Graph(
                 className = 'tab-two-section',
-                id = "world-map"
+                id = "world-map",
+                config = config
             ),
             html.Div(
                 className = 'container-col tab-two-section',

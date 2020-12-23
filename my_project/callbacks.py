@@ -115,9 +115,10 @@ def update_tab_two(ts, global_local, df, meta):
     """ Update the contents of tab two. Passing in the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
+    print(meta)
     location = "Location: " + meta[1] + " , " + meta[3]
     lon = "Longitude: " + str(meta[-3])
-    lat = "Longitude: " + str(meta[-3])
+    lat = "Latitude: " + str(meta[-4])
     elevation = "Elevation above sea level: " + meta[-1]
 
     # Violin Graphs 
