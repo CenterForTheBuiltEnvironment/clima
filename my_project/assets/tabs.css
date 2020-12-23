@@ -191,13 +191,13 @@ p {
 }
 
 .seasonal-graph {
-    width: 800px;
-    height: 600px;
+    width: 80%;
+    height: 80%;
 }
 
 .daily-wind-graph {
-    width: 600px;
-    height: 600px;
+    width: 90%;
+    height: 90%;
 }
 
 #slider-container * {
