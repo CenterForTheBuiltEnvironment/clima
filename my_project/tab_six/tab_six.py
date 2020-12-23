@@ -152,12 +152,12 @@ def section_two_inputs():
                     children = [
                         html.H6(
                             className = "text-next-to-input",
-                            children = ["Max Value:"]
+                            children = ["Min Value:"]
                         ),
                         dbc.Input(
                             className = "num-input",
-                            id = "sec2-max-val",
-                            placeholder = "Enter a number for the max val",
+                            id = "sec2-min-val",
+                            placeholder = "Enter a number for the min val",
                             type = "number", 
                             min = 0, 
                             step = 1
@@ -169,12 +169,12 @@ def section_two_inputs():
                     children = [
                         html.H6(
                             className = "text-next-to-input",
-                            children = ["Min Value:"]
+                            children = ["Max Value:"]
                         ),
                         dbc.Input(
                             className = "num-input",
-                            id = "sec2-min-val",
-                            placeholder = "Enter a number for the min val",
+                            id = "sec2-max-val",
+                            placeholder = "Enter a number for the max val",
                             type = "number", 
                             min = 0, 
                             step = 1
@@ -346,12 +346,12 @@ def section_three_inputs():
                 children = [
                     html.H6(
                         className = "text-next-to-input",
-                        children = ["Max Value:"]
+                        children = ["Min Value:"]
                     ),
                     dbc.Input(
                         className = "num-input",
-                        id = "sec3-max-val",
-                        placeholder = "Enter a number for the max val",
+                        id = "sec3-min-val",
+                        placeholder = "Enter a number for the min val",
                         type = "number", 
                         min = 0, 
                         step = 1
@@ -363,12 +363,12 @@ def section_three_inputs():
                 children = [
                     html.H6(
                         className = "text-next-to-input",
-                        children = ["Min Value:"]
+                        children = ["Max Value:"]
                     ),
                     dbc.Input(
                         className = "num-input",
-                        id = "sec3-min-val",
-                        placeholder = "Enter a number for the min val",
+                        id = "sec3-max-val",
+                        placeholder = "Enter a number for the max val",
                         type = "number", 
                         min = 0, 
                         step = 1

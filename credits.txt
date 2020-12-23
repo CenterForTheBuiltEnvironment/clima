@@ -1,0 +1,9 @@
+/* TEAM */
+    Lead: Giovanni Betti
+    Email: gbetti [at] berkeley [dot] edu
+    From: Berlin, Germany 
+
+    Developer: Christine Nguyen
+    Email: christine_nguyenl [at] berkeley [dot] edu 
+    Portfolio: https://chrlng.github.io/
+    From: Berkeley, CA, USA
