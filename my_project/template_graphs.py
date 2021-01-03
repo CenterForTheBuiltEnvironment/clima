@@ -401,24 +401,23 @@ def wind_rose(df, meta, title, month, hour):
 ########################
 ### SUMMARY BARCHATS ###
 ########################
-def barchart(df, global_local, var, min_val, max_val, time_filter_info, data_filter_info, normalize):
+def barchart(df, global_local, var, time_filter_info, data_filter_info, normalize):
     """ Return the custom summary barcharts.
     """
-    if time_filter_info:
-        time_filter = time_filter_info[0]
-        start_month = time_filter_info[1][0]
-        end_month = time_filter_info[1][1]
-        start_hour = time_filter_info[2][0]
-        end_hour = time_filter_info[2][1]
-    if data_filter_info:
-        data_filter = data_filter_info[0]
-        filter_var = data_filter_info[1]
-        data_min_val = data_filter_info[2]
-        data_max_val = data_filter_info[3]
-        filter_name = str(filter_var) + "_name"
-        filter_name = name_dict[filter_name]
-        filter_unit = str(filter_var) + "_unit"
-        filter_unit = unit_dict[filter_unit]
+    time_filter = time_filter_info[0]
+    start_month = time_filter_info[1][0]
+    end_month = time_filter_info[1][1]
+    start_hour = time_filter_info[2][0]
+    end_hour = time_filter_info[2][1]
+
+    data_filter = data_filter_info[0]
+    filter_var = data_filter_info[1]
+    min_val = data_filter_info[2]
+    max_val = data_filter_info[3]
+    filter_name = str(filter_var) + "_name"
+    filter_name = name_dict[filter_name]
+    filter_unit = str(filter_var) + "_unit"
+    filter_unit = unit_dict[filter_unit]
 
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
@@ -432,7 +431,7 @@ def barchart(df, global_local, var, min_val, max_val, time_filter_info, data_fil
     color_below = var_color[0]
     color_above = var_color[-1]
     color_in = var_color[len(var_color)//2]
-
+    print(df.head())
     if time_filter:
         if start_month <= end_month:
             df.loc[(df['month'] < start_month) | (df['month'] > end_month)] 
@@ -445,25 +444,26 @@ def barchart(df, global_local, var, min_val, max_val, time_filter_info, data_fil
 
     if data_filter:
         if min_val <= max_val:
-            df.loc[(df[filter_var] < data_min_val) | (df[filter_var] > data_max_val)] 
+            df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)] 
         else:
-            df.loc[(df[filter_var] >= data_max_val) & (df[filter_var] <= data_min_val)] 
-    
+            df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] 
+    print(df.head())
     month_in = []
     month_below = []
     month_above = []
 
     min_val = str(min_val)
     max_val = str(max_val)
+    filter_var = str(filter_var)
 
     for i in range(1, 13):
-        query = "month==" + str(i) + " and (" + var + ">=" + min_val + " and " + var + "<=" + max_val + ")"
+        query = "month==" + str(i) + " and (" + filter_var + ">=" + min_val + " and " + filter_var + "<=" + max_val + ")"
         a = df.query(query)["DOY"].count()
         month_in.append(a)
-        query = "month==" + str(i) + " and (" + var + "<" + min_val + ")"
+        query = "month==" + str(i) + " and (" + filter_var + "<" + min_val + ")"
         b = df.query(query)["DOY"].count()
         month_below.append(b)
-        query = "month==" + str(i) + " and " + var + ">" + max_val
+        query = "month==" + str(i) + " and " + filter_var + ">" + max_val
         c = df.query(query)["DOY"].count()
         month_above.append(c)
 

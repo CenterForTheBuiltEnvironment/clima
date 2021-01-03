@@ -431,6 +431,7 @@ def update_tab_six_one(var, ts, global_local, df, meta):
 ### Section Two ###
 @app.callback(
     Output('custom-heatmap', 'figure'),
+    Output('custom-summary', 'style'),
     Output('custom-summary', 'figure'),
 
     # Section Two
@@ -458,8 +459,11 @@ def update_tab_six_two(var, time_filter, month, hour, data_filter, \
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
-    return custom_heatmap(df, global_local, var, time_filter_info, data_filter_info), \
-        barchart(df, global_local, var, min_val, max_val, time_filter, time_filter_info, data_filter, data_filter_info, normalize)
+
+    heatmap = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+    if data_filter:
+        return heatmap, {}, barchart(df, global_local, var, time_filter_info, data_filter_info, normalize)
+    return heatmap, {'display': 'none'}, {'data': [], 'layout': {}, 'frames': []}
 
 ### Section Three ###
 @app.callback(

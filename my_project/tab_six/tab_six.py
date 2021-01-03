@@ -160,7 +160,8 @@ def section_two_inputs():
                             placeholder = "Enter a number for the min val",
                             type = "number", 
                             min = 0, 
-                            step = 1
+                            step = 1, 
+                            value = 15
                         ),
                     ]
                 ),
@@ -177,7 +178,8 @@ def section_two_inputs():
                             placeholder = "Enter a number for the max val",
                             type = "number", 
                             min = 0, 
-                            step = 1
+                            step = 1,
+                            value = 25
                         ),
                     ]
                 ),
