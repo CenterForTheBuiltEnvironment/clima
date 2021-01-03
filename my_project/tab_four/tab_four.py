@@ -15,12 +15,21 @@ def custom():
         className = 'container-col',
         id = "tab-four-custom-sun-container",
         children = [
-            dcc.Dropdown(
-                id = "custom-sun-var-dropdown", 
-                options = [
-                    {'label': i, 'value': i} for i in var_name_lst
-                ], 
-                value = 'RH'
+            html.Div(
+                className = "container-row container-center full-width",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input",
+                        children = ["Variable: "]
+                    ),
+                    dcc.Dropdown(
+                        id = "custom-sun-var-dropdown", 
+                        options = [
+                            {'label': i, 'value': i} for i in var_name_lst
+                        ], 
+                        value = 'RH'
+                    ),
+                ]
             ),
             dcc.Graph(
                 id = 'custom-sunpath',
@@ -34,23 +43,32 @@ def tab_four():
     """ Contents of tab four.
     """
     return html.Div(
-        className = "container-col tab-container",
+        className = "container-col tab-container full-width",
         id = "tab-four-container",
         children = [
-            dcc.Dropdown(
-                id = "solar-dropdown", 
-                options = [
-                    {'label': 'Polar', 'value': 'polar'},
-                    {'label': 'Latitude/Longitude', 'value': 'lat/long'}
-                ], 
-                value = 'polar'
+            html.Div(
+                className = "container-row full-width container-center",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input",
+                        children = ["View: "]
+                    ),
+                    dcc.Dropdown(
+                        id = "solar-dropdown", 
+                        options = [
+                            {'label': 'Polar', 'value': 'polar'},
+                            {'label': 'Latitude/Longitude', 'value': 'lat/long'}
+                        ], 
+                        value = 'polar'
+                    ),
+                ]
             ),
             dcc.Graph(
                 id = 'solar-dropdown-output',
                 config = config
             ), 
             html.Div(
-                className = 'container-row',
+                className = 'container-row full-width',
                 id = 'tab-four-subcontainer',
                 children = [
                     dcc.Graph(

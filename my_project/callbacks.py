@@ -17,7 +17,7 @@ from .tab_six.tab_six import tab_six
 from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map
-from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, custom_sunpath, yearly_solar_radiation
+from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, cloud_cover, custom_sunpath, yearly_solar_radiation
 from .tab_six.tab_six_graphs import custom_heatmap, three_var_graph, two_var_graph
 
 #####################
@@ -170,6 +170,7 @@ def update_tab_three(ts, global_local, df, meta):
     Output('solar-dropdown-output', 'figure'),
     Output('monthly-solar', 'figure'),
     Output('yearly-solar', 'figure'),
+    Output('cloud-cover', 'figure'),
     Output('custom-sunpath', 'figure'),
     Output('daily-ghrad', 'figure'),
     Output('heatmap-ghrad', 'figure'),
@@ -194,17 +195,20 @@ def update_tab_four(solar_dropdown, ts, global_local, custom_sun_var, df, meta):
     dnrad_heatmap = heatmap(df, "DNrad", global_local)
     difhrad_heatmap = heatmap(df, "DifHrad", global_local)
 
-    # Daily Profiler Graphs 
+    # Daily Profile Graphs 
     ghrad_daily = daily_profile(df, "GHrad", global_local)
     dnrad_profile = daily_profile(df, "DNrad", global_local)
     difhrad_profile = daily_profile(df, "DifHrad", global_local)
 
+    # Cloud Cover 
+    cover = cloud_cover(df, global_local, 'Tskycover', 3, 7)
+
     if solar_dropdown == 'polar':
-        return polar_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), custom_sunpath(df, meta, global_local, custom_sun_var), \
+        return polar_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), cover, custom_sunpath(df, meta, global_local, custom_sun_var), \
             ghrad_daily, ghrad_heatmap, dnrad_profile, dnrad_heatmap, difhrad_profile, difhrad_heatmap
             
     else:
-        return lat_long_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), custom_sunpath(df, meta, global_local, custom_sun_var), \
+        return lat_long_solar(df, meta), monthly_solar(df, meta), yearly_solar_radiation(df), cover, custom_sunpath(df, meta, global_local, custom_sun_var), \
             ghrad_daily, ghrad_heatmap, dnrad_profile, dnrad_heatmap, difhrad_profile, difhrad_heatmap
 
 ######################
@@ -427,7 +431,7 @@ def update_tab_six_one(var, ts, global_local, df, meta):
 ### Section Two ###
 @app.callback(
     Output('custom-heatmap', 'figure'),
-    # Output('custom-summary', 'figure'),
+    Output('custom-summary', 'figure'),
 
     # Section Two
     [Input('sec2-var-dropdown', 'value')],
@@ -454,8 +458,8 @@ def update_tab_six_two(var, time_filter, month, hour, data_filter, \
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
-    return custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
-# barchart(df, global_local, var, time_filter_info, data_filter_info, normalize)
+    return custom_heatmap(df, global_local, var, time_filter_info, data_filter_info), \
+        barchart(df, global_local, var, min_val, max_val, time_filter, time_filter_info, data_filter, data_filter_info, normalize)
 
 ### Section Three ###
 @app.callback(

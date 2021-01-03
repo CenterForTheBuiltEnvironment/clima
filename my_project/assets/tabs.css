@@ -146,7 +146,9 @@ p {
 
 #tab-four-subcontainer {
     width: 100%;
+    height: 50vh;
     justify-content: space-between;
+    margin-bottom: 24px;
 }
 
 #monthly-solar {
@@ -154,10 +156,11 @@ p {
 }
 
 #yearly-solar {
-    width: 25%;
+    width: 50vh;
+    height: 50vh;
 }
 
-#daily-ghrad, #heatmap-ghrad, #daily-dnrad, #heatmap-dnrad, #daily-difhrad, #heatmap-difhrad {
+#daily-ghrad, #heatmap-ghrad, #daily-dnrad, #heatmap-dnrad, #daily-difhrad, #heatmap-difhrad, #cloud-cover {
     width: 100%;
 }
 

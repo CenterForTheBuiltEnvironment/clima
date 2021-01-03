@@ -401,18 +401,24 @@ def wind_rose(df, meta, title, month, hour):
 ########################
 ### SUMMARY BARCHATS ###
 ########################
-def barchart(df, global_local, var, time_filter_info, data_filter_info, normalize):
+def barchart(df, global_local, var, min_val, max_val, time_filter_info, data_filter_info, normalize):
     """ Return the custom summary barcharts.
     """
-    time_filter = time_filter_info[0]
-    start_month = time_filter_info[1][0]
-    end_month = time_filter_info[1][1]
-    start_hour = time_filter_info[2][0]
-    end_hour = time_filter_info[2][1]
-    data_filter = data_filter_info[0]
-    filter_var = data_filter_info[1]
-    min_val = data_filter_info[2]
-    max_val = data_filter_info[3]
+    if time_filter_info:
+        time_filter = time_filter_info[0]
+        start_month = time_filter_info[1][0]
+        end_month = time_filter_info[1][1]
+        start_hour = time_filter_info[2][0]
+        end_hour = time_filter_info[2][1]
+    if data_filter_info:
+        data_filter = data_filter_info[0]
+        filter_var = data_filter_info[1]
+        data_min_val = data_filter_info[2]
+        data_max_val = data_filter_info[3]
+        filter_name = str(filter_var) + "_name"
+        filter_name = name_dict[filter_name]
+        filter_unit = str(filter_var) + "_unit"
+        filter_unit = unit_dict[filter_unit]
 
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
@@ -422,10 +428,6 @@ def barchart(df, global_local, var, time_filter_info, data_filter_info, normaliz
     var_name = name_dict[var_name]
     var_color = str(var) + "_color"
     var_color = color_dict[var_color]
-    filter_name = str(filter_var) + "_name"
-    filter_name = name_dict[filter_name]
-    filter_unit = str(filter_var) + "_unit"
-    filter_unit = unit_dict[filter_unit]
 
     color_below = var_color[0]
     color_above = var_color[-1]
@@ -443,9 +445,9 @@ def barchart(df, global_local, var, time_filter_info, data_filter_info, normaliz
 
     if data_filter:
         if min_val <= max_val:
-            df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)] 
+            df.loc[(df[filter_var] < data_min_val) | (df[filter_var] > data_max_val)] 
         else:
-            df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] 
+            df.loc[(df[filter_var] >= data_max_val) & (df[filter_var] <= data_min_val)] 
     
     month_in = []
     month_below = []

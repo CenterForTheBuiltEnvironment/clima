@@ -268,14 +268,62 @@ def yearly_solar_radiation(df):
         legend = dict(
             x = 0,
             y = -0.5
-        )
+        ),
     )
     return fig
 
 ###################
 ### CLOUD COVER ###
 ###################
+def cloud_cover(df, global_local, var, min_val, max_val):
+    """ Return the custom summary barcharts.
+    """
 
+    var_unit = str(var) + "_unit"
+    var_unit = unit_dict[var_unit]
+    var_range = str(var) + "_range"
+    var_range = range_dict[var_range]
+    var_name = str(var) + "_name"
+    var_name = name_dict[var_name]
+    var_color = str(var) + "_color"
+    var_color = color_dict[var_color]
+
+    color_below = var_color[0]
+    color_above = var_color[-1]
+    color_in = var_color[len(var_color)//2]
+
+    month_in = []
+    month_below = []
+    month_above = []
+
+    min_val = str(min_val)
+    max_val = str(max_val)
+
+    for i in range(1, 13):
+        query = "month==" + str(i) + " and (" + var + ">=" + min_val + " and " + var + "<=" + max_val + ")"
+        print(df.query(query))
+        a = df.query(query)["DOY"].count()
+        month_in.append(a)
+        query = "month==" + str(i) + " and (" + var + "<" + min_val + ")"
+        b = df.query(query)["DOY"].count()
+        month_below.append(b)
+        query = "month==" + str(i) + " and " + var + ">" + max_val
+        c = df.query(query)["DOY"].count()
+        month_above.append(c)
+
+    fig = go.Figure()
+    trace1 = go.Bar(x = list(range(0, 13)), y = month_in, name = " IN range", marker_color = color_in)
+    trace2 = go.Bar(x = list(range(0, 13)), y = month_below, name = " BELOW range", marker_color = color_below)
+    trace3 = go.Bar(x = list(range(0, 13)), y = month_above, name = " ABOVE range", marker_color = color_above)
+    data = [trace2, trace1, trace3]
+
+    fig = go.Figure(data = data)
+    fig.update_layout(barmode = 'stack')
+
+    title = "Number of hours the " + var_name + " is in the range " + min_val+" to " + max_val + " " + var_unit
+    fig.update_yaxes(title_text = "hours")
+    fig.update_layout(title = title, barnorm = "")
+    return fig
 
 #######################
 ### CUSTOM SUN PATH ###
