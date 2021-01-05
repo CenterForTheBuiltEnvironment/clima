@@ -183,6 +183,9 @@ def section_two_inputs():
                         ),
                     ]
                 ),
+                dbc.Button(
+                    "Go", color = "primary", className = "mr-1", id = "tab6-sec2-data-button"
+                )
             ]
     )
 

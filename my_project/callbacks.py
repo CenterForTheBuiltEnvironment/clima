@@ -116,7 +116,7 @@ def update_tab_two(ts, global_local, df, meta):
     """
     df = pd.read_json(df, orient = 'split')
     print(meta)
-    location = "Location: " + meta[1] + " , " + meta[3]
+    location = "Location: " + meta[1] + ", " + meta[3]
     lon = "Longitude: " + str(meta[-3])
     lat = "Latitude: " + str(meta[-4])
     elevation = "Elevation above sea level: " + meta[-1]
@@ -433,6 +433,7 @@ def update_tab_six_one(var, ts, global_local, df, meta):
     Output('custom-heatmap', 'figure'),
     Output('custom-summary', 'style'),
     Output('custom-summary', 'figure'),
+    Output('normalize', 'style'),
 
     # Section Two
     [Input('sec2-var-dropdown', 'value')],
@@ -461,9 +462,11 @@ def update_tab_six_two(var, time_filter, month, hour, data_filter, \
     data_filter_info = [data_filter, filter_var, min_val, max_val]
 
     heatmap = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+    no_display = {'display': 'none'}
+    
     if data_filter:
-        return heatmap, {}, barchart(df, global_local, var, time_filter_info, data_filter_info, normalize)
-    return heatmap, {'display': 'none'}, {'data': [], 'layout': {}, 'frames': []}
+        return heatmap, {}, barchart(df, global_local, var, time_filter_info, data_filter_info, normalize), {}
+    return heatmap, no_display, {'data': [], 'layout': {}, 'frames': []}, no_display
 
 ### Section Three ###
 @app.callback(
