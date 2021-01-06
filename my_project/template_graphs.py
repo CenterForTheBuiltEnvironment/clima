@@ -315,7 +315,7 @@ def speed_labels(bins, units):
             labels.append('{} - {} {}'.format(left, right, units))
     return labels
 
-def wind_rose(df, meta, title, month, hour):
+def wind_rose(df, meta, title, month, hour, labels):
     """ Return the wind rose figure.
 
     Based on:  https://gist.github.com/phobson/41b41bdd157a2bcf6e14
@@ -395,6 +395,7 @@ def wind_rose(df, meta, title, month, hour):
     fig.update_layout(
         autosize = True,
         polar_angularaxis_rotation = 90,
+        showlegend = labels
     )
     return fig
 

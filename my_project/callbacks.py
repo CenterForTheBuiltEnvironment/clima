@@ -294,7 +294,7 @@ def update_tab_five(start_month, start_hour, end_month, end_hour, ts, global_loc
     direction = heatmap(df, 'Wdir', global_local)
 
     # Wind Rose Graphs
-    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24])
+    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24], True)
     if start_month <= end_month:
         df = df.loc[(df['month'] >= start_month) & (df['month'] <= end_month)]
     else:
@@ -303,7 +303,7 @@ def update_tab_five(start_month, start_hour, end_month, end_hour, ts, global_loc
         df = df.loc[(df['hour'] >= start_hour) & (df['hour'] <= end_hour)]
     else:
         df = df.loc[(df['hour'] <= end_hour) | (df['hour'] >= start_hour)]
-    custom = wind_rose(df, meta, "", [start_month, end_month], [start_hour, end_hour])
+    custom = wind_rose(df, meta, "", [start_month, end_month], [start_hour, end_hour], True)
 
     return annual, speed, direction, custom
 
@@ -339,10 +339,10 @@ def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
     fall_months = [9, 12]
 
     # Wind Rose Graphs
-    winter = wind_rose(df, meta, "", winter_months, hours)
-    spring = wind_rose(df, meta, "", spring_months, hours)
-    summer = wind_rose(df, meta, "", summer_months, hours)
-    fall = wind_rose(df, meta, "", fall_months, hours)
+    winter = wind_rose(df, meta, "", winter_months, hours, False)
+    spring = wind_rose(df, meta, "", spring_months, hours, True)
+    summer = wind_rose(df, meta, "", summer_months, hours, False)
+    fall = wind_rose(df, meta, "", fall_months, hours, False)
 
     # Text 
     winter_df = df.loc[(df['month'] <= winter_months[1]) | (df['month'] >= winter_months[0])]
@@ -412,9 +412,9 @@ def update_tab_five_daily_graphs(ts, global_local, df, meta):
     night_times = [22, 5]
 
     # Wind Rose Graphs
-    morning = wind_rose(df, meta, "", months, morning_times)
-    noon = wind_rose(df, meta, "", months, noon_times)
-    night = wind_rose(df, meta, "", months, night_times)
+    morning = wind_rose(df, meta, "", months, morning_times, False)
+    noon = wind_rose(df, meta, "", months, noon_times, False)
+    night = wind_rose(df, meta, "", months, night_times, True)
 
     # Text 
     morning_df = df.loc[(df['hour'] >= morning_times[0]) & (df['hour'] <= morning_times[1])]
