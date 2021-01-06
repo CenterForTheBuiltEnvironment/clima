@@ -24,10 +24,13 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 numba==0.52.0
 numpy==1.19.5
+pandas==1.2.0
 plotly==4.14.1
+pvlib==0.8.1
 pylint==2.6.0
 pythermalcomfort==1.3.3
-python-dateutil==1.5
+python-dateutil==2.8.1
+pytz==2020.5
 requests==2.25.1
 retrying==1.3.3
 six==1.15.0

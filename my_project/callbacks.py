@@ -14,7 +14,6 @@ from .tab_three.tab_three import tab_three
 from .tab_four.tab_four import tab_four
 from .tab_five.tab_five import tab_five
 from .tab_six.tab_six import tab_six
-from .tab_eight.tab_eight import tab_eight
 
 from .tab_two.tab_two_graphs import world_map
 from .tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, polar_graph, yearly_solar_radiation
@@ -48,7 +47,11 @@ def render_content(tab):
             ]
         )
     elif tab == 'tab-8':
-        return tab_eight()
+        return html.Div(
+            children = [
+                html.H3('Tab content 8')
+            ]
+        )
 
 #######################
 ### TAB ONE: SELECT ###        
