@@ -169,8 +169,12 @@ p {
     align-items: center;
 }
 
-#custom-sun-var-dropdown {
+#custom-sun-view-dropdown {
     width: 25%;
+}
+
+#custom-sun-var-dropdown {
+    width: 50%;
 }
 
 /* Tab Five */

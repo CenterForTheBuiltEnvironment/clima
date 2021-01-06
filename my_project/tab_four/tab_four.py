@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from my_project.server import app 
-from my_project.global_scheme import config, var_name_lst
+from my_project.global_scheme import config, dropdown_names
 
 def custom():
     """ Return the layout for the custom sunpath and its dropdowns.
@@ -25,9 +25,26 @@ def custom():
                     dcc.Dropdown(
                         id = "custom-sun-var-dropdown", 
                         options = [
-                            {'label': i, 'value': i} for i in var_name_lst
+                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                         ], 
-                        value = 'RH'
+                        value = 'DBT'
+                    ),
+                ]
+            ),
+            html.Div(
+                className = "container-row container-center full-width",
+                children = [
+                    html.H6(
+                        className = "text-next-to-input",
+                        children = ["View: "]
+                    ),
+                    dcc.Dropdown(
+                        id = "custom-sun-view-dropdown", 
+                        options = [
+                            {'label': 'Polar', 'value': 'polar'},
+                            {'label': 'Latitude/Longitude', 'value': 'lat/long'}
+                        ], 
+                        value = 'polar'
                     ),
                 ]
             ),

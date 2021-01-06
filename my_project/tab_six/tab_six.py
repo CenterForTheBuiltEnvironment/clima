@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from my_project.global_scheme import config, var_name_lst
+from my_project.global_scheme import config, dropdown_names
 
 def section_one_inputs():
     """ Return the inputs from section one.
@@ -17,9 +17,9 @@ def section_one_inputs():
             dcc.Dropdown(
                 id = "sec1-var-dropdown", 
                 options = [
-                    {'label': i, 'value': i} for i in var_name_lst
+                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                 ], 
-                value = 'RH'
+                value = 'DBT'
             ),
         ]
     )
@@ -65,7 +65,7 @@ def section_two_inputs():
                         dcc.Dropdown(
                             id = "sec2-var-dropdown", 
                             options = [
-                                {'label': i, 'value': i} for i in var_name_lst
+                                {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                             ], 
                             value = 'RH'
                         ),
@@ -141,7 +141,7 @@ def section_two_inputs():
                         dcc.Dropdown(
                             id = "sec2-data-filter-var", 
                             options = [
-                                {'label': i, 'value': i} for i in var_name_lst
+                                {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                             ], 
                             value = 'RH'
                         ),
@@ -232,7 +232,7 @@ def section_three_inputs():
                     dcc.Dropdown(
                         id = "var-x-dropdown", 
                         options = [
-                            {'label': i, 'value': i} for i in var_name_lst
+                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                         ], 
                         value = 'DBT'
                     ),
@@ -248,7 +248,7 @@ def section_three_inputs():
                     dcc.Dropdown(
                         id = "var-y-dropdown", 
                         options = [
-                            {'label': i, 'value': i} for i in var_name_lst
+                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                         ], 
                         value = 'RH'
                     ),
@@ -264,7 +264,7 @@ def section_three_inputs():
                     dcc.Dropdown(
                         id = "colorby-dropdown", 
                         options = [
-                            {'label': i, 'value': i} for i in var_name_lst
+                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                         ], 
                         value = 'GHrad'
                     ),
@@ -340,7 +340,7 @@ def section_three_inputs():
                     dcc.Dropdown(
                         id = "sec3-filter-var-dropdown", 
                         options = [
-                            {'label': i, 'value': i} for i in var_name_lst
+                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                         ], 
                         value = 'RH'
                     ),

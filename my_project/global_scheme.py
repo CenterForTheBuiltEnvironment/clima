@@ -160,38 +160,62 @@ name_dict = {
 }
 
 ######################
+### Dropdown Names ###
+######################
+dropdown_names = {
+    "Dry bulb temperature" : "DBT",
+    "Dew point temperature" : "DPT",
+    "Relative humidity" : "RH",
+    "Atmospheric pressure" : "Apressure",
+    "Extraterrestrial horizontal irradiation" : "EHrad",
+    "´Horizontal infrared radiation" : "HIRrad",
+    "Global horizontal radiation" : "GHrad",
+    "Direct normal radiation" : "DNrad",
+    "Diffuse horizontal radiation" : "DifHrad",
+    "Global horizontal iluminance" : "GHillum",
+    "Direct normal iluminance" : "DNillum",
+    "Diffuse horizontal iluminance" : "DifHillum",
+    "Zenith luminance" : "Zlumi",
+    "Wind direction" : "Wdir",
+    "Wind speed" : "Wspeed",
+    "Total sky cover" : "Tskycover",
+    "Opaque sky cover" : "Oskycover",
+    "Visibility" : "Vis",
+}
+
+######################
 ### Variable Names ###
 ######################
-var_name_lst = [
-    "DOY",
-    "day",
-    "month",
-    "hour",
-    "DBT",
-    "DPT",
-    "RH",
-    "Apressure",
-    "EHrad",
-    "HIRrad",
-    "GHrad",
-    "DNrad",
-    "DifHrad",
-    "GHillum",
-    "DNillum",
-    "DifHillum",
-    "Zlumi",
-    "Wdir",
-    "Wspeed",
-    "Tskycover",
-    "Oskycover",
-    "Vis",
-    "apparent",
-    "zenith",
-    "apparent_elevation",
-    "elevation",
-    "azimuth",
-    "equation_of_time"
-]
+# var_name_lst = [
+#     # "DOY",
+#     # "day",
+#     # "month",
+#     # "hour",
+#     "DBT",
+#     "DPT",
+#     "RH",
+#     "Apressure",
+#     "EHrad",
+#     "HIRrad",
+#     "GHrad",
+#     "DNrad",
+#     "DifHrad",
+#     "GHillum",
+#     "DNillum",
+#     "DifHillum",
+#     "Zlumi",
+#     "Wdir",
+#     "Wspeed",
+#     "Tskycover",
+#     "Oskycover",
+#     "Vis",
+#     # "apparent_zenith",
+#     # "zenith",
+#     # "apparent_elevation",
+#     # "elevation",
+#     # "azimuth",
+#     # "equation_of_time"
+# ]
 
 ###########################
 ### Global Value Ranges ###
