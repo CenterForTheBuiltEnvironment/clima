@@ -1,10 +1,8 @@
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-
-from my_project.server import app 
 from my_project.extract_df import create_df
 
 def tab_one():

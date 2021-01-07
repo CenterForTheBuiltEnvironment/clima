@@ -1,14 +1,18 @@
-from plotly.colors import n_colors
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 from math import ceil, floor
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+from plotly.colors import n_colors
+from plotly.subplots import make_subplots
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
 
-from .global_scheme import template, month_lst
-from my_project.global_scheme import unit_dict, range_dict, name_dict, color_dict
+from my_project.global_scheme import (color_dict, name_dict, range_dict,
+                                      unit_dict)
+
+from .global_scheme import month_lst, template
+
 
 #######################
 ### VIOLIN TEMPLATE ###

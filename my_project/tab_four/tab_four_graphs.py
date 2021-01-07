@@ -1,14 +1,17 @@
+from datetime import datetime, time, timedelta, timezone
+from math import ceil, cos, floor, radians
+
+import numpy as np
 import pandas as pd
 import plotly.express as px
-from plotly.subplots import make_subplots
 import plotly.graph_objects as go
-from pvlib import solarposition
-from datetime import time, datetime, timedelta, timezone
-import numpy as np
-from math import cos, radians, ceil, floor
 from my_project.extract_df import create_df
-from my_project.template_graphs import heatmap, daily_profile
-from my_project.global_scheme import template, unit_dict, range_dict, name_dict, color_dict
+from my_project.global_scheme import (color_dict, name_dict, range_dict,
+                                      template, unit_dict)
+from my_project.template_graphs import daily_profile, heatmap
+from plotly.subplots import make_subplots
+from pvlib import solarposition
+
 
 ####################################
 ### POLAR/LAT-LONG GRAPH SELECT ###

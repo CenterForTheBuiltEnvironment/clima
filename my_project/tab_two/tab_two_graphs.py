@@ -1,10 +1,9 @@
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.colors import n_colors
-import plotly.express as px
-
 from my_project.template_graphs import violin
+from plotly.colors import n_colors
+
 
 #################
 ### WORLD MAP ###

@@ -1,8 +1,11 @@
+import io
+import zipfile
+from datetime import datetime, time, timedelta, timezone
 from urllib.request import Request, urlopen
-import requests, zipfile, io
+
 import pandas as pd
+import requests
 from pvlib import solarposition
-from datetime import time, datetime, timedelta, timezone
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 

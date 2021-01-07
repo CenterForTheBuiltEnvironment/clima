@@ -1,8 +1,9 @@
 import dash
+import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+
 
 def build_footer():
     """ Build the footer at the bottom of the page
@@ -23,7 +24,7 @@ def build_footer():
             html.Div(
                 className = "container-col",
                 children = [
-                    html.P("Contact"),
+                    html.A(children = ["Report a bug"], href = "https://om8d9aqiuwr.typeform.com/to/VrsLqx2r"), 
                     html.P("Filler text"),
                 ]
             ),
@@ -52,7 +53,7 @@ def build_banner():
                 children = [
                     html.H1(
                         id = "banner-title",
-                        children = ["EPW Viz Tool"]),
+                        children = ["Berkeley Clima Tool"]),
                     html.H5(
                         id = "banner-subtitle",
                         children = ["Current Location: N/A"]),

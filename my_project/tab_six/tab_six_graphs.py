@@ -1,13 +1,12 @@
+from math import ceil, floor
+
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from my_project.global_scheme import (color_dict, name_dict, range_dict,
+                                      template, unit_dict)
 from plotly.colors import n_colors
-import plotly.express as px
-from math import ceil, floor
-import numpy as np
-
-from my_project.global_scheme import unit_dict, range_dict, name_dict, color_dict, template
-
 
 month_lst = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 

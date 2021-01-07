@@ -1,28 +1,27 @@
-from dash import Dash
 import dash_bootstrap_components as dbc
 import dash_html_components as html
-
-from my_project.layout import build_banner, build_tabs, build_footer
-
-import dash_html_components as html
+import pandas as pd
+from dash import Dash
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-import pandas as pd
 
 from my_project.extract_df import create_df
 from my_project.global_scheme import month_lst
-from my_project.template_graphs import violin, wind_rose, heatmap, daily_profile, heatmap, yearly_profile, barchart
-
-from my_project.tab_one.tab_one import tab_one
-from my_project.tab_two.tab_two import tab_two
-from my_project.tab_three.tab_three import tab_three
-from my_project.tab_four.tab_four import tab_four
+from my_project.layout import build_banner, build_footer, build_tabs
 from my_project.tab_five.tab_five import tab_five
+from my_project.tab_four.tab_four import tab_four
+from my_project.tab_four.tab_four_graphs import (lat_long_solar, monthly_solar,
+                                                 polar_graph, polar_solar,
+                                                 yearly_solar_radiation)
+from my_project.tab_one.tab_one import tab_one
 from my_project.tab_six.tab_six import tab_six
-
+from my_project.tab_six.tab_six_graphs import (custom_heatmap, three_var_graph,
+                                               two_var_graph)
+from my_project.tab_three.tab_three import tab_three
+from my_project.tab_two.tab_two import tab_two
 from my_project.tab_two.tab_two_graphs import world_map
-from my_project.tab_four.tab_four_graphs import polar_solar, lat_long_solar, monthly_solar, polar_graph, yearly_solar_radiation
-from my_project.tab_six.tab_six_graphs import custom_heatmap, three_var_graph, two_var_graph
+from my_project.template_graphs import (barchart, daily_profile, heatmap,
+                                        violin, wind_rose, yearly_profile)
 
 app = Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 server = app.server 
@@ -35,6 +34,9 @@ app.layout = html.Div(
         build_tabs(), 
     ]
 )
+
+if __name__ == '__main__':
+    app.run_server(debug = True)
 
 #####################
 ### TAB SELECTION ###        
@@ -563,6 +565,3 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
     data_filter_info3 = [data_filter3, data_filter_var3, min_val3, max_val3]
     return three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3), \
         two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
-
-if __name__ == '__main__':
-    app.run_server(debug = True)
