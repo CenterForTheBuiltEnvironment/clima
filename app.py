@@ -26,7 +26,7 @@ from my_project.template_graphs import (barchart, daily_profile, heatmap,
 app = Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 server = app.server 
 
-app.title = "EPW Viz"
+app.title = "Berkeley Clima Tool"
 app.layout = html.Div(
     id = 'big-container',
     children = [
@@ -36,7 +36,7 @@ app.layout = html.Div(
 )
 
 if __name__ == '__main__':
-    app.run_server(debug = True)
+    app.run_server(debug = False)
 
 #####################
 ### TAB SELECTION ###        
