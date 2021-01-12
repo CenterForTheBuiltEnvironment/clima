@@ -406,8 +406,8 @@ def custom_lat_long_solar(df, meta, global_local, var):
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max=(5*math.ceil(df[var].max()/5))
-        data_min=(5*math.floor(df[var].min()/5))
+        data_max=(5*ceil(df[var].max()/5))
+        data_min=(5*floor(df[var].min()/5))
         range_z = [data_min, data_max]
 
     var = df[var]
