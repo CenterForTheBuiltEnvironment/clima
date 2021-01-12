@@ -12,6 +12,7 @@ from my_project.tab_five.tab_five import tab_five
 from my_project.tab_four.tab_four import tab_four
 from my_project.tab_four.tab_four_graphs import (lat_long_solar, monthly_solar,
                                                  polar_graph, polar_solar,
+                                                 custom_lat_long_solar,
                                                  yearly_solar_radiation)
 from my_project.tab_one.tab_one import tab_one
 from my_project.tab_six.tab_six import tab_six
@@ -240,8 +241,8 @@ def update_tab_four(view, var, ts, global_local, df, meta):
         return polar_graph(df, meta, global_local, var)
             
     else:
-        # return polar_long_solar(df, meta, var)
-        return polar_graph(df, meta, global_local, var)
+        return custom_lat_long_solar(df, meta, global_local, var)
+        # return polar_graph(df, meta, global_local, var)
 
 
 ### SECTION TWO ###

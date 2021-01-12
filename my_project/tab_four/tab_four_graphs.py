@@ -368,6 +368,7 @@ def polar_graph(df, meta, global_local, var):
             )
         ) 
     fig.update_layout(
+        height = 600,
         showlegend = False,
         polar = dict(
         radialaxis_tickfont_size = 10,
@@ -380,9 +381,111 @@ def polar_graph(df, meta, global_local, var):
     )
     fig.update_layout(
         autosize = False,
-        width = 800,
-        height = 800,
         title = Title,
         title_x = 0.5,
     )
     return fig
+
+def custom_lat_long_solar(df, meta, global_local, var):
+    """ Return a graph of a latitude and longitude solar diagram. 
+    """
+    # Meta data
+    city = meta[1]
+    country = meta[3]
+    latitude = float(meta[-4])
+    longitude = float(meta[-3])
+    time_zone = float(meta[-2])
+
+    var_unit = unit_dict[str(var) + "_unit"]
+    var_range = range_dict[str(var) + "_range"]
+    var_name = name_dict[str(var) + "_name"]
+    var_color = color_dict[str(var) + "_color"]
+
+    if global_local == "global":
+        # Set Global values for Max and minimum
+        range_z = var_range
+    else:
+        # Set maximum and minimum according to data
+        data_max=(5*math.ceil(df[var].max()/5))
+        data_min=(5*math.floor(df[var].min()/5))
+        range_z = [data_min, data_max]
+
+    var = df[var]
+    marker_size = (((var - var.min()) / var.max()) + 1) * 4
+    
+    # Adjust dateime based on timezone
+    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
+    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    date = date-tz
+    tz = 'UTC'
+
+    times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed = 'left',
+                        freq = 'H', tz = tz)
+    delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+    times = times - delta
+    solpos = solarposition.get_solarposition(times, latitude, longitude)
+    # remove nighttime
+    solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+
+    fig = go.Figure()
+
+    # draw annalemma
+    fig.add_trace(
+        go.Scatter(
+            y = df['elevation'],
+            x = df['azimuth'] ,
+            mode = 'markers',
+            marker = dict(
+            color = var,
+            size = marker_size,
+            line_width = 0,
+            colorscale = var_color,
+            cmin = range_z[0],
+            cmax = range_z[1],
+            colorbar = dict(
+                thickness = 30,
+                title = var_unit + "<br>  ")
+            ) 
+        )
+    )
+
+    # draw equinox and sostices
+    for date in pd.to_datetime(['2019-03-21', '2019-06-21', '2019-12-21']):
+        times = pd.date_range(date, date + pd.Timedelta('24h'), freq = '5min', tz = tz)
+        times = times - delta
+        solpos = solarposition.get_solarposition(times, latitude, longitude)
+        solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+
+        fig.add_trace(go.Scatter(
+                        y = (90 - solpos.apparent_zenith),
+                        x = solpos.azimuth ,
+                        mode = 'markers',
+                        marker_color = "orange",
+                        marker_size = 4 
+                    ))  
+
+    # draw sunpath on the 21st of each other month 
+    for date in pd.to_datetime(['2019-01-21', '2019-02-21', '2019-4-21', '2019-5-21']):
+        times = pd.date_range(date, date+pd.Timedelta('24h'), freq = '5min', tz = tz)
+        times = times - delta
+        solpos = solarposition.get_solarposition(times, latitude, longitude)
+        solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+
+        fig.add_trace(go.Scatter(
+                        y = (90 - solpos.apparent_zenith),
+                        x = solpos.azimuth ,
+                        mode = 'markers',
+                        marker_color = "orange",
+                        marker_size = 3   
+                    )) 
+
+    fig.update_layout(
+        title = "Cartesian Sun-Path",
+        title_x = 0.5,
+        template = template,
+        showlegend = False, xaxis_range = [0, 360], 
+        yaxis_range = [0, 90], xaxis_tickmode = "array", 
+        xaxis_tickvals = [0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360]
+    )
+
+    return fig 

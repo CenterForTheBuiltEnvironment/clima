@@ -169,6 +169,10 @@ p {
     align-items: center;
 }
 
+#custom-sunpath {
+    width: 100%;
+}
+
 #custom-sun-view-dropdown {
     width: 25%;
 }
