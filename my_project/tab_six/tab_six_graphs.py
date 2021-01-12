@@ -182,7 +182,7 @@ def two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, da
     var_color = color_dict[var_color]
 
     title =  "Simultaneous frequency of " + var_x + " and " + var_y
-
+    print(time_filter)
     if time_filter:
         if start_month <= end_month:
             df.loc[(df['month'] < start_month) | (df['month'] > end_month)]
@@ -193,7 +193,7 @@ def two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, da
             df.loc[(df['hour'] < start_hour ) | (df['hour'] > end_hour)]
         else:
             df.loc[(df['hour'] >= end_hour) & (df['hour'] <= start_hour )]
-
+    print(data_filter)
     if data_filter:
         if min_val <= max_val:
             df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)]

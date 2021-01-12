@@ -36,7 +36,7 @@ app.layout = html.Div(
 )
 
 if __name__ == '__main__':
-    app.run_server(debug = False)
+    app.run_server(debug = True)
 
 #####################
 ### TAB SELECTION ###        
@@ -560,8 +560,12 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
     ts, global_local, df, meta):
     """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
     """
+    ### TO DO: dont allow to input if apply filter not checked 
+    # if (min_val3 is None or max_val3 is None) and data_filter3:
+    #     raise PreventUpdate
     df = pd.read_json(df, orient = 'split')
     time_filter_info3 = [time_filter3, month3, hour3]
     data_filter_info3 = [data_filter3, data_filter_var3, min_val3, max_val3]
-    return three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3), \
-        two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
+    two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
+    three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
+    return three, two

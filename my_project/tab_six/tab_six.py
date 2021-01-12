@@ -53,138 +53,151 @@ def section_two_inputs():
     """ Return all the input forms from section two.
     """
     return html.Div(
-            className = "container-col full-width container-center",
+            className = "container-row full-width three-inputs-container",
             children = [
                 html.Div(
-                    className = "container-row row-center full-width",
+                    className = "container-col container-center one-of-three-container",
                     children = [
-                        html.H6(
-                            className = "text-next-to-input", 
-                            children = ["Variable:"]
+                        html.Div(
+                            className = "container-row row-center full-width",
+                            children = [
+                                html.H6(
+                                    className = "text-next-to-input", 
+                                    children = ["Variable:"]
+                                ),
+                                dcc.Dropdown(
+                                    id = "sec2-var-dropdown", 
+                                    options = [
+                                        {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                                    ], 
+                                    value = 'RH'
+                                ),
+                            ]
                         ),
-                        dcc.Dropdown(
-                            id = "sec2-var-dropdown", 
+                    ]
+                ),
+                html.Div(
+                    className = "container-col container-center one-of-three-container",
+                    children = [
+                        dbc.Checklist(
                             options = [
-                                {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                            ], 
-                            value = 'RH'
+                                {"label": "Apply Time Filters", "value": "time"},
+                            ],
+                            value = ["time"],
+                            id = "sec2-time-filter-input",
+                        ),
+                        html.Div(
+                            className = 'container-row full-width container-center',
+                            children = [
+                                html.H6("Month Range"),
+                                dcc.RangeSlider(
+                                    id = 'sec2-month-slider',
+                                    className = "month-hour-slider",
+                                    min = 1,
+                                    max = 12,
+                                    step = 1,
+                                    value = [1, 12], 
+                                    marks = {
+                                        1: '1',
+                                        12: '12'
+                                    },
+                                    tooltip = {
+                                        'always_visible': False,
+                                        'placement' : 'top'
+                                    },
+                                    allowCross = True
+                                ),
+                            ]
+                        ),
+                        html.Div(
+                            className = 'container-row full-width container-center',
+                            children = [
+                                html.H6("Hour Range"),
+                                dcc.RangeSlider(
+                                    className = "month-hour-slider",
+                                    id = 'sec2-hour-slider',
+                                    min = 1,
+                                    max = 24,
+                                    step = 1,
+                                    value = [6, 20],
+                                    marks = {
+                                        1: '1',
+                                        24: '24'
+                                    },
+                                    tooltip = {
+                                        'always_visible': False,
+                                        'placement' : 'topLeft'
+                                    },
+                                    allowCross = False
+                                )
+                            ]
                         ),
                     ]
-                ),
-                dbc.Checklist(
-                    options = [
-                        {"label": "Apply Time Filters", "value": "time"},
-                    ],
-                    value = ["time"],
-                    id = "sec2-time-filter-input",
-                ),
+                ), 
                 html.Div(
-                    className = 'container-row full-width container-center',
+                    className = "container-col container-center one-of-three-container",
                     children = [
-                        html.H6("Month Range"),
-                        dcc.RangeSlider(
-                            id = 'sec2-month-slider',
-                            className = "month-hour-slider",
-                            min = 1,
-                            max = 12,
-                            step = 1,
-                            value = [1, 12], 
-                            marks = {
-                                1: '1',
-                                12: '12'
-                            },
-                            tooltip = {
-                                'always_visible': False,
-                                'placement' : 'top'
-                            },
-                            allowCross = True
-                        ),
-                    ]
-                ),
-                html.Div(
-                    className = 'container-row full-width container-center',
-                    children = [
-                        html.H6("Hour Range"),
-                        dcc.RangeSlider(
-                            className = "month-hour-slider",
-                            id = 'sec2-hour-slider',
-                            min = 1,
-                            max = 24,
-                            step = 1,
-                            value = [6, 20],
-                            marks = {
-                                1: '1',
-                                24: '24'
-                            },
-                            tooltip = {
-                                'always_visible': False,
-                                'placement' : 'topLeft'
-                            },
-                            allowCross = False
-                        )
-                    ]
-                ),
-                dbc.Checklist(
-                    options = [
-                        {"label": "Apply Data Filters", "value": "data"},
-                    ],
-                    value = [],
-                    id = "sec2-data-filter-input",
-                ),
-                html.Div(
-                    className = "container-row row-center full-width",
-                    children = [
-                        html.H6(
-                            className = "text-next-to-input", 
-                            children = ["Filter Variable:"]
-                        ),
-                        dcc.Dropdown(
-                            id = "sec2-data-filter-var", 
+                        dbc.Checklist(
                             options = [
-                                {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                            ], 
-                            value = 'RH'
+                                {"label": "Apply Data Filters", "value": "data"},
+                            ],
+                            value = [],
+                            id = "sec2-data-filter-input",
                         ),
+                        html.Div(
+                            className = "container-row row-center full-width",
+                            children = [
+                                html.H6(
+                                    className = "text-next-to-input", 
+                                    children = ["Filter Variable:"]
+                                ),
+                                dcc.Dropdown(
+                                    id = "sec2-data-filter-var", 
+                                    options = [
+                                        {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                                    ], 
+                                    value = 'RH'
+                                ),
+                            ]
+                        ),
+                        html.Div(
+                            className = "container-row row-center full-width",
+                            children = [
+                                html.H6(
+                                    className = "text-next-to-input",
+                                    children = ["Min Value:"]
+                                ),
+                                dbc.Input(
+                                    className = "num-input",
+                                    id = "sec2-min-val",
+                                    placeholder = "Enter a number for the min val",
+                                    type = "number", 
+                                    min = 0, 
+                                    step = 1, 
+                                ),
+                            ]
+                        ),
+                        html.Div(
+                            className = "container-row row-center full-width",
+                            children = [
+                                html.H6(
+                                    className = "text-next-to-input",
+                                    children = ["Max Value:"]
+                                ),
+                                dbc.Input(
+                                    className = "num-input",
+                                    id = "sec2-max-val",
+                                    placeholder = "Enter a number for the max val",
+                                    type = "number", 
+                                    min = 0, 
+                                    step = 1,
+                                ),
+                            ]
+                        ),
+                        # dbc.Button(
+                        #     "Apply", color = "primary", className = "mr-1", id = "tab6-sec2-data-button"
+                        # )
                     ]
-                ),
-                html.Div(
-                    className = "container-row row-center full-width",
-                    children = [
-                        html.H6(
-                            className = "text-next-to-input",
-                            children = ["Min Value:"]
-                        ),
-                        dbc.Input(
-                            className = "num-input",
-                            id = "sec2-min-val",
-                            placeholder = "Enter a number for the min val",
-                            type = "number", 
-                            min = 0, 
-                            step = 1, 
-                            value = 15
-                        ),
-                    ]
-                ),
-                html.Div(
-                    className = "container-row row-center full-width",
-                    children = [
-                        html.H6(
-                            className = "text-next-to-input",
-                            children = ["Max Value:"]
-                        ),
-                        dbc.Input(
-                            className = "num-input",
-                            id = "sec2-max-val",
-                            placeholder = "Enter a number for the max val",
-                            type = "number", 
-                            min = 0, 
-                            step = 1,
-                            value = 25
-                        ),
-                    ]
-                ),
-                dbc.Button(
-                    "Go", color = "primary", className = "mr-1", id = "tab6-sec2-data-button"
                 )
             ]
     )
@@ -220,166 +233,183 @@ def section_three_inputs():
     """
     """
     return html.Div(
-        className = "container-col container-center full-width",
+        className = "container-row full-width three-inputs-container",
         children = [
             html.Div(
-                className = "container-row row-center full-width",
+                className = "container-col container-center one-of-three-container",
                 children = [
-                    html.H6(
-                        className = "text-next-to-input", 
-                        children = ["X Variable:"]
+                    html.Div(
+                        className = "container-row row-center full-width",
+                        children = [
+                            html.H6(
+                                className = "text-next-to-input", 
+                                children = ["X Variable:"]
+                            ),
+                            dcc.Dropdown(
+                                className = "tab6-sec3-dropdown",
+                                id = "var-x-dropdown", 
+                                options = [
+                                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                                ], 
+                                value = 'DBT'
+                            ),
+                        ]
                     ),
-                    dcc.Dropdown(
-                        id = "var-x-dropdown", 
+                    html.Div(
+                        className = "container-row row-center full-width",
+                        children = [
+                            html.H6(
+                                className = "text-next-to-input", 
+                                children = ["Y Variable:"]
+                            ),
+                            dcc.Dropdown(
+                                className = "tab6-sec3-dropdown",
+                                id = "var-y-dropdown", 
+                                options = [
+                                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                                ], 
+                                value = 'RH'
+                            ),
+                        ]
+                    ),
+                    html.Div(
+                        className = "container-row row-center full-width",
+                        children = [
+                            html.H6(
+                                className = "text-next-to-input", 
+                                children = ["Color By:"]
+                            ),
+                            dcc.Dropdown(
+                                className = "tab6-sec3-dropdown",
+                                id = "colorby-dropdown", 
+                                options = [
+                                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                                ], 
+                                value = 'GHrad'
+                            ),
+                        ]
+                    ),
+                ]
+            ),
+            html.Div(
+                className = "container-col container-center one-of-three-container",
+                children = [
+                    dbc.Checklist(
                         options = [
-                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                        ], 
-                        value = 'DBT'
+                            {"label": "Apply Time Filters", "value": "time"},
+                        ],
+                        value = ["time"],
+                        id = "sec3-time-filter-input",
+                    ),
+                    html.Div(
+                        className = 'container-row full-width container-center',
+                        children = [
+                            html.H6("Month Range"),
+                            dcc.RangeSlider(
+                                id = "sec3-query-month-slider",
+                                min = 1,
+                                max = 12,
+                                step = 1,
+                                value = [1, 12], 
+                                marks = {
+                                    1: '1',
+                                    12: '12'
+                                },
+                                tooltip = {
+                                    'always_visible': False,
+                                    'placement' : 'top'
+                                },
+                                allowCross = True
+                            ),
+                        ]
+                    ),
+                    html.Div(
+                        className = 'container-row full-width container-center',
+                        children = [
+                            html.H6("Hour Range"),
+                            dcc.RangeSlider(
+                                id = "sec3-query-hour-slider",
+                                min = 1,
+                                max = 24,
+                                step = 1,
+                                value = [6, 20],
+                                marks = {
+                                    1: '1',
+                                    24: '24'
+                                },
+                                tooltip = {
+                                    'always_visible': False,
+                                    'placement' : 'topLeft'
+                                },
+                                allowCross = False
+                            )
+                        ]
                     ),
                 ]
             ),
             html.Div(
-                className = "container-row row-center full-width",
+                className = "container-col container-center one-of-three-container",
                 children = [
-                    html.H6(
-                        className = "text-next-to-input", 
-                        children = ["Y Variable:"]
-                    ),
-                    dcc.Dropdown(
-                        id = "var-y-dropdown", 
+                    dbc.Checklist(
                         options = [
-                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                        ], 
-                        value = 'RH'
+                            {"label": "Apply Data Filters", "value": "data"},
+                        ],
+                        value = [],
+                        id = "sec3-data-filter-input",
+                    ),
+                    html.Div(
+                        className = "container-row row-center full-width",
+                        children = [
+                            html.H6(
+                                className = "text-next-to-input", 
+                                children = ["Filter Variable:"]
+                            ),
+                            dcc.Dropdown(
+                                className = "tab6-sec3-dropdown",
+                                id = "sec3-filter-var-dropdown", 
+                                options = [
+                                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                                ], 
+                                value = 'RH'
+                            ),
+                        ]
+                    ),
+                    html.Div(
+                        className = "container-row row-center full-width",
+                        children = [
+                            html.H6(
+                                className = "text-next-to-input",
+                                children = ["Min Value:"]
+                            ),
+                            dbc.Input(
+                                className = "num-input",
+                                id = "sec3-min-val",
+                                placeholder = "Enter a number for the min val",
+                                type = "number", 
+                                min = 0, 
+                                step = 1
+                            ),
+                        ]
+                    ),
+                    html.Div(
+                        className = "container-row row-center full-width",
+                        children = [
+                            html.H6(
+                                className = "text-next-to-input",
+                                children = ["Max Value:"]
+                            ),
+                            dbc.Input(
+                                className = "num-input",
+                                id = "sec3-max-val",
+                                placeholder = "Enter a number for the max val",
+                                type = "number", 
+                                min = 0, 
+                                step = 1
+                            ),
+                        ]
                     ),
                 ]
-            ),
-            html.Div(
-                className = "container-row row-center full-width",
-                children = [
-                    html.H6(
-                        className = "text-next-to-input", 
-                        children = ["Color By:"]
-                    ),
-                    dcc.Dropdown(
-                        id = "colorby-dropdown", 
-                        options = [
-                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                        ], 
-                        value = 'GHrad'
-                    ),
-                ]
-            ),
-            dbc.Checklist(
-                options = [
-                    {"label": "Apply Time Filters", "value": "time"},
-                ],
-                value = ["time"],
-                id = "sec3-time-filter-input",
-            ),
-            html.Div(
-                className = 'container-row full-width container-center',
-                children = [
-                    html.H6("Month Range"),
-                    dcc.RangeSlider(
-                        className = "month-hour-slider",
-                        id = "sec3-query-month-slider",
-                        min = 1,
-                        max = 12,
-                        step = 1,
-                        value = [1, 12], 
-                        marks = {
-                            1: '1',
-                            12: '12'
-                        },
-                        tooltip = {
-                            'always_visible': False,
-                            'placement' : 'top'
-                        },
-                        allowCross = True
-                    ),
-                ]
-            ),
-            html.Div(
-                className = 'container-row full-width container-center',
-                children = [
-                    html.H6("Hour Range"),
-                    dcc.RangeSlider(
-                        className = "month-hour-slider",
-                        id = "sec3-query-hour-slider",
-                        min = 1,
-                        max = 24,
-                        step = 1,
-                        value = [6, 20],
-                        marks = {
-                            1: '1',
-                            24: '24'
-                        },
-                        tooltip = {
-                            'always_visible': False,
-                            'placement' : 'topLeft'
-                        },
-                        allowCross = False
-                    )
-                ]
-            ),
-            dbc.Checklist(
-                options = [
-                    {"label": "Apply Data Filters", "value": "data"},
-                ],
-                value = [],
-                id = "sec3-data-filter-input",
-            ),
-            html.Div(
-                className = "container-row row-center full-width",
-                children = [
-                    html.H6(
-                        className = "text-next-to-input", 
-                        children = ["Filter Variable:"]
-                    ),
-                    dcc.Dropdown(
-                        id = "sec3-filter-var-dropdown", 
-                        options = [
-                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                        ], 
-                        value = 'RH'
-                    ),
-                ]
-            ),
-            html.Div(
-                className = "container-row row-center full-width",
-                children = [
-                    html.H6(
-                        className = "text-next-to-input",
-                        children = ["Min Value:"]
-                    ),
-                    dbc.Input(
-                        className = "num-input",
-                        id = "sec3-min-val",
-                        placeholder = "Enter a number for the min val",
-                        type = "number", 
-                        min = 0, 
-                        step = 1
-                    ),
-                ]
-            ),
-            html.Div(
-                className = "container-row row-center full-width",
-                children = [
-                    html.H6(
-                        className = "text-next-to-input",
-                        children = ["Max Value:"]
-                    ),
-                    dbc.Input(
-                        className = "num-input",
-                        id = "sec3-max-val",
-                        placeholder = "Enter a number for the max val",
-                        type = "number", 
-                        min = 0, 
-                        step = 1
-                    ),
-                ]
-            ),
+            )
         ]
     )
 
