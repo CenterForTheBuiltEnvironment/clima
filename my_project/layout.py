@@ -53,7 +53,7 @@ def build_banner():
                 children = [
                     html.H1(
                         id = "banner-title",
-                        children = ["Berkeley Clima Tool"]),
+                        children = ["CBE Clima Tool"]),
                     html.H5(
                         id = "banner-subtitle",
                         children = ["Current Location: N/A"]),
