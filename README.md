@@ -1,4 +1,4 @@
-# epw_viz
+# Clima Tool
 
 **Description**
 Display climatic data
