@@ -27,7 +27,7 @@ from my_project.template_graphs import (barchart, daily_profile, heatmap,
 app = Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 server = app.server 
 
-app.title = "Berkeley Clima Tool"
+app.title = "CBE Clima Tool"
 app.layout = html.Div(
     id = 'big-container',
     children = [
