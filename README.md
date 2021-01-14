@@ -1,7 +1,7 @@
-# epw_viz
+# Clima Tool
 
 **Description**
-Display climatic data
+Display climatic data contained in EPW files
 
 **Built with**
 * [Dash] (https://plotly.com/dash/) - Framework for building the web app
