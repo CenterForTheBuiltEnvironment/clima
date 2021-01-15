@@ -28,6 +28,19 @@ def tab_one():
                 id = "tab-one-map",
                 src = "https://www.ladybug.tools/epwmap/"
             ), 
+            html.P(
+                children = [
+                    "This ",
+                    html.A(
+                        "EPW Map",
+                        href = "https://www.ladybug.tools/epwmap/"),
+                    " has been developed by and is used with kind permission of the amazing folks at ",
+                    html.A(
+                        "Ladybug Tools",
+                        href = "https://www.ladybug.tools/"
+                    )
+                ]
+            )
         ]
     )
       

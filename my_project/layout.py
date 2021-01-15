@@ -22,7 +22,7 @@ def new_build_footer():
                         ],
                         href = 'https://cbe.berkeley.edu/'
                     ),
-                    html.P("Copyright")
+                    html.P("The CBE Clima Tool is licensed under a Creative Commons Attribution-Noncomercial 4.0 International License")
                 ]
             ),
             html.Div(
@@ -30,12 +30,7 @@ def new_build_footer():
                 id = "footer-right-container",
                 children = [
                     html.P("Developed by Giovanni Betti and Christine Nguyen"),
-                    html.A(
-                        'EPW Map', 
-                        href = "https://www.ladybug.tools/epwmap/",
-                        id = 'map-credits'
-                    ), 
-                    html.P("has been developed by and is used iwth kind permission of the amazing folks at Ladybug Tools")
+                    html.P("Note: This page is intended for viewing in Google Chrome."),
                 ]
             )
         ]
