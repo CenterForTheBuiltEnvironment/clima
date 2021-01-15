@@ -4,6 +4,13 @@
     justify-content: space-between;
     background-color: #003262;
     color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+#logo-small {
+    height: 6em;
 }
 
 #banner-text-left * {

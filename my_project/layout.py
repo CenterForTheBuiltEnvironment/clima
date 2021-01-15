@@ -49,14 +49,30 @@ def build_banner():
         children = [
             html.Div(
                 id = "banner-text-left",
-                className = "container-col",
+                className = "container-row",
                 children = [
-                    html.H1(
-                        id = "banner-title",
-                        children = ["CBE Clima Tool"]),
-                    html.H5(
-                        id = "banner-subtitle",
-                        children = ["Current Location: N/A"]),
+                    html.A(
+                        href = "https://cbe.berkeley.edu/",
+                        children = [
+                            html.Img(
+                                id = "logo-small",
+                                src = "assets/img/cbe-logo-small.png"
+                            ),
+                        ]
+                    ),
+                    html.Div(
+                        className = "container-col",
+                        children = [
+                            html.H1(
+                                id = "banner-title",
+                                children = ["CBE Clima Tool"]
+                            ),
+                            html.H5(
+                                id = "banner-subtitle",
+                                children = ["Current Location: N/A"]
+                            ),
+                        ]
+                    ),
                 ]
             ),
             html.Div(
