@@ -4,39 +4,75 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
-
-def build_footer():
-    """ Build the footer at the bottom of the page
-    """
+def new_build_footer():
     return html.Div(
         id = "footer-container",
         className = "container-row",
         children = [
-            html.A(
-                children = [
-                    html.Img(
-                        id = "cbe-logo", 
-                        src = "assets/img/cbe-logo.png"
-                    )
-                ],
-                href = 'https://cbe.berkeley.edu/'
-            ),
             html.Div(
                 className = "container-col",
+                id = "footer-left-container",
                 children = [
-                    html.A(children = ["Report a bug"], href = "https://om8d9aqiuwr.typeform.com/to/VrsLqx2r"), 
-                    html.P("Filler text"),
+                    html.A(
+                        children = [
+                            html.Img(
+                                id = "cbe-logo", 
+                                src = "assets/img/cbe-logo.png"
+                            )
+                        ],
+                        href = 'https://cbe.berkeley.edu/'
+                    ),
+                    html.P("Copyright")
                 ]
             ),
             html.Div(
-                className = "container-col",
+                className = "container-row",
+                id = "footer-right-container",
                 children = [
-                    html.P("Filler text"),
-                    html.P("Filler text")
+                    html.P("Developed by Giovanni Betti and Christine Nguyen"),
+                    html.A(
+                        'EPW Map', 
+                        href = "https://www.ladybug.tools/epwmap/",
+                        id = 'map-credits'
+                    ), 
+                    html.P("has been developed by and is used iwth kind permission of the amazing folks at Ladybug Tools")
                 ]
-            ),
+            )
         ]
     )
+
+# def build_footer():
+#     """ Build the footer at the bottom of the page
+#     """
+#     return html.Div(
+#         id = "footer-container",
+#         className = "container-row",
+#         children = [
+#             html.A(
+#                 children = [
+#                     html.Img(
+#                         id = "cbe-logo", 
+#                         src = "assets/img/cbe-logo.png"
+#                     )
+#                 ],
+#                 href = 'https://cbe.berkeley.edu/'
+#             ),
+#             html.Div(
+#                 className = "container-col",
+#                 children = [
+#                     html.A(children = ["Report a bug"], href = "https://om8d9aqiuwr.typeform.com/to/VrsLqx2r"), 
+#                     html.P("Filler text"),
+#                 ]
+#             ),
+#             html.Div(
+#                 className = "container-col",
+#                 children = [
+#                     html.P("Filler text"),
+#                     html.P("Filler text")
+#                 ]
+#             ),
+#         ]
+#     )
 
 def build_banner():
     """ Build the banner at the top of the page.
@@ -153,7 +189,7 @@ def build_tabs():
                     html.Div(
                         id = 'tabs-content'
                     ), 
-                    build_footer(), 
+                    new_build_footer()
                 ]
             ),
             

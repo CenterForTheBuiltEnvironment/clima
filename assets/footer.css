@@ -1,5 +1,6 @@
 #footer-container {
-    justify-content: center;
+    padding: 0 10% 0 10%;
+    justify-content: space-between;
     align-items: center;
     color: white;
     background-color: #003262;

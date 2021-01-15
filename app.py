@@ -7,7 +7,8 @@ from dash.exceptions import PreventUpdate
 
 from my_project.extract_df import create_df
 from my_project.global_scheme import month_lst
-from my_project.layout import build_banner, build_footer, build_tabs
+from my_project.layout import build_banner, build_tabs
+from my_project.construction import construction
 from my_project.tab_five.tab_five import tab_five
 from my_project.tab_four.tab_four import tab_four
 from my_project.tab_four.tab_four_graphs import (lat_long_solar, monthly_solar,
@@ -61,17 +62,9 @@ def render_content(tab):
     elif tab == 'tab-6':
         return tab_six()
     elif tab == 'tab-7':
-        return html.Div(
-            children = [
-                html.H3('Tab content 7')
-            ]
-        )
+        return construction()
     elif tab == 'tab-8':
-        return html.Div(
-            children = [
-                html.H3('Tab content 8')
-            ]
-        )
+        return construction()
 
 #######################
 ### TAB ONE: SELECT ###        
