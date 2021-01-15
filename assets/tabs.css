@@ -106,7 +106,17 @@
 }
 
 .tab-two-section {
-    padding-bottom: 24px;
+    padding-bottom: 16px;
+}
+
+#tab2-sec1-container, #tab2-sec2-container {
+    background-color: rgb(241, 243, 245);
+    margin-bottom: 32px;
+    padding-bottom: 0px;
+}
+
+#location-info, #location-description {
+    padding: 12px 12px 12px 12px; 
 }
 
 p {
@@ -118,7 +128,7 @@ p {
 }
 
 #tooltip-title-container {
-    padding: 0px;
+    padding: 12px 12px 0px 12px;
 }
 
 #tooltip-title-container h5 {

@@ -24,6 +24,7 @@ def map_section():
     """
     return html.Div(
         className = 'container-col tab-two-section',
+        id = "tab2-sec1-container",
         children = [
             html.Div(
                 className = 'container-col tab-two-section',
@@ -58,6 +59,7 @@ def graph_section():
     """
     return html.Div(
             className = "tab-container tab-two-section",
+            id = "tab2-sec2-container",
             children = [
                 html.Div(
                     className = "container-col",
