@@ -241,10 +241,33 @@ range_dict = {
 ### Misc. ###
 #############
 month_lst = ["Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+
+"""
 template = "plotly"
 config = {
     'modeBarButtonsToRemove': ['toggleSpikelines', 'hoverCompareCartesian', "pan2d", "lasso2d", "zoomIn2d", "zoomOut2d", "hoverClosestCartesian"],
     "modeBarButtonsToAdd": ["select2d"],
     'displaylogo': False,
     "displayModeBar": "hover"
+}
+
+"""
+
+import plotly.io as pio
+
+clima_template = "plotly_white"
+
+pio.templates.default = clima_template
+template=clima_template
+
+config={
+    'modeBarButtonsToRemove': 
+    ['toggleSpikelines','hoverCompareCartesian',"select2d","zoom2d",
+     "autoScale2d","resetScale2d","pan2d","lasso2d",
+     "zoomIn2d","zoomOut2d","hoverClosestCartesian"],
+    'displaylogo': False,
+     "displayModeBar": "hover",
+     'toImageButtonOptions': {
+    'format': 'svg',
+    'filename': "Clima tool graph"}
 }
