@@ -110,7 +110,7 @@
 }
 
 #tab2-sec1-container, #tab2-sec2-container {
-    background-color: rgb(241, 243, 245);
+    /* background-color: rgb(241, 243, 245); */
     margin-bottom: 32px;
     padding-bottom: 0px;
 }
