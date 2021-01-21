@@ -103,6 +103,7 @@
 /* Tab Two */
 #tab-two-container {
     justify-content: space-between;
+    width: 100vw;
 }
 
 .tab-two-section {
@@ -113,6 +114,11 @@
     /* background-color: rgb(241, 243, 245); */
     margin-bottom: 32px;
     padding-bottom: 0px;
+}
+
+#tab2-sec2-container {
+    height: 100vh;
+    width: 100vw; 
 }
 
 #location-info, #location-description {
@@ -137,7 +143,15 @@ p {
 
 #graph-container {
     justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    flex-wrap: nowrap;
 }
+
+#temp-profile-graph, #humidity-profile-graph, #solar-radiation-graph, #wind-speed-graph {
+    flex: 1;
+}
+
 
 /* Tab Four */
 #tab-four-container {

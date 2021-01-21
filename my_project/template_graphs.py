@@ -39,11 +39,11 @@ def violin(df, var, global_local):
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
     fig = go.Figure()
-    fig.add_trace(go.Violin(x = df["fake_year"], y = data_day, line_color = 'rgb(200, 10, 10)', name = "Day", side = 'negative'))
-    fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = 'rgb(0, 200, 200)', name = "Night", side = 'positive'))
+    fig.add_trace(go.Violin(x = df["fake_year"], y = data_day, line_color = "#ffaa00", name = "Day", side = 'negative'))
+    fig.add_trace(go.Violin(x = df["fake_year"], y = data_night, line_color = "#00264d", name = "Night", side = 'positive'))
     fig.update_yaxes(range = range_y)
     fig.update_traces(meanline_visible = True, orientation = 'v', width = 0.8, points = False)
-    fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, height = 1000, width = 350, violingap = 0, violingroupgap = 0, violinmode = 'overlay')
+    fig.update_layout(xaxis_showgrid = False, xaxis_zeroline = False, violingap = 0, violingroupgap = 0, violinmode = 'overlay')
     title = var_name + " (" + var_unit + ")"
     fig.update_layout(template = template, title = title)
     return fig

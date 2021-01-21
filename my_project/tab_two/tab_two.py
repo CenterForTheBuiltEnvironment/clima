@@ -58,16 +58,11 @@ def graph_section():
     the 'Climate Profiles' title and the graphs. 
     """
     return html.Div(
-            className = "tab-container tab-two-section",
+            className = "tab-container tab-two-section container-col",
             id = "tab2-sec2-container",
             children = [
-                html.Div(
-                    className = "container-col",
-                    children = [
-                        climate_profiles_title(), 
-                        climate_profiles_graphs()
-                    ]
-                )
+                climate_profiles_title(), 
+                climate_profiles_graphs()
             ]
         )
 
