@@ -82,20 +82,10 @@ def tab_four():
                 id = 'solar-dropdown-output',
                 config = config
             ), 
-            html.Div(
-                className = 'container-row full-width',
-                id = 'tab-four-subcontainer',
-                children = [
-                    dcc.Graph(
-                        id = 'yearly-solar',
-                        config = config
-                    ),
-                    dcc.Graph(
-                        id = 'monthly-solar',
-                        config = config
-                    ), 
-                ]
-            ),
+            dcc.Graph(
+                id = 'monthly-solar',
+                config = config
+            ), 
             dcc.Graph(
                 id = 'cloud-cover',
                 config = config

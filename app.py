@@ -186,7 +186,6 @@ def update_tab_three(ts, global_local, df, meta):
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
     Output('monthly-solar', 'figure'),
-    Output('yearly-solar', 'figure'),
     Output('cloud-cover', 'figure'),
 
     [Input("solar-dropdown", 'value')],
@@ -202,15 +201,14 @@ def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
 
     # Sun Radiation
     monthly = monthly_solar(df, meta)
-    yearly = yearly_solar_radiation(df)
 
     # Cloud Cover 
     cover = barchart(df, 'Tskycover', [False], [False, '', 3, 7], True)
 
     if solar_dropdown == 'polar':
-        return polar_solar(df, meta), monthly, yearly, cover 
+        return polar_solar(df, meta), monthly, cover 
     else:
-        return lat_long_solar(df, meta), monthly, yearly, cover
+        return lat_long_solar(df, meta), monthly, cover
 
 ### CUSTOM SUNPATH ###
 @app.callback(
