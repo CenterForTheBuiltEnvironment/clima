@@ -3,12 +3,13 @@
 #########################
 blue_red_yellow = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
 dry_humid = ["#ffe600", "#00c8ff", "#0000ff"]
-sun_colors = ["#293a59", "#ff0000", "#ffff00", "#ffffff"]
+sun_colors = ["#293a59","#960c2c", "#ff0000","#ff7b00","#fffc00","#ffff7b","#ffffff"]
 light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
 bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
 Wspeed_color = ["#ffffff", "#b2f2ff", "#33ddff", "#00aaff", "#0055ff", "#0000ff", "#aa00ff", "#ff00ff", "#cc0000", "#ffaa00"]
 Wdir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
 cloud_colors = ["#00aaff", "#ffffff", "#c2c2c2"]
+utci_categories_color=["#2B2977","#38429B","#4253A4","#4B62AD","#68B8E7","#53B848","#EE8522","#EA2C24","#B12224","#751613"]
 
 
 color_dict = {
@@ -56,8 +57,25 @@ color_dict = {
     'hour_color' : ["#000000", "#355e7e", "#6b5c7b", "#c06c84", "#f8b195", "#c92a42", "#c92a42", "#c92a42", "#000000"],
     "Apressure_color" : Wspeed_color,
 
+    #UTCI temperatures
+    "utci_Sun_Wind_color":blue_red_yellow,
+    "utci_noSun_Wind_color":blue_red_yellow,
+    "utci_Sun_noWind_color":blue_red_yellow,
+    "utci_noSun_noWind_color":blue_red_yellow,
 
-}
+    #UTCI categories 
+    "utci_Sun_Wind_categories_color":utci_categories_color,
+    "utci_noSun_Wind_categories_color":utci_categories_color,
+    "utci_Sun_noWind_categories_color":utci_categories_color,
+    "utci_noSun_noWind_categories_color":utci_categories_color,
+    
+    #other psychrometric quantities
+    "p_vap_color":dry_humid,
+    "hr_color":dry_humid,
+    "t_wb_color":blue_red_yellow,
+    "t_dp_color":blue_red_yellow,
+    "h_color":blue_red_yellow,
+    }
 
 ########################
 ### Units Dictionary ###
@@ -110,8 +128,26 @@ unit_dict = {
     "apparent_elevation_unit" : "\u00B0 deg",
     "elevation_unit" : "\u00B0 deg",
     "azimuth_unit" : "\u00B0 deg",
-    "equation_of_time_unit" : "\u00B0 deg"
-}
+    "equation_of_time_unit" : "\u00B0 deg",
+
+    #UTCI temperatures
+    "utci_Sun_Wind_unit":"\u00B0 C", # "&#8451",
+    "utci_noSun_Wind_unit":"\u00B0 C", # "&#8451",
+    "utci_Sun_noWind_unit":"\u00B0 C", # "&#8451",
+    "utci_noSun_noWind_unit":"\u00B0 C", # "&#8451",
+
+    #UTCI categories
+    "utci_Sun_Wind_categories_unit":"Thermal stress",
+    "utci_noSun_Wind_categories_unit":"Thermal stress",
+    "utci_Sun_noWind_categories_unit":"Thermal stress",
+    "utci_noSun_noWind_categories_unit":"Thermal stress",
+    #other psychrometric values
+    "p_vap_unit":"Pa",
+    "hr_unit":"kg water/kg dry air",
+    "t_wb_unit":"\u00B0 C", # "&#8451"
+    "t_dp_unit":"\u00B0 C", # "&#8451"
+    "h_unit":"J/kg dry air",
+    }
 
 ####################
 ### Global Names ###
@@ -164,8 +200,27 @@ name_dict = {
     "apparent_elevation_name": "Apparent elevation",
     "elevation_name": "Elevation",
     "azimuth_name": "Azimuth",
-    "equation_of_time_name": "Equation of time"
-}
+    "equation_of_time_name": "Equation of time",
+
+    # UTCI temperatures
+    "utci_Sun_Wind_name":"UTCI: Sun & Wind",
+    "utci_noSun_Wind_name":"UTCI: no Sun & Wind",
+    "utci_Sun_noWind_name":"UTCI: Sun & no WInd",
+    "utci_noSun_noWind_name":"UTCI: no Sun & no Wind",
+
+    # UTCI categories
+    "utci_Sun_Wind_categories_name":"UTCI: Sun & Wind : categories",
+    "utci_noSun_Wind_categories_name":"UTCI: no Sun & Wind : categories",
+    "utci_Sun_noWind_categories_name":"UTCI: Sun & no WInd : categories",
+    "utci_noSun_noWind_categories_name":"UTCI: no Sun & no Wind : categories",
+
+    #psychrometric variables
+    "p_vap_name":"Vapor partial pressure",
+    "hr_name":"Absolute humidity",
+    "t_wb_name":"Wet bulb temperature",
+    "t_dp_name":"Dew point temperature",
+    "h_name":"Enthalpy",
+    }
 
 ######################
 ### Dropdown Names ###
@@ -189,6 +244,19 @@ dropdown_names = {
     "Total sky cover" : "Tskycover",
     "Opaque sky cover" : "Oskycover",
     "Visibility" : "Vis",
+    #"UTCI: Sun & Wind":"utci_Sun_Wind_name",
+    #"UTCI: no Sun & Wind":"utci_noSun_Wind_name",
+    #"UTCI: Sun & no WInd":"utci_Sun_noWind_name",
+    #"UTCI: no Sun & no Wind":"utci_noSun_noWind_name",
+    #"UTCI: Sun & Wind : categories":"utci_Sun_Wind_categories_name",
+    #"UTCI: no Sun & Wind : categories":"utci_noSun_Wind_categories_name",
+    #"UTCI: Sun & no WInd : categories":"utci_Sun_noWind_categories_name",
+    #"UTCI: no Sun & no Wind : categories":"utci_noSun_noWind_categories_name",
+    #"Vapor partial pressure":"p_vap_name",
+    #"Absolute humidity":"hr_name",
+    #"Wet bulb temperature":"t_wb_name",
+    #"Dew point temperature":"t_dp_name",
+    #"Enthalpy":"h_name",
 }
 
 ###########################
@@ -243,6 +311,25 @@ range_dict = {
     "elevation_range" : [-90,90],
     "azimuth_range" : [0,360],
     "equation_of_time_range" : [-20,20],
+
+    #utci temperatures
+    "utci_Sun_Wind_range":[-70,70],
+    "utci_noSun_Wind_range":[-70,70],
+    "utci_Sun_noWind_range":[-70,70],
+    "utci_noSun_noWind_range":[-70,70],
+
+    #utci categories
+    "utci_Sun_Wind_categories_range":[-5,4],
+    "utci_noSun_Wind_categories_range":[-5,4],
+    "utci_Sun_noWind_categories_range":[-5,4],
+    "utci_noSun_noWind_categories_range":[-5,4],
+
+    #other psychrometric quantities
+    "p_vap_range":[0,5000],
+    "hr_range":[0,0.03],
+    "t_wb_range":[-40,50],
+    "t_dp_range":[-40,50],
+    "h_range":[0,110000],
 }
 
 #############
