@@ -411,7 +411,7 @@ def polar_graph(df, meta, global_local, var):
           hovertemplate ="Altitude circle<br>"+str(i*10)+"\u00B0 deg",
           name="", 
           )) 
-      
+    print(solpos.columns)
     #draw annalemma
     fig.add_trace(go.Scatterpolar(
         r = 90*np.cos(np.radians(90-solpos["apparent_zenith"])),
