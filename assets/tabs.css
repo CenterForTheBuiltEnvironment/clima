@@ -3,10 +3,6 @@
     height: 100vh;
     padding: 0px;
     padding-top: 0px;
-    display: flex;
-    flex-direction: column;
-    align-content: flex-start;
-    justify-content: flex-start;
 }
 
 #tabs {
@@ -25,10 +21,6 @@
 
 #store-container { 
     padding: 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-content: flex-start;
 }
 
 #loading-container {
@@ -169,7 +161,7 @@ p {
 #tab-four-container {
     width: 100%;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
 }
 
 #solar-dropdown {
@@ -221,6 +213,7 @@ p {
 #tab-five-container {
     justify-content: center;
     align-items: center;
+    align-items: stretch;
 }
 
 #tab5-daily-container {
@@ -336,6 +329,11 @@ p {
     width: 30%;
     align-self: flex-start;
     align-items: center;
+    align-items: stretch;
+}
+
+#tab6-sec2-container {
+    align-items: stretch;
 }
 
 #sec3-query-hour-slider, #sec3-query-month-slider, #sec2-hour-slider, #sec2-month-slider {

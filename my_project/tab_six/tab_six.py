@@ -31,21 +31,36 @@ def section_one():
         className = "container-col full-width",
         children = [
             section_one_inputs(),
-            dcc.Graph(
-                className = "full-width",
-                id = 'query-yearly',
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        className = "full-width",
+                        id = 'query-yearly',
+                        config = config
+                    ),
+                ]
             ),
-            dcc.Graph(
-                className = "full-width",
-                id = 'query-daily',
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        className = "full-width",
+                        id = 'query-daily',
+                        config = config
+                    ),
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        className = "full-width",
+                        id = 'query-heatmap',
+                        config = config
+                    ),
+                ]
             ), 
-            dcc.Graph(
-                className = "full-width",
-                id = 'query-heatmap',
-                config = config
-            )
         ]
     )
 
@@ -206,13 +221,19 @@ def section_two():
     """ Return the two graphs in section two.
     """
     return html.Div(
+        id = "tab6-sec2-container",
         className = "container-col container-center full-width",
         children = [
             section_two_inputs(),
-            dcc.Graph(
-                className = "full-width",
-                id = 'custom-heatmap',
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        className = "full-width",
+                        id = 'custom-heatmap',
+                        config = config
+                    ),
+                ]
             ),
             dbc.Checklist(
                 options = [
@@ -221,11 +242,16 @@ def section_two():
                 value = [],
                 id = "normalize",
             ),
-            dcc.Graph(
-                className = "full-width",
-                id = 'custom-summary',
-                config = config
-            ),  
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        className = "full-width",
+                        id = 'custom-summary',
+                        config = config
+                    ),
+                ]
+            ),
         ]
     )
 
@@ -420,14 +446,24 @@ def section_three():
         className = "container-col full-width",
         children = [
             section_three_inputs(),
-            dcc.Graph(
-                id = "three-var",
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'three-var',
+                        config = config
+                    ),
+                ]
             ),
-            dcc.Graph(
-                id = "two-var",
-                config = config
-            ), 
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'two-var',
+                        config = config
+                    ),
+                ]
+            ),
         ]
     )
 

@@ -78,42 +78,87 @@ def tab_four():
                     ),
                 ]
             ),
-            dcc.Graph(
-                id = 'solar-dropdown-output',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'monthly-solar',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'cloud-cover',
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'solar-dropdown-output',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'monthly-solar',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'cloud-cover',
+                        config = config
+                    ), 
+                ]
             ),
             custom(),
-            dcc.Graph(
-                id = 'daily-ghrad',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'heatmap-ghrad',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'daily-dnrad',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'heatmap-dnrad',
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'daily-ghrad',
+                        config = config
+                    ), 
+                ]
             ),
-            dcc.Graph(
-                id = 'daily-difhrad',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'heatmap-difhrad',
-                config = config
-            )
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'heatmap-ghrad',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'daily-dnrad',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'heatmap-dnrad',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'daily-difhrad',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'heatmap-difhrad',
+                        config = config
+                    ), 
+                ]
+            ),
         ]
     )

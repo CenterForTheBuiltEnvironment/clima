@@ -181,15 +181,9 @@ def build_tabs():
                 id = 'store-container', 
                 children = [
                     store(),
-                    dcc.Loading(
-                        id = "loading-container",
-                        type = "default",
-                        children = [
-                            html.Div(
-                                id = 'tabs-content'
-                            ), 
-                        ],
-                    ),
+                    html.Div(
+                        id = 'tabs-content'
+                    ), 
                     new_build_footer()
                 ]
             ),

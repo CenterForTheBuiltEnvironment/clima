@@ -57,14 +57,19 @@ def graph_section():
     """ Returns the contents of the graph section which includes 
     the 'Climate Profiles' title and the graphs. 
     """
-    return html.Div(
-            className = "tab-container tab-two-section container-col",
-            id = "tab2-sec2-container",
-            children = [
-                climate_profiles_title(), 
-                climate_profiles_graphs()
-            ]
-        )
+    return dcc.Loading(
+        type = "circle",
+        children = [
+            html.Div(
+                className = "tab-container tab-two-section container-col",
+                id = "tab2-sec2-container",
+                children = [
+                    climate_profiles_title(), 
+                    climate_profiles_graphs()
+                ]
+            )
+        ]
+    )
 
 def climate_profiles_title():
     """
@@ -99,21 +104,41 @@ def climate_profiles_graphs():
             id = "graph-container",
             className = "container-row",
             children = [
-                dcc.Graph(
-                    id = 'temp-profile-graph',
-                    config = config
-                ), 
-                dcc.Graph(
-                    id = 'humidity-profile-graph',
-                    config = config
-                ), 
-                dcc.Graph(
-                    id = 'solar-radiation-graph',
-                    config = config
-                ), 
-                dcc.Graph(
-                    id = 'wind-speed-graph',
-                    config = config
-                )
+                dcc.Loading(
+                    type = "circle",
+                    children = [
+                        dcc.Graph(
+                            id = 'temp-profile-graph',
+                            config = config
+                        ), 
+                    ]
+                ),
+                dcc.Loading(
+                    type = "circle",
+                    children = [
+                        dcc.Graph(
+                            id = 'humidity-profile-graph',
+                            config = config
+                        ), 
+                    ]
+                ),
+                dcc.Loading(
+                    type = "circle",
+                    children = [
+                        dcc.Graph(
+                            id = 'solar-radiation-graph',
+                            config = config
+                        ), 
+                    ]
+                ),
+                dcc.Loading(
+                    type = "circle",
+                    children = [
+                        dcc.Graph(
+                            id = 'wind-speed-graph',
+                            config = config
+                        ), 
+                    ]
+                ),
             ]
         )

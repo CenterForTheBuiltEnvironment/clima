@@ -75,10 +75,15 @@ def seasonal_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "seasonal-graph",
-                                id = "winter-wind-rose",
-                                config = config
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "seasonal-graph",
+                                        id = "winter-wind-rose",
+                                        config = config
+                                    ),
+                                ]
                             ), 
                             html.P(className = "seasonal-text", id = "winter-wind-rose-text"),
                         ]
@@ -86,11 +91,16 @@ def seasonal_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "seasonal-graph",
-                                id = "spring-wind-rose",
-                                config = config
-                            ), 
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "seasonal-graph",
+                                        id = "spring-wind-rose",
+                                        config = config
+                                    ),
+                                ]
+                            ),
                             html.P(className = "seasonal-text", id = "spring-wind-rose-text"),
                         ]
                     ),
@@ -102,11 +112,16 @@ def seasonal_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "seasonal-graph",
-                                id = "summer-wind-rose",
-                                config = config
-                            ), 
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "seasonal-graph",
+                                        id = "summer-wind-rose",
+                                        config = config
+                                    ),
+                                ]
+                            ),
                             html.P(className = "seasonal-text", id = "summer-wind-rose-text"),
 
                         ]
@@ -114,11 +129,16 @@ def seasonal_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "seasonal-graph",
-                                id = "fall-wind-rose",
-                                config = config
-                            ), 
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "seasonal-graph",
+                                        id = "fall-wind-rose",
+                                        config = config
+                                    ),
+                                ]
+                            ),
                             html.P(className = "seasonal-text", id = "fall-wind-rose-text"),
                         ]
                     ),
@@ -141,21 +161,31 @@ def daily_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "daily-wind-graph",
-                                id = "morning-wind-rose",
-                                config = config
-                            ), 
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "daily-wind-graph",
+                                        id = "morning-wind-rose",
+                                        config = config
+                                    ),
+                                ]
+                            ),
                             html.P(className = "daily-text", id = "morning-windrose-text"),
                         ]
                     ),
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "daily-wind-graph",
-                                id = "noon-wind-rose",
-                                config = config
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "daily-wind-graph",
+                                        id = "noon-wind-rose",
+                                        config = config
+                                    ),
+                                ]
                             ),
                             html.P(className = "daily-text", id = "noon-windrose-text"),
                         ]
@@ -163,10 +193,15 @@ def daily_wind_rose():
                     html.Div(
                         className = "container-col",
                         children = [
-                            dcc.Graph(
-                                className = "daily-wind-graph",
-                                id = "night-wind-rose",
-                                config = config
+                            dcc.Loading(
+                                type = "circle",
+                                children = [
+                                    dcc.Graph(
+                                        className = "daily-wind-graph",
+                                        id = "night-wind-rose",
+                                        config = config
+                                    ),
+                                ]
                             ), 
                             html.P(className = "daily-text", id = "night-windrose-text"),
                         ]
@@ -264,9 +299,15 @@ def custom_windrose():
                     )
                 ]
             ),
-            dcc.Graph(
-                id = 'custom-wind-rose'
-            ), 
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = "custom-wind-rose",
+                        config = config
+                    ),
+                ]
+            ),
         ]
     )
 
@@ -277,16 +318,32 @@ def tab_five():
         className = 'container-col',
         id = 'tab-five-container',
         children = [
-            dcc.Graph(
-                id = 'wind-rose'
-            ), 
-            dcc.Graph(
-                id = 'wind-speed',
-                config = config
-            ), 
-            dcc.Graph(
-                id = 'wind-direction',
-                config = config
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = "wind-rose",
+                        config = config
+                    ),
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = "wind-speed",
+                        config = config
+                    ),
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = "wind-direction",
+                        config = config
+                    ),
+                ]
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),
