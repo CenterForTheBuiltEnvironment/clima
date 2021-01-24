@@ -12,7 +12,7 @@ def tab_three():
         children = [
             html.H5('Dry Bulb Temperature'),
             dcc.Loading(
-                type = "circle",
+                type = "graph",
                 children = [
                     dcc.Graph(
                         id = 'yearly-dbt',
@@ -21,7 +21,7 @@ def tab_three():
                 ]
             ),
             dcc.Loading(
-                type = "circle",
+                type = "cube",
                 children = [
                     dcc.Graph(
                         id = 'daily-dbt',
@@ -30,7 +30,7 @@ def tab_three():
                 ]
             ),
             dcc.Loading(
-                type = "circle",
+                type = "dot",
                 children = [
                     dcc.Graph(
                         id = 'heatmap-dbt',

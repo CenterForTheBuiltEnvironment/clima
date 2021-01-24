@@ -29,7 +29,15 @@ def new_build_footer():
                 className = "container-row",
                 id = "footer-right-container",
                 children = [
-                    html.P("Developed by Giovanni Betti and Christine Nguyen"),
+                    html.P(
+                        children = [
+                            "Developed by Giovanni Betti and", 
+                            html.A(
+                                "Christine Nguyen",
+                                href = "https://chrlng.github.io/",
+                            )
+                        ],
+                    ),
                     html.P("Note: This page is intended for viewing in Google Chrome."),
                 ]
             )
