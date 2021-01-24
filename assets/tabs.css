@@ -3,6 +3,10 @@
     height: 100vh;
     padding: 0px;
     padding-top: 0px;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: flex-start;
 }
 
 #tabs {
@@ -21,6 +25,14 @@
 
 #store-container { 
     padding: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+#loading-container {
+    top: 0;
 }
 
 .custom-tabs-container {
