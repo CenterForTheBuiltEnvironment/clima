@@ -121,26 +121,9 @@ def monthly_solar(epw_df, meta):
             ),
             row = 1, col = i + 1,
         )
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x = epw_df.loc[epw_df["month"] == i + 1, "hour"], 
-        #         y = epw_df.loc[epw_df["month"] == i + 1, "GHrad"],
-        #         mode="markers",marker_color="#ff8400",
-        #         marker_size = 2, name = monthList[i], showlegend = False
-        #     ),
-        #     row = 1, col = i + 1,
-        # )
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x = epw_df.loc[epw_df["month"] == i + 1, "hour"],
-        #         y = epw_df.loc[epw_df["month"] == i + 1, "DifHrad"],
-        #         mode = "markers", marker_color = "skyblue",
-        #         marker_size = 2, name = monthList[i], showlegend = False
-        #     ),
-        #     row = 1, col = i + 1,
-        # )
         fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
         fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
+        
     fig.update_layout(template = template)
     return fig
 
