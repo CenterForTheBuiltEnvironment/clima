@@ -13,8 +13,7 @@ from my_project.tab_five.tab_five import tab_five
 from my_project.tab_four.tab_four import tab_four
 from my_project.tab_four.tab_four_graphs import (lat_long_solar, monthly_solar,
                                                  polar_graph,
-                                                 custom_lat_long_solar,
-                                                 yearly_solar_radiation)
+                                                 custom_lat_long_solar)
 from my_project.tab_one.tab_one import tab_one
 from my_project.tab_six.tab_six import tab_six
 from my_project.tab_six.tab_six_graphs import (custom_heatmap, three_var_graph,
