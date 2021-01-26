@@ -80,6 +80,7 @@ color_dict = {
 ########################
 ### Units Dictionary ###
 ########################
+degrees_unit="\u00B0 deg"
 
 unit_dict = {
     "DOY_unit" : "days",
@@ -123,12 +124,12 @@ unit_dict = {
     "Vis_unit" : "Km",
 
     # Solar position
-    "apparent_zenith_unit" : "\u00B0 deg",
-    "zenith_unit" : "\u00B0 deg",
-    "apparent_elevation_unit" : "\u00B0 deg",
-    "elevation_unit" : "\u00B0 deg",
-    "azimuth_unit" : "\u00B0 deg",
-    "equation_of_time_unit" : "\u00B0 deg",
+    "apparent_zenith_unit" : degrees_unit,
+    "zenith_unit" : degrees_unit,
+    "apparent_elevation_unit" : degrees_unit,
+    "elevation_unit" : degrees_unit,
+    "azimuth_unit" : degrees_unit,
+    "equation_of_time_unit" : degrees_unit,
 
     #UTCI temperatures
     "utci_Sun_Wind_unit":"\u00B0 C", # "&#8451",
