@@ -92,99 +92,99 @@ def lat_long_solar(epw_df, meta):
 
     return fig 
 
-def polar_solar(epw_df, meta):
-    """
-    """
-    # Meta data
-    city = meta[1]
-    country = meta[3]
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    time_zone = float(meta[-2])
-    location_name = city + ", " + country
-    # Adjust dateime based on timezone
-    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
-    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-    date = date-tz
+# def polar_solar(epw_df, meta):
+#     """
+#     """
+#     # Meta data
+#     city = meta[1]
+#     country = meta[3]
+#     latitude = float(meta[-4])
+#     longitude = float(meta[-3])
+#     time_zone = float(meta[-2])
+#     location_name = city + ", " + country
+#     # Adjust dateime based on timezone
+#     date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
+#     tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+#     date = date-tz
 
-    tz = 'UTC'
-    times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed='left',
-                        freq = 'H', tz = tz)
-    delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-    times = times - delta
-    solpos = solarposition.get_solarposition(times, latitude, longitude)
-    # remove nighttime
-    solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+#     tz = 'UTC'
+#     times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed='left',
+#                         freq = 'H', tz = tz)
+#     delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
+#     times = times - delta
+#     solpos = solarposition.get_solarposition(times, latitude, longitude)
+#     # remove nighttime
+#     solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
 
-    fig = go.Figure()
+#     fig = go.Figure()
 
-    # draw altitude circles
-    for i in range(10):
-        pt = []
-        for j in range(360):
-            pt.append(j)
+#     # draw altitude circles
+#     for i in range(10):
+#         pt = []
+#         for j in range(360):
+#             pt.append(j)
 
-        fig.add_trace(go.Scatterpolar(
-                r = [90 * cos(radians(i * 10))] * 361,
-                theta = pt ,
-                mode = 'lines',
-                line_color = "silver",
-                line_width = 1
-            )) 
+#         fig.add_trace(go.Scatterpolar(
+#                 r = [90 * cos(radians(i * 10))] * 361,
+#                 theta = pt ,
+#                 mode = 'lines',
+#                 line_color = "silver",
+#                 line_width = 1
+#             )) 
     
-    # draw annalemma
-    fig.add_trace(go.Scatterpolar(
-                r = 90 * np.cos(np.radians(90 - solpos.apparent_zenith)),
-                theta = solpos.azimuth ,
-                mode = 'markers',
-                marker_color = "orange",
-                marker_size = 1 
-            ))
+#     # draw annalemma
+#     fig.add_trace(go.Scatterpolar(
+#                 r = 90 * np.cos(np.radians(90 - solpos.apparent_zenith)),
+#                 theta = solpos.azimuth ,
+#                 mode = 'markers',
+#                 marker_color = "orange",
+#                 marker_size = 1 
+#             ))
 
-    # draw equinox and sostices
-    for date in pd.to_datetime(['2019-03-21', '2019-06-21', '2019-12-21']):
-        times = pd.date_range(date, date+pd.Timedelta('24h'), freq = '5min', tz = tz)
-        times = times - delta
-        solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+#     # draw equinox and sostices
+#     for date in pd.to_datetime(['2019-03-21', '2019-06-21', '2019-12-21']):
+#         times = pd.date_range(date, date+pd.Timedelta('24h'), freq = '5min', tz = tz)
+#         times = times - delta
+#         solpos = solarposition.get_solarposition(times, latitude, longitude)
+#         solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
 
-        fig.add_trace(go.Scatterpolar(
-                    r = 90 * np.cos(np.radians(90 - solpos.apparent_zenith)),
-                    theta = solpos.azimuth ,
-                    mode = 'lines',
-                    line_color = "orange",
-                    line_width = 3
-                ))  
+#         fig.add_trace(go.Scatterpolar(
+#                     r = 90 * np.cos(np.radians(90 - solpos.apparent_zenith)),
+#                     theta = solpos.azimuth ,
+#                     mode = 'lines',
+#                     line_color = "orange",
+#                     line_width = 3
+#                 ))  
 
-    # draw sunpath on the 21st of each other month 
-    for date in pd.to_datetime(['2019-01-21', '2019-02-21', '2019-4-21', '2019-5-21']):
-        times = pd.date_range(date, date + pd.Timedelta('24h'), freq = '5min', tz = tz)
-        times = times - delta
-        solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+#     # draw sunpath on the 21st of each other month 
+#     for date in pd.to_datetime(['2019-01-21', '2019-02-21', '2019-4-21', '2019-5-21']):
+#         times = pd.date_range(date, date + pd.Timedelta('24h'), freq = '5min', tz = tz)
+#         times = times - delta
+#         solpos = solarposition.get_solarposition(times, latitude, longitude)
+#         solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
 
-        fig.add_trace(go.Scatterpolar(
-                    r = 90 * np.cos(np.radians(90 - solpos.apparent_zenith)),
-                    theta = solpos.azimuth ,
-                    mode = 'lines',
-                    line_color = "orange",
-                    line_width = 1
-                )) 
-    fig.update_layout(
-        title = "Spherical Sun-Path",
-        title_x = 0.5,
-        height = 600,
-        template = template,
-        showlegend = False,
-        polar = dict(
-        radialaxis_tickfont_size = 10,
-        angularaxis = dict(
-            tickfont_size = 10,
-            rotation = 90, # start position of angular axis
-            direction = "counterclockwise"
-        )
-    ))
-    return fig
+#         fig.add_trace(go.Scatterpolar(
+#                     r = 90 * np.cos(np.radians(90 - solpos.apparent_zenith)),
+#                     theta = solpos.azimuth ,
+#                     mode = 'lines',
+#                     line_color = "orange",
+#                     line_width = 1
+#                 )) 
+#     fig.update_layout(
+#         title = "Spherical Sun-Path",
+#         title_x = 0.5,
+#         height = 600,
+#         template = template,
+#         showlegend = False,
+#         polar = dict(
+#         radialaxis_tickfont_size = 10,
+#         angularaxis = dict(
+#             tickfont_size = 10,
+#             rotation = 90, # start position of angular axis
+#             direction = "counterclockwise"
+#         )
+#     ))
+#     return fig
 
 #######################
 ### SOLAR RADIATION ###
@@ -291,23 +291,22 @@ def polar_graph(df, meta, global_local, var):
         var_name = name_dict[str(var) + "_name"]
         var_color = color_dict[str(var) + "_color"]
         title = var_name + " (" + var_unit + ") on Spherical Sun-Path"
+        if global_local == "global":
+            # Set Global values for Max and minimum
+            range_z = var_range
+        else:
+            # Set maximum and minimum according to data
+            data_max = (5 * ceil(solpos[var].max() / 5))
+            data_min = (5 * floor(solpos[var].min() / 5))
+            range_z = [data_min, data_max]
+
     tz = 'UTC'
     times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed = 'left', freq = 'H', tz = tz)
     delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
     times = times - delta
     solpos = df.loc[df['apparent_elevation'] > 0, :]
-    if global_local == "global":
-        # Set Global values for Max and minimum
-        range_z = var_range
-    elif var is None:
-        # Set maximum and minimum according to data
-        data_max = (5 * ceil(solpos[var].max() / 5))
-        data_min = (5 * floor(solpos[var].min() / 5))
-        range_z = [data_min, data_max]
-    else:
-        range_z = var_range
+
     if var is None:
-        var = "orange"
         var_color = "orange"
         marker_size = 3
         title = "Spherical Sun-Path"
@@ -343,7 +342,7 @@ def polar_graph(df, meta, global_local, var):
         marker_color="orange",
         marker_size=marker_size,
         marker_line_width=0,
-        customdata=np.stack((solpos["day"],solpos["month_names_long"],solpos["hour"], 
+        customdata=np.stack((solpos["day"],solpos["month_names"],solpos["hour"], 
                         solpos["elevation"],solpos["azimuth"]),axis=-1),
         hovertemplate =
         "month: %{customdata[1]}"+
@@ -353,12 +352,8 @@ def polar_graph(df, meta, global_local, var):
         "<br>sun azimuth: %{customdata[4]:.2f}"+degrees_unit+
         "<br>",
             name="",
-        ))
-        
+        )) 
     else:
-        
-        print(var)
-        print(solpos.columns)
         fig.add_trace(go.Scatterpolar(
                 r = 90*np.cos(np.radians(90-solpos["apparent_zenith"])),
                 theta = solpos["azimuth"] ,

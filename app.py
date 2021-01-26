@@ -12,7 +12,7 @@ from my_project.construction import construction
 from my_project.tab_five.tab_five import tab_five
 from my_project.tab_four.tab_four import tab_four
 from my_project.tab_four.tab_four_graphs import (lat_long_solar, monthly_solar,
-                                                 polar_graph, polar_solar,
+                                                 polar_graph,
                                                  custom_lat_long_solar,
                                                  yearly_solar_radiation)
 from my_project.tab_one.tab_one import tab_one
@@ -206,7 +206,7 @@ def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
     cover = barchart(df, 'Tskycover', [False], [False, '', 3, 7], True)
 
     if solar_dropdown == 'polar':
-        return polar_solar(df, meta), monthly, cover 
+        return polar_graph(df, meta, global_local, None), monthly, cover 
     else:
         return lat_long_solar(df, meta), monthly, cover
 
