@@ -290,7 +290,7 @@ def polar_graph(df, meta, global_local, var):
         var_range = range_dict[str(var) + "_range"]
         var_name = name_dict[str(var) + "_name"]
         var_color = color_dict[str(var) + "_color"]
-        Title = var_name + " (" + var_unit + ") on Spherical Sun-Path"
+        title = var_name + " (" + var_unit + ") on Spherical Sun-Path"
     tz = 'UTC'
     times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed = 'left', freq = 'H', tz = tz)
     delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
@@ -312,9 +312,9 @@ def polar_graph(df, meta, global_local, var):
         marker_size = 3
         title = "Spherical Sun-Path"
     else: 
-        var = solpos[var]
+        vals = solpos[var]
         var_color = var_color
-        marker_size = (((var-var.min())/var.max()) + 1) * 4
+        marker_size = (((vals-vals.min())/vals.max()) + 1) * 4
 
 
     fig = go.Figure()
@@ -356,6 +356,9 @@ def polar_graph(df, meta, global_local, var):
         ))
         
     else:
+        
+        print(var)
+        print(solpos.columns)
         fig.add_trace(go.Scatterpolar(
                 r = 90*np.cos(np.radians(90-solpos["apparent_zenith"])),
                 theta = solpos["azimuth"] ,
@@ -443,10 +446,7 @@ def polar_graph(df, meta, global_local, var):
         #template="simple_white",
     )
 
-
-    fig.update_layout(title=title)
-
-    fig.update_layout(template=template,title=Title,)
+    fig.update_layout(template=template,title=title,)
 
     fig.update_layout(
         polar = dict(
