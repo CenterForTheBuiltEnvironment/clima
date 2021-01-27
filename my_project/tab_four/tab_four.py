@@ -10,7 +10,7 @@ def custom():
     """ Return the layout for the custom sunpath and its dropdowns.
     """
     return html.Div(
-        className = 'container-col full-width container-center',
+        className = 'container-col full-width',
         id = "tab-four-custom-sun-container",
         children = [
             html.Div(
@@ -58,7 +58,7 @@ def tab_four():
     """ Contents of tab four.
     """
     return html.Div(
-        className = "container-col tab-container full-width",
+        className = "container-col",
         id = "tab-four-container",
         children = [
             html.Div(

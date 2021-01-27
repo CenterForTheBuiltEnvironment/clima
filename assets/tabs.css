@@ -160,7 +160,7 @@ p {
 /* Tab Four */
 #tab-four-container {
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
     align-items: stretch;
 }
 
@@ -169,7 +169,7 @@ p {
 }
 
 #solar-dropdown-output {
-    width: 100%;
+    padding-left: 20%;
 }
 
 #tab-four-subcontainer {
@@ -179,14 +179,9 @@ p {
     margin-bottom: 24px;
 }
 
-#monthly-solar {
+/* #monthly-solar {
     width: 100%;
-}
-
-#yearly-solar {
-    width: 50vh;
-    height: 50vh;
-}
+} */
 
 #daily-ghrad, #heatmap-ghrad, #daily-dnrad, #heatmap-dnrad, #daily-difhrad, #heatmap-difhrad, #cloud-cover {
     width: 100%;
@@ -199,6 +194,7 @@ p {
 
 #custom-sunpath {
     width: 100%;
+    padding-left: 20%;
 }
 
 #custom-sun-view-dropdown {
