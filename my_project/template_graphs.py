@@ -66,7 +66,7 @@ def violin(df, var, global_local):
 
     Title = var_name+" ("+var_unit+")"
 
-    fig.update_layout(template=template, title=Title,dragmode=False)
+    fig.update_layout(template=template, title=Title, title_x = 0.5, dragmode = False)
     fig.update_xaxes(showline=True, linewidth=1,
                      linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=1,
