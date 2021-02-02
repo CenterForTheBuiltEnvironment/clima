@@ -283,7 +283,7 @@ def polar_graph(df, meta, global_local, var):
         angularaxis = dict(
             tickfont_size=10,
             rotation=90, # start position of angular axis
-            direction="counterclockwise"
+            direction="clockwise"
         )
         ))
 

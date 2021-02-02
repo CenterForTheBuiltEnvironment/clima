@@ -203,6 +203,7 @@ def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
 
     # Cloud Cover 
     cover = barchart(df, 'Tskycover', [False], [False, '', 3, 7], True)
+    cover = cover.update_layout(title = "Cloud Coverage")
 
     if solar_dropdown == 'polar':
         return polar_graph(df, meta, global_local, None), monthly, cover 
