@@ -395,8 +395,14 @@ def custom_lat_long_solar(df, meta, global_local, var):
                         x = solpos.azimuth ,
                         mode = 'markers',
                         marker_color = "orange",
-                        marker_size = 4 
-                    ))  
+                        marker_size = 4, 
+                        hovertemplate =
+                            "<br>sun altitude: %{y:.2f}" + degrees_unit +
+                            "<br>sun azimuth: %{x:.2f}" + degrees_unit +
+                            "<br>",
+                            name="",
+                    )
+                )  
 
     # draw sunpath on the 21st of each other month 
     for date in pd.to_datetime(['2019-01-21', '2019-02-21', '2019-4-21', '2019-5-21']):
@@ -410,7 +416,12 @@ def custom_lat_long_solar(df, meta, global_local, var):
                         x = solpos.azimuth ,
                         mode = 'markers',
                         marker_color = "orange",
-                        marker_size = 3   
+                        marker_size = 3, 
+                        hovertemplate =
+                            "<br>sun altitude: %{y:.2f}"+degrees_unit+
+                            "<br>sun azimuth: %{x:.2f}"+degrees_unit+
+                            "<br>",
+                            name="", 
                     )) 
 
     fig.update_layout(
