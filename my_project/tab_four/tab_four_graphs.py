@@ -110,18 +110,30 @@ def monthly_solar(epw_df, meta):
             go.Scatter(
                 x = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1,"hour"], 
                 y = GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "GHrad"], fill = 'tozeroy',
-                mode = "lines", line_color = "orange", line_width = 2, name = None, showlegend = False
-            ),
+                mode = "lines", line_color = "orange", line_width = 2, name = None, showlegend = False, 
+                customdata=epw_df.loc[epw_df["month"]==i+1,"month_names"],
+                hovertemplate = (
+                    '<b>'+"Global Horizontal Solar Radiation"+': %{y:.2f} '+unit_dict["GHrad_unit"]+'</b><br>'+\
+                    'Month: %{customdata}<br>'+\
+                    'Hour: %{x}:00<br>'
+                    )
+                ),
             row = 1, col = i + 1,
         )
+
         fig.add_trace(
             go.Scatter(
                 x = DifHrad_month_ave.loc[DifHrad_month_ave["month"] == i + 1, "hour"], 
                 y = DifHrad_month_ave.loc[DifHrad_month_ave["month"] == i + 1, "DifHrad"], fill = "tozeroy",
-                mode = "lines", line_color = "dodgerblue", line_width = 2, name = None, showlegend = False
+                mode = "lines", line_color = "dodgerblue", line_width = 2, name = None, showlegend = False, 
+                customdata=epw_df.loc[epw_df["month"]==i+1,"month_names"],
+                hovertemplate = ('<b>'+"Diffuse Horizontal Solar Radiation"+': %{y:.2f} '+ unit_dict["DifHrad_unit"] + '</b><br>'+\
+                                'Month: %{customdata}<br>'+\
+                                'Hour: %{x}:00<br>'),
             ),
             row = 1, col = i + 1,
         )
+
         fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
         fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
         
