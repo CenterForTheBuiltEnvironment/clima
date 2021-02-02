@@ -85,6 +85,7 @@ def lat_long_solar(epw_df, meta):
         title = "Cartesian Sun-Path",
         title_x = 0.5,
         template = template,
+        dragmode = False,
         showlegend = False, xaxis_range = [0, 360], 
         yaxis_range = [0, 90], xaxis_tickmode = "array", 
         xaxis_tickvals = [0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360]
@@ -124,7 +125,7 @@ def monthly_solar(epw_df, meta):
         fig.update_xaxes(range = [0, 25], row = 1, col = i + 1)
         fig.update_yaxes(range = [0, 1000], row = 1, col = i + 1)
         
-    fig.update_layout(template = template)
+    fig.update_layout(template = template, dragmode = False,)
     return fig
 
 
@@ -293,7 +294,7 @@ def polar_graph(df, meta, global_local, var):
         #template="simple_white",
     )
 
-    fig.update_layout(template=template,title=title,)
+    fig.update_layout(template=template,title=title,dragmode = False)
 
     fig.update_layout(
         polar = dict(
@@ -398,6 +399,7 @@ def custom_lat_long_solar(df, meta, global_local, var):
     fig.update_layout(
         title = "Cartesian Sun-Path",
         title_x = 0.5,
+        dragmode = False,
         template = template,
         showlegend = False, xaxis_range = [0, 360], 
         yaxis_range = [0, 90], xaxis_tickmode = "array", 

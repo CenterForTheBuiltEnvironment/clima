@@ -66,7 +66,7 @@ def violin(df, var, global_local):
 
     Title = var_name+" ("+var_unit+")"
 
-    fig.update_layout(template=template, title=Title,)
+    fig.update_layout(template=template, title=Title,dragmode=False)
     fig.update_xaxes(showline=True, linewidth=1,
                      linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=1,
@@ -297,7 +297,7 @@ def daily_profile(df, var, global_local):
 
     Title = var_name+" ("+var_unit+")"
 
-    fig.update_layout(template=template, title=Title,)
+    fig.update_layout(template=template, title=Title, dragmode=False)
     return fig
 
 ########################
@@ -455,7 +455,8 @@ def wind_rose(df, meta, title, month, hour, labels):
     fig.update_layout(
         autosize=True,
         polar_angularaxis_rotation=90,
-        showlegend=labels
+        showlegend=labels, 
+        dragmode=False
     )
     fig.update_xaxes(showline=True, linewidth=1,
                      linecolor='black', mirror=True)
@@ -557,7 +558,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
     data = [trace2, trace1, trace3]
 
     fig = go.Figure(data=data)
-    fig.update_layout(barmode='stack')
+    fig.update_layout(barmode='stack', dragmode=False)
 
     if normalize:
         title = "Percentage of time the " + var_name + \

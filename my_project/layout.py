@@ -169,7 +169,7 @@ def build_tabs():
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Custom Data', 
+                        label = 'Data Explorer', 
                         value = 'tab-6',
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
