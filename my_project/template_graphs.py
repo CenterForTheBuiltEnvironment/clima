@@ -168,8 +168,9 @@ def yearly_profile(df, var, global_local):
         hi80_df = pd.DataFrame({"hi80": hi80})
 
         trace3 = go.Bar(x=days, y=hi80_df["hi80"]-lo80_df["lo80"], base=lo80_df["lo80"],
-                        name='ashrae adaptive comfort (80%)',
+                        name='ASHRAE adaptive comfort (80%)',
                         marker_color="silver",
+
                         marker_opacity=0.3,
                         hovertemplate=('Max: %{y:.2f} &#8451;<br>' +
                                        'Min: %{base:.2f} &#8451;<br>')
@@ -180,7 +181,7 @@ def yearly_profile(df, var, global_local):
         hi90_df = pd.DataFrame({"hi90": hi90})
 
         trace4 = go.Bar(x=days, y=hi90_df["hi90"]-lo90_df["lo90"], base=lo90_df["lo90"],
-                        name='ashrae adaptive comfort (90%)',
+                        name='ASHRAE adaptive comfort (90%)',
                         marker_color="silver",
                         marker_opacity=0.3,
                         hovertemplate=('Max: %{y:.2f} &#8451;<br>' +
