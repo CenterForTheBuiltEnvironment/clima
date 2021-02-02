@@ -75,7 +75,7 @@ color_dict = {
     "t_wb_color":blue_red_yellow,
     "t_dp_color":blue_red_yellow,
     "h_color":blue_red_yellow,
-    }
+}
 
 ########################
 ### Units Dictionary ###
@@ -110,7 +110,7 @@ unit_dict = {
     "DifHillum_unit" : "lux",
 
     # Luminance
-    "Zlumim_unit" : "cd/m<sup>2</sup>",
+    "Zlumi_unit" : "cd/m<sup>2</sup>",
 
     # Wind
     "Wdir_unit" : "\u00B0 deg",
@@ -258,6 +258,19 @@ dropdown_names = {
     #"Wet bulb temperature":"t_wb_name",
     #"Dew point temperature":"t_dp_name",
     #"Enthalpy":"h_name",
+}
+
+tab4_explore_dropdown_names = {
+    "Extraterrestrial horizontal irradiation" : "EHrad",
+    "Horizontal infrared radiation" : "HIRrad",
+    "Global horizontal radiation" : "GHrad",
+    "Direct normal radiation" : "DNrad",
+    "Diffuse horizontal radiation" : "DifHrad",
+    "Global horizontal iluminance" : "GHillum",
+    "Direct normal iluminance" : "DNillum",
+    "Diffuse horizontal iluminance" : "DifHillum",
+    "Zenith luminance" : "Zlumi",
+    "Opaque sky cover" : "Oskycover",
 }
 
 ###########################

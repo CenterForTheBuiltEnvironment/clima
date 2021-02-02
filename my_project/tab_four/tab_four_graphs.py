@@ -294,7 +294,12 @@ def polar_graph(df, meta, global_local, var):
         #template="simple_white",
     )
 
-    fig.update_layout(template=template,title=title,dragmode = False)
+    fig.update_layout(
+        template = template, 
+        title = title, 
+        title_x = 0.5, 
+        dragmode = False
+    )
 
     fig.update_layout(
         polar = dict(

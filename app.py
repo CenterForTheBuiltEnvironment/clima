@@ -238,33 +238,20 @@ def update_tab_four(view, var, ts, global_local, df, meta):
 
 ### SECTION TWO ###
 @app.callback(
-    Output('daily-ghrad', 'figure'),
-    Output('heatmap-ghrad', 'figure'),
-    Output('daily-dnrad', 'figure'),
-    Output('heatmap-dnrad', 'figure'),
-    Output('daily-difhrad', 'figure'),
-    Output('heatmap-difhrad', 'figure'),
-    
+    Output('tab4-daily', 'figure'),
+    Output('tab4-heatmap', 'figure'),
+
+    [Input("tab4-explore-dropdown", 'value')],
     [Input('df-store', 'modified_timestamp')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_four_section_two(ts, global_local, df, meta):
+def update_tab_four_section_two(var, ts, global_local, df, meta):
     """ Update the contents of tab four section two. Passing in the general info (df, meta).
     """
     df = pd.read_json(df, orient = 'split')
-
-    # Heatmap Graphs
-    ghrad_heatmap = heatmap(df, "GHrad", global_local)
-    dnrad_heatmap = heatmap(df, "DNrad", global_local)
-    difhrad_heatmap = heatmap(df, "DifHrad", global_local)
-
-    # Daily Profile Graphs 
-    ghrad_daily = daily_profile(df, "GHrad", global_local)
-    dnrad_profile = daily_profile(df, "DNrad", global_local)
-    difhrad_profile = daily_profile(df, "DifHrad", global_local) 
-    return ghrad_daily, ghrad_heatmap, dnrad_profile, dnrad_heatmap, difhrad_profile, difhrad_heatmap
+    return daily_profile(df, var, global_local), heatmap(df, var, global_local)
 
 
 ######################

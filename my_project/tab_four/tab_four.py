@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output, State
-from my_project.global_scheme import config, dropdown_names
+from my_project.global_scheme import config, dropdown_names, tab4_explore_dropdown_names
 
 def custom():
     """ Return the layout for the custom sunpath and its dropdowns.
@@ -49,6 +49,39 @@ def custom():
             dcc.Graph(
                 id = 'custom-sunpath',
                 config = config
+            )
+        ]
+    )
+
+def explore_daily_heatmap():
+    """ Contents of the bottom part of the tab"""
+    return html.Div(
+        className = "container-col full-width",
+        children = [
+            dcc.Dropdown(
+                id = "tab4-explore-dropdown",
+                options = [
+                    {'label': i, 'value': tab4_explore_dropdown_names[i]} for i in tab4_explore_dropdown_names
+                ], 
+                value = 'GHrad'
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'tab4-daily',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'tab4-heatmap',
+                        config = config
+                    ), 
+                ]
             )
         ]
     )
@@ -106,59 +139,7 @@ def tab_four():
                 ]
             ),
             custom(),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'daily-ghrad',
-                        config = config
-                    ), 
-                ]
-            ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'heatmap-ghrad',
-                        config = config
-                    ), 
-                ]
-            ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'daily-dnrad',
-                        config = config
-                    ), 
-                ]
-            ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'heatmap-dnrad',
-                        config = config
-                    ), 
-                ]
-            ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'daily-difhrad',
-                        config = config
-                    ), 
-                ]
-            ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'heatmap-difhrad',
-                        config = config
-                    ), 
-                ]
-            ),
+            explore_daily_heatmap()
+
         ]
     )
