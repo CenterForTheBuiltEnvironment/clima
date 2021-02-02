@@ -298,6 +298,12 @@ def daily_profile(df, var, global_local):
 
     Title = var_name+" ("+var_unit+")"
 
+    fig.update_xaxes(
+        ticktext=["6", "12", "18"],
+        tickvals=["6", "12", "18"],
+        tickangle = 0
+    )
+
     fig.update_layout(template=template, title=Title, dragmode=False)
     return fig
 
