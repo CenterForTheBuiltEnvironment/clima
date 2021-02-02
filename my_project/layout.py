@@ -154,12 +154,12 @@ def build_tabs():
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Temperature/Humidity', 
+                        label = 'Temperature and Humidity', 
                         value = 'tab-3',
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
-                        label = 'Sun and Rain', 
+                        label = 'Sun and Clouds', 
                         value = 'tab-4',
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
