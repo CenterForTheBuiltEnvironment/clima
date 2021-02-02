@@ -38,6 +38,7 @@ def create_df(default_url):
     longitude = float(meta[-3])
     time_zone = float(meta[-2])
     site_elevation = meta[-1]
+    meta[-1] = ''.join([x for x in site_elevation if x.isnumeric() or x == "."])
     location_name = (city + ", " + country)
 
     lst = lst[8:len(lst) - 1]
