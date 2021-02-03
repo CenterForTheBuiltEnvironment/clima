@@ -13,86 +13,6 @@ from plotly.subplots import make_subplots
 from pvlib import solarposition
 
 
-####################################
-### POLAR/LAT-LONG GRAPH SELECT ###
-###################################
-def lat_long_solar(epw_df, meta):
-    """ Return a graph of a latitude and longitude solar diagram. 
-    """
-    # Meta data
-    city = meta[1]
-    country = meta[3]
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    time_zone = float(meta[-2])
-    location_name = city + ", " + country
-    # Adjust dateime based on timezone
-    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
-    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-    date = date-tz
-    tz = 'UTC'
-
-    times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed = 'left',
-                        freq = 'H', tz = tz)
-    delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-    times = times - delta
-    solpos = solarposition.get_solarposition(times, latitude, longitude)
-    # remove nighttime
-    solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
-
-    fig = go.Figure()
-
-    # draw annalemma
-    fig.add_trace(go.Scatter(
-        y = (90 - solpos.apparent_zenith),
-        x = solpos.azimuth ,
-        mode = 'markers',
-        marker_color = "orange",
-        marker_size = 1
-        ))
-
-    # draw equinox and sostices
-    for date in pd.to_datetime(['2019-03-21', '2019-06-21', '2019-12-21']):
-        times = pd.date_range(date, date + pd.Timedelta('24h'), freq = '5min', tz = tz)
-        times = times - delta
-        solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
-
-        fig.add_trace(go.Scatter(
-                        y = (90 - solpos.apparent_zenith),
-                        x = solpos.azimuth ,
-                        mode = 'markers',
-                        marker_color = "orange",
-                        marker_size = 4 
-                    ))  
-
-    # draw sunpath on the 21st of each other month 
-    for date in pd.to_datetime(['2019-01-21', '2019-02-21', '2019-4-21', '2019-5-21']):
-        times = pd.date_range(date, date+pd.Timedelta('24h'), freq = '5min', tz = tz)
-        times = times - delta
-        solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
-
-        fig.add_trace(go.Scatter(
-                        y = (90 - solpos.apparent_zenith),
-                        x = solpos.azimuth ,
-                        mode = 'markers',
-                        marker_color = "orange",
-                        marker_size = 3 
-                    )) 
-
-    fig.update_layout(
-        title = "Cartesian Sun-Path",
-        title_x = 0.5,
-        template = template,
-        dragmode = False,
-        showlegend = False, xaxis_range = [0, 360], 
-        yaxis_range = [0, 90], xaxis_tickmode = "array", 
-        xaxis_tickvals = [0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360]
-    )
-
-    return fig 
-
 #######################
 ### SOLAR RADIATION ###
 #######################
@@ -320,118 +240,136 @@ def polar_graph(df, meta, global_local, var):
     )
     return fig
 
-def custom_lat_long_solar(df, meta, global_local, var):
+def custom_cartesian_solar(df, meta, global_local, var):
     """ Return a graph of a latitude and longitude solar diagram. 
     """
-    # Meta data
-    city = meta[1]
-    country = meta[3]
     latitude = float(meta[-4])
     longitude = float(meta[-3])
     time_zone = float(meta[-2])
-
-    var_unit = unit_dict[str(var) + "_unit"]
-    var_range = range_dict[str(var) + "_range"]
-    var_name = name_dict[str(var) + "_name"]
-    var_color = color_dict[str(var) + "_color"]
-
-    if global_local == "global":
-        # Set Global values for Max and minimum
-        range_z = var_range
-    else:
-        # Set maximum and minimum according to data
-        data_max=(5*ceil(df[var].max()/5))
-        data_min=(5*floor(df[var].min()/5))
-        range_z = [data_min, data_max]
-
-    var = df[var]
-    marker_size = (((var - var.min()) / var.max()) + 1) * 4
-    
-    # Adjust dateime based on timezone
-    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo = timezone.utc)
-    tz = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-    date = date-tz
     tz = 'UTC'
+    if var is not None: 
+        var_unit = unit_dict[str(var) + "_unit"]
+        var_range = range_dict[str(var) + "_range"]
+        var_name = name_dict[str(var) + "_name"]
+        var_color = color_dict[str(var) + "_color"]
+        title = var_name + " (" + var_unit + ") on Cartesian Sun-Path"
+        if global_local == "global":
+            # Set Global values for Max and minimum
+            range_z = var_range
+        else:
+            # Set maximum and minimum according to data
+            data_max = (5 * ceil(df[var].max() / 5))
+            data_min = (5 * floor(df[var].min() / 5))
+            range_z = [data_min, data_max]
 
-    times = pd.date_range('2019-01-01 00:00:00', '2020-01-01', closed = 'left',
-                        freq = 'H', tz = tz)
-    delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
-    times = times - delta
-    solpos = solarposition.get_solarposition(times, latitude, longitude)
-    # remove nighttime
-    solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
+    if var is None:
+        var_color = "orange"
+        marker_size = 3
+        title = "Cartesian Sun-Path"
+    else: 
+        vals = df[var]
+        marker_size = (((vals-vals.min())/vals.max()) + 1) * 4
 
     fig = go.Figure()
 
     # draw annalemma
-    fig.add_trace(
-        go.Scatter(
+    if var is None:
+        fig.add_trace(go.Scatter(
+                y = df['elevation'],
+                x = df['azimuth'] ,
+                mode = 'markers',
+                marker_color = "orange",
+                marker_size = marker_size,
+                marker_line_width = 0,
+                customdata=np.stack((df["day"],df["month_names"],df["hour"], 
+                            df["elevation"],df["azimuth"]),axis=-1),
+                hovertemplate =
+                "month: %{customdata[1]}"+
+                "<br>day: %{customdata[0]:.0f}"+
+                "<br>hour: %{customdata[2]:.0f}:00"+
+                "<br>sun altitude: %{customdata[3]:.2f}"+degrees_unit+
+                "<br>sun azimuth: %{customdata[4]:.2f}"+degrees_unit+
+                "<br>",
+                name="",
+                ))
+    else:
+        fig.add_trace(go.Scatter(
             y = df['elevation'],
             x = df['azimuth'] ,
             mode = 'markers',
             marker = dict(
-            color = var,
-            size = marker_size,
-            line_width = 0,
-            colorscale = var_color,
-            cmin = range_z[0],
-            cmax = range_z[1],
-            colorbar = dict(
-                thickness = 30,
-                title = var_unit + "<br>  ")
-            ) 
-        )
-    )
+                color = df[var],
+                size = marker_size,
+                line_width = 0,
+                colorscale = var_color,
+                cmin = range_z[0],
+                cmax = range_z[1],
+                colorbar = dict(
+                    thickness = 30,
+                    title = var_unit + "<br>  ")
+            ),
+                customdata = np.stack((df["day"], df["month_names"], df["hour"], 
+                                    df["elevation"], df["azimuth"], df[var]), axis = -1),
+                hovertemplate =
+                "month: %{customdata[1]}" +
+                "<br>day: %{customdata[0]:.0f}" +
+                "<br>hour: %{customdata[2]:.0f}:00" +
+                "<br>sun altitude: %{customdata[3]:.2f}" + degrees_unit +
+                "<br>sun azimuth: %{customdata[4]:.2f}" + degrees_unit +
+                "<br>" +
+                "<br><b>" + var_name + ': %{customdata[5]:.2f}'+var_unit + "</b>",
+                name = "",
+                ) 
+            )
 
     # draw equinox and sostices
     for date in pd.to_datetime(['2019-03-21', '2019-06-21', '2019-12-21']):
         times = pd.date_range(date, date + pd.Timedelta('24h'), freq = '5min', tz = tz)
+        delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
         solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
 
         fig.add_trace(go.Scatter(
-                        y = (90 - solpos.apparent_zenith),
-                        x = solpos.azimuth ,
-                        mode = 'markers',
-                        marker_color = "orange",
-                        marker_size = 4, 
-                        hovertemplate =
-                            "<br>sun altitude: %{y:.2f}" + degrees_unit +
-                            "<br>sun azimuth: %{x:.2f}" + degrees_unit +
-                            "<br>",
-                            name="",
-                    )
-                )  
+                y = (90-solpos.apparent_zenith),
+                x = solpos.azimuth ,
+                mode = 'markers',
+                marker_color="orange",
+                marker_size=4,
+                hovertemplate =
+                "<br>sun altitude: %{y:.2f}"+degrees_unit+
+                "<br>sun azimuth: %{x:.2f}"+degrees_unit+
+                "<br>",
+                name="",
+                ))  
 
-    # draw sunpath on the 21st of each other month 
+    #draw sunpath on the 21st of each other month 
     for date in pd.to_datetime(['2019-01-21', '2019-02-21', '2019-4-21', '2019-5-21']):
-        times = pd.date_range(date, date+pd.Timedelta('24h'), freq = '5min', tz = tz)
+        times = pd.date_range(date, date + pd.Timedelta('24h'), freq = '5min', tz = tz)
+        delta = timedelta(days = 0, hours = time_zone - 1, minutes = 0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
         solpos = solpos.loc[solpos['apparent_elevation'] > 0, :]
 
         fig.add_trace(go.Scatter(
-                        y = (90 - solpos.apparent_zenith),
-                        x = solpos.azimuth ,
-                        mode = 'markers',
-                        marker_color = "orange",
-                        marker_size = 3, 
-                        hovertemplate =
-                            "<br>sun altitude: %{y:.2f}"+degrees_unit+
-                            "<br>sun azimuth: %{x:.2f}"+degrees_unit+
-                            "<br>",
-                            name="", 
-                    )) 
+                y = (90-solpos.apparent_zenith),
+                x = solpos.azimuth ,
+                mode = 'markers',
+                marker_color="orange",
+                marker_size=3,
+                hovertemplate =
+                "<br>sun altitude: %{y:.2f}"+degrees_unit+
+                "<br>sun azimuth: %{x:.2f}"+degrees_unit+
+                "<br>",
+                name="",
+                )) 
 
     fig.update_layout(
-        title = "Cartesian Sun-Path",
-        title_x = 0.5,
-        dragmode = False,
-        template = template,
-        showlegend = False, xaxis_range = [0, 360], 
-        yaxis_range = [0, 90], xaxis_tickmode = "array", 
-        xaxis_tickvals = [0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360]
-    )
+        showlegend = False,xaxis_range=[0,360],yaxis_range=[0,90], xaxis_tickmode="array", xaxis_tickvals=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360]
+        )
+
+    fig.update_layout(template=template,title=title,dragmode=False )
+    fig.update_xaxes(showline=True, linewidth=1, linecolor='black', mirror=True)
+    fig.update_yaxes(showline=True, linewidth=1, linecolor='black', mirror=True)
 
     return fig 

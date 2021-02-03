@@ -11,9 +11,9 @@ from my_project.layout import build_banner, build_tabs
 from my_project.construction import construction
 from my_project.tab_five.tab_five import tab_five
 from my_project.tab_four.tab_four import tab_four
-from my_project.tab_four.tab_four_graphs import (lat_long_solar, monthly_solar,
+from my_project.tab_four.tab_four_graphs import (monthly_solar,
                                                  polar_graph,
-                                                 custom_lat_long_solar)
+                                                 custom_cartesian_solar)
 from my_project.tab_one.tab_one import tab_one
 from my_project.tab_six.tab_six import tab_six
 from my_project.tab_six.tab_six_graphs import (custom_heatmap, three_var_graph,
@@ -208,7 +208,7 @@ def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
     if solar_dropdown == 'polar':
         return polar_graph(df, meta, global_local, None), monthly, cover 
     else:
-        return lat_long_solar(df, meta), monthly, cover
+        return custom_cartesian_solar(df, meta, global_local, None), monthly, cover
 
 ### CUSTOM SUNPATH ###
 @app.callback(
@@ -232,8 +232,7 @@ def update_tab_four(view, var, ts, global_local, df, meta):
         return polar_graph(df, meta, global_local, var)
             
     else:
-        return custom_lat_long_solar(df, meta, global_local, var)
-        # return polar_graph(df, meta, global_local, var)
+        return custom_cartesian_solar(df, meta, global_local, var)
 
 
 ### SECTION TWO ###
