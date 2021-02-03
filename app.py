@@ -166,6 +166,12 @@ def update_tab_three(ts, global_local, df, meta):
     # Yearly Graphs 
     dbt_yearly = yearly_profile(df, "DBT", global_local)
     rh_yearly = yearly_profile(df, "RH", global_local)
+    dbt_yearly.update_layout(
+        xaxis=dict(rangeslider=dict(visible=True))
+    )
+    rh_yearly.update_layout(
+        xaxis=dict(rangeslider=dict(visible=True))
+    )
 
     # Daily Profile Graphs
     dbt_daily = daily_profile(df, "DBT", global_local)
