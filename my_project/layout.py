@@ -31,7 +31,12 @@ def new_build_footer():
                 children = [
                     html.P(
                         children = [
-                            "Developed by Giovanni Betti and", 
+                            "Developed by", 
+                            html.A(
+                                "Giovanni Betti", 
+                                href = "https://www.linkedin.com/in/gbetti/"
+                            ),
+                            " and",
                             html.A(
                                 "Christine Nguyen",
                                 href = "https://chrlng.github.io/",

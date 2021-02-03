@@ -40,7 +40,7 @@ def custom():
                         id = "custom-sun-view-dropdown", 
                         options = [
                             {'label': 'Polar', 'value': 'polar'},
-                            {'label': 'Cartesian Sunpath', 'value': 'cartesian'}
+                            {'label': 'Cartesian', 'value': 'cartesian'}
                         ], 
                         value = 'polar'
                     ),
@@ -105,7 +105,7 @@ def tab_four():
                         id = "solar-dropdown", 
                         options = [
                             {'label': 'Polar', 'value': 'polar'},
-                            {'label': 'Latitude/Longitude', 'value': 'lat/long'}
+                            {'label': 'Cartesian', 'value': 'cartesian'}
                         ], 
                         value = 'polar'
                     ),
