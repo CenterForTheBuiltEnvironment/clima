@@ -157,6 +157,7 @@ def three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, 
             marginal_y = "histogram",
             title = title
         )
+    fig.update_layout(dragmode =  False)
     return fig
 
 def two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3):
@@ -206,4 +207,5 @@ def two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, da
                 marginal_x = "histogram",
                 marginal_y = "histogram",
             )
+    fig.update_layout(dragmode = False)
     return fig 
