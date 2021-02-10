@@ -570,5 +570,4 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
 )
 def update_tab_seven(ts, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
-    print("hi")
     return heatmap(df, 'utci_Sun_Wind', global_local)
