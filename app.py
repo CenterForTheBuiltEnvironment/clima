@@ -561,13 +561,17 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
 ##################################
 @app.callback(
     Output('utci-heatmap', 'figure'), 
+    Output('utci-category-heatmap', 'figure'), 
 
+    [Input('tab7-dropdown', 'value')],
     # General 
     [Input('df-store', 'modified_timestamp')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_seven(ts, global_local, df, meta):
+def update_tab_seven(var, ts, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return heatmap(df, 'utci_Sun_Wind', global_local)
+    first = heatmap(df, var, global_local)
+    second = heatmap(df, var + "_categories", global_local)
+    return first, second
