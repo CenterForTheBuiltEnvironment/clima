@@ -148,7 +148,7 @@ unit_dict = {
     "t_wb_unit":"\u00B0 C", # "&#8451"
     "t_dp_unit":"\u00B0 C", # "&#8451"
     "h_unit":"J/kg dry air",
-    }
+}
 
 ####################
 ### Global Names ###

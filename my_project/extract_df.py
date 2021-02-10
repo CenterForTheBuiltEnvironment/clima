@@ -4,8 +4,13 @@ from datetime import datetime, time, timedelta, timezone
 from urllib.request import Request, urlopen
 
 import pandas as pd
+import numpy as np
 import requests
 from pvlib import solarposition
+from pythermalcomfort.models import utci
+from pythermalcomfort.models import solar_gain as sgain
+from pythermalcomfort import psychrometrics as psy
+
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 
@@ -114,6 +119,47 @@ def create_df(default_url):
     # Add in solpos df
     solpos = solarposition.get_solarposition(times, latitude, longitude)
     epw_df = pd.concat([epw_df, solpos], axis = 1)
+
+    # Add in UTCI 
+    sol_altitude = epw_df["elevation"].mask(epw_df["elevation"] <= 0, 0)
+    sharp = [45] * 8760 
+    sol_radiation_dir = epw_df["DNrad"]
+    sol_transmittance = [1] * 8760 #CHECK VALUE
+    f_svv = [1] * 8760 #CHECK VALUE
+    f_bes = [1] * 8760 #CHECK VALUE
+    asw = [0.7] * 8760 #CHECK VALUE
+    posture = ['standing'] * 8760 
+    floor_reflectance = [0.6] * 8760  #EXPOSE AS A VARIABLE?
+
+    mrt = np.vectorize(sgain)(sol_altitude, sharp, sol_radiation_dir, sol_transmittance, f_svv,f_bes, asw,posture, floor_reflectance)
+    mrt_df = pd.DataFrame.from_records(mrt)
+    mrt_df["delta_mrt"] = mrt_df["delta_mrt"].mask(mrt_df["delta_mrt"] >= 70, 70)
+    mrt_df = mrt_df.set_index(epw_df.times)
+
+    epw_df = epw_df.join(mrt_df)
+
+    epw_df["MRT"] = epw_df["delta_mrt"] + epw_df["DBT"]
+    epw_df["Wspeed_utci"] = epw_df["Wspeed"]
+    epw_df["Wspeed_utci"] = epw_df["Wspeed_utci"].mask(epw_df["Wspeed_utci"] >= 17, 16.9)
+    epw_df["Wspeed_utci"] = epw_df["Wspeed_utci"].mask(epw_df["Wspeed_utci"] <= 0.5, 0.6)
+    epw_df["Wspeed_utci_0"] = epw_df["Wspeed_utci"].mask(epw_df["Wspeed_utci"] >= 0, 0.5)
+    epw_df["utci_noSun_Wind"] = np.vectorize(utci)(epw_df["DBT"], epw_df["DBT"], epw_df["Wspeed_utci"], epw_df["RH"])
+    epw_df["utci_noSun_noWind"] = np.vectorize(utci)(epw_df["DBT"], epw_df["DBT"], epw_df["Wspeed_utci_0"], epw_df["RH"])
+    epw_df["utci_Sun_Wind"] = np.vectorize(utci)(epw_df["DBT"], epw_df["MRT"], epw_df["Wspeed_utci"], epw_df["RH"])
+    epw_df["utci_Sun_noWind"] = np.vectorize(utci)(epw_df["DBT"], epw_df["MRT"], epw_df["Wspeed_utci_0"], epw_df["RH"])
+
+    utci_bins = [-999,-40,-27,-13,0,9,26,32,38,46,999]
+    utci_labels = [-5,-4,-3,-2,-1,0,1,2,3,4]
+    epw_df['utci_noSun_Wind_categories'] = pd.cut(x=epw_df['utci_noSun_Wind'], bins=utci_bins, labels=utci_labels)
+    epw_df['utci_noSun_noWind_categories'] = pd.cut(x=epw_df['utci_noSun_noWind'], bins=utci_bins, labels=utci_labels)
+    epw_df['utci_Sun_Wind_categories'] = pd.cut(x=epw_df['utci_Sun_Wind'], bins=utci_bins, labels=utci_labels)
+    epw_df['utci_Sun_noWind_categories'] = pd.cut(x=epw_df['utci_Sun_noWind'], bins=utci_bins, labels=utci_labels)
+
+    # Add psy values
+    ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df["DBT"], epw_df["RH"]) 
+    psy_df = pd.DataFrame.from_records(ta_rh)
+    psy_df=psy_df.set_index(epw_df.times)
+    epw_df=epw_df.join(psy_df) 
 
     return epw_df, meta
 
