@@ -315,6 +315,7 @@ def daily_profile(df, var, global_local):
 def heatmap(df, var, global_local):
     """ General function that returns a heatmap.
     """
+    print(df.head())
     var_unit = unit_dict[str(var) + "_unit"]
     var_range = range_dict[str(var) + "_range"]
     var_name = name_dict[str(var) + "_name"]

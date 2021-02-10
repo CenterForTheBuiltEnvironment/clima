@@ -158,8 +158,8 @@ def create_df(default_url):
     # Add psy values
     ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df["DBT"], epw_df["RH"]) 
     psy_df = pd.DataFrame.from_records(ta_rh)
-    psy_df=psy_df.set_index(epw_df.times)
-    epw_df=epw_df.join(psy_df) 
+    psy_df = psy_df.set_index(epw_df.times)
+    epw_df = epw_df.join(psy_df) 
 
     return epw_df, meta
 

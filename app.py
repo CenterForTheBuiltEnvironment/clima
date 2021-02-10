@@ -18,6 +18,7 @@ from my_project.tab_one.tab_one import tab_one
 from my_project.tab_six.tab_six import tab_six
 from my_project.tab_six.tab_six_graphs import (custom_heatmap, three_var_graph,
                                                two_var_graph)
+from my_project.tab_seven.tab_seven import tab_seven
 from my_project.tab_three.tab_three import tab_three
 from my_project.tab_two.tab_two import tab_two
 from my_project.tab_two.tab_two_graphs import world_map
@@ -37,7 +38,7 @@ app.layout = html.Div(
 )
 
 if __name__ == '__main__':
-    app.run_server(debug = True)
+    app.run_server(debug = False)
 
 #####################
 ### TAB SELECTION ###        
@@ -61,7 +62,7 @@ def render_content(tab):
     elif tab == 'tab-6':
         return tab_six()
     elif tab == 'tab-7':
-        return construction()
+        return tab_seven()
     elif tab == 'tab-8':
         return construction()
 
@@ -553,3 +554,21 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
     two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
     three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
     return three, two
+
+
+##################################
+### TAB SEVEN: OUTDOOR COMFORT ###
+##################################
+@app.callback(
+    Output('utci-heatmap', 'figure'), 
+
+    # General 
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_seven(ts, global_local, df, meta):
+    df = pd.read_json(df, orient = 'split')
+    print("hi")
+    return heatmap(df, 'utci_Sun_Wind', global_local)
