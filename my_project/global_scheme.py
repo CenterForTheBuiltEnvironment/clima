@@ -137,12 +137,13 @@ unit_dict = {
     "utci_Sun_noWind_unit":"\u00B0 C", # "&#8451",
     "utci_noSun_noWind_unit":"\u00B0 C", # "&#8451",
 
-    #UTCI categories
+    # UTCI categories
     "utci_Sun_Wind_categories_unit":"Thermal stress",
     "utci_noSun_Wind_categories_unit":"Thermal stress",
     "utci_Sun_noWind_categories_unit":"Thermal stress",
     "utci_noSun_noWind_categories_unit":"Thermal stress",
-    #other psychrometric values
+    
+    # other psychrometric values
     "p_vap_unit":"Pa",
     "hr_unit":"kg water/kg dry air",
     "t_wb_unit":"\u00B0 C", # "&#8451"
@@ -221,7 +222,7 @@ name_dict = {
     "t_wb_name":"Wet bulb temperature",
     "t_dp_name":"Dew point temperature",
     "h_name":"Enthalpy",
-    }
+}
 
 ######################
 ### Dropdown Names ###

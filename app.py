@@ -21,6 +21,7 @@ from my_project.tab_six.tab_six_graphs import (custom_heatmap, three_var_graph,
 from my_project.tab_seven.layout import tab_seven
 from my_project.tab_three.layout import tab_three
 from my_project.tab_nine.layout import tab_nine
+from my_project.tab_nine.tab_nine_graphs import psych_chart
 from my_project.tab_two.layout import tab_two
 from my_project.tab_two.tab_two_graphs import world_map
 from my_project.template_graphs import (barchart, daily_profile, heatmap,
@@ -586,11 +587,18 @@ def update_tab_seven(var, ts, global_local, df, meta):
     Output('psych-chart', 'figure'),
 
     # Sec1 Inputs 
-
+    [Input('tab9-colorby-dropdown', 'value')],
+    
     # Sec2 Inputs 
+    [Input('tab9-sec3-time-filter-input', 'value')],
+    [Input('tab9-sec3-query-month-slider', 'value')],
+    [Input('tab9-sec3-query-hour-slider', 'value')],
 
     # Sec3 Inputs 
-    
+    [Input('tab9-sec3-data-filter-input', 'value')],
+    [Input('tab9-sec3-filter-var-dropdown', 'value')],
+    [Input('tab9-sec3-min-val', 'value')],
+    [Input('tab9-sec3-max-val', 'value')],
 
     # General 
     [Input('df-store', 'modified_timestamp')],
@@ -598,6 +606,9 @@ def update_tab_seven(var, ts, global_local, df, meta):
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_psych_chart(ts, global_local, df, meta):
+def update_psych_chart(colorby_var, time_filter, month, hour, data_filter, data_filter_var, min_val, max_val, ts, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
-    return ...
+    time_filter_info = [time_filter, month, hour]
+    data_filter_info = [data_filter, data_filter_var, min_val, max_val]
+    fig = psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_info)
+    return fig 

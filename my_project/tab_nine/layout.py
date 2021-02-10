@@ -22,40 +22,6 @@ def inputs():
                         children = [
                             html.H6(
                                 className = "text-next-to-input", 
-                                children = ["X Variable:"]
-                            ),
-                            dcc.Dropdown(
-                                className = "tab9-sec3-dropdown",
-                                id = "tab9-var-x-dropdown", 
-                                options = [
-                                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                                ], 
-                                value = 'DBT'
-                            ),
-                        ]
-                    ),
-                    html.Div(
-                        className = "container-row row-center full-width",
-                        children = [
-                            html.H6(
-                                className = "text-next-to-input", 
-                                children = ["Y Variable:"]
-                            ),
-                            dcc.Dropdown(
-                                className = "tab9-sec3-dropdown",
-                                id = "tab9-var-y-dropdown", 
-                                options = [
-                                    {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
-                                ], 
-                                value = 'RH'
-                            ),
-                        ]
-                    ),
-                    html.Div(
-                        className = "container-row row-center full-width",
-                        children = [
-                            html.H6(
-                                className = "text-next-to-input", 
                                 children = ["Color By:"]
                             ),
                             dcc.Dropdown(
