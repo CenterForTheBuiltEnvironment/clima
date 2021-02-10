@@ -174,6 +174,12 @@ def build_tabs():
                         className = 'custom-tab',
                         selected_className = 'custom-tab--selected'),
                     dcc.Tab(
+                        label = 'Psychrometric Chart',
+                        value = 'tab-9',
+                        className = "custom-tab",
+                        selected_className = 'custom-tab--selected'
+                    ),
+                    dcc.Tab(
                         label = 'Data Explorer', 
                         value = 'tab-6',
                         className = 'custom-tab',

@@ -9,18 +9,19 @@ from my_project.extract_df import create_df
 from my_project.global_scheme import month_lst
 from my_project.layout import build_banner, build_tabs
 from my_project.construction import construction
-from my_project.tab_five.tab_five import tab_five
-from my_project.tab_four.tab_four import tab_four
+from my_project.tab_five.layout import tab_five
+from my_project.tab_four.layout import tab_four
 from my_project.tab_four.tab_four_graphs import (monthly_solar,
                                                  polar_graph,
                                                  custom_cartesian_solar)
-from my_project.tab_one.tab_one import tab_one
-from my_project.tab_six.tab_six import tab_six
+from my_project.tab_one.layout import tab_one
+from my_project.tab_six.layout import tab_six
 from my_project.tab_six.tab_six_graphs import (custom_heatmap, three_var_graph,
                                                two_var_graph)
-from my_project.tab_seven.tab_seven import tab_seven
-from my_project.tab_three.tab_three import tab_three
-from my_project.tab_two.tab_two import tab_two
+from my_project.tab_seven.layout import tab_seven
+from my_project.tab_three.layout import tab_three
+from my_project.tab_nine.layout import tab_nine
+from my_project.tab_two.layout import tab_two
 from my_project.tab_two.tab_two_graphs import world_map
 from my_project.template_graphs import (barchart, daily_profile, heatmap,
                                         violin, wind_rose, yearly_profile)
@@ -65,6 +66,8 @@ def render_content(tab):
         return tab_seven()
     elif tab == 'tab-8':
         return construction()
+    elif tab == 'tab-9':
+        return tab_nine()
 
 #######################
 ### TAB ONE: SELECT ###        
@@ -575,3 +578,26 @@ def update_tab_seven(var, ts, global_local, df, meta):
     first = heatmap(df, var, global_local)
     second = heatmap(df, var + "_categories", global_local)
     return first, second
+
+#####################################
+### TAB NINE: PYSCHROMETRIC CHART ###
+#####################################
+@app.callback(
+    Output('psych-chart', 'figure'),
+
+    # Sec1 Inputs 
+
+    # Sec2 Inputs 
+
+    # Sec3 Inputs 
+    
+
+    # General 
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_psych_chart(ts, global_local, df, meta):
+    df = pd.read_json(df, orient = 'split')
+    return ...
