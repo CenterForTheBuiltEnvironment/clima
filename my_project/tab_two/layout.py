@@ -102,57 +102,37 @@ def climate_profiles_graphs():
                 html.Div(
                     className = "violin-container",
                     children = [
-                        dcc.Loading(
-                            type = "circle",
-                            children = [
-                                dcc.Graph(
-                                    id = 'temp-profile-graph',
-                                    config = config
-                                ), 
-                            ]
+                        dcc.Graph(
+                            id = 'temp-profile-graph',
+                            config = config
+                        ), 
+                    ]
+                ),
+                html.Div(
+                    className = "violin-container",
+                    children = [
+                        dcc.Graph(
+                            id = 'humidity-profile-graph',
+                            config = config
                         ),
                     ]
                 ),
                 html.Div(
                     className = "violin-container",
                     children = [
-                       dcc.Loading(
-                            type = "circle",
-                            children = [
-                                dcc.Graph(
-                                    id = 'humidity-profile-graph',
-                                    config = config
-                                ), 
-                            ]
-                        ),
+                        dcc.Graph(
+                            id = 'solar-radiation-graph',
+                            config = config
+                        ), 
                     ]
                 ),
                 html.Div(
                     className = "violin-container",
                     children = [
-                        dcc.Loading(
-                            type = "circle",
-                            children = [
-                                dcc.Graph(
-                                    id = 'solar-radiation-graph',
-                                    config = config
-                                ), 
-                            ]
-                        ),
-                    ]
-                ),
-                html.Div(
-                    className = "violin-container",
-                    children = [
-                       dcc.Loading(
-                            type = "circle",
-                            children = [
-                                dcc.Graph(
-                                    id = 'wind-speed-graph',
-                                    config = config
-                                ), 
-                            ]
-                        ),
+                        dcc.Graph(
+                            id = 'wind-speed-graph',
+                            config = config
+                        ), 
                     ]
                 ),
             ]

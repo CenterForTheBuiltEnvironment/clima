@@ -153,6 +153,16 @@ p {
     align-items: stretch;
 }
 
+.loading-violin-container {
+    width: 100%;
+    height: 100%;
+}
+
+#temp-profile-graph, #humidity-profile-graph, #solar-radiation-graph, #wind-speed-graph {
+    height: 100%;
+    width: 100%;
+}
+
 
 /* Tab Four */
 #tab-four-container {

@@ -60,7 +60,7 @@ def violin(df, var, global_local):
     fig.update_yaxes(range=var_range)
     fig.update_traces(meanline_visible=True, orientation='v',
                       width=0.8, points=False,)
-    fig.update_layout(xaxis_showgrid=False, xaxis_zeroline=False,height = 700, width = 300,
+    fig.update_layout(xaxis_showgrid=False, xaxis_zeroline=False,
                       violingap=0, violingroupgap=0, violinmode='overlay')
     Title = var_name+" ("+var_unit+")"
     fig.update_layout(template=template, title=Title, title_x = 0.5, dragmode = False)
