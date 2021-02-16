@@ -272,11 +272,28 @@ def update_tab_four_section_two(var, ts, global_local, df, meta):
     Output('wind-rose', 'figure'),
     Output('wind-speed', 'figure'),
     Output('wind-direction', 'figure'),
-    Output('custom-wind-rose', 'figure'),
 
-    # Custom Sliders
-    # [Input('month-slider', 'value')],
-    # [Input('hour-slider', 'value')],
+    # General
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_five(ts, global_local, df, meta):
+    """ Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta).
+    """
+    df = pd.read_json(df, orient = 'split')
+
+    # Heatmap Graphs
+    speed = heatmap(df, 'Wspeed', global_local)
+    direction = heatmap(df, 'Wdir', global_local)
+    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24], True)
+
+    return annual, speed, direction
+
+### Custom Windrose ### 
+@app.callback(
+    Output('custom-wind-rose', 'figure'),
 
     # Custom Graph Input 
     [Input('tab5-custom-start-month', 'value')],
@@ -299,12 +316,7 @@ def update_tab_five(start_month, start_hour, end_month, end_hour, ts, global_loc
     start_month = int(start_month)
     end_month = int(end_month)
 
-    # Heatmap Graphs
-    speed = heatmap(df, 'Wspeed', global_local)
-    direction = heatmap(df, 'Wdir', global_local)
-
     # Wind Rose Graphs
-    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24], True)
     if start_month <= end_month:
         df = df.loc[(df['month'] >= start_month) & (df['month'] <= end_month)]
     else:
@@ -315,7 +327,7 @@ def update_tab_five(start_month, start_hour, end_month, end_hour, ts, global_loc
         df = df.loc[(df['hour'] <= end_hour) | (df['hour'] >= start_hour)]
     custom = wind_rose(df, meta, "", [start_month, end_month], [start_hour, end_hour], True)
 
-    return annual, speed, direction, custom
+    return custom
 
 ### Seasonal Graphs ###
 @app.callback(
