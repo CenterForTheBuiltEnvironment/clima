@@ -126,6 +126,7 @@ def alert_display(data, n_clicks, meta):
     Output('tab-two-long', 'children'),
     Output('tab-two-lat', 'children'),
     Output('tab-two-elevation', 'children'),
+    
     [Input('df-store', 'modified_timestamp')],
     [Input('global-local-radio-input', 'value')],
     [State('df-store', 'data')],

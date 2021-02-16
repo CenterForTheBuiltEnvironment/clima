@@ -110,14 +110,9 @@
     width: 100vw;
 }
 
-.tab-two-section {
-    padding-bottom: 16px;
-}
-
 #tab2-sec1-container, #tab2-sec2-container {
-    /* background-color: rgb(241, 243, 245); */
     margin-bottom: 32px;
-    padding-bottom: 0px;
+    padding-bottom: 16px;
 }
 
 #tab2-sec2-container {
@@ -146,14 +141,16 @@ p {
 }
 
 #graph-container {
-    justify-content: space-between;
     height: 100%;
     width: 100%;
-    flex-wrap: nowrap;
+    align-items: stretch;
 }
 
-#temp-profile-graph, #humidity-profile-graph, #solar-radiation-graph, #wind-speed-graph {
-    flex: 1;
+.violin-container {
+    height: 100%;
+    width: 25%;
+    display: flex;
+    align-items: stretch;
 }
 
 
