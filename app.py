@@ -192,11 +192,9 @@ def update_tab_three(ts, global_local, df, meta):
 ### TAB FOUR: SUN ###
 #####################
 
-### SECTION ONE ###
+### SOLAR DROPDOWN ###
 @app.callback(
     Output('solar-dropdown-output', 'figure'),
-    Output('monthly-solar', 'figure'),
-    Output('cloud-cover', 'figure'),
 
     [Input("solar-dropdown", 'value')],
     [Input('df-store', 'modified_timestamp')],
@@ -209,6 +207,26 @@ def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
     """
     df = pd.read_json(df, orient = 'split')
 
+    if solar_dropdown == 'polar':
+        return polar_graph(df, meta, global_local, None)
+    else:
+        return custom_cartesian_solar(df, meta, global_local, None)
+
+### STATIC ###
+@app.callback(
+    Output('monthly-solar', 'figure'),
+    Output('cloud-cover', 'figure'),
+
+    [Input('df-store', 'modified_timestamp')],
+    [Input('global-local-radio-input', 'value')],
+    [State('df-store', 'data')],
+    [State('meta-store', 'data')]
+)
+def update_tab_four_section_one(ts, global_local, df, meta):
+    """ Update the contents of tab four. Passing in the polar selection and the general info (df, meta).
+    """
+    df = pd.read_json(df, orient = 'split')
+
     # Sun Radiation
     monthly = monthly_solar(df, meta)
 
@@ -216,10 +234,8 @@ def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
     cover = barchart(df, 'Tskycover', [False], [False, '', 3, 7], True)
     cover = cover.update_layout(title = "Cloud Coverage")
 
-    if solar_dropdown == 'polar':
-        return polar_graph(df, meta, global_local, None), monthly, cover 
-    else:
-        return custom_cartesian_solar(df, meta, global_local, None), monthly, cover
+    return monthly, cover 
+
 
 ### CUSTOM SUNPATH ###
 @app.callback(
@@ -246,7 +262,7 @@ def update_tab_four(view, var, ts, global_local, df, meta):
         return custom_cartesian_solar(df, meta, global_local, var)
 
 
-### SECTION TWO ###
+### DAILY + HEATMAP ###
 @app.callback(
     Output('tab4-daily', 'figure'),
     Output('tab4-heatmap', 'figure'),
@@ -267,7 +283,7 @@ def update_tab_four_section_two(var, ts, global_local, df, meta):
 ######################
 ### TAB FIVE: WIND ###
 ######################
-### Annual + Custom Windrose and Heatmaps ### 
+### Static Graphs ### 
 @app.callback(
     Output('wind-rose', 'figure'),
     Output('wind-speed', 'figure'),
