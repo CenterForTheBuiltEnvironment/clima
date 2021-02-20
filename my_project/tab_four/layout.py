@@ -6,7 +6,7 @@ import pandas as pd
 from dash.dependencies import Input, Output, State
 from my_project.global_scheme import config, tab4_dropdown_names, tab4_explore_dropdown_names
 
-def custom():
+def sunpath():
     """ Return the layout for the custom sunpath and its dropdowns.
     """
     return html.Div(
@@ -47,9 +47,10 @@ def custom():
                 ]
             ),
             html.Div(
-                className = "container-row full-width container-center container-stretch",
+                id = "sunpath-container",
                 children = [
                     dcc.Loading(
+                        id = "sunpath-loading-container",
                         type = "circle",
                         children = [
                             dcc.Graph(
@@ -59,7 +60,22 @@ def custom():
                         ]
                     ),
                 ]
-            ),
+            )
+            # html.Div(
+            #     className = "container-row full-width container-center container-stretch",
+            #     children = [
+            #         dcc.Loading(
+            #             className = "full-width",
+            #             type = "circle",
+            #             children = [
+            #                 dcc.Graph(
+            #                     id = 'custom-sunpath',
+            #                     config = config
+            #                 ), 
+            #             ]
+            #         ),
+            #     ]
+            # ),
         ]
     )
 
@@ -129,7 +145,7 @@ def tab_four():
         className = "container-col",
         id = "tab-four-container",
         children = [
-            custom(),
+            sunpath(),
             static_section(),
             explore_daily_heatmap()
         ]

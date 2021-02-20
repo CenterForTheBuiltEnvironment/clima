@@ -171,35 +171,25 @@ p {
     align-items: center;
 }
 
-#solar-dropdown {
-    width: 15%;
-}
-
-#solar-dropdown-output {
-    width: 100%;
-}
-
-#tab-four-subcontainer {
-    width: 100%;
-    height: 50vh;
-    justify-content: space-between;
-    margin-bottom: 24px;
-}
-
-/* #daily-ghrad, #heatmap-ghrad, #daily-dnrad, #heatmap-dnrad, #daily-difhrad, #heatmap-difhrad {
-    width: 100%;
-} */
-
 #tab-four-custom-sun-container {
-    justify-content: center;
+    /* justify-content: center; */
     align-items: stretch;
-    align-content: center;
+    /* align-content: center; */
+    /* height: 100vh; */
 }
 
-#custom-sunpath {
+/* #custom-sunpath {
     width: 100%;
+    height: 100%;
 }
 
+#sunpath-container {
+    height: 80%;
+}
+
+#sunpath-loading-container {
+    height: 100%;
+} */
 
 #custom-sun-view-dropdown {
     width: 25%;

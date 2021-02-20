@@ -221,8 +221,8 @@ def polar_graph(df, meta, global_local, var):
 
     fig.update_layout(
         autosize=False,
-        width=800,
-        height=800,
+        # width=800,
+        # height=800,
         #template="simple_white",
     )
 
