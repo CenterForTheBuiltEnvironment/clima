@@ -186,9 +186,9 @@ p {
     margin-bottom: 24px;
 }
 
-#daily-ghrad, #heatmap-ghrad, #daily-dnrad, #heatmap-dnrad, #daily-difhrad, #heatmap-difhrad {
+/* #daily-ghrad, #heatmap-ghrad, #daily-dnrad, #heatmap-dnrad, #daily-difhrad, #heatmap-difhrad {
     width: 100%;
-}
+} */
 
 #tab-four-custom-sun-container {
     justify-content: center;

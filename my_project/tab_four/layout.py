@@ -4,7 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 from dash.dependencies import Input, Output, State
-from my_project.global_scheme import config, dropdown_names, tab4_explore_dropdown_names
+from my_project.global_scheme import config, tab4_dropdown_names, tab4_explore_dropdown_names
 
 def custom():
     """ Return the layout for the custom sunpath and its dropdowns.
@@ -23,7 +23,7 @@ def custom():
                     dcc.Dropdown(
                         id = "custom-sun-var-dropdown", 
                         options = [
-                            {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
+                            {'label': i, 'value': tab4_dropdown_names[i]} for i in tab4_dropdown_names
                         ], 
                         value = 'DBT'
                     ),
@@ -129,39 +129,8 @@ def tab_four():
         className = "container-col",
         id = "tab-four-container",
         children = [
-            html.Div(
-                className = "container-row full-width container-center",
-                children = [
-                    html.H6(
-                        className = "text-next-to-input",
-                        children = ["View: "]
-                    ),
-                    dcc.Dropdown(
-                        id = "solar-dropdown", 
-                        options = [
-                            {'label': 'Polar', 'value': 'polar'},
-                            {'label': 'Cartesian', 'value': 'cartesian'}
-                        ], 
-                        value = 'polar'
-                    ),
-                ]
-            ),
-            html.Div(
-                className = "container-row full-width container-center container-stretch",
-                children = [
-                    dcc.Loading(
-                        type = "circle",
-                        children = [
-                            dcc.Graph(
-                                id = 'solar-dropdown-output',
-                                config = config
-                            ), 
-                        ]
-                    ),
-                ]
-            ),
-            static_section(),
             custom(),
+            static_section(),
             explore_daily_heatmap()
         ]
     )

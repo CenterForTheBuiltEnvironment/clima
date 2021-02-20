@@ -193,26 +193,6 @@ def update_tab_three(ts, global_local, df, meta):
 ### TAB FOUR: SUN ###
 #####################
 
-### SOLAR DROPDOWN ###
-@app.callback(
-    Output('solar-dropdown-output', 'figure'),
-
-    [Input("solar-dropdown", 'value')],
-    [Input('df-store', 'modified_timestamp')],
-    [Input('global-local-radio-input', 'value')],
-    [State('df-store', 'data')],
-    [State('meta-store', 'data')]
-)
-def update_tab_four_section_one(solar_dropdown, ts, global_local, df, meta):
-    """ Update the contents of tab four. Passing in the polar selection and the general info (df, meta).
-    """
-    df = pd.read_json(df, orient = 'split')
-
-    if solar_dropdown == 'polar':
-        return polar_graph(df, meta, global_local, None)
-    else:
-        return custom_cartesian_solar(df, meta, global_local, None)
-
 ### STATIC ###
 @app.callback(
     Output('monthly-solar', 'figure'),
