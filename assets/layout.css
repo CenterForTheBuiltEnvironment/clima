@@ -10,7 +10,10 @@
 
 .container-center {
     justify-content: center;
-    align-items: center;
+}
+
+.container-stretch {
+    align-items: stretch;
 }
 
 .full-width {

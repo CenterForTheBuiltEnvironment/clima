@@ -46,10 +46,20 @@ def custom():
                     ),
                 ]
             ),
-            dcc.Graph(
-                id = 'custom-sunpath',
-                config = config
-            )
+            html.Div(
+                className = "container-row full-width container-center container-stretch",
+                children = [
+                    dcc.Loading(
+                        type = "circle",
+                        children = [
+                            dcc.Graph(
+                                id = 'custom-sunpath',
+                                config = config
+                            ), 
+                        ]
+                    ),
+                ]
+            ),
         ]
     )
 
@@ -86,6 +96,31 @@ def explore_daily_heatmap():
         ]
     )
 
+def static_section():
+    return html.Div(
+        className = "container-col full-width", 
+        children = [
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'monthly-solar',
+                        config = config
+                    ), 
+                ]
+            ),
+            dcc.Loading(
+                type = "circle",
+                children = [
+                    dcc.Graph(
+                        id = 'cloud-cover',
+                        config = config
+                    ), 
+                ]
+            ),
+        ]
+    )
+
 
 def tab_four():
     """ Contents of tab four.
@@ -111,35 +146,22 @@ def tab_four():
                     ),
                 ]
             ),
-            dcc.Loading(
-                type = "circle",
+            html.Div(
+                className = "container-row full-width container-center container-stretch",
                 children = [
-                    dcc.Graph(
-                        id = 'solar-dropdown-output',
-                        config = config
-                    ), 
+                    dcc.Loading(
+                        type = "circle",
+                        children = [
+                            dcc.Graph(
+                                id = 'solar-dropdown-output',
+                                config = config
+                            ), 
+                        ]
+                    ),
                 ]
             ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'monthly-solar',
-                        config = config
-                    ), 
-                ]
-            ),
-            dcc.Loading(
-                type = "circle",
-                children = [
-                    dcc.Graph(
-                        id = 'cloud-cover',
-                        config = config
-                    ), 
-                ]
-            ),
+            static_section(),
             custom(),
             explore_daily_heatmap()
-
         ]
     )
