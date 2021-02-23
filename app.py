@@ -565,16 +565,10 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter, \
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
-    print(data_filter)
-    if data_filter:
-        print("hi")
-        if min_val and max_val:
-            two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
-            three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
-            return three, two
-        else: 
-            print("ello")
-            return dash.no_update
+    # print(str(data_filter) + " " + str(min_val) + " " + str(max_val))
+    if data_filter and (min_val is None or max_val is None):
+        # print("ello")
+        raise PreventUpdate
     else:
         two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
         three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
