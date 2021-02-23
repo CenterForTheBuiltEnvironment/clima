@@ -308,10 +308,10 @@ p {
 }
 
 #sec1-var-dropdown {
-    width: 15%;
+    width: 25%;
 }
 
-#sec2-var-dropdown, #sec2-data-filter-var, #sec3-filter-var-dropdown, #var-x-dropdown, #var-y-dropdown, #colorby-dropdown {
+#sec2-var-dropdown, #sec2-data-filter-var, #tab6-sec3-filter-var-dropdown, #tab6-sec3-var-x-dropdown, #tab6-sec3-var-y-dropdown, #tab6-sec3-colorby-dropdown {
     width: 65%;
 }
 
@@ -330,11 +330,11 @@ p {
     align-items: stretch;
 }
 
-#sec3-query-hour-slider, #sec3-query-month-slider, #sec2-hour-slider, #sec2-month-slider {
+#tab6-sec3-query-hour-slider, #tab6-sec3-query-month-slider, #tab6-sec3-hour-slider, #tab6-sec3-month-slider {
     width: 65%;
 }
 
-#sec3-max-val, #sec3-min-val, #sec2-max-val, #sec2-min-val {
+#sec2-max-val, #sec2-min-val, #tab6-sec3-max-val, #tab6-sec3-min-val {
     width: 65%
 }
 

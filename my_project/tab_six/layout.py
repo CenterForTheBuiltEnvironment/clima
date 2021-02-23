@@ -273,7 +273,7 @@ def section_three_inputs():
                             ),
                             dcc.Dropdown(
                                 className = "tab6-sec3-dropdown",
-                                id = "var-x-dropdown", 
+                                id = "tab6-sec3-var-x-dropdown", 
                                 options = [
                                     {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                                 ], 
@@ -290,7 +290,7 @@ def section_three_inputs():
                             ),
                             dcc.Dropdown(
                                 className = "tab6-sec3-dropdown",
-                                id = "var-y-dropdown", 
+                                id = "tab6-sec3-var-y-dropdown", 
                                 options = [
                                     {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                                 ], 
@@ -307,7 +307,7 @@ def section_three_inputs():
                             ),
                             dcc.Dropdown(
                                 className = "tab6-sec3-dropdown",
-                                id = "colorby-dropdown", 
+                                id = "tab6-sec3-colorby-dropdown", 
                                 options = [
                                     {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                                 ], 
@@ -325,14 +325,14 @@ def section_three_inputs():
                             {"label": "Apply Time Filters", "value": "time"},
                         ],
                         value = ["time"],
-                        id = "sec3-time-filter-input",
+                        id = "tab6-sec3-time-filter-input",
                     ),
                     html.Div(
                         className = 'container-row full-width container-center',
                         children = [
                             html.H6("Month Range"),
                             dcc.RangeSlider(
-                                id = "sec3-query-month-slider",
+                                id = "tab6-sec3-query-month-slider",
                                 min = 1,
                                 max = 12,
                                 step = 1,
@@ -354,7 +354,7 @@ def section_three_inputs():
                         children = [
                             html.H6("Hour Range"),
                             dcc.RangeSlider(
-                                id = "sec3-query-hour-slider",
+                                id = "tab6-sec3-query-hour-slider",
                                 min = 1,
                                 max = 24,
                                 step = 1,
@@ -381,7 +381,7 @@ def section_three_inputs():
                             {"label": "Apply Data Filters", "value": "data"},
                         ],
                         value = [],
-                        id = "sec3-data-filter-input",
+                        id = "tab6-sec3-data-filter-input",
                     ),
                     html.Div(
                         className = "container-row row-center full-width",
@@ -392,7 +392,7 @@ def section_three_inputs():
                             ),
                             dcc.Dropdown(
                                 className = "tab6-sec3-dropdown",
-                                id = "sec3-filter-var-dropdown", 
+                                id = "tab6-sec3-filter-var-dropdown", 
                                 options = [
                                     {'label': i, 'value': dropdown_names[i]} for i in dropdown_names
                                 ], 
@@ -409,7 +409,7 @@ def section_three_inputs():
                             ),
                             dbc.Input(
                                 className = "num-input",
-                                id = "sec3-min-val",
+                                id = "tab6-sec3-min-val",
                                 placeholder = "Enter a number for the min val",
                                 type = "number", 
                                 min = 0, 
@@ -426,7 +426,7 @@ def section_three_inputs():
                             ),
                             dbc.Input(
                                 className = "num-input",
-                                id = "sec3-max-val",
+                                id = "tab6-sec3-max-val",
                                 placeholder = "Enter a number for the max val",
                                 type = "number", 
                                 min = 0, 

@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 import pandas as pd
 from dash import Dash
+import dash 
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
@@ -536,16 +537,16 @@ def update_tab_six_two(var, time_filter, month, hour, data_filter, \
     Output('two-var', 'figure'),
 
     # Section Three
-    [Input('var-x-dropdown', 'value')],
-    [Input('var-y-dropdown', 'value')],
-    [Input('colorby-dropdown', 'value')],
-    [Input('sec3-time-filter-input', 'value')],
-    [Input('sec3-query-month-slider', 'value')],
-    [Input('sec3-query-hour-slider', 'value')],
-    [Input('sec3-data-filter-input', 'value')],
-    [Input('sec3-filter-var-dropdown', 'value')],
-    [Input('sec3-min-val', 'value')],
-    [Input('sec3-max-val', 'value')],
+    [Input('tab6-sec3-var-x-dropdown', 'value')],
+    [Input('tab6-sec3-var-y-dropdown', 'value')],
+    [Input('tab6-sec3-colorby-dropdown', 'value')],
+    [Input('tab6-sec3-time-filter-input', 'value')],
+    [Input('tab6-sec3-query-month-slider', 'value')],
+    [Input('tab6-sec3-query-hour-slider', 'value')],
+    [Input('tab6-sec3-data-filter-input', 'value')],
+    [Input('tab6-sec3-filter-var-dropdown', 'value')],
+    [Input('tab6-sec3-min-val', 'value')],
+    [Input('tab6-sec3-max-val', 'value')],
 
     # General 
     [Input('df-store', 'modified_timestamp')],
@@ -553,8 +554,8 @@ def update_tab_six_two(var, time_filter, month, hour, data_filter, \
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
-def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
-    month3, hour3, data_filter3, data_filter_var3, min_val3, max_val3, \
+def update_tab_six_three(var_x, var_y, colorby, time_filter, \
+    month, hour, data_filter, data_filter_var, min_val, max_val, \
     ts, global_local, df, meta):
     """ Update the contents of tab size. Passing in the info from the dropdown and the general info.
     """
@@ -562,11 +563,23 @@ def update_tab_six_three(var_x, var_y, colorby, time_filter3, \
     # if (min_val3 is None or max_val3 is None) and data_filter3:
     #     raise PreventUpdate
     df = pd.read_json(df, orient = 'split')
-    time_filter_info3 = [time_filter3, month3, hour3]
-    data_filter_info3 = [data_filter3, data_filter_var3, min_val3, max_val3]
-    two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
-    three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3)
-    return three, two
+    time_filter_info = [time_filter, month, hour]
+    data_filter_info = [data_filter, data_filter_var, min_val, max_val]
+    print(data_filter)
+    if data_filter:
+        print("hi")
+        if min_val and max_val:
+            two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
+            three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
+            return three, two
+        else: 
+            print("ello")
+            return dash.no_update
+    else:
+        two = two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
+        three = three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info)
+        return three, two
+
 
 
 ##################################

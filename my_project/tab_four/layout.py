@@ -53,16 +53,6 @@ def sunpath():
                         id = 'custom-sunpath',
                         config = config
                     ), 
-                    # dcc.Loading(
-                    #     id = "sunpath-loading-container",
-                    #     type = "circle",
-                    #     children = [
-                    #         dcc.Graph(
-                    #             id = 'custom-sunpath',
-                    #             config = config
-                    #         ), 
-                    #     ]
-                    # ),
                 ]
             )
         ]

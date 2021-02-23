@@ -117,48 +117,103 @@ def three_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, 
     min_val = data_filter_info3[2]
     max_val = data_filter_info3[3]
 
-    var_unit = str(colorby) + "_unit"
-    var_unit = unit_dict[var_unit]
-    var_range = str(colorby) + "_range"
-    var_range = range_dict[var_range]
-    var_name = str(colorby) + "_name"
-    var_name = name_dict[var_name]
-    var_color = str(colorby) + "_color"
-    var_color = color_dict[var_color]
+    var = colorby
+    var_unit = unit_dict[str(var) + "_unit"]
+    var_range = range_dict[str(var) + "_range"]
+    var_name = name_dict[str(var) + "_name"]
+    var_color = color_dict[str(var) + "_color"]
+
+    nbinsx = "auto"
+    nbinsy = "auto"
+
+    if global_local == "global":
+        ##Set Global values for Max and minimum
+        var_range = var_range
+    else:
+        ##Set maximumand minimum according to data
+        dataMax = (5*math.ceil(df[var].max()/5))
+        dataMin = (5*math.floor(df[var].min()/5))
+        var_range = [dataMin, dataMax]
+
     colorscale = var_color
+
+
 
     if time_filter:
         if start_month <= end_month:
-            df.loc[(df['month'] < start_month) | (df['month'] > end_month)]
+            df.loc[ (df['month'] < start_month) | (df['month'] > end_month)]=None
         else:
-            df.loc[(df['month'] >= end_month) & (df['month'] <= start_month)]
+            df.loc[ (df['month'] >= end_month) & (df['month'] <= start_month)]=None
 
         if start_hour <= end_hour:
-            df.loc[(df['hour'] < start_hour ) | (df['hour'] > end_hour)]
+            df.loc[(df['hour'] < start_hour ) | (df['hour'] > end_hour)]=None
         else:
-            df.loc[(df['hour'] >= end_hour) & (df['hour'] <= start_hour )]
+            df.loc[(df['hour'] >= end_hour) & (df['hour'] <= start_hour)]=None
 
     if data_filter:
+        print(min_val)
+        print(max_val)
         if min_val <= max_val:
-            df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)]
+            df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)]=None
         else:
-            df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)]
+            df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)]=None
+
 
     title = var_x + " vs " + var_y + " colored by " + colorby
-    fig = px.scatter(
-            df, 
-            x = var_x, 
-            y = var_y, 
-            color = colorby,
-            color_continuous_scale = colorscale,
-            opacity = 0.4,
-            range_color = var_range,
-            marginal_x = "histogram", 
-            marginal_y = "histogram",
-            title = title
-        )
-    fig.update_layout(dragmode =  False)
+
+    fig = px.scatter(df, x = var_x, y = var_y, color = colorby,
+                    color_continuous_scale = colorscale,
+                    opacity=0.4,range_color = var_range,
+                    marginal_x = "histogram", marginal_y = "histogram",
+                    title = title)
+
+    fig.update_layout(template = template, title = title,)
+    fig.update_xaxes(showline = True, linewidth = 1, linecolor = 'black', mirror = False)
+    fig.update_yaxes(showline = True, linewidth = 1, linecolor = 'black', mirror = False)
     return fig
+
+    # var_unit = str(colorby) + "_unit"
+    # var_unit = unit_dict[var_unit]
+    # var_range = str(colorby) + "_range"
+    # var_range = range_dict[var_range]
+    # var_name = str(colorby) + "_name"
+    # var_name = name_dict[var_name]
+    # var_color = str(colorby) + "_color"
+    # var_color = color_dict[var_color]
+    # colorscale = var_color
+
+    # if time_filter:
+    #     if start_month <= end_month:
+    #         df.loc[(df['month'] < start_month) | (df['month'] > end_month)]
+    #     else:
+    #         df.loc[(df['month'] >= end_month) & (df['month'] <= start_month)]
+
+    #     if start_hour <= end_hour:
+    #         df.loc[(df['hour'] < start_hour ) | (df['hour'] > end_hour)]
+    #     else:
+    #         df.loc[(df['hour'] >= end_hour) & (df['hour'] <= start_hour )]
+
+    # if data_filter:
+    #     if min_val <= max_val:
+    #         df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)]
+    #     else:
+    #         df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)]
+
+    # title = var_x + " vs " + var_y + " colored by " + colorby
+    # fig = px.scatter(
+    #         df, 
+    #         x = var_x, 
+    #         y = var_y, 
+    #         color = colorby,
+    #         color_continuous_scale = colorscale,
+    #         opacity = 0.4,
+    #         range_color = var_range,
+    #         marginal_x = "histogram", 
+    #         marginal_y = "histogram",
+    #         title = title
+    #     )
+    # fig.update_layout(dragmode =  False)
+    # return fig
 
 def two_var_graph(df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3):
     """ Return the custom graph plotting two variables.
