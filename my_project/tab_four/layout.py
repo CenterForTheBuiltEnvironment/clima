@@ -14,7 +14,7 @@ def sunpath():
         id = "tab-four-custom-sun-container",
         children = [
             html.Div(
-                className = "container-row container-center full-width",
+                className = "container-row container-center full-width text-dropdown-container",
                 children = [
                     html.H6(
                         className = "text-next-to-input",
@@ -30,7 +30,7 @@ def sunpath():
                 ]
             ),
             html.Div(
-                className = "container-row container-center full-width",
+                className = "container-row container-center full-width text-dropdown-container",
                 children = [
                     html.H6(
                         className = "text-next-to-input",
@@ -49,33 +49,22 @@ def sunpath():
             html.Div(
                 id = "sunpath-container",
                 children = [
-                    dcc.Loading(
-                        id = "sunpath-loading-container",
-                        type = "circle",
-                        children = [
-                            dcc.Graph(
-                                id = 'custom-sunpath',
-                                config = config
-                            ), 
-                        ]
-                    ),
+                    dcc.Graph(
+                        id = 'custom-sunpath',
+                        config = config
+                    ), 
+                    # dcc.Loading(
+                    #     id = "sunpath-loading-container",
+                    #     type = "circle",
+                    #     children = [
+                    #         dcc.Graph(
+                    #             id = 'custom-sunpath',
+                    #             config = config
+                    #         ), 
+                    #     ]
+                    # ),
                 ]
             )
-            # html.Div(
-            #     className = "container-row full-width container-center container-stretch",
-            #     children = [
-            #         dcc.Loading(
-            #             className = "full-width",
-            #             type = "circle",
-            #             children = [
-            #                 dcc.Graph(
-            #                     id = 'custom-sunpath',
-            #                     config = config
-            #                 ), 
-            #             ]
-            #         ),
-            #     ]
-            # ),
         ]
     )
 
