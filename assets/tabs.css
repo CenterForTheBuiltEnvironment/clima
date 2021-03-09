@@ -225,13 +225,23 @@ p {
 }
 
 .seasonal-graph {
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
 }
 
 .daily-wind-graph {
     width: 90%;
     height: 90%;
+}
+
+#daily-wind-rose-container {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+}
+
+#daily-wind-rose-outer-container {
+    align-items: stretch;
 }
 
 #slider-container * {
