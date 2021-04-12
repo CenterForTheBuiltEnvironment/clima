@@ -74,6 +74,7 @@ def render_content(tab):
 #######################
 ### TAB ONE: SELECT ###        
 #######################
+ 
 @app.callback(
     Output('df-store', 'data'),
     Output('meta-store', 'data'),
@@ -623,6 +624,7 @@ def update_tab_seven(var, ts, global_local, df, meta):
     [State('df-store', 'data')],
     [State('meta-store', 'data')]
 )
+
 def update_psych_chart(colorby_var, time_filter, month, hour, data_filter, data_filter_var, min_val, max_val, ts, global_local, df, meta):
     df = pd.read_json(df, orient = 'split')
     time_filter_info = [time_filter, month, hour]
