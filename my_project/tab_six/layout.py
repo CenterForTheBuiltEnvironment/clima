@@ -98,7 +98,7 @@ def section_two_inputs():
                             options = [
                                 {"label": "Apply Time Filters", "value": "time"},
                             ],
-                            value = ["time"],
+                            value = [],
                             id = "sec2-time-filter-input",
                         ),
                         html.Div(
@@ -134,7 +134,7 @@ def section_two_inputs():
                                     min = 1,
                                     max = 24,
                                     step = 1,
-                                    value = [6, 20],
+                                    value = [1, 24],
                                     marks = {
                                         1: '1',
                                         24: '24'
@@ -143,7 +143,7 @@ def section_two_inputs():
                                         'always_visible': False,
                                         'placement' : 'topLeft'
                                     },
-                                    allowCross = False
+                                    allowCross = True
                                 )
                             ]
                         ),
@@ -324,7 +324,7 @@ def section_three_inputs():
                         options = [
                             {"label": "Apply Time Filters", "value": "time"},
                         ],
-                        value = ["time"],
+                        value = [],
                         id = "tab6-sec3-time-filter-input",
                     ),
                     html.Div(
@@ -358,16 +358,16 @@ def section_three_inputs():
                                 min = 1,
                                 max = 24,
                                 step = 1,
-                                value = [6, 20],
+                                value = [1, 24],
                                 marks = {
                                     1: '1',
                                     24: '24'
                                 },
                                 tooltip = {
                                     'always_visible': False,
-                                    'placement' : 'topLeft'
+                                    'placement' : 'top'
                                 },
-                                allowCross = False
+                                allowCross = True
                             )
                         ]
                     ),

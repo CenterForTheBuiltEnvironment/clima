@@ -43,7 +43,7 @@ def inputs():
                         options = [
                             {"label": "Apply Time Filters", "value": "time"},
                         ],
-                        value = ["time"],
+                        value = [],
                         id = "tab9-sec3-time-filter-input",
                     ),
                     html.Div(
@@ -77,7 +77,7 @@ def inputs():
                                 min = 1,
                                 max = 24,
                                 step = 1,
-                                value = [6, 20],
+                                value = [1, 24],
                                 marks = {
                                     1: '1',
                                     24: '24'
@@ -86,7 +86,7 @@ def inputs():
                                     'always_visible': False,
                                     'placement' : 'topLeft'
                                 },
-                                allowCross = False
+                                allowCross = True
                             )
                         ]
                     ),

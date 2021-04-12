@@ -38,6 +38,8 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
             df[mask] = None
 
     if data_filter:
+        print(min_val, " ", max_val)
+        print(type(max_val))
         if min_val <= max_val:
             mask = ((df[data_filter_var] < min_val) |
                     (df[data_filter_var] > max_val))
@@ -88,7 +90,7 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
             str(start_hour) + ":00 and " + str(end_hour)+":00"
     if data_filter:
         title = title + "<br>when the " + data_filter_var + \
-            " is between " + str(min_val) + " and " + str(max_val) + filter_unit
+            " is between " + str(min_val) + " and " + str(max_val)
 
     dbt_list = list(range(-60, 60, 1))
     rh_list = list(range(10, 110, 10))

@@ -211,6 +211,7 @@ def update_tab_four_section_one(ts, global_local, df, meta):
 
     # Sun Radiation
     monthly = monthly_solar(df, meta)
+    monthly = monthly.update_layout(title="Global and Diffuse Horizontal Solar Radiatioin (KWH/m²)")
 
     # Cloud Cover 
     cover = barchart(df, 'Tskycover', [False], [False, '', 3, 7], True)

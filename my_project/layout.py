@@ -22,7 +22,7 @@ def new_build_footer():
                         ],
                         href = 'https://cbe.berkeley.edu/'
                     ),
-                    html.P("The CBE Clima Tool is licensed under a Creative Commons Attribution-Noncomercial 4.0 International License")
+                    html.P("The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License")
                 ]
             ),
             html.Div(
@@ -36,10 +36,15 @@ def new_build_footer():
                                 "Giovanni Betti", 
                                 href = "https://www.linkedin.com/in/gbetti/"
                             ),
-                            " and",
+                            ",",
                             html.A(
                                 "Christine Nguyen",
                                 href = "https://chrlng.github.io/",
+                            ),
+                            "and",
+                            html.A(
+                                "Juliet Kim",
+                                href="https://www.linkedin.com/in/suhyangkim/",
                             )
                         ],
                     ),

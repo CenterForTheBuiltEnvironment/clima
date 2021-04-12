@@ -70,6 +70,8 @@ def polar_graph(df, meta, global_local, var):
     latitude = float(meta[-4])
     longitude = float(meta[-3])
     time_zone = float(meta[-2])
+    solpos = df.loc[df['apparent_elevation'] > 0, :]
+    
     if var is not None: 
         var_unit = unit_dict[str(var) + "_unit"]
         var_range = range_dict[str(var) + "_range"]
@@ -83,6 +85,7 @@ def polar_graph(df, meta, global_local, var):
             # Set maximum and minimum according to data
             data_max = (5 * ceil(solpos[var].max() / 5))
             data_min = (5 * floor(solpos[var].min() / 5))
+            print(data_min, data_max)
             range_z = [data_min, data_max]
 
     tz = 'UTC'

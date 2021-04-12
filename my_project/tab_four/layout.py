@@ -39,7 +39,7 @@ def sunpath():
                     dcc.Dropdown(
                         id = "custom-sun-view-dropdown", 
                         options = [
-                            {'label': 'Polar', 'value': 'polar'},
+                            {'label': 'Spherical', 'value': 'polar'},
                             {'label': 'Cartesian', 'value': 'cartesian'}
                         ], 
                         value = 'polar'
