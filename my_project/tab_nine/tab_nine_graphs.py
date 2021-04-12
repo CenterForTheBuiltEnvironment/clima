@@ -38,8 +38,6 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
             df[mask] = None
 
     if data_filter:
-        print(min_val, " ", max_val)
-        print(type(max_val))
         if min_val <= max_val:
             mask = ((df[data_filter_var] < min_val) |
                     (df[data_filter_var] > max_val))
