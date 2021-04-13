@@ -52,6 +52,7 @@ if __name__ == '__main__':
 def render_content(tab):
     """ Update the contents of the page depending on what tab the user selects.
     """
+    print("to deploy")
     if tab == 'tab-1':
         return tab_one()
     elif tab == 'tab-2':
