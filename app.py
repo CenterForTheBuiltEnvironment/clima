@@ -28,6 +28,7 @@ from my_project.tab_two.tab_two_graphs import world_map
 from my_project.template_graphs import (barchart, daily_profile, heatmap,
                                         violin, wind_rose, yearly_profile)
 
+
 app = Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions = True)
 server = app.server 
 
