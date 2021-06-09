@@ -56,9 +56,6 @@ app.layout = html.Div(
     ],
 )
 
-if __name__ == "__main__":
-    app.run_server(debug=False)
-
 #####################
 ### TAB SELECTION ###
 #####################
@@ -790,3 +787,7 @@ def update_psych_chart(
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
     fig = psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_info)
     return fig
+
+
+if __name__ == "__main__":
+    app.run_server(debug=False)
