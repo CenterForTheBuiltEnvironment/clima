@@ -11,10 +11,29 @@ from pythermalcomfort.models import utci
 from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
 
+import functools
+import time
+
+
+def timer(func):
+    """Print the runtime of the decorated function"""
+
+    @functools.wraps(func)
+    def wrapper_timer(*args, **kwargs):
+        start_time = time.perf_counter()  # 1
+        value = func(*args, **kwargs)
+        end_time = time.perf_counter()  # 2
+        run_time = end_time - start_time  # 3
+        print(f"Finished {func.__name__!r} in {run_time:.4f} secs")
+        return value
+
+    return wrapper_timer
+
 
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 
 
+@timer
 def get_data(url):
     """Return a list of the data from api call."""
     if url[-3:] == "zip" or url[-3:] == "all":
@@ -33,6 +52,7 @@ def get_data(url):
     return lines
 
 
+@timer
 def create_df(default_url):
     """Extract and clean the data. Return a pandas data from a url."""
     lst = get_data(default_url)
@@ -48,7 +68,7 @@ def create_df(default_url):
     lst = lst[8 : len(lst) - 1]
     lst = [line.strip().split(",") for line in lst]
 
-    # Each data row exlude index 4 and 5, and everything afterdayssnow
+    # Each data row exclude index 4 and 5, and everything after days now
     for line in lst:
         del line[4:6]
         del line[9]
@@ -108,24 +128,24 @@ def create_df(default_url):
         "11": "Nov",
         "12": "Dec",
     }
-    epw_df["month_names"] = epw_df["month"].apply(lambda x: month_look_up[x])
+    epw_df["month_names"] = epw_df["month"].map(month_look_up)
 
     # Add in DOY
-    def doy_helper(row):
-        """Helper function for the DOY column."""
-        month = int(row["month"])
-        year = int(row["year"])
-        day = int(row["day"])
-        period = pd.Period(day=day, month=month, year=year, freq="D")
-        return period.dayofyear
-
-    epw_df["DOY"] = epw_df.apply(lambda row: doy_helper(row), axis=1)
+    epw_df["DOY"] = pd.to_datetime(
+        (
+            epw_df["year"].astype(int) * 10000
+            + epw_df["month"].astype(int) * 100
+            + epw_df["day"].astype(int)
+        ).apply(str),
+        format="%Y%m%d",
+    ).dt.dayofyear
 
     # Change to int type
     change_to_int = ["year", "day", "month", "hour"]
     for col in change_to_int:
         epw_df[col] = epw_df[col].astype(int)
 
+    # todo optimize
     # Change to float type
     change_to_float = [
         "DBT",
@@ -173,9 +193,9 @@ def create_df(default_url):
         "times", drop=False, append=False, inplace=True, verify_integrity=False
     )
 
-    # Add in solpos df
-    solpos = solarposition.get_solarposition(times, latitude, longitude)
-    epw_df = pd.concat([epw_df, solpos], axis=1)
+    # Add in solar position df
+    solar_position = solarposition.get_solarposition(times, latitude, longitude)
+    epw_df = pd.concat([epw_df, solar_position], axis=1)
 
     # Add in UTCI
     sol_altitude = epw_df["elevation"].mask(epw_df["elevation"] <= 0, 0)
@@ -251,3 +271,8 @@ def create_df(default_url):
     epw_df = epw_df.join(psy_df)
 
     return epw_df, meta
+
+
+if __name__ == "__main__":
+    df, meta_data = create_df(default_url)
+    # result = df.head().to_json(date_format="iso", orient="split")
