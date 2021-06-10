@@ -146,9 +146,7 @@ def alert_display(data, n_clicks, meta):
         )
 
 
-########################
-### TAB TWO: CLIMATE ###
-########################
+# TAB TWO: CLIMATE
 @app.callback(
     Output("world-map", "figure"),
     Output("temp-profile-graph", "figure"),
@@ -164,6 +162,7 @@ def alert_display(data, n_clicks, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_two(ts, global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -277,11 +276,7 @@ def update_tab_three_rh_heatmap(global_local, df):
     return rh_heatmap
 
 
-#####################
-### TAB FOUR: SUN ###
-#####################
-
-### STATIC ###
+# TAB 4: SUN
 @app.callback(
     Output("monthly-solar", "figure"),
     Output("cloud-cover", "figure"),
@@ -307,7 +302,7 @@ def update_tab_four_section_one(ts, global_local, df, meta):
     return monthly, cover
 
 
-### CUSTOM SUNPATH ###
+# custom sun path
 @app.callback(
     Output("custom-sunpath", "figure"),
     [Input("custom-sun-view-dropdown", "value")],
@@ -346,9 +341,7 @@ def update_tab_four_section_two(var, ts, global_local, df, meta):
     return daily_profile(df, var, global_local), heatmap(df, var, global_local)
 
 
-######################
-### TAB FIVE: WIND ###
-######################
+# TAB FIVE: WIND
 ### Static Graphs ###
 @app.callback(
     Output("wind-rose", "figure"),
@@ -360,6 +353,7 @@ def update_tab_four_section_two(var, ts, global_local, df, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_five(ts, global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -372,7 +366,7 @@ def update_tab_five(ts, global_local, df, meta):
     return annual, speed, direction
 
 
-### Custom Windrose ###
+# Custom Wind rose
 @app.callback(
     Output("custom-wind-rose", "figure"),
     # Custom Graph Input
@@ -382,13 +376,10 @@ def update_tab_five(ts, global_local, df, meta):
     [Input("tab5-custom-end-hour", "value")],
     # General
     [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
-def update_tab_five(
-    start_month, start_hour, end_month, end_hour, ts, global_local, df, meta
-):
+def update_tab_five(start_month, start_hour, end_month, end_hour, ts, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     start_hour = int(start_hour)
@@ -430,6 +421,7 @@ def update_tab_five(
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -655,9 +647,7 @@ def update_tab_five_daily_graphs(ts, global_local, df, meta):
     return morning, noon, night, morning_text, noon_text, night_text
 
 
-###########################
-### TAB SIX: QUERY DATA ###
-###########################
+# TAB SIX: QUERY DATA
 
 ### Section One ###
 @app.callback(
@@ -667,12 +657,10 @@ def update_tab_five_daily_graphs(ts, global_local, df, meta):
     # Section One
     [Input("sec1-var-dropdown", "value")],
     # General
-    [Input("df-store", "modified_timestamp")],
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
-def update_tab_six_one(var, ts, global_local, df, meta):
+def update_tab_six_one(var, global_local, df):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
     return (
@@ -699,10 +687,8 @@ def update_tab_six_one(var, ts, global_local, df, meta):
     [Input("sec2-max-val", "value")],
     [Input("normalize", "value")],
     # General
-    [Input("df-store", "modified_timestamp")],
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 def update_tab_six_two(
     var,
@@ -714,10 +700,8 @@ def update_tab_six_two(
     min_val,
     max_val,
     normalize,
-    ts,
     global_local,
     df,
-    meta,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
@@ -753,10 +737,8 @@ def update_tab_six_two(
     [Input("tab6-sec3-min-val", "value")],
     [Input("tab6-sec3-max-val", "value")],
     # General
-    [Input("df-store", "modified_timestamp")],
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 def update_tab_six_three(
     var_x,
@@ -769,10 +751,8 @@ def update_tab_six_three(
     data_filter_var,
     min_val,
     max_val,
-    ts,
     global_local,
     df,
-    meta,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     ### TO DO: dont allow to input if apply filter not checked
@@ -795,9 +775,7 @@ def update_tab_six_three(
         return three, two
 
 
-##################################
-### TAB SEVEN: OUTDOOR COMFORT ###
-##################################
+# TAB SEVEN: OUTDOOR COMFORT
 @app.callback(
     Output("utci-heatmap", "figure"),
     Output("utci-category-heatmap", "figure"),
@@ -808,6 +786,7 @@ def update_tab_six_three(
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_seven(var, ts, global_local, df, meta):
     df = pd.read_json(df, orient="split")
     first = heatmap(df, var, global_local)
@@ -815,9 +794,7 @@ def update_tab_seven(var, ts, global_local, df, meta):
     return first, second
 
 
-#####################################
-### TAB NINE: PYSCHROMETRIC CHART ###
-#####################################
+# TAB NINE: PYSCHROMETRIC CHART
 @app.callback(
     Output("psych-chart", "figure"),
     # Sec1 Inputs
@@ -832,10 +809,8 @@ def update_tab_seven(var, ts, global_local, df, meta):
     [Input("tab9-sec3-min-val", "value")],
     [Input("tab9-sec3-max-val", "value")],
     # General
-    [Input("df-store", "modified_timestamp")],
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 def update_psych_chart(
     colorby_var,
@@ -846,10 +821,8 @@ def update_psych_chart(
     data_filter_var,
     min_val,
     max_val,
-    ts,
     global_local,
     df,
-    meta,
 ):
     df = pd.read_json(df, orient="split")
     time_filter_info = [time_filter, month, hour]
