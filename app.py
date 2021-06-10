@@ -38,6 +38,8 @@ from my_project.template_graphs import (
     yearly_profile,
 )
 from my_project.utils import code_timer
+from flask_caching import Cache
+import os
 import warnings
 
 # todo remove ignore warnings
@@ -49,6 +51,11 @@ app = Dash(
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True,
 )
+cache = Cache(
+    app.server, config={"CACHE_TYPE": "filesystem", "CACHE_DIR": "cache-directory"}
+)
+TIMEOUT = 600
+app.config.suppress_callback_exceptions = True
 server = app.server
 
 app.title = "CBE Clima Tool"
@@ -96,6 +103,7 @@ def render_content(tab):
     [State("input-url", "value")],
 )
 @code_timer
+@cache.memoize(timeout=TIMEOUT)
 def submit_button(n_clicks, value):
     """Takes the input once submitted and stores it."""
     try:
