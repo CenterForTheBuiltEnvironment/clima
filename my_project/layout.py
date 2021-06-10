@@ -1,8 +1,6 @@
-import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
 
 
 def new_build_footer():
@@ -48,7 +46,7 @@ def new_build_footer():
                             ),
                         ],
                     ),
-                    html.P("Note: This page is intended for viewing in Google Chrome."),
+                    html.P("Supported browsers: Google Chrome, Opera."),
                 ],
             ),
         ],

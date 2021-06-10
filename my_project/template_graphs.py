@@ -3,7 +3,6 @@ from math import ceil, floor
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.colors import n_colors
 from plotly.subplots import make_subplots
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature

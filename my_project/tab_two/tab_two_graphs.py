@@ -1,8 +1,5 @@
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
-from my_project.template_graphs import violin
-from plotly.colors import n_colors
 
 
 #################

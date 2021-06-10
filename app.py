@@ -61,7 +61,6 @@ app.layout = html.Div(
 @app.callback(Output("tabs-content", "children"), [Input("tabs", "value")])
 def render_content(tab):
     """Update the contents of the page depending on what tab the user selects."""
-    print("to deploy")
     if tab == "tab-1":
         return tab_one()
     elif tab == "tab-2":
@@ -99,6 +98,7 @@ def submit_button(n_clicks, value):
         if n_clicks is None:
             raise PreventUpdate
         df, meta = create_df(value)
+        # fixme: DeprecationWarning: an integer is required (got type float).
         df = df.to_json(date_format="iso", orient="split")
         return df, meta
     except:
@@ -789,4 +789,4 @@ def update_psych_chart(
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server(debug=True)
