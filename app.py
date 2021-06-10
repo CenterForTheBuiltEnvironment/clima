@@ -37,6 +37,11 @@ from my_project.template_graphs import (
     wind_rose,
     yearly_profile,
 )
+from my_project.utils import code_timer
+import warnings
+
+# todo remove ignore warnings
+warnings.filterwarnings("ignore")
 
 
 app = Dash(
@@ -84,14 +89,13 @@ def render_content(tab):
 #######################
 ### TAB ONE: SELECT ###
 #######################
-
-
 @app.callback(
     Output("df-store", "data"),
     Output("meta-store", "data"),
     [Input("submit-button", "n_clicks")],
     [State("input-url", "value")],
 )
+@code_timer
 def submit_button(n_clicks, value):
     """Takes the input once submitted and stores it."""
     try:
@@ -174,6 +178,8 @@ def update_tab_two(ts, global_local, df, meta):
 ####################################
 ### TAB THREE: TEMP AND HUMIDITY ###
 ####################################
+
+
 @app.callback(
     Output("yearly-dbt", "figure"),
     Output("daily-dbt", "figure"),
@@ -186,6 +192,7 @@ def update_tab_two(ts, global_local, df, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@code_timer
 def update_tab_three(ts, global_local, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")

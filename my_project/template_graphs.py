@@ -8,6 +8,7 @@ from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
 
 from my_project.global_scheme import color_dict, name_dict, range_dict, unit_dict
+from my_project.utils import code_timer
 
 from .global_scheme import month_lst, template
 
@@ -76,8 +77,8 @@ def violin(df, var, global_local):
         violingroupgap=0,
         violinmode="overlay",
     )
-    Title = var_name + " (" + var_unit + ")"
-    fig.update_layout(template=template, title=Title, title_x=0.5, dragmode=False)
+    title = var_name + " (" + var_unit + ")"
+    fig.update_layout(template=template, title=title, title_x=0.5, dragmode=False)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
@@ -123,6 +124,7 @@ def get_ashrae(df):
     return lo80, hi80, lo90, hi90
 
 
+@code_timer
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
     lo80, hi80, lo90, hi90 = get_ashrae(df)
@@ -228,10 +230,10 @@ def yearly_profile(df, var, global_local):
 
     elif var == "RH":
         # plot relative Humidity limits (30-70%)
-        loRH = [30] * 365
-        hiRH = [70] * 365
-        lo_rh_df = pd.DataFrame({"loRH": loRH})
-        hi_rh_df = pd.DataFrame({"hiRH": hiRH})
+        lo_rh = [30] * 365
+        hi_rh = [70] * 365
+        lo_rh_df = pd.DataFrame({"loRH": lo_rh})
+        hi_rh_df = pd.DataFrame({"hiRH": hi_rh})
 
         trace3 = go.Bar(
             x=days,
@@ -241,8 +243,6 @@ def yearly_profile(df, var, global_local):
             marker_opacity=0.3,
             marker_color="silver",
         )
-
-        ##
 
         data = [trace3, trace1, trace2]
 
@@ -276,11 +276,7 @@ def yearly_profile(df, var, global_local):
     return fig
 
 
-##############################
-### DAILY PROFILE TEMPLATE ###
-##############################
-
-
+@code_timer
 def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
     var_unit = unit_dict[str(var) + "_unit"]
@@ -394,11 +390,7 @@ def daily_profile(df, var, global_local):
     return fig
 
 
-########################
-### HEATMAP TEMPLATE ###
-########################
-
-
+@code_timer
 def heatmap(df, var, global_local):
     """General function that returns a heatmap."""
     var_unit = unit_dict[str(var) + "_unit"]
@@ -462,8 +454,6 @@ def heatmap(df, var, global_local):
 #########################
 ### WINDROSE TEMPLATE ###
 #########################
-
-
 def speed_labels(bins, units):
     """Return nice labels for a wind speed range."""
     labels = []
@@ -569,13 +559,8 @@ def wind_rose(df, meta, title, month, hour, labels):
     return fig
 
 
-########################
-### SUMMARY BARCHATS ###
-########################
-
-
 def barchart(df, var, time_filter_info, data_filter_info, normalize):
-    """Return the custom summary barcharts."""
+    """Return the custom summary bar chart."""
     time_filter = time_filter_info[0]
     data_filter = data_filter_info[0]
     min_val = data_filter_info[2]

@@ -1,39 +1,21 @@
 import io
 import zipfile
-from datetime import datetime, time, timedelta, timezone
+from datetime import datetime, timedelta, timezone
 from urllib.request import Request, urlopen
 
 import pandas as pd
 import numpy as np
 import requests
+from my_project.utils import code_timer
 from pvlib import solarposition
 from pythermalcomfort.models import utci
 from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
 
-import functools
-import time
-
-
-def timer(func):
-    """Print the runtime of the decorated function"""
-
-    @functools.wraps(func)
-    def wrapper_timer(*args, **kwargs):
-        start_time = time.perf_counter()  # 1
-        value = func(*args, **kwargs)
-        end_time = time.perf_counter()  # 2
-        run_time = end_time - start_time  # 3
-        print(f"Finished {func.__name__!r} in {run_time:.4f} secs")
-        return value
-
-    return wrapper_timer
-
-
 default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
 
 
-@timer
+@code_timer
 def get_data(url):
     """Return a list of the data from api call."""
     if url[-3:] == "zip" or url[-3:] == "all":
@@ -52,13 +34,11 @@ def get_data(url):
     return lines
 
 
-@timer
+@code_timer
 def create_df(default_url):
     """Extract and clean the data. Return a pandas data from a url."""
     lst = get_data(default_url)
     meta = lst[0].strip().split(",")
-    city = meta[1]
-    country = meta[3]
     latitude = float(meta[-4])
     longitude = float(meta[-3])
     time_zone = float(meta[-2])
