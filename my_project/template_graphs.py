@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from pythermalcomfort.models import adaptive_ashrae
-from pythermalcomfort.psychrometrics import running_mean_outdoor_temperature
+from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
 from my_project.global_scheme import color_dict, name_dict, range_dict, unit_dict
 from my_project.utils import code_timer
