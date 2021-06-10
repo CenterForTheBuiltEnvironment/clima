@@ -1,10 +1,6 @@
-import dash
-import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas as pd
-from dash.dependencies import Input, Output, State
-from my_project.global_scheme import config, month_lst
+from my_project.global_scheme import config, month_lst, container_row_center_full
 
 
 def sliders():
@@ -57,7 +53,7 @@ def seasonal_wind_rose():
         children=[
             html.H5("Seasonal Wind Rose"),
             html.Div(
-                className="container-row container-center",
+                className=container_row_center_full,
                 children=[
                     html.Div(
                         className="container-col",
@@ -103,7 +99,7 @@ def seasonal_wind_rose():
                 ],
             ),
             html.Div(
-                className="container-row container-center",
+                className=container_row_center_full,
                 children=[
                     html.Div(
                         className="container-col",
@@ -231,7 +227,7 @@ def custom_windrose():
                         className="container-col container-center tab5-custom-half-container",
                         children=[
                             html.Div(
-                                className="container-row row-center full-width",
+                                className=container_row_center_full,
                                 children=[
                                     html.H6(
                                         className="text-next-to-input",
@@ -248,7 +244,7 @@ def custom_windrose():
                                 ],
                             ),
                             html.Div(
-                                className="container-row row-center full-width",
+                                className=container_row_center_full,
                                 children=[
                                     html.H6(
                                         className="text-next-to-input",
@@ -270,7 +266,7 @@ def custom_windrose():
                         className="container-col tab5-custom-half-container container-center",
                         children=[
                             html.Div(
-                                className="container-row row-center full-width",
+                                className=container_row_center_full,
                                 children=[
                                     html.H6(
                                         className="text-next-to-input",
@@ -287,7 +283,7 @@ def custom_windrose():
                                 ],
                             ),
                             html.Div(
-                                className="container-row row-center full-width",
+                                className=container_row_center_full,
                                 children=[
                                     html.H6(
                                         className="text-next-to-input",

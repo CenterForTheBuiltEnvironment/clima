@@ -13,9 +13,7 @@ from my_project.utils import code_timer
 from .global_scheme import month_lst, template
 
 
-#######################
-### VIOLIN TEMPLATE ###
-#######################
+# violin template
 def violin(df, var, global_local):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
@@ -591,25 +589,25 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
     color_in = var_color[len(var_color) // 2]
 
     new_df = df.copy()
-    if time_filter:
-        if start_month <= end_month:
-            new_df.loc[(new_df["month"] < start_month) | (new_df["month"] > end_month)]
-        else:
-            new_df.loc[
-                (new_df["month"] >= end_month) & (new_df["month"] <= start_month)
-            ]
-        if start_hour <= end_hour:
-            new_df.loc[(new_df["hour"] < start_hour) | (new_df["hour"] > end_hour)]
-        else:
-            new_df.loc[(df["hour"] >= end_hour) & (new_df["hour"] <= start_hour)]
-
-    if data_filter:
-        if min_val <= max_val:
-            new_df.loc[(new_df[filter_var] < min_val) | (new_df[filter_var] > max_val)]
-        else:
-            new_df.loc[
-                (new_df[filter_var] >= max_val) & (new_df[filter_var] <= min_val)
-            ]
+    # if time_filter:
+    #     if start_month <= end_month:
+    #         new_df.loc[(new_df["month"] < start_month) | (new_df["month"] > end_month)]
+    #     else:
+    #         new_df.loc[
+    #             (new_df["month"] >= end_month) & (new_df["month"] <= start_month)
+    #         ]
+    #     if start_hour <= end_hour:
+    #         new_df.loc[(new_df["hour"] < start_hour) | (new_df["hour"] > end_hour)]
+    #     else:
+    #         new_df.loc[(df["hour"] >= end_hour) & (new_df["hour"] <= start_hour)]
+    #
+    # if data_filter:
+    #     if min_val <= max_val:
+    #         new_df.loc[(new_df[filter_var] < min_val) | (new_df[filter_var] > max_val)]
+    #     else:
+    #         new_df.loc[
+    #             (new_df[filter_var] >= max_val) & (new_df[filter_var] <= min_val)
+    #         ]
     month_in = []
     month_below = []
     month_above = []

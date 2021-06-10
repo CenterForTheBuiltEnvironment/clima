@@ -2,10 +2,7 @@ import pandas as pd
 import plotly.express as px
 
 
-#################
-### WORLD MAP ###
-#################
-def world_map(df, meta):
+def world_map(meta):
     """Return the world map showing the current location."""
     latitude = float(meta[-4])
     longitude = float(meta[-3])

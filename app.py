@@ -39,7 +39,6 @@ from my_project.template_graphs import (
 )
 from my_project.utils import code_timer
 from flask_caching import Cache
-import os
 import warnings
 
 # todo remove ignore warnings
@@ -179,7 +178,7 @@ def update_tab_two(ts, global_local, df, meta):
     ghrad = violin(df, "GHrad", global_local)
     wspeed = violin(df, "Wspeed", global_local)
 
-    return world_map(df, meta), dbt, rh, ghrad, wspeed, location, lon, lat, elevation
+    return world_map(meta), dbt, rh, ghrad, wspeed, location, lon, lat, elevation
 
 
 ####################################

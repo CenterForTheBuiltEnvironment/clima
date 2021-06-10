@@ -1,10 +1,7 @@
-import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas as pd
-from dash.dependencies import Input, Output, State
-from my_project.global_scheme import config, dropdown_names
+from my_project.global_scheme import config, dropdown_names, container_row_center_full
 
 
 def section_one_inputs():
@@ -63,7 +60,7 @@ def section_two_inputs():
                 className="container-col container-center one-of-three-container",
                 children=[
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Variable:"]
@@ -140,7 +137,7 @@ def section_two_inputs():
                         id="sec2-data-filter-input",
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input",
@@ -157,7 +154,7 @@ def section_two_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Min Value:"]
@@ -173,7 +170,7 @@ def section_two_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Max Value:"]
@@ -240,7 +237,7 @@ def section_three_inputs():
                 className="container-col container-center one-of-three-container",
                 children=[
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["X Variable:"]
@@ -257,7 +254,7 @@ def section_three_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Y Variable:"]
@@ -274,7 +271,7 @@ def section_three_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Color By:"]
@@ -347,7 +344,7 @@ def section_three_inputs():
                         id="tab6-sec3-data-filter-input",
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input",
@@ -365,7 +362,7 @@ def section_three_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Min Value:"]
@@ -381,7 +378,7 @@ def section_three_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row row-center full-width",
+                        className=container_row_center_full,
                         children=[
                             html.H6(
                                 className="text-next-to-input", children=["Max Value:"]

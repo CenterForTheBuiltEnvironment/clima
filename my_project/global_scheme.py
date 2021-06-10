@@ -1,6 +1,4 @@
-#########################
-### Colors Dictionary ###
-#########################
+# Colors Dictionary
 blue_red_yellow = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
 dry_humid = ["#ffe600", "#00c8ff", "#0000ff"]
 sun_colors = [
@@ -41,6 +39,8 @@ utci_categories_color = [
     "#751613",
 ]
 
+# container
+container_row_center_full = "container-row row-center full-width"
 
 color_dict = {
     # TEMP
@@ -106,9 +106,7 @@ color_dict = {
     "h_color": blue_red_yellow,
 }
 
-########################
-### Units Dictionary ###
-########################
+# Units Dictionary
 degrees_unit = "\u00B0 deg"
 
 unit_dict = {
@@ -167,9 +165,7 @@ unit_dict = {
     "h_unit": "J/kg dry air",
 }
 
-####################
-### Global Names ###
-####################
+# Global Names
 name_dict = {
     "DOY_name": "Day of the year",
     "day_name": "day",
@@ -227,9 +223,7 @@ name_dict = {
     "h_name": "Enthalpy",
 }
 
-######################
-### Dropdown Names ###
-######################
+# Dropdown Names
 tab4_dropdown_names = {
     "None": None,
     "Dry bulb temperature": "DBT",
@@ -370,9 +364,7 @@ range_dict = {
     "h_range": [0, 110000],
 }
 
-#############
-### Misc. ###
-#############
+# Misc
 month_lst = [
     "Jan",
     "Feb",
@@ -387,17 +379,6 @@ month_lst = [
     "Nov",
     "Dec",
 ]
-
-"""
-template = "plotly"
-config = {
-    'modeBarButtonsToRemove': ['toggleSpikelines', 'hoverCompareCartesian', "pan2d", "lasso2d", "zoomIn2d", "zoomOut2d", "hoverClosestCartesian"],
-    "modeBarButtonsToAdd": ["select2d"],
-    'displaylogo': False,
-    "displayModeBar": "hover"
-}
-
-"""
 
 import plotly.io as pio
 

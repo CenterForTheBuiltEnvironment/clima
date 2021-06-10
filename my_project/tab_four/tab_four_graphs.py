@@ -1,11 +1,9 @@
-from datetime import datetime, time, timedelta, timezone
+from datetime import timedelta
 from math import ceil, cos, floor, radians
 
 import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
-from my_project.extract_df import create_df
 from my_project.global_scheme import (
     color_dict,
     name_dict,
@@ -14,7 +12,6 @@ from my_project.global_scheme import (
     unit_dict,
     degrees_unit,
 )
-from my_project.template_graphs import daily_profile, heatmap
 from plotly.subplots import make_subplots
 from pvlib import solarposition
 
@@ -24,8 +21,10 @@ from pvlib import solarposition
 #######################
 def monthly_solar(epw_df, meta):
     """"""
-    GHrad_month_ave = epw_df.groupby(["month", "hour"])["GHrad"].median().reset_index()
-    DifHrad_month_ave = (
+    g_h_rad_month_ave = (
+        epw_df.groupby(["month", "hour"])["GHrad"].median().reset_index()
+    )
+    dif_h_rad_month_ave = (
         epw_df.groupby(["month", "hour"])["DifHrad"].median().reset_index()
     )
     fig = make_subplots(
@@ -51,8 +50,8 @@ def monthly_solar(epw_df, meta):
 
         fig.add_trace(
             go.Scatter(
-                x=GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "hour"],
-                y=GHrad_month_ave.loc[GHrad_month_ave["month"] == i + 1, "GHrad"],
+                x=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "hour"],
+                y=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "GHrad"],
                 fill="tozeroy",
                 mode="lines",
                 line_color="orange",
@@ -76,8 +75,12 @@ def monthly_solar(epw_df, meta):
 
         fig.add_trace(
             go.Scatter(
-                x=DifHrad_month_ave.loc[DifHrad_month_ave["month"] == i + 1, "hour"],
-                y=DifHrad_month_ave.loc[DifHrad_month_ave["month"] == i + 1, "DifHrad"],
+                x=dif_h_rad_month_ave.loc[
+                    dif_h_rad_month_ave["month"] == i + 1, "hour"
+                ],
+                y=dif_h_rad_month_ave.loc[
+                    dif_h_rad_month_ave["month"] == i + 1, "DifHrad"
+                ],
                 fill="tozeroy",
                 mode="lines",
                 line_color="dodgerblue",
@@ -149,7 +152,6 @@ def polar_graph(df, meta, global_local, var):
         title = "Spherical Sun-Path"
     else:
         vals = solpos[var]
-        var_color = var_color
         marker_size = (((vals - vals.min()) / vals.max()) + 1) * 4
 
     fig = go.Figure()
@@ -166,7 +168,6 @@ def polar_graph(df, meta, global_local, var):
                 mode="lines",
                 line_color="silver",
                 line_width=1,
-                # customdata=10,
                 hovertemplate="Altitude circle<br>" + str(i * 10) + degrees_unit,
                 name="",
             )
@@ -306,9 +307,6 @@ def polar_graph(df, meta, global_local, var):
 
     fig.update_layout(
         autosize=False,
-        # width=800,
-        # height=800,
-        # template="simple_white",
     )
 
     fig.update_layout(template=template, title=title, title_x=0.5, dragmode=False)
