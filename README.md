@@ -61,6 +61,10 @@ Note that whenever you want to run the tool, you have to activate the virtualenv
 
 [comment]: <> (Secondly you should describe the changes in `docs/changelog.md`)
 
+[comment]: <> (gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521)
+
+[comment]: <> (gcloud run deploy --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated)
+
 ## Build with
 * [Dash](https://plotly.com/dash/) - Framework for building the web app
 * [Plotly Python](https://plotly.com/python/) - Used to create the interactive plots 
