@@ -1,5 +1,6 @@
 venv
 .idea
+cache-directory
 
 # Created by .ignore support plugin (hsz.mobi)
 ### VisualStudioCode template
