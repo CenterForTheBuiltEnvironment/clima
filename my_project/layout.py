@@ -21,7 +21,7 @@ def new_build_footer():
                     html.P(
                         "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License"
                     ),
-                    html.P("Version: 0.0.1"),
+                    html.P("Version: 0.0.3"),
                 ],
             ),
             html.Div(
