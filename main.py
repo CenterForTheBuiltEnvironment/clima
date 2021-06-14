@@ -1,7 +1,9 @@
 import dash_html_components as html
 from dash.dependencies import Input, Output
+import dash
+import dash_core_components as dcc
 
-from my_project.layout import build_banner, build_tabs
+from my_project.layout import build_banner, build_tabs, changelog, footer
 from my_project.construction import construction
 from my_project.tab_five.app_five import tab_five
 from my_project.tab_four.app_four import tab_four
@@ -20,10 +22,25 @@ app.title = "CBE Clima Tool"
 app.layout = html.Div(
     id="big-container",
     children=[
+        dcc.Location(id="url", refresh=False),
+        # content will be rendered in this element
         build_banner(),
-        build_tabs(),
+        html.Div(id="page-content"),
+        # fixme the footer should be imported here, it should always tbe there as the banner
     ],
 )
+
+
+@app.callback(
+    dash.dependencies.Output("page-content", "children"),
+    [dash.dependencies.Input("url", "pathname")],
+)
+def display_page(pathname):
+    if pathname == "/":
+        return build_tabs()
+    elif pathname == "/changelog":
+        return html.Div(children=[changelog(), footer()])
+
 
 # Handle tab selection
 @app.callback(Output("tabs-content", "children"), [Input("tabs", "value")])

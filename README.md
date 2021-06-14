@@ -70,7 +70,7 @@ bumpversion patch  # alternatively you can use minor or major instead of patch
 
 If the above command do not work even if you have committed all the files try with `bumpversion patch --allow-dirty`
 
-Secondly you should describe the changes in `changelod document`
+Secondly you should describe the changes in `CHANGELOG.md`
 
 ### Deploy to Google Cloud Run
 

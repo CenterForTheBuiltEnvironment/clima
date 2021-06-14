@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 
-def new_build_footer():
+def footer():
     return html.Div(
         id="footer-container",
         className="container-row",
@@ -14,14 +14,21 @@ def new_build_footer():
                 children=[
                     html.A(
                         children=[
-                            html.Img(id="cbe-logo", src="assets/img/cbe-logo.png")
+                            html.Img(
+                                id="cbe-logo",
+                                src="assets/img/cbe-logo.png",
+                                className="mb-2",
+                            )
                         ],
                         href="https://cbe.berkeley.edu/",
                     ),
                     html.P(
                         "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License"
                     ),
-                    html.P("Version: 0.1.0"),
+                    html.A(
+                        "Version: 0.1.0",
+                        href="/changelog",
+                    ),
                 ],
             ),
             html.Div(
@@ -57,7 +64,7 @@ def build_banner():
                 className="container-row",
                 children=[
                     html.A(
-                        href="https://cbe.berkeley.edu/",
+                        href="/",
                         children=[
                             html.Img(
                                 id="logo-small", src="assets/img/cbe-logo-small.png"
@@ -162,9 +169,19 @@ def build_tabs():
             ),
             html.Div(
                 id="store-container",
-                children=[store(), html.Div(id="tabs-content"), new_build_footer()],
+                children=[store(), html.Div(id="tabs-content"), footer()],
             ),
         ],
+    )
+
+
+def changelog():
+    """changelog page"""
+    f = open("CHANGELOG.md", "r")
+
+    return dbc.Container(
+        className="container p-4",
+        children=[dcc.Markdown(f.read())],
     )
 
 
