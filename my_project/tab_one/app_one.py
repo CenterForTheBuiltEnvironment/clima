@@ -3,8 +3,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-import dash
-import json
 
 from app import app, cache, TIMEOUT
 from my_project.extract_df import create_df
@@ -66,16 +64,9 @@ def alert():
     [State("input-url", "value")],
 )
 @code_timer
-# @cache.memoize(timeout=TIMEOUT)
+@cache.memoize(timeout=TIMEOUT)
 def submit_button(n_clicks, value):
     """Takes the input once submitted and stores it."""
-    # ctx = dash.callback_context
-    # print(
-    #     json.dumps(
-    #         {"states": ctx.states, "triggered": ctx.triggered, "inputs": ctx.inputs},
-    #         indent=2,
-    #     )
-    # )
 
     if n_clicks is None:
         raise PreventUpdate
