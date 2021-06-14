@@ -4,9 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pythermalcomfort = "==1.6.0"
+pythermalcomfort = "*"
 dash = "*"
 pvlib = "*"
+gunicorn = "*"
 
 [dev-packages]
 cleanpy = "*"
