@@ -253,12 +253,15 @@ def create_df(default_url):
     psy_df = psy_df.set_index(epw_df.times)
     epw_df = epw_df.join(psy_df)
 
+    meta.append(default_url)
+    # fixme meta should be a dictionary not an array
     return epw_df, meta
 
 
 if __name__ == "__main__":
     # fmt: off
     url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
+    other_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     # fmt: on
 
     df, meta_data = create_df(url)

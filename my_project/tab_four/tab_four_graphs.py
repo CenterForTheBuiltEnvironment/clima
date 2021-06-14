@@ -117,9 +117,9 @@ def monthly_solar(epw_df, meta):
 #######################
 def polar_graph(df, meta, global_local, var):
     """Return the figure for the custom sun path."""
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    time_zone = float(meta[-2])
+    latitude = float(meta[-5])
+    longitude = float(meta[-4])
+    time_zone = float(meta[-3])
     solpos = df.loc[df["apparent_elevation"] > 0, :]
 
     if var is not None:
@@ -321,9 +321,9 @@ def polar_graph(df, meta, global_local, var):
 
 def custom_cartesian_solar(df, meta, global_local, var):
     """Return a graph of a latitude and longitude solar diagram."""
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    time_zone = float(meta[-2])
+    latitude = float(meta[-5])
+    longitude = float(meta[-4])
+    time_zone = float(meta[-3])
     tz = "UTC"
     if var is not None:
         var_unit = unit_dict[str(var) + "_unit"]

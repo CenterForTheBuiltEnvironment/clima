@@ -3,6 +3,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+import dash
+import json
 
 from app import app, cache, TIMEOUT
 from my_project.extract_df import create_df
@@ -22,7 +24,7 @@ def tab_one():
                     # todo the url below should be the one that was previously selected
                     dcc.Input(
                         id="input-url",
-                        value="https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw",
+                        value="",
                         type="text",
                     ),
                     dbc.Button(
@@ -60,23 +62,33 @@ def alert():
 @app.callback(
     Output("df-store", "data"),
     Output("meta-store", "data"),
-    Output("input-url", "value"),
     [Input("submit-button", "n_clicks")],
     [State("input-url", "value")],
 )
 @code_timer
-@cache.memoize(timeout=TIMEOUT)
+# @cache.memoize(timeout=TIMEOUT)
 def submit_button(n_clicks, value):
     """Takes the input once submitted and stores it."""
-    print(n_clicks)
+    # ctx = dash.callback_context
+    # print(
+    #     json.dumps(
+    #         {"states": ctx.states, "triggered": ctx.triggered, "inputs": ctx.inputs},
+    #         indent=2,
+    #     )
+    # )
+
     if n_clicks is None:
         raise PreventUpdate
-    df, meta = create_df(value)
-    # fixme: DeprecationWarning: an integer is required (got type float).
-    df = df.to_json(date_format="iso", orient="split")
-    print(meta)
-    # todo I should update the input value with the last entered
-    return df, meta, meta[-1]
+    else:
+        df, meta = create_df(value)
+        if df is not None:
+            # fixme: DeprecationWarning: an integer is required (got type float).
+            df = df.to_json(date_format="iso", orient="split")
+            print(meta)
+            # todo I should update the input value with the last entered
+            return df, meta
+        else:
+            return None, None
 
 
 @app.callback(
@@ -91,9 +103,10 @@ def submit_button(n_clicks, value):
 def alert_display(data, n_clicks, meta):
     """Displays the alert for the submit button."""
     default = "Current Location: N/A"
-    if n_clicks is None:
+    # todo store click count in memory
+    if data is None and n_clicks is None:
         return True, "To start, submit a link below!", "primary", default
-    if data is None and n_clicks > 0:
+    elif data is None and n_clicks > 0:
         return (
             True,
             "This link is not available. Please choose another one.",
@@ -104,7 +117,27 @@ def alert_display(data, n_clicks, meta):
         subtitle = "Current Location: " + meta[1] + ", " + meta[3]
         return (
             True,
-            "Successfully loaded data. Check out the other tabs!",
+            "Successfully loaded data. You can change location by submitting a link below!",
             "success",
             subtitle,
         )
+
+
+# update the value of the input URL
+@app.callback(
+    Output("input-url", "value"),
+    Input("meta-store", "modified_timestamp"),
+    State("meta-store", "data"),
+)
+def on_data(ts, meta):
+    if ts is None:
+        raise PreventUpdate
+
+    print(ts, meta)
+
+    if meta is None:
+        default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
+    else:
+        default_url = meta[-1]
+
+    return default_url
