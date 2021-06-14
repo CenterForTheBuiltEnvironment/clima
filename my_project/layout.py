@@ -21,32 +21,22 @@ def new_build_footer():
                     html.P(
                         "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License"
                     ),
+                    html.P("Version: 0.0.1"),
                 ],
             ),
             html.Div(
                 className="container-row",
                 id="footer-right-container",
                 children=[
-                    html.P(
-                        children=[
-                            "Developed by",
-                            html.A(
-                                "Giovanni Betti",
-                                href="https://www.linkedin.com/in/gbetti/",
-                            ),
-                            ",",
-                            html.A(
-                                "Christine Nguyen",
-                                href="https://chrlng.github.io/",
-                            ),
-                            "and",
-                            html.A(
-                                "Juliet Kim",
-                                href="https://www.linkedin.com/in/suhyangkim/",
-                            ),
-                        ],
+                    dcc.Markdown(
+                        """
+                    Developed by [Giovanni Betti](https://www.linkedin.com/in/gbetti/), 
+                    [Christine Nguyen](https://chrlng.github.io/),
+                    [Juliet Kim](https://www.linkedin.com/in/suhyangkim/).
+                    
+                    Supported browsers: Google Chrome, Opera.
+                    """
                     ),
-                    html.P("Supported browsers: Google Chrome, Opera."),
                 ],
             ),
         ],
