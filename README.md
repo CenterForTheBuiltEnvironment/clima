@@ -77,7 +77,7 @@ Secondly you should describe the changes in `changelod document`
 ````
 gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 
-gcloud run deploy --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated
+gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --region=asia-southeast1 --allow-unauthenticated
 ```
 
 ## Build with
