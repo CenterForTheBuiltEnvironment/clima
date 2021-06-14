@@ -4,6 +4,11 @@ import dash_html_components as html
 from my_project.global_scheme import config, container_row_center_full
 
 from my_project.global_scheme import dropdown_names
+from dash.dependencies import Input, Output, State
+import pandas as pd
+
+from app import app
+from my_project.tab_nine.tab_nine_graphs import psych_chart
 
 
 def inputs():
@@ -151,3 +156,40 @@ def tab_nine():
         className="container-col",
         children=[inputs(), dcc.Graph(id="psych-chart", config=config)],
     )
+
+
+# TAB NINE: PYSCHROMETRIC CHART
+@app.callback(
+    Output("psych-chart", "figure"),
+    # Sec1 Inputs
+    [Input("tab9-colorby-dropdown", "value")],
+    # Sec2 Inputs
+    [Input("tab9-sec3-time-filter-input", "value")],
+    [Input("tab9-sec3-query-month-slider", "value")],
+    [Input("tab9-sec3-query-hour-slider", "value")],
+    # Sec3 Inputs
+    [Input("tab9-sec3-data-filter-input", "value")],
+    [Input("tab9-sec3-filter-var-dropdown", "value")],
+    [Input("tab9-sec3-min-val", "value")],
+    [Input("tab9-sec3-max-val", "value")],
+    # General
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+)
+def update_psych_chart(
+    colorby_var,
+    time_filter,
+    month,
+    hour,
+    data_filter,
+    data_filter_var,
+    min_val,
+    max_val,
+    global_local,
+    df,
+):
+    df = pd.read_json(df, orient="split")
+    time_filter_info = [time_filter, month, hour]
+    data_filter_info = [data_filter, data_filter_var, min_val, max_val]
+    fig = psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_info)
+    return fig

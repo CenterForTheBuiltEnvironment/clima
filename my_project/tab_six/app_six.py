@@ -1,7 +1,20 @@
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
+
 from my_project.global_scheme import config, dropdown_names, container_row_center_full
+from dash.dependencies import Input, Output, State
+
+from my_project.tab_six.tab_six_graphs import (
+    custom_heatmap,
+    two_var_graph,
+    three_var_graph,
+)
+from my_project.template_graphs import heatmap, yearly_profile, daily_profile, barchart
+import pandas as pd
+
+from app import app
 
 
 def section_one_inputs():
@@ -427,3 +440,130 @@ def tab_six():
         className="continer-col container-center",
         children=[section_one(), section_two(), section_three()],
     )
+
+
+# TAB SIX: QUERY DATA
+
+### Section One ###
+@app.callback(
+    Output("query-yearly", "figure"),
+    Output("query-daily", "figure"),
+    Output("query-heatmap", "figure"),
+    # Section One
+    [Input("sec1-var-dropdown", "value")],
+    # General
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+)
+def update_tab_six_one(var, global_local, df):
+    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    df = pd.read_json(df, orient="split")
+    return (
+        yearly_profile(df, var, global_local),
+        daily_profile(df, var, global_local),
+        heatmap(df, var, global_local),
+    )
+
+
+### Section Two ###
+@app.callback(
+    Output("custom-heatmap", "figure"),
+    Output("custom-summary", "style"),
+    Output("custom-summary", "figure"),
+    Output("normalize", "style"),
+    # Section Two
+    [Input("sec2-var-dropdown", "value")],
+    [Input("sec2-time-filter-input", "value")],
+    [Input("sec2-month-slider", "value")],
+    [Input("sec2-hour-slider", "value")],
+    [Input("sec2-data-filter-input", "value")],
+    [Input("sec2-data-filter-var", "value")],
+    [Input("sec2-min-val", "value")],
+    [Input("sec2-max-val", "value")],
+    [Input("normalize", "value")],
+    # General
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+)
+def update_tab_six_two(
+    var,
+    time_filter,
+    month,
+    hour,
+    data_filter,
+    filter_var,
+    min_val,
+    max_val,
+    normalize,
+    global_local,
+    df,
+):
+    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    df = pd.read_json(df, orient="split")
+    time_filter_info = [time_filter, month, hour]
+    data_filter_info = [data_filter, filter_var, min_val, max_val]
+
+    heatmap = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+    no_display = {"display": "none"}
+
+    if data_filter:
+        return (
+            heatmap,
+            {},
+            barchart(df, var, time_filter_info, data_filter_info, normalize),
+            {},
+        )
+    return heatmap, no_display, {"data": [], "layout": {}, "frames": []}, no_display
+
+
+### Section Three ###
+@app.callback(
+    Output("three-var", "figure"),
+    Output("two-var", "figure"),
+    # Section Three
+    [Input("tab6-sec3-var-x-dropdown", "value")],
+    [Input("tab6-sec3-var-y-dropdown", "value")],
+    [Input("tab6-sec3-colorby-dropdown", "value")],
+    [Input("tab6-sec3-time-filter-input", "value")],
+    [Input("tab6-sec3-query-month-slider", "value")],
+    [Input("tab6-sec3-query-hour-slider", "value")],
+    [Input("tab6-sec3-data-filter-input", "value")],
+    [Input("tab6-sec3-filter-var-dropdown", "value")],
+    [Input("tab6-sec3-min-val", "value")],
+    [Input("tab6-sec3-max-val", "value")],
+    # General
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+)
+def update_tab_six_three(
+    var_x,
+    var_y,
+    colorby,
+    time_filter,
+    month,
+    hour,
+    data_filter,
+    data_filter_var,
+    min_val,
+    max_val,
+    global_local,
+    df,
+):
+    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    ### TO DO: dont allow to input if apply filter not checked
+    # if (min_val3 is None or max_val3 is None) and data_filter3:
+    #     raise PreventUpdate
+    df = pd.read_json(df, orient="split")
+    time_filter_info = [time_filter, month, hour]
+    data_filter_info = [data_filter, data_filter_var, min_val, max_val]
+    # print(str(data_filter) + " " + str(min_val) + " " + str(max_val))
+    if data_filter and (min_val is None or max_val is None):
+        raise PreventUpdate
+    else:
+        two = two_var_graph(
+            df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info
+        )
+        three = three_var_graph(
+            df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info
+        )
+        return three, two

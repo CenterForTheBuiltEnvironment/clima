@@ -83,11 +83,7 @@ def violin(df, var, global_local):
     return fig
 
 
-###############################
-### YEARLY PROFILE TEMPLATE ###
-###############################
-
-
+# YEARLY PROFILE TEMPLATE
 def get_ashrae(df):
     """calculate the ashrae for the yearly DBT. Helper function for yearly_profile"""
     dbt_day_ave = df.groupby(["DOY"])["DBT"].mean().reset_index()
@@ -134,7 +130,7 @@ def yearly_profile(df, var, global_local):
         # Set Global values for Max and minimum
         range_y = var_range
     else:
-        # Set maximumand minimum according to data
+        # Set maximum and minimum according to data
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]

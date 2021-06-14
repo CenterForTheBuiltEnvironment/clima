@@ -2,6 +2,13 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from my_project.global_scheme import config
+from dash.dependencies import Input, Output, State
+import pandas as pd
+
+from app import app, cache, TIMEOUT
+from my_project.tab_two.tab_two_graphs import world_map
+from my_project.template_graphs import violin
+from my_project.utils import code_timer
 
 
 def tab_two():
@@ -115,3 +122,38 @@ def climate_profiles_graphs():
             ),
         ],
     )
+
+
+# TAB TWO: CLIMATE
+@app.callback(
+    Output("world-map", "figure"),
+    Output("temp-profile-graph", "figure"),
+    Output("humidity-profile-graph", "figure"),
+    Output("solar-radiation-graph", "figure"),
+    Output("wind-speed-graph", "figure"),
+    Output("tab-two-location", "children"),
+    Output("tab-two-long", "children"),
+    Output("tab-two-lat", "children"),
+    Output("tab-two-elevation", "children"),
+    [Input("df-store", "modified_timestamp")],
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+@code_timer
+def update_tab_two(ts, global_local, df, meta):
+    """Update the contents of tab two. Passing in the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+    location = "Location: " + meta[1] + ", " + meta[3]
+    lon = "Longitude: " + str(meta[-4])
+    lat = "Latitude: " + str(meta[-5])
+    elevation = "Elevation above sea level: " + meta[-2]
+
+    # Violin Graphs
+    dbt = violin(df, "DBT", global_local)
+    rh = violin(df, "RH", global_local)
+    ghrad = violin(df, "GHrad", global_local)
+    wspeed = violin(df, "Wspeed", global_local)
+
+    return world_map(meta), dbt, rh, ghrad, wspeed, location, lon, lat, elevation

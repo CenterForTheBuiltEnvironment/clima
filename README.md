@@ -44,7 +44,7 @@ Install them all using:
 6. **Run tool locally**
 
 Now you should be ready to run the tool locally.
-`python3 app.py`
+`python3 main.py`
 
 Visit http://localhost:8050 in your browser to check it out. 
 Note that whenever you want to run the tool, you have to activate the virtualenv first.
