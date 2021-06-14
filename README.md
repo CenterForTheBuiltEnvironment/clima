@@ -8,9 +8,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Python 3 installed on your machine.
+Python 3 installed on your machine and [pipenv](https://docs.pipenv.org).
 
-If you do not have Python installed on your machine you can follow [this guide](https://wiki.python.org/moin/BeginnersGuide/Download)
+* If you do not have Python installed on your machine you can follow [this guide](https://wiki.python.org/moin/BeginnersGuide/Download)
+* You can install `pipenv` using the following command `pip install pipenv`.
 
 ### Installation
 
@@ -21,33 +22,43 @@ This guide is for Mac OSX, Linux or Windows.
 $ git clone https://github.com/CenterForTheBuiltEnvironment/clima.git
 $ cd clima
 ```
-2. **Create a virtual environment using the following command:**
+2. **Create a virtual environment using pipenv and install dependencies:**
 
-On Linux and MAC ` $ python3 -m venv venv `
+``` 
+pipenv install --three 
+```
 
-On Windows ` py -3 -m venv venv `
-
-3. **Activate the virtualenv:**
-
-On Linux and MAC ` $ . venv/bin/activate `
-
-On Windows ` venv\Scripts\activate `
-
-Your shell prompt will change to show the name of the activated environment.
-
-4. **Install Python dependencies**
-
-The dependencies of the tool are all contained in *requirements.txt*. 
-Install them all using:
-`$ pip install -r requirements.txt`
-
-6. **Run tool locally**
+3. **Run tool locally**
 
 Now you should be ready to run the tool locally.
-`python3 main.py`
 
-Visit http://localhost:8050 in your browser to check it out. 
+```pipenv run python my_project.py```
+
+Visit http://localhost:8080 in your browser to check it out. 
 Note that whenever you want to run the tool, you have to activate the virtualenv first.
+
+#### Adding new dependencies
+Pipfiles contain information about the dependencies of your project, and supercede the requirements.txt file that is typically used in Python projects.
+
+To install a Python package for your project use the install keyword. For example,
+
+```pipenv install beautifulsoup4```
+
+The package name, together with its version and a list of its own dependencies, can be frozen by updating the Pipfile.lock. This is done using the lock keyword,
+
+```pipenv lock```
+
+#### Managing your development environment
+
+There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. Pipenv will let you keep the two environments separate using the --dev flag. For example,
+
+```pipenv install --dev nose2```
+
+#### Generate and update the requirement.txt file
+
+You can update the requirement.txt file with the following command.
+
+```pipenv run pip freeze > requirements.txt```
 
 [comment]: <> (### Versioning)
 

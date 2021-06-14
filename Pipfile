@@ -5,8 +5,11 @@ name = "pypi"
 
 [packages]
 pythermalcomfort = "==1.6.0"
+dash = "*"
+pvlib = "*"
 
 [dev-packages]
+bumpversion = "*"
 
 [requires]
 python_version = "3.8"
