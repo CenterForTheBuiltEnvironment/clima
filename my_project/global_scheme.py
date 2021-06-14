@@ -108,24 +108,27 @@ color_dict = {
 
 # Units Dictionary
 degrees_unit = "\u00B0 deg"
+temperature_unit = "\u00B0C"
+radiation_unit = "Wh/m<sup>2</sup>"
+thermal_stress_label = "Thermal stress"
 
 unit_dict = {
     "DOY_unit": "days",
     "month_unit": "months",
     "hour_unit": "h",
     # Temp
-    "DBT_unit": "\u00B0 C",  # "&#8451"
-    "DPT_unit": "\u00B0 C",  # "&#8451"
+    "DBT_unit": temperature_unit,  # "&#8451"
+    "DPT_unit": temperature_unit,  # "&#8451"
     # Humidity
     "RH_unit": "%",
     # Pressure
     "Apressure_unit": "Pa",
     # Radiation
-    "EHrad_unit": "Wh/m<sup>2</sup>",
-    "HIRrad_unit": "Wh/m<sup>2</sup>",
-    "GHrad_unit": "Wh/m<sup>2</sup>",
-    "DNrad_unit": "Wh/m<sup>2</sup>",
-    "DifHrad_unit": "Wh/m<sup>2</sup>",
+    "EHrad_unit": radiation_unit,
+    "HIRrad_unit": radiation_unit,
+    "GHrad_unit": radiation_unit,
+    "DNrad_unit": radiation_unit,
+    "DifHrad_unit": radiation_unit,
     # Illuminance
     "GHillum_unit": "lux",
     "DNillum_unit": "lux",
@@ -148,20 +151,20 @@ unit_dict = {
     "azimuth_unit": degrees_unit,
     "equation_of_time_unit": degrees_unit,
     # UTCI temperatures
-    "utci_Sun_Wind_unit": "\u00B0 C",  # "&#8451",
-    "utci_noSun_Wind_unit": "\u00B0 C",  # "&#8451",
-    "utci_Sun_noWind_unit": "\u00B0 C",  # "&#8451",
-    "utci_noSun_noWind_unit": "\u00B0 C",  # "&#8451",
+    "utci_Sun_Wind_unit": temperature_unit,  # "&#8451",
+    "utci_noSun_Wind_unit": temperature_unit,  # "&#8451",
+    "utci_Sun_noWind_unit": temperature_unit,  # "&#8451",
+    "utci_noSun_noWind_unit": temperature_unit,  # "&#8451",
     # UTCI categories
-    "utci_Sun_Wind_categories_unit": "Thermal stress",
-    "utci_noSun_Wind_categories_unit": "Thermal stress",
-    "utci_Sun_noWind_categories_unit": "Thermal stress",
-    "utci_noSun_noWind_categories_unit": "Thermal stress",
+    "utci_Sun_Wind_categories_unit": thermal_stress_label,
+    "utci_noSun_Wind_categories_unit": thermal_stress_label,
+    "utci_Sun_noWind_categories_unit": thermal_stress_label,
+    "utci_noSun_noWind_categories_unit": thermal_stress_label,
     # other psychrometric values
     "p_vap_unit": "Pa",
     "hr_unit": "kg water/kg dry air",
-    "t_wb_unit": "\u00B0 C",  # "&#8451"
-    "t_dp_unit": "\u00B0 C",  # "&#8451"
+    "t_wb_unit": temperature_unit,  # "&#8451"
+    "t_dp_unit": temperature_unit,  # "&#8451"
     "h_unit": "J/kg dry air",
 }
 
