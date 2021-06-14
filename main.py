@@ -14,6 +14,8 @@ from my_project.tab_two.app_two import tab_two
 
 from app import app, cache, TIMEOUT
 
+server = app.server
+
 app.title = "CBE Clima Tool"
 app.layout = html.Div(
     id="big-container",

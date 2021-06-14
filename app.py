@@ -16,4 +16,3 @@ cache = Cache(
 )
 TIMEOUT = 600
 app.config.suppress_callback_exceptions = True
-server = app.server
