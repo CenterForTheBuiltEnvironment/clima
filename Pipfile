@@ -10,6 +10,7 @@ pvlib = "*"
 
 [dev-packages]
 bumpversion = "*"
+cleanpy = "*"
 
 [requires]
 python_version = "3.8"
