@@ -60,21 +60,25 @@ You can update the requirement.txt file with the following command.
 
 ```pipenv run pip freeze > requirements.txt```
 
-[comment]: <> (### Versioning)
+### Versioning
 
-[comment]: <> (When you release a new version of the tool you should first use `bumpversion` to update the version of the tool. You can use the following command:)
+When you release a new version of the tool you should first use `bumpversion` to update the version of the tool. You can use the following command:
 
-[comment]: <> (```cmd)
+```cmd
+bumpversion patch  # alternatively you can use minor or major instead of patch
+```
 
-[comment]: <> (bumpversion patch  # alternatively you can use minor or major instead of patch)
+If the above command do not work even if you have committed all the files try with `bumpversion patch --allow-dirty`
 
-[comment]: <> (```)
+Secondly you should describe the changes in `changelod document`
 
-[comment]: <> (Secondly you should describe the changes in `docs/changelog.md`)
+### Deploy to Google Cloud Run
 
-[comment]: <> (gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521)
+````
+gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 
-[comment]: <> (gcloud run deploy --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated)
+gcloud run deploy --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated
+```
 
 ## Build with
 * [Dash](https://plotly.com/dash/) - Framework for building the web app
