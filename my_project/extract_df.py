@@ -12,21 +12,22 @@ from pythermalcomfort.models import utci
 from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
 
-default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
-
 
 @code_timer
 def get_data(url):
     """Return a list of the data from api call."""
     if url[-3:] == "zip" or url[-3:] == "all":
         request = requests.get(url)
-        zf = zipfile.ZipFile(io.BytesIO(request.content))
-        for i in zf.namelist():
-            if i[-3:] == "epw":
-                epw_name = i
-        data = zf.read(epw_name)
-        data = repr(data).split("\\n")
-        return data
+        if request.status_code != 404:
+            zf = zipfile.ZipFile(io.BytesIO(request.content))
+            for i in zf.namelist():
+                if i[-3:] == "epw":
+                    epw_name = i
+            data = zf.read(epw_name)
+            data = repr(data).split("\\n")
+            return data
+        else:
+            return None
     headers = {"User-Agent": "Mozilla/5.0"}
     req = Request(url, headers=headers)
     epw = urlopen(req).read().decode()
@@ -38,6 +39,8 @@ def get_data(url):
 def create_df(default_url):
     """Extract and clean the data. Return a pandas data from a url."""
     lst = get_data(default_url)
+    if lst is None:
+        return None, None
     meta = lst[0].strip().split(",")
     latitude = float(meta[-4])
     longitude = float(meta[-3])
@@ -254,5 +257,9 @@ def create_df(default_url):
 
 
 if __name__ == "__main__":
-    df, meta_data = create_df(default_url)
+    # fmt: off
+    url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
+    # fmt: on
+
+    df, meta_data = create_df(url)
     # result = df.head().to_json(date_format="iso", orient="split")
