@@ -9,7 +9,6 @@ dash = "*"
 pvlib = "*"
 
 [dev-packages]
-bumpversion = "*"
 cleanpy = "*"
 
 [requires]
