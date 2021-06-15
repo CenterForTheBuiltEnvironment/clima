@@ -7,7 +7,7 @@ from my_project.global_scheme import (
 )
 from dash.dependencies import Input, Output, State
 
-from my_project.tab_four.tab_four_graphs import (
+from my_project.tab_sun.charts_sun import (
     monthly_solar,
     polar_graph,
     custom_cartesian_solar,
@@ -15,8 +15,7 @@ from my_project.tab_four.tab_four_graphs import (
 from my_project.template_graphs import heatmap, barchart, daily_profile
 import pandas as pd
 
-from app import app
-from my_project.utils import code_timer
+from app import app, cache, TIMEOUT
 
 
 def sunpath():
@@ -112,7 +111,7 @@ def static_section():
     )
 
 
-def tab_four():
+def layout_sun():
     """Contents of tab four."""
     return html.Div(
         className="container-col",
@@ -130,7 +129,7 @@ def tab_four():
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
-@code_timer
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_four_section_one(ts, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -158,7 +157,7 @@ def update_tab_four_section_one(ts, global_local, df, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
-@code_timer
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_four(view, var, ts, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -172,9 +171,24 @@ def update_tab_four(view, var, ts, global_local, df, meta):
         return custom_cartesian_solar(df, meta, global_local, var)
 
 
-### DAILY + HEATMAP ###
+# DAILY
 @app.callback(
     Output("tab4-daily", "figure"),
+    [Input("tab4-explore-dropdown", "value")],
+    [Input("df-store", "modified_timestamp")],
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_four_daily_profile(var, ts, global_local, df, meta):
+    """Update the contents of tab four section two. Passing in the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+    return daily_profile(df, var, global_local)
+
+
+# HEATMAP
+@app.callback(
     Output("tab4-heatmap", "figure"),
     [Input("tab4-explore-dropdown", "value")],
     [Input("df-store", "modified_timestamp")],
@@ -182,8 +196,8 @@ def update_tab_four(view, var, ts, global_local, df, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
-@code_timer
-def update_tab_four_section_two(var, ts, global_local, df, meta):
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_four_heatmap(var, ts, global_local, df, meta):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-    return daily_profile(df, var, global_local), heatmap(df, var, global_local)
+    return heatmap(df, var, global_local)

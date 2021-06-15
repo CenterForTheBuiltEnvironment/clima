@@ -217,7 +217,7 @@ def daily_wind_rose():
     )
 
 
-def custom_windrose():
+def custom_wind_rose():
     """"""
     return html.Div(
         className="container-col container-center full-width",
@@ -318,7 +318,7 @@ def custom_windrose():
     )
 
 
-def tab_five():
+def layout_wind():
     """Contents in the fifth tab 'Wind'."""
     return html.Div(
         className="container-col",
@@ -344,16 +344,49 @@ def tab_five():
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),
-            custom_windrose(),
+            custom_wind_rose(),
         ],
     )
 
 
-# TAB FIVE: WIND
-### Static Graphs ###
+# wind rose
 @app.callback(
     Output("wind-rose", "figure"),
+    # General
+    [Input("df-store", "modified_timestamp")],
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_wind_rose(ts, global_local, df, meta):
+    """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24], True)
+    return annual
+
+
+# wind speed
+@app.callback(
     Output("wind-speed", "figure"),
+    # General
+    [Input("df-store", "modified_timestamp")],
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_wind_speed(ts, global_local, df, meta):
+    """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+
+    speed = heatmap(df, "Wspeed", global_local)
+
+    return speed
+
+
+# wind direction
+@app.callback(
     Output("wind-direction", "figure"),
     # General
     [Input("df-store", "modified_timestamp")],
@@ -362,16 +395,11 @@ def tab_five():
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_five(ts, global_local, df, meta):
+def update_tab_wind_direction(ts, global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-
-    # Heatmap Graphs
-    speed = heatmap(df, "Wspeed", global_local)
     direction = heatmap(df, "Wdir", global_local)
-    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24], True)
-
-    return annual, speed, direction
+    return direction
 
 
 # Custom Wind rose
@@ -387,6 +415,7 @@ def update_tab_five(ts, global_local, df, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_five(start_month, start_hour, end_month, end_hour, ts, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -569,6 +598,7 @@ def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
     [State("df-store", "data")],
     [State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_five_daily_graphs(ts, global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")

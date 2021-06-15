@@ -1,14 +1,18 @@
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import config, container_row_center_full
+from my_project.global_scheme import (
+    config,
+    container_row_center_full,
+    container_col_center_one_of_three,
+)
 
 from my_project.global_scheme import dropdown_names
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from app import app
-from my_project.tab_nine.tab_nine_graphs import psych_chart
+from app import app, cache, TIMEOUT
+from my_project.tab_psy_chart.charts_psy_chart import psych_chart
 
 
 def inputs():
@@ -17,7 +21,7 @@ def inputs():
         className="container-row full-width three-inputs-container",
         children=[
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     html.Div(
                         className=container_row_center_full,
@@ -39,7 +43,7 @@ def inputs():
                 ],
             ),
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     dbc.Checklist(
                         options=[
@@ -86,7 +90,7 @@ def inputs():
                 ],
             ),
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     dbc.Checklist(
                         options=[
@@ -151,7 +155,7 @@ def inputs():
     )
 
 
-def tab_nine():
+def layout_psy_chart():
     return html.Div(
         className="container-col",
         children=[inputs(), dcc.Graph(id="psych-chart", config=config)],
@@ -176,6 +180,7 @@ def tab_nine():
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_psych_chart(
     colorby_var,
     time_filter,

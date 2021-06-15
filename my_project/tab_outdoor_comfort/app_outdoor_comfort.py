@@ -8,7 +8,7 @@ import pandas as pd
 from app import app, cache, TIMEOUT
 
 
-def tab_seven():
+def layout_outdoor_comfort():
     """Return the contents for tab 7."""
     return html.Div(
         className="container-col",
@@ -31,9 +31,23 @@ def tab_seven():
     )
 
 
-# TAB SEVEN: OUTDOOR COMFORT
 @app.callback(
     Output("utci-heatmap", "figure"),
+    [Input("tab7-dropdown", "value")],
+    # General
+    [Input("df-store", "modified_timestamp")],
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_utci_value(var, ts, global_local, df, meta):
+    df = pd.read_json(df, orient="split")
+    utci_heatmap = heatmap(df, var, global_local)
+    return utci_heatmap
+
+
+@app.callback(
     Output("utci-category-heatmap", "figure"),
     [Input("tab7-dropdown", "value")],
     # General
@@ -43,8 +57,7 @@ def tab_seven():
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_seven(var, ts, global_local, df, meta):
+def update_tab_utci_category(var, ts, global_local, df, meta):
     df = pd.read_json(df, orient="split")
-    utci_heatmap = heatmap(df, var, global_local)
     utci_stress_cat = heatmap(df, var + "_categories", global_local)
-    return utci_heatmap, utci_stress_cat
+    return utci_stress_cat

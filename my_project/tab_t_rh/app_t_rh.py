@@ -1,7 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from my_project.global_scheme import config
-from my_project.utils import code_timer
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
@@ -9,7 +8,7 @@ import pandas as pd
 from app import app, cache, TIMEOUT
 
 
-def tab_three():
+def layout_t_rh():
     return html.Div(
         className="container-col",
         children=[
@@ -55,15 +54,12 @@ def tab_three():
     )
 
 
-####################################
-### TAB THREE: TEMP AND HUMIDITY ###
-####################################
+# TAB THREE: TEMP AND HUMIDITY
 @app.callback(
     Output("yearly-dbt", "figure"),
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-@code_timer
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_three_db_yearly(global_local, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
@@ -80,7 +76,6 @@ def update_tab_three_db_yearly(global_local, df):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-@code_timer
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_three_db_daily(global_local, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
@@ -94,7 +89,6 @@ def update_tab_three_db_daily(global_local, df):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-@code_timer
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_three_db_heatmap(global_local, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
@@ -109,7 +103,7 @@ def update_tab_three_db_heatmap(global_local, df):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-@code_timer
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_three_rh_yearly(global_local, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -124,7 +118,6 @@ def update_tab_three_rh_yearly(global_local, df):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-@code_timer
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_three_rh_daily(global_local, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
@@ -140,7 +133,6 @@ def update_tab_three_rh_daily(global_local, df):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-@code_timer
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_three_rh_heatmap(global_local, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""

@@ -6,12 +6,11 @@ from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from app import app, cache, TIMEOUT
-from my_project.tab_two.tab_two_graphs import world_map
+from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
-from my_project.utils import code_timer
 
 
-def tab_two():
+def layout_summary():
     """Contents in the second tab 'Climate Summary'."""
     return html.Div(
         className="container-col",
@@ -141,7 +140,6 @@ def climate_profiles_graphs():
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_tab_two(ts, global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -153,7 +151,7 @@ def update_tab_two(ts, global_local, df, meta):
     # Violin Graphs
     dbt = violin(df, "DBT", global_local)
     rh = violin(df, "RH", global_local)
-    ghrad = violin(df, "GHrad", global_local)
-    wspeed = violin(df, "Wspeed", global_local)
+    gh_rad = violin(df, "GHrad", global_local)
+    w_speed = violin(df, "Wspeed", global_local)
 
-    return world_map(meta), dbt, rh, ghrad, wspeed, location, lon, lat, elevation
+    return world_map(meta), dbt, rh, gh_rad, w_speed, location, lon, lat, elevation

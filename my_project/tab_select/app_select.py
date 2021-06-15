@@ -9,7 +9,7 @@ from my_project.extract_df import create_df
 from my_project.utils import code_timer
 
 
-def tab_one():
+def layout_select():
     """Contents in the first tab 'Select Weather File'"""
     return html.Div(
         className="container-col tab-container",

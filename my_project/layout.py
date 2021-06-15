@@ -109,59 +109,59 @@ def build_tabs():
             dcc.Tabs(
                 id="tabs",
                 parent_className="custom-tabs",
-                value="tab-1",
+                value="tab-select",
                 children=[
                     dcc.Tab(
                         label="Select Weather File",
-                        value="tab-1",
+                        value="tab-select",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Climate Summary",
-                        value="tab-2",
+                        value="tab-summary",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Temperature and Humidity",
-                        value="tab-3",
+                        value="tab-t-rh",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Sun and Clouds",
-                        value="tab-4",
+                        value="tab-sun",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Wind",
-                        value="tab-5",
+                        value="tab-wind",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Psychrometric Chart",
-                        value="tab-9",
+                        value="tab-psy-chart",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Data Explorer",
-                        value="tab-6",
+                        value="tab-data-explorer",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Outdoor Comfort",
-                        value="tab-7",
+                        value="tab-outdoor_comfort",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
                     dcc.Tab(
                         label="Natural Ventilation",
-                        value="tab-8",
+                        value="tab-natural-ventilation",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                     ),
@@ -172,16 +172,6 @@ def build_tabs():
                 children=[store(), html.Div(id="tabs-content"), footer()],
             ),
         ],
-    )
-
-
-def changelog():
-    """changelog page"""
-    f = open("CHANGELOG.md", "r")
-
-    return dbc.Container(
-        className="container p-4",
-        children=[dcc.Markdown(f.read())],
     )
 
 

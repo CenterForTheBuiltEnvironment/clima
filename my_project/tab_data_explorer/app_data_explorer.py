@@ -3,10 +3,15 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
-from my_project.global_scheme import config, dropdown_names, container_row_center_full
+from my_project.global_scheme import (
+    config,
+    dropdown_names,
+    container_row_center_full,
+    container_col_center_one_of_three,
+)
 from dash.dependencies import Input, Output, State
 
-from my_project.tab_six.tab_six_graphs import (
+from my_project.tab_data_explorer.charts_data_explorer import (
     custom_heatmap,
     two_var_graph,
     three_var_graph,
@@ -14,7 +19,7 @@ from my_project.tab_six.tab_six_graphs import (
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile, barchart
 import pandas as pd
 
-from app import app
+from app import app, cache, TIMEOUT
 
 
 def section_one_inputs():
@@ -70,7 +75,7 @@ def section_two_inputs():
         className="container-row full-width three-inputs-container",
         children=[
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     html.Div(
                         className=container_row_center_full,
@@ -91,7 +96,7 @@ def section_two_inputs():
                 ],
             ),
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     dbc.Checklist(
                         options=[
@@ -140,7 +145,7 @@ def section_two_inputs():
                 ],
             ),
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     dbc.Checklist(
                         options=[
@@ -247,7 +252,7 @@ def section_three_inputs():
         className="container-row full-width three-inputs-container",
         children=[
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     html.Div(
                         className=container_row_center_full,
@@ -303,7 +308,7 @@ def section_three_inputs():
                 ],
             ),
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     dbc.Checklist(
                         options=[
@@ -347,7 +352,7 @@ def section_three_inputs():
                 ],
             ),
             html.Div(
-                className="container-col container-center one-of-three-container",
+                className=container_col_center_one_of_three,
                 children=[
                     dbc.Checklist(
                         options=[
@@ -434,7 +439,7 @@ def section_three():
     )
 
 
-def tab_six():
+def layout_data_explorer():
     """Return the contents of tab six." """
     return html.Div(
         className="continer-col container-center",
@@ -442,12 +447,37 @@ def tab_six():
     )
 
 
-# TAB SIX: QUERY DATA
-
-### Section One ###
 @app.callback(
     Output("query-yearly", "figure"),
+    # Section One
+    [Input("sec1-var-dropdown", "value")],
+    # General
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_yearly(var, global_local, df):
+    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    df = pd.read_json(df, orient="split")
+    return yearly_profile(df, var, global_local)
+
+
+@app.callback(
     Output("query-daily", "figure"),
+    # Section One
+    [Input("sec1-var-dropdown", "value")],
+    # General
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_daily(var, global_local, df):
+    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    df = pd.read_json(df, orient="split")
+    return daily_profile(df, var, global_local)
+
+
+@app.callback(
     Output("query-heatmap", "figure"),
     # Section One
     [Input("sec1-var-dropdown", "value")],
@@ -455,14 +485,11 @@ def tab_six():
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
-def update_tab_six_one(var, global_local, df):
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_heatmap(var, global_local, df):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
-    return (
-        yearly_profile(df, var, global_local),
-        daily_profile(df, var, global_local),
-        heatmap(df, var, global_local),
-    )
+    return heatmap(df, var, global_local)
 
 
 ### Section Two ###
@@ -485,6 +512,7 @@ def update_tab_six_one(var, global_local, df):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_six_two(
     var,
     time_filter,
@@ -535,6 +563,7 @@ def update_tab_six_two(
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_tab_six_three(
     var_x,
     var_y,
@@ -550,13 +579,12 @@ def update_tab_six_three(
     df,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-    ### TO DO: dont allow to input if apply filter not checked
+    # todo: dont allow to input if apply filter not checked
     # if (min_val3 is None or max_val3 is None) and data_filter3:
     #     raise PreventUpdate
     df = pd.read_json(df, orient="split")
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
-    # print(str(data_filter) + " " + str(min_val) + " " + str(max_val))
     if data_filter and (min_val is None or max_val is None):
         raise PreventUpdate
     else:

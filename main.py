@@ -3,16 +3,17 @@ from dash.dependencies import Input, Output
 import dash
 import dash_core_components as dcc
 
-from my_project.layout import build_banner, build_tabs, changelog, footer
-from my_project.construction import construction
-from my_project.tab_five.app_five import tab_five
-from my_project.tab_four.app_four import tab_four
-from my_project.tab_one.app_one import tab_one
-from my_project.tab_six.app_six import tab_six
-from my_project.tab_seven.app_seven import tab_seven
-from my_project.tab_three.app_three import tab_three
-from my_project.tab_nine.app_nine import tab_nine
-from my_project.tab_two.app_two import tab_two
+from my_project.layout import build_banner, build_tabs, footer
+from my_project.tab_under_construction.construction import construction
+from my_project.tab_wind.app_wind import layout_wind
+from my_project.tab_sun.app_sun import layout_sun
+from my_project.tab_select.app_select import layout_select
+from my_project.tab_data_explorer.app_data_explorer import layout_data_explorer
+from my_project.tab_outdoor_comfort.app_outdoor_comfort import layout_outdoor_comfort
+from my_project.tab_t_rh.app_t_rh import layout_t_rh
+from my_project.tab_psy_chart.app_psy_chart import layout_psy_chart
+from my_project.tab_summary.app_summary import layout_summary
+from my_project.page_changelog.app_changelog import changelog
 
 from app import app, cache, TIMEOUT
 
@@ -47,24 +48,24 @@ def display_page(pathname):
 @cache.memoize(timeout=TIMEOUT)
 def render_content(tab):
     """Update the contents of the page depending on what tab the user selects."""
-    if tab == "tab-1":
-        return tab_one()
-    elif tab == "tab-2":
-        return tab_two()
-    elif tab == "tab-3":
-        return tab_three()
-    elif tab == "tab-4":
-        return tab_four()
-    elif tab == "tab-5":
-        return tab_five()
-    elif tab == "tab-6":
-        return tab_six()
-    elif tab == "tab-7":
-        return tab_seven()
-    elif tab == "tab-8":
+    if tab == "tab-select":
+        return layout_select()
+    elif tab == "tab-summary":
+        return layout_summary()
+    elif tab == "tab-t-rh":
+        return layout_t_rh()
+    elif tab == "tab-sun":
+        return layout_sun()
+    elif tab == "tab-wind":
+        return layout_wind()
+    elif tab == "tab-data-explorer":
+        return layout_data_explorer()
+    elif tab == "tab-outdoor_comfort":
+        return layout_outdoor_comfort()
+    elif tab == "tab-natural-ventilation":
         return construction()
-    elif tab == "tab-9":
-        return tab_nine()
+    elif tab == "tab-psy-chart":
+        return layout_psy_chart()
     else:
         return "404"
 

@@ -39,9 +39,13 @@ utci_categories_color = [
     "#751613",
 ]
 
-# container
+# containers
 container_row_center_full = "container-row row-center full-width"
+container_col_center_one_of_three = (
+    "container-col container-center one-of-three-container"
+)
 
+# color dictionary
 color_dict = {
     # TEMP
     "DBT_color": blue_red_yellow,
