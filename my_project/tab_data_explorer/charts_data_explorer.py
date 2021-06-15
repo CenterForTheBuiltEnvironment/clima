@@ -219,24 +219,24 @@ def two_var_graph(
     df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3
 ):
     """Return the custom graph plotting two variables."""
-    time_filter = time_filter_info3[0]
-    start_month = time_filter_info3[1][0]
-    end_month = time_filter_info3[1][1]
-    start_hour = time_filter_info3[2][0]
-    end_hour = time_filter_info3[2][1]
-    data_filter = data_filter_info3[0]
-    filter_var = data_filter_info3[1]
-    min_val = data_filter_info3[2]
-    max_val = data_filter_info3[3]
+    # time_filter = time_filter_info3[0]
+    # start_month = time_filter_info3[1][0]
+    # end_month = time_filter_info3[1][1]
+    # start_hour = time_filter_info3[2][0]
+    # end_hour = time_filter_info3[2][1]
+    # data_filter = data_filter_info3[0]
+    # filter_var = data_filter_info3[1]
+    # min_val = data_filter_info3[2]
+    # max_val = data_filter_info3[3]
 
-    var_unit = str(colorby) + "_unit"
-    var_unit = unit_dict[var_unit]
-    var_range = str(colorby) + "_range"
-    var_range = range_dict[var_range]
-    var_name = str(colorby) + "_name"
-    var_name = name_dict[var_name]
-    var_color = str(colorby) + "_color"
-    var_color = color_dict[var_color]
+    # var_unit = str(colorby) + "_unit"
+    # var_unit = unit_dict[var_unit]
+    # var_range = str(colorby) + "_range"
+    # var_range = range_dict[var_range]
+    # var_name = str(colorby) + "_name"
+    # var_name = name_dict[var_name]
+    # var_color = str(colorby) + "_color"
+    # var_color = color_dict[var_color]
 
     title = "Simultaneous frequency of " + var_x + " and " + var_y
     # if time_filter:
