@@ -22,8 +22,9 @@ def footer():
                         ],
                         href="https://cbe.berkeley.edu/",
                     ),
-                    html.P(
-                        "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License"
+                    html.A(
+                        "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License (CC BY 4.0)",
+                        href="https://creativecommons.org/licenses/by/4.0/",
                     ),
                     html.A(
                         "Version: 0.1.1",
