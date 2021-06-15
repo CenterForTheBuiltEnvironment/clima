@@ -40,7 +40,7 @@ def footer():
                         """
                     Developed by [Giovanni Betti](https://www.linkedin.com/in/gbetti/), 
                     [Christine Nguyen](https://chrlng.github.io/),
-                    [Juliet Kim](https://www.linkedin.com/in/suhyangkim/).
+                    [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
                     
                     Supported browsers: Chromium-based browsers, Firefox.
                     """
