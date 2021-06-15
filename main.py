@@ -45,7 +45,6 @@ def display_page(pathname):
 
 # Handle tab selection
 @app.callback(Output("tabs-content", "children"), [Input("tabs", "value")])
-@cache.memoize(timeout=TIMEOUT)
 def render_content(tab):
     """Update the contents of the page depending on what tab the user selects."""
     if tab == "tab-select":
