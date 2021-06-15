@@ -26,7 +26,7 @@ def footer():
                         "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License"
                     ),
                     html.A(
-                        "Version: 0.1.0",
+                        "Version: 0.1.1",
                         href="/changelog",
                     ),
                 ],
