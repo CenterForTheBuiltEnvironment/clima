@@ -60,4 +60,23 @@ def update_tab_utci_value(var, ts, global_local, df, meta):
 def update_tab_utci_category(var, ts, global_local, df, meta):
     df = pd.read_json(df, orient="split")
     utci_stress_cat = heatmap(df, var + "_categories", global_local)
+    utci_stress_cat["data"][0]["colorbar"] = dict(
+        title="Thermal stress",
+        titleside="top",
+        tickmode="array",
+        tickvals=[4, 3, 2, 1, 0, -1, -2, -3, -4, -5],
+        ticktext=[
+            "extreme heat stress",
+            "very strong heat stress",
+            "strong heat stress",
+            "moderate heat stress",
+            "no thermal stress",
+            "slight cold stress",
+            "moderate cold stress",
+            "strong cold stress",
+            "very strong cold stress",
+            "extreme cold stress",
+        ],
+        ticks="outside",
+    )
     return utci_stress_cat

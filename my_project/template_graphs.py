@@ -24,14 +24,6 @@ def violin(df, var, global_local):
     var_range = range_dict[var_range]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
-    if global_local == "global":
-        # Set Global values for Max and minimum
-        range_y = var_range
-    else:
-        # Set maximumand minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
-        range_y = [data_min, data_max]
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
@@ -445,9 +437,7 @@ def heatmap(df, var, global_local):
     return fig
 
 
-#########################
-### WINDROSE TEMPLATE ###
-#########################
+### WIND ROSE TEMPLATE
 def speed_labels(bins, units):
     """Return nice labels for a wind speed range."""
     labels = []
