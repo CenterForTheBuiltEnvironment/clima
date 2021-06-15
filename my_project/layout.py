@@ -41,7 +41,7 @@ def footer():
                     [Christine Nguyen](https://chrlng.github.io/),
                     [Juliet Kim](https://www.linkedin.com/in/suhyangkim/).
                     
-                    Supported browsers: Google Chrome, Opera.
+                    Supported browsers: Chromium-based browsers, Firefox.
                     """
                     ),
                 ],
