@@ -37,7 +37,10 @@ def map_section():
                     html.P(id="tab-two-elevation"),
                 ],
             ),
-            html.Div(className="tab-two-section", id="world-map"),
+            dcc.Loading(
+                type="circle",
+                children=html.Div(className="tab-two-section", id="world-map"),
+            ),
             html.Div(
                 className="container-col tab-two-section",
                 id="location-description",
