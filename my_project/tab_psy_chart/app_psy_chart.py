@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from my_project.global_scheme import (
-    config,
+    fig_config,
     container_row_center_full,
     container_col_center_one_of_three,
 )
@@ -158,7 +158,7 @@ def inputs():
 def layout_psy_chart():
     return html.Div(
         className="container-col",
-        children=[inputs(), dcc.Graph(id="psych-chart", config=config)],
+        children=[inputs(), dcc.Graph(id="psych-chart", config=fig_config)],
     )
 
 

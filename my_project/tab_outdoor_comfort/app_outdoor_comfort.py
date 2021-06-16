@@ -1,6 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import config, tab7_dropdown
+from my_project.global_scheme import fig_config, tab7_dropdown
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap
 import pandas as pd
@@ -21,11 +21,12 @@ def layout_outdoor_comfort():
                 value="utci_Sun_Wind",
             ),
             dcc.Loading(
-                type="circle", children=[dcc.Graph(id="utci-heatmap", config=config)]
+                type="circle",
+                children=[dcc.Graph(id="utci-heatmap", config=fig_config)],
             ),
             dcc.Loading(
                 type="circle",
-                children=[dcc.Graph(id="utci-category-heatmap", config=config)],
+                children=[dcc.Graph(id="utci-category-heatmap", config=fig_config)],
             ),
         ],
     )

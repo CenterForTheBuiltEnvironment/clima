@@ -1,13 +1,13 @@
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import config
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
 from app import app, cache, TIMEOUT
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
+from my_project.utils import generate_chart_name
 
 
 def layout_summary():
@@ -37,15 +37,13 @@ def map_section():
                     html.P(id="tab-two-elevation"),
                 ],
             ),
-            dcc.Graph(className="tab-two-section", id="world-map", config=config),
+            html.Div(className="tab-two-section", id="world-map"),
             html.Div(
                 className="container-col tab-two-section",
                 id="location-description",
                 children=[
                     html.P("Koeppen Geiger Climate Classification: "),
-                    html.P(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elitsed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                    ),
+                    html.P("Placeholder text"),
                 ],
             ),
         ],
@@ -96,62 +94,119 @@ def climate_profiles_graphs():
         className="container-row",
         children=[
             html.Div(
-                className="violin-container",
-                children=[
-                    dcc.Graph(id="temp-profile-graph", config=config),
-                ],
+                id="temp-profile-graph",
             ),
             html.Div(
-                className="violin-container",
-                children=[
-                    dcc.Graph(id="humidity-profile-graph", config=config),
-                ],
+                id="humidity-profile-graph",
             ),
             html.Div(
-                className="violin-container",
-                children=[
-                    dcc.Graph(id="solar-radiation-graph", config=config),
-                ],
+                id="solar-radiation-graph",
             ),
             html.Div(
-                className="violin-container",
-                children=[
-                    dcc.Graph(id="wind-speed-graph", config=config),
-                ],
+                id="wind-speed-graph",
             ),
         ],
     )
 
 
-# TAB TWO: CLIMATE
 @app.callback(
-    Output("world-map", "figure"),
-    Output("temp-profile-graph", "figure"),
-    Output("humidity-profile-graph", "figure"),
-    Output("solar-radiation-graph", "figure"),
-    Output("wind-speed-graph", "figure"),
+    Output("world-map", "children"),
     Output("tab-two-location", "children"),
     Output("tab-two-long", "children"),
     Output("tab-two-lat", "children"),
     Output("tab-two-elevation", "children"),
     [Input("df-store", "modified_timestamp")],
     [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_two(ts, global_local, df, meta):
+def update_tab_map(ts, global_local, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
     location = "Location: " + meta[1] + ", " + meta[3]
     lon = "Longitude: " + str(meta[-4])
     lat = "Latitude: " + str(meta[-5])
     elevation = "Elevation above sea level: " + meta[-2]
 
-    # Violin Graphs
-    dbt = violin(df, "DBT", global_local)
-    rh = violin(df, "RH", global_local)
-    gh_rad = violin(df, "GHrad", global_local)
-    w_speed = violin(df, "Wspeed", global_local)
+    map_world = dcc.Graph(
+        id="gh_rad-profile-graph",
+        config=generate_chart_name("summary", meta),
+        figure=world_map(meta),
+    )
 
-    return world_map(meta), dbt, rh, gh_rad, w_speed, location, lon, lat, elevation
+    return map_world, location, lon, lat, elevation
+
+
+@app.callback(
+    Output("temp-profile-graph", "children"),
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_violin_tdb(global_local, df, meta):
+    """Update the contents of tab two. Passing in the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+
+    return dcc.Graph(
+        id="tdb-profile-graph",
+        className="violin-container",
+        config=generate_chart_name("summary", meta),
+        figure=violin(df, "DBT", global_local),
+    )
+
+
+@app.callback(
+    Output("wind-speed-graph", "children"),
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_wind(global_local, df, meta):
+    """Update the contents of tab two. Passing in the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+
+    return dcc.Graph(
+        id="wind-profile-graph",
+        className="violin-container",
+        config=generate_chart_name("summary", meta),
+        figure=violin(df, "Wspeed", global_local),
+    )
+
+
+@app.callback(
+    Output("humidity-profile-graph", "children"),
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_rh(global_local, df, meta):
+    """Update the contents of tab two. Passing in the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+
+    return dcc.Graph(
+        id="rh-profile-graph",
+        className="violin-container",
+        config=generate_chart_name("summary", meta),
+        figure=violin(df, "RH", global_local),
+    )
+
+
+@app.callback(
+    Output("solar-radiation-graph", "children"),
+    [Input("global-local-radio-input", "value")],
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_tab_gh_rad(global_local, df, meta):
+    """Update the contents of tab two. Passing in the general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+
+    return dcc.Graph(
+        id="gh_rad-profile-graph",
+        className="violin-container",
+        config=generate_chart_name("summary", meta),
+        figure=violin(df, "GHrad", global_local),
+    )

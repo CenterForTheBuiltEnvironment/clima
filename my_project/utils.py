@@ -1,5 +1,6 @@
 import functools
 import time
+from my_project.global_scheme import fig_config, name_dict
 
 
 def code_timer(func):
@@ -15,3 +16,12 @@ def code_timer(func):
         return value
 
     return wrapper_timer
+
+
+def generate_chart_name(tab_name, meta):
+    # todo the file name should contain the image title, the function works but each figure gets the same config
+    _fig_config = fig_config.copy()
+    _fig_config["toImageButtonOptions"][
+        "filename"
+    ] = f"CBEClima_{meta[1]}_{meta[3]}_{tab_name}_tab"
+    return _fig_config

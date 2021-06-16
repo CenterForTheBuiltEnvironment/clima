@@ -1,7 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from my_project.global_scheme import (
-    config,
+    fig_config,
     tab4_dropdown_names,
     tab4_explore_dropdown_names,
 )
@@ -55,7 +55,7 @@ def sunpath():
             html.Div(
                 id="sunpath-container",
                 children=[
-                    dcc.Graph(id="custom-sunpath", config=config),
+                    dcc.Graph(id="custom-sunpath", config=fig_config),
                 ],
             ),
         ],
@@ -78,13 +78,13 @@ def explore_daily_heatmap():
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="tab4-daily", config=config),
+                    dcc.Graph(id="tab4-daily", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="tab4-heatmap", config=config),
+                    dcc.Graph(id="tab4-heatmap", config=fig_config),
                 ],
             ),
         ],
@@ -98,13 +98,13 @@ def static_section():
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="monthly-solar", config=config),
+                    dcc.Graph(id="monthly-solar", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="cloud-cover", config=config),
+                    dcc.Graph(id="cloud-cover", config=fig_config),
                 ],
             ),
         ],

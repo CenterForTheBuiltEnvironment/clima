@@ -394,7 +394,7 @@ clima_template = "plotly_white"
 pio.templates.default = clima_template
 template = clima_template
 
-config = {
+fig_config = {
     "modeBarButtonsToRemove": [
         "toggleSpikelines",
         "hoverCompareCartesian",

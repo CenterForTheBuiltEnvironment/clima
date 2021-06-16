@@ -107,21 +107,15 @@
 /* Tab Two */
 #tab-two-container {
     justify-content: space-between;
-    width: 100vw;
+    width: 100%;
 }
 
 #tab2-sec1-container, #tab2-sec2-container {
-    margin-bottom: 32px;
     padding-bottom: 16px;
 }
 
-#tab2-sec2-container {
-    height: 100vh;
-    width: 100vw; 
-}
-
 #location-info, #location-description {
-    padding: 12px 12px 12px 12px; 
+    padding: 12px 12px 12px 12px;
 }
 
 p {
@@ -130,6 +124,7 @@ p {
 
 #world-map {
     height: 65%;
+    width: 100%;
 }
 
 #tooltip-title-container {
@@ -140,15 +135,9 @@ p {
     margin-right: 10px;
 }
 
-#graph-container {
-    height: 100%;
-    width: 100%;
-    align-items: stretch;
-}
-
 .violin-container {
     height: 100%;
-    width: 25%;
+    width: 100%;
     display: flex;
     align-items: stretch;
 }
@@ -159,7 +148,7 @@ p {
 }
 
 #temp-profile-graph, #humidity-profile-graph, #solar-radiation-graph, #wind-speed-graph {
-    height: 100%;
+    height: 50%;
     width: 100%;
 }
 

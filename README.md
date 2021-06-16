@@ -75,9 +75,9 @@ Secondly you should describe the changes in `CHANGELOG.md`
 ### Deploy to Google Cloud Run
 
 ````
-gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
+gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
 
-gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --region=asia-southeast1 --allow-unauthenticated
+gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --region=us-central1 --allow-unauthenticated
 ```
 
 ## Build with

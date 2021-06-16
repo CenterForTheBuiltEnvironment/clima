@@ -1,7 +1,8 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import config
+from my_project.global_scheme import fig_config
 from dash.dependencies import Input, Output, State
+from my_project.utils import generate_chart_name
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
 
@@ -15,39 +16,37 @@ def layout_t_rh():
             html.H5("Dry Bulb Temperature"),
             dcc.Loading(
                 type="circle",
+                children=[html.Div(id="yearly-dbt")],
+            ),
+            dcc.Loading(
+                type="circle",
                 children=[
-                    dcc.Graph(id="yearly-dbt", config=config),
+                    dcc.Graph(id="daily-dbt", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="daily-dbt", config=config),
-                ],
-            ),
-            dcc.Loading(
-                type="circle",
-                children=[
-                    dcc.Graph(id="heatmap-dbt", config=config),
+                    dcc.Graph(id="heatmap-dbt", config=fig_config),
                 ],
             ),
             html.H5("Relative Humidity"),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="yearly-rh", config=config),
+                    dcc.Graph(id="yearly-rh", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="daily-rh", config=config),
+                    dcc.Graph(id="daily-rh", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="heatmap-rh", config=config),
+                    dcc.Graph(id="heatmap-rh", config=fig_config),
                 ],
             ),
         ],
@@ -56,19 +55,23 @@ def layout_t_rh():
 
 # TAB THREE: TEMP AND HUMIDITY
 @app.callback(
-    Output("yearly-dbt", "figure"),
+    Output("yearly-dbt", "children"),
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
+    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_three_db_yearly(global_local, df):
+def update_tab_three_db_yearly(global_local, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     # Yearly Graphs
     dbt_yearly = yearly_profile(df, "DBT", global_local)
     dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
-    return dbt_yearly
+    return dcc.Graph(
+        config=generate_chart_name("t_rh", meta),
+        figure=dbt_yearly,
+    )
 
 
 @app.callback(

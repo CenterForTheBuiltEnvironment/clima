@@ -4,7 +4,7 @@ import dash_html_components as html
 from dash.exceptions import PreventUpdate
 
 from my_project.global_scheme import (
-    config,
+    fig_config,
     dropdown_names,
     container_row_center_full,
     container_col_center_one_of_three,
@@ -48,20 +48,24 @@ def section_one():
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(className="full-width", id="query-yearly", config=config),
-                ],
-            ),
-            dcc.Loading(
-                type="circle",
-                children=[
-                    dcc.Graph(className="full-width", id="query-daily", config=config),
+                    dcc.Graph(
+                        className="full-width", id="query-yearly", config=fig_config
+                    ),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
                     dcc.Graph(
-                        className="full-width", id="query-heatmap", config=config
+                        className="full-width", id="query-daily", config=fig_config
+                    ),
+                ],
+            ),
+            dcc.Loading(
+                type="circle",
+                children=[
+                    dcc.Graph(
+                        className="full-width", id="query-heatmap", config=fig_config
                     ),
                 ],
             ),
@@ -223,7 +227,7 @@ def section_two():
                 type="circle",
                 children=[
                     dcc.Graph(
-                        className="full-width", id="custom-heatmap", config=config
+                        className="full-width", id="custom-heatmap", config=fig_config
                     ),
                 ],
             ),
@@ -238,7 +242,7 @@ def section_two():
                 type="circle",
                 children=[
                     dcc.Graph(
-                        className="full-width", id="custom-summary", config=config
+                        className="full-width", id="custom-summary", config=fig_config
                     ),
                 ],
             ),
@@ -426,13 +430,13 @@ def section_three():
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="three-var", config=config),
+                    dcc.Graph(id="three-var", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="two-var", config=config),
+                    dcc.Graph(id="two-var", config=fig_config),
                 ],
             ),
         ],

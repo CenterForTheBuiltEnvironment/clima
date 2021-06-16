@@ -1,6 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import config, month_lst, container_row_center_full
+from my_project.global_scheme import fig_config, month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
 import pandas as pd
@@ -74,7 +74,7 @@ def seasonal_wind_rose():
                                     dcc.Graph(
                                         className="seasonal-graph",
                                         id="winter-wind-rose",
-                                        config=config,
+                                        config=fig_config,
                                     ),
                                 ],
                             ),
@@ -92,7 +92,7 @@ def seasonal_wind_rose():
                                     dcc.Graph(
                                         className="seasonal-graph",
                                         id="spring-wind-rose",
-                                        config=config,
+                                        config=fig_config,
                                     ),
                                 ],
                             ),
@@ -115,7 +115,7 @@ def seasonal_wind_rose():
                                     dcc.Graph(
                                         className="seasonal-graph",
                                         id="summer-wind-rose",
-                                        config=config,
+                                        config=fig_config,
                                     ),
                                 ],
                             ),
@@ -133,7 +133,7 @@ def seasonal_wind_rose():
                                     dcc.Graph(
                                         className="seasonal-graph",
                                         id="fall-wind-rose",
-                                        config=config,
+                                        config=fig_config,
                                     ),
                                 ],
                             ),
@@ -167,7 +167,7 @@ def daily_wind_rose():
                                         dcc.Graph(
                                             className="daily-wind-graph",
                                             id="morning-wind-rose",
-                                            config=config,
+                                            config=fig_config,
                                         ),
                                     ],
                                 ),
@@ -185,7 +185,7 @@ def daily_wind_rose():
                                         dcc.Graph(
                                             className="daily-wind-graph",
                                             id="noon-wind-rose",
-                                            config=config,
+                                            config=fig_config,
                                         ),
                                     ],
                                 ),
@@ -203,7 +203,7 @@ def daily_wind_rose():
                                         dcc.Graph(
                                             className="daily-wind-graph",
                                             id="night-wind-rose",
-                                            config=config,
+                                            config=fig_config,
                                         ),
                                     ],
                                 ),
@@ -311,7 +311,7 @@ def custom_wind_rose():
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="custom-wind-rose", config=config),
+                    dcc.Graph(id="custom-wind-rose", config=fig_config),
                 ],
             ),
         ],
@@ -327,19 +327,19 @@ def layout_wind():
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="wind-rose", config=config),
+                    dcc.Graph(id="wind-rose", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="wind-speed", config=config),
+                    dcc.Graph(id="wind-speed", config=fig_config),
                 ],
             ),
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="wind-direction", config=config),
+                    dcc.Graph(id="wind-direction", config=fig_config),
                 ],
             ),
             seasonal_wind_rose(),
