@@ -1,3 +1,14 @@
+*[data-dash-is-loading="true"]{
+    visibility: hidden;
+}
+*[data-dash-is-loading="true"]::before{
+    content: "";
+    display: inline-block;
+    color: magenta;
+    visibility: visible;
+    height: 10rem
+}
+
 /* Tabs */
 #tabs-container {
     height: 100vh;

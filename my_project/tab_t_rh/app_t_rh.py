@@ -31,22 +31,16 @@ def layout_t_rh():
                 className="container-col",
                 children=[
                     dcc.Loading(
-                        id="loading-1",
                         type="circle",
                         children=html.Div(id="yearly"),
-                        style={"height": "20px"},
                     ),
                     dcc.Loading(
-                        id="loading-2",
                         type="circle",
                         children=html.Div(id="daily"),
-                        style={"height": "20px"},
                     ),
                     dcc.Loading(
-                        id="loading-3",
                         type="circle",
                         children=html.Div(id="heatmap"),
-                        style={"height": "20px"},
                     ),
                 ],
             ),
