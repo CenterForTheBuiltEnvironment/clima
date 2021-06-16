@@ -152,6 +152,10 @@ p {
     width: 100%;
 }
 
+/* Tab Temperature RH*/
+.dropdown-t-rh {
+    width: 15rem;
+}
 
 /* Tab Four */
 #tab-four-container {
