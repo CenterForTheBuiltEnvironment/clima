@@ -15,7 +15,7 @@ from my_project.tab_psy_chart.app_psy_chart import layout_psy_chart
 from my_project.tab_summary.app_summary import layout_summary
 from my_project.page_changelog.app_changelog import changelog
 
-from app import app, cache, TIMEOUT
+from app import app
 
 server = app.server
 

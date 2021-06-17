@@ -8,8 +8,6 @@ from app import app, cache, TIMEOUT
 from my_project.extract_df import create_df
 from my_project.utils import code_timer
 
-import pandas as pd
-
 
 def layout_select():
     """Contents in the first tab 'Select Weather File'"""
@@ -29,14 +27,6 @@ def layout_select():
                     dbc.Button(
                         "Submit", color="primary", className="mr-1", id="submit-button"
                     ),
-                    dbc.Button(
-                        "Download EPW",
-                        color="primary",
-                        className="mr-1",
-                        id="download-button",
-                        disabled=True,
-                    ),
-                    dcc.Download(id="download-dataframe-csv"),
                 ],
             ),
             html.Embed(id="tab-one-map", src="https://www.ladybug.tools/epwmap/"),
@@ -96,7 +86,6 @@ def submit_button(n_clicks, value):
     Output("alert", "children"),
     Output("alert", "color"),
     Output("banner-subtitle", "children"),
-    Output("download-button", "disabled"),
     [Input("df-store", "data")],
     [Input("submit-button", "n_clicks")],
     [State("meta-store", "data")],
@@ -106,14 +95,13 @@ def alert_display(data, n_clicks, meta):
     default = "Current Location: N/A"
     # todo store click count in memory
     if data is None and n_clicks is None:
-        return True, "To start, submit a link below!", "primary", default, True
+        return True, "To start, submit a link below!", "primary", default
     elif data is None and n_clicks > 0:
         return (
             True,
             "This link is not available. Please choose another one.",
             "warning",
             default,
-            False,
         )
     else:
         subtitle = "Current Location: " + meta[1] + ", " + meta[3]
@@ -122,7 +110,6 @@ def alert_display(data, n_clicks, meta):
             "Successfully loaded data. You can change location by submitting a link below!",
             "success",
             subtitle,
-            False,
         )
 
 
@@ -161,22 +148,3 @@ def on_data(ts, meta):
         default_url = meta[-1]
 
     return default_url
-
-
-@app.callback(
-    Output("download-dataframe-csv", "data"),
-    Input("download-button", "n_clicks"),
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
-    prevent_initial_call=True,
-)
-def func(n_clicks, df, meta):
-    if n_clicks is None:
-        raise PreventUpdate
-    elif df is not None:
-        df = pd.read_json(df, orient="split")
-
-        file_name = "_".join(meta[1:4])
-        return dcc.send_data_frame(df.to_csv, f"{file_name}_EPW.csv")
-    else:
-        print("df not loaded yet")

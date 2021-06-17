@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import pandas as pd
-
+from dash.exceptions import PreventUpdate
 from app import app, cache, TIMEOUT
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
@@ -49,6 +49,36 @@ def map_section():
                     html.P("Placeholder text"),
                 ],
             ),
+            html.Div(
+                id="tooltip-title-container",
+                className="container-row",
+                children=[
+                    html.H5("Download Clima Dataframe"),
+                    html.Div(
+                        [
+                            html.Span(
+                                "?",
+                                id="tooltip-target-download",
+                                style={"textAlign": "center", "color": "white"},
+                                className="dot",
+                            ),
+                            dbc.Tooltip(
+                                "Use the following button to download the Clima sourcefile",
+                                target="tooltip-target-download",
+                                placement="right",
+                            ),
+                        ]
+                    ),
+                ],
+            ),
+            dbc.Button(
+                "Download",
+                color="primary",
+                className="ml-4",
+                id="download-button",
+                style={"width": "12rem"},
+            ),
+            dcc.Download(id="download-dataframe-csv"),
         ],
     )
 
@@ -213,3 +243,22 @@ def update_tab_gh_rad(global_local, df, meta):
         config=generate_chart_name("summary", meta),
         figure=violin(df, "GHrad", global_local),
     )
+
+
+@app.callback(
+    Output("download-dataframe-csv", "data"),
+    Input("download-button", "n_clicks"),
+    [State("df-store", "data")],
+    [State("meta-store", "data")],
+    prevent_initial_call=True,
+)
+def func(n_clicks, df, meta):
+    if n_clicks is None:
+        raise PreventUpdate
+    elif df is not None:
+        df = pd.read_json(df, orient="split")
+
+        file_name = "_".join(meta[1:4])
+        return dcc.send_data_frame(df.to_csv, f"{file_name}_EPW.csv")
+    else:
+        print("df not loaded yet")
