@@ -156,9 +156,14 @@ def inputs():
 
 
 def layout_psy_chart():
-    return html.Div(
-        className="container-col",
-        children=[inputs(), dcc.Graph(id="psych-chart", config=fig_config)],
+    return (
+        dcc.Loading(
+            type="circle",
+            children=html.Div(
+                className="container-col",
+                children=[inputs(), dcc.Graph(id="psych-chart", config=fig_config)],
+            ),
+        ),
     )
 
 

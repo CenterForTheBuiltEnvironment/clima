@@ -55,7 +55,10 @@ def sunpath():
             html.Div(
                 id="sunpath-container",
                 children=[
-                    dcc.Graph(id="custom-sunpath", config=fig_config),
+                    dcc.Loading(
+                        type="circle",
+                        children=dcc.Graph(id="custom-sunpath", config=fig_config),
+                    ),
                 ],
             ),
         ],
