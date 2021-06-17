@@ -88,7 +88,7 @@ def update_yearly(global_local, dd_value, df, meta):
 )
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
-def update_tab_three_db_daily(global_local, dd_value, df, meta):
+def update_daily(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
@@ -113,7 +113,7 @@ def update_tab_three_db_daily(global_local, dd_value, df, meta):
 )
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
-def update_tab_three_db_heatmap(global_local, dd_value, df, meta):
+def update_heatmap(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     if dd_value == "dd_tdb":

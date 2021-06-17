@@ -66,6 +66,7 @@ def violin(df, var, global_local):
         violingap=0,
         violingroupgap=0,
         violinmode="overlay",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
     )
     title = var_name + " (" + var_unit + ")"
     fig.update_layout(template=template, title=title, title_x=0.5, dragmode=False)
