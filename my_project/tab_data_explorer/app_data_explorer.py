@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
+from my_project.utils import generate_chart_name
 
 from my_project.global_scheme import (
     fig_config,
@@ -47,11 +48,7 @@ def section_one():
             section_one_inputs(),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        className="full-width", id="query-yearly", config=fig_config
-                    ),
-                ],
+                children=html.Div(id="yearly-explore", className="full-width"),
             ),
             dcc.Loading(
                 type="circle",
@@ -452,18 +449,30 @@ def layout_data_explorer():
 
 
 @app.callback(
-    Output("query-yearly", "figure"),
+    Output("yearly-explore", "children"),
     # Section One
     [Input("sec1-var-dropdown", "value")],
     # General
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
+    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_yearly(var, global_local, df):
+def update_tab_yearly(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
-    return yearly_profile(df, var, global_local)
+    if df[var].mean() == 99990.0:
+        return dbc.Alert(
+            """The selected variable is not available,
+            the Clima tool could not generate the yearly plot""",
+            color="warning",
+            className="m-4",
+        )
+    else:
+        return dcc.Graph(
+            config=generate_chart_name("data_explorer", meta),
+            figure=yearly_profile(df, var, global_local),
+        )
 
 
 @app.callback(
