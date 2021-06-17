@@ -71,7 +71,7 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
         var_range_y = hr_range
 
     else:
-        # Set maximumand minimum according to data
+        # Set maximum and minimum according to data
         data_max = 5 * ceil(df["DBT"].max() / 5)
         data_min = 5 * floor(df["DBT"].min() / 5)
         var_range_x = [data_min, data_max]

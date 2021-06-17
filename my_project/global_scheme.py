@@ -254,6 +254,7 @@ tab4_dropdown_names = {
 }
 
 dropdown_names = {
+    "None": "None",
     "Dry bulb temperature": "DBT",
     "Dew point temperature": "DPT",
     "Relative humidity": "RH",

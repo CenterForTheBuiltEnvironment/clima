@@ -36,7 +36,7 @@ def inputs():
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
-                                value="GHrad",
+                                value="None",
                             ),
                         ],
                     ),
