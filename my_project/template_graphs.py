@@ -396,7 +396,7 @@ def heatmap(df, var, global_local):
     fig = go.Figure(
         data=go.Heatmap(
             y=df["hour"],
-            x=df["DOY"],
+            x=df["UTC_time"].dt.date,
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
@@ -418,10 +418,11 @@ def heatmap(df, var, global_local):
 
     title = var_name + " (" + var_unit + ")"
 
+    fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
+
     fig.update_layout(
         template=template,
         title=title,
-        xaxis_nticks=53,
         yaxis_nticks=13,
     )
 

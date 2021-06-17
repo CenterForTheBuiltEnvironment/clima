@@ -168,6 +168,7 @@ def create_df(default_url):
     times = pd.date_range(
         "2019-01-01 00:00:00", "2020-01-01", closed="left", freq="H", tz=tz
     )
+    epw_df["UTC_time"] = pd.to_datetime(times)
     delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
     times = times - delta
     times_df = pd.DataFrame(times, columns=["times"])
@@ -260,9 +261,9 @@ def create_df(default_url):
 
 if __name__ == "__main__":
     # fmt: off
-    url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
+    # url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
     other_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     # fmt: on
 
-    df, meta_data = create_df(url)
+    df, meta_data = create_df(default_url=other_url)
     # result = df.head().to_json(date_format="iso", orient="split")
