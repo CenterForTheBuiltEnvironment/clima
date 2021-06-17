@@ -126,6 +126,26 @@ def alert_display(data, n_clicks, meta):
         )
 
 
+@app.callback(
+    Output("tab-summary", "disabled"),
+    Output("tab-t-rh", "disabled"),
+    Output("tab-sun", "disabled"),
+    Output("tab-wind", "disabled"),
+    Output("tab-psy-chart", "disabled"),
+    Output("tab-data-explorer", "disabled"),
+    Output("tab-outdoor_comfort", "disabled"),
+    Output("tab-natural-ventilation", "disabled"),
+    [Input("df-store", "data")],
+    [Input("submit-button", "n_clicks")],
+)
+def enable_disable_tabs(data, n_clicks):
+    print("in here")
+    if data is None and n_clicks is None:
+        return True, True, True, True, True, True, True, True
+    else:
+        return False, False, False, False, False, False, False, False
+
+
 # update the value of the input URL
 @app.callback(
     Output("input-url", "value"),
@@ -135,8 +155,6 @@ def alert_display(data, n_clicks, meta):
 def on_data(ts, meta):
     if ts is None:
         raise PreventUpdate
-
-    print(ts, meta)
 
     if meta is None:
         default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
