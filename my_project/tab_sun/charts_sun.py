@@ -122,7 +122,7 @@ def polar_graph(df, meta, global_local, var):
     time_zone = float(meta[-3])
     solpos = df.loc[df["apparent_elevation"] > 0, :]
 
-    if var is not None:
+    if var != "None":
         var_unit = unit_dict[str(var) + "_unit"]
         var_range = range_dict[str(var) + "_range"]
         var_name = name_dict[str(var) + "_name"]
@@ -146,7 +146,7 @@ def polar_graph(df, meta, global_local, var):
     times = times - delta
     solpos = df.loc[df["apparent_elevation"] > 0, :]
 
-    if var is None:
+    if var == "None":
         var_color = "orange"
         marker_size = 3
         title = "Spherical Sun-Path"
@@ -173,7 +173,7 @@ def polar_graph(df, meta, global_local, var):
             )
         )
     # Draw annalemma
-    if var is None:
+    if var == "None":
         fig.add_trace(
             go.Scatterpolar(
                 r=90 * np.cos(np.radians(90 - solpos["apparent_zenith"])),
@@ -325,7 +325,7 @@ def custom_cartesian_solar(df, meta, global_local, var):
     longitude = float(meta[-4])
     time_zone = float(meta[-3])
     tz = "UTC"
-    if var is not None:
+    if var != "None":
         var_unit = unit_dict[str(var) + "_unit"]
         var_range = range_dict[str(var) + "_range"]
         var_name = name_dict[str(var) + "_name"]
@@ -340,7 +340,7 @@ def custom_cartesian_solar(df, meta, global_local, var):
             data_min = 5 * floor(df[var].min() / 5)
             range_z = [data_min, data_max]
 
-    if var is None:
+    if var == "None":
         var_color = "orange"
         marker_size = 3
         title = "Cartesian Sun-Path"
@@ -351,7 +351,7 @@ def custom_cartesian_solar(df, meta, global_local, var):
     fig = go.Figure()
 
     # draw annalemma
-    if var is None:
+    if var == "None":
         fig.add_trace(
             go.Scatter(
                 y=df["elevation"],

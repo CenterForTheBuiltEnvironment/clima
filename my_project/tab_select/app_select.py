@@ -139,7 +139,6 @@ def alert_display(data, n_clicks, meta):
     [Input("submit-button", "n_clicks")],
 )
 def enable_disable_tabs(data, n_clicks):
-    print("in here")
     if data is None and n_clicks is None:
         return True, True, True, True, True, True, True, True
     else:

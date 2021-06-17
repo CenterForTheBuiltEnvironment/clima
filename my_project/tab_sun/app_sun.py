@@ -27,20 +27,6 @@ def sunpath():
             html.Div(
                 className="container-row container-center full-width text-dropdown-container",
                 children=[
-                    html.H6(className="text-next-to-input", children=["Variable: "]),
-                    dcc.Dropdown(
-                        id="custom-sun-var-dropdown",
-                        options=[
-                            {"label": i, "value": tab4_dropdown_names[i]}
-                            for i in tab4_dropdown_names
-                        ],
-                        value="DBT",
-                    ),
-                ],
-            ),
-            html.Div(
-                className="container-row container-center full-width text-dropdown-container",
-                children=[
                     html.H6(className="text-next-to-input", children=["View: "]),
                     dcc.Dropdown(
                         id="custom-sun-view-dropdown",
@@ -49,6 +35,20 @@ def sunpath():
                             {"label": "Cartesian", "value": "cartesian"},
                         ],
                         value="polar",
+                    ),
+                ],
+            ),
+            html.Div(
+                className="container-row container-center full-width text-dropdown-container",
+                children=[
+                    html.H6(className="text-next-to-input", children=["Variable: "]),
+                    dcc.Dropdown(
+                        id="custom-sun-var-dropdown",
+                        options=[
+                            {"label": i, "value": tab4_dropdown_names[i]}
+                            for i in tab4_dropdown_names
+                        ],
+                        value="None",
                     ),
                 ],
             ),
@@ -162,11 +162,8 @@ def update_tab_four(view, var, ts, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
-    # Sunpaths
-
     if view == "polar":
         return polar_graph(df, meta, global_local, var)
-
     else:
         return custom_cartesian_solar(df, meta, global_local, var)
 

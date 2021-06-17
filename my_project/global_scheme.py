@@ -232,7 +232,7 @@ name_dict = {
 
 # Dropdown Names
 tab4_dropdown_names = {
-    "None": None,
+    "None": "None",
     "Dry bulb temperature": "DBT",
     "Dew point temperature": "DPT",
     "Relative humidity": "RH",
