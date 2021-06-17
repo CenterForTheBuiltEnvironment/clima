@@ -412,6 +412,7 @@ def heatmap(df, var, global_local):
                 + "Day: %{customdata[1]}<br>"
                 + "Hour: %{y}:00<br>"
             ),
+            name="",
             colorbar=dict(title=var_unit),
         )
     )
