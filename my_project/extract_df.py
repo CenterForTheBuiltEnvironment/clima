@@ -36,11 +36,8 @@ def get_data(url):
 
 
 @code_timer
-def create_df(default_url):
+def create_df(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
-    lst = get_data(default_url)
-    if lst is None:
-        return None, None
     meta = lst[0].strip().split(",")
     latitude = float(meta[-4])
     longitude = float(meta[-3])
@@ -254,16 +251,16 @@ def create_df(default_url):
     psy_df = psy_df.set_index(epw_df.times)
     epw_df = epw_df.join(psy_df)
 
-    meta.append(default_url)
+    meta.append(file_name)
     # fixme meta should be a dictionary not an array
     return epw_df, meta
 
 
 if __name__ == "__main__":
     # fmt: off
-    # url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
+    url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
     other_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     # fmt: on
 
-    df, meta_data = create_df(default_url=other_url)
-    # result = df.head().to_json(date_format="iso", orient="split")
+    lines = get_data(other_url)
+    df, meta_data = create_df(lines, other_url)

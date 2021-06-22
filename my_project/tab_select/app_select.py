@@ -1,3 +1,8 @@
+import base64
+import datetime
+import io
+import dash_table
+import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
@@ -5,7 +10,7 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from app import app, cache, TIMEOUT
-from my_project.extract_df import create_df
+from my_project.extract_df import create_df, get_data
 from my_project.utils import code_timer
 
 
@@ -29,6 +34,33 @@ def layout_select():
                     ),
                 ],
             ),
+            html.Div(
+                children=[
+                    dcc.Upload(
+                        id="upload-data",
+                        children=html.Div(
+                            [
+                                "Drag and Drop or ",
+                                html.A("Select Files"),
+                                " your EPW file",
+                            ]
+                        ),
+                        style={
+                            "width": "98%",
+                            "height": "50px",
+                            "lineHeight": "60px",
+                            "borderWidth": "1px",
+                            "borderStyle": "dashed",
+                            "borderRadius": "5px",
+                            "textAlign": "center",
+                            "margin": "10px",
+                        },
+                        # Allow multiple files to be uploaded
+                        multiple=True,
+                    ),
+                ],
+            ),
+            html.Div(id="output-data-upload"),
             html.Embed(id="tab-one-map", src="https://www.ladybug.tools/epwmap/"),
             html.P(
                 children=[
@@ -59,26 +91,55 @@ def alert():
 @app.callback(
     Output("df-store", "data"),
     Output("meta-store", "data"),
-    [Input("submit-button", "n_clicks")],
-    [State("input-url", "value")],
+    Input("submit-button", "n_clicks"),
+    Input("upload-data", "contents"),
+    State("upload-data", "filename"),
+    State("upload-data", "last_modified"),
+    State("input-url", "value"),
     prevent_initial_call=True,
 )
 @code_timer
-@cache.memoize(timeout=TIMEOUT)
-def submit_button(n_clicks, value):
+# @cache.memoize(timeout=TIMEOUT)
+def submit_button(n_clicks, list_of_contents, list_of_names, list_of_dates, url):
     """Takes the input once submitted and stores it."""
 
-    if n_clicks is None:
-        raise PreventUpdate
-    else:
-        df, meta = create_df(value)
-        if df is not None:
-            # fixme: DeprecationWarning: an integer is required (got type float).
-            df = df.to_json(date_format="iso", orient="split")
-            # todo I should update the input value with the last entered
-            return df, meta
+    ctx = dash.callback_context
+    print(ctx.triggered[0]["prop_id"])
+
+    if ctx.triggered[0]["prop_id"] == "submit-button.n_clicks":
+        if n_clicks is None:
+            raise PreventUpdate
         else:
-            return None, None
+            lines = get_data(url)
+            if lines is None:
+                return None, None
+            df, meta = create_df(lines, url)
+            if df is not None:
+                # fixme: DeprecationWarning: an integer is required (got type float).
+                df = df.to_json(date_format="iso", orient="split")
+                # todo I should update the input value with the last entered
+                return df, meta
+            else:
+                return None, None
+
+    else:
+        print(list_of_contents, list_of_names, list_of_dates)
+        if list_of_contents is not None:
+            content_type, content_string = list_of_contents[0].split(",")
+
+            decoded = base64.b64decode(content_string)
+            try:
+                if "epw" in list_of_names[0]:
+                    # Assume that the user uploaded a CSV file
+                    lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
+                    df, meta_data = create_df(lines, list_of_names[0])
+                    df = df.to_json(date_format="iso", orient="split")
+                    return df, meta_data
+                else:
+                    return None, None
+            except Exception as e:
+                print(e)
+                return None, None
 
 
 @app.callback(
@@ -107,7 +168,7 @@ def alert_display(data, n_clicks, meta):
         subtitle = "Current Location: " + meta[1] + ", " + meta[3]
         return (
             True,
-            "Successfully loaded data. You can change location by submitting a link below!",
+            "Successfully loaded data. You can change location by submitting a link below or by uploading your EPW file!",
             "success",
             subtitle,
         )
@@ -144,7 +205,57 @@ def on_data(ts, meta):
 
     if meta is None:
         default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
+    elif "http" not in meta[-1]:
+        default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     else:
         default_url = meta[-1]
 
     return default_url
+
+
+def parse_contents(contents, filename, date):
+    content_type, content_string = contents.split(",")
+
+    decoded = base64.b64decode(content_string)
+    try:
+        if "epw" in filename:
+            # Assume that the user uploaded a CSV file
+            lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
+            df, meta_data = create_df(lines, filename)
+            df = df.head()
+    except Exception as e:
+        print(e)
+        return html.Div(["There was an error processing this file."])
+
+    return html.Div(
+        [
+            html.H5(filename),
+            html.H6(datetime.datetime.fromtimestamp(date)),
+            dash_table.DataTable(
+                data=df.to_dict("records"),
+                columns=[{"name": i, "id": i} for i in df.columns],
+            ),
+            html.Hr(),  # horizontal line
+            # For debugging, display the raw contents provided by the web browser
+            html.Div("Raw Content"),
+            html.Pre(
+                contents[0:200] + "...",
+                style={"whiteSpace": "pre-wrap", "wordBreak": "break-all"},
+            ),
+        ]
+    )
+
+
+@app.callback(
+    Output("output-data-upload", "children"),
+    Input("upload-data", "contents"),
+    State("upload-data", "filename"),
+    State("upload-data", "last_modified"),
+)
+def update_output(list_of_contents, list_of_names, list_of_dates):
+    if list_of_contents is not None:
+        children = [
+            parse_contents(c, n, d)
+            for c, n, d in zip(list_of_contents, list_of_names, list_of_dates)
+        ]
+        return children
