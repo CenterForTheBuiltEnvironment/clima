@@ -43,7 +43,9 @@ def footer():
                     [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
                     
                     Supported browsers: Chromium-based browsers, Firefox.
-                    """
+                    
+                    Report issues with the Clima app [here](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
+                    """,
                     ),
                 ],
             ),
