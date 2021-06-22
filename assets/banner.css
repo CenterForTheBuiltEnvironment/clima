@@ -30,6 +30,7 @@
 #banner-subtitle { 
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
+    max-height: 25px;
 }
 
 #banner-text-right * {
