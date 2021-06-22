@@ -1,6 +1,9 @@
 import functools
 import time
 from my_project.global_scheme import fig_config, name_dict
+import pandas as pd
+import json
+from pandas import json_normalize
 
 
 def code_timer(func):
@@ -25,3 +28,29 @@ def generate_chart_name(tab_name, meta):
         "filename"
     ] = f"CBEClima_{meta[1]}_{meta[3]}_{tab_name}_tab"
     return _fig_config
+
+
+def plot_location_epw_files():
+    with open("./assets/data/epw_location.json") as data_file:
+        data = json.load(data_file)
+
+    df = json_normalize(data["features"])
+    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
+
+    import plotly.express as px
+
+    fig = px.scatter_mapbox(
+        df.head(2585),
+        lat="lat",
+        lon="lon",
+        hover_name="properties.title",
+        color_discrete_sequence=["blue"],
+        hover_data=["properties.epw"],
+        zoom=2,
+        height=500,
+    )
+    fig.update_layout(mapbox_style="open-street-map")
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    # fig.update_layout(clickmode="event+select")
+
+    return fig

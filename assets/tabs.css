@@ -88,13 +88,13 @@
 #input-url {
     width: 90%;
 }
-#submit-button {
-    width: 9%;
-}
+/*#submit-button {*/
+/*    width: 9%;*/
+/*}*/
 
 #tab-one-map {
     margin-top: 28px;
-    height: 100vh;
+    /*height: 100vh;*/
     width: 100%;
 }
 

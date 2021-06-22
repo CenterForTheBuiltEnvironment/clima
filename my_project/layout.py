@@ -192,5 +192,6 @@ def store():
         children=[
             dcc.Store(id="df-store", storage_type="session"),
             dcc.Store(id="meta-store", storage_type="session"),
+            dcc.Store(id="url-store", storage_type="session"),
         ],
     )
