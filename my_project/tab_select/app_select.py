@@ -179,15 +179,14 @@ def submit_button(n_clicks, list_of_contents, list_of_names, url):
     Output("tab-psy-chart", "disabled"),
     Output("tab-data-explorer", "disabled"),
     Output("tab-outdoor_comfort", "disabled"),
-    Output("tab-natural-ventilation", "disabled"),
     [Input("df-store", "data")],
     [Input("submit-button", "n_clicks")],
 )
 def enable_disable_tabs(data, n_clicks):
     if data is None and n_clicks is None:
-        return True, True, True, True, True, True, True, True
+        return True, True, True, True, True, True, True
     else:
-        return False, False, False, False, False, False, False, False
+        return False, False, False, False, False, False, False
 
 
 # update the value of the input URL

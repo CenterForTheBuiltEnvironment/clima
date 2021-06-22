@@ -176,14 +176,6 @@ def build_tabs():
                         selected_className="custom-tab--selected",
                         disabled=True,
                     ),
-                    dcc.Tab(
-                        id="tab-natural-ventilation",
-                        label="Natural Ventilation",
-                        value="tab-natural-ventilation",
-                        className="custom-tab",
-                        selected_className="custom-tab--selected",
-                        disabled=True,
-                    ),
                 ],
             ),
             html.Div(

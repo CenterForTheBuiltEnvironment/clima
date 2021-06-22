@@ -4,7 +4,6 @@ import dash
 import dash_core_components as dcc
 
 from my_project.layout import build_banner, build_tabs, footer
-from my_project.tab_under_construction.construction import construction
 from my_project.tab_wind.app_wind import layout_wind
 from my_project.tab_sun.app_sun import layout_sun
 from my_project.tab_select.app_select import layout_select
@@ -61,8 +60,6 @@ def render_content(tab):
         return layout_data_explorer()
     elif tab == "tab-outdoor_comfort":
         return layout_outdoor_comfort()
-    elif tab == "tab-natural-ventilation":
-        return construction()
     elif tab == "tab-psy-chart":
         return layout_psy_chart()
     else:
