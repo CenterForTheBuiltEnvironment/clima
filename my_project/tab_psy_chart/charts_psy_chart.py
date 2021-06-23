@@ -54,6 +54,8 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
     var = colorby_var
     if var == "None":
         var_color = "darkorange"
+    elif var == "Frequency":
+        var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
         var_unit = str(var) + "_unit"
         var_unit = unit_dict[var_unit]
@@ -82,7 +84,7 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
 
     title = "Psychrometric Chart"
 
-    if colorby_var != "None":
+    if colorby_var != "None" and colorby_var != "Frequency":
         title = title + " colored by " + var_name + " (" + var_unit + ")"
 
     if time_filter:
@@ -152,6 +154,18 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
                 + ": %{x:.2f}"
                 + unit_dict["DBT_unit"],
                 name="",
+            )
+        )
+    elif var == "Frequency":
+        fig.add_trace(
+            go.Histogram2d(
+                x=df["DBT"],
+                y=df["hr"],
+                name="",
+                colorscale=var_color,
+                hovertemplate="",
+                autobinx=False,
+                xbins=dict(start=-50, end=60, size=1),
             )
         )
 

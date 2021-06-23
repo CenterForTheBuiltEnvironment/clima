@@ -36,7 +36,7 @@ def inputs():
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
-                                value="None",
+                                value="Frequency",
                             ),
                         ],
                     ),
@@ -171,18 +171,20 @@ def layout_psy_chart():
 @app.callback(
     Output("psych-chart", "figure"),
     # Sec1 Inputs
-    [Input("tab9-colorby-dropdown", "value")],
-    # Sec2 Inputs
-    [Input("tab9-sec3-time-filter-input", "value")],
-    [Input("tab9-sec3-query-month-slider", "value")],
-    [Input("tab9-sec3-query-hour-slider", "value")],
-    # Sec3 Inputs
-    [Input("tab9-sec3-data-filter-input", "value")],
-    [Input("tab9-sec3-filter-var-dropdown", "value")],
-    [Input("tab9-sec3-min-val", "value")],
-    [Input("tab9-sec3-max-val", "value")],
-    # General
-    [Input("global-local-radio-input", "value")],
+    [
+        Input("tab9-colorby-dropdown", "value"),
+        # Sec2 Inputs
+        Input("tab9-sec3-time-filter-input", "value"),
+        Input("tab9-sec3-query-month-slider", "value"),
+        Input("tab9-sec3-query-hour-slider", "value"),
+        # Sec3 Inputs
+        Input("tab9-sec3-data-filter-input", "value"),
+        Input("tab9-sec3-filter-var-dropdown", "value"),
+        Input("tab9-sec3-min-val", "value"),
+        Input("tab9-sec3-max-val", "value"),
+        # General
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
