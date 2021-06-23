@@ -58,11 +58,14 @@ def layout_select():
                     dbc.ModalHeader("Analyse data from this location?"),
                     dbc.ModalFooter(
                         children=[
-                            dbc.Button("Close", id="close", className="ml-2"),
+                            dbc.Button(
+                                "Close", id="close", className="ml-2", color="danger"
+                            ),
                             dbc.Button(
                                 "Yes",
                                 id="yes-use-epw",
                                 className="ml-2",
+                                color="primary",
                             ),
                         ]
                     ),
