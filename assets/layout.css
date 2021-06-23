@@ -6,11 +6,14 @@
 .container-row {
     display: flex;
     flex-direction: row;
-    align-items: center;
 }
 
-.container-center {
+.justify-center {
     justify-content: center;
+}
+
+.align-center{
+    align-items: center;
 }
 
 .container-stretch {

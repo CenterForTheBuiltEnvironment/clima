@@ -25,7 +25,7 @@ def sunpath():
         id="tab-four-custom-sun-container",
         children=[
             html.Div(
-                className="container-row container-center full-width text-dropdown-container",
+                className="container-row justify-center full-width align-center",
                 children=[
                     html.H6(className="text-next-to-input", children=["View: "]),
                     dcc.Dropdown(
@@ -39,7 +39,7 @@ def sunpath():
                 ],
             ),
             html.Div(
-                className="container-row container-center full-width text-dropdown-container",
+                className="container-row justify-center full-width align-center",
                 children=[
                     html.H6(className="text-next-to-input", children=["Variable: "]),
                     dcc.Dropdown(

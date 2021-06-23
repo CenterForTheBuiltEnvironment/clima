@@ -12,6 +12,7 @@ from my_project.global_scheme import (
     range_dict,
     name_dict,
     color_dict,
+    tight_margins,
 )
 
 
@@ -211,7 +212,7 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
     fig.update_xaxes(range=var_range_x)
     fig.update_yaxes(range=var_range_y)
 
-    fig.update_layout(template=template, title=title)
+    fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     return fig

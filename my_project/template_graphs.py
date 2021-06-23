@@ -10,7 +10,7 @@ from pythermalcomfort.utilities import running_mean_outdoor_temperature
 from my_project.global_scheme import color_dict, name_dict, range_dict, unit_dict
 from my_project.utils import code_timer
 
-from .global_scheme import month_lst, template
+from .global_scheme import month_lst, template, tight_margins
 
 
 # violin template
@@ -66,7 +66,8 @@ def violin(df, var, global_local):
         violingap=0,
         violingroupgap=0,
         violinmode="overlay",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=tight_margins,
+        legend=dict(orientation="h", yanchor="bottom", y=0.9, xanchor="right", x=1),
     )
     title = var_name + " (" + var_unit + ")"
     fig.update_layout(template=template, title=title, title_x=0.5, dragmode=False)
@@ -236,28 +237,21 @@ def yearly_profile(df, var, global_local):
     else:
         data = [trace1, trace2]
 
-    layout = go.Layout(barmode="overlay", bargap=0)
+    layout = go.Layout(barmode="overlay", bargap=0, margin=tight_margins)
 
     fig = go.Figure(data=data, layout=layout)
 
     fig.update_xaxes(range=custom_xlim)
     fig.update_yaxes(range=custom_ylim)
 
-    # fig.update_traces(opacity=0.6)
-
     fig.update_layout(
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
     )
 
-    title = "Yearly profile of " + var_name + " (" + var_unit + ")"
-
     fig.update_yaxes(title_text=var_unit)
     fig.update_xaxes(title_text="days of the year")
 
-    fig.update_layout(
-        template=template,
-        title=title,
-    )
+    fig.update_layout(template=template)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     return fig
@@ -373,7 +367,7 @@ def daily_profile(df, var, global_local):
         ticktext=["6", "12", "18"], tickvals=["6", "12", "18"], tickangle=0
     )
 
-    fig.update_layout(template=template, title=title, dragmode=False)
+    fig.update_layout(template=template, dragmode=False, margin=tight_margins)
     return fig
 
 
@@ -421,19 +415,10 @@ def heatmap(df, var, global_local):
 
     fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
 
-    fig.update_layout(
-        template=template,
-        title=title,
-        yaxis_nticks=13,
-    )
-
     fig.update_yaxes(title_text="hours of the day")
     fig.update_xaxes(title_text="days of the year")
 
-    fig.update_layout(
-        template=template,
-        title=title,
-    )
+    fig.update_layout(template=template, margin=tight_margins, yaxis_nticks=13)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
@@ -538,7 +523,11 @@ def wind_rose(df, meta, title, month, hour, labels):
     if title != "":
         fig.update_layout(title=title, title_x=0.5)
     fig.update_layout(
-        autosize=True, polar_angularaxis_rotation=90, showlegend=labels, dragmode=False
+        autosize=True,
+        polar_angularaxis_rotation=90,
+        showlegend=labels,
+        dragmode=False,
+        margin=tight_margins,
     )
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)

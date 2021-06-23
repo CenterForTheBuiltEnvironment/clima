@@ -10,7 +10,7 @@ from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
 from my_project.utils import generate_chart_name, title_with_tooltip, code_timer
 import plotly.graph_objects as go
-from my_project.global_scheme import template
+from my_project.global_scheme import template, tight_margins
 
 
 def layout_summary():
@@ -99,7 +99,7 @@ def layout_summary():
                                 color="primary",
                             ),
                         ],
-                        className="container-row container-center",
+                        className="container-row justify-center align-center",
                     ),
                     dcc.Loading(
                         type="circle",
@@ -178,7 +178,7 @@ def update_tab_map(ts, global_local, meta):
         State("submit-set-points", "n_clicks"),
     ],
 )
-# @cache.memoize(timeout=TIMEOUT)
+@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -253,11 +253,8 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
 
         fig = go.Figure(
             data=data,
-            layout=go.Layout(
-                margin={"l": 20, "r": 20, "t": 20, "b": 20},
-            ),
         )
-        fig.update_layout(barmode="relative")
+        fig.update_layout(barmode="relative", margin=tight_margins)
         fig.update_layout(template=template, dragmode=False)
 
         fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)

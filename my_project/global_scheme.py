@@ -40,9 +40,9 @@ utci_categories_color = [
 ]
 
 # containers
-container_row_center_full = "container-row row-center full-width"
+container_row_center_full = "container-row row-center"
 container_col_center_one_of_three = (
-    "container-col container-center one-of-three-container"
+    "container-col justify-center one-of-three-container"
 )
 
 # color dictionary
@@ -415,3 +415,5 @@ fig_config = {
     "displayModeBar": "hover",
     "toImageButtonOptions": {"format": "svg", "filename": "Clima tool graph"},
 }
+
+tight_margins = dict(l=20, r=20, t=33, b=20)

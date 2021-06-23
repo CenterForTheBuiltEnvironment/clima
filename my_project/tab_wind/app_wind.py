@@ -4,6 +4,7 @@ from my_project.global_scheme import fig_config, month_lst, container_row_center
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
 import pandas as pd
+from my_project.utils import title_with_tooltip
 
 from app import app, cache, TIMEOUT
 
@@ -11,10 +12,15 @@ from app import app, cache, TIMEOUT
 def sliders():
     """Returns 2 sliders for the hour"""
     return html.Div(
-        className="container-col container-center",
+        className="container-col justify-center",
         id="slider-container",
         children=[
-            html.H3("Customizable Wind Rose"),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Customizable Wind Rose",
+                    tooltip_text="Customizable Wind Rose",
+                ),
+            ),
             html.Div(
                 className="container-row each-slider",
                 children=[
@@ -54,25 +60,24 @@ def sliders():
 def seasonal_wind_rose():
     """Return the section with the 4 seasonal wind rose graphs."""
     return html.Div(
-        className="container-col full-width",
+        className="container-col",
         children=[
-            html.H5("Seasonal Wind Rose"),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Seasonal Wind Rose",
+                    tooltip_text="Seasonal Wind Rose",
+                ),
+            ),
             html.Div(
                 className=container_row_center_full,
                 children=[
                     html.Div(
                         className="container-col",
                         children=[
-                            # dcc.Graph(
-                            #     className = "seasonal-graph",
-                            #     id = "winter-wind-rose",
-                            #     config = config
-                            # ),
                             dcc.Loading(
                                 type="circle",
                                 children=[
                                     dcc.Graph(
-                                        className="seasonal-graph",
                                         id="winter-wind-rose",
                                         config=fig_config,
                                     ),
@@ -90,7 +95,6 @@ def seasonal_wind_rose():
                                 type="circle",
                                 children=[
                                     dcc.Graph(
-                                        className="seasonal-graph",
                                         id="spring-wind-rose",
                                         config=fig_config,
                                     ),
@@ -113,7 +117,6 @@ def seasonal_wind_rose():
                                 type="circle",
                                 children=[
                                     dcc.Graph(
-                                        className="seasonal-graph",
                                         id="summer-wind-rose",
                                         config=fig_config,
                                     ),
@@ -131,7 +134,6 @@ def seasonal_wind_rose():
                                 type="circle",
                                 children=[
                                     dcc.Graph(
-                                        className="seasonal-graph",
                                         id="fall-wind-rose",
                                         config=fig_config,
                                     ),
@@ -152,7 +154,12 @@ def daily_wind_rose():
         className="container-col full-width",
         id="tab5-daily-container",
         children=[
-            html.H5("Daily Wind Rose"),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Daily Wind Rose",
+                    tooltip_text="Daily Wind Rose",
+                ),
+            ),
             html.Div(
                 id="daily-wind-rose-outer-container",
                 className="container-row full-width",
@@ -220,16 +227,21 @@ def daily_wind_rose():
 def custom_wind_rose():
     """"""
     return html.Div(
-        className="container-col container-center full-width",
+        className="container-col justify-center full-width",
         id="custom-windrose-container",
         children=[
-            html.H4("Customizable Windrose"),
             html.Div(
-                className="container-row full-width container-center",
+                children=title_with_tooltip(
+                    text="Customizable Wind Rose",
+                    tooltip_text="Customizable Wind Rose",
+                ),
+            ),
+            html.Div(
+                className="container-row full-width justify-center",
                 id="tab5-custom-dropdown-container",
                 children=[
                     html.Div(
-                        className="container-col container-center tab5-custom-half-container",
+                        className="container-col justify-center tab5-custom-half-container",
                         children=[
                             html.Div(
                                 className=container_row_center_full,
@@ -268,7 +280,7 @@ def custom_wind_rose():
                         ],
                     ),
                     html.Div(
-                        className="container-col tab5-custom-half-container container-center",
+                        className="container-col tab5-custom-half-container justify-center",
                         children=[
                             html.Div(
                                 className=container_row_center_full,
@@ -321,9 +333,14 @@ def custom_wind_rose():
 def layout_wind():
     """Contents in the fifth tab 'Wind'."""
     return html.Div(
-        className="container-col",
-        id="tab-five-container",
+        className="container-col justify-center",
         children=[
+            html.Div(
+                children=title_with_tooltip(
+                    text="Annual Wind Rose",
+                    tooltip_text="Annual Wind Rose",
+                ),
+            ),
             dcc.Loading(
                 type="circle",
                 children=[
@@ -362,7 +379,7 @@ def layout_wind():
 def update_tab_wind_rose(ts, global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-    annual = wind_rose(df, meta, "Annual Wind Rose", [1, 12], [1, 24], True)
+    annual = wind_rose(df, meta, "", [1, 12], [1, 24], True)
     return annual
 
 

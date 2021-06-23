@@ -170,10 +170,6 @@ p {
     height: 100%;
 }
 
-.text-dropdown-container {
-    align-items: center;
-}
-
 #custom-sun-view-dropdown {
     width: 25%;
 }
@@ -237,14 +233,6 @@ p {
 
 #wind-speed, #wind-direction {
     width: 100%;
-}
-
-.seasonal-text {
-    width: 75%;
-}
-
-.daily-text {
-    width: 65%;
 }
 
 #custom-windrose-container {

@@ -1,7 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-from my_project.utils import generate_chart_name, code_timer
+from my_project.utils import generate_chart_name, code_timer, title_with_tooltip
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
 
@@ -13,9 +13,11 @@ def layout_t_rh():
         className="container-col full-width",
         children=[
             html.Div(
-                className="container-row full-width text-dropdown-container",
+                className="container-row full-width align-center justify-center",
                 children=[
-                    html.H6(className="text-next-to-input", children=["Variable: "]),
+                    html.H3(
+                        className="text-next-to-input", children=["Select variable: "]
+                    ),
                     dcc.Dropdown(
                         id="dropdown",
                         className="dropdown-t-rh",
@@ -30,13 +32,31 @@ def layout_t_rh():
             html.Div(
                 className="container-col",
                 children=[
+                    html.Div(
+                        children=title_with_tooltip(
+                            text="Yearly chart",
+                            tooltip_text="Yearly chart",
+                        ),
+                    ),
                     dcc.Loading(
                         type="circle",
                         children=html.Div(id="yearly"),
                     ),
+                    html.Div(
+                        children=title_with_tooltip(
+                            text="Daily chart",
+                            tooltip_text="Daily chart",
+                        ),
+                    ),
                     dcc.Loading(
                         type="circle",
                         children=html.Div(id="daily"),
+                    ),
+                    html.Div(
+                        children=title_with_tooltip(
+                            text="Heatmap chart",
+                            tooltip_text="Heatmap",
+                        ),
                     ),
                     dcc.Loading(
                         type="circle",

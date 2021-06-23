@@ -107,7 +107,7 @@ def section_two_inputs():
                         id="sec2-time-filter-input",
                     ),
                     html.Div(
-                        className="container-row full-width container-center",
+                        className="container-row full-width justify-center",
                         children=[
                             html.H6("Month Range"),
                             dcc.RangeSlider(
@@ -124,7 +124,7 @@ def section_two_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row full-width container-center",
+                        className="container-row full-width justify-center",
                         children=[
                             html.H6("Hour Range"),
                             dcc.RangeSlider(
@@ -217,7 +217,7 @@ def section_two():
     """Return the two graphs in section two."""
     return html.Div(
         id="tab6-sec2-container",
-        className="container-col container-center full-width",
+        className="container-col justify-center full-width",
         children=[
             section_two_inputs(),
             dcc.Loading(
@@ -319,7 +319,7 @@ def section_three_inputs():
                         id="tab6-sec3-time-filter-input",
                     ),
                     html.Div(
-                        className="container-row full-width container-center",
+                        className="container-row full-width justify-center",
                         children=[
                             html.H6("Month Range"),
                             dcc.RangeSlider(
@@ -335,7 +335,7 @@ def section_three_inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row full-width container-center",
+                        className="container-row full-width justify-center",
                         children=[
                             html.H6("Hour Range"),
                             dcc.RangeSlider(
@@ -443,7 +443,7 @@ def section_three():
 def layout_data_explorer():
     """Return the contents of tab six." """
     return html.Div(
-        className="continer-col container-center",
+        className="continer-col justify-center",
         children=[section_one(), section_two(), section_three()],
     )
 

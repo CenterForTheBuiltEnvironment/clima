@@ -53,7 +53,7 @@ def inputs():
                         id="tab9-sec3-time-filter-input",
                     ),
                     html.Div(
-                        className="container-row full-width container-center",
+                        className="container-row full-width justify-center",
                         children=[
                             html.H6("Month Range"),
                             dcc.RangeSlider(
@@ -69,7 +69,7 @@ def inputs():
                         ],
                     ),
                     html.Div(
-                        className="container-row full-width container-center",
+                        className="container-row full-width justify-center",
                         children=[
                             html.H6("Hour Range"),
                             dcc.RangeSlider(
