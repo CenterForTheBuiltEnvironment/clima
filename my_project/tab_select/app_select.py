@@ -85,7 +85,7 @@ def alert():
                 messages_alert["start"],
                 color="primary",
                 id="alert",
-                dismissable=True,
+                dismissable=False,
                 is_open=True,
                 style={"maxHeight": "66px"},
             )
