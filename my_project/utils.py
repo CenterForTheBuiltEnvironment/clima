@@ -4,6 +4,8 @@ from my_project.global_scheme import fig_config, name_dict
 import pandas as pd
 import json
 from pandas import json_normalize
+import dash_html_components as html
+import dash_bootstrap_components as dbc
 
 
 def code_timer(func):
@@ -55,3 +57,30 @@ def plot_location_epw_files():
     # fig.update_layout(clickmode="event+select")
 
     return fig
+
+
+def title_with_tooltip(text, tooltip_text):
+    return (
+        html.Div(
+            className="container-row",
+            style={"padding": "1rem", "marginTop": "1rem"},
+            children=[
+                html.H5(text, style={"marginRight": "1rem"}),
+                html.Div(
+                    [
+                        html.Span(
+                            "?",
+                            id="tooltip-target",
+                            style={"textAlign": "center", "color": "white"},
+                            className="dot",
+                        ),
+                        dbc.Tooltip(
+                            tooltip_text,
+                            target="tooltip-target",
+                            placement="right",
+                        ),
+                    ]
+                ),
+            ],
+        ),
+    )

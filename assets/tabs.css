@@ -12,12 +12,11 @@
 /* Tabs */
 #tabs-container {
     height: 100vh;
-    padding: 0px;
-    padding-top: 0px;
+    padding: 0;
 }
 
 #tabs {
-    margin: 0px;
+    margin: 0;
 }
 
 #tabs-content {
@@ -26,12 +25,12 @@
 }
 
 #tabs-parent {
-    padding: 0px 24px 0px 24px;
+    padding: 0 24px 0 24px;
     background-color: #003262 !important;
 }
 
 #store-container { 
-    padding: 0px;
+    padding: 0;
 }
 
 #loading-container {
@@ -44,7 +43,7 @@
 .custom-tabs {
     border-top-left-radius: 3px;
     background-color: #f9f9f9;
-    padding: 0px 24px;
+    padding: 0 24px;
     border-bottom: 1px solid #d6d6d6;
 }
 
@@ -65,7 +64,7 @@
 }
 .custom-tab--selected {
     color: black;
-    box-shadow: 1px 1px 0px white;
+    box-shadow: 1px 1px 0 white;
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;
     border-top: 6px solid #abd2ff !important;
@@ -74,7 +73,7 @@
 /* Tab One */
 #tab-one-container {
     height: 100%;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 #tab-one-form-container {
@@ -89,10 +88,6 @@
     margin-top: 28px;
     /*height: 100vh;*/
     width: 100%;
-}
-
-#tooltip-title-container {
-    padding: 10px;
 }
 
 .dot {
@@ -114,10 +109,6 @@
     width: 100%;
 }
 
-#tab2-sec1-container, #tab2-sec2-container {
-    padding-bottom: 16px;
-}
-
 #location-info, #location-description {
     padding: 12px 12px 12px 12px;
 }
@@ -131,13 +122,13 @@ p {
     width: 100%;
 }
 
-#tooltip-title-container {
-    padding: 12px 12px 0px 12px;
-}
+/*#tooltip-title-container {*/
+/*    padding: 12px 12px 0px 12px;*/
+/*}*/
 
-#tooltip-title-container h5 {
-    margin-right: 10px;
-}
+/*#tooltip-title-container h5 {*/
+/*    margin-right: 10px;*/
+/*}*/
 
 .violin-container {
     height: 100%;
@@ -194,7 +185,6 @@ p {
 /* Tab Five */
 #tab-five-container {
     justify-content: center;
-    align-items: center;
     align-items: stretch;
 }
 
@@ -237,7 +227,7 @@ p {
 }
 
 .each-slider {
-    padding: 32px 0px 0px 0px;
+    padding: 32px 0 0 0;
     width: 60%;
 }
 
@@ -301,7 +291,7 @@ p {
 }
 
 .text-next-to-input {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     margin-right: 18px;
 }
 
@@ -320,7 +310,6 @@ p {
 .one-of-three-container {
     width: 30%;
     align-self: flex-start;
-    align-items: center;
     align-items: stretch;
 }
 
