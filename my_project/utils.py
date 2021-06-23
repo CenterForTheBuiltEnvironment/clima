@@ -40,6 +40,7 @@ def plot_location_epw_files():
     import plotly.express as px
 
     fig = px.scatter_mapbox(
+        # fixme change this and import them all
         df.head(2585),
         lat="lat",
         lon="lon",
@@ -49,7 +50,7 @@ def plot_location_epw_files():
         zoom=2,
         height=500,
     )
-    fig.update_layout(mapbox_style="open-street-map")
+    fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     # fig.update_layout(clickmode="event+select")
 

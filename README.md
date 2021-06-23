@@ -74,11 +74,19 @@ Secondly you should describe the changes in `CHANGELOG.md`
 
 ### Deploy to Google Cloud Run
 
-````
+```
 gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
 
 gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --region=us-central1 --allow-unauthenticated
 ```
+
+#### Test project
+```
+gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
+
+gcloud run deploy --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated
+```
+
 
 ## Build with
 * [Dash](https://plotly.com/dash/) - Framework for building the web app

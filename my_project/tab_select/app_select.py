@@ -1,7 +1,6 @@
 import base64
-import datetime
 import io
-import dash_table
+import re
 import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
@@ -11,7 +10,7 @@ from dash.exceptions import PreventUpdate
 
 from app import app, cache, TIMEOUT
 from my_project.extract_df import create_df, get_data
-from my_project.utils import code_timer
+from my_project.utils import code_timer, plot_location_epw_files
 
 
 def layout_select():
@@ -52,14 +51,24 @@ def layout_select():
                 multiple=True,
             ),
             html.Div(id="output-data-upload"),
-            html.Embed(id="tab-one-map", src="https://www.ladybug.tools/epwmap/"),
-            html.P(
-                children=[
-                    "This ",
-                    html.A("EPW Map", href="https://www.ladybug.tools/epwmap/"),
-                    " has been developed by and is used with kind permission of the amazing folks at ",
-                    html.A("Ladybug Tools", href="https://www.ladybug.tools/"),
-                ]
+            dcc.Graph(id="tab-one-map", figure=plot_location_epw_files()),
+            dbc.Modal(
+                [
+                    # dbc.ModalHeader("Header"),
+                    dbc.ModalHeader("Analyse data from this location?"),
+                    dbc.ModalFooter(
+                        children=[
+                            dbc.Button("Close", id="close", className="ml-2"),
+                            dbc.Button(
+                                "Yes",
+                                id="yes-use-epw",
+                                className="ml-2",
+                            ),
+                        ]
+                    ),
+                ],
+                id="modal",
+                is_open=False,
             ),
         ],
     )
@@ -70,7 +79,7 @@ def alert():
     return html.Div(
         [
             dbc.Alert(
-                "Submit a link below or upload an EPW file!",
+                "Submit a link below, upload an EPW file or click on a point on the map!",
                 color="primary",
                 id="alert",
                 dismissable=True,
@@ -89,47 +98,33 @@ def alert():
     Output("alert", "children"),
     Output("alert", "color"),
     Output("banner-subtitle", "children"),
+    Input("yes-use-epw", "n_clicks"),
     Input("submit-button", "n_clicks"),
     Input("upload-data", "contents"),
     State("upload-data", "filename"),
     State("input-url", "value"),
+    State("url-store", "data"),
     prevent_initial_call=True,
 )
 @code_timer
 # @cache.memoize(timeout=TIMEOUT)
-def submit_button(n_clicks, list_of_contents, list_of_names, url):
+def submit_button(
+    use_epw_click, n_clicks, list_of_contents, list_of_names, url, url_store
+):
     """Takes the input once submitted and stores it."""
     default = "Current Location: N/A"
 
     ctx = dash.callback_context
     print(ctx.triggered[0]["prop_id"])
 
-    if ctx.triggered[0]["prop_id"] == "submit-button.n_clicks":
+    if ctx.triggered[0]["prop_id"] == "yes-use-epw.n_clicks":
+        return return_df_from_url(url_store, default)
+
+    elif ctx.triggered[0]["prop_id"] == "submit-button.n_clicks":
         if n_clicks is None:
             raise PreventUpdate
         else:
-            lines = get_data(url)
-            if lines is None:
-                return (
-                    None,
-                    None,
-                    True,
-                    "This link you have selected is not available. Please choose another one.",
-                    "warning",
-                    default,
-                )
-            df, meta = create_df(lines, url)
-            # fixme: DeprecationWarning: an integer is required (got type float).
-            df = df.to_json(date_format="iso", orient="split")
-            # todo I should update the input value with the last entered
-            return (
-                df,
-                meta,
-                True,
-                "Successfully loaded data. You can change location by submitting a link below or by uploading your EPW file!",
-                "success",
-                "Current Location: " + meta[1] + ", " + meta[3],
-            )
+            return return_df_from_url(url, default)
 
     else:
         if list_of_contents is not None:
@@ -198,7 +193,6 @@ def enable_disable_tabs(data, n_clicks):
 def on_data(ts, meta):
     if ts is None:
         raise PreventUpdate
-
     if meta is None:
         default_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     elif "http" not in meta[-1]:
@@ -207,3 +201,53 @@ def on_data(ts, meta):
         default_url = meta[-1]
 
     return default_url
+
+
+@app.callback(
+    [
+        Output("modal", "is_open"),
+        Output("url-store", "data"),
+    ],
+    [
+        Input("yes-use-epw", "n_clicks"),
+        Input("tab-one-map", "clickData"),
+        Input("close", "n_clicks"),
+    ],
+    [State("modal", "is_open")],
+    prevent_initial_call=True,
+)
+@code_timer
+def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_open):
+    if click_map:
+        # print(clickData["points"][0]["customdata"])
+        url = re.search(
+            r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][0]
+        ).group(1)
+        return not is_open, url
+    return is_open, ""
+
+
+def return_df_from_url(url, default):
+    lines = get_data(url)
+    if lines is None:
+        return (
+            None,
+            None,
+            True,
+            "This link you have selected is not available. Please choose another one.",
+            "warning",
+            default,
+        )
+    df, meta = create_df(lines, url)
+    # fixme: DeprecationWarning: an integer is required (got type float).
+    df = df.to_json(date_format="iso", orient="split")
+    # todo I should update the input value with the last entered
+    return (
+        df,
+        meta,
+        True,
+        "Successfully loaded data. You can change location by submitting a link below "
+        "or by uploading your EPW file!",
+        "success",
+        "Current Location: " + meta[1] + ", " + meta[3],
+    )
