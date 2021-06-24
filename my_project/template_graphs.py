@@ -372,7 +372,7 @@ def daily_profile(df, var, global_local):
 
 
 @code_timer
-def heatmap(df, var, global_local):
+def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
     var_unit = unit_dict[str(var) + "_unit"]
     var_range = range_dict[str(var) + "_range"]

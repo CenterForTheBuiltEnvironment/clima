@@ -70,14 +70,13 @@ def update_tab_utci_value(var, ts, global_local, df, meta):
     [
         Input("tab7-dropdown", "value"),
         Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_utci_category(var, ts, global_local, df, meta):
+def update_tab_utci_category(var, ts, df):
     df = pd.read_json(df, orient="split")
-    utci_stress_cat = heatmap(df, var + "_categories", global_local)
+    utci_stress_cat = heatmap(df, var + "_categories")
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
         titleside="top",
