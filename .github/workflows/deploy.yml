@@ -1,5 +1,5 @@
 # .github/workflows/deploy.yml
-name: Deploy to Cloud Run
+name: Deploy 🚀 Clima to Google Cloud Run (☁🏃)
 on:
   push:
     branches:
@@ -11,7 +11,8 @@ env:
   SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
 jobs:
   deploy:
-    name: Deploy to Cloud Run
+    if: "contains(github.event.head_commit.message, 'bump version')"
+    name: Deploying 🚀 Clima
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -24,8 +25,8 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       # Build and push image to Google Container Registry
-      - name: Build
+      - name: Building (🏗️)
         run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
-      - name: Deploy
+      - name: Deploy (🚀)
         run: gcloud run deploy $APP_ID --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --region $RUN_REGION --project=$PROJECT_ID --allow-unauthenticated
