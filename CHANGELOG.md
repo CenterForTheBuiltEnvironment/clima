@@ -3,6 +3,20 @@
 
 ---
 
+### Version 0.2.1 (2021-06-23)
+
+Fix:
+
+- added Koppen-Geiger climate classification
+- tooltip is now correctly displaying
+
+Features:
+
+- added heating and cooling degree days chart
+- successfully implemented continuous deployment
+- improved the layout of the application
+- figures have now narrower white margins
+
 ### Version 0.2.0 (2021-06-23)
 
 Fix:
