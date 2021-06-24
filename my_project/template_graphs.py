@@ -361,8 +361,6 @@ def daily_profile(df, var, global_local):
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
         fig.update_yaxes(range=range_y, row=1, col=i + 1)
 
-    title = var_name + " (" + var_unit + ")"
-
     fig.update_xaxes(
         ticktext=["6", "12", "18"], tickvals=["6", "12", "18"], tickangle=0
     )
@@ -410,8 +408,6 @@ def heatmap(df, var, global_local="global"):
             colorbar=dict(title=var_unit),
         )
     )
-
-    title = var_name + " (" + var_unit + ")"
 
     fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
 
@@ -599,24 +595,14 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
 
     for i in range(1, 13):
         query = (
-            "month=="
-            + str(i)
-            + " and ("
-            + filter_var
-            + ">="
-            + min_val
-            + " and "
-            + filter_var
-            + "<="
-            + max_val
-            + ")"
+            f"month=={str(i)} and ({filter_var}>={min_val} and {filter_var}<={max_val})"
         )
         a = new_df.query(query)["DOY"].count()
         month_in.append(a)
-        query = "month==" + str(i) + " and (" + filter_var + "<" + min_val + ")"
+        query = f"month=={str(i)} and ({filter_var}<{min_val})"
         b = new_df.query(query)["DOY"].count()
         month_below.append(b)
-        query = "month==" + str(i) + " and " + filter_var + ">" + max_val
+        query = f"month=={str(i)} and {filter_var}>{max_val}"
         c = new_df.query(query)["DOY"].count()
         month_above.append(c)
 
