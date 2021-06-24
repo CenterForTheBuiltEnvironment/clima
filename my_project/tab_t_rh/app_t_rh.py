@@ -41,7 +41,7 @@ def layout_t_rh():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=html.Div(id="yearly"),
+                        children=html.Div(id="yearly-chart"),
                     ),
                     html.Div(
                         children=title_with_tooltip(
@@ -72,7 +72,7 @@ def layout_t_rh():
 
 
 @app.callback(
-    Output("yearly", "children"),
+    Output("yearly-chart", "children"),
     [Input("global-local-radio-input", "value")],
     [Input("dropdown", "value")],
     [State("df-store", "data")],
@@ -80,7 +80,7 @@ def layout_t_rh():
 )
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
-def update_yearly(global_local, dd_value, df, meta):
+def update_yearly_chart(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 

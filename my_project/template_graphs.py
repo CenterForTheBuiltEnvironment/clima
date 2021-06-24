@@ -129,15 +129,13 @@ def yearly_profile(df, var, global_local):
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]
     var_single_color = var_color[len(var_color) // 2]
-    custom_xlim = [0, 365]
     custom_ylim = range_y
-    days = [i for i in range(365)]
     # Get min, max, and mean of each day
     dbt_day = df.groupby(np.arange(len(df.index)) // 24)[var].agg(
         ["min", "max", "mean"]
     )
     trace1 = go.Bar(
-        x=days,
+        x=df["UTC_time"].dt.date.unique(),
         y=dbt_day["max"] - dbt_day["min"],
         base=dbt_day["min"],
         marker_color=var_single_color,
@@ -163,7 +161,7 @@ def yearly_profile(df, var, global_local):
     )
 
     trace2 = go.Scatter(
-        x=days,
+        x=df["UTC_time"].dt.date.unique(),
         y=dbt_day["mean"],
         name="Average " + var_name,
         mode="lines",
@@ -188,7 +186,7 @@ def yearly_profile(df, var, global_local):
         hi80_df = pd.DataFrame({"hi80": hi80})
 
         trace3 = go.Bar(
-            x=days,
+            x=df["UTC_time"].dt.date.unique(),
             y=hi80_df["hi80"] - lo80_df["lo80"],
             base=lo80_df["lo80"],
             name="ASHRAE adaptive comfort (80%)",
@@ -204,7 +202,7 @@ def yearly_profile(df, var, global_local):
         hi90_df = pd.DataFrame({"hi90": hi90})
 
         trace4 = go.Bar(
-            x=days,
+            x=df["UTC_time"].dt.date.unique(),
             y=hi90_df["hi90"] - lo90_df["lo90"],
             base=lo90_df["lo90"],
             name="ASHRAE adaptive comfort (90%)",
@@ -224,7 +222,7 @@ def yearly_profile(df, var, global_local):
         hi_rh_df = pd.DataFrame({"hiRH": hi_rh})
 
         trace3 = go.Bar(
-            x=days,
+            x=df["UTC_time"].dt.date.unique(),
             y=hi_rh_df["hiRH"] - lo_rh_df["loRH"],
             base=lo_rh_df["loRH"],
             name="humidity comfort band",
@@ -237,23 +235,34 @@ def yearly_profile(df, var, global_local):
     else:
         data = [trace1, trace2]
 
-    layout = go.Layout(barmode="overlay", bargap=0, margin=tight_margins)
-
-    fig = go.Figure(data=data, layout=layout)
-
-    fig.update_xaxes(range=custom_xlim)
-    fig.update_yaxes(range=custom_ylim)
-
-    fig.update_layout(
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    fig = go.Figure(
+        data=data, layout=go.Layout(barmode="overlay", bargap=0, margin=tight_margins)
     )
 
-    fig.update_yaxes(title_text=var_unit)
-    fig.update_xaxes(title_text="days of the year")
+    fig.update_xaxes(
+        dtick="M1",
+        tickformat="%b",
+        ticklabelmode="period",
+        title_text="days of the year",
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
+    fig.update_yaxes(
+        range=custom_ylim,
+        title_text=var_unit,
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
 
-    fig.update_layout(template=template)
-    fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_layout(
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        template=template,
+    )
+
     return fig
 
 
@@ -262,7 +271,6 @@ def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
     var_unit = unit_dict[str(var) + "_unit"]
     var_range = range_dict[str(var) + "_range"]
-    var_name = name_dict[str(var) + "_name"]
     var_color = color_dict[str(var) + "_color"]
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -374,7 +382,6 @@ def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
     var_unit = unit_dict[str(var) + "_unit"]
     var_range = range_dict[str(var) + "_range"]
-    var_name = name_dict[str(var) + "_name"]
     var_color = color_dict[str(var) + "_color"]
     if global_local == "global":
         # Set Global values for Max and minimum
