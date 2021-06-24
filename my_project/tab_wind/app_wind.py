@@ -16,12 +16,6 @@ def sliders():
         id="slider-container",
         children=[
             html.Div(
-                children=title_with_tooltip(
-                    text="Customizable Wind Rose",
-                    tooltip_text="Customizable Wind Rose",
-                ),
-            ),
-            html.Div(
                 className="container-row each-slider",
                 children=[
                     html.P("Month Range"),
@@ -66,6 +60,7 @@ def seasonal_wind_rose():
                 children=title_with_tooltip(
                     text="Seasonal Wind Rose",
                     tooltip_text="Seasonal Wind Rose",
+                    id_button="seasonal-rose-chart",
                 ),
             ),
             html.Div(
@@ -79,6 +74,7 @@ def seasonal_wind_rose():
                                 children=[
                                     dcc.Graph(
                                         id="winter-wind-rose",
+                                        className="daily-wind-graph",
                                         config=fig_config,
                                     ),
                                 ],
@@ -96,6 +92,7 @@ def seasonal_wind_rose():
                                 children=[
                                     dcc.Graph(
                                         id="spring-wind-rose",
+                                        className="daily-wind-graph",
                                         config=fig_config,
                                     ),
                                 ],
@@ -118,6 +115,7 @@ def seasonal_wind_rose():
                                 children=[
                                     dcc.Graph(
                                         id="summer-wind-rose",
+                                        className="daily-wind-graph",
                                         config=fig_config,
                                     ),
                                 ],
@@ -135,6 +133,7 @@ def seasonal_wind_rose():
                                 children=[
                                     dcc.Graph(
                                         id="fall-wind-rose",
+                                        className="daily-wind-graph",
                                         config=fig_config,
                                     ),
                                 ],
@@ -158,6 +157,7 @@ def daily_wind_rose():
                 children=title_with_tooltip(
                     text="Daily Wind Rose",
                     tooltip_text="Daily Wind Rose",
+                    id_button="daily-rose-chart",
                 ),
             ),
             html.Div(
@@ -234,6 +234,7 @@ def custom_wind_rose():
                 children=title_with_tooltip(
                     text="Customizable Wind Rose",
                     tooltip_text="Customizable Wind Rose",
+                    id_button="custom-rose-chart",
                 ),
             ),
             html.Div(
@@ -241,7 +242,7 @@ def custom_wind_rose():
                 id="tab5-custom-dropdown-container",
                 children=[
                     html.Div(
-                        className="container-col justify-center tab5-custom-half-container",
+                        className="container-col justify-center",
                         children=[
                             html.Div(
                                 className=container_row_center_full,
@@ -257,6 +258,7 @@ def custom_wind_rose():
                                             for i, j in enumerate(month_lst)
                                         ],
                                         value="1",
+                                        className="text-next-to-input",
                                     ),
                                 ],
                             ),
@@ -280,7 +282,7 @@ def custom_wind_rose():
                         ],
                     ),
                     html.Div(
-                        className="container-col tab5-custom-half-container justify-center",
+                        className="container-col justify-center",
                         children=[
                             html.Div(
                                 className=container_row_center_full,
@@ -339,12 +341,17 @@ def layout_wind():
                 children=title_with_tooltip(
                     text="Annual Wind Rose",
                     tooltip_text="Annual Wind Rose",
+                    id_button="annual-rose-chart",
                 ),
             ),
+            # todo center this chart
             dcc.Loading(
                 type="circle",
                 children=[
-                    dcc.Graph(id="wind-rose", config=fig_config),
+                    dcc.Graph(
+                        id="wind-rose",
+                        config=fig_config,
+                    ),
                 ],
             ),
             dcc.Loading(
@@ -496,95 +503,58 @@ def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
     winter_df = df.loc[
         (df["month"] <= winter_months[1]) | (df["month"] >= winter_months[0])
     ]
+    query_calm_wind = "Wspeed == 0"
     winter_total_count = winter_df.shape[0]
-    winter_calm_count = winter_df.query("Wspeed == 0").shape[0]
+    winter_calm_count = winter_df.query(query_calm_wind).shape[0]
 
     spring_df = df.loc[
         (df["month"] >= spring_months[0]) & (df["month"] <= spring_months[1])
     ]
     spring_total_count = spring_df.shape[0]
-    spring_calm_count = spring_df.query("Wspeed == 0").shape[0]
+    spring_calm_count = spring_df.query(query_calm_wind).shape[0]
 
     summer_df = df.loc[
         (df["month"] >= summer_months[0]) & (df["month"] <= summer_months[1])
     ]
     summer_total_count = summer_df.shape[0]
-    summer_calm_count = summer_df.query("Wspeed == 0").shape[0]
+    summer_calm_count = summer_df.query(query_calm_wind).shape[0]
 
     fall_df = df.loc[(df["month"] >= fall_months[0]) & (df["month"] <= fall_months[1])]
     fall_total_count = fall_df.shape[0]
-    fall_calm_count = fall_df.query("Wspeed == 0").shape[0]
+    fall_calm_count = fall_df.query(query_calm_wind).shape[0]
 
-    winter_text = (
-        "Observations between the months of "
-        + month_lst[winter_months[0] - 1]
-        + " and "
-        + month_lst[winter_months[1] - 1]
-        + " between "
-        + str(hours[0])
-        + ":00 hours and "
-        + str(hours[1])
-        + ":00 hours. Selected observations "
-        + str(winter_total_count)
-        + " of 8760, or "
-        + str(int(100 * (winter_total_count / 8760)))
-        + "%. "
-        + str(winter_calm_count)
-        + " observations have calm winds."
+    def seasonal_chart_caption(month_start, month_end, count, n_calm):
+        return (
+            f"Observations between the months of {month_start}and {month_end} "
+            f"between 01:00 hours and 24:00 hours. "
+            f"Selected observations {str(count)} of 8760, or "
+            f"{str(int(100 * (count / 8760)))} %. {str(n_calm)} observations have "
+            f"calm winds."
+        )
+
+    winter_text = seasonal_chart_caption(
+        month_lst[winter_months[0] - 1],
+        month_lst[winter_months[1] - 1],
+        winter_total_count,
+        winter_calm_count,
     )
-
-    spring_text = (
-        "Observations between the months of "
-        + month_lst[spring_months[0] - 1]
-        + " and "
-        + month_lst[spring_months[1] - 1]
-        + " between "
-        + str(hours[0])
-        + ":00 hours and "
-        + str(hours[1])
-        + ":00 hours. Selected observations "
-        + str(spring_total_count)
-        + " of 8760, or "
-        + str(int(100 * (spring_total_count / 8760)))
-        + "%. "
-        + str(spring_calm_count)
-        + " observations have calm winds."
+    spring_text = seasonal_chart_caption(
+        month_lst[spring_months[0] - 1],
+        month_lst[spring_months[1] - 1],
+        spring_total_count,
+        spring_calm_count,
     )
-
-    summer_text = (
-        "Observations between the months of "
-        + month_lst[summer_months[0] - 1]
-        + " and "
-        + month_lst[summer_months[1] - 1]
-        + " between "
-        + str(hours[0])
-        + ":00 hours and "
-        + str(hours[1])
-        + ":00 hours. Selected observations "
-        + str(summer_total_count)
-        + " of 8760, or "
-        + str(int(100 * (summer_total_count / 8760)))
-        + "%. "
-        + str(summer_calm_count)
-        + " observations have calm winds."
+    summer_text = seasonal_chart_caption(
+        month_lst[summer_months[0] - 1],
+        month_lst[summer_months[1] - 1],
+        summer_total_count,
+        summer_calm_count,
     )
-
-    fall_text = (
-        "Observations between the months of "
-        + month_lst[fall_months[0] - 1]
-        + " and "
-        + month_lst[fall_months[1] - 1]
-        + " between "
-        + str(hours[0])
-        + ":00 hours and "
-        + str(hours[1])
-        + ":00 hours. Selected observations "
-        + str(fall_total_count)
-        + " of 8760, or "
-        + str(int(100 * (fall_total_count / 8760)))
-        + "%. "
-        + str(fall_calm_count)
-        + " observations have calm winds."
+    fall_text = seasonal_chart_caption(
+        month_lst[fall_months[0] - 1],
+        month_lst[fall_months[1] - 1],
+        fall_total_count,
+        fall_calm_count,
     )
 
     return (
@@ -631,72 +601,42 @@ def update_tab_five_daily_graphs(ts, global_local, df, meta):
     night = wind_rose(df, meta, "", months, night_times, True)
 
     # Text
+    query_calm_wind = "Wspeed == 0"
     morning_df = df.loc[
         (df["hour"] >= morning_times[0]) & (df["hour"] <= morning_times[1])
     ]
     morning_total_count = morning_df.shape[0]
-    morning_calm_count = morning_df.query("Wspeed == 0").shape[0]
+    morning_calm_count = morning_df.query(query_calm_wind).shape[0]
 
     noon_df = df.loc[
         (df["hour"] >= morning_times[0]) & (df["hour"] <= morning_times[1])
     ]
     noon_total_count = noon_df.shape[0]
-    noon_calm_count = noon_df.query("Wspeed == 0").shape[0]
+    noon_calm_count = noon_df.query(query_calm_wind).shape[0]
 
     night_df = df.loc[(df["hour"] <= night_times[1]) | (df["hour"] >= night_times[0])]
     night_total_count = night_df.shape[0]
-    night_calm_count = night_df.query("Wspeed == 0").shape[0]
+    night_calm_count = night_df.query(query_calm_wind).shape[0]
 
-    morning_text = (
-        "Observations between the months of "
-        + month_lst[months[0] - 1]
-        + " and "
-        + month_lst[months[1] - 1]
-        + " between "
-        + str(morning_times[0])
-        + ":00 hours and "
-        + str(morning_times[1])
-        + ":00 hours. Selected observations "
-        + str(morning_total_count)
-        + " of 8760, or "
-        + str(int(100 * (morning_total_count / 8760)))
-        + "% "
-        + str(morning_calm_count)
-        + " observations have calm winds."
+    def daily_chart_caption(hour_start, hour_end, count, calm_count):
+        return (
+            f"Observations between the months of Jan and Dec between "
+            f"{str(hour_start)}:00 hours and {str(hour_end)}:00 hours. "
+            f"Selected observations {count} of 8760, or "
+            f"{str(int(100 * (count / 8760)))}%. {calm_count} "
+            f"observations have calm winds."
+        )
+
+    morning_text = daily_chart_caption(
+        morning_times[0], morning_times[1], morning_total_count, morning_calm_count
     )
-    noon_text = (
-        "Observations between the months of "
-        + month_lst[months[0] - 1]
-        + " and "
-        + month_lst[months[1] - 1]
-        + " between "
-        + str(noon_times[0])
-        + ":00 hours and "
-        + str(noon_times[1])
-        + ":00 hours. Selected observations "
-        + str(noon_total_count)
-        + " of 8760, or "
-        + str(int(100 * (noon_total_count / 8760)))
-        + "% "
-        + str(noon_calm_count)
-        + " observations have calm winds."
+
+    noon_text = daily_chart_caption(
+        noon_times[0], noon_times[1], noon_total_count, noon_calm_count
     )
-    night_text = (
-        "Observations between the months of "
-        + month_lst[months[0] - 1]
-        + " and "
-        + month_lst[months[1] - 1]
-        + " between "
-        + str(night_times[0])
-        + ":00 hours and "
-        + str(night_times[1])
-        + ":00 hours. Selected observations "
-        + str(night_total_count)
-        + " of 8760, or "
-        + str(int(100 * (night_total_count / 8760)))
-        + "% "
-        + str(night_calm_count)
-        + " observations have calm winds."
+
+    night_text = daily_chart_caption(
+        night_times[0], night_times[1], night_total_count, night_calm_count
     )
 
     return morning, noon, night, morning_text, noon_text, night_text

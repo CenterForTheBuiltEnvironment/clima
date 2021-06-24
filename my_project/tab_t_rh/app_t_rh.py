@@ -16,7 +16,7 @@ def layout_t_rh():
                 className="container-row full-width align-center justify-center",
                 children=[
                     html.H3(
-                        className="text-next-to-input", children=["Select variable: "]
+                        className="text-next-to-input", children=["Select a variable: "]
                     ),
                     dcc.Dropdown(
                         id="dropdown",
@@ -36,6 +36,7 @@ def layout_t_rh():
                         children=title_with_tooltip(
                             text="Yearly chart",
                             tooltip_text="Yearly chart",
+                            id_button="yearly-chart-label",
                         ),
                     ),
                     dcc.Loading(
@@ -46,6 +47,7 @@ def layout_t_rh():
                         children=title_with_tooltip(
                             text="Daily chart",
                             tooltip_text="Daily chart",
+                            id_button="daily-chart-label",
                         ),
                     ),
                     dcc.Loading(
@@ -56,6 +58,7 @@ def layout_t_rh():
                         children=title_with_tooltip(
                             text="Heatmap chart",
                             tooltip_text="Heatmap",
+                            id_button="heatmap-chart-label",
                         ),
                     ),
                     dcc.Loading(

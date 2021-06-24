@@ -90,14 +90,6 @@
     width: 100%;
 }
 
-.dot {
-    height: 25px;
-    width: 25px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-}
-
 #map-credits {
     padding-top: 10px;
 }
@@ -121,14 +113,6 @@ p {
     height: 65%;
     width: 100%;
 }
-
-/*#tooltip-title-container {*/
-/*    padding: 12px 12px 0px 12px;*/
-/*}*/
-
-/*#tooltip-title-container h5 {*/
-/*    margin-right: 10px;*/
-/*}*/
 
 .violin-container {
     height: 100%;
@@ -193,19 +177,14 @@ p {
     margin: 24px;
 }
 
-#custom-wind-rose, #wind-rose {
-    width: 1200px;
-    height: 800px
-}
-
 .seasonal-graph {
     width: 100%;
     height: 100%;
 }
 
 .daily-wind-graph {
-    width: 90%;
-    height: 90%;
+    width: 80%;
+    height: 80%;
 }
 
 #daily-wind-rose-container {
@@ -244,11 +223,7 @@ p {
 }
 
 #tab5-custom-start-month, #tab5-custom-start-hour, #tab5-custom-end-month, #tab5-custom-end-hour {
-    width: 35%;
-}
-
-.tab5-custom-half-container {
-    width: 20%;
+    width: 7rem;
 }
 
 /* Tab Six */

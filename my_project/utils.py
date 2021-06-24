@@ -54,29 +54,33 @@ def plot_location_epw_files():
     )
     fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-    # fig.update_layout(clickmode="event+select")
 
     return fig
 
 
-def title_with_tooltip(text, tooltip_text):
+def title_with_tooltip(text, tooltip_text, id_button):
     return (
         html.Div(
             className="container-row",
             style={"padding": "1rem", "marginTop": "1rem"},
             children=[
-                html.H5(text, style={"marginRight": "1rem"}),
+                html.H5(text, style={"marginRight": "0.5rem"}),
                 html.Div(
                     [
-                        html.Span(
-                            "?",
-                            id="tooltip-target",
-                            style={"textAlign": "center", "color": "white"},
-                            className="dot",
+                        html.Sup(
+                            html.Img(
+                                id=id_button,
+                                src="../assets/icons/help.png",
+                                alt="help",
+                                style={
+                                    "width": "1rem",
+                                    "height": "1rem",
+                                },
+                            ),
                         ),
                         dbc.Tooltip(
                             tooltip_text,
-                            target="tooltip-target",
+                            target=id_button,
                             placement="right",
                         ),
                     ]

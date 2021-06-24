@@ -59,11 +59,14 @@ def layout_select():
                     dbc.ModalFooter(
                         children=[
                             dbc.Button(
-                                "Close", id="close", className="ml-2", color="danger"
+                                "Close",
+                                id="modal-close-button",
+                                className="ml-2",
+                                color="danger",
                             ),
                             dbc.Button(
                                 "Yes",
-                                id="yes-use-epw",
+                                id="modal-yes-button",
                                 className="ml-2",
                                 color="primary",
                             ),
@@ -93,14 +96,13 @@ def alert():
     )
 
 
-# TAB: Select EPW
 @app.callback(
     Output("df-store", "data"),
     Output("meta-store", "data"),
     Output("alert", "is_open"),
     Output("alert", "children"),
     Output("alert", "color"),
-    Input("yes-use-epw", "n_clicks"),
+    Input("modal-yes-button", "n_clicks"),
     Input("upload-data-button", "n_clicks"),
     Input("upload-data", "contents"),
     State("upload-data", "filename"),
@@ -108,13 +110,13 @@ def alert():
     prevent_initial_call=True,
 )
 @code_timer
-def submit_button(
+def submitted_data(
     use_epw_click, upload_click, list_of_contents, list_of_names, url_store
 ):
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
 
-    if ctx.triggered[0]["prop_id"] == "yes-use-epw.n_clicks":
+    if ctx.triggered[0]["prop_id"] == "modal-yes-button.n_clicks":
         lines = get_data(url_store)
         if lines is None:
             return (
@@ -191,7 +193,8 @@ def submit_button(
     [Input("df-store", "data")],
     State("meta-store", "data"),
 )
-def update_page_id_data_is_loaded(data, meta):
+@code_timer
+def enable_tabs_when_data_is_loaded(data, meta):
     """Hide tabs when data are not loaded"""
     default = "Current Location: N/A"
     if data is None:
@@ -224,9 +227,9 @@ def update_page_id_data_is_loaded(data, meta):
         Output("url-store", "data"),
     ],
     [
-        Input("yes-use-epw", "n_clicks"),
+        Input("modal-yes-button", "n_clicks"),
         Input("tab-one-map", "clickData"),
-        Input("close", "n_clicks"),
+        Input("modal-close-button", "n_clicks"),
     ],
     [State("modal", "is_open")],
     prevent_initial_call=True,
@@ -234,6 +237,7 @@ def update_page_id_data_is_loaded(data, meta):
 @code_timer
 def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_open):
     """display the modal to the user and check if he wants to use that file"""
+    # fixme split in two one that opens the modal and one that handles the modal answer
     if click_map:
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][0]

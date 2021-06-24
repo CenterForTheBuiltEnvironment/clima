@@ -13,6 +13,7 @@ import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
 
 
+@code_timer
 def layout_summary():
     """Contents in the second tab 'Climate Summary'."""
     return html.Div(
@@ -48,6 +49,7 @@ def layout_summary():
                     html.Div(
                         children=title_with_tooltip(
                             text="Download Clima Dataframe",
+                            id_button="download-button-label",
                             tooltip_text="Use the following button to download the Clima sourcefile",
                         ),
                     ),
@@ -63,6 +65,7 @@ def layout_summary():
                         children=title_with_tooltip(
                             text="Heating and Cooling Degree Days",
                             tooltip_text="Some information text",
+                            id_button="hdd-cdd-chart",
                         ),
                     ),
                     dbc.Alert(
@@ -109,6 +112,7 @@ def layout_summary():
                         children=title_with_tooltip(
                             text="Climate Profiles",
                             tooltip_text="Some information text",
+                            id_button="climate-profiles-chart",
                         ),
                     ),
                     html.Div(
@@ -146,6 +150,7 @@ def layout_summary():
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_tab_map(ts, global_local, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = "Location: " + meta[1] + ", " + meta[3]
@@ -207,13 +212,14 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
         months = []
 
         for i in range(1, 13):
+            query_month = "month=="
             # calculates months names
-            query = "month==" + str(i)
+            query = query_month + str(i)
             month = df.query(query)["month_names"][0]
             months.append(month)
 
             # calculates HDD per month
-            query = "month==" + str(i) + " and DBT<=" + str(hdd_setpoint)
+            query = query_month + str(i) + " and DBT<=" + str(hdd_setpoint)
             a = df.query(query)["DBT"].sub(hdd_setpoint)
             hdd = a.sum(axis=0, skipna=True)
             hdd = hdd / 24
@@ -221,7 +227,7 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
             hdd_array.append(hdd)
 
             # calculates CDD per month
-            query = "month==" + str(i) + " and DBT>=" + str(cdd_setpoint)
+            query = query_month + str(i) + " and DBT>=" + str(cdd_setpoint)
             a = df.query(query)["DBT"].sub(cdd_setpoint)
             cdd = a.sum(axis=0, skipna=True)
             cdd = cdd / 24
@@ -275,6 +281,7 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_violin_tdb(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -294,6 +301,7 @@ def update_violin_tdb(global_local, df, meta):
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_tab_wind(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -313,6 +321,7 @@ def update_tab_wind(global_local, df, meta):
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_tab_rh(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -332,6 +341,7 @@ def update_tab_rh(global_local, df, meta):
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_tab_gh_rad(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -351,7 +361,8 @@ def update_tab_gh_rad(global_local, df, meta):
     [State("meta-store", "data")],
     prevent_initial_call=True,
 )
-def func(n_clicks, df, meta):
+@code_timer
+def download_epw_file(n_clicks, df, meta):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
