@@ -38,7 +38,7 @@ Visit http://localhost:8080 in your browser to check it out.
 Note that whenever you want to run the tool, you have to activate the virtualenv first.
 
 #### Adding new dependencies
-Pipfiles contain information about the dependencies of your project, and supercede the requirements.txt file that is typically used in Python projects.
+Pipfiles contain information about the dependencies of your project, and supersede the requirements.txt file that is typically used in Python projects.
 
 To install a Python package for your project use the install keyword. For example,
 

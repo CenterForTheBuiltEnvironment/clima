@@ -169,6 +169,17 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
                 xbins=dict(start=-50, end=60, size=1),
             )
         )
+        fig.add_trace(
+            go.Scatter(
+                x=dbt_list,
+                y=rh_df["rh100"],
+                showlegend=False,
+                mode="none",
+                name="",
+                fill="toself",
+                fillcolor="#fff",
+            )
+        )
 
     else:
         fig.add_trace(
