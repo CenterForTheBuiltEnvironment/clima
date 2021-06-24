@@ -11,6 +11,7 @@ from my_project.template_graphs import violin
 from my_project.utils import generate_chart_name, title_with_tooltip, code_timer
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
+import requests
 
 
 @code_timer
@@ -41,10 +42,6 @@ def layout_summary():
                     html.Div(
                         className="container-col",
                         id="location-description",
-                        children=[
-                            html.P("Koeppen Geiger Climate Classification: "),
-                            html.P("Placeholder text"),
-                        ],
                     ),
                     html.Div(
                         children=title_with_tooltip(
@@ -145,6 +142,7 @@ def layout_summary():
     Output("tab-two-long", "children"),
     Output("tab-two-lat", "children"),
     Output("tab-two-elevation", "children"),
+    Output("location-description", "children"),
     [Input("df-store", "modified_timestamp")],
     [Input("global-local-radio-input", "value")],
     [State("meta-store", "data")],
@@ -158,13 +156,27 @@ def update_tab_map(ts, global_local, meta):
     lat = "Latitude: " + str(meta[-5])
     elevation = "Elevation above sea level: " + meta[-2]
 
+    r = requests.get(
+        f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[-5]}/{meta[-4]}"
+    )
+
+    if r.status_code == 200:
+        climate_zone = r.json()["return_values"][0]["koppen_geiger_zone"]
+        zone_description = r.json()["return_values"][0]["zone_description"]
+
+        climate_text = (
+            f"Köppen–Geiger climate zone: {climate_zone}. {zone_description}."
+        )
+    else:
+        climate_text = ""
+
     map_world = dcc.Graph(
         id="gh_rad-profile-graph",
         config=generate_chart_name("summary", meta),
         figure=world_map(meta),
     )
 
-    return map_world, location, lon, lat, elevation
+    return map_world, location, lon, lat, elevation, climate_text
 
 
 @app.callback(
