@@ -184,8 +184,6 @@ def three_var_graph(
             df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour)] = None
 
     if data_filter:
-        print(min_val)
-        print(max_val)
         if min_val <= max_val:
             df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)] = None
         else:

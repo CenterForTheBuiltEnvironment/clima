@@ -2,7 +2,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.exceptions import PreventUpdate
-from my_project.utils import generate_chart_name
+from my_project.utils import generate_chart_name, title_with_tooltip
 
 from my_project.global_scheme import (
     fig_config,
@@ -28,7 +28,7 @@ def section_one_inputs():
     return html.Div(
         className="container-row full-width row-center",
         children=[
-            html.H6(className="text-next-to-input", children=["Variable:"]),
+            html.H3(className="text-next-to-input", children=["Select a variable: "]),
             dcc.Dropdown(
                 id="sec1-var-dropdown",
                 options=[
@@ -46,9 +46,23 @@ def section_one():
         className="container-col full-width",
         children=[
             section_one_inputs(),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Yearly chart",
+                    tooltip_text="Yearly chart",
+                    id_button="explore-yearly-chart-label",
+                ),
+            ),
             dcc.Loading(
                 type="circle",
                 children=html.Div(id="yearly-explore", className="full-width"),
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Daily chart",
+                    tooltip_text="Daily chart",
+                    id_button="explore-daily-chart-label",
+                ),
             ),
             dcc.Loading(
                 type="circle",
@@ -57,6 +71,13 @@ def section_one():
                         className="full-width", id="query-daily", config=fig_config
                     ),
                 ],
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Heatmap chart",
+                    tooltip_text="Heatmap",
+                    id_button="explore-heatmap-chart-label",
+                ),
             ),
             dcc.Loading(
                 type="circle",
@@ -73,140 +94,154 @@ def section_one():
 def section_two_inputs():
     """Return all the input forms from section two."""
     return html.Div(
-        className="container-row full-width three-inputs-container",
         children=[
             html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Variable:"]
-                            ),
-                            dcc.Dropdown(
-                                id="sec2-var-dropdown",
-                                options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
-                                ],
-                                value="RH",
-                            ),
-                        ],
-                    ),
-                ],
+                children=title_with_tooltip(
+                    text="Customizable heatmap",
+                    tooltip_text="Heatmap",
+                    id_button="custom-heatmap-chart-label",
+                ),
             ),
             html.Div(
-                className=container_col_center_one_of_three,
+                className="container-row full-width three-inputs-container",
                 children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "Apply Time Filters", "value": "time"},
-                        ],
-                        value=[],
-                        id="sec2-time-filter-input",
-                    ),
                     html.Div(
-                        className="container-row full-width justify-center",
+                        className=container_col_center_one_of_three,
                         children=[
-                            html.H6("Month Range"),
-                            dcc.RangeSlider(
-                                id="sec2-month-slider",
-                                className="month-hour-slider",
-                                min=1,
-                                max=12,
-                                step=1,
-                                value=[1, 12],
-                                marks={1: "1", 12: "12"},
-                                tooltip={"always_visible": False, "placement": "top"},
-                                allowCross=True,
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className="container-row full-width justify-center",
-                        children=[
-                            html.H6("Hour Range"),
-                            dcc.RangeSlider(
-                                className="month-hour-slider",
-                                id="sec2-hour-slider",
-                                min=1,
-                                max=24,
-                                step=1,
-                                value=[1, 24],
-                                marks={1: "1", 24: "24"},
-                                tooltip={
-                                    "always_visible": False,
-                                    "placement": "topLeft",
-                                },
-                                allowCross=True,
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "Apply Data Filters", "value": "data"},
-                        ],
-                        value=[],
-                        id="sec2-data-filter-input",
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                className="text-next-to-input",
-                                children=["Filter Variable:"],
-                            ),
-                            dcc.Dropdown(
-                                id="sec2-data-filter-var",
-                                options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
+                            html.Div(
+                                className=container_row_center_full,
+                                children=[
+                                    html.H6(
+                                        className="text-next-to-input",
+                                        children=["Variable:"],
+                                    ),
+                                    dcc.Dropdown(
+                                        id="sec2-var-dropdown",
+                                        options=[
+                                            {"label": i, "value": dropdown_names[i]}
+                                            for i in dropdown_names
+                                        ],
+                                        value="RH",
+                                    ),
                                 ],
-                                value="RH",
                             ),
                         ],
                     ),
                     html.Div(
-                        className=container_row_center_full,
+                        className=container_col_center_one_of_three,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Min Value:"]
+                            dbc.Checklist(
+                                options=[
+                                    {"label": "Apply Time Filters", "value": "time"},
+                                ],
+                                value=[],
+                                id="sec2-time-filter-input",
                             ),
-                            dbc.Input(
-                                className="num-input",
-                                id="sec2-min-val",
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                min=0,
-                                step=1,
+                            html.Div(
+                                className="container-row full-width justify-center",
+                                children=[
+                                    html.H6("Month Range"),
+                                    dcc.RangeSlider(
+                                        id="sec2-month-slider",
+                                        className="month-hour-slider",
+                                        min=1,
+                                        max=12,
+                                        step=1,
+                                        value=[1, 12],
+                                        marks={1: "1", 12: "12"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "top",
+                                        },
+                                        allowCross=True,
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className="container-row full-width justify-center",
+                                children=[
+                                    html.H6("Hour Range"),
+                                    dcc.RangeSlider(
+                                        className="month-hour-slider",
+                                        id="sec2-hour-slider",
+                                        min=1,
+                                        max=24,
+                                        step=1,
+                                        value=[1, 24],
+                                        marks={1: "1", 24: "24"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "topLeft",
+                                        },
+                                        allowCross=True,
+                                    ),
+                                ],
                             ),
                         ],
                     ),
                     html.Div(
-                        className=container_row_center_full,
+                        className=container_col_center_one_of_three,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Max Value:"]
+                            dbc.Checklist(
+                                options=[
+                                    {"label": "Apply Data Filters", "value": "data"},
+                                ],
+                                value=[],
+                                id="sec2-data-filter-input",
                             ),
-                            dbc.Input(
-                                className="num-input",
-                                id="sec2-max-val",
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                min=0,
-                                step=1,
+                            html.Div(
+                                className=container_row_center_full,
+                                children=[
+                                    html.H6(
+                                        className="text-next-to-input",
+                                        children=["Filter Variable:"],
+                                    ),
+                                    dcc.Dropdown(
+                                        id="sec2-data-filter-var",
+                                        options=[
+                                            {"label": i, "value": dropdown_names[i]}
+                                            for i in dropdown_names
+                                        ],
+                                        value="RH",
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className=container_row_center_full,
+                                children=[
+                                    html.H6(
+                                        className="text-next-to-input",
+                                        children=["Min Value:"],
+                                    ),
+                                    dbc.Input(
+                                        className="num-input",
+                                        id="sec2-min-val",
+                                        placeholder="Enter a number for the min val",
+                                        type="number",
+                                        min=0,
+                                        step=1,
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className=container_row_center_full,
+                                children=[
+                                    html.H6(
+                                        className="text-next-to-input",
+                                        children=["Max Value:"],
+                                    ),
+                                    dbc.Input(
+                                        className="num-input",
+                                        id="sec2-max-val",
+                                        placeholder="Enter a number for the max val",
+                                        type="number",
+                                        min=0,
+                                        step=1,
+                                    ),
+                                ],
                             ),
                         ],
                     ),
-                    # dbc.Button(
-                    #     "Apply", color = "primary", className = "mr-1", id = "tab6-sec2-data-button"
-                    # )
                 ],
             ),
         ],
@@ -423,6 +458,13 @@ def section_three():
     return html.Div(
         className="container-col full-width",
         children=[
+            html.Div(
+                children=title_with_tooltip(
+                    text="More charts",
+                    tooltip_text="Heatmap",
+                    id_button="more-charts-label",
+                ),
+            ),
             section_three_inputs(),
             dcc.Loading(
                 type="circle",
@@ -451,11 +493,8 @@ def layout_data_explorer():
 @app.callback(
     Output("yearly-explore", "children"),
     # Section One
-    [Input("sec1-var-dropdown", "value")],
-    # General
-    [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_yearly(var, global_local, df, meta):
@@ -477,10 +516,7 @@ def update_tab_yearly(var, global_local, df, meta):
 
 @app.callback(
     Output("query-daily", "figure"),
-    # Section One
-    [Input("sec1-var-dropdown", "value")],
-    # General
-    [Input("global-local-radio-input", "value")],
+    [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -492,10 +528,7 @@ def update_tab_daily(var, global_local, df):
 
 @app.callback(
     Output("query-heatmap", "figure"),
-    # Section One
-    [Input("sec1-var-dropdown", "value")],
-    # General
-    [Input("global-local-radio-input", "value")],
+    [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -505,24 +538,26 @@ def update_tab_heatmap(var, global_local, df):
     return heatmap(df, var, global_local)
 
 
-### Section Two ###
 @app.callback(
-    Output("custom-heatmap", "figure"),
-    Output("custom-summary", "style"),
-    Output("custom-summary", "figure"),
-    Output("normalize", "style"),
-    # Section Two
-    [Input("sec2-var-dropdown", "value")],
-    [Input("sec2-time-filter-input", "value")],
-    [Input("sec2-month-slider", "value")],
-    [Input("sec2-hour-slider", "value")],
-    [Input("sec2-data-filter-input", "value")],
-    [Input("sec2-data-filter-var", "value")],
-    [Input("sec2-min-val", "value")],
-    [Input("sec2-max-val", "value")],
-    [Input("normalize", "value")],
+    [
+        Output("custom-heatmap", "figure"),
+        Output("custom-summary", "style"),
+        Output("custom-summary", "figure"),
+        Output("normalize", "style"),
+    ],
+    [
+        Input("sec2-var-dropdown", "value"),
+        Input("sec2-time-filter-input", "value"),
+        Input("sec2-month-slider", "value"),
+        Input("sec2-hour-slider", "value"),
+        Input("sec2-data-filter-input", "value"),
+        Input("sec2-data-filter-var", "value"),
+        Input("sec2-min-val", "value"),
+        Input("sec2-max-val", "value"),
+        Input("normalize", "value"),
+        Input("global-local-radio-input", "value"),
+    ],
     # General
-    [Input("global-local-radio-input", "value")],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -544,43 +579,41 @@ def update_tab_six_two(
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
 
-    heatmap = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+    heat_map = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
     no_display = {"display": "none"}
 
     if data_filter:
         return (
-            heatmap,
+            heat_map,
             {},
             barchart(df, var, time_filter_info, data_filter_info, normalize),
             {},
         )
-    return heatmap, no_display, {"data": [], "layout": {}, "frames": []}, no_display
+    return heat_map, no_display, {"data": [], "layout": {}, "frames": []}, no_display
 
 
-### Section Three ###
 @app.callback(
-    Output("three-var", "figure"),
-    Output("two-var", "figure"),
-    # Section Three
-    [Input("tab6-sec3-var-x-dropdown", "value")],
-    [Input("tab6-sec3-var-y-dropdown", "value")],
-    [Input("tab6-sec3-colorby-dropdown", "value")],
-    [Input("tab6-sec3-time-filter-input", "value")],
-    [Input("tab6-sec3-query-month-slider", "value")],
-    [Input("tab6-sec3-query-hour-slider", "value")],
-    [Input("tab6-sec3-data-filter-input", "value")],
-    [Input("tab6-sec3-filter-var-dropdown", "value")],
-    [Input("tab6-sec3-min-val", "value")],
-    [Input("tab6-sec3-max-val", "value")],
-    # General
-    [Input("global-local-radio-input", "value")],
+    [Output("three-var", "figure"), Output("two-var", "figure")],
+    [
+        Input("tab6-sec3-var-x-dropdown", "value"),
+        Input("tab6-sec3-var-y-dropdown", "value"),
+        Input("tab6-sec3-colorby-dropdown", "value"),
+        Input("tab6-sec3-time-filter-input", "value"),
+        Input("tab6-sec3-query-month-slider", "value"),
+        Input("tab6-sec3-query-hour-slider", "value"),
+        Input("tab6-sec3-data-filter-input", "value"),
+        Input("tab6-sec3-filter-var-dropdown", "value"),
+        Input("tab6-sec3-min-val", "value"),
+        Input("tab6-sec3-max-val", "value"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_six_three(
     var_x,
     var_y,
-    colorby,
+    color_by,
     time_filter,
     month,
     hour,
@@ -602,9 +635,9 @@ def update_tab_six_three(
         raise PreventUpdate
     else:
         two = two_var_graph(
-            df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info
+            df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
         )
         three = three_var_graph(
-            df, global_local, var_x, var_y, colorby, time_filter_info, data_filter_info
+            df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
         )
         return three, two

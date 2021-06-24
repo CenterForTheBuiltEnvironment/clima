@@ -4,21 +4,38 @@ from my_project.global_scheme import fig_config, tab7_dropdown
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap
 import pandas as pd
+from my_project.utils import title_with_tooltip
 
 from app import app, cache, TIMEOUT
 
 
 def layout_outdoor_comfort():
-    """Return the contents for tab 7."""
     return html.Div(
         className="container-col",
         children=[
-            dcc.Dropdown(
-                id="tab7-dropdown",
-                options=[
-                    {"label": i, "value": tab7_dropdown[i]} for i in tab7_dropdown
+            html.Div(
+                className="container-row full-width align-center justify-center",
+                children=[
+                    html.H3(
+                        className="text-next-to-input", children=["Select a variable: "]
+                    ),
+                    dcc.Dropdown(
+                        id="tab7-dropdown",
+                        className="dropdown-t-rh",
+                        options=[
+                            {"label": i, "value": tab7_dropdown[i]}
+                            for i in tab7_dropdown
+                        ],
+                        value="utci_Sun_Wind",
+                    ),
                 ],
-                value="utci_Sun_Wind",
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="UTCI heatmap charts",
+                    tooltip_text="Heatmap",
+                    id_button="utci-charts-label",
+                ),
             ),
             dcc.Loading(
                 type="circle",
@@ -34,12 +51,12 @@ def layout_outdoor_comfort():
 
 @app.callback(
     Output("utci-heatmap", "figure"),
-    [Input("tab7-dropdown", "value")],
-    # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [
+        Input("tab7-dropdown", "value"),
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_utci_value(var, ts, global_local, df, meta):
@@ -50,12 +67,12 @@ def update_tab_utci_value(var, ts, global_local, df, meta):
 
 @app.callback(
     Output("utci-category-heatmap", "figure"),
-    [Input("tab7-dropdown", "value")],
-    # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [
+        Input("tab7-dropdown", "value"),
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_utci_category(var, ts, global_local, df, meta):
