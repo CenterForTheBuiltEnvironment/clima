@@ -11,6 +11,7 @@ from my_project.global_scheme import (
     template,
     unit_dict,
     degrees_unit,
+    tight_margins,
 )
 from plotly.subplots import make_subplots
 from pvlib import solarposition
@@ -112,9 +113,6 @@ def monthly_solar(epw_df, meta):
     return fig
 
 
-#######################
-### CUSTOM SUN PATH ###
-#######################
 def polar_graph(df, meta, global_local, var):
     """Return the figure for the custom sun path."""
     latitude = float(meta[-5])
@@ -127,7 +125,6 @@ def polar_graph(df, meta, global_local, var):
         var_range = range_dict[str(var) + "_range"]
         var_name = name_dict[str(var) + "_name"]
         var_color = color_dict[str(var) + "_color"]
-        title = var_name + " (" + var_unit + ") on Spherical Sun-Path"
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -149,7 +146,6 @@ def polar_graph(df, meta, global_local, var):
     if var == "None":
         var_color = "orange"
         marker_size = 3
-        title = "Spherical Sun-Path"
     else:
         vals = solpos[var]
         marker_size = (((vals - vals.min()) / vals.max()) + 1) * 4
@@ -309,7 +305,9 @@ def polar_graph(df, meta, global_local, var):
         autosize=False,
     )
 
-    fig.update_layout(template=template, title=title, title_x=0.5, dragmode=False)
+    fig.update_layout(
+        template=template, title_x=0.5, dragmode=False, margin=tight_margins
+    )
 
     fig.update_layout(
         polar=dict(
@@ -330,7 +328,6 @@ def custom_cartesian_solar(df, meta, global_local, var):
         var_range = range_dict[str(var) + "_range"]
         var_name = name_dict[str(var) + "_name"]
         var_color = color_dict[str(var) + "_color"]
-        title = var_name + " (" + var_unit + ") on Cartesian Sun-Path"
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -343,7 +340,6 @@ def custom_cartesian_solar(df, meta, global_local, var):
     if var == "None":
         var_color = "orange"
         marker_size = 3
-        title = "Cartesian Sun-Path"
     else:
         vals = df[var]
         marker_size = (((vals - vals.min()) / vals.max()) + 1) * 4
@@ -500,7 +496,7 @@ def custom_cartesian_solar(df, meta, global_local, var):
         ],
     )
 
-    fig.update_layout(template=template, title=title, dragmode=False)
+    fig.update_layout(template=template, margin=tight_margins, dragmode=False)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 

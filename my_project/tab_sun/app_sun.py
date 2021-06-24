@@ -4,6 +4,7 @@ from my_project.global_scheme import (
     fig_config,
     tab4_dropdown_names,
     tab4_explore_dropdown_names,
+    tight_margins,
 )
 from dash.dependencies import Input, Output, State
 
@@ -14,16 +15,24 @@ from my_project.tab_sun.charts_sun import (
 )
 from my_project.template_graphs import heatmap, barchart, daily_profile
 import pandas as pd
+from my_project.utils import title_with_tooltip
 
 from app import app, cache, TIMEOUT
 
 
-def sunpath():
+def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
     return html.Div(
         className="container-col full-width",
         id="tab-four-custom-sun-container",
         children=[
+            html.Div(
+                children=title_with_tooltip(
+                    text="Sun path chart",
+                    tooltip_text="Sun path chart",
+                    id_button="sun-path-chart-label",
+                ),
+            ),
             html.Div(
                 className="container-row justify-center full-width align-center",
                 children=[
@@ -70,6 +79,13 @@ def explore_daily_heatmap():
     return html.Div(
         className="container-col full-width",
         children=[
+            html.Div(
+                children=title_with_tooltip(
+                    text="Daily charts",
+                    tooltip_text="Daily charts",
+                    id_button="daily-chart-label",
+                ),
+            ),
             dcc.Dropdown(
                 id="tab4-explore-dropdown",
                 options=[
@@ -98,11 +114,25 @@ def static_section():
     return html.Div(
         className="container-col full-width",
         children=[
+            html.Div(
+                children=title_with_tooltip(
+                    text="Global and Diffuse Horizontal Solar Radiation (KWh/m²)",
+                    tooltip_text="Global and Diffuse Horizontal Solar Radiation chart",
+                    id_button="monthly-chart-label",
+                ),
+            ),
             dcc.Loading(
                 type="circle",
                 children=[
                     dcc.Graph(id="monthly-solar", config=fig_config),
                 ],
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Cloud coverage",
+                    tooltip_text="Cloud coverage",
+                    id_button="cloud-chart-label",
+                ),
             ),
             dcc.Loading(
                 type="circle",
@@ -119,11 +149,10 @@ def layout_sun():
     return html.Div(
         className="container-col",
         id="tab-four-container",
-        children=[sunpath(), static_section(), explore_daily_heatmap()],
+        children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
 
 
-# TAB 4: SUN
 @app.callback(
     Output("monthly-solar", "figure"),
     Output("cloud-cover", "figure"),
@@ -139,18 +168,15 @@ def update_tab_four_section_one(ts, global_local, df, meta):
 
     # Sun Radiation
     monthly = monthly_solar(df, meta)
-    monthly = monthly.update_layout(
-        title="Global and Diffuse Horizontal Solar Radiation (KWh/m²)"
-    )
+    monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
     cover = barchart(df, "Tskycover", [False], [False, "", 3, 7], True)
-    cover = cover.update_layout(title="Cloud Coverage")
+    cover = cover.update_layout(margin=tight_margins, title="")
 
     return monthly, cover
 
 
-# custom sun path
 @app.callback(
     Output("custom-sunpath", "figure"),
     [Input("custom-sun-view-dropdown", "value")],
@@ -171,7 +197,6 @@ def update_tab_four(view, var, ts, global_local, df, meta):
         return custom_cartesian_solar(df, meta, global_local, var)
 
 
-# DAILY
 @app.callback(
     Output("tab4-daily", "figure"),
     [Input("tab4-explore-dropdown", "value")],
@@ -187,7 +212,6 @@ def update_tab_four_daily_profile(var, ts, global_local, df, meta):
     return daily_profile(df, var, global_local)
 
 
-# HEATMAP
 @app.callback(
     Output("tab4-heatmap", "figure"),
     [Input("tab4-explore-dropdown", "value")],
