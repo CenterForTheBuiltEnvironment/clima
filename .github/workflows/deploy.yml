@@ -11,9 +11,9 @@ env:
   SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
 jobs:
   deploy:
-    if: "contains(github.event.head_commit.message, 'bump version')"
     name: Deploying 🚀 Clima
     runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'bump version')"
     steps:
       - uses: actions/checkout@v2
 
