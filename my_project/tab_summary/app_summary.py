@@ -80,7 +80,7 @@ def layout_summary():
                             dbc.Input(
                                 id="input-hdd-set-point",
                                 type="number",
-                                value=20,
+                                value=10,
                                 style={"marginRight": "2rem", "width": "5rem"},
                             ),
                             html.Label(
@@ -90,7 +90,7 @@ def layout_summary():
                             dbc.Input(
                                 id="input-cdd-set-point",
                                 type="number",
-                                value=26,
+                                value=18,
                                 style={"marginRight": "2rem", "width": "5rem"},
                             ),
                             dbc.Button(
