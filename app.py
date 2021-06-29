@@ -4,7 +4,7 @@ from flask_caching import Cache
 import warnings
 
 # todo remove ignore warnings
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 
 app = Dash(
     __name__,
@@ -12,7 +12,11 @@ app = Dash(
     suppress_callback_exceptions=True,
 )
 cache = Cache(
-    app.server, config={"CACHE_TYPE": "filesystem", "CACHE_DIR": "cache-directory"}
+    app.server,
+    config={
+        "CACHE_TYPE": "flask_caching.backends.SimpleCache",
+        "CACHE_DIR": "cache-directory",
+    },
 )
 TIMEOUT = 600
 app.config.suppress_callback_exceptions = True
