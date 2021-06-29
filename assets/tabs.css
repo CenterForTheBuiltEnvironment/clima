@@ -10,17 +10,11 @@
 }
 
 /* Tabs */
-#tabs-container {
-    height: 100vh;
-    padding: 0;
-}
-
 #tabs {
     margin: 0;
 }
 
 #tabs-content {
-    height: auto;
     padding: 30px 24px 50px 24px;
 }
 

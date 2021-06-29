@@ -23,10 +23,9 @@ app.layout = html.Div(
     id="big-container",
     children=[
         dcc.Location(id="url", refresh=False),
-        # content will be rendered in this element
         build_banner(),
         html.Div(id="page-content"),
-        # fixme the footer should be imported here, it should always tbe there as the banner
+        footer(),
     ],
 )
 
@@ -39,7 +38,7 @@ def display_page(pathname):
     if pathname == "/":
         return build_tabs()
     elif pathname == "/changelog":
-        return html.Div(children=[changelog(), footer()])
+        return html.Div(children=[changelog()])
 
 
 # Handle tab selection
@@ -67,4 +66,4 @@ def render_content(tab):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False, host="0.0.0.0", port=8080, processes=1, threaded=True)
+    app.run_server(debug=True, host="0.0.0.0", port=8080, processes=1, threaded=True)

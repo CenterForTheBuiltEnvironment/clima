@@ -180,7 +180,7 @@ def build_tabs():
             ),
             html.Div(
                 id="store-container",
-                children=[store(), html.Div(id="tabs-content"), footer()],
+                children=[store(), html.Div(id="tabs-content")],
             ),
         ],
     )
