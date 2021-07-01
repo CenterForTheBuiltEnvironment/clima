@@ -242,13 +242,13 @@ def custom_wind_rose():
                 id="tab5-custom-dropdown-container",
                 children=[
                     html.Div(
-                        className="container-col justify-center",
+                        className="container-col justify-center p-2 mr-2",
                         children=[
                             html.Div(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
+                                        style={"width": "8rem"},
                                         children=["Start Month:"],
                                     ),
                                     dcc.Dropdown(
@@ -258,7 +258,7 @@ def custom_wind_rose():
                                             for i, j in enumerate(month_lst)
                                         ],
                                         value="1",
-                                        className="text-next-to-input",
+                                        style={"width": "6rem"},
                                     ),
                                 ],
                             ),
@@ -266,7 +266,7 @@ def custom_wind_rose():
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
+                                        style={"width": "8rem"},
                                         children=["Start Hour:"],
                                     ),
                                     dcc.Dropdown(
@@ -276,19 +276,20 @@ def custom_wind_rose():
                                             for i in range(1, 25)
                                         ],
                                         value="1",
+                                        style={"width": "6rem"},
                                     ),
                                 ],
                             ),
                         ],
                     ),
                     html.Div(
-                        className="container-col justify-center",
+                        className="container-col justify-center p-2 ml-2",
                         children=[
                             html.Div(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
+                                        style={"width": "8rem"},
                                         children=["End Month:"],
                                     ),
                                     dcc.Dropdown(
@@ -298,6 +299,7 @@ def custom_wind_rose():
                                             for i, j in enumerate(month_lst)
                                         ],
                                         value="12",
+                                        style={"width": "6rem"},
                                     ),
                                 ],
                             ),
@@ -305,7 +307,7 @@ def custom_wind_rose():
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
+                                        style={"width": "8rem"},
                                         children=["End Hour:"],
                                     ),
                                     dcc.Dropdown(
@@ -315,6 +317,7 @@ def custom_wind_rose():
                                             for i in range(1, 25)
                                         ],
                                         value="24",
+                                        style={"width": "6rem"},
                                     ),
                                 ],
                             ),
