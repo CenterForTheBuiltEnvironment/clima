@@ -23,12 +23,17 @@ def code_timer(func):
     return wrapper_timer
 
 
-def generate_chart_name(tab_name, meta):
+def generate_chart_name(tab_name, meta=None):
     # todo the file name should contain the image title, the function works but each figure gets the same config
+    if meta is None:
+        meta = ["", "", "", ""]
     _fig_config = fig_config.copy()
-    _fig_config["toImageButtonOptions"][
-        "filename"
-    ] = f"CBEClima_{meta[1]}_{meta[3]}_{tab_name}_tab"
+    if meta:
+        _fig_config["toImageButtonOptions"][
+            "filename"
+        ] = f"CBEClima_{meta[1]}_{meta[3]}_{tab_name}_tab"
+    else:
+        _fig_config["toImageButtonOptions"]["filename"] = f"CBEClima_{tab_name}_tab"
     return _fig_config
 
 
