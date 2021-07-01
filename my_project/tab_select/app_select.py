@@ -62,7 +62,7 @@ def layout_select():
                                 "Close",
                                 id="modal-close-button",
                                 className="ml-2",
-                                color="danger",
+                                color="light",
                             ),
                             dbc.Button(
                                 "Yes",
