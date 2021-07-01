@@ -14,6 +14,10 @@ import pandas as pd
 from app import app, cache, TIMEOUT
 from my_project.tab_psy_chart.charts_psy_chart import psych_chart
 
+psy_dropdown_names = dropdown_names.copy()
+psy_dropdown_names["Frequency"] = "Frequency"
+psy_dropdown_names["None"] = "None"
+
 
 def inputs():
     """"""
@@ -32,11 +36,10 @@ def inputs():
                                 style={"flex": "30%"},
                             ),
                             dcc.Dropdown(
-                                className="tab9-sec3-dropdown",
                                 id="psy-color-by-dropdown",
                                 options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
+                                    {"label": i, "value": psy_dropdown_names[i]}
+                                    for i in psy_dropdown_names
                                 ],
                                 value="Frequency",
                                 style={"flex": "70%"},
