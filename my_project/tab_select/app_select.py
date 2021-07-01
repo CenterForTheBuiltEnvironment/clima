@@ -197,7 +197,6 @@ def submitted_data(
     [Input("df-store", "data")],
     State("meta-store", "data"),
 )
-@code_timer
 def enable_tabs_when_data_is_loaded(data, meta):
     """Hide tabs when data are not loaded"""
     default = "Current Location: N/A"
@@ -238,7 +237,6 @@ def enable_tabs_when_data_is_loaded(data, meta):
     [State("modal", "is_open")],
     prevent_initial_call=True,
 )
-@code_timer
 def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_open):
     """display the modal to the user and check if he wants to use that file"""
     # fixme split in two one that opens the modal and one that handles the modal answer
