@@ -88,30 +88,6 @@ def psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_inf
     if colorby_var != "None" and colorby_var != "Frequency":
         title = title + " colored by " + var_name + " (" + var_unit + ")"
 
-    if time_filter:
-        title = (
-            title
-            + "<br>between the months of "
-            + month_lst[start_month - 1]
-            + " and "
-            + month_lst[end_month - 1]
-            + " and between the hours "
-            + str(start_hour)
-            + ":00 and "
-            + str(end_hour)
-            + ":00"
-        )
-    if data_filter:
-        title = (
-            title
-            + "<br>when the "
-            + data_filter_var
-            + " is between "
-            + str(min_val)
-            + " and "
-            + str(max_val)
-        )
-
     dbt_list = list(range(-60, 60, 1))
     rh_list = list(range(10, 110, 10))
 

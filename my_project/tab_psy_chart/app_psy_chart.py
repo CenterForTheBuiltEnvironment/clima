@@ -27,16 +27,19 @@ def inputs():
                         className=container_row_center_full,
                         children=[
                             html.H6(
-                                className="text-next-to-input", children=["Color By:"]
+                                className="text-next-to-input",
+                                children=["Color By:"],
+                                style={"flex": "30%"},
                             ),
                             dcc.Dropdown(
                                 className="tab9-sec3-dropdown",
-                                id="tab9-colorby-dropdown",
+                                id="psy-color-by-dropdown",
                                 options=[
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
                                 value="Frequency",
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
@@ -45,45 +48,54 @@ def inputs():
             html.Div(
                 className=container_col_center_one_of_three,
                 children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "Apply Time Filters", "value": "time"},
-                        ],
-                        value=[],
-                        id="tab9-sec3-time-filter-input",
+                    dbc.Button(
+                        "Apply month and hour filter",
+                        color="primary",
+                        id="month-hour-filter",
+                        className="mb-2",
+                        n_clicks=0,
                     ),
                     html.Div(
-                        className="container-row full-width justify-center",
+                        className="container-row full-width justify-center mt-2",
                         children=[
-                            html.H6("Month Range"),
-                            dcc.RangeSlider(
-                                id="tab9-sec3-query-month-slider",
-                                min=1,
-                                max=12,
-                                step=1,
-                                value=[1, 12],
-                                marks={1: "1", 12: "12"},
-                                tooltip={"always_visible": False, "placement": "top"},
-                                allowCross=True,
+                            html.H6("Month Range", style={"flex": "30%"}),
+                            html.Div(
+                                dcc.RangeSlider(
+                                    id="psy-month-slider",
+                                    min=1,
+                                    max=12,
+                                    step=1,
+                                    value=[1, 12],
+                                    marks={1: "1", 12: "12"},
+                                    tooltip={
+                                        "always_visible": False,
+                                        "placement": "top",
+                                    },
+                                    allowCross=True,
+                                ),
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
-                        className="container-row full-width justify-center",
+                        className="container-row align-center justify-center",
                         children=[
-                            html.H6("Hour Range"),
-                            dcc.RangeSlider(
-                                id="tab9-sec3-query-hour-slider",
-                                min=1,
-                                max=24,
-                                step=1,
-                                value=[1, 24],
-                                marks={1: "1", 24: "24"},
-                                tooltip={
-                                    "always_visible": False,
-                                    "placement": "topLeft",
-                                },
-                                allowCross=True,
+                            html.H6("Hour Range", style={"flex": "30%"}),
+                            html.Div(
+                                dcc.RangeSlider(
+                                    id="psy-hour-slider",
+                                    min=1,
+                                    max=24,
+                                    step=1,
+                                    value=[1, 24],
+                                    marks={1: "1", 24: "24"},
+                                    tooltip={
+                                        "always_visible": False,
+                                        "placement": "topLeft",
+                                    },
+                                    allowCross=True,
+                                ),
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
@@ -92,60 +104,56 @@ def inputs():
             html.Div(
                 className=container_col_center_one_of_three,
                 children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "Apply Data Filters", "value": "data"},
-                        ],
-                        value=[],
-                        id="tab9-sec3-data-filter-input",
+                    dbc.Button(
+                        "Apply filter",
+                        color="primary",
+                        id="data-filter",
+                        className="mb-2",
+                        n_clicks=0,
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
                             html.H6(
-                                className="text-next-to-input",
-                                children=["Filter Variable:"],
+                                children=["Filter Variable:"], style={"flex": "30%"}
                             ),
                             dcc.Dropdown(
-                                className="tab9-sec3-dropdown",
-                                id="tab9-sec3-filter-var-dropdown",
+                                id="psy-var-dropdown",
                                 options=[
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
                                 value="RH",
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Min Value:"]
-                            ),
+                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
                             dbc.Input(
-                                className="num-input",
-                                id="tab9-sec3-min-val",
+                                id="psy-min-val",
                                 placeholder="Enter a number for the min val",
                                 type="number",
-                                min=0,
                                 step=1,
+                                value=0,
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Max Value:"]
-                            ),
+                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
                             dbc.Input(
                                 className="num-input",
-                                id="tab9-sec3-max-val",
+                                id="psy-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
-                                min=0,
+                                value=100,
                                 step=1,
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
@@ -172,33 +180,32 @@ def layout_psy_chart():
     Output("psych-chart", "figure"),
     # Sec1 Inputs
     [
-        Input("tab9-colorby-dropdown", "value"),
-        # Sec2 Inputs
-        Input("tab9-sec3-time-filter-input", "value"),
-        Input("tab9-sec3-query-month-slider", "value"),
-        Input("tab9-sec3-query-hour-slider", "value"),
-        # Sec3 Inputs
-        Input("tab9-sec3-data-filter-input", "value"),
-        Input("tab9-sec3-filter-var-dropdown", "value"),
-        Input("tab9-sec3-min-val", "value"),
-        Input("tab9-sec3-max-val", "value"),
-        # General
+        Input("psy-color-by-dropdown", "value"),
+        Input("month-hour-filter", "n_clicks"),
+        Input("data-filter", "n_clicks"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [
+        State("df-store", "data"),
+        State("psy-month-slider", "value"),
+        State("psy-hour-slider", "value"),
+        State("psy-min-val", "value"),
+        State("psy-max-val", "value"),
+        State("psy-var-dropdown", "value"),
+    ],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_psych_chart(
     colorby_var,
     time_filter,
-    month,
-    hour,
     data_filter,
-    data_filter_var,
-    min_val,
-    max_val,
     global_local,
     df,
+    month,
+    hour,
+    min_val,
+    max_val,
+    data_filter_var,
 ):
     df = pd.read_json(df, orient="split")
     time_filter_info = [time_filter, month, hour]
