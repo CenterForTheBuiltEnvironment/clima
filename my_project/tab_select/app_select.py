@@ -113,7 +113,7 @@ def alert():
     State("url-store", "data"),
     prevent_initial_call=True,
 )
-@code_timer
+# @code_timer
 def submitted_data(
     use_epw_click, upload_click, list_of_contents, list_of_names, url_store
 ):

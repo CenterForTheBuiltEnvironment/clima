@@ -14,7 +14,7 @@ from my_project.global_scheme import template, tight_margins
 import requests
 
 
-@code_timer
+# @code_timer
 def layout_summary():
     """Contents in the second tab 'Climate Summary'."""
     return html.Div(
@@ -148,7 +148,7 @@ def layout_summary():
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
+# @code_timer
 def update_tab_map(ts, global_local, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = "Location: " + meta[1] + ", " + meta[3]
@@ -196,7 +196,7 @@ def update_tab_map(ts, global_local, meta):
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
+# @code_timer
 def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
@@ -293,7 +293,7 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
+# @code_timer
 def update_violin_tdb(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -313,7 +313,7 @@ def update_violin_tdb(global_local, df, meta):
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
+# @code_timer
 def update_tab_wind(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -333,7 +333,7 @@ def update_tab_wind(global_local, df, meta):
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
+# @code_timer
 def update_tab_rh(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -353,7 +353,7 @@ def update_tab_rh(global_local, df, meta):
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-@code_timer
+# @code_timer
 def update_tab_gh_rad(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -373,7 +373,7 @@ def update_tab_gh_rad(global_local, df, meta):
     [State("meta-store", "data")],
     prevent_initial_call=True,
 )
-@code_timer
+# @code_timer
 def download_epw_file(n_clicks, df, meta):
     if n_clicks is None:
         raise PreventUpdate

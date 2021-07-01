@@ -13,7 +13,7 @@ from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
 
 
-@code_timer
+# @code_timer
 def get_data(url):
     """Return a list of the data from api call."""
     if url[-3:] == "zip" or url[-3:] == "all":
@@ -35,7 +35,7 @@ def get_data(url):
     return lines
 
 
-@code_timer
+# @code_timer
 def create_df(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
     meta = lst[0].strip().split(",")

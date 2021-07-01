@@ -34,9 +34,13 @@ def sun_path():
                 ),
             ),
             html.Div(
-                className="container-row justify-center full-width align-center",
+                className="container-row justify-center align-center",
                 children=[
-                    html.H6(className="text-next-to-input", children=["View: "]),
+                    html.H6(
+                        className="text-next-to-input",
+                        children=["View: "],
+                        style={"width": "10rem"},
+                    ),
                     dcc.Dropdown(
                         id="custom-sun-view-dropdown",
                         options=[
@@ -44,13 +48,18 @@ def sun_path():
                             {"label": "Cartesian", "value": "cartesian"},
                         ],
                         value="polar",
+                        style={"width": "20rem"},
                     ),
                 ],
             ),
             html.Div(
-                className="container-row justify-center full-width align-center",
+                className="container-row justify-center align-center",
                 children=[
-                    html.H6(className="text-next-to-input", children=["Variable: "]),
+                    html.H6(
+                        className="text-next-to-input",
+                        children=["Variable: "],
+                        style={"width": "10rem"},
+                    ),
                     dcc.Dropdown(
                         id="custom-sun-var-dropdown",
                         options=[
@@ -58,6 +67,7 @@ def sun_path():
                             for i in tab4_dropdown_names
                         ],
                         value="None",
+                        style={"width": "20rem"},
                     ),
                 ],
             ),
@@ -86,13 +96,24 @@ def explore_daily_heatmap():
                     id_button="daily-chart-label",
                 ),
             ),
-            dcc.Dropdown(
-                id="tab4-explore-dropdown",
-                options=[
-                    {"label": i, "value": tab4_explore_dropdown_names[i]}
-                    for i in tab4_explore_dropdown_names
+            html.Div(
+                className="container-row justify-center align-center mb-2",
+                children=[
+                    html.H6(
+                        className="text-next-to-input",
+                        children=["Select variable: "],
+                        style={"width": "10rem"},
+                    ),
+                    dcc.Dropdown(
+                        id="tab4-explore-dropdown",
+                        options=[
+                            {"label": i, "value": tab4_explore_dropdown_names[i]}
+                            for i in tab4_explore_dropdown_names
+                        ],
+                        value="GHrad",
+                        style={"width": "20rem"},
+                    ),
                 ],
-                value="GHrad",
             ),
             dcc.Loading(
                 type="circle",

@@ -112,7 +112,7 @@ def get_ashrae(df):
     return lo80, hi80, lo90, hi90
 
 
-@code_timer
+# @code_timer
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
     lo80, hi80, lo90, hi90 = get_ashrae(df)
@@ -266,7 +266,7 @@ def yearly_profile(df, var, global_local):
     return fig
 
 
-@code_timer
+# @code_timer
 def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
     var_unit = unit_dict[str(var) + "_unit"]
@@ -377,7 +377,7 @@ def daily_profile(df, var, global_local):
     return fig
 
 
-@code_timer
+# @code_timer
 def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
     var_unit = unit_dict[str(var) + "_unit"]
@@ -570,25 +570,6 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
     color_in = var_color[len(var_color) // 2]
 
     new_df = df.copy()
-    # if time_filter:
-    #     if start_month <= end_month:
-    #         new_df.loc[(new_df["month"] < start_month) | (new_df["month"] > end_month)]
-    #     else:
-    #         new_df.loc[
-    #             (new_df["month"] >= end_month) & (new_df["month"] <= start_month)
-    #         ]
-    #     if start_hour <= end_hour:
-    #         new_df.loc[(new_df["hour"] < start_hour) | (new_df["hour"] > end_hour)]
-    #     else:
-    #         new_df.loc[(df["hour"] >= end_hour) & (new_df["hour"] <= start_hour)]
-    #
-    # if data_filter:
-    #     if min_val <= max_val:
-    #         new_df.loc[(new_df[filter_var] < min_val) | (new_df[filter_var] > max_val)]
-    #     else:
-    #         new_df.loc[
-    #             (new_df[filter_var] >= max_val) & (new_df[filter_var] <= min_val)
-    #         ]
     month_in = []
     month_below = []
     month_above = []

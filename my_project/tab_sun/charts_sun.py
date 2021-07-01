@@ -17,9 +17,6 @@ from plotly.subplots import make_subplots
 from pvlib import solarposition
 
 
-#######################
-### SOLAR RADIATION ###
-#######################
 def monthly_solar(epw_df, meta):
     """"""
     g_h_rad_month_ave = (
