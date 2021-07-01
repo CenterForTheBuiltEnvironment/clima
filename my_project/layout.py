@@ -94,7 +94,7 @@ def build_banner():
                             {"label": "Global Value Ranges", "value": "global"},
                             {"label": "Local Value Ranges", "value": "local"},
                         ],
-                        value="global",
+                        value="local",
                         id="global-local-radio-input",
                         inline=True,
                     ),
