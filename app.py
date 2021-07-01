@@ -4,7 +4,7 @@ from flask_caching import Cache
 import warnings
 
 # todo remove ignore warnings
-# warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore")
 
 app = Dash(
     __name__,
