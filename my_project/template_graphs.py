@@ -442,7 +442,7 @@ def speed_labels(bins, units):
     return labels
 
 
-def wind_rose(df, meta, title, month, hour, labels):
+def wind_rose(df, title, month, hour, labels):
     """Return the wind rose figure.
 
     Based on:  https://gist.github.com/phobson/41b41bdd157a2bcf6e14

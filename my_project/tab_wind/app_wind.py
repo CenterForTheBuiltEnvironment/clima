@@ -379,16 +379,17 @@ def layout_wind():
 @app.callback(
     Output("wind-rose", "figure"),
     # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_wind_rose(ts, global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-    annual = wind_rose(df, meta, "", [1, 12], [1, 24], True)
+    annual = wind_rose(df, "", [1, 12], [1, 24], True)
     return annual
 
 
@@ -396,13 +397,14 @@ def update_tab_wind_rose(ts, global_local, df, meta):
 @app.callback(
     Output("wind-speed", "figure"),
     # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_wind_speed(ts, global_local, df, meta):
+def update_tab_wind_speed(ts, global_local, df):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
@@ -415,13 +417,14 @@ def update_tab_wind_speed(ts, global_local, df, meta):
 @app.callback(
     Output("wind-direction", "figure"),
     # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_wind_direction(ts, global_local, df, meta):
+def update_tab_wind_direction(ts, global_local, df):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     direction = heatmap(df, "Wdir", global_local)
@@ -432,14 +435,14 @@ def update_tab_wind_direction(ts, global_local, df, meta):
 @app.callback(
     Output("custom-wind-rose", "figure"),
     # Custom Graph Input
-    [Input("tab5-custom-start-month", "value")],
-    [Input("tab5-custom-start-hour", "value")],
-    [Input("tab5-custom-end-month", "value")],
-    [Input("tab5-custom-end-hour", "value")],
-    # General
-    [Input("df-store", "modified_timestamp")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [
+        Input("tab5-custom-start-month", "value"),
+        Input("tab5-custom-start-hour", "value"),
+        Input("tab5-custom-end-month", "value"),
+        Input("tab5-custom-end-hour", "value"),
+        Input("df-store", "modified_timestamp"),
+    ],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_five(start_month, start_hour, end_month, end_hour, ts, df, meta):
@@ -459,34 +462,31 @@ def update_tab_five(start_month, start_hour, end_month, end_hour, ts, df, meta):
         df = df.loc[(df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
-    custom = wind_rose(
-        df, meta, "", [start_month, end_month], [start_hour, end_hour], True
-    )
+    custom = wind_rose(df, "", [start_month, end_month], [start_hour, end_hour], True)
 
     return custom
 
 
 ### Seasonal Graphs ###
 @app.callback(
-    # Graphs
-    Output("winter-wind-rose", "figure"),
-    Output("spring-wind-rose", "figure"),
-    Output("summer-wind-rose", "figure"),
-    Output("fall-wind-rose", "figure"),
-    # Text
-    Output("winter-wind-rose-text", "children"),
-    Output("spring-wind-rose-text", "children"),
-    Output("summer-wind-rose-text", "children"),
-    Output("fall-wind-rose-text", "children"),
-    # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Output("winter-wind-rose", "figure"),
+        Output("spring-wind-rose", "figure"),
+        Output("summer-wind-rose", "figure"),
+        Output("fall-wind-rose", "figure"),
+        Output("winter-wind-rose-text", "children"),
+        Output("spring-wind-rose-text", "children"),
+        Output("summer-wind-rose-text", "children"),
+        Output("fall-wind-rose-text", "children"),
+    ],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
-    """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
+def update_tab_five_seasonal_graphs(ts, global_local, df):
     df = pd.read_json(df, orient="split")
 
     hours = [1, 24]
@@ -496,10 +496,10 @@ def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
     fall_months = [9, 12]
 
     # Wind Rose Graphs
-    winter = wind_rose(df, meta, "", winter_months, hours, False)
-    spring = wind_rose(df, meta, "", spring_months, hours, True)
-    summer = wind_rose(df, meta, "", summer_months, hours, False)
-    fall = wind_rose(df, meta, "", fall_months, hours, False)
+    winter = wind_rose(df, "", winter_months, hours, False)
+    spring = wind_rose(df, "", spring_months, hours, True)
+    summer = wind_rose(df, "", summer_months, hours, False)
+    fall = wind_rose(df, "", fall_months, hours, False)
 
     # Text
     winter_df = df.loc[
@@ -574,18 +574,20 @@ def update_tab_five_seasonal_graphs(ts, global_local, df, meta):
 ### Daily Graphs ###
 @app.callback(
     # Daily Graphs
-    Output("morning-wind-rose", "figure"),
-    Output("noon-wind-rose", "figure"),
-    Output("night-wind-rose", "figure"),
-    # Text
-    Output("morning-windrose-text", "children"),
-    Output("noon-windrose-text", "children"),
-    Output("night-windrose-text", "children"),
+    [
+        Output("morning-wind-rose", "figure"),
+        Output("noon-wind-rose", "figure"),
+        Output("night-wind-rose", "figure"),
+        Output("morning-windrose-text", "children"),
+        Output("noon-windrose-text", "children"),
+        Output("night-windrose-text", "children"),
+    ],
     # General
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_five_daily_graphs(ts, global_local, df, meta):
@@ -598,9 +600,9 @@ def update_tab_five_daily_graphs(ts, global_local, df, meta):
     night_times = [22, 5]
 
     # Wind Rose Graphs
-    morning = wind_rose(df, meta, "", months, morning_times, False)
-    noon = wind_rose(df, meta, "", months, noon_times, False)
-    night = wind_rose(df, meta, "", months, night_times, True)
+    morning = wind_rose(df, "", months, morning_times, False)
+    noon = wind_rose(df, "", months, noon_times, False)
+    night = wind_rose(df, "", months, night_times, True)
 
     # Text
     query_calm_wind = "Wspeed == 0"

@@ -17,7 +17,7 @@ from plotly.subplots import make_subplots
 from pvlib import solarposition
 
 
-def monthly_solar(epw_df, meta):
+def monthly_solar(epw_df):
     """"""
     g_h_rad_month_ave = (
         epw_df.groupby(["month", "hour"])["GHrad"].median().reset_index()
@@ -112,9 +112,9 @@ def monthly_solar(epw_df, meta):
 
 def polar_graph(df, meta, global_local, var):
     """Return the figure for the custom sun path."""
-    latitude = float(meta[-5])
-    longitude = float(meta[-4])
-    time_zone = float(meta[-3])
+    latitude = float(meta["lat"])
+    longitude = float(meta["lon"])
+    time_zone = float(meta["time_zone"])
     solpos = df.loc[df["apparent_elevation"] > 0, :]
 
     if var != "None":
@@ -316,9 +316,9 @@ def polar_graph(df, meta, global_local, var):
 
 def custom_cartesian_solar(df, meta, global_local, var):
     """Return a graph of a latitude and longitude solar diagram."""
-    latitude = float(meta[-5])
-    longitude = float(meta[-4])
-    time_zone = float(meta[-3])
+    latitude = float(meta["lat"])
+    longitude = float(meta["lon"])
+    time_zone = float(meta["time_zone"])
     tz = "UTC"
     if var != "None":
         var_unit = unit_dict[str(var) + "_unit"]

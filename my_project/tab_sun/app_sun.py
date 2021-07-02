@@ -175,20 +175,23 @@ def layout_sun():
 
 
 @app.callback(
-    Output("monthly-solar", "figure"),
-    Output("cloud-cover", "figure"),
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Output("monthly-solar", "figure"),
+        Output("cloud-cover", "figure"),
+    ],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_section_one(ts, global_local, df, meta):
+def update_tab_four_section_one(ts, global_local, df):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
     # Sun Radiation
-    monthly = monthly_solar(df, meta)
+    monthly = monthly_solar(df)
     monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
@@ -200,12 +203,13 @@ def update_tab_four_section_one(ts, global_local, df, meta):
 
 @app.callback(
     Output("custom-sunpath", "figure"),
-    [Input("custom-sun-view-dropdown", "value")],
-    [Input("custom-sun-var-dropdown", "value")],
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [
+        Input("custom-sun-view-dropdown", "value"),
+        Input("custom-sun-var-dropdown", "value"),
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_four(view, var, ts, global_local, df, meta):
@@ -220,14 +224,15 @@ def update_tab_four(view, var, ts, global_local, df, meta):
 
 @app.callback(
     Output("tab4-daily", "figure"),
-    [Input("tab4-explore-dropdown", "value")],
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Input("tab4-explore-dropdown", "value"),
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_daily_profile(var, ts, global_local, df, meta):
+def update_tab_four_daily_profile(var, ts, global_local, df):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     return daily_profile(df, var, global_local)
@@ -235,14 +240,14 @@ def update_tab_four_daily_profile(var, ts, global_local, df, meta):
 
 @app.callback(
     Output("tab4-heatmap", "figure"),
-    [Input("tab4-explore-dropdown", "value")],
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Input("tab4-explore-dropdown", "value"),
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("df-store", "data")],
-    [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_heatmap(var, ts, global_local, df, meta):
-    """Update the contents of tab four section two. Passing in the general info (df, meta)."""
+def update_tab_four_heatmap(var, ts, global_local, df):
     df = pd.read_json(df, orient="split")
     return heatmap(df, var, global_local)

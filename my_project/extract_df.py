@@ -39,11 +39,19 @@ def get_data(url):
 def create_df(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
     meta = lst[0].strip().split(",")
-    latitude = float(meta[-4])
-    longitude = float(meta[-3])
-    time_zone = float(meta[-2])
-    site_elevation = meta[-1]
-    meta[-1] = "".join([x for x in site_elevation if x.isnumeric() or x == "."])
+
+    print(meta)
+
+    location_info = {
+        "url": file_name,
+        "lat": float(meta[-4]),
+        "lon": float(meta[-3]),
+        "time_zone": float(meta[-2]),
+        "site_elevation": meta[-1],
+        "city": meta[1],
+        "state": meta[2],
+        "country": meta[3],
+    }
 
     lst = lst[8 : len(lst) - 1]
     lst = [line.strip().split(",") for line in lst]
@@ -158,14 +166,14 @@ def create_df(lst, file_name):
 
     # Add in times df
     date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo=timezone.utc)
-    tz = timedelta(days=0, hours=time_zone - 1, minutes=0)
+    tz = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
     date = date - tz
     tz = "UTC"
     times = pd.date_range(
         "2019-01-01 00:00:00", "2020-01-01", closed="left", freq="H", tz=tz
     )
     epw_df["UTC_time"] = pd.to_datetime(times)
-    delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
+    delta = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
     times = times - delta
     times_df = pd.DataFrame(times, columns=["times"])
     epw_df = pd.concat([epw_df, times_df], axis=1)
@@ -174,7 +182,9 @@ def create_df(lst, file_name):
     )
 
     # Add in solar position df
-    solar_position = solarposition.get_solarposition(times, latitude, longitude)
+    solar_position = solarposition.get_solarposition(
+        times, location_info["lat"], location_info["lon"]
+    )
     epw_df = pd.concat([epw_df, solar_position], axis=1)
 
     # Add in UTCI
@@ -250,9 +260,7 @@ def create_df(lst, file_name):
     psy_df = psy_df.set_index(epw_df.times)
     epw_df = epw_df.join(psy_df)
 
-    meta.append(file_name)
-    # fixme meta should be a dictionary not an array
-    return epw_df, meta
+    return epw_df, location_info
 
 
 if __name__ == "__main__":
@@ -261,5 +269,5 @@ if __name__ == "__main__":
     other_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     # fmt: on
 
-    lines = get_data(other_url)
-    df, meta_data = create_df(lines, other_url)
+    lines = get_data(url)
+    df, location_data = create_df(lines, url)

@@ -73,15 +73,12 @@ def layout_t_rh():
 
 @app.callback(
     Output("yearly-chart", "children"),
-    [Input("global-local-radio-input", "value")],
-    [Input("dropdown", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [Input("global-local-radio-input", "value"), Input("dropdown", "value")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
 def update_yearly_chart(global_local, dd_value, df, meta):
-    """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
     if dd_value == "dd_tdb":
@@ -104,15 +101,12 @@ def update_yearly_chart(global_local, dd_value, df, meta):
 
 @app.callback(
     Output("daily", "children"),
-    [Input("global-local-radio-input", "value")],
-    [Input("dropdown", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [Input("global-local-radio-input", "value"), Input("dropdown", "value")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
 def update_daily(global_local, dd_value, df, meta):
-    """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
     if dd_value == "dd_tdb":
@@ -129,10 +123,8 @@ def update_daily(global_local, dd_value, df, meta):
 
 @app.callback(
     Output("heatmap", "children"),
-    [Input("global-local-radio-input", "value")],
-    [Input("dropdown", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [Input("global-local-radio-input", "value"), Input("dropdown", "value")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer

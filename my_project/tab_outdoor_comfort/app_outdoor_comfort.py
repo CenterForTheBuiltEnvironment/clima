@@ -56,10 +56,10 @@ def layout_outdoor_comfort():
         Input("df-store", "modified_timestamp"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_utci_value(var, ts, global_local, df, meta):
+def update_tab_utci_value(var, ts, global_local, df):
     df = pd.read_json(df, orient="split")
     utci_heatmap = heatmap(df, var, global_local)
     return utci_heatmap

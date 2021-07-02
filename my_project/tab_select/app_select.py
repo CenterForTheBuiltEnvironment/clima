@@ -100,16 +100,22 @@ def alert():
 
 
 @app.callback(
-    Output("df-store", "data"),
-    Output("meta-store", "data"),
-    Output("alert", "is_open"),
-    Output("alert", "children"),
-    Output("alert", "color"),
-    Input("modal-yes-button", "n_clicks"),
-    Input("upload-data-button", "n_clicks"),
-    Input("upload-data", "contents"),
-    State("upload-data", "filename"),
-    State("url-store", "data"),
+    [
+        Output("df-store", "data"),
+        Output("meta-store", "data"),
+        Output("alert", "is_open"),
+        Output("alert", "children"),
+        Output("alert", "color"),
+    ],
+    [
+        Input("modal-yes-button", "n_clicks"),
+        Input("upload-data-button", "n_clicks"),
+        Input("upload-data", "contents"),
+    ],
+    [
+        State("upload-data", "filename"),
+        State("url-store", "data"),
+    ],
     prevent_initial_call=True,
 )
 # @code_timer
@@ -130,12 +136,12 @@ def submitted_data(
                 "one.",
                 "warning",
             )
-        df, meta = create_df(lines, url_store)
+        df, location_info = create_df(lines, url_store)
         # fixme: DeprecationWarning: an integer is required (got type float).
         df = df.to_json(date_format="iso", orient="split")
         return (
             df,
-            meta,
+            location_info,
             True,
             messages_alert["success"],
             "success",
@@ -152,11 +158,11 @@ def submitted_data(
             if "epw" in list_of_names[0]:
                 # Assume that the user uploaded a CSV file
                 lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
-                df, meta = create_df(lines, list_of_names[0])
+                df, location_info = create_df(lines, list_of_names[0])
                 df = df.to_json(date_format="iso", orient="split")
                 return (
                     df,
-                    meta,
+                    location_info,
                     True,
                     messages_alert["success"],
                     "success",
@@ -218,7 +224,7 @@ def enable_tabs_when_data_is_loaded(data, meta):
             False,
             False,
             False,
-            "Current Location: " + meta[1] + ", " + meta[3],
+            "Current Location: " + meta["city"] + ", " + meta["country"],
         )
 
 

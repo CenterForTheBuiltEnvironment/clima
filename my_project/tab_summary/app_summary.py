@@ -137,27 +137,31 @@ def layout_summary():
 
 
 @app.callback(
-    Output("world-map", "children"),
-    Output("tab-two-location", "children"),
-    Output("tab-two-long", "children"),
-    Output("tab-two-lat", "children"),
-    Output("tab-two-elevation", "children"),
-    Output("location-description", "children"),
-    [Input("df-store", "modified_timestamp")],
-    [Input("global-local-radio-input", "value")],
+    [
+        Output("world-map", "children"),
+        Output("tab-two-location", "children"),
+        Output("tab-two-long", "children"),
+        Output("tab-two-lat", "children"),
+        Output("tab-two-elevation", "children"),
+        Output("location-description", "children"),
+    ],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
 def update_tab_map(ts, global_local, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    location = "Location: " + meta[1] + ", " + meta[3]
-    lon = "Longitude: " + str(meta[-4])
-    lat = "Latitude: " + str(meta[-5])
-    elevation = "Elevation above sea level: " + meta[-2]
+    location = f"Location: {meta['city']}, {meta['country']}"
+    lon = f"Longitude: {meta['lon']}"
+    lat = f"Latitude: {meta['lat']}"
+    elevation = f"Elevation above sea level: {meta['site_elevation']}"
 
     r = requests.get(
-        f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[-5]}/{meta[-4]}"
+        f"http://climateapi.scottpinkelman.com/api/v1/location/{meta['lat']}/{meta['lon']}"
     )
 
     if r.status_code == 200:
@@ -295,7 +299,6 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
 def update_violin_tdb(global_local, df, meta):
-    """Update the contents of tab two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
     return dcc.Graph(
@@ -309,8 +312,7 @@ def update_violin_tdb(global_local, df, meta):
 @app.callback(
     Output("wind-speed-graph", "children"),
     [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
@@ -329,8 +331,7 @@ def update_tab_wind(global_local, df, meta):
 @app.callback(
     Output("humidity-profile-graph", "children"),
     [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
@@ -349,8 +350,7 @@ def update_tab_rh(global_local, df, meta):
 @app.callback(
     Output("solar-radiation-graph", "children"),
     [Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
@@ -369,8 +369,7 @@ def update_tab_gh_rad(global_local, df, meta):
 @app.callback(
     Output("download-dataframe-csv", "data"),
     Input("download-button", "n_clicks"),
-    [State("df-store", "data")],
-    [State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
     prevent_initial_call=True,
 )
 # @code_timer
@@ -379,8 +378,8 @@ def download_epw_file(n_clicks, df, meta):
         raise PreventUpdate
     elif df is not None:
         df = pd.read_json(df, orient="split")
-
-        file_name = "_".join(meta[1:4])
-        return dcc.send_data_frame(df.to_csv, f"{file_name}_EPW.csv")
+        return dcc.send_data_frame(
+            df.to_csv, f"df_{meta['city']}_{meta['country']}_EPW.csv"
+        )
     else:
         print("df not loaded yet")

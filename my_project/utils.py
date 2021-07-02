@@ -24,13 +24,11 @@ def code_timer(func):
 
 
 def generate_chart_name(tab_name, meta=None):
-    if meta is None:
-        meta = ["", "", "", ""]
     _fig_config = fig_config.copy()
     if meta:
         _fig_config["toImageButtonOptions"][
             "filename"
-        ] = f"CBEClima_{meta[1]}_{meta[3]}_{tab_name}_tab"
+        ] = f"CBEClima_{meta['city']}_{meta['country']}_{tab_name}_tab"
     else:
         _fig_config["toImageButtonOptions"]["filename"] = f"CBEClima_{tab_name}_tab"
     return _fig_config
