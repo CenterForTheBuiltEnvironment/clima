@@ -181,12 +181,11 @@ def layout_sun():
     ],
     [
         Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
     ],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_section_one(ts, global_local, df):
+def update_monthly_and_cloud_chart(ts, df):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
@@ -206,13 +205,12 @@ def update_tab_four_section_one(ts, global_local, df):
     [
         Input("custom-sun-view-dropdown", "value"),
         Input("custom-sun-var-dropdown", "value"),
-        Input("df-store", "modified_timestamp"),
         Input("global-local-radio-input", "value"),
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four(view, var, ts, global_local, df, meta):
+def update_sun_path_chart(view, var, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
@@ -226,13 +224,12 @@ def update_tab_four(view, var, ts, global_local, df, meta):
     Output("tab4-daily", "figure"),
     [
         Input("tab4-explore-dropdown", "value"),
-        Input("df-store", "modified_timestamp"),
         Input("global-local-radio-input", "value"),
     ],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_daily_profile(var, ts, global_local, df):
+def update_tab_four_daily_profile(var, global_local, df):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     return daily_profile(df, var, global_local)
@@ -242,12 +239,11 @@ def update_tab_four_daily_profile(var, ts, global_local, df):
     Output("tab4-heatmap", "figure"),
     [
         Input("tab4-explore-dropdown", "value"),
-        Input("df-store", "modified_timestamp"),
         Input("global-local-radio-input", "value"),
     ],
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_heatmap(var, ts, global_local, df):
+def update_tab_four_heatmap(var, global_local, df):
     df = pd.read_json(df, orient="split")
     return heatmap(df, var, global_local)

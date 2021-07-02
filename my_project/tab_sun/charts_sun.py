@@ -129,7 +129,6 @@ def polar_graph(df, meta, global_local, var):
             # Set maximum and minimum according to data
             data_max = 5 * ceil(solpos[var].max() / 5)
             data_min = 5 * floor(solpos[var].min() / 5)
-            print(data_min, data_max)
             range_z = [data_min, data_max]
 
     tz = "UTC"

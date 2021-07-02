@@ -147,13 +147,12 @@ def layout_summary():
     ],
     [
         Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
     ],
     [State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
-def update_tab_map(ts, global_local, meta):
+def update_tab_map(ts, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta['city']}, {meta['country']}"
     lon = f"Longitude: {meta['lon']}"
