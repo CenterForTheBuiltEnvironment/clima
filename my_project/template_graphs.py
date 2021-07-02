@@ -8,7 +8,6 @@ from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
 from my_project.global_scheme import color_dict, name_dict, range_dict, unit_dict
-from my_project.utils import code_timer
 
 from .global_scheme import month_lst, template, tight_margins
 

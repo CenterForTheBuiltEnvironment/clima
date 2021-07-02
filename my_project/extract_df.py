@@ -31,16 +31,13 @@ def get_data(url):
     headers = {"User-Agent": "Mozilla/5.0"}
     req = Request(url, headers=headers)
     epw = urlopen(req).read().decode()
-    lines = epw.split("\n")
-    return lines
+    return epw.split("\n")
 
 
 @code_timer
 def create_df(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
     meta = lst[0].strip().split(",")
-
-    print(meta)
 
     location_info = {
         "url": file_name,
@@ -133,7 +130,6 @@ def create_df(lst, file_name):
     for col in change_to_int:
         epw_df[col] = epw_df[col].astype(int)
 
-    # todo optimize
     change_to_float = [
         "DBT",
         "DPT",
@@ -165,18 +161,13 @@ def create_df(lst, file_name):
         epw_df[col] = epw_df[col].astype(float)
 
     # Add in times df
-    date = datetime(2000, 6, 21, 12 - 1, 0, 0, 0, tzinfo=timezone.utc)
-    tz = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
-    date = date - tz
-    tz = "UTC"
     times = pd.date_range(
-        "2019-01-01 00:00:00", "2020-01-01", closed="left", freq="H", tz=tz
+        "2019-01-01 00:00:00", "2020-01-01", closed="left", freq="H", tz="UTC"
     )
     epw_df["UTC_time"] = pd.to_datetime(times)
     delta = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
     times = times - delta
-    times_df = pd.DataFrame(times, columns=["times"])
-    epw_df = pd.concat([epw_df, times_df], axis=1)
+    epw_df["times"] = times
     epw_df.set_index(
         "times", drop=False, append=False, inplace=True, verify_integrity=False
     )
@@ -265,9 +256,9 @@ def create_df(lst, file_name):
 
 if __name__ == "__main__":
     # fmt: off
-    url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
+    test_url = "https://www.energyplus.net/weather-download/europe_wmo_region_6/ITA//ITA_Bologna-Borgo.Panigale.161400_IGDG/all"
     other_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     # fmt: on
 
-    lines = get_data(url)
-    df, location_data = create_df(lines, url)
+    lines = get_data(test_url)
+    df, location_data = create_df(lines, test_url)
