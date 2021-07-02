@@ -38,22 +38,18 @@ def generate_chart_name(tab_name, meta=None):
 
 
 def plot_location_epw_files():
-    with open("./assets/data/epw_location.json") as data_file:
-        data = json.load(data_file)
 
-    df = json_normalize(data["features"])
-    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
+    df_one_building = pd.read_csv("./assets/data/one_building.csv")
 
     import plotly.express as px
 
     fig = px.scatter_mapbox(
-        # fixme change this and import them all
-        df.head(2585),
+        df_one_building,
         lat="lat",
         lon="lon",
-        hover_name="properties.title",
+        hover_name="name",
         color_discrete_sequence=["blue"],
-        hover_data=["properties.epw"],
+        hover_data=["Source"],
         zoom=2,
         height=500,
     )

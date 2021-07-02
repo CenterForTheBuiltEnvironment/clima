@@ -1,0 +1,1800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+  <name>WMO Region 7 (Antarctica) EPW Processing locations in GoogleEarth KML format</name>
+  <open>1</open>
+  <Style id="weatherlocation_hiliteicon">
+    <IconStyle>
+      <scale>1.3</scale>
+      <Icon>
+         <href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+      </Icon>
+      <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+    </IconStyle>
+    <LabelStyle>
+      <scale>0.2</scale>
+    </LabelStyle>
+  </Style>
+  <Style id="weatherlocation_normal">
+    <IconStyle>
+      <scale>1.1</scale>
+      <Icon>
+         <href>http://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href>
+      </Icon>
+      <hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+    </IconStyle>
+    <LabelStyle>
+      <scale>0.2</scale>
+    </LabelStyle>
+  </Style>
+  <StyleMap id="weatherlocation">
+    <Pair>
+      <key>normal</key>
+      <styleUrl>#weatherlocation_normal</styleUrl>
+    </Pair>
+    <Pair>
+      <key>highlight</key>
+      <styleUrl>#weatherlocation_hiliteicon</styleUrl>
+    </Pair>
+  </StyleMap>
+  <Placemark>
+    <name>Vernadsky Research Base Argentine Islands GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Vernadsky.Research.Base-Argentine.Islands.889520 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=1955-1984</td></tr>
+       <tr><td>WMO <b>889520</b></td></tr>
+       <tr><td><b>S 65° 15.00'   W 64° 16.02'</b></td></tr>
+       <tr><td>Elevation <b>9</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-2.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-19.6 C</b>, <b>-3.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.4 C</b>, <b>41.7 F</b></td></tr>
+       <tr><td>HDD18 <b>7675</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Vernadsky.Research.Base-Argentine.Islands.889520_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-64.26700,-65.25000,9.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Esperanza Base Hope Bay ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Esperanza.Base-Hope.Bay.889630 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>889630</b></td></tr>
+       <tr><td><b>S 63° 23.89'   W 56° 59.84'</b></td></tr>
+       <tr><td>Elevation <b>3</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-23.1 C</b>, <b>-9.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>7.2 C</b>, <b>45.0 F</b></td></tr>
+       <tr><td>HDD18 <b>8082</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Esperanza.Base-Hope.Bay.889630_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.99730,-63.39810,3.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Esperanza Base Hope Bay ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Esperanza.Base-Hope.Bay.889630 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[34] Period of Record=1974-2018</td></tr>
+       <tr><td>WMO <b>889630</b></td></tr>
+       <tr><td><b>S 63° 23.89'   W 56° 59.84'</b></td></tr>
+       <tr><td>Elevation <b>3</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-23.1 C</b>, <b>-9.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>7.2 C</b>, <b>45.0 F</b></td></tr>
+       <tr><td>HDD18 <b>8129</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Esperanza.Base-Hope.Bay.889630_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.99730,-63.39810,3.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Orcadas Base Laurie Island South Orkney Islands ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Orcadas.Base-Laurie.Island-South.Orkney.Islands.889680 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>889680</b></td></tr>
+       <tr><td><b>S 60° 43.98'   W 44° 43.98'</b></td></tr>
+       <tr><td>Elevation <b>8</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-3.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-24.2 C</b>, <b>-11.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.8 C</b>, <b>40.6 F</b></td></tr>
+       <tr><td>HDD18 <b>7475</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Orcadas.Base-Laurie.Island-South.Orkney.Islands.889680_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-44.73300,-60.73300,8.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Orcadas Base Laurie Island South Orkney Islands ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Orcadas.Base-Laurie.Island-South.Orkney.Islands.889680 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[34] Period of Record=1973-2018</td></tr>
+       <tr><td>WMO <b>889680</b></td></tr>
+       <tr><td><b>S 60° 43.98'   W 44° 43.98'</b></td></tr>
+       <tr><td>Elevation <b>8</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-3.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-24.2 C</b>, <b>-11.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.8 C</b>, <b>40.6 F</b></td></tr>
+       <tr><td>HDD18 <b>7614</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Orcadas.Base-Laurie.Island-South.Orkney.Islands.889680_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-44.73300,-60.73300,8.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Admiral Brown Base Graham Land ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Admiral.Brown.Base-Graham.Land.889710 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=1975-1983</td></tr>
+       <tr><td>WMO <b>889710</b></td></tr>
+       <tr><td><b>S 64° 53.72'   E 62° 52.24'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-3.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-19.1 C</b>, <b>-2.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>6.4 C</b>, <b>43.5 F</b></td></tr>
+       <tr><td>HDD18 <b>7441</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Admiral.Brown.Base-Graham.Land.889710_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>62.87060,-64.89540,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>SANAE SAF Stn ZAF ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ZAF SANAE.SAF.Stn.890010 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[8] Period of Record=1973-1985</td></tr>
+       <tr><td>WMO <b>890010</b></td></tr>
+       <tr><td><b>S 70° 18.00'   W 2° 21.00'</b></td></tr>
+       <tr><td>Elevation <b>62</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+0.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-37.8 C</b>, <b>-36.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>0.1 C</b>, <b>32.2 F</b></td></tr>
+       <tr><td>HDD18 <b>12201</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ZAF_SANAE.SAF.Stn.890010_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-2.35000,-70.30000,62.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Neumayer III Stn DEU ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA DEU Neumayer.III.Stn.890020 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890020</b></td></tr>
+       <tr><td><b>S 70° 40.00'   W 8° 16.00'</b></td></tr>
+       <tr><td>Elevation <b>50</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-1.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-38.9 C</b>, <b>-38.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.6 C</b>, <b>30.9 F</b></td></tr>
+       <tr><td>HDD18 <b>12300</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_DEU_Neumayer.III.Stn.890020_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-8.26670,-70.66660,50.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Neumayer III Stn DEU ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA DEU Neumayer.III.Stn.890020 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[33] Period of Record=1984-2018</td></tr>
+       <tr><td>WMO <b>890020</b></td></tr>
+       <tr><td><b>S 70° 40.00'   W 8° 16.00'</b></td></tr>
+       <tr><td>Elevation <b>50</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-1.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-38.9 C</b>, <b>-38.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.6 C</b>, <b>30.9 F</b></td></tr>
+       <tr><td>HDD18 <b>12273</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_DEU_Neumayer.III.Stn.890020_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-8.26670,-70.66660,50.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>SANAE IV Stn ZAF ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ZAF SANAE.IV.Stn.890040 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[11] Period of Record=2004-2017</td></tr>
+       <tr><td>WMO <b>890040</b></td></tr>
+       <tr><td><b>S 71° 40.42'   W 2° 50.44'</b></td></tr>
+       <tr><td>Elevation <b>790</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+0.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-35.0 C</b>, <b>-31.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-2.2 C</b>, <b>28.0 F</b></td></tr>
+       <tr><td>HDD18 <b>12496</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ZAF_SANAE.IV.Stn.890040_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-2.84070,-71.67360,790.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>SANAE IV Stn ZAF ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ZAF SANAE.IV.Stn.890040 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[12] Period of Record=2003-2017</td></tr>
+       <tr><td>WMO <b>890040</b></td></tr>
+       <tr><td><b>S 71° 40.42'   W 2° 50.44'</b></td></tr>
+       <tr><td>Elevation <b>790</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+0.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-35.0 C</b>, <b>-31.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-2.2 C</b>, <b>28.0 F</b></td></tr>
+       <tr><td>HDD18 <b>12530</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ZAF_SANAE.IV.Stn.890040_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-2.84070,-71.67360,790.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>U-Wisc Baldrick AWS-High Polar Plateau USA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA USA U-Wisc.Baldrick.AWS-High.Polar.Plateau.890130 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=2008-2018</td></tr>
+       <tr><td>WMO <b>890130</b></td></tr>
+       <tr><td><b>S 82° 46.44'   W 13° 3.24'</b></td></tr>
+       <tr><td>Elevation <b>1968</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-1.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-59.2 C</b>, <b>-74.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-9.2 C</b>, <b>15.4 F</b></td></tr>
+       <tr><td>HDD18 <b>20173</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_USA_U-Wisc.Baldrick.AWS-High.Polar.Plateau.890130_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-13.05400,-82.77400,1968.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>U-Wisc Baldrick AWS-High Polar Plateau USA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA USA U-Wisc.Baldrick.AWS-High.Polar.Plateau.890130 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=2008-2018</td></tr>
+       <tr><td>WMO <b>890130</b></td></tr>
+       <tr><td><b>S 82° 46.44'   W 13° 3.24'</b></td></tr>
+       <tr><td>Elevation <b>1968</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-1.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-59.2 C</b>, <b>-74.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-9.2 C</b>, <b>15.4 F</b></td></tr>
+       <tr><td>HDD18 <b>20173</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_USA_U-Wisc.Baldrick.AWS-High.Polar.Plateau.890130_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-13.05400,-82.77400,1968.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Nordenskiold Base Camp SWE ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA SWE Nordenskiold.Base.Camp.890140 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[6] Period of Record=2007-2018</td></tr>
+       <tr><td>WMO <b>890140</b></td></tr>
+       <tr><td><b>S 73° 2.01'   W 13° 24.97'</b></td></tr>
+       <tr><td>Elevation <b>367</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-1.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-33.8 C</b>, <b>-28.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.8 C</b>, <b>30.6 F</b></td></tr>
+       <tr><td>HDD18 <b>11968</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_SWE_Nordenskiold.Base.Camp.890140_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-13.41620,-73.03350,367.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Nordenskiold Base Camp SWE ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA SWE Nordenskiold.Base.Camp.890140 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=1998-2018</td></tr>
+       <tr><td>WMO <b>890140</b></td></tr>
+       <tr><td><b>S 73° 2.01'   W 13° 24.97'</b></td></tr>
+       <tr><td>Elevation <b>367</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-1.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-33.8 C</b>, <b>-28.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.8 C</b>, <b>30.6 F</b></td></tr>
+       <tr><td>HDD18 <b>12010</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_SWE_Nordenskiold.Base.Camp.890140_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-13.41620,-73.03350,367.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Brunt AWS-Halley Research Stn GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Brunt.AWS-Halley.Research.Stn.890220 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[13] Period of Record=2005-2018</td></tr>
+       <tr><td>WMO <b>890220</b></td></tr>
+       <tr><td><b>S 75° 36.33'   W 26° 12.40'</b></td></tr>
+       <tr><td>Elevation <b>33</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-2.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-43.1 C</b>, <b>-45.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.8 C</b>, <b>30.6 F</b></td></tr>
+       <tr><td>HDD18 <b>13519</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Brunt.AWS-Halley.Research.Stn.890220_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-26.20660,-75.60550,33.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Brunt AWS-Halley Research Stn GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Brunt.AWS-Halley.Research.Stn.890220 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[39] Period of Record=1957-2018</td></tr>
+       <tr><td>WMO <b>890220</b></td></tr>
+       <tr><td><b>S 75° 36.33'   W 26° 12.40'</b></td></tr>
+       <tr><td>Elevation <b>33</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-2.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-43.1 C</b>, <b>-45.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.8 C</b>, <b>30.6 F</b></td></tr>
+       <tr><td>HDD18 <b>13093</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Brunt.AWS-Halley.Research.Stn.890220_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-26.20660,-75.60550,33.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Belgrano II Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Belgrano.II.Stn.890340 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[12] Period of Record=2005-2018</td></tr>
+       <tr><td>WMO <b>890340</b></td></tr>
+       <tr><td><b>S 77° 52.42'   W 34° 37.60'</b></td></tr>
+       <tr><td>Elevation <b>202</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-2.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-32.5 C</b>, <b>-26.5 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.1 C</b>, <b>35.8 F</b></td></tr>
+       <tr><td>HDD18 <b>11135</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Belgrano.II.Stn.890340_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-34.62670,-77.87360,202.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Belgrano II Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Belgrano.II.Stn.890340 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[19] Period of Record=1957-2018</td></tr>
+       <tr><td>WMO <b>890340</b></td></tr>
+       <tr><td><b>S 77° 52.42'   W 34° 37.60'</b></td></tr>
+       <tr><td>Elevation <b>202</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-2.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-32.5 C</b>, <b>-26.5 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.1 C</b>, <b>35.8 F</b></td></tr>
+       <tr><td>HDD18 <b>11216</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Belgrano.II.Stn.890340_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-34.62670,-77.87360,202.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bellingshausen AWS ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Bellingshausen.AWS.890500 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890500</b></td></tr>
+       <tr><td><b>S 62° 11.54'   W 58° 56.26'</b></td></tr>
+       <tr><td>Elevation <b>14</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-16.3 C</b>, <b>2.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.8 C</b>, <b>38.8 F</b></td></tr>
+       <tr><td>HDD18 <b>7271</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Bellingshausen.AWS.890500_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.93760,-62.19240,14.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bellingshausen AWS ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Bellingshausen.AWS.890500 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[40] Period of Record=1974-2018</td></tr>
+       <tr><td>WMO <b>890500</b></td></tr>
+       <tr><td><b>S 62° 11.54'   W 58° 56.26'</b></td></tr>
+       <tr><td>Elevation <b>14</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-16.3 C</b>, <b>2.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.8 C</b>, <b>38.8 F</b></td></tr>
+       <tr><td>HDD18 <b>7275</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Bellingshausen.AWS.890500_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.93760,-62.19240,14.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Petrel Arg Base ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Petrel.Arg.Base.890510 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[5] Period of Record=1973-1977</td></tr>
+       <tr><td>WMO <b>890510</b></td></tr>
+       <tr><td><b>S 63° 28.02'   W 56° 16.98'</b></td></tr>
+       <tr><td>Elevation <b>20</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-26.6 C</b>, <b>-15.9 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>11.7 C</b>, <b>53.1 F</b></td></tr>
+       <tr><td>HDD18 <b>8574</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Petrel.Arg.Base.890510_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.28300,-63.46700,20.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Arctowski Stn POL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA POL Arctowski.Stn.890520 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=1980-1989</td></tr>
+       <tr><td>WMO <b>890520</b></td></tr>
+       <tr><td><b>S 62° 9.59'   W 58° 28.14'</b></td></tr>
+       <tr><td>Elevation <b>2</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-21.3 C</b>, <b>-6.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>6.8 C</b>, <b>44.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7116</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_POL_Arctowski.Stn.890520_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.46900,-62.15990,2.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Carlini Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Carlini.Stn.890530 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=2005-2018</td></tr>
+       <tr><td>WMO <b>890530</b></td></tr>
+       <tr><td><b>S 62° 14.30'   W 58° 40.07'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-16.8 C</b>, <b>1.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.3 C</b>, <b>41.5 F</b></td></tr>
+       <tr><td>HDD18 <b>6996</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Carlini.Stn.890530_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.66780,-62.23830,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Carlini Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Carlini.Stn.890530 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[27] Period of Record=1986-2018</td></tr>
+       <tr><td>WMO <b>890530</b></td></tr>
+       <tr><td><b>S 62° 14.30'   W 58° 40.07'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-16.8 C</b>, <b>1.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.3 C</b>, <b>41.5 F</b></td></tr>
+       <tr><td>HDD18 <b>7030</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Carlini.Stn.890530_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.66780,-62.23830,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Artigas Base Dinamet Uruguay URY ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA URY Artigas.Base-Dinamet.Uruguay.890540 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[13] Period of Record=2004-2016</td></tr>
+       <tr><td>WMO <b>890540</b></td></tr>
+       <tr><td><b>S 62° 11.11'   W 58° 54.29'</b></td></tr>
+       <tr><td>Elevation <b>17</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-15.7 C</b>, <b>3.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.1 C</b>, <b>39.4 F</b></td></tr>
+       <tr><td>HDD18 <b>7209</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_URY_Artigas.Base-Dinamet.Uruguay.890540_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.90490,-62.18510,17.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Artigas Base Dinamet Uruguay URY ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA URY Artigas.Base-Dinamet.Uruguay.890540 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[30] Period of Record=1986-2016</td></tr>
+       <tr><td>WMO <b>890540</b></td></tr>
+       <tr><td><b>S 62° 11.11'   W 58° 54.29'</b></td></tr>
+       <tr><td>Elevation <b>17</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-15.7 C</b>, <b>3.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.1 C</b>, <b>39.4 F</b></td></tr>
+       <tr><td>HDD18 <b>7166</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_URY_Artigas.Base-Dinamet.Uruguay.890540_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.90490,-62.18510,17.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Marambio Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Marambio.Stn.890550 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890550</b></td></tr>
+       <tr><td><b>S 64° 14.45'   W 56° 37.63'</b></td></tr>
+       <tr><td>Elevation <b>0</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.8 C</b>, <b>-18.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>6.0 C</b>, <b>42.8 F</b></td></tr>
+       <tr><td>HDD18 <b>9401</b>, CDD10 <b>1</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Marambio.Stn.890550_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.62710,-64.24080,0.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Marambio Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG Marambio.Stn.890550 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[35] Period of Record=1974-2018</td></tr>
+       <tr><td>WMO <b>890550</b></td></tr>
+       <tr><td><b>S 64° 14.45'   W 56° 37.63'</b></td></tr>
+       <tr><td>Elevation <b>0</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.8 C</b>, <b>-18.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>6.0 C</b>, <b>42.8 F</b></td></tr>
+       <tr><td>HDD18 <b>9348</b>, CDD10 <b>1</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_Marambio.Stn.890550_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.62710,-64.24080,0.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Eduardo Frei Montalva AWS-Feldes Peninsula King Ge CHL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHL Eduardo.Frei.Montalva.AWS-Feldes.Peninsula-King.Ge.890560 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890560</b></td></tr>
+       <tr><td><b>S 62° 11.59'   W 58° 58.92'</b></td></tr>
+       <tr><td>Elevation <b>48</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-16.0 C</b>, <b>3.2 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.5 C</b>, <b>38.3 F</b></td></tr>
+       <tr><td>HDD18 <b>7327</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHL_Eduardo.Frei.Montalva.AWS-Feldes.Peninsula-King.Ge.890560_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.98200,-62.19310,48.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Eduardo Frei Montalva AWS-Feldes Peninsula King Ge CHL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHL Eduardo.Frei.Montalva.AWS-Feldes.Peninsula-King.Ge.890560 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[32] Period of Record=1986-2018</td></tr>
+       <tr><td>WMO <b>890560</b></td></tr>
+       <tr><td><b>S 62° 11.59'   W 58° 58.92'</b></td></tr>
+       <tr><td>Elevation <b>48</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-16.0 C</b>, <b>3.2 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.5 C</b>, <b>38.3 F</b></td></tr>
+       <tr><td>HDD18 <b>7344</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHL_Eduardo.Frei.Montalva.AWS-Feldes.Peninsula-King.Ge.890560_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.98200,-62.19310,48.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Captain Arturo Prat Navy Base CHL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHL Captain.Arturo.Prat.Navy.Base.890570 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[10] Period of Record=2009-2018</td></tr>
+       <tr><td>WMO <b>890570</b></td></tr>
+       <tr><td><b>S 62° 28.73'   W 59° 39.88'</b></td></tr>
+       <tr><td>Elevation <b>5</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-15.5 C</b>, <b>4.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.0 C</b>, <b>39.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7217</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHL_Captain.Arturo.Prat.Navy.Base.890570_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-59.66460,-62.47890,5.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Captain Arturo Prat Navy Base CHL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHL Captain.Arturo.Prat.Navy.Base.890570 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[28] Period of Record=1986-2018</td></tr>
+       <tr><td>WMO <b>890570</b></td></tr>
+       <tr><td><b>S 62° 28.73'   W 59° 39.88'</b></td></tr>
+       <tr><td>Elevation <b>5</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-15.5 C</b>, <b>4.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.0 C</b>, <b>39.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7261</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHL_Captain.Arturo.Prat.Navy.Base.890570_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-59.66460,-62.47890,5.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Great Wall Stn CHN ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHN Great.Wall.Stn.890580 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890580</b></td></tr>
+       <tr><td><b>S 62° 13.08'   W 58° 57.61'</b></td></tr>
+       <tr><td>Elevation <b>8</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-15.1 C</b>, <b>4.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.0 C</b>, <b>39.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7272</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHN_Great.Wall.Stn.890580_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.96020,-62.21800,8.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Great Wall Stn CHN ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHN Great.Wall.Stn.890580 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[33] Period of Record=1986-2018</td></tr>
+       <tr><td>WMO <b>890580</b></td></tr>
+       <tr><td><b>S 62° 13.08'   W 58° 57.61'</b></td></tr>
+       <tr><td>Elevation <b>8</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-15.1 C</b>, <b>4.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.0 C</b>, <b>39.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7160</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHN_Great.Wall.Stn.890580_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.96020,-62.21800,8.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>General Bernardo O-Higgins Base CHL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHL General.Bernardo.O-Higgins.Base.890590 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[12] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890590</b></td></tr>
+       <tr><td><b>S 63° 19.31'   W 56° 40.98'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-17.5 C</b>, <b>0.5 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.9 C</b>, <b>37.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7782</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHL_General.Bernardo.O-Higgins.Base.890590_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.68300,-63.32180,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>General Bernardo O-Higgins Base CHL ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA CHL General.Bernardo.O-Higgins.Base.890590 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[29] Period of Record=1986-2018</td></tr>
+       <tr><td>WMO <b>890590</b></td></tr>
+       <tr><td><b>S 63° 19.31'   W 56° 40.98'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-17.5 C</b>, <b>0.5 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.9 C</b>, <b>37.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7802</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_CHL_General.Bernardo.O-Higgins.Base.890590_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-56.68300,-63.32180,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Palmer Stn USA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA USA Palmer.Stn.890610 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890610</b></td></tr>
+       <tr><td><b>S 64° 46.46'   W 64° 3.17'</b></td></tr>
+       <tr><td>Elevation <b>0</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-14.1 C</b>, <b>6.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.1 C</b>, <b>41.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7098</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_USA_Palmer.Stn.890610_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-64.05290,-64.77430,0.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Palmer Stn USA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA USA Palmer.Stn.890610 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[20] Period of Record=1985-2018</td></tr>
+       <tr><td>WMO <b>890610</b></td></tr>
+       <tr><td><b>S 64° 46.46'   W 64° 3.17'</b></td></tr>
+       <tr><td>Elevation <b>0</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-14.1 C</b>, <b>6.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.1 C</b>, <b>41.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7113</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_USA_Palmer.Stn.890610_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-64.05290,-64.77430,0.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Rothera Research Stn GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Rothera.Research.Stn.890620 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890620</b></td></tr>
+       <tr><td><b>S 67° 34.02'   W 68° 7.02'</b></td></tr>
+       <tr><td>Elevation <b>33</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-20.4 C</b>, <b>-4.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.9 C</b>, <b>39.0 F</b></td></tr>
+       <tr><td>HDD18 <b>7752</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Rothera.Research.Stn.890620_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-68.11700,-67.56700,33.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Rothera Research Stn GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Rothera.Research.Stn.890620 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[25] Period of Record=1984-2018</td></tr>
+       <tr><td>WMO <b>890620</b></td></tr>
+       <tr><td><b>S 67° 34.02'   W 68° 7.02'</b></td></tr>
+       <tr><td>Elevation <b>33</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-20.4 C</b>, <b>-4.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.9 C</b>, <b>39.0 F</b></td></tr>
+       <tr><td>HDD18 <b>7860</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Rothera.Research.Stn.890620_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-68.11700,-67.56700,33.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Vernadsky Research Base UKR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA UKR Vernadsky.Research.Base.890630 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[10] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890630</b></td></tr>
+       <tr><td><b>S 65° 14.75'   W 64° 15.44'</b></td></tr>
+       <tr><td>Elevation <b>11</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-18.0 C</b>, <b>-0.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.3 C</b>, <b>41.5 F</b></td></tr>
+       <tr><td>HDD18 <b>7395</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_UKR_Vernadsky.Research.Base.890630_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-64.25740,-65.24580,11.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Vernadsky Research Base UKR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA UKR Vernadsky.Research.Base.890630 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[17] Period of Record=1986-2018</td></tr>
+       <tr><td>WMO <b>890630</b></td></tr>
+       <tr><td><b>S 65° 14.75'   W 64° 15.44'</b></td></tr>
+       <tr><td>Elevation <b>11</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-18.1 C</b>, <b>-0.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.1 C</b>, <b>41.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7533</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_UKR_Vernadsky.Research.Base.890630_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-64.25740,-65.24580,11.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Fossil Bluff Stn GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Fossil.Bluff.Stn.890650 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=2006-2014</td></tr>
+       <tr><td>WMO <b>890650</b></td></tr>
+       <tr><td><b>S 71° 19.76'   W 68° 16.02'</b></td></tr>
+       <tr><td>Elevation <b>69</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-5.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-30.8 C</b>, <b>-23.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.8 C</b>, <b>38.8 F</b></td></tr>
+       <tr><td>HDD18 <b>9688</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Fossil.Bluff.Stn.890650_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-68.26700,-71.32930,69.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Fossil Bluff Stn GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Fossil.Bluff.Stn.890650 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=2006-2014</td></tr>
+       <tr><td>WMO <b>890650</b></td></tr>
+       <tr><td><b>S 71° 19.76'   W 68° 16.02'</b></td></tr>
+       <tr><td>Elevation <b>69</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-5.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-30.8 C</b>, <b>-23.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.8 C</b>, <b>38.8 F</b></td></tr>
+       <tr><td>HDD18 <b>9688</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Fossil.Bluff.Stn.890650_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-68.26700,-71.32930,69.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>San Martin Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG San.Martin.Stn.890660 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>890660</b></td></tr>
+       <tr><td><b>S 68° 7.82'   W 67° 6.22'</b></td></tr>
+       <tr><td>Elevation <b>7</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-26.1 C</b>, <b>-15.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.7 C</b>, <b>42.3 F</b></td></tr>
+       <tr><td>HDD18 <b>7966</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_San.Martin.Stn.890660_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-67.10370,-68.13030,7.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>San Martin Stn ARG ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA ARG San.Martin.Stn.890660 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[30] Period of Record=1977-2018</td></tr>
+       <tr><td>WMO <b>890660</b></td></tr>
+       <tr><td><b>S 68° 7.82'   W 67° 6.22'</b></td></tr>
+       <tr><td>Elevation <b>7</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-26.1 C</b>, <b>-15.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.7 C</b>, <b>42.3 F</b></td></tr>
+       <tr><td>HDD18 <b>8030</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_ARG_San.Martin.Stn.890660_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-67.10370,-68.13030,7.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Russkaja Research Stn RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Russkaja.Research.Stn.891320 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=1981-1989</td></tr>
+       <tr><td>WMO <b>891320</b></td></tr>
+       <tr><td><b>S 74° 58.01'   E 136° 0.00'</b></td></tr>
+       <tr><td>Elevation <b>142</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-9.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-42.0 C</b>, <b>-43.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>1.7 C</b>, <b>35.1 F</b></td></tr>
+       <tr><td>HDD18 <b>11065</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Russkaja.Research.Stn.891320_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>136.0000,-74.96680,141.5</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>King Sejong Stn Barton Peninsula King George Islan KOR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA KOR King.Sejong.Stn-Barton.Peninsula-King.George.Islan.892510 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>892510</b></td></tr>
+       <tr><td><b>S 62° 13.34'   W 58° 46.94'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-18.9 C</b>, <b>-2.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>6.8 C</b>, <b>44.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7192</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_KOR_King.Sejong.Stn-Barton.Peninsula-King.George.Islan.892510_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.78230,-62.22240,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>King Sejong Stn Barton Peninsula King George Islan KOR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA KOR King.Sejong.Stn-Barton.Peninsula-King.George.Islan.892510 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[28] Period of Record=1991-2018</td></tr>
+       <tr><td>WMO <b>892510</b></td></tr>
+       <tr><td><b>S 62° 13.34'   W 58° 46.94'</b></td></tr>
+       <tr><td>Elevation <b>10</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-18.3 C</b>, <b>-0.9 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.1 C</b>, <b>41.2 F</b></td></tr>
+       <tr><td>HDD18 <b>7192</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_KOR_King.Sejong.Stn-Barton.Peninsula-King.George.Islan.892510_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.78230,-62.22240,10.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Limbert AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Limbert.AWS.892570 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[6] Period of Record=2008-2013</td></tr>
+       <tr><td>WMO <b>892570</b></td></tr>
+       <tr><td><b>S 75° 54.85'   W 59° 15.86'</b></td></tr>
+       <tr><td>Elevation <b>40</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-47.3 C</b>, <b>-53.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.8 C</b>, <b>30.6 F</b></td></tr>
+       <tr><td>HDD18 <b>14781</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Limbert.AWS.892570_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-59.26430,-75.91420,40.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Limbert AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Limbert.AWS.892570 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[6] Period of Record=2008-2013</td></tr>
+       <tr><td>WMO <b>892570</b></td></tr>
+       <tr><td><b>S 75° 54.85'   W 59° 15.86'</b></td></tr>
+       <tr><td>Elevation <b>40</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-47.3 C</b>, <b>-53.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.8 C</b>, <b>30.6 F</b></td></tr>
+       <tr><td>HDD18 <b>14781</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Limbert.AWS.892570_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-59.26430,-75.91420,40.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Larsen Ice Shelf AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Larsen.Ice.Shelf.AWS.892620 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[5] Period of Record=2007-2011</td></tr>
+       <tr><td>WMO <b>892620</b></td></tr>
+       <tr><td><b>S 67° 0.80'   W 61° 27.53'</b></td></tr>
+       <tr><td>Elevation <b>17</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-39.5 C</b>, <b>-39.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.6 C</b>, <b>38.5 F</b></td></tr>
+       <tr><td>HDD18 <b>12200</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Larsen.Ice.Shelf.AWS.892620_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-61.45880,-67.01330,17.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Larsen Ice Shelf AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Larsen.Ice.Shelf.AWS.892620 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[5] Period of Record=2007-2011</td></tr>
+       <tr><td>WMO <b>892620</b></td></tr>
+       <tr><td><b>S 67° 0.80'   W 61° 27.53'</b></td></tr>
+       <tr><td>Elevation <b>17</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-39.5 C</b>, <b>-39.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.6 C</b>, <b>38.5 F</b></td></tr>
+       <tr><td>HDD18 <b>12200</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Larsen.Ice.Shelf.AWS.892620_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-61.45880,-67.01330,17.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Butler Island AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Butler.Island.AWS.892660 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=2008-2014</td></tr>
+       <tr><td>WMO <b>892660</b></td></tr>
+       <tr><td><b>S 72° 12.38'   W 60° 10.19'</b></td></tr>
+       <tr><td>Elevation <b>91</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-34.6 C</b>, <b>-30.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.1 C</b>, <b>37.6 F</b></td></tr>
+       <tr><td>HDD18 <b>12787</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Butler.Island.AWS.892660_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-60.16980,-72.20630,91.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Butler Island AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Butler.Island.AWS.892660 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=2008-2014</td></tr>
+       <tr><td>WMO <b>892660</b></td></tr>
+       <tr><td><b>S 72° 12.38'   W 60° 10.19'</b></td></tr>
+       <tr><td>Elevation <b>91</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-34.6 C</b>, <b>-30.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.1 C</b>, <b>37.6 F</b></td></tr>
+       <tr><td>HDD18 <b>12787</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Butler.Island.AWS.892660_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-60.16980,-72.20630,91.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Sky Blu AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Sky.Blu.AWS.892720 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[6] Period of Record=2007-2014</td></tr>
+       <tr><td>WMO <b>892720</b></td></tr>
+       <tr><td><b>S 74° 47.54'   W 71° 29.39'</b></td></tr>
+       <tr><td>Elevation <b>1510</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-41.9 C</b>, <b>-43.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-4.2 C</b>, <b>24.4 F</b></td></tr>
+       <tr><td>HDD18 <b>13825</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Sky.Blu.AWS.892720_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-71.48980,-74.79230,1510.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Sky Blu AWS GBR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA GBR Sky.Blu.AWS.892720 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[6] Period of Record=2007-2014</td></tr>
+       <tr><td>WMO <b>892720</b></td></tr>
+       <tr><td><b>S 74° 47.54'   W 71° 29.39'</b></td></tr>
+       <tr><td>Elevation <b>1510</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-41.9 C</b>, <b>-43.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-4.2 C</b>, <b>24.4 F</b></td></tr>
+       <tr><td>HDD18 <b>13825</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_GBR_Sky.Blu.AWS.892720_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-71.48980,-74.79230,1510.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Troll Research Stn NOR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA NOR Troll.Research.Stn.895040 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=2007-2018</td></tr>
+       <tr><td>WMO <b>895040</b></td></tr>
+       <tr><td><b>S 72° 0.70'   E 2° 32.11'</b></td></tr>
+       <tr><td>Elevation <b>1275</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+0.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-37.6 C</b>, <b>-35.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-1.2 C</b>, <b>29.8 F</b></td></tr>
+       <tr><td>HDD18 <b>12771</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_NOR_Troll.Research.Stn.895040_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>2.53520,-72.01170,1275.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Troll Research Stn NOR ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA NOR Troll.Research.Stn.895040 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=2007-2018</td></tr>
+       <tr><td>WMO <b>895040</b></td></tr>
+       <tr><td><b>S 72° 0.70'   E 2° 32.11'</b></td></tr>
+       <tr><td>Elevation <b>1275</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+0.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-37.6 C</b>, <b>-35.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-1.2 C</b>, <b>29.8 F</b></td></tr>
+       <tr><td>HDD18 <b>12771</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_NOR_Troll.Research.Stn.895040_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>2.53520,-72.01170,1275.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Novolazarevskaja Research Stn RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Novolazarevskaja.Research.Stn.895120 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>895120</b></td></tr>
+       <tr><td><b>S 70° 46.61'   E 11° 49.34'</b></td></tr>
+       <tr><td>Elevation <b>102</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+1.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-26.9 C</b>, <b>-16.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.0 C</b>, <b>37.4 F</b></td></tr>
+       <tr><td>HDD18 <b>10267</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Novolazarevskaja.Research.Stn.895120_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>11.82240,-70.77680,102.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Novolazarevskaja Research Stn RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Novolazarevskaja.Research.Stn.895120 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[40] Period of Record=1974-2018</td></tr>
+       <tr><td>WMO <b>895120</b></td></tr>
+       <tr><td><b>S 70° 46.61'   E 11° 49.34'</b></td></tr>
+       <tr><td>Elevation <b>102</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+1.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-26.9 C</b>, <b>-16.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>3.0 C</b>, <b>37.4 F</b></td></tr>
+       <tr><td>HDD18 <b>10125</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Novolazarevskaja.Research.Stn.895120_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>11.82240,-70.77680,102.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Syowa Stn JPN ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA JPN Syowa.Stn.895320 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>895320</b></td></tr>
+       <tr><td><b>S 69° 0.26'   E 39° 34.97'</b></td></tr>
+       <tr><td>Elevation <b>21</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+3.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-31.3 C</b>, <b>-24.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.7 C</b>, <b>36.9 F</b></td></tr>
+       <tr><td>HDD18 <b>10427</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_JPN_Syowa.Stn.895320_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>39.58280,-69.00440,21.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Syowa Stn JPN ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA JPN Syowa.Stn.895320 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[40] Period of Record=1977-2018</td></tr>
+       <tr><td>WMO <b>895320</b></td></tr>
+       <tr><td><b>S 69° 0.26'   E 39° 34.97'</b></td></tr>
+       <tr><td>Elevation <b>21</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+3.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-31.3 C</b>, <b>-24.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.7 C</b>, <b>36.9 F</b></td></tr>
+       <tr><td>HDD18 <b>10235</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_JPN_Syowa.Stn.895320_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>39.58280,-69.00440,21.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Molodyozhnaya Research Stn Thala Hills RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Molodyozhnaya.Research.Stn-Thala.Hills.895420 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[21] Period of Record=1973-1998</td></tr>
+       <tr><td>WMO <b>895420</b></td></tr>
+       <tr><td><b>S 67° 39.92'   E 45° 50.30'</b></td></tr>
+       <tr><td>Elevation <b>50</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+3.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-28.2 C</b>, <b>-18.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.6 C</b>, <b>36.7 F</b></td></tr>
+       <tr><td>HDD18 <b>10444</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Molodyozhnaya.Research.Stn-Thala.Hills.895420_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>45.83840,-67.66530,50.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mawson Stn East Antarctica AUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA AUS Mawson.Stn-East.Antarctica.895640 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>895640</b></td></tr>
+       <tr><td><b>S 67° 36.13'   E 62° 52.34'</b></td></tr>
+       <tr><td>Elevation <b>16</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.3 C</b>, <b>-17.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.8 C</b>, <b>37.0 F</b></td></tr>
+       <tr><td>HDD18 <b>10680</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_AUS_Mawson.Stn-East.Antarctica.895640_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>62.87240,-67.60220,16.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mawson Stn East Antarctica AUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA AUS Mawson.Stn-East.Antarctica.895640 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[43] Period of Record=1973-2018</td></tr>
+       <tr><td>WMO <b>895640</b></td></tr>
+       <tr><td><b>S 67° 36.13'   E 62° 52.34'</b></td></tr>
+       <tr><td>Elevation <b>16</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.3 C</b>, <b>-17.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.8 C</b>, <b>37.0 F</b></td></tr>
+       <tr><td>HDD18 <b>10592</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_AUS_Mawson.Stn-East.Antarctica.895640_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>62.87240,-67.60220,16.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Davis Stn AUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA AUS Davis.Stn.895710 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>895710</b></td></tr>
+       <tr><td><b>S 68° 34.57'   E 77° 58.18'</b></td></tr>
+       <tr><td>Elevation <b>3</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+7.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-29.5 C</b>, <b>-21.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.1 C</b>, <b>39.4 F</b></td></tr>
+       <tr><td>HDD18 <b>10105</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_AUS_Davis.Stn.895710_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>77.96960,-68.57620,3.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Davis Stn AUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA AUS Davis.Stn.895710 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[46] Period of Record=1973-2018</td></tr>
+       <tr><td>WMO <b>895710</b></td></tr>
+       <tr><td><b>S 68° 34.57'   E 77° 58.18'</b></td></tr>
+       <tr><td>Elevation <b>3</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+7.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-29.5 C</b>, <b>-21.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.1 C</b>, <b>39.4 F</b></td></tr>
+       <tr><td>HDD18 <b>10066</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_AUS_Davis.Stn.895710_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>77.96960,-68.57620,3.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Progress Research Stn Prydz Bay East Antarctica RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Progress.Research.Stn-Prydz.Bay-East.Antarctica.895740 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>895740</b></td></tr>
+       <tr><td><b>S 69° 22.70'   E 76° 23.30'</b></td></tr>
+       <tr><td>Elevation <b>15</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-29.1 C</b>, <b>-20.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.1 C</b>, <b>39.4 F</b></td></tr>
+       <tr><td>HDD18 <b>9949</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Progress.Research.Stn-Prydz.Bay-East.Antarctica.895740_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>76.38840,-69.37840,15.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Progress Research Stn Prydz Bay East Antarctica RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Progress.Research.Stn-Prydz.Bay-East.Antarctica.895740 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[25] Period of Record=1989-2018</td></tr>
+       <tr><td>WMO <b>895740</b></td></tr>
+       <tr><td><b>S 69° 22.70'   E 76° 23.30'</b></td></tr>
+       <tr><td>Elevation <b>15</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-29.1 C</b>, <b>-20.4 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>4.1 C</b>, <b>39.4 F</b></td></tr>
+       <tr><td>HDD18 <b>10085</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Progress.Research.Stn-Prydz.Bay-East.Antarctica.895740_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>76.38840,-69.37840,15.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mirny Research Stn RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Mirny.Research.Stn.895920 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>895920</b></td></tr>
+       <tr><td><b>S 66° 33.19'   E 93° 0.58'</b></td></tr>
+       <tr><td>Elevation <b>40</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.9 C</b>, <b>-18.2 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>1.2 C</b>, <b>34.2 F</b></td></tr>
+       <tr><td>HDD18 <b>10618</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Mirny.Research.Stn.895920_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>93.00970,-66.55310,40.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mirny Research Stn RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Mirny.Research.Stn.895920 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[41] Period of Record=1973-2018</td></tr>
+       <tr><td>WMO <b>895920</b></td></tr>
+       <tr><td><b>S 66° 33.19'   E 93° 0.58'</b></td></tr>
+       <tr><td>Elevation <b>40</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.9 C</b>, <b>-18.2 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>1.2 C</b>, <b>34.2 F</b></td></tr>
+       <tr><td>HDD18 <b>10561</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Mirny.Research.Stn.895920_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>93.00970,-66.55310,40.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Vostok RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Vostok.896060 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>896060</b></td></tr>
+       <tr><td><b>S 78° 27.00'   E 106° 52.02'</b></td></tr>
+       <tr><td>Elevation <b>3488</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+7.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-70.0 C</b>, <b>-94.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-22.0 C</b>, <b>-7.6 F</b></td></tr>
+       <tr><td>HDD18 <b>26197</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Vostok.896060_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>106.8670,-78.45000,3488.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Vostok RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Vostok.896060 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[34] Period of Record=1980-2018</td></tr>
+       <tr><td>WMO <b>896060</b></td></tr>
+       <tr><td><b>S 78° 27.00'   E 106° 52.02'</b></td></tr>
+       <tr><td>Elevation <b>3488</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+7.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-70.0 C</b>, <b>-94.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-23.8 C</b>, <b>-10.8 F</b></td></tr>
+       <tr><td>HDD18 <b>26347</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Vostok.896060_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>106.8670,-78.45000,3488.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Casey Research Stn Wilkes Land AUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA AUS Casey.Research.Stn-Wilkes.Land.896110 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>896110</b></td></tr>
+       <tr><td><b>S 66° 16.95'   E 110° 31.60'</b></td></tr>
+       <tr><td>Elevation <b>42</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+7.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.0 C</b>, <b>-16.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.7 C</b>, <b>36.9 F</b></td></tr>
+       <tr><td>HDD18 <b>9951</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_AUS_Casey.Research.Stn-Wilkes.Land.896110_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>110.5266,-66.28250,42.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Casey Research Stn Wilkes Land AUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA AUS Casey.Research.Stn-Wilkes.Land.896110 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[45] Period of Record=1973-2018</td></tr>
+       <tr><td>WMO <b>896110</b></td></tr>
+       <tr><td><b>S 66° 16.95'   E 110° 31.60'</b></td></tr>
+       <tr><td>Elevation <b>42</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+7.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-27.0 C</b>, <b>-16.6 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.7 C</b>, <b>36.9 F</b></td></tr>
+       <tr><td>HDD18 <b>9729</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_AUS_Casey.Research.Stn-Wilkes.Land.896110_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>110.5266,-66.28250,42.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Dumont d Urville Stn Adelie Land FRA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA FRA Dumont.d-Urville.Stn-Adelie.Land.896420 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=2004-2018</td></tr>
+       <tr><td>WMO <b>896420</b></td></tr>
+       <tr><td><b>S 66° 39.77'   E 140° 0.11'</b></td></tr>
+       <tr><td>Elevation <b>202</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+9.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-26.7 C</b>, <b>-16.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.1 C</b>, <b>35.8 F</b></td></tr>
+       <tr><td>HDD18 <b>10561</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_FRA_Dumont.d-Urville.Stn-Adelie.Land.896420_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>140.0019,-66.66280,202.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Dumont d Urville Stn Adelie Land FRA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA FRA Dumont.d-Urville.Stn-Adelie.Land.896420 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[40] Period of Record=1976-2018</td></tr>
+       <tr><td>WMO <b>896420</b></td></tr>
+       <tr><td><b>S 66° 39.77'   E 140° 0.11'</b></td></tr>
+       <tr><td>Elevation <b>202</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+9.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-26.7 C</b>, <b>-16.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.1 C</b>, <b>35.8 F</b></td></tr>
+       <tr><td>HDD18 <b>10392</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_FRA_Dumont.d-Urville.Stn-Adelie.Land.896420_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>140.0019,-66.66280,202.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Leningradskaya RUS ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA RUS Leningradskaya.896570 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[14] Period of Record=1974-1990</td></tr>
+       <tr><td>WMO <b>896570</b></td></tr>
+       <tr><td><b>S 69° 30.00'   E 159° 22.98'</b></td></tr>
+       <tr><td>Elevation <b>291</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+11.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-32.1 C</b>, <b>-25.8 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>-0.3 C</b>, <b>31.5 F</b></td></tr>
+       <tr><td>HDD18 <b>11626</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_RUS_Leningradskaya.896570_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>159.3830,-69.50000,291.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Mcmurdo Stn Pegasus Field Ross Island USA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA USA Mcmurdo.Stn-Pegasus.Field-Ross.Island.896640 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[7] Period of Record=2001-2011</td></tr>
+       <tr><td>WMO <b>896640</b></td></tr>
+       <tr><td><b>S 77° 50.78'   E 165° 40.09'</b></td></tr>
+       <tr><td>Elevation <b>24</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+11.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-35.0 C</b>, <b>-31.0 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>2.1 C</b>, <b>35.8 F</b></td></tr>
+       <tr><td>HDD18 <b>12642</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_USA_Mcmurdo.Stn-Pegasus.Field-Ross.Island.896640_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>165.6682,-77.84630,24.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>U-Wisc Manuela AWS-Inexpressible Island USA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA USA U-Wisc-Manuela.AWS-Inexpressible.Island.898640 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[5] Period of Record=1991-1995</td></tr>
+       <tr><td>WMO <b>898640</b></td></tr>
+       <tr><td><b>S 74° 56.76'   E 163° 41.22'</b></td></tr>
+       <tr><td>Elevation <b>80</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+11.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>8 - Subarctic</b></td></tr>
+       <tr><td>99% Heating DB <b>-36.2 C</b>, <b>-33.2 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>1.3 C</b>, <b>34.3 F</b></td></tr>
+       <tr><td>HDD18 <b>13044</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_USA_U-Wisc-Manuela.AWS-Inexpressible.Island.898640_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>163.6870,-74.94600,80.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Heard.Island.The.Spit HMD AUS</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>AUS HMD Heard.Island.The.Spit.949970 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[12] Period of Record=2004-2015</td></tr>
+       <tr><td>WMO <b>949970</b></td></tr>
+       <tr><td><b>S 53° 6.50'   E 73° 43.35'</b></td></tr>
+       <tr><td>Elevation <b>12</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>7 - Very Cold</b></td></tr>
+       <tr><td>99% Heating DB <b>-4.3 C</b>, <b>24.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>10.5 C</b>, <b>50.9 F</b></td></tr>
+       <tr><td>HDD18 <b>5607</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/AUS_Australia/AUS_HMD_Heard.Island.The.Spit.949970_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>73.72250,-53.10830,12.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Heard.Island.The.Spit HMD AUS</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>AUS HMD Heard.Island.The.Spit.949970 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[18] Period of Record=1998-2015</td></tr>
+       <tr><td>WMO <b>949970</b></td></tr>
+       <tr><td><b>S 53° 6.50'   E 73° 43.35'</b></td></tr>
+       <tr><td>Elevation <b>12</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+5.0</b> hours}</td></tr>
+       <tr><td>ASHRAE HOF 2017 Climate Zone <b>7 - Very Cold</b></td></tr>
+       <tr><td>99% Heating DB <b>-4.3 C</b>, <b>24.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>10.5 C</b>, <b>50.9 F</b></td></tr>
+       <tr><td>HDD18 <b>5625</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/AUS_Australia/AUS_HMD_Heard.Island.The.Spit.949970_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>73.72250,-53.10830,12.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Heard.Island.Atlas.Cove.Stn HMD AUS</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>AUS HMD Heard.Island.Atlas.Cove.Stn.959970 TMYx.2004-2018</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[9] Period of Record=2004-2012</td></tr>
+       <tr><td>WMO <b>959970</b></td></tr>
+       <tr><td><b>S 53° 6.53'   E 73° 23.52'</b></td></tr>
+       <tr><td>Elevation <b>4</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+5.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-4.3 C</b>, <b>24.3 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>8.5 C</b>, <b>47.3 F</b></td></tr>
+       <tr><td>HDD18 <b>5747</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/AUS_Australia/AUS_HMD_Heard.Island.Atlas.Cove.Stn.959970_TMYx.2004-2018.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>73.39200,-53.10890,3.5</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Heard.Island.Atlas.Cove.Stn HMD AUS</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>AUS HMD Heard.Island.Atlas.Cove.Stn.959970 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[15] Period of Record=1998-2012</td></tr>
+       <tr><td>WMO <b>959970</b></td></tr>
+       <tr><td><b>S 53° 6.53'   E 73° 23.52'</b></td></tr>
+       <tr><td>Elevation <b>4</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+5.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-4.6 C</b>, <b>23.7 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>10.7 C</b>, <b>51.3 F</b></td></tr>
+       <tr><td>HDD18 <b>5748</b>, CDD10 <b>1</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/AUS_Australia/AUS_HMD_Heard.Island.Atlas.Cove.Stn.959970_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>73.39200,-53.10890,3.5</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Bouvet.Island BV BVT</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>BVT BV Bouvet.Island.689920 TMYx</b></td></tr>
+       <tr><td><b>Data Source ISD-TMYx</td></tr>
+       <tr><td>NCEI ISD - #years=[6] Period of Record=1997-2005</td></tr>
+       <tr><td>WMO <b>689920</b></td></tr>
+       <tr><td><b>S 54° 25.98'   E 3° 24.00'</b></td></tr>
+       <tr><td>Elevation <b>42</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>+0.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-10.5 C</b>, <b>13.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.2 C</b>, <b>41.4 F</b></td></tr>
+       <tr><td>HDD18 <b>6912</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/BVT_Bouvet_Island/BVT_BV_Bouvet.Island.689920_TMYx.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>3.40000,-54.43300,42.0</coordinates>
+   </Point>
+  </Placemark>
+  <Placemark>
+    <name>Comandante.Ferraz.Stn Admiralty.Bay King.George.Island BRA ATA</name>
+    <description><![CDATA[<table><tr><td colspan="2"><b>ATA BRA Comandante.Ferraz.Stn-Admiralty.Bay-King.George.Island.892520 INMET</b></td></tr>
+       <tr><td><b>Data Source INMET</td></tr>
+       <tr><td>WMO <b>892520</b></td></tr>
+       <tr><td><b>S 62° 5.13'   W 58° 57.85'</b></td></tr>
+       <tr><td>Elevation <b>18</b> m</td></tr>
+       <tr><td>Time Zone {GMT <b>-4.0</b> hours}</td></tr>
+       <tr><td>Design conditions from weather file</td></tr>
+       <tr><td>99% Heating DB <b>-14.4 C</b>, <b>6.1 F</b></td></tr>
+       <tr><td>1% Cooling DB <b>5.9 C</b>, <b>42.6 F</b></td></tr>
+       <tr><td>HDD18 <b>7082</b>, CDD10 <b>0</b></td></tr>
+       <tr><td>URL http://climate.onebuilding.org/WMO_Region_7_Antarctica/ATA_Antarctica/ATA_BRA_Comandante.Ferraz.Stn-Admiralty.Bay-King.George.Island.892520_INMET.zip</td></tr></table>]]></description>
+   <styleUrl>#weatherlocation</styleUrl>
+   <Point>
+     <altitudeMode>absolute</altitudeMode>
+     <coordinates>-58.96417,-62.08549,18.0</coordinates>
+   </Point>
+  </Placemark>
+</Document>
+</kml>
