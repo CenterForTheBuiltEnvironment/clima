@@ -112,8 +112,8 @@ def section_two_inputs():
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
                                         children=["Variable:"],
+                                        style={"flex": "30%"},
                                     ),
                                     dcc.Dropdown(
                                         id="sec2-var-dropdown",
@@ -122,6 +122,7 @@ def section_two_inputs():
                                             for i in dropdown_names
                                         ],
                                         value="RH",
+                                        style={"flex": "70%"},
                                     ),
                                 ],
                             ),
@@ -136,44 +137,49 @@ def section_two_inputs():
                                 ],
                                 value=[],
                                 id="sec2-time-filter-input",
+                                className="mb-2",
                             ),
                             html.Div(
-                                className="container-row full-width justify-center",
+                                className="container-row full-width justify-center mt-2",
                                 children=[
-                                    html.H6("Month Range"),
-                                    dcc.RangeSlider(
-                                        id="sec2-month-slider",
-                                        className="month-hour-slider",
-                                        min=1,
-                                        max=12,
-                                        step=1,
-                                        value=[1, 12],
-                                        marks={1: "1", 12: "12"},
-                                        tooltip={
-                                            "always_visible": False,
-                                            "placement": "top",
-                                        },
-                                        allowCross=True,
+                                    html.H6("Month Range", style={"flex": "30%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="sec2-month-slider",
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=True,
+                                        ),
+                                        style={"flex": "70%"},
                                     ),
                                 ],
                             ),
                             html.Div(
-                                className="container-row full-width justify-center",
+                                className="container-row justify-center",
                                 children=[
-                                    html.H6("Hour Range"),
-                                    dcc.RangeSlider(
-                                        className="month-hour-slider",
-                                        id="sec2-hour-slider",
-                                        min=1,
-                                        max=24,
-                                        step=1,
-                                        value=[1, 24],
-                                        marks={1: "1", 24: "24"},
-                                        tooltip={
-                                            "always_visible": False,
-                                            "placement": "topLeft",
-                                        },
-                                        allowCross=True,
+                                    html.H6("Hour Range", style={"flex": "30%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="sec2-hour-slider",
+                                            min=1,
+                                            max=24,
+                                            step=1,
+                                            value=[1, 24],
+                                            marks={1: "1", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "topLeft",
+                                            },
+                                            allowCross=True,
+                                        ),
+                                        style={"flex": "70%"},
                                     ),
                                 ],
                             ),
@@ -193,8 +199,8 @@ def section_two_inputs():
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
                                         children=["Filter Variable:"],
+                                        style={"flex": "30%"},
                                     ),
                                     dcc.Dropdown(
                                         id="sec2-data-filter-var",
@@ -203,6 +209,7 @@ def section_two_inputs():
                                             for i in dropdown_names
                                         ],
                                         value="RH",
+                                        style={"flex": "70%"},
                                     ),
                                 ],
                             ),
@@ -210,16 +217,15 @@ def section_two_inputs():
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
-                                        children=["Min Value:"],
+                                        children=["Min Value:"], style={"flex": "30%"}
                                     ),
                                     dbc.Input(
-                                        className="num-input",
                                         id="sec2-min-val",
                                         placeholder="Enter a number for the min val",
                                         type="number",
-                                        min=0,
+                                        value=0,
                                         step=1,
+                                        style={"flex": "70%"},
                                     ),
                                 ],
                             ),
@@ -227,16 +233,15 @@ def section_two_inputs():
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
-                                        className="text-next-to-input",
-                                        children=["Max Value:"],
+                                        children=["Max Value:"], style={"flex": "30%"}
                                     ),
                                     dbc.Input(
-                                        className="num-input",
                                         id="sec2-max-val",
                                         placeholder="Enter a number for the max val",
                                         type="number",
-                                        min=0,
+                                        value=100,
                                         step=1,
+                                        style={"flex": "70%"},
                                     ),
                                 ],
                             ),
@@ -293,51 +298,45 @@ def section_three_inputs():
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["X Variable:"]
-                            ),
+                            html.H6(style={"flex": "30%"}, children=["X Variable:"]),
                             dcc.Dropdown(
-                                className="tab6-sec3-dropdown",
                                 id="tab6-sec3-var-x-dropdown",
                                 options=[
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
                                 value="DBT",
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Y Variable:"]
-                            ),
+                            html.H6(style={"flex": "30%"}, children=["Y Variable:"]),
                             dcc.Dropdown(
-                                className="tab6-sec3-dropdown",
                                 id="tab6-sec3-var-y-dropdown",
                                 options=[
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
                                 value="RH",
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Color By:"]
-                            ),
+                            html.H6(style={"flex": "30%"}, children=["Color By:"]),
                             dcc.Dropdown(
-                                className="tab6-sec3-dropdown",
                                 id="tab6-sec3-colorby-dropdown",
                                 options=[
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
                                 value="GHrad",
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
@@ -352,36 +351,49 @@ def section_three_inputs():
                         ],
                         value=[],
                         id="tab6-sec3-time-filter-input",
+                        className="mb-2",
                     ),
                     html.Div(
                         className="container-row full-width justify-center",
                         children=[
-                            html.H6("Month Range"),
-                            dcc.RangeSlider(
-                                id="tab6-sec3-query-month-slider",
-                                min=1,
-                                max=12,
-                                step=1,
-                                value=[1, 12],
-                                marks={1: "1", 12: "12"},
-                                tooltip={"always_visible": False, "placement": "top"},
-                                allowCross=True,
+                            html.H6("Month Range", style={"flex": "30%"}),
+                            html.Div(
+                                dcc.RangeSlider(
+                                    id="tab6-sec3-query-month-slider",
+                                    min=1,
+                                    max=12,
+                                    step=1,
+                                    value=[1, 12],
+                                    marks={1: "1", 12: "12"},
+                                    tooltip={
+                                        "always_visible": False,
+                                        "placement": "top",
+                                    },
+                                    allowCross=True,
+                                ),
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className="container-row full-width justify-center",
                         children=[
-                            html.H6("Hour Range"),
-                            dcc.RangeSlider(
-                                id="tab6-sec3-query-hour-slider",
-                                min=1,
-                                max=24,
-                                step=1,
-                                value=[1, 24],
-                                marks={1: "1", 24: "24"},
-                                tooltip={"always_visible": False, "placement": "top"},
-                                allowCross=True,
+                            html.H6("Hour Range", style={"flex": "30%"}),
+                            html.Div(
+                                dcc.RangeSlider(
+                                    id="tab6-sec3-query-hour-slider",
+                                    min=1,
+                                    max=24,
+                                    step=1,
+                                    value=[1, 24],
+                                    marks={1: "1", 24: "24"},
+                                    tooltip={
+                                        "always_visible": False,
+                                        "placement": "top",
+                                    },
+                                    allowCross=True,
+                                ),
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
@@ -401,49 +413,46 @@ def section_three_inputs():
                         className=container_row_center_full,
                         children=[
                             html.H6(
-                                className="text-next-to-input",
-                                children=["Filter Variable:"],
+                                children=["Filter Variable:"], style={"flex": "30%"}
                             ),
                             dcc.Dropdown(
-                                className="tab6-sec3-dropdown",
                                 id="tab6-sec3-filter-var-dropdown",
                                 options=[
                                     {"label": i, "value": dropdown_names[i]}
                                     for i in dropdown_names
                                 ],
                                 value="RH",
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Min Value:"]
-                            ),
+                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
                             dbc.Input(
                                 className="num-input",
                                 id="tab6-sec3-min-val",
                                 placeholder="Enter a number for the min val",
                                 type="number",
-                                min=0,
                                 step=1,
+                                value=0,
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(
-                                className="text-next-to-input", children=["Max Value:"]
-                            ),
+                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
                             dbc.Input(
                                 className="num-input",
                                 id="tab6-sec3-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
-                                min=0,
+                                value=100,
                                 step=1,
+                                style={"flex": "70%"},
                             ),
                         ],
                     ),

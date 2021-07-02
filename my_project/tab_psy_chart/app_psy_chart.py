@@ -31,7 +31,6 @@ def inputs():
                         className=container_row_center_full,
                         children=[
                             html.H6(
-                                className="text-next-to-input",
                                 children=["Color By:"],
                                 style={"flex": "30%"},
                             ),
@@ -150,7 +149,6 @@ def inputs():
                         children=[
                             html.H6(children=["Max Value:"], style={"flex": "30%"}),
                             dbc.Input(
-                                className="num-input",
                                 id="psy-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
