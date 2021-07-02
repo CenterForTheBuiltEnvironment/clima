@@ -66,4 +66,4 @@ def render_content(tab):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, host="0.0.0.0", port=8080, processes=1, threaded=True)
+    app.run_server(debug=False, host="0.0.0.0", port=8080, processes=1, threaded=True)
