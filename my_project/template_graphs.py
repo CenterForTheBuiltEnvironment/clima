@@ -27,6 +27,11 @@ def violin(df, var, global_local):
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
 
+    if global_local != "global":
+        data_max = 5 * ceil(df[var].max() / 5)
+        data_min = 5 * floor(df[var].min() / 5)
+        var_range = [data_min, data_max]
+
     fig = go.Figure()
     fig.add_trace(
         go.Violin(
