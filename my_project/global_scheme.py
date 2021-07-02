@@ -265,7 +265,6 @@ tab4_dropdown_names = {
 }
 
 dropdown_names = {
-    # fixme this is shared between two tabs (psy and explorer) and maybe we should not do this
     "Dry bulb temperature": "DBT",
     "Dew point temperature": "DPT",
     "Relative humidity": "RH",

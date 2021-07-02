@@ -347,7 +347,6 @@ def layout_wind():
                     id_button="annual-rose-chart",
                 ),
             ),
-            # todo center this chart
             dcc.Loading(
                 type="circle",
                 children=[

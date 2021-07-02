@@ -37,8 +37,7 @@ def layout_select():
                 children=dbc.Button(
                     [
                         "Drag and Drop or ",
-                        html.A("Select Files"),
-                        " your EPW file",
+                        html.A("Select an EPW file from your computer"),
                     ],
                     id="upload-data-button",
                     outline=True,
@@ -134,7 +133,6 @@ def submitted_data(
         df, meta = create_df(lines, url_store)
         # fixme: DeprecationWarning: an integer is required (got type float).
         df = df.to_json(date_format="iso", orient="split")
-        # todo I should update the input value with the last entered
         return (
             df,
             meta,
@@ -239,7 +237,6 @@ def enable_tabs_when_data_is_loaded(data, meta):
 )
 def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_open):
     """display the modal to the user and check if he wants to use that file"""
-    # fixme split in two one that opens the modal and one that handles the modal answer
     if click_map:
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][0]

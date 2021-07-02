@@ -126,7 +126,6 @@ def create_df(lst, file_name):
         epw_df[col] = epw_df[col].astype(int)
 
     # todo optimize
-    # Change to float type
     change_to_float = [
         "DBT",
         "DPT",
