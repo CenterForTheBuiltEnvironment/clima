@@ -3,6 +3,21 @@
 
 ---
 
+### Version 0.3.0 (2021-0/-02)
+
+Fix:
+
+- issues in psychrometric chart tab
+- changed Flask cache type
+
+Features:
+
+- added more links to EPW files ([source](http://climate.onebuilding.org/))
+- improved layout wind tab
+- changed order tabs
+- added month name in yearly chart
+- set local range as the default one
+
 ### Version 0.2.1 (2021-06-23)
 
 Fix:
