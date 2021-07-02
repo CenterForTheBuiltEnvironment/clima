@@ -152,15 +152,11 @@ def yearly_profile(df, var, global_local):
         hovertemplate=(
             "Max: %{y:.2f} "
             + var_unit
-            + "<br>"
-            + "Min: %{base:.2f} "
+            + "<br>Min: %{base:.2f} "
             + var_unit
-            + "<br>"
-            + "<b>Ave : %{customdata[0]:.2f} "
+            + "<br><b>Ave : %{customdata[0]:.2f} "
             + var_unit
-            + "</b><br>"
-            + "Month: %{customdata[1]}<br>"
-            + "Day: %{customdata[2]}<br>"
+            + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
         ),
     )
 
@@ -178,9 +174,7 @@ def yearly_profile(df, var, global_local):
         hovertemplate=(
             "<b>Ave : %{customdata[0]:.2f} "
             + var_unit
-            + "</b><br>"
-            + "Month: %{customdata[1]}<br>"
-            + "Day: %{customdata[2]}<br>"
+            + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
         ),
     )
 
@@ -338,9 +332,7 @@ def daily_profile(df, var, global_local):
                     + var
                     + ": %{y:.2f} "
                     + var_unit
-                    + "</b><br>"
-                    + "Month: %{customdata}<br>"
-                    + "Hour: %{x}:00<br>"
+                    + "</b><br>Month: %{customdata}<br>Hour: %{x}:00<br>"
                 ),
             ),
             row=1,
@@ -357,12 +349,7 @@ def daily_profile(df, var, global_local):
                 name=None,
                 showlegend=False,
                 hovertemplate=(
-                    "<b>"
-                    + var
-                    + ": %{y:.2f} "
-                    + var_unit
-                    + "</b><br>"
-                    + "Hour: %{x}:00<br>"
+                    "<b>" + var + ": %{y:.2f} " + var_unit + "</b><br>Hour: %{x}:00<br>"
                 ),
             ),
             row=1,
@@ -410,10 +397,7 @@ def heatmap(df, var, global_local="global"):
                 + var
                 + ": %{z:.2f} "
                 + var_unit
-                + "</b><br>"
-                + "Month: %{customdata[0]}<br>"
-                + "Day: %{customdata[1]}<br>"
-                + "Hour: %{y}:00<br>"
+                + "</b><br>Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour: %{y}:00<br>"
             ),
             name="",
             colorbar=dict(title=var_unit),
