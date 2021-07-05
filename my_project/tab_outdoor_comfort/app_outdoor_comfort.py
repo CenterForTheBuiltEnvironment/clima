@@ -14,20 +14,25 @@ def layout_outdoor_comfort():
         className="container-col",
         children=[
             html.Div(
-                className="container-row full-width align-center justify-center",
+                className="container-row align-center justify-center",
                 children=[
                     html.H3(
-                        className="text-next-to-input", children=["Select a variable: "]
+                        children=["Select a scenario: "],
                     ),
                     dcc.Dropdown(
                         id="tab7-dropdown",
-                        className="dropdown-t-rh",
+                        style={
+                            "width": "25rem",
+                            "marginLeft": "1rem",
+                            "marginRight": "2rem",
+                        },
                         options=[
                             {"label": i, "value": tab7_dropdown[i]}
                             for i in tab7_dropdown
                         ],
                         value="utci_Sun_Wind",
                     ),
+                    html.Div(id="image-selection"),
                 ],
             ),
             html.Div(
@@ -63,6 +68,23 @@ def update_tab_utci_value(var, ts, global_local, df):
     df = pd.read_json(df, orient="split")
     utci_heatmap = heatmap(df, var, global_local)
     return utci_heatmap
+
+
+@app.callback(
+    Output("image-selection", "children"),
+    Input("tab7-dropdown", "value"),
+)
+def change_image_based_on_selection(value):
+    if value == "utci_Sun_Wind":
+        source = "./assets/img/sun_and_wind.png"
+    elif value == "utci_Sun_noWind":
+        source = "./assets/img/sun_no_wind.png"
+    elif value == "utci_noSun_Wind":
+        source = "./assets/img/no_sun_and_wind.png"
+    else:
+        source = "./assets/img/no_sun_no_wind.png"
+
+    return html.Img(src=source, height=50)
 
 
 @app.callback(

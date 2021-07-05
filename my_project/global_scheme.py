@@ -312,19 +312,13 @@ tab4_explore_dropdown_names = {
 }
 
 tab7_dropdown = {
-    "UTCI: Sun & Wind": "utci_Sun_Wind",
-    "UTCI: no Sun & Wind": "utci_noSun_Wind",
-    "UTCI: Sun & no WInd": "utci_Sun_noWind",
-    "UTCI: no Sun & no Wind": "utci_noSun_noWind",
-    # "UTCI: Sun & Wind : categories":"utci_Sun_Wind_categories",
-    # "UTCI: no Sun & Wind : categories":"utci_noSun_Wind_categories",
-    # "UTCI: Sun & no WInd : categories":"utci_Sun_noWind_categories",
-    # "UTCI: no Sun & no Wind : categories":"utci_noSun_noWind_categories",
+    "Exposed to the sun and the wind": "utci_Sun_Wind",
+    "Exposed to the sun and protected from the wind": "utci_Sun_noWind",
+    "Protected from the sun and exposed to the wind": "utci_noSun_Wind",
+    "Protected from the sun and the wind": "utci_noSun_noWind",
 }
 
-###########################
-### Global Value Ranges ###
-###########################
+# Global Value Ranges
 range_dict = {
     "DOY_range": [0, 365],
     "month_range": [1, 12],
