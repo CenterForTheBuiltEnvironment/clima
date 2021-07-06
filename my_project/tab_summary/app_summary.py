@@ -12,7 +12,7 @@ from my_project.utils import generate_chart_name, title_with_tooltip, code_timer
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
 import requests
-from extract_df import get_data
+from my_project.extract_df import get_data
 
 
 # @code_timer
