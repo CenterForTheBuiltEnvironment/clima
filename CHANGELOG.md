@@ -3,7 +3,21 @@
 
 ---
 
-### Version 0.3.0 (2021-0/-02)
+### Version 0.3.2 (2021-07-06)
+
+Fix:
+
+- meta is now a dictionary
+
+Features:
+
+- user can download both the EPW and the Clima df
+- improved data explorer tab
+- outdoor tab added images
+- violin plots in climate summary now updates as function of range selected
+- discrete color bar UTCI thermal stress
+
+### Version 0.3.0 (2021-07-02)
 
 Fix:
 
