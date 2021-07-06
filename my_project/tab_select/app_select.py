@@ -195,7 +195,7 @@ def submitted_data(
         Output("tab-wind", "disabled"),
         Output("tab-psy-chart", "disabled"),
         Output("tab-data-explorer", "disabled"),
-        Output("tab-outdoor_comfort", "disabled"),
+        Output("tab-outdoor-comfort", "disabled"),
         Output("banner-subtitle", "children"),
     ],
     [Input("df-store", "data")],

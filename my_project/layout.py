@@ -161,9 +161,9 @@ def build_tabs():
                         disabled=True,
                     ),
                     dcc.Tab(
-                        id="tab-outdoor_comfort",
+                        id="tab-outdoor-comfort",
                         label="Outdoor Comfort",
-                        value="tab-outdoor_comfort",
+                        value="tab-outdoor-comfort",
                         className="custom-tab",
                         selected_className="custom-tab--selected",
                         disabled=True,

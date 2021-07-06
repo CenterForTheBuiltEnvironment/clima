@@ -57,7 +57,7 @@ def render_content(tab):
         return layout_wind()
     elif tab == "tab-data-explorer":
         return layout_data_explorer()
-    elif tab == "tab-outdoor_comfort":
+    elif tab == "tab-outdoor-comfort":
         return layout_outdoor_comfort()
     elif tab == "tab-psy-chart":
         return layout_psy_chart()
