@@ -36,6 +36,40 @@ def layout_natural_ventilation():
                 ),
                 type="circle",
             ),
+            html.Div(
+                className="container-row align-center justify-center",
+                children=[
+                    dbc.Checklist(
+                        options=[
+                            {"label": "", "value": 1},
+                        ],
+                        value=[1],
+                        id="switches-input",
+                        switch=True,
+                        style={
+                            "padding": "1rem",
+                            "marginTop": "1rem",
+                            "marginRight": "-2rem",
+                        },
+                    ),
+                    html.Div(
+                        children=title_with_tooltip(
+                            text="Normalize data",
+                            tooltip_text="If normalized is enabled it calculates the % "
+                            "time otherwise it calculates the total number of hours",
+                            id_button="nv_normalize",
+                        ),
+                    ),
+                ],
+            ),
+            dcc.Loading(
+                dcc.Graph(
+                    id="nv-bar-chart",
+                    config=fig_config,
+                    style={"marginTop": "1rem"},
+                ),
+                type="circle",
+            ),
         ],
     )
 
@@ -191,7 +225,7 @@ def inputs_tab():
         State("nv-dpt-max-val", "value"),
     ],
 )
-# @cache.memoize(timeout=TIMEOUT)
+@cache.memoize(timeout=TIMEOUT)
 def nv_heatmap(
     time_filter,
     dbt_data_filter,
@@ -262,8 +296,8 @@ def nv_heatmap(
 
     if time_filter:
         title += (
-            f" between the months of {month_lst[start_month - 1]} and "
-            f"{month_lst[end_month - 1]} and between<br>the hours {start_hour}"
+            f" between the months of<br>{month_lst[start_month - 1]} and "
+            f"{month_lst[end_month - 1]} and betweenthe hours {start_hour}"
             f":00 and {end_hour}:00"
         )
     if dpt_data_filter:
@@ -320,5 +354,169 @@ def nv_heatmap(
         mirror=True,
         title_text="hours of the day",
     )
+
+    return fig
+
+
+@app.callback(
+    Output("nv-bar-chart", "figure"),
+    [
+        Input("nv-month-hour-filter", "n_clicks"),
+        Input("nv-dbt-filter", "n_clicks"),
+        Input("nv-dpt-filter", "n_clicks"),
+        Input("switches-input", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("nv-month-slider", "value"),
+        State("nv-hour-slider", "value"),
+        State("nv-tdb-min-val", "value"),
+        State("nv-tdb-max-val", "value"),
+        State("nv-dpt-max-val", "value"),
+    ],
+)
+# @cache.memoize(timeout=TIMEOUT)
+def nv_bar_chart(
+    time_filter,
+    dbt_data_filter,
+    dpt_data_filter,
+    toggle,
+    df,
+    month,
+    hour,
+    min_dbt_val,
+    max_dbt_val,
+    max_dpt_val,
+):
+    df = pd.read_json(df, orient="split")
+
+    start_month, end_month = month
+    start_hour, end_hour = hour
+
+    var = "DBT"
+    filter_var = "DPT"
+
+    var_unit = str(var) + "_unit"
+    var_unit = unit_dict[var_unit]
+
+    filter_unit = str(filter_var) + "_unit"
+    filter_unit = unit_dict[filter_unit]
+
+    var_name = str(var) + "_name"
+    var_name = name_dict[var_name]
+
+    filter_name = str(filter_var) + "_name"
+    filter_name = name_dict[filter_name]
+
+    color_in = "dodgerblue"
+
+    df["nv_allowed"] = 1
+
+    if time_filter:
+        if start_month <= end_month:
+            df.loc[
+                (df["month"] < start_month) | (df["month"] > end_month), "nv_allowed"
+            ] = 0
+        else:
+            df.loc[
+                (df["month"] >= end_month) & (df["month"] <= start_month), "nv_allowed"
+            ] = 0
+
+        if start_hour <= end_hour:
+            df.loc[
+                (df["hour"] < start_hour) | (df["hour"] > end_hour), "nv_allowed"
+            ] = 0
+        else:
+            df.loc[
+                (df["hour"] >= end_hour) & (df["hour"] <= start_hour), "nv_allowed"
+            ] = 0
+
+    # this should be the total after filtering by time
+    tot_month_hours = df.groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
+
+    if dbt_data_filter and (min_dbt_val <= max_dbt_val):
+        df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), "nv_allowed"] = 0
+
+    if dpt_data_filter:
+        df.loc[
+            (df[filter_var] < -200) | (df[filter_var] > max_dpt_val), "nv_allowed"
+        ] = 0
+
+    n_hours_nv_allowed = (
+        df.dropna().groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
+    )
+
+    per_time_nv_allowed = np.round(100 * (n_hours_nv_allowed / tot_month_hours))
+
+    if len(toggle) == 0:
+        fig = go.Figure(
+            go.Bar(
+                x=df["month_names"].unique(),
+                y=n_hours_nv_allowed,
+                name="",
+                marker_color=color_in,
+                customdata=np.stack((n_hours_nv_allowed, per_time_nv_allowed), axis=-1),
+                hovertemplate=(
+                    "natural ventilation possible for: <br>%{customdata[0]} hrs or <br>%{"
+                    "customdata[1]}% of selected time<br>"
+                ),
+            )
+        )
+
+        title = (
+            f"Number of hours the {var_name}"
+            + f" is in the range {min_dbt_val}"
+            + f" to "
+            + f" {max_dbt_val} {var_unit}"
+        )
+        fig.update_yaxes(title_text="hours")
+
+    else:
+        trace1 = go.Bar(
+            x=df["month_names"].unique(),
+            y=per_time_nv_allowed,
+            name="",
+            marker_color=color_in,
+            customdata=np.stack((n_hours_nv_allowed, per_time_nv_allowed), axis=-1),
+            hovertemplate=(
+                "natural ventilation possible for: <br>%{customdata[0]} hrs or <br>%{"
+                "customdata[1]}% of selected time<br>"
+            ),
+        )
+
+        fig = go.Figure(data=trace1)
+
+        title = (
+            f"Percentage of hours the {var_name}"
+            + f" is in the range {min_dbt_val}"
+            + f" to {max_dbt_val}"
+            + f" {var_unit}"
+        )
+        fig.update_yaxes(title_text="% percent")
+
+    if time_filter:
+        title += (
+            f" between the months of {month_lst[start_month - 1]} and "
+            f"{month_lst[end_month - 1]} and between<br>the hours {start_hour}"
+            f":00 and {end_hour}:00"
+        )
+    if dpt_data_filter:
+        title += f" when the {filter_name} is below {max_dpt_val} {filter_unit}."
+
+    fig.update_layout(
+        template=template,
+        title=title,
+        barnorm="",
+        dragmode=False,
+        margin=tight_margins.copy().update({"t": 55}),
+    )
+
+    fig.update_xaxes(
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
+    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
     return fig
