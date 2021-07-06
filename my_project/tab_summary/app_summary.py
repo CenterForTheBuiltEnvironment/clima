@@ -12,6 +12,7 @@ from my_project.utils import generate_chart_name, title_with_tooltip, code_timer
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
 import requests
+from extract_df import get_data
 
 
 # @code_timer
@@ -45,19 +46,33 @@ def layout_summary():
                     ),
                     html.Div(
                         children=title_with_tooltip(
-                            text="Download Clima Dataframe",
+                            text="Download",
                             id_button="download-button-label",
-                            tooltip_text="Use the following button to download the Clima sourcefile",
+                            tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
                         ),
                     ),
-                    dbc.Button(
-                        "Download",
-                        color="primary",
-                        className="ml-4",
-                        id="download-button",
-                        style={"width": "12rem"},
+                    dcc.Loading(
+                        className="container-row",
+                        type="circle",
+                        children=[
+                            dbc.Button(
+                                "Download Clima dataframe",
+                                color="primary",
+                                className="ml-4",
+                                id="download-button",
+                                style={"width": "20rem"},
+                            ),
+                            dcc.Download(id="download-dataframe-csv"),
+                            dbc.Button(
+                                "Download EPW",
+                                color="primary",
+                                className="ml-4",
+                                id="download-epw-button",
+                                style={"width": "20rem"},
+                            ),
+                            dcc.Download(id="download-epw"),
+                        ],
                     ),
-                    dcc.Download(id="download-dataframe-csv"),
                     html.Div(
                         children=title_with_tooltip(
                             text="Heating and Cooling Degree Days",
@@ -372,13 +387,32 @@ def update_tab_gh_rad(global_local, df, meta):
     prevent_initial_call=True,
 )
 # @code_timer
-def download_epw_file(n_clicks, df, meta):
+def download_clima_dataframe(n_clicks, df, meta):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
         df = pd.read_json(df, orient="split")
         return dcc.send_data_frame(
-            df.to_csv, f"df_{meta['city']}_{meta['country']}_EPW.csv"
+            df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima.csv"
         )
     else:
         print("df not loaded yet")
+
+
+@app.callback(
+    Output("download-epw", "data"),
+    Input("download-epw-button", "n_clicks"),
+    [State("meta-store", "data")],
+    prevent_initial_call=True,
+)
+# @code_timer
+def download_clima_dataframe(n_clicks, meta):
+    if n_clicks is None:
+        raise PreventUpdate
+    elif meta is not None:
+        lines = get_data(meta["url"])
+        return dict(
+            content="\n".join(lines), filename=f"{meta['city']}_{meta['country']}.epw"
+        )
+    else:
+        raise PreventUpdate
