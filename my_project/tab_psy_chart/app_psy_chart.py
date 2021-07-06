@@ -14,9 +14,11 @@ import pandas as pd
 from app import app, cache, TIMEOUT
 from my_project.tab_psy_chart.charts_psy_chart import psych_chart
 
-psy_dropdown_names = dropdown_names.copy()
-psy_dropdown_names["Frequency"] = "Frequency"
-psy_dropdown_names["None"] = "None"
+psy_dropdown_names = {
+    "None": "None",
+    "Frequency": "Frequency",
+}
+psy_dropdown_names.update(dropdown_names.copy())
 
 
 def inputs():
