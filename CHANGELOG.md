@@ -3,6 +3,12 @@
 
 ---
 
+### Version 0.4.0 (2021-07-06)
+
+Features:
+
+- created natural ventilation tab
+
 ### Version 0.3.2 (2021-07-06)
 
 Fix:
