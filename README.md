@@ -1,6 +1,6 @@
 # Clima Tool
 
-The tool displays data contained in EPW files
+The tool displays data contained in EPW files. You can access the tool via [this link](https://clima-oiook3g2yq-uc.a.run.app/). Alternatively you can access the Beta version using [this link](https://clima-7sr4nnlw7a-uc.a.run.app)
 
 ## Getting Started
 
@@ -80,7 +80,7 @@ I have set-up continuous deployment with GitHub actions. Each time a new version
 ```
 gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 
-gcloud run deploy --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated
+gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated --region=us-central1
 ```
 
 
