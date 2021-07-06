@@ -6,6 +6,7 @@ import json
 from pandas import json_normalize
 import dash_html_components as html
 import dash_bootstrap_components as dbc
+import plotly.express as px
 
 
 def code_timer(func):
@@ -35,21 +36,37 @@ def generate_chart_name(tab_name, meta=None):
 
 
 def plot_location_epw_files():
+    with open("./assets/data/epw_location.json") as data_file:
+        data = json.load(data_file)
+
+    df = json_normalize(data["features"])
+    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
+    df["lat"] += 0.005
+    df["lat"] += 0.005
 
     df_one_building = pd.read_csv("./assets/data/one_building.csv")
 
-    import plotly.express as px
-
+    fig2 = px.scatter_mapbox(
+        df.head(2585),
+        lat="lat",
+        lon="lon",
+        hover_name="properties.title",
+        color_discrete_sequence=["#3a0ca3"],
+        hover_data=["properties.epw"],
+        zoom=2,
+        height=500,
+    )
     fig = px.scatter_mapbox(
         df_one_building,
         lat="lat",
         lon="lon",
         hover_name="name",
-        color_discrete_sequence=["blue"],
+        color_discrete_sequence=["#4895ef"],
         hover_data=["Source"],
         zoom=2,
         height=500,
     )
+    fig.add_trace(fig2.data[0])
     fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
