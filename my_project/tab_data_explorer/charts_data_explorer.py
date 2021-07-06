@@ -88,25 +88,13 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
     title = var_name + " (" + var_unit + ")"
     if time_filter:
         title += (
-            "<br>between the months of "
-            + month_lst[start_month - 1]
-            + " and "
-            + month_lst[end_month - 1]
-            + " and between the hours "
-            + str(start_hour)
-            + ":00 and "
-            + str(end_hour)
-            + ":00"
+            f" between the months of {month_lst[start_month - 1]} and "
+            f"{month_lst[end_month - 1]} and between the hours {start_hour}"
+            f":00 and {end_hour}:00"
         )
     if data_filter:
         title += (
-            "<br>when the "
-            + filter_name
-            + " is between "
-            + str(min_val)
-            + " and "
-            + str(max_val)
-            + filter_unit
+            f" when the {filter_name} is between {min_val} and {max_val} {filter_unit}"
         )
 
     fig = go.Figure(

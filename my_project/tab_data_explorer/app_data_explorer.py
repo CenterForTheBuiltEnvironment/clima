@@ -131,13 +131,12 @@ def section_two_inputs():
                     html.Div(
                         className=container_col_center_one_of_three,
                         children=[
-                            dbc.Checklist(
-                                options=[
-                                    {"label": "Apply Time Filters", "value": "time"},
-                                ],
-                                value=[],
+                            dbc.Button(
+                                "Apply month and hour filter",
+                                color="primary",
                                 id="sec2-time-filter-input",
                                 className="mb-2",
+                                n_clicks=0,
                             ),
                             html.Div(
                                 className="container-row full-width justify-center mt-2",
@@ -188,12 +187,12 @@ def section_two_inputs():
                     html.Div(
                         className=container_col_center_one_of_three,
                         children=[
-                            dbc.Checklist(
-                                options=[
-                                    {"label": "Apply Data Filters", "value": "data"},
-                                ],
-                                value=[],
+                            dbc.Button(
+                                "Apply filter",
+                                color="primary",
                                 id="sec2-data-filter-input",
+                                className="mb-2",
+                                n_clicks=0,
                             ),
                             html.Div(
                                 className=container_row_center_full,
@@ -556,34 +555,35 @@ def update_tab_heatmap(var, global_local, df):
     ],
     [
         Input("sec2-var-dropdown", "value"),
-        Input("sec2-time-filter-input", "value"),
-        Input("sec2-month-slider", "value"),
-        Input("sec2-hour-slider", "value"),
-        Input("sec2-data-filter-input", "value"),
-        Input("sec2-data-filter-var", "value"),
-        Input("sec2-min-val", "value"),
-        Input("sec2-max-val", "value"),
+        Input("sec2-time-filter-input", "n_clicks"),
+        Input("sec2-data-filter-input", "n_clicks"),
         Input("normalize", "value"),
         Input("global-local-radio-input", "value"),
     ],
     # General
-    [State("df-store", "data")],
+    [
+        State("df-store", "data"),
+        State("sec2-month-slider", "value"),
+        State("sec2-hour-slider", "value"),
+        State("sec2-data-filter-var", "value"),
+        State("sec2-min-val", "value"),
+        State("sec2-max-val", "value"),
+    ],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_six_two(
     var,
     time_filter,
-    month,
-    hour,
     data_filter,
-    filter_var,
-    min_val,
-    max_val,
     normalize,
     global_local,
     df,
+    month,
+    hour,
+    filter_var,
+    min_val,
+    max_val,
 ):
-    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
