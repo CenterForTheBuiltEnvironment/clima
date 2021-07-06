@@ -344,13 +344,12 @@ def section_three_inputs():
             html.Div(
                 className=container_col_center_one_of_three,
                 children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "Apply Time Filters", "value": "time"},
-                        ],
-                        value=[],
+                    dbc.Button(
+                        "Apply month and hour filter",
+                        color="primary",
                         id="tab6-sec3-time-filter-input",
                         className="mb-2",
+                        n_clicks=0,
                     ),
                     html.Div(
                         className="container-row full-width justify-center",
@@ -401,12 +400,12 @@ def section_three_inputs():
             html.Div(
                 className=container_col_center_one_of_three,
                 children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "Apply Data Filters", "value": "data"},
-                        ],
-                        value=[],
+                    dbc.Button(
+                        "Apply filter",
+                        color="primary",
                         id="tab6-sec3-data-filter-input",
+                        className="mb-2",
+                        n_clicks=0,
                     ),
                     html.Div(
                         className=container_row_center_full,
@@ -607,16 +606,18 @@ def update_tab_six_two(
         Input("tab6-sec3-var-x-dropdown", "value"),
         Input("tab6-sec3-var-y-dropdown", "value"),
         Input("tab6-sec3-colorby-dropdown", "value"),
-        Input("tab6-sec3-time-filter-input", "value"),
-        Input("tab6-sec3-query-month-slider", "value"),
-        Input("tab6-sec3-query-hour-slider", "value"),
-        Input("tab6-sec3-data-filter-input", "value"),
-        Input("tab6-sec3-filter-var-dropdown", "value"),
-        Input("tab6-sec3-min-val", "value"),
-        Input("tab6-sec3-max-val", "value"),
+        Input("tab6-sec3-time-filter-input", "n_clicks"),
+        Input("tab6-sec3-data-filter-input", "n_clicks"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [
+        State("df-store", "data"),
+        State("tab6-sec3-query-month-slider", "value"),
+        State("tab6-sec3-query-hour-slider", "value"),
+        State("tab6-sec3-filter-var-dropdown", "value"),
+        State("tab6-sec3-min-val", "value"),
+        State("tab6-sec3-max-val", "value"),
+    ],
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_six_three(
@@ -624,14 +625,14 @@ def update_tab_six_three(
     var_y,
     color_by,
     time_filter,
+    data_filter,
+    global_local,
+    df,
     month,
     hour,
-    data_filter,
     data_filter_var,
     min_val,
     max_val,
-    global_local,
-    df,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     # todo: dont allow to input if apply filter not checked
@@ -643,9 +644,7 @@ def update_tab_six_three(
     if data_filter and (min_val is None or max_val is None):
         raise PreventUpdate
     else:
-        two = two_var_graph(
-            df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
-        )
+        two = two_var_graph(df, var_x, var_y)
         three = three_var_graph(
             df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
         )

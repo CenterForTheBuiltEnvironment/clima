@@ -181,7 +181,6 @@ def layout_psy_chart():
 # TAB NINE: PYSCHROMETRIC CHART
 @app.callback(
     Output("psych-chart", "figure"),
-    # Sec1 Inputs
     [
         Input("psy-color-by-dropdown", "value"),
         Input("month-hour-filter", "n_clicks"),

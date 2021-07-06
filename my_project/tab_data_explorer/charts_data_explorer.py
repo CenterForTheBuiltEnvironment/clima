@@ -135,7 +135,7 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
 
 
 def three_var_graph(
-    df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3
+    df, global_local, var_x, var_y, color_by, time_filter_info3, data_filter_info3
 ):
     """Return the custom graph plotting three variables."""
     time_filter = time_filter_info3[0]
@@ -148,7 +148,7 @@ def three_var_graph(
     min_val = data_filter_info3[2]
     max_val = data_filter_info3[3]
 
-    var = colorby
+    var = color_by
     var_range = range_dict[str(var) + "_range"]
     var_color = color_dict[str(var) + "_color"]
 
@@ -177,13 +177,19 @@ def three_var_graph(
         else:
             df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] = None
 
-    title = var_x + " vs " + var_y + " colored by " + colorby
+    title = (
+        name_dict[f"{var_x}_name"]
+        + " vs "
+        + name_dict[f"{var_y}_name"]
+        + " colored by "
+        + name_dict[f"{color_by}_name"]
+    )
 
     fig = px.scatter(
         df,
         x=var_x,
         y=var_y,
-        color=colorby,
+        color=color_by,
         color_continuous_scale=color_scale,
         opacity=0.4,
         range_color=var_range,
@@ -201,45 +207,14 @@ def three_var_graph(
     return fig
 
 
-def two_var_graph(
-    df, global_local, var_x, var_y, colorby, time_filter_info3, data_filter_info3
-):
-    """Return the custom graph plotting two variables."""
-    # time_filter = time_filter_info3[0]
-    # start_month = time_filter_info3[1][0]
-    # end_month = time_filter_info3[1][1]
-    # start_hour = time_filter_info3[2][0]
-    # end_hour = time_filter_info3[2][1]
-    # data_filter = data_filter_info3[0]
-    # filter_var = data_filter_info3[1]
-    # min_val = data_filter_info3[2]
-    # max_val = data_filter_info3[3]
+def two_var_graph(df, var_x, var_y):
 
-    # var_unit = str(colorby) + "_unit"
-    # var_unit = unit_dict[var_unit]
-    # var_range = str(colorby) + "_range"
-    # var_range = range_dict[var_range]
-    # var_name = str(colorby) + "_name"
-    # var_name = name_dict[var_name]
-    # var_color = str(colorby) + "_color"
-    # var_color = color_dict[var_color]
-
-    title = "Simultaneous frequency of " + var_x + " and " + var_y
-    # if time_filter:
-    #     if start_month <= end_month:
-    #         df.loc[(df["month"] < start_month) | (df["month"] > end_month)]
-    #     else:
-    #         df.loc[(df["month"] >= end_month) & (df["month"] <= start_month)]
-    #
-    #     if start_hour <= end_hour:
-    #         df.loc[(df["hour"] < start_hour) | (df["hour"] > end_hour)]
-    #     else:
-    #         df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour)]
-    # if data_filter:
-    #     if min_val <= max_val:
-    #         df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)]
-    #     else:
-    #         df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)]
+    title = (
+        "Simultaneous frequency of "
+        + name_dict[f"{var_x}_name"]
+        + " and  "
+        + name_dict[f"{var_y}_name"]
+    )
 
     fig = px.density_heatmap(
         df,
