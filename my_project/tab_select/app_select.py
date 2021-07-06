@@ -196,6 +196,7 @@ def submitted_data(
         Output("tab-psy-chart", "disabled"),
         Output("tab-data-explorer", "disabled"),
         Output("tab-outdoor-comfort", "disabled"),
+        Output("tab-natural-ventilation", "disabled"),
         Output("banner-subtitle", "children"),
     ],
     [Input("df-store", "data")],
@@ -213,10 +214,12 @@ def enable_tabs_when_data_is_loaded(data, meta):
             True,
             True,
             True,
+            True,
             default,
         )
     else:
         return (
+            False,
             False,
             False,
             False,

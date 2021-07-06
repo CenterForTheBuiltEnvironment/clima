@@ -11,6 +11,9 @@ from my_project.tab_data_explorer.app_data_explorer import layout_data_explorer
 from my_project.tab_outdoor_comfort.app_outdoor_comfort import layout_outdoor_comfort
 from my_project.tab_t_rh.app_t_rh import layout_t_rh
 from my_project.tab_psy_chart.app_psy_chart import layout_psy_chart
+from my_project.tab_natural_ventilation.app_natural_ventilation import (
+    layout_natural_ventilation,
+)
 from my_project.tab_summary.app_summary import layout_summary
 from my_project.page_changelog.app_changelog import changelog
 
@@ -59,6 +62,8 @@ def render_content(tab):
         return layout_data_explorer()
     elif tab == "tab-outdoor-comfort":
         return layout_outdoor_comfort()
+    elif tab == "tab-natural-ventilation":
+        return layout_natural_ventilation()
     elif tab == "tab-psy-chart":
         return layout_psy_chart()
     else:

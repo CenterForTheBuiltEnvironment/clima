@@ -169,6 +169,14 @@ def build_tabs():
                         disabled=True,
                     ),
                     dcc.Tab(
+                        id="tab-natural-ventilation",
+                        label="Natural Ventilation",
+                        value="tab-natural-ventilation",
+                        className="custom-tab",
+                        selected_className="custom-tab--selected",
+                        disabled=True,
+                    ),
+                    dcc.Tab(
                         id="tab-data-explorer",
                         label="Data Explorer",
                         value="tab-data-explorer",
