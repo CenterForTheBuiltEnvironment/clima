@@ -1,6 +1,6 @@
 # Clima Tool
 
-The tool displays data contained in EPW files. You can access the tool via [this link](https://clima-oiook3g2yq-uc.a.run.app/). Alternatively you can access the Beta version using [this link](https://clima-7sr4nnlw7a-uc.a.run.app)
+The tool displays data contained in EPW files. You can access the tool via [this link](https://clima-oiook3g2yq-uc.a.run.app/). Alternatively you can access the Beta version using [this link](https://clima-7sr4nnlw7a-uc.a.run.app).
 
 ## Getting Started
 
