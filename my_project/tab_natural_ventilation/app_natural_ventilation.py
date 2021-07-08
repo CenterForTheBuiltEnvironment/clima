@@ -493,7 +493,7 @@ def nv_bar_chart(
             + f" to "
             + f" {max_dbt_val} {var_unit}"
         )
-        fig.update_yaxes(title_text="hours")
+        fig.update_yaxes(title_text="hours", range=[0, 744])
 
     else:
         trace1 = go.Bar(
@@ -516,7 +516,7 @@ def nv_bar_chart(
             + f" to {max_dbt_val}"
             + f" {var_unit}"
         )
-        fig.update_yaxes(title_text="% percent")
+        fig.update_yaxes(title_text="% percent", range=[0, 100])
 
     if time_filter:
         title += (
