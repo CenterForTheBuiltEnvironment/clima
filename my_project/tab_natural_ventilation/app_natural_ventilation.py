@@ -379,6 +379,7 @@ def nv_heatmap(
 @app.callback(
     Output("nv-bar-chart", "figure"),
     [
+        Input("enable-condensation", "value"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
@@ -395,10 +396,11 @@ def nv_heatmap(
 )
 # @cache.memoize(timeout=TIMEOUT)
 def nv_bar_chart(
+    state_checklist,
     time_filter,
     dbt_data_filter,
-    dpt_data_filter,
-    toggle,
+    click_dpt_filter,
+    normalize,
     df,
     month,
     hour,
@@ -406,6 +408,12 @@ def nv_bar_chart(
     max_dbt_val,
     max_dpt_val,
 ):
+    # enable or disable button apply filter DPT
+    if len(state_checklist) == 1:
+        dpt_data_filter = True
+    else:
+        dpt_data_filter = False
+
     df = pd.read_json(df, orient="split")
 
     start_month, end_month = month
@@ -464,7 +472,7 @@ def nv_bar_chart(
 
     per_time_nv_allowed = np.round(100 * (n_hours_nv_allowed / tot_month_hours))
 
-    if len(toggle) == 0:
+    if len(normalize) == 0:
         fig = go.Figure(
             go.Bar(
                 x=df["month_names"].unique(),
