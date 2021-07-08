@@ -267,25 +267,23 @@ def nv_heatmap(
     filter_var = "DPT"
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
-        df[(df[var] < min_dbt_val) | (df[var] > max_dbt_val)] = None
+        df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), var] = None
 
     if dpt_data_filter:
-        df[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val)] = None
+        df.loc[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val), var] = None
 
     if time_filter:
         if start_month <= end_month:
-            mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[mask] = None
+            df.loc[(df["month"] < start_month) | (df["month"] > end_month), var] = None
         else:
-            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[mask] = None
+            df.loc[
+                (df["month"] >= end_month) & (df["month"] <= start_month), var
+            ] = None
 
         if start_hour <= end_hour:
-            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[mask] = None
+            df.loc[(df["hour"] < start_hour) | (df["hour"] > end_hour), var] = None
         else:
-            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[mask] = None
+            df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
 
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
@@ -458,9 +456,7 @@ def nv_bar_chart(
         df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), "nv_allowed"] = 0
 
     if dpt_data_filter:
-        df.loc[
-            (df[filter_var] < -200) | (df[filter_var] > max_dpt_val), "nv_allowed"
-        ] = 0
+        df.loc[(df[filter_var] > max_dpt_val), "nv_allowed"] = 0
 
     n_hours_nv_allowed = (
         df.dropna().groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
