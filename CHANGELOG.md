@@ -3,6 +3,19 @@
 
 ---
 
+### Version 0.4.1 (2021-07-08)
+
+Fix:
+
+- issue with natural ventilation heatmap chart
+- title heatmap natural ventilation tab
+
+Features:
+
+- added checkbox in apply filter dew point temperature
+- changed order outdoor and natural ventilation tab
+- natural ventilation tab charts have now a constant y range
+
 ### Version 0.4.0 (2021-07-06)
 
 Features:
