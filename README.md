@@ -83,7 +83,6 @@ gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated --region=us-central1
 ```
 
-
-## Build with
+## Built with
 * [Dash](https://plotly.com/dash/) - Framework for building the web app
 * [Plotly Python](https://plotly.com/python/) - Used to create the interactive plots 
