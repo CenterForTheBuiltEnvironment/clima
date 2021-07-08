@@ -184,21 +184,32 @@ def inputs_tab():
                         id="nv-dpt-filter",
                         className="mb-2",
                         n_clicks=0,
+                        disabled=True,
                     ),
-                    html.H6(
-                        "Include condensation risk by specifying below the dew-point temperature (to be used only if radiant systems are present)."
+                    dbc.Checklist(
+                        options=[
+                            {
+                                "label": "Include condensation risk by specifying below the dew-point temperature (to be used only if radiant systems are present).",
+                                "value": 1,
+                            },
+                        ],
+                        value=[],
+                        id="enable-condensation",
                     ),
                     html.Div(
                         className=container_row_center_full,
                         children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
+                            html.H6(
+                                children=["Condensation risk:"],
+                                style={"marginRight": "1rem"},
+                            ),
                             dbc.Input(
                                 id="nv-dpt-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
                                 value=16,
                                 step=1,
-                                style={"flex": "70%"},
+                                style={"flex": "1"},
                             ),
                         ],
                     ),
@@ -211,6 +222,7 @@ def inputs_tab():
 @app.callback(
     Output("nv-heatmap-chart", "figure"),
     [
+        Input("enable-condensation", "value"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
@@ -225,11 +237,12 @@ def inputs_tab():
         State("nv-dpt-max-val", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
+# @cache.memoize(timeout=TIMEOUT)
 def nv_heatmap(
+    state_checklist,
     time_filter,
     dbt_data_filter,
-    dpt_data_filter,
+    click_dpt_filter,
     global_local,
     df,
     month,
@@ -238,6 +251,13 @@ def nv_heatmap(
     max_dbt_val,
     max_dpt_val,
 ):
+
+    # enable or disable button apply filter DPT
+    if len(state_checklist) == 1:
+        dpt_data_filter = True
+    else:
+        dpt_data_filter = False
+
     df = pd.read_json(df, orient="split")
 
     start_month, end_month = month
@@ -520,3 +540,13 @@ def nv_bar_chart(
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
     return fig
+
+
+@app.callback(
+    Output("nv-dpt-filter", "disabled"), Input("enable-condensation", "value")
+)
+def enable_disable_button_data_filter(state_checklist):
+    if len(state_checklist) == 1:
+        return False
+    else:
+        return True
