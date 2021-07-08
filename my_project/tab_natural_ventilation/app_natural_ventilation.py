@@ -292,16 +292,16 @@ def nv_heatmap(
         data_min = 5 * math.floor(df[var].min() / 5)
         range_z = [data_min, data_max]
 
-    title = f"{var_name} ({var_unit})"
+    title = f"Hours when the {var_name} is in the range {min_dbt_val} to {max_dbt_val} {var_unit}"
 
     if time_filter:
         title += (
-            f" between the months of<br>{month_lst[start_month - 1]} and "
-            f"{month_lst[end_month - 1]} and betweenthe hours {start_hour}"
+            f" between the months of {month_lst[start_month - 1]} and "
+            f"{month_lst[end_month - 1]}<br>and between the hours {start_hour}"
             f":00 and {end_hour}:00"
         )
     if dpt_data_filter:
-        title += f" when the {filter_name} is below {max_dpt_val} {filter_unit}."
+        title += f" and when the {filter_name} is below {max_dpt_val} {filter_unit}."
 
     fig = go.Figure(
         data=go.Heatmap(
