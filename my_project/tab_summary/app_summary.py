@@ -56,6 +56,13 @@ def layout_summary():
                         type="circle",
                         children=[
                             dbc.Button(
+                                "Download EPW",
+                                color="primary",
+                                className="ml-4",
+                                id="download-epw-button",
+                                style={"width": "20rem"},
+                            ),
+                            dbc.Button(
                                 "Download Clima dataframe",
                                 color="primary",
                                 className="ml-4",
@@ -63,13 +70,6 @@ def layout_summary():
                                 style={"width": "20rem"},
                             ),
                             dcc.Download(id="download-dataframe-csv"),
-                            dbc.Button(
-                                "Download EPW",
-                                color="primary",
-                                className="ml-4",
-                                id="download-epw-button",
-                                style={"width": "20rem"},
-                            ),
                             dcc.Download(id="download-epw"),
                         ],
                     ),
