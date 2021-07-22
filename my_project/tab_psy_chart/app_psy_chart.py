@@ -62,7 +62,7 @@ def inputs():
                     html.Div(
                         className="container-row full-width justify-center mt-2",
                         children=[
-                            html.H6("Month Range", style={"flex": "30%"}),
+                            html.H6("Month Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
                                     id="psy-month-slider",
@@ -77,14 +77,22 @@ def inputs():
                                     },
                                     allowCross=False,
                                 ),
-                                style={"flex": "70%"},
+                                style={"flex": "50%"},
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {"label": "Invert", "value": "invert"},
+                                ],
+                                value=[],
+                                id="invert-month-psy",
+                                labelStyle={"flex": "30%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className="container-row align-center justify-center",
                         children=[
-                            html.H6("Hour Range", style={"flex": "30%"}),
+                            html.H6("Hour Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
                                     id="psy-hour-slider",
@@ -99,7 +107,15 @@ def inputs():
                                     },
                                     allowCross=False,
                                 ),
-                                style={"flex": "70%"},
+                                style={"flex": "50%"},
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {"label": "Invert", "value": "invert"},
+                                ],
+                                value=[],
+                                id="invert-hour-psy",
+                                labelStyle={"flex": "30%"},
                             ),
                         ],
                     ),
@@ -195,6 +211,8 @@ def layout_psy_chart():
         State("psy-max-val", "value"),
         State("psy-var-dropdown", "value"),
         State("meta-store", "data"),
+        State("invert-month-psy", "value"),
+        State("invert-hour-psy", "value"),
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -210,8 +228,16 @@ def update_psych_chart(
     max_val,
     data_filter_var,
     meta,
+    invert_month,
+    invert_hour,
 ):
     df = pd.read_json(df, orient="split")
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        month = month[::-1]
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        hour = hour[::-1]
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
     return dcc.Graph(

@@ -151,7 +151,7 @@ def inputs_tab():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-month",
+                                id="invert-month-nv",
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -181,7 +181,7 @@ def inputs_tab():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-hour",
+                                id="invert-hour-nv",
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -248,8 +248,8 @@ def inputs_tab():
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
         State("meta-store", "data"),
-        State("invert-month", "value"),
-        State("invert-hour", "value"),
+        State("invert-month-nv", "value"),
+        State("invert-hour-nv", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
@@ -416,8 +416,8 @@ def nv_heatmap(
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
         State("meta-store", "data"),
-        State("invert-month", "value"),
-        State("invert-hour", "value"),
+        State("invert-month-nv", "value"),
+        State("invert-hour-nv", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
