@@ -1,3 +1,4 @@
+import dash_bootstrap_components as dbc
 from math import ceil, floor
 
 import numpy as np
@@ -62,6 +63,9 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
         else:
             mask = (df[filter_var] >= max_val) & (df[filter_var] <= min_val)
             df[var][mask] = None
+
+    if df[var].dropna().shape[0] == 0:
+        return None
 
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
@@ -176,6 +180,9 @@ def three_var_graph(
             df.loc[(df[filter_var] < min_val) | (df[filter_var] > max_val)] = None
         else:
             df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] = None
+
+    if df.dropna().shape[0] == 0:
+        return None
 
     title = (
         name_dict[f"{var_x}_name"]

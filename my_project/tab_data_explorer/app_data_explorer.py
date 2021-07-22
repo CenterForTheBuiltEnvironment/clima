@@ -584,7 +584,22 @@ def update_tab_six_two(
     data_filter_info = [data_filter, filter_var, min_val, max_val]
 
     heat_map = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+
     no_display = {"display": "none"}
+
+    if not heat_map:
+        return (
+            dbc.Alert(
+                "No data is available in this location under these conditions. Please "
+                "either change the month and hour filters, or select a wider range for "
+                "the filter variable",
+                color="danger",
+                style={"text-align": "center", "marginTop": "2rem"},
+            ),
+            no_display,
+            {"data": [], "layout": {}, "frames": []},
+            no_display,
+        )
 
     if data_filter:
         return (
@@ -657,10 +672,22 @@ def update_tab_six_three(
         three = three_var_graph(
             df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
         )
-        return dcc.Graph(
-            config=generate_chart_name("scatter_three_vars_explore", meta),
-            figure=three,
-        ), dcc.Graph(
-            config=generate_chart_name("scatter_two_vars_explore", meta),
-            figure=two,
-        )
+        if not three:
+            return dbc.Alert(
+                "No data is available in this location under these conditions. Please "
+                "either change the month and hour filters, or select a wider range for "
+                "the filter variable",
+                color="danger",
+                style={"text-align": "center", "marginTop": "2rem"},
+            ), dcc.Graph(
+                config=generate_chart_name("scatter_two_vars_explore", meta),
+                figure=two,
+            )
+        else:
+            return dcc.Graph(
+                config=generate_chart_name("scatter_three_vars_explore", meta),
+                figure=three,
+            ), dcc.Graph(
+                config=generate_chart_name("scatter_two_vars_explore", meta),
+                figure=two,
+            )
