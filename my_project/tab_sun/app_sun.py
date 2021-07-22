@@ -1,9 +1,8 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from my_project.global_scheme import (
-    fig_config,
-    tab4_dropdown_names,
-    tab4_explore_dropdown_names,
+    sun_cloud_tab_dropdown_names,
+    sun_cloud_tab_explore_dropdown_names,
     tight_margins,
 )
 from dash.dependencies import Input, Output, State
@@ -63,8 +62,8 @@ def sun_path():
                     dcc.Dropdown(
                         id="custom-sun-var-dropdown",
                         options=[
-                            {"label": i, "value": tab4_dropdown_names[i]}
-                            for i in tab4_dropdown_names
+                            {"label": i, "value": sun_cloud_tab_dropdown_names[i]}
+                            for i in sun_cloud_tab_dropdown_names
                         ],
                         value="None",
                         style={"width": "20rem"},
@@ -110,8 +109,11 @@ def explore_daily_heatmap():
                     dcc.Dropdown(
                         id="tab4-explore-dropdown",
                         options=[
-                            {"label": i, "value": tab4_explore_dropdown_names[i]}
-                            for i in tab4_explore_dropdown_names
+                            {
+                                "label": i,
+                                "value": sun_cloud_tab_explore_dropdown_names[i],
+                            }
+                            for i in sun_cloud_tab_explore_dropdown_names
                         ],
                         value="GHrad",
                         style={"width": "20rem"},

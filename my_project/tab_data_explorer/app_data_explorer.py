@@ -7,6 +7,9 @@ from my_project.utils import generate_chart_name, title_with_tooltip
 from my_project.global_scheme import (
     fig_config,
     dropdown_names,
+    sun_cloud_tab_dropdown_names,
+    more_variables_dropdown,
+    sun_cloud_tab_explore_dropdown_names,
     container_row_center_full,
     container_col_center_one_of_three,
 )
@@ -22,6 +25,12 @@ import pandas as pd
 
 from app import app, cache, TIMEOUT
 
+explore_dropdown_names = {}
+explore_dropdown_names.update(dropdown_names.copy())
+explore_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
+explore_dropdown_names.update(more_variables_dropdown.copy())
+explore_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+
 
 def section_one_inputs():
     """Return the inputs from section one."""
@@ -32,7 +41,8 @@ def section_one_inputs():
             dcc.Dropdown(
                 id="sec1-var-dropdown",
                 options=[
-                    {"label": i, "value": dropdown_names[i]} for i in dropdown_names
+                    {"label": i, "value": explore_dropdown_names[i]}
+                    for i in explore_dropdown_names
                 ],
                 value="DBT",
             ),
@@ -110,8 +120,11 @@ def section_two_inputs():
                                     dcc.Dropdown(
                                         id="sec2-var-dropdown",
                                         options=[
-                                            {"label": i, "value": dropdown_names[i]}
-                                            for i in dropdown_names
+                                            {
+                                                "label": i,
+                                                "value": explore_dropdown_names[i],
+                                            }
+                                            for i in explore_dropdown_names
                                         ],
                                         value="RH",
                                         style={"flex": "70%"},
@@ -212,8 +225,11 @@ def section_two_inputs():
                                     dcc.Dropdown(
                                         id="sec2-data-filter-var",
                                         options=[
-                                            {"label": i, "value": dropdown_names[i]}
-                                            for i in dropdown_names
+                                            {
+                                                "label": i,
+                                                "value": explore_dropdown_names[i],
+                                            }
+                                            for i in explore_dropdown_names
                                         ],
                                         value="RH",
                                         style={"flex": "70%"},
@@ -305,8 +321,8 @@ def section_three_inputs():
                             dcc.Dropdown(
                                 id="tab6-sec3-var-x-dropdown",
                                 options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
+                                    {"label": i, "value": explore_dropdown_names[i]}
+                                    for i in explore_dropdown_names
                                 ],
                                 value="DBT",
                                 style={"flex": "70%"},
@@ -320,8 +336,8 @@ def section_three_inputs():
                             dcc.Dropdown(
                                 id="tab6-sec3-var-y-dropdown",
                                 options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
+                                    {"label": i, "value": explore_dropdown_names[i]}
+                                    for i in explore_dropdown_names
                                 ],
                                 value="RH",
                                 style={"flex": "70%"},
@@ -335,8 +351,8 @@ def section_three_inputs():
                             dcc.Dropdown(
                                 id="tab6-sec3-colorby-dropdown",
                                 options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
+                                    {"label": i, "value": explore_dropdown_names[i]}
+                                    for i in explore_dropdown_names
                                 ],
                                 value="GHrad",
                                 style={"flex": "70%"},
@@ -436,8 +452,8 @@ def section_three_inputs():
                             dcc.Dropdown(
                                 id="tab6-sec3-filter-var-dropdown",
                                 options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
+                                    {"label": i, "value": explore_dropdown_names[i]}
+                                    for i in explore_dropdown_names
                                 ],
                                 value="RH",
                                 style={"flex": "70%"},

@@ -1,6 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import tab7_dropdown
+from my_project.global_scheme import outdoor_dropdown_names
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap
 import pandas as pd
@@ -27,8 +27,8 @@ def layout_outdoor_comfort():
                             "marginRight": "2rem",
                         },
                         options=[
-                            {"label": i, "value": tab7_dropdown[i]}
-                            for i in tab7_dropdown
+                            {"label": i, "value": outdoor_dropdown_names[i]}
+                            for i in outdoor_dropdown_names
                         ],
                         value="utci_Sun_Wind",
                     ),

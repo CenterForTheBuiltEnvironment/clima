@@ -11,15 +11,19 @@ from my_project.global_scheme import (
 )
 from my_project.utils import generate_chart_name
 
-from my_project.global_scheme import dropdown_names
+from my_project.global_scheme import (
+    dropdown_names,
+    sun_cloud_tab_dropdown_names,
+    more_variables_dropdown,
+    sun_cloud_tab_explore_dropdown_names,
+)
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from app import app, cache, TIMEOUT
+from app import app
 
 from my_project.global_scheme import (
     template,
-    month_lst,
     unit_dict,
     range_dict,
     name_dict,
@@ -32,6 +36,9 @@ psy_dropdown_names = {
     "Frequency": "Frequency",
 }
 psy_dropdown_names.update(dropdown_names.copy())
+psy_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
+psy_dropdown_names.update(more_variables_dropdown.copy())
+psy_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
 
 
 def inputs():
@@ -207,7 +214,7 @@ def layout_psy_chart():
     )
 
 
-# TAB NINE: PYSCHROMETRIC CHART
+# psychrometric chart
 @app.callback(
     Output("psych-chart", "children"),
     [
@@ -228,7 +235,7 @@ def layout_psy_chart():
         State("invert-hour-psy", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
+# @cache.memoize(timeout=TIMEOUT)
 def update_psych_chart(
     colorby_var,
     time_filter,

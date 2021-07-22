@@ -242,7 +242,7 @@ name_dict = {
 }
 
 # Dropdown Names
-tab4_dropdown_names = {
+sun_cloud_tab_dropdown_names = {
     "None": "None",
     "Dry bulb temperature": "DBT",
     "Dew point temperature": "DPT",
@@ -283,22 +283,25 @@ dropdown_names = {
     "Total sky cover": "Tskycover",
     "Opaque sky cover": "Oskycover",
     "Visibility": "Vis",
-    # "UTCI: Sun & Wind":"utci_Sun_Wind_name",
-    # "UTCI: no Sun & Wind":"utci_noSun_Wind_name",
-    # "UTCI: Sun & no WInd":"utci_Sun_noWind_name",
-    # "UTCI: no Sun & no Wind":"utci_noSun_noWind_name",
-    # "UTCI: Sun & Wind : categories":"utci_Sun_Wind_categories_name",
-    # "UTCI: no Sun & Wind : categories":"utci_noSun_Wind_categories_name",
-    # "UTCI: Sun & no WInd : categories":"utci_Sun_noWind_categories_name",
-    # "UTCI: no Sun & no Wind : categories":"utci_noSun_noWind_categories_name",
-    # "Vapor partial pressure":"p_vap_name",
-    # "Absolute humidity":"hr_name",
-    # "Wet bulb temperature":"t_wb_name",
-    # "Dew point temperature":"t_dp_name",
-    # "Enthalpy":"h_name",
 }
 
-tab4_explore_dropdown_names = {
+more_variables_dropdown = {
+    "UTCI: Sun & Wind": "utci_Sun_Wind",
+    "UTCI: no Sun & Wind": "utci_noSun_Wind",
+    "UTCI: Sun & no WInd": "utci_Sun_noWind",
+    "UTCI: no Sun & no Wind": "utci_noSun_noWind",
+    "UTCI: Sun & Wind : categories": "utci_Sun_Wind_categories",
+    "UTCI: no Sun & Wind : categories": "utci_noSun_Wind_categories",
+    "UTCI: Sun & no WInd : categories": "utci_Sun_noWind_categories",
+    "UTCI: no Sun & no Wind : categories": "utci_noSun_noWind_categories",
+    "Vapor partial pressure": "p_vap",
+    "Absolute humidity": "hr",
+    "Wet bulb temperature": "t_wb",
+    "Dew point temperature": "t_dp",
+    "Enthalpy": "h",
+}
+
+sun_cloud_tab_explore_dropdown_names = {
     "Extraterrestrial horizontal irradiation": "EHrad",
     "Horizontal infrared radiation": "HIRrad",
     "Global horizontal radiation": "GHrad",
@@ -311,7 +314,7 @@ tab4_explore_dropdown_names = {
     "Opaque sky cover": "Oskycover",
 }
 
-tab7_dropdown = {
+outdoor_dropdown_names = {
     "Exposed to the sun and the wind": "utci_Sun_Wind",
     "Exposed to the sun and protected from the wind": "utci_Sun_noWind",
     "Protected from the sun and exposed to the wind": "utci_noSun_Wind",
