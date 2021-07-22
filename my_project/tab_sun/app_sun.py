@@ -251,7 +251,7 @@ def daily(var, global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def heatmap(var, global_local, df, meta):
+def update_heatmap(var, global_local, df, meta):
     df = pd.read_json(df, orient="split")
     return dcc.Graph(
         config=generate_chart_name("heatmap_sun", meta),
