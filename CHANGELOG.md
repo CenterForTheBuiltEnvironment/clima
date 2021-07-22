@@ -3,6 +3,18 @@
 
 ---
 
+### Version 0.4.2 (2021-07-22)
+
+Fix:
+
+- display error if no data are available to plot
+- saving charts with their unique names 
+
+Features:
+
+- added more variables to plot in psy and explore tabs
+- user can now invert hour and month selection
+
 ### Version 0.4.1 (2021-07-08)
 
 Fix:
