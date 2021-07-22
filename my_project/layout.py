@@ -27,7 +27,7 @@ def footer():
                         href="https://creativecommons.org/licenses/by/4.0/",
                     ),
                     html.A(
-                        "Version: 0.4.1",
+                        "Version: 0.4.2",
                         href="/changelog",
                     ),
                 ],
