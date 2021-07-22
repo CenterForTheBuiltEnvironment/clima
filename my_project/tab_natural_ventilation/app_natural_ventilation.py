@@ -235,9 +235,9 @@ def inputs_tab():
 @app.callback(
     Output("nv-heatmap-chart", "children"),
     [
-        Input("enable-condensation", "value"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
+        Input("nv-dpt-filter", "n_clicks"),
         Input("global-local-radio-input", "value"),
     ],
     [
@@ -250,13 +250,14 @@ def inputs_tab():
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
+        State("enable-condensation", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
 def nv_heatmap(
-    state_checklist,
     time_filter,
     dbt_data_filter,
+    click_dpt_filter,
     global_local,
     df,
     month,
@@ -267,10 +268,11 @@ def nv_heatmap(
     meta,
     invert_month,
     invert_hour,
+    condensation_enabled,
 ):
 
     # enable or disable button apply filter DPT
-    if len(state_checklist) == 1:
+    if len(condensation_enabled) == 1:
         dpt_data_filter = True
     else:
         dpt_data_filter = False
@@ -292,6 +294,18 @@ def nv_heatmap(
 
     if dpt_data_filter:
         df.loc[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val), var] = None
+
+        if df.dropna().shape[0] == 0:
+            return (
+                dbc.Alert(
+                    "Natural ventilation is not available in this location under these "
+                    "conditions. Please either select a different outdoor dry-bulb air "
+                    "temperature range, change the month and hour filter, or increase the"
+                    "dew-point temperature.",
+                    color="danger",
+                    style={"text-align": "center"},
+                ),
+            )
 
     if time_filter:
         if start_month <= end_month:
@@ -403,9 +417,9 @@ def nv_heatmap(
 @app.callback(
     Output("nv-bar-chart", "children"),
     [
-        Input("enable-condensation", "value"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
+        Input("nv-dpt-filter", "n_clicks"),
         Input("switches-input", "value"),
     ],
     [
@@ -418,13 +432,14 @@ def nv_heatmap(
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
+        State("enable-condensation", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
 def nv_bar_chart(
-    state_checklist,
     time_filter,
     dbt_data_filter,
+    click_dpt_filter,
     normalize,
     df,
     month,
@@ -435,9 +450,10 @@ def nv_bar_chart(
     meta,
     invert_month,
     invert_hour,
+    condensation_enabled,
 ):
     # enable or disable button apply filter DPT
-    if len(state_checklist) == 1:
+    if len(condensation_enabled) == 1:
         dpt_data_filter = True
     else:
         dpt_data_filter = False
