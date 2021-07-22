@@ -9,7 +9,6 @@ from my_project.global_scheme import (
     range_dict,
     name_dict,
     color_dict,
-    fig_config,
     tight_margins,
     month_lst,
     container_row_center_full,
@@ -130,7 +129,7 @@ def inputs_tab():
                     html.Div(
                         className="container-row full-width justify-center mt-2",
                         children=[
-                            html.H6("Month Range", style={"flex": "30%"}),
+                            html.H6("Month Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
                                     id="nv-month-slider",
@@ -145,14 +144,22 @@ def inputs_tab():
                                     },
                                     allowCross=True,
                                 ),
-                                style={"flex": "70%"},
+                                style={"flex": "50%"},
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {"label": "Invert", "value": "invert"},
+                                ],
+                                value=[],
+                                id="invert-month",
+                                labelStyle={"flex": "30%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className="container-row align-center justify-center",
                         children=[
-                            html.H6("Hour Range", style={"flex": "30%"}),
+                            html.H6("Hour Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
                                     id="nv-hour-slider",
@@ -167,7 +174,15 @@ def inputs_tab():
                                     },
                                     allowCross=True,
                                 ),
-                                style={"flex": "70%"},
+                                style={"flex": "50%"},
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {"label": "Invert", "value": "invert"},
+                                ],
+                                value=[],
+                                id="invert-hour",
+                                labelStyle={"flex": "30%"},
                             ),
                         ],
                     ),
@@ -234,6 +249,8 @@ def inputs_tab():
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
         State("meta-store", "data"),
+        State("invert-month", "value"),
+        State("invert-hour", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
@@ -250,6 +267,8 @@ def nv_heatmap(
     max_dbt_val,
     max_dpt_val,
     meta,
+    invert_month,
+    invert_hour,
 ):
 
     # enable or disable button apply filter DPT
@@ -261,7 +280,11 @@ def nv_heatmap(
     df = pd.read_json(df, orient="split")
 
     start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        end_month, start_month = month
     start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        end_hour, start_hour = hour
 
     var = "DBT"
     filter_var = "DPT"
@@ -396,6 +419,8 @@ def nv_heatmap(
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
         State("meta-store", "data"),
+        State("invert-month", "value"),
+        State("invert-hour", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
@@ -412,6 +437,8 @@ def nv_bar_chart(
     max_dbt_val,
     max_dpt_val,
     meta,
+    invert_month,
+    invert_hour,
 ):
     # enable or disable button apply filter DPT
     if len(state_checklist) == 1:
@@ -422,7 +449,11 @@ def nv_bar_chart(
     df = pd.read_json(df, orient="split")
 
     start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        end_month, start_month = month
     start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        end_hour, start_hour = hour
 
     var = "DBT"
     filter_var = "DPT"
