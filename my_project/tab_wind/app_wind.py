@@ -27,7 +27,7 @@ def sliders():
                         value=[1, 12],
                         marks={1: "1", 12: "12"},
                         tooltip={"always_visible": False, "placement": "top"},
-                        allowCross=True,
+                        allowCross=False,
                     ),
                 ],
             ),
