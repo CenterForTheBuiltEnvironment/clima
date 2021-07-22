@@ -303,7 +303,7 @@ def nv_heatmap(
                     "temperature range, change the month and hour filter, or increase the"
                     "dew-point temperature.",
                     color="danger",
-                    style={"text-align": "center"},
+                    style={"text-align": "center", "marginTop": "2rem"},
                 ),
             )
 
