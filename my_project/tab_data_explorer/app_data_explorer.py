@@ -133,7 +133,7 @@ def section_two_inputs():
                             html.Div(
                                 className="container-row full-width justify-center mt-2",
                                 children=[
-                                    html.H6("Month Range", style={"flex": "30%"}),
+                                    html.H6("Month Range", style={"flex": "20%"}),
                                     html.Div(
                                         dcc.RangeSlider(
                                             id="sec2-month-slider",
@@ -148,14 +148,22 @@ def section_two_inputs():
                                             },
                                             allowCross=False,
                                         ),
-                                        style={"flex": "70%"},
+                                        style={"flex": "50%"},
+                                    ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-month-explore-heatmap",
+                                        labelStyle={"flex": "30%"},
                                     ),
                                 ],
                             ),
                             html.Div(
                                 className="container-row justify-center",
                                 children=[
-                                    html.H6("Hour Range", style={"flex": "30%"}),
+                                    html.H6("Hour Range", style={"flex": "20%"}),
                                     html.Div(
                                         dcc.RangeSlider(
                                             id="sec2-hour-slider",
@@ -170,7 +178,15 @@ def section_two_inputs():
                                             },
                                             allowCross=False,
                                         ),
-                                        style={"flex": "70%"},
+                                        style={"flex": "50%"},
+                                    ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-hour-explore-heatmap",
+                                        labelStyle={"flex": "30%"},
                                     ),
                                 ],
                             ),
@@ -342,7 +358,7 @@ def section_three_inputs():
                     html.Div(
                         className="container-row full-width justify-center",
                         children=[
-                            html.H6("Month Range", style={"flex": "30%"}),
+                            html.H6("Month Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
                                     id="tab6-sec3-query-month-slider",
@@ -357,14 +373,22 @@ def section_three_inputs():
                                     },
                                     allowCross=False,
                                 ),
-                                style={"flex": "70%"},
+                                style={"flex": "50%"},
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {"label": "Invert", "value": "invert"},
+                                ],
+                                value=[],
+                                id="invert-month-explore-more-charts",
+                                labelStyle={"flex": "30%"},
                             ),
                         ],
                     ),
                     html.Div(
                         className="container-row full-width justify-center",
                         children=[
-                            html.H6("Hour Range", style={"flex": "30%"}),
+                            html.H6("Hour Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
                                     id="tab6-sec3-query-hour-slider",
@@ -379,7 +403,15 @@ def section_three_inputs():
                                     },
                                     allowCross=False,
                                 ),
-                                style={"flex": "70%"},
+                                style={"flex": "50%"},
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {"label": "Invert", "value": "invert"},
+                                ],
+                                value=[],
+                                id="invert-hour-explore-more-charts",
+                                labelStyle={"flex": "30%"},
                             ),
                         ],
                     ),
@@ -562,10 +594,11 @@ def update_tab_heatmap(var, global_local, df, meta):
         State("sec2-min-val", "value"),
         State("sec2-max-val", "value"),
         State("meta-store", "data"),
+        State("invert-month-explore-heatmap", "value"),
+        State("invert-hour-explore-heatmap", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-def update_tab_six_two(
+def update_heatmap(
     var,
     time_filter,
     data_filter,
@@ -578,8 +611,16 @@ def update_tab_six_two(
     min_val,
     max_val,
     meta,
+    invert_month,
+    invert_hour,
 ):
     df = pd.read_json(df, orient="split")
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        month = month[::-1]
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        hour = hour[::-1]
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
 
@@ -640,10 +681,11 @@ def update_tab_six_two(
         State("tab6-sec3-min-val", "value"),
         State("tab6-sec3-max-val", "value"),
         State("meta-store", "data"),
+        State("invert-month-explore-more-charts", "value"),
+        State("invert-hour-explore-more-charts", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-def update_tab_six_three(
+def update_more_charts(
     var_x,
     var_y,
     color_by,
@@ -657,12 +699,20 @@ def update_tab_six_three(
     min_val,
     max_val,
     meta,
+    invert_month,
+    invert_hour,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     # todo: dont allow to input if apply filter not checked
     # if (min_val3 is None or max_val3 is None) and data_filter3:
     #     raise PreventUpdate
     df = pd.read_json(df, orient="split")
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        month = month[::-1]
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        hour = hour[::-1]
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
     if data_filter and (min_val is None or max_val is None):
