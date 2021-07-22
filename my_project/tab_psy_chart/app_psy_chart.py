@@ -2,10 +2,10 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from my_project.global_scheme import (
-    fig_config,
     container_row_center_full,
     container_col_center_one_of_three,
 )
+from my_project.utils import generate_chart_name
 
 from my_project.global_scheme import dropdown_names
 from dash.dependencies import Input, Output, State
@@ -172,7 +172,7 @@ def layout_psy_chart():
             type="circle",
             children=html.Div(
                 className="container-col",
-                children=[inputs(), dcc.Graph(id="psych-chart", config=fig_config)],
+                children=[inputs(), html.Div(id="psych-chart")],
             ),
         ),
     )
@@ -180,7 +180,7 @@ def layout_psy_chart():
 
 # TAB NINE: PYSCHROMETRIC CHART
 @app.callback(
-    Output("psych-chart", "figure"),
+    Output("psych-chart", "children"),
     [
         Input("psy-color-by-dropdown", "value"),
         Input("month-hour-filter", "n_clicks"),
@@ -194,6 +194,7 @@ def layout_psy_chart():
         State("psy-min-val", "value"),
         State("psy-max-val", "value"),
         State("psy-var-dropdown", "value"),
+        State("meta-store", "data"),
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -208,9 +209,14 @@ def update_psych_chart(
     min_val,
     max_val,
     data_filter_var,
+    meta,
 ):
     df = pd.read_json(df, orient="split")
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
-    fig = psych_chart(df, global_local, colorby_var, time_filter_info, data_filter_info)
-    return fig
+    return dcc.Graph(
+        config=generate_chart_name("psy", meta),
+        figure=psych_chart(
+            df, global_local, colorby_var, time_filter_info, data_filter_info
+        ),
+    )

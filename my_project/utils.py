@@ -7,6 +7,7 @@ from pandas import json_normalize
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 import plotly.express as px
+import copy
 
 
 def code_timer(func):
@@ -25,14 +26,14 @@ def code_timer(func):
 
 
 def generate_chart_name(tab_name, meta=None):
-    _fig_config = fig_config.copy()
+    figure_config = copy.deepcopy(fig_config)
     if meta:
-        _fig_config["toImageButtonOptions"][
+        figure_config["toImageButtonOptions"][
             "filename"
         ] = f"CBEClima_{meta['city']}_{meta['country']}_{tab_name}_tab"
     else:
-        _fig_config["toImageButtonOptions"]["filename"] = f"CBEClima_{tab_name}_tab"
-    return _fig_config
+        figure_config["toImageButtonOptions"]["filename"] = f"CBEClima_{tab_name}_tab"
+    return figure_config
 
 
 def plot_location_epw_files():

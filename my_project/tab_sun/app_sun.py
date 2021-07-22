@@ -15,7 +15,7 @@ from my_project.tab_sun.charts_sun import (
 )
 from my_project.template_graphs import heatmap, barchart, daily_profile
 import pandas as pd
-from my_project.utils import title_with_tooltip
+from my_project.utils import title_with_tooltip, generate_chart_name
 
 from app import app, cache, TIMEOUT
 
@@ -76,7 +76,10 @@ def sun_path():
                 children=[
                     dcc.Loading(
                         type="circle",
-                        children=dcc.Graph(id="custom-sunpath", config=fig_config),
+                        children=html.Div(
+                            id="custom-sunpath",
+                            className="container-row full-width align-center justify-center",
+                        ),
                     ),
                 ],
             ),
@@ -115,17 +118,10 @@ def explore_daily_heatmap():
                     ),
                 ],
             ),
+            dcc.Loading(type="circle", children=html.Div(id="tab4-daily")),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(id="tab4-daily", config=fig_config),
-                ],
-            ),
-            dcc.Loading(
-                type="circle",
-                children=[
-                    dcc.Graph(id="tab4-heatmap", config=fig_config),
-                ],
+                children=html.Div(id="tab4-heatmap"),
             ),
         ],
     )
@@ -144,9 +140,7 @@ def static_section():
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(id="monthly-solar", config=fig_config),
-                ],
+                children=html.Div(id="monthly-solar"),
             ),
             html.Div(
                 children=title_with_tooltip(
@@ -157,9 +151,7 @@ def static_section():
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(id="cloud-cover", config=fig_config),
-                ],
+                children=html.Div(id="cloud-cover"),
             ),
         ],
     )
@@ -176,16 +168,16 @@ def layout_sun():
 
 @app.callback(
     [
-        Output("monthly-solar", "figure"),
-        Output("cloud-cover", "figure"),
+        Output("monthly-solar", "children"),
+        Output("cloud-cover", "children"),
     ],
     [
         Input("df-store", "modified_timestamp"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_monthly_and_cloud_chart(ts, df):
+def monthly_and_cloud_chart(ts, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
@@ -197,11 +189,17 @@ def update_monthly_and_cloud_chart(ts, df):
     cover = barchart(df, "Tskycover", [False], [False, "", 3, 7], True)
     cover = cover.update_layout(margin=tight_margins, title="")
 
-    return monthly, cover
+    return dcc.Graph(
+        config=generate_chart_name("monthly_sun", meta),
+        figure=monthly,
+    ), dcc.Graph(
+        config=generate_chart_name("cloud_cover_sun", meta),
+        figure=cover,
+    )
 
 
 @app.callback(
-    Output("custom-sunpath", "figure"),
+    Output("custom-sunpath", "children"),
     [
         Input("custom-sun-view-dropdown", "value"),
         Input("custom-sun-var-dropdown", "value"),
@@ -210,40 +208,52 @@ def update_monthly_and_cloud_chart(ts, df):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_sun_path_chart(view, var, global_local, df, meta):
+def sun_path_chart(view, var, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
     if view == "polar":
-        return polar_graph(df, meta, global_local, var)
+        return dcc.Graph(
+            config=generate_chart_name("spherical_sun_path_sun", meta),
+            figure=polar_graph(df, meta, global_local, var),
+        )
     else:
-        return custom_cartesian_solar(df, meta, global_local, var)
+        return dcc.Graph(
+            config=generate_chart_name("cartesian_sun_path_sun", meta),
+            figure=custom_cartesian_solar(df, meta, global_local, var),
+        )
 
 
 @app.callback(
-    Output("tab4-daily", "figure"),
+    Output("tab4-daily", "children"),
     [
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_daily_profile(var, global_local, df):
+def daily(var, global_local, df, meta):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-    return daily_profile(df, var, global_local)
+    return dcc.Graph(
+        config=generate_chart_name("daily_sun", meta),
+        figure=daily_profile(df, var, global_local),
+    )
 
 
 @app.callback(
-    Output("tab4-heatmap", "figure"),
+    Output("tab4-heatmap", "children"),
     [
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_four_heatmap(var, global_local, df):
+def heatmap(var, global_local, df, meta):
     df = pd.read_json(df, orient="split")
-    return heatmap(df, var, global_local)
+    return dcc.Graph(
+        config=generate_chart_name("heatmap_sun", meta),
+        figure=heatmap(df, var, global_local),
+    )

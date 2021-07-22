@@ -1,10 +1,10 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import fig_config, month_lst, container_row_center_full
+from my_project.global_scheme import month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
 import pandas as pd
-from my_project.utils import title_with_tooltip
+from my_project.utils import title_with_tooltip, generate_chart_name
 
 from app import app, cache, TIMEOUT
 
@@ -71,13 +71,10 @@ def seasonal_wind_rose():
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=[
-                                    dcc.Graph(
-                                        id="winter-wind-rose",
-                                        className="daily-wind-graph",
-                                        config=fig_config,
-                                    ),
-                                ],
+                                children=html.Div(
+                                    id="winter-wind-rose",
+                                    className="daily-wind-graph",
+                                ),
                             ),
                             html.P(
                                 className="seasonal-text", id="winter-wind-rose-text"
@@ -89,13 +86,10 @@ def seasonal_wind_rose():
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=[
-                                    dcc.Graph(
-                                        id="spring-wind-rose",
-                                        className="daily-wind-graph",
-                                        config=fig_config,
-                                    ),
-                                ],
+                                children=html.Div(
+                                    id="spring-wind-rose",
+                                    className="daily-wind-graph",
+                                ),
                             ),
                             html.P(
                                 className="seasonal-text", id="spring-wind-rose-text"
@@ -112,13 +106,10 @@ def seasonal_wind_rose():
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=[
-                                    dcc.Graph(
-                                        id="summer-wind-rose",
-                                        className="daily-wind-graph",
-                                        config=fig_config,
-                                    ),
-                                ],
+                                children=html.Div(
+                                    id="summer-wind-rose",
+                                    className="daily-wind-graph",
+                                ),
                             ),
                             html.P(
                                 className="seasonal-text", id="summer-wind-rose-text"
@@ -130,13 +121,10 @@ def seasonal_wind_rose():
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=[
-                                    dcc.Graph(
-                                        id="fall-wind-rose",
-                                        className="daily-wind-graph",
-                                        config=fig_config,
-                                    ),
-                                ],
+                                children=html.Div(
+                                    id="fall-wind-rose",
+                                    className="daily-wind-graph",
+                                ),
                             ),
                             html.P(className="seasonal-text", id="fall-wind-rose-text"),
                         ],
@@ -170,16 +158,13 @@ def daily_wind_rose():
                             html.Div(
                                 dcc.Loading(
                                     type="circle",
-                                    children=[
-                                        dcc.Graph(
-                                            className="daily-wind-graph",
-                                            id="morning-wind-rose",
-                                            config=fig_config,
-                                        ),
-                                    ],
+                                    children=html.Div(
+                                        className="daily-wind-graph",
+                                        id="morning-wind-rose",
+                                    ),
                                 ),
                             ),
-                            html.P(className="daily-text", id="morning-windrose-text"),
+                            html.P(className="daily-text", id="morning-wind-rose-text"),
                         ],
                     ),
                     html.Div(
@@ -188,16 +173,13 @@ def daily_wind_rose():
                             html.Div(
                                 dcc.Loading(
                                     type="circle",
-                                    children=[
-                                        dcc.Graph(
-                                            className="daily-wind-graph",
-                                            id="noon-wind-rose",
-                                            config=fig_config,
-                                        ),
-                                    ],
+                                    children=html.Div(
+                                        className="daily-wind-graph",
+                                        id="noon-wind-rose",
+                                    ),
                                 ),
                             ),
-                            html.P(className="daily-text", id="noon-windrose-text"),
+                            html.P(className="daily-text", id="noon-wind-rose-text"),
                         ],
                     ),
                     html.Div(
@@ -206,16 +188,13 @@ def daily_wind_rose():
                             html.Div(
                                 dcc.Loading(
                                     type="circle",
-                                    children=[
-                                        dcc.Graph(
-                                            className="daily-wind-graph",
-                                            id="night-wind-rose",
-                                            config=fig_config,
-                                        ),
-                                    ],
+                                    children=html.Div(
+                                        className="daily-wind-graph",
+                                        id="night-wind-rose",
+                                    ),
                                 ),
                             ),
-                            html.P(className="daily-text", id="night-windrose-text"),
+                            html.P(className="daily-text", id="night-wind-rose-text"),
                         ],
                     ),
                 ],
@@ -228,7 +207,6 @@ def custom_wind_rose():
     """"""
     return html.Div(
         className="container-col justify-center full-width",
-        id="custom-windrose-container",
         children=[
             html.Div(
                 children=title_with_tooltip(
@@ -327,9 +305,7 @@ def custom_wind_rose():
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(id="custom-wind-rose", config=fig_config),
-                ],
+                children=html.Div(id="custom-wind-rose"),
             ),
         ],
     )
@@ -349,24 +325,17 @@ def layout_wind():
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        id="wind-rose",
-                        config=fig_config,
-                    ),
-                ],
+                children=html.Div(
+                    id="wind-rose",
+                ),
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(id="wind-speed", config=fig_config),
-                ],
+                children=html.Div(id="wind-speed"),
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(id="wind-direction", config=fig_config),
-                ],
+                children=html.Div(id="wind-direction"),
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),
@@ -377,68 +346,77 @@ def layout_wind():
 
 # wind rose
 @app.callback(
-    Output("wind-rose", "figure"),
+    Output("wind-rose", "children"),
     Input("df-store", "data"),
+    State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_annual_wind_rose(df):
+def update_annual_wind_rose(df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     annual = wind_rose(df, "", [1, 12], [1, 24], True)
-    return annual
+    return dcc.Graph(
+        config=generate_chart_name("annual_wind_rose_wind", meta),
+        figure=annual,
+    )
 
 
 # wind speed
 @app.callback(
-    Output("wind-speed", "figure"),
+    Output("wind-speed", "children"),
     # General
     [
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_wind_speed(global_local, df):
+def update_tab_wind_speed(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
     speed = heatmap(df, "Wspeed", global_local)
 
-    return speed
+    return dcc.Graph(
+        config=generate_chart_name("wind_speed_wind", meta),
+        figure=speed,
+    )
 
 
 # wind direction
 @app.callback(
-    Output("wind-direction", "figure"),
+    Output("wind-direction", "children"),
     # General
     [
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_wind_direction(global_local, df):
+def update_tab_wind_direction(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     direction = heatmap(df, "Wdir", global_local)
-    return direction
+    return dcc.Graph(
+        config=generate_chart_name("wind_direction_wind", meta),
+        figure=direction,
+    )
 
 
 # Custom Wind rose
 @app.callback(
-    Output("custom-wind-rose", "figure"),
+    Output("custom-wind-rose", "children"),
     # Custom Graph Input
     [
         Input("tab5-custom-start-month", "value"),
         Input("tab5-custom-start-hour", "value"),
         Input("tab5-custom-end-month", "value"),
         Input("tab5-custom-end-hour", "value"),
-        Input("df-store", "modified_timestamp"),
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_five(start_month, start_hour, end_month, end_hour, ts, df, meta):
+def update_custom_wind_rose(start_month, start_hour, end_month, end_hour, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
     start_hour = int(start_hour)
@@ -457,25 +435,29 @@ def update_tab_five(start_month, start_hour, end_month, end_hour, ts, df, meta):
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
     custom = wind_rose(df, "", [start_month, end_month], [start_hour, end_hour], True)
 
-    return custom
+    return dcc.Graph(
+        config=generate_chart_name("custom_wind_rose_wind", meta),
+        figure=custom,
+    )
 
 
 ### Seasonal Graphs ###
 @app.callback(
     [
-        Output("winter-wind-rose", "figure"),
-        Output("spring-wind-rose", "figure"),
-        Output("summer-wind-rose", "figure"),
-        Output("fall-wind-rose", "figure"),
+        Output("winter-wind-rose", "children"),
+        Output("spring-wind-rose", "children"),
+        Output("summer-wind-rose", "children"),
+        Output("fall-wind-rose", "children"),
         Output("winter-wind-rose-text", "children"),
         Output("spring-wind-rose-text", "children"),
         Output("summer-wind-rose-text", "children"),
         Output("fall-wind-rose-text", "children"),
     ],
     Input("df-store", "data"),
+    State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_seasonal_graphs(df):
+def update_seasonal_graphs(df, meta):
     df = pd.read_json(df, orient="split")
 
     hours = [1, 24]
@@ -549,10 +531,22 @@ def update_seasonal_graphs(df):
     )
 
     return (
-        winter,
-        spring,
-        summer,
-        fall,
+        dcc.Graph(
+            config=generate_chart_name("winter_wind_rose_wind", meta),
+            figure=winter,
+        ),
+        dcc.Graph(
+            config=generate_chart_name("spring_wind_rose_wind", meta),
+            figure=spring,
+        ),
+        dcc.Graph(
+            config=generate_chart_name("summer_wind_rose_wind", meta),
+            figure=summer,
+        ),
+        dcc.Graph(
+            config=generate_chart_name("fall_wind_rose_wind", meta),
+            figure=fall,
+        ),
         winter_text,
         spring_text,
         summer_text,
@@ -564,18 +558,19 @@ def update_seasonal_graphs(df):
 @app.callback(
     # Daily Graphs
     [
-        Output("morning-wind-rose", "figure"),
-        Output("noon-wind-rose", "figure"),
-        Output("night-wind-rose", "figure"),
-        Output("morning-windrose-text", "children"),
-        Output("noon-windrose-text", "children"),
-        Output("night-windrose-text", "children"),
+        Output("morning-wind-rose", "children"),
+        Output("noon-wind-rose", "children"),
+        Output("night-wind-rose", "children"),
+        Output("morning-wind-rose-text", "children"),
+        Output("noon-wind-rose-text", "children"),
+        Output("night-wind-rose-text", "children"),
     ],
     # General
     Input("df-store", "data"),
+    State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_daily_graphs(df):
+def update_daily_graphs(df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
@@ -628,4 +623,20 @@ def update_daily_graphs(df):
         night_times[0], night_times[1], night_total_count, night_calm_count
     )
 
-    return morning, noon, night, morning_text, noon_text, night_text
+    return (
+        dcc.Graph(
+            config=generate_chart_name("morning_wind_rose_wind", meta),
+            figure=morning,
+        ),
+        dcc.Graph(
+            config=generate_chart_name("noon_wind_rose_wind", meta),
+            figure=noon,
+        ),
+        dcc.Graph(
+            config=generate_chart_name("night_wind_rose_wind", meta),
+            figure=night,
+        ),
+        morning_text,
+        noon_text,
+        night_text,
+    )

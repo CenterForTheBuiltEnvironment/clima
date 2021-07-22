@@ -65,12 +65,8 @@ def section_one():
                 ),
             ),
             dcc.Loading(
+                html.Div(className="full-width", id="query-daily"),
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        className="full-width", id="query-daily", config=fig_config
-                    ),
-                ],
             ),
             html.Div(
                 children=title_with_tooltip(
@@ -80,12 +76,8 @@ def section_one():
                 ),
             ),
             dcc.Loading(
+                html.Div(className="full-width", id="query-heatmap"),
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        className="full-width", id="query-heatmap", config=fig_config
-                    ),
-                ],
             ),
         ],
     )
@@ -261,11 +253,7 @@ def section_two():
             section_two_inputs(),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        className="full-width", id="custom-heatmap", config=fig_config
-                    ),
-                ],
+                children=html.Div(className="full-width", id="custom-heatmap"),
             ),
             dbc.Checklist(
                 options=[
@@ -474,16 +462,12 @@ def section_three():
             ),
             section_three_inputs(),
             dcc.Loading(
+                html.Div(id="three-var"),
                 type="circle",
-                children=[
-                    dcc.Graph(id="three-var", config=fig_config),
-                ],
             ),
             dcc.Loading(
+                html.Div(id="two-var"),
                 type="circle",
-                children=[
-                    dcc.Graph(id="two-var", config=fig_config),
-                ],
             ),
         ],
     )
@@ -516,38 +500,48 @@ def update_tab_yearly(var, global_local, df, meta):
         )
     else:
         return dcc.Graph(
-            config=generate_chart_name("data_explorer", meta),
+            config=generate_chart_name("yearly_explore", meta),
             figure=yearly_profile(df, var, global_local),
         )
 
 
 @app.callback(
-    Output("query-daily", "figure"),
+    Output("query-daily", "children"),
     [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_daily(var, global_local, df):
+def update_tab_daily(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
-    return daily_profile(df, var, global_local)
+    return (
+        dcc.Graph(
+            config=generate_chart_name("daily_explore", meta),
+            figure=daily_profile(df, var, global_local),
+        ),
+    )
 
 
 @app.callback(
-    Output("query-heatmap", "figure"),
+    Output("query-heatmap", "children"),
     [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_heatmap(var, global_local, df):
+def update_tab_heatmap(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     df = pd.read_json(df, orient="split")
-    return heatmap(df, var, global_local)
+    return (
+        dcc.Graph(
+            config=generate_chart_name("heatmap_explore", meta),
+            figure=heatmap(df, var, global_local),
+        ),
+    )
 
 
 @app.callback(
     [
-        Output("custom-heatmap", "figure"),
+        Output("custom-heatmap", "children"),
         Output("custom-summary", "style"),
         Output("custom-summary", "figure"),
         Output("normalize", "style"),
@@ -567,6 +561,7 @@ def update_tab_heatmap(var, global_local, df):
         State("sec2-data-filter-var", "value"),
         State("sec2-min-val", "value"),
         State("sec2-max-val", "value"),
+        State("meta-store", "data"),
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -582,6 +577,7 @@ def update_tab_six_two(
     filter_var,
     min_val,
     max_val,
+    meta,
 ):
     df = pd.read_json(df, orient="split")
     time_filter_info = [time_filter, month, hour]
@@ -592,16 +588,27 @@ def update_tab_six_two(
 
     if data_filter:
         return (
-            heat_map,
+            dcc.Graph(
+                config=generate_chart_name("heatmap_explore", meta),
+                figure=heat_map,
+            ),
             {},
             barchart(df, var, time_filter_info, data_filter_info, normalize),
             {},
         )
-    return heat_map, no_display, {"data": [], "layout": {}, "frames": []}, no_display
+    return (
+        dcc.Graph(
+            config=generate_chart_name("heatmap_explore", meta),
+            figure=heat_map,
+        ),
+        no_display,
+        {"data": [], "layout": {}, "frames": []},
+        no_display,
+    )
 
 
 @app.callback(
-    [Output("three-var", "figure"), Output("two-var", "figure")],
+    [Output("three-var", "children"), Output("two-var", "children")],
     [
         Input("tab6-sec3-var-x-dropdown", "value"),
         Input("tab6-sec3-var-y-dropdown", "value"),
@@ -617,6 +624,7 @@ def update_tab_six_two(
         State("tab6-sec3-filter-var-dropdown", "value"),
         State("tab6-sec3-min-val", "value"),
         State("tab6-sec3-max-val", "value"),
+        State("meta-store", "data"),
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -633,6 +641,7 @@ def update_tab_six_three(
     data_filter_var,
     min_val,
     max_val,
+    meta,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     # todo: dont allow to input if apply filter not checked
@@ -648,4 +657,10 @@ def update_tab_six_three(
         three = three_var_graph(
             df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
         )
-        return three, two
+        return dcc.Graph(
+            config=generate_chart_name("scatter_three_vars_explore", meta),
+            figure=three,
+        ), dcc.Graph(
+            config=generate_chart_name("scatter_two_vars_explore", meta),
+            figure=two,
+        )

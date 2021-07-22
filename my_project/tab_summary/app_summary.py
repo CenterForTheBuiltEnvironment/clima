@@ -190,7 +190,7 @@ def update_tab_map(ts, meta):
 
     map_world = dcc.Graph(
         id="gh_rad-profile-graph",
-        config=generate_chart_name("summary", meta),
+        config=generate_chart_name("map_summary", meta),
         figure=world_map(meta),
     )
 
@@ -298,7 +298,7 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
 
         chart = dcc.Graph(
             id="degree-days-chart",
-            config=generate_chart_name("summary", meta),
+            config=generate_chart_name("hdd_cdd_summary", meta),
             figure=fig,
         )
 
@@ -318,7 +318,7 @@ def update_violin_tdb(global_local, df, meta):
     return dcc.Graph(
         id="tdb-profile-graph",
         className="violin-container",
-        config=generate_chart_name("summary", meta),
+        config=generate_chart_name("tdb_summary", meta),
         figure=violin(df, "DBT", global_local),
     )
 
@@ -337,7 +337,7 @@ def update_tab_wind(global_local, df, meta):
     return dcc.Graph(
         id="wind-profile-graph",
         className="violin-container",
-        config=generate_chart_name("summary", meta),
+        config=generate_chart_name("wind_summary", meta),
         figure=violin(df, "Wspeed", global_local),
     )
 
@@ -356,7 +356,7 @@ def update_tab_rh(global_local, df, meta):
     return dcc.Graph(
         id="rh-profile-graph",
         className="violin-container",
-        config=generate_chart_name("summary", meta),
+        config=generate_chart_name("rh_summary", meta),
         figure=violin(df, "RH", global_local),
     )
 
@@ -375,7 +375,7 @@ def update_tab_gh_rad(global_local, df, meta):
     return dcc.Graph(
         id="gh_rad-profile-graph",
         className="violin-container",
-        config=generate_chart_name("summary", meta),
+        config=generate_chart_name("solar_summary", meta),
         figure=violin(df, "GHrad", global_local),
     )
 

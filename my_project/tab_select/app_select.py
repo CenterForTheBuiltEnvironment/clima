@@ -10,7 +10,7 @@ from dash.exceptions import PreventUpdate
 
 from app import app
 from my_project.extract_df import create_df, get_data
-from my_project.utils import code_timer, plot_location_epw_files, generate_chart_name
+from my_project.utils import plot_location_epw_files, generate_chart_name
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",
@@ -53,7 +53,7 @@ def layout_select():
             dcc.Graph(
                 id="tab-one-map",
                 figure=plot_location_epw_files(),
-                config=generate_chart_name("main"),
+                config=generate_chart_name("epw_location_select"),
             ),
             dbc.Modal(
                 [

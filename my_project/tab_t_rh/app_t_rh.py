@@ -1,7 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
-from my_project.utils import generate_chart_name, code_timer, title_with_tooltip
+from my_project.utils import generate_chart_name, title_with_tooltip
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
 
@@ -86,7 +86,7 @@ def update_yearly_chart(global_local, dd_value, df, meta):
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
         return dcc.Graph(
-            config=generate_chart_name("tmp_rh", meta),
+            config=generate_chart_name("tdb_yearly_t_rh", meta),
             figure=dbt_yearly,
         )
     else:
@@ -94,7 +94,7 @@ def update_yearly_chart(global_local, dd_value, df, meta):
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
         return dcc.Graph(
-            config=generate_chart_name("tmp_rh", meta),
+            config=generate_chart_name("rh_yearly_t_rh", meta),
             figure=rh_yearly,
         )
 
@@ -111,12 +111,12 @@ def update_daily(global_local, dd_value, df, meta):
 
     if dd_value == "dd_tdb":
         return dcc.Graph(
-            config=generate_chart_name("tmp_rh", meta),
+            config=generate_chart_name("tdb_daily_t_rh", meta),
             figure=daily_profile(df, "DBT", global_local),
         )
     else:
         return dcc.Graph(
-            config=generate_chart_name("tmp_rh", meta),
+            config=generate_chart_name("rh_daily_t_rh", meta),
             figure=daily_profile(df, "RH", global_local),
         )
 
@@ -133,11 +133,11 @@ def update_heatmap(global_local, dd_value, df, meta):
     df = pd.read_json(df, orient="split")
     if dd_value == "dd_tdb":
         return dcc.Graph(
-            config=generate_chart_name("tmp_rh", meta),
+            config=generate_chart_name("tdb_heatmap_t_rh", meta),
             figure=heatmap(df, "DBT", global_local),
         )
     else:
         return dcc.Graph(
-            config=generate_chart_name("tmp_rh", meta),
+            config=generate_chart_name("rh_heatmap_t_rh", meta),
             figure=heatmap(df, "RH", global_local),
         )

@@ -1,10 +1,10 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from my_project.global_scheme import fig_config, tab7_dropdown
+from my_project.global_scheme import tab7_dropdown
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap
 import pandas as pd
-from my_project.utils import title_with_tooltip
+from my_project.utils import title_with_tooltip, generate_chart_name
 
 from app import app, cache, TIMEOUT
 
@@ -43,31 +43,32 @@ def layout_outdoor_comfort():
                 ),
             ),
             dcc.Loading(
+                html.Div(id="utci-heatmap"),
                 type="circle",
-                children=[dcc.Graph(id="utci-heatmap", config=fig_config)],
             ),
             dcc.Loading(
+                html.Div(id="utci-category-heatmap"),
                 type="circle",
-                children=[dcc.Graph(id="utci-category-heatmap", config=fig_config)],
             ),
         ],
     )
 
 
 @app.callback(
-    Output("utci-heatmap", "figure"),
+    Output("utci-heatmap", "children"),
     [
         Input("tab7-dropdown", "value"),
-        Input("df-store", "modified_timestamp"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_utci_value(var, ts, global_local, df):
+def update_tab_utci_value(var, global_local, df, meta):
     df = pd.read_json(df, orient="split")
-    utci_heatmap = heatmap(df, var, global_local)
-    return utci_heatmap
+    return dcc.Graph(
+        config=generate_chart_name("utci_heatmap", meta),
+        figure=heatmap(df, var, global_local),
+    )
 
 
 @app.callback(
@@ -88,15 +89,14 @@ def change_image_based_on_selection(value):
 
 
 @app.callback(
-    Output("utci-category-heatmap", "figure"),
+    Output("utci-category-heatmap", "children"),
     [
         Input("tab7-dropdown", "value"),
-        Input("df-store", "modified_timestamp"),
     ],
-    [State("df-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_tab_utci_category(var, ts, df):
+def update_tab_utci_category(var, df, meta):
     df = pd.read_json(df, orient="split")
     utci_stress_cat = heatmap(df, var + "_categories")
     utci_stress_cat["data"][0]["colorbar"] = dict(
@@ -118,4 +118,7 @@ def update_tab_utci_category(var, ts, df):
         ],
         ticks="outside",
     )
-    return utci_stress_cat
+    return dcc.Graph(
+        config=generate_chart_name("utci_heatmap_category", meta),
+        figure=utci_stress_cat,
+    )

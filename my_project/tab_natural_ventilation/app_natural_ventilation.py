@@ -18,9 +18,9 @@ from my_project.global_scheme import (
 from dash.dependencies import Input, Output, State
 import pandas as pd
 import numpy as np
-from my_project.utils import title_with_tooltip
+from my_project.utils import title_with_tooltip, generate_chart_name
 
-from app import app, cache, TIMEOUT
+from app import app
 
 
 def layout_natural_ventilation():
@@ -29,9 +29,8 @@ def layout_natural_ventilation():
         children=[
             inputs_tab(),
             dcc.Loading(
-                dcc.Graph(
+                html.Div(
                     id="nv-heatmap-chart",
-                    config=fig_config,
                     style={"marginTop": "1rem"},
                 ),
                 type="circle",
@@ -63,9 +62,8 @@ def layout_natural_ventilation():
                 ],
             ),
             dcc.Loading(
-                dcc.Graph(
+                html.Div(
                     id="nv-bar-chart",
-                    config=fig_config,
                     style={"marginTop": "1rem"},
                 ),
                 type="circle",
@@ -220,7 +218,7 @@ def inputs_tab():
 
 
 @app.callback(
-    Output("nv-heatmap-chart", "figure"),
+    Output("nv-heatmap-chart", "children"),
     [
         Input("enable-condensation", "value"),
         Input("nv-month-hour-filter", "n_clicks"),
@@ -235,6 +233,7 @@ def inputs_tab():
         State("nv-tdb-min-val", "value"),
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
+        State("meta-store", "data"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
@@ -250,6 +249,7 @@ def nv_heatmap(
     min_dbt_val,
     max_dbt_val,
     max_dpt_val,
+    meta,
 ):
 
     # enable or disable button apply filter DPT
@@ -373,11 +373,14 @@ def nv_heatmap(
         title_text="hours of the day",
     )
 
-    return fig
+    return dcc.Graph(
+        config=generate_chart_name("heatmap_nv", meta),
+        figure=fig,
+    )
 
 
 @app.callback(
-    Output("nv-bar-chart", "figure"),
+    Output("nv-bar-chart", "children"),
     [
         Input("enable-condensation", "value"),
         Input("nv-month-hour-filter", "n_clicks"),
@@ -392,6 +395,7 @@ def nv_heatmap(
         State("nv-tdb-min-val", "value"),
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
+        State("meta-store", "data"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
@@ -407,6 +411,7 @@ def nv_bar_chart(
     min_dbt_val,
     max_dbt_val,
     max_dpt_val,
+    meta,
 ):
     # enable or disable button apply filter DPT
     if len(state_checklist) == 1:
@@ -543,7 +548,10 @@ def nv_bar_chart(
     )
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
-    return fig
+    return dcc.Graph(
+        config=generate_chart_name("bar_chart_nv", meta),
+        figure=fig,
+    )
 
 
 @app.callback(
