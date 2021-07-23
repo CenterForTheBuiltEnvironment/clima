@@ -298,7 +298,9 @@ more_variables_dropdown = {
     "Absolute humidity": "hr",
     "Wet bulb temperature": "t_wb",
     "Dew point temperature": "t_dp",
-    "Enthalpy": "h",
+    "Solar elevation": "elevation",
+    "Solar azimuth": "azimuth",
+    "Saturation pressure": "p_sat",
 }
 
 sun_cloud_tab_explore_dropdown_names = {
