@@ -58,7 +58,7 @@ def layout_select():
             dbc.Modal(
                 [
                     # dbc.ModalHeader("Header"),
-                    dbc.ModalHeader("Analyse data from this location?"),
+                    dbc.ModalHeader(id="modal-header"),
                     dbc.ModalFooter(
                         children=[
                             dbc.Button(
@@ -252,3 +252,19 @@ def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_
         ).group(1)
         return not is_open, url
     return is_open, ""
+
+
+@app.callback(
+    [
+        Output("modal-header", "children"),
+    ],
+    [
+        Input("tab-one-map", "clickData"),
+    ],
+    prevent_initial_call=True,
+)
+def display_modal_when_data_clicked(click_map):
+    """change the text of the modal header"""
+    if click_map:
+        return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
+    return ["Analyse data from this location?"]
