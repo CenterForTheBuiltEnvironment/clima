@@ -37,7 +37,7 @@ def get_data(url):
 @code_timer
 def create_df(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
-    meta = lst[0].strip().split(",")
+    meta = lst[0].strip().replace("\\r", "").split(",")
 
     location_info = {
         "url": file_name,
