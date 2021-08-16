@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, 'bump version')"
     steps:
-      - uses: google-github-actions/deploy-cloudrun@main
+      - uses: google-github-actions/setup-gcloud@master
 
       # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@master
+      # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "290.0.1"
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
