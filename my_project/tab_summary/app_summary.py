@@ -34,6 +34,7 @@ def layout_summary():
                             html.P(id="tab-two-long"),
                             html.P(id="tab-two-lat"),
                             html.P(id="tab-two-elevation"),
+                            html.P(id="period-of-record"),
                         ],
                     ),
                     dcc.Loading(
@@ -159,6 +160,7 @@ def layout_summary():
         Output("tab-two-lat", "children"),
         Output("tab-two-elevation", "children"),
         Output("location-description", "children"),
+        Output("period-of-record", "children"),
     ],
     [
         Input("df-store", "modified_timestamp"),
@@ -173,6 +175,10 @@ def update_tab_map(ts, meta):
     lon = f"Longitude: {meta['lon']}"
     lat = f"Latitude: {meta['lat']}"
     elevation = f"Elevation above sea level: {meta['site_elevation']}"
+    period = ""
+    if meta["period"]:
+        start, stop = meta["period"].split("-")
+        period = f"This file is based on data collected between {start} and {stop}"
 
     r = requests.get(
         f"http://climateapi.scottpinkelman.com/api/v1/location/{meta['lat']}/{meta['lon']}"
@@ -196,7 +202,7 @@ def update_tab_map(ts, meta):
         figure=world_map(meta),
     )
 
-    return map_world, location, lon, lat, elevation, climate_text
+    return map_world, location, lon, lat, elevation, climate_text, period
 
 
 @app.callback(

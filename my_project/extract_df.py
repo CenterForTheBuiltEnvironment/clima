@@ -1,4 +1,5 @@
 import io
+import re
 import zipfile
 from datetime import datetime, timedelta, timezone
 from urllib.request import Request, urlopen
@@ -48,7 +49,13 @@ def create_df(lst, file_name):
         "city": meta[1],
         "state": meta[2],
         "country": meta[3],
+        "period": None,
     }
+
+    try:
+        location_info["period"] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
+    except AttributeError:
+        pass
 
     lst = lst[8 : len(lst) - 1]
     lst = [line.strip().split(",") for line in lst]
@@ -260,5 +267,22 @@ if __name__ == "__main__":
     other_url = "https://energyplus.net/weather-download/north_and_central_america_wmo_region_4/USA/CA/USA_CA_Oakland.Intl.AP.724930_TMY/USA_CA_Oakland.Intl.AP.724930_TMY.epw"
     # fmt: on
 
+    # -----
     lines = get_data(test_url)
     df, location_data = create_df(lines, test_url)
+
+    # -----
+    import json
+    from pandas import json_normalize
+
+    with open("./assets/data/epw_location.json") as data_file:
+        data = json.load(data_file)
+
+    df = json_normalize(data["features"])
+    for value in df["properties.epw"][29:30]:
+        url = re.search(r'href=[\'"]?([^\'" >]+)', value).group(1)
+        print(url)
+
+        lines = get_data(url)
+        # print([x.split(",")[0] for x in lines[:]])
+        create_df(lines, test_url)
