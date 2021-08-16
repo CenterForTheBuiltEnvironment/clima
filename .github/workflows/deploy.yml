@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     if: "contains(github.event.head_commit.message, 'bump version')"
     steps:
-      - uses: google-github-actions/setup-gcloud@master
+      - uses: google-github-actions/deploy-cloudrun@main
 
       # Setup gcloud CLI
       # - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
