@@ -178,15 +178,17 @@ def update_tab_map(ts, meta):
         f"http://climateapi.scottpinkelman.com/api/v1/location/{meta['lat']}/{meta['lon']}"
     )
 
+    climate_text = ""
     if r.status_code == 200:
-        climate_zone = r.json()["return_values"][0]["koppen_geiger_zone"]
-        zone_description = r.json()["return_values"][0]["zone_description"]
+        try:
+            climate_zone = r.json()["return_values"][0]["koppen_geiger_zone"]
+            zone_description = r.json()["return_values"][0]["zone_description"]
 
-        climate_text = (
-            f"Köppen–Geiger climate zone: {climate_zone}. {zone_description}."
-        )
-    else:
-        climate_text = ""
+            climate_text = (
+                f"Köppen–Geiger climate zone: {climate_zone}. {zone_description}."
+            )
+        except KeyError:
+            pass
 
     map_world = dcc.Graph(
         id="gh_rad-profile-graph",
