@@ -74,8 +74,12 @@ Secondly you should describe the changes in `CHANGELOG.md`
 
 ### Deploy to Google Cloud Run
 
-I have set up continuous deployment with GitHub actions. Each time a new version of the code is pushed to master the GitHub Action will deploy the application as long as the commit message will contain the following text `bump version`. 
-I have implemented this to limit the number of deployment we do and to ensure we do not inadvertently deploy an app that is not working. Please refer to the previous section which explains how to change the app version number.
+You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed on your computer. Short guide on how to deploy on Google Cloud Run can be found [here](https://youtu.be/FPFDg5znLTM)
+```
+gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
+
+gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1
+```
 
 #### Test project
 ```
