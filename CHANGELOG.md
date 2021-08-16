@@ -3,6 +3,19 @@
 
 ---
 
+### Version 0.4.3 (2021-08-16)
+
+Fix:
+
+- app was crashing is Koppen data was not available
+- displaying elevation correctly
+
+Features:
+
+- displaying info on reference years used to create EPW file
+- added labels to some chart
+- pop up modal now shows weather station name
+
 ### Version 0.4.2 (2021-07-22)
 
 Fix:
