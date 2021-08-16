@@ -450,11 +450,23 @@ def update_psych_chart(
                 name="",
             )
         )
-    fig.update_xaxes(range=var_range_x)
-    fig.update_yaxes(range=var_range_y)
 
     fig.update_layout(template=template, margin=tight_margins)
-    fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_xaxes(
+        title_text="Temperature, °C",
+        range=var_range_x,
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
+    fig.update_yaxes(
+        title_text="Humidity Ratio, kg_water/kg_dry air",
+        range=var_range_y,
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
 
     return dcc.Graph(config=generate_chart_name("psy", meta), figure=fig)

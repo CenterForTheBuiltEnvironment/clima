@@ -57,13 +57,13 @@ def violin(df, var, global_local):
         )
     )
 
-    fig.update_yaxes(range=var_range)
     fig.update_traces(
         meanline_visible=True,
         orientation="v",
         width=0.8,
         points=False,
     )
+    title = var_name + " (" + var_unit + ")"
     fig.update_layout(
         xaxis_showgrid=False,
         xaxis_zeroline=False,
@@ -72,11 +72,15 @@ def violin(df, var, global_local):
         violinmode="overlay",
         margin=tight_margins,
         legend=dict(orientation="h", yanchor="bottom", y=0.9, xanchor="right", x=1),
+        template=template,
+        title=title,
+        title_x=0.5,
+        dragmode=False,
     )
-    title = var_name + " (" + var_unit + ")"
-    fig.update_layout(template=template, title=title, title_x=0.5, dragmode=False)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_yaxes(
+        showline=True, linewidth=1, linecolor="black", mirror=True, range=var_range
+    )
 
     return fig
 
@@ -249,7 +253,7 @@ def yearly_profile(df, var, global_local):
     )
     fig.update_yaxes(
         range=custom_ylim,
-        title_text=var_unit,
+        title_text=f"{var_name}, {var_unit}",
         showline=True,
         linewidth=1,
         linecolor="black",

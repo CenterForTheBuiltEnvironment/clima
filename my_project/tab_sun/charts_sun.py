@@ -493,7 +493,19 @@ def custom_cartesian_solar(df, meta, global_local, var):
     )
 
     fig.update_layout(template=template, margin=tight_margins, dragmode=False)
-    fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_xaxes(
+        title_text="Azimuth angle",
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
+    fig.update_yaxes(
+        title_text="Altitude angle",
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
 
     return fig
