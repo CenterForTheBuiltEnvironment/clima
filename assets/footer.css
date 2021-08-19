@@ -10,5 +10,14 @@
     height: 60px;
 }
 
+a {
+    color: white;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: lightgrey;
+}
+
 
 

@@ -44,7 +44,9 @@ def footer():
                     
                     Supported browsers: Chromium-based browsers, Firefox.
                     
-                    Report issues with the Clima app [here](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
+                    Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
+                    
+                    [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
                     """,
                     ),
                 ],
