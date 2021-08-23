@@ -1,7 +1,7 @@
 import io
 import re
 import zipfile
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 from urllib.request import Request, urlopen
 
 import pandas as pd
@@ -57,7 +57,7 @@ def create_df(lst, file_name):
     except AttributeError:
         pass
 
-    lst = lst[8 : len(lst) - 1]
+    lst = lst[8:8768]
     lst = [line.strip().split(",") for line in lst]
 
     # Each data row exclude index 4 and 5, and everything after days now
@@ -100,7 +100,12 @@ def create_df(lst, file_name):
         "DaySSnow",
     ]
 
-    epw_df = pd.DataFrame(columns=col_names, data=lst)
+    if len(lst[0]) < len(col_names):
+        epw_df = pd.DataFrame(columns=col_names[: len(lst[0])], data=lst)
+        for col in [x for ix, x in enumerate(col_names) if ix >= len(lst[0])]:
+            epw_df[col] = 9999
+    else:
+        epw_df = pd.DataFrame(columns=col_names, data=lst)
 
     # Add fake_year
     epw_df["fake_year"] = "year"
@@ -270,6 +275,16 @@ if __name__ == "__main__":
     # -----
     lines = get_data(test_url)
     df, location_data = create_df(lines, test_url)
+
+    # ---- import a local file
+    file_path = r"C:\Users\sbbfti\Downloads\PredictiveWeatherFilesEpw_20210712\PredictiveWeatherFilesEpw_20210712\01\RCP2.6\2030\01_CZ0101_DA_NH16_TMY_RCP26_2030.epw"
+
+    with open(
+        file_path,
+        "r",
+    ) as f:
+        lines = f.readlines()
+    df, location_data = create_df(lines, file_path)
 
     # -----
     import json

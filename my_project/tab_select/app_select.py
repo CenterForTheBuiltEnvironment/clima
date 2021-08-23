@@ -49,7 +49,6 @@ def layout_select():
                 # Allow multiple files to be uploaded
                 multiple=True,
             ),
-            html.Div(id="output-data-upload"),
             dcc.Graph(
                 id="tab-one-map",
                 figure=plot_location_epw_files(),
