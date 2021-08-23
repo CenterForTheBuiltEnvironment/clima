@@ -271,6 +271,7 @@ def yearly_profile(df, var, global_local):
 # @code_timer
 def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
+    var_name = name_dict[str(var) + "_name"]
     var_unit = unit_dict[str(var) + "_unit"]
     var_range = range_dict[str(var) + "_range"]
     var_color = color_dict[str(var) + "_color"]
@@ -368,7 +369,12 @@ def daily_profile(df, var, global_local):
         ticktext=["6", "12", "18"], tickvals=["6", "12", "18"], tickangle=0
     )
 
-    fig.update_layout(template=template, dragmode=False, margin=tight_margins)
+    fig.update_layout(
+        template=template,
+        dragmode=False,
+        margin=dict(l=20, r=20, t=55, b=20),
+        title=f"{var_name} {var_unit}",
+    )
     return fig
 
 
