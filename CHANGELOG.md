@@ -3,6 +3,17 @@
 
 ---
 
+### Version 0.4.4 (2021-08-16)
+
+Fix:
+
+- error importing some EPW files
+- error with cooling and heating degrees chart
+
+Features:
+
+- improved footer layout
+
 ### Version 0.4.3 (2021-08-16)
 
 Fix:
