@@ -135,7 +135,7 @@ def static_section():
         children=[
             html.Div(
                 children=title_with_tooltip(
-                    text="Global and Diffuse Horizontal Solar Radiation (KWh/m²)",
+                    text="Global and Diffuse Horizontal Solar Radiation (Wh/m²)",
                     tooltip_text=None,
                     id_button="monthly-chart-label",
                 ),
