@@ -112,20 +112,20 @@ def create_df(lst, file_name):
 
     # Add in month names
     month_look_up = {
-        "1": "Jan",
-        "2": "Feb",
-        "3": "Mar",
-        "4": "Apr",
-        "5": "May",
-        "6": "Jun",
-        "7": "Jul",
-        "8": "Aug",
-        "9": "Sep",
-        "10": "Oct",
-        "11": "Nov",
-        "12": "Dec",
+        1: "Jan",
+        2: "Feb",
+        3: "Mar",
+        4: "Apr",
+        5: "May",
+        6: "Jun",
+        7: "Jul",
+        8: "Aug",
+        9: "Sep",
+        10: "Oct",
+        11: "Nov",
+        12: "Dec",
     }
-    epw_df["month_names"] = epw_df["month"].map(month_look_up)
+    epw_df["month_names"] = epw_df["month"].astype("int").map(month_look_up)
 
     # Add in DOY
     epw_df["DOY"] = pd.to_datetime(

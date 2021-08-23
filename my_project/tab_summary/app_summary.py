@@ -247,14 +247,10 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
 
         hdd_array = []
         cdd_array = []
-        months = []
+        months = df["month_names"].unique()
 
         for i in range(1, 13):
             query_month = "month=="
-            # calculates months names
-            query = query_month + str(i)
-            month = df.query(query)["month_names"][0]
-            months.append(month)
 
             # calculates HDD per month
             query = query_month + str(i) + " and DBT<=" + str(hdd_setpoint)

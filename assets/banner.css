@@ -20,6 +20,7 @@
 #banner-text-right * {
     margin: 3px;
     text-align: left;
+    max-width: 220px;
 }
 
 #banner-title {
