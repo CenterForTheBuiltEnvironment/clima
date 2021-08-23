@@ -28,7 +28,7 @@ def sun_path():
             html.Div(
                 children=title_with_tooltip(
                     text="Sun path chart",
-                    tooltip_text="Sun path chart",
+                    tooltip_text=None,
                     id_button="sun-path-chart-label",
                 ),
             ),
@@ -94,7 +94,7 @@ def explore_daily_heatmap():
             html.Div(
                 children=title_with_tooltip(
                     text="Daily charts",
-                    tooltip_text="Daily charts",
+                    tooltip_text=None,
                     id_button="daily-chart-label",
                 ),
             ),
@@ -136,7 +136,7 @@ def static_section():
             html.Div(
                 children=title_with_tooltip(
                     text="Global and Diffuse Horizontal Solar Radiation (KWh/m²)",
-                    tooltip_text="Global and Diffuse Horizontal Solar Radiation chart",
+                    tooltip_text=None,
                     id_button="monthly-chart-label",
                 ),
             ),
@@ -147,7 +147,7 @@ def static_section():
             html.Div(
                 children=title_with_tooltip(
                     text="Cloud coverage",
-                    tooltip_text="Cloud coverage",
+                    tooltip_text=None,
                     id_button="cloud-chart-label",
                 ),
             ),

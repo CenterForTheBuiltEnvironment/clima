@@ -59,7 +59,7 @@ def section_one():
             html.Div(
                 children=title_with_tooltip(
                     text="Yearly chart",
-                    tooltip_text="Yearly chart",
+                    tooltip_text=None,
                     id_button="explore-yearly-chart-label",
                 ),
             ),
@@ -70,7 +70,7 @@ def section_one():
             html.Div(
                 children=title_with_tooltip(
                     text="Daily chart",
-                    tooltip_text="Daily chart",
+                    tooltip_text=None,
                     id_button="explore-daily-chart-label",
                 ),
             ),
@@ -81,7 +81,7 @@ def section_one():
             html.Div(
                 children=title_with_tooltip(
                     text="Heatmap chart",
-                    tooltip_text="Heatmap",
+                    tooltip_text=None,
                     id_button="explore-heatmap-chart-label",
                 ),
             ),
@@ -100,7 +100,7 @@ def section_two_inputs():
             html.Div(
                 children=title_with_tooltip(
                     text="Customizable heatmap",
-                    tooltip_text="Heatmap",
+                    tooltip_text=None,
                     id_button="custom-heatmap-chart-label",
                 ),
             ),
@@ -504,7 +504,7 @@ def section_three():
             html.Div(
                 children=title_with_tooltip(
                     text="More charts",
-                    tooltip_text="Heatmap",
+                    tooltip_text=None,
                     id_button="more-charts-label",
                 ),
             ),

@@ -35,7 +35,7 @@ def layout_t_rh():
                     html.Div(
                         children=title_with_tooltip(
                             text="Yearly chart",
-                            tooltip_text="Yearly chart",
+                            tooltip_text=None,
                             id_button="yearly-chart-label",
                         ),
                     ),
@@ -46,7 +46,7 @@ def layout_t_rh():
                     html.Div(
                         children=title_with_tooltip(
                             text="Daily chart",
-                            tooltip_text="Daily chart",
+                            tooltip_text=None,
                             id_button="daily-chart-label",
                         ),
                     ),
@@ -57,7 +57,7 @@ def layout_t_rh():
                     html.Div(
                         children=title_with_tooltip(
                             text="Heatmap chart",
-                            tooltip_text="Heatmap",
+                            tooltip_text=None,
                             id_button="heatmap-chart-label",
                         ),
                     ),

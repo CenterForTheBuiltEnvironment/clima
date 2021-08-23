@@ -59,7 +59,7 @@ def seasonal_wind_rose():
             html.Div(
                 children=title_with_tooltip(
                     text="Seasonal Wind Rose",
-                    tooltip_text="Seasonal Wind Rose",
+                    tooltip_text=None,
                     id_button="seasonal-rose-chart",
                 ),
             ),
@@ -144,7 +144,7 @@ def daily_wind_rose():
             html.Div(
                 children=title_with_tooltip(
                     text="Daily Wind Rose",
-                    tooltip_text="Daily Wind Rose",
+                    tooltip_text=None,
                     id_button="daily-rose-chart",
                 ),
             ),
@@ -211,7 +211,7 @@ def custom_wind_rose():
             html.Div(
                 children=title_with_tooltip(
                     text="Customizable Wind Rose",
-                    tooltip_text="Customizable Wind Rose",
+                    tooltip_text=None,
                     id_button="custom-rose-chart",
                 ),
             ),
@@ -319,7 +319,7 @@ def layout_wind():
             html.Div(
                 children=title_with_tooltip(
                     text="Annual Wind Rose",
-                    tooltip_text="Annual Wind Rose",
+                    tooltip_text=None,
                     id_button="annual-rose-chart",
                 ),
             ),

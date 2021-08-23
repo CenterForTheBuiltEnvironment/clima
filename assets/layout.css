@@ -24,4 +24,9 @@
     width: 100%;
 }
 
+.doc-modal-body img {
+    box-sizing: border-box;
+    width: 100%; //or any percentage width you want
+}
+
 

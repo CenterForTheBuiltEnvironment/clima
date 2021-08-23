@@ -38,7 +38,7 @@ def layout_outdoor_comfort():
             html.Div(
                 children=title_with_tooltip(
                     text="UTCI heatmap charts",
-                    tooltip_text="Heatmap",
+                    tooltip_text=None,
                     id_button="utci-charts-label",
                 ),
             ),

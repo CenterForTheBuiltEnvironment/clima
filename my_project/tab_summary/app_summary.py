@@ -8,7 +8,7 @@ from dash.exceptions import PreventUpdate
 from app import app, cache, TIMEOUT
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
-from my_project.utils import generate_chart_name, title_with_tooltip, code_timer
+from my_project.utils import generate_chart_name, title_with_tooltip
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
 import requests
@@ -77,7 +77,7 @@ def layout_summary():
                     html.Div(
                         children=title_with_tooltip(
                             text="Heating and Cooling Degree Days",
-                            tooltip_text="Some information text",
+                            tooltip_text=None,
                             id_button="hdd-cdd-chart",
                         ),
                     ),
@@ -124,7 +124,7 @@ def layout_summary():
                     html.Div(
                         children=title_with_tooltip(
                             text="Climate Profiles",
-                            tooltip_text="Some information text",
+                            tooltip_text=None,
                             id_button="climate-profiles-chart",
                         ),
                     ),
@@ -420,3 +420,30 @@ def download_clima_dataframe(n_clicks, meta):
         )
     else:
         raise PreventUpdate
+
+
+def toggle_modal(n1, is_open):
+    if n1:
+        return not is_open
+    return is_open
+
+
+app.callback(
+    Output("modal_hdd-cdd-chart", "is_open"),
+    [Input("button_hdd-cdd-chart", "n_clicks")],
+    [State("modal_hdd-cdd-chart", "is_open")],
+)(toggle_modal)
+
+
+app.callback(
+    Output("modal_climate-profiles-chart", "is_open"),
+    [Input("button_climate-profiles-chart", "n_clicks")],
+    [State("modal_climate-profiles-chart", "is_open")],
+)(toggle_modal)
+
+
+app.callback(
+    Output("modal_download-button-label", "is_open"),
+    [Input("button_download-button-label", "n_clicks")],
+    [State("modal_download-button-label", "is_open")],
+)(toggle_modal)
