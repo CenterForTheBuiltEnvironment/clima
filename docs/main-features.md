@@ -1,16 +1,10 @@
 # Main features
 
-Beyond allowing the display of daily, monthly, and yearly plots of most variables contained in EPW files,[ Clima](https://clima.cbe.berkeley.edu/) calculates heating and cooling degree days, generates customizable wind roses, sun paths, psychrometric charts, and more.
+The CBE Clima Tool allows users to analyze and visualize climatic data.
+Via our tool users can be easily accessed via a map-based interface EPW files from two online repositories the [Energy Plus](https://energyplus.net/weather) and [Climate.One.Building.org](http://climate.onebuilding.org/). In addition, users can upload into our tool their own EPW file. 
 
-Furthermore, there are tabs dedicated to understanding natural ventilation potential, investigating UTCI thermal stress and equivalent temperatures under different scenarios, and exploring correlations among data in the EPW.
+Users can download:
+* all the charts and figures in Scalable Vector Graphics (SVG);
+* the data from the EPW file or those we used in the tool to generate the plots in Comma-Separated Values (CSV) format.
 
-All the graphics are downloadable in high-quality vector format \(.svg\) and free to use for research, educational and professional purposes and are licensed under a permissive[ Creative Commons \(CC BY 4.0.\) license](https://creativecommons.org/licenses/by/4.0/). The source code -mostly Python- is also available on[ GitHub](https://github.com/CenterForTheBuiltEnvironment/clima) under[ MIT licence](https://github.com/CenterForTheBuiltEnvironment/clima/blob/main/LICENSE) for anyone to freely use, re-use, or misuse.
-
-## Versions
-
-[The CBE Clima Tool](https://clima.cbe.berkeley.edu/) is still in its infancy and what we are releasing here is a beta version. Much work still needs to be done, especially in developing a comprehensive documentation. The comments, suggestions, critiques \(and offers of help\) of this community are most welcome!
-
-## Acknowledgment
-
-[Clima](https://clima.cbe.berkeley.edu/) has been made possible by the[ Centre for the Built Environment at UC Berkeley](https://cbe.berkeley.edu/) and the technical wizardry of[ Christine Nguyen](https://chrlng.github.io/) and[ Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/). Many thanks as well to[ Stefano Schiavon](https://ced.berkeley.edu/ced/faculty-staff/stefano-schiavon) for the guidance and support!
-
+When dis-playing the variables in the interactive plots users can either select to use the Global or Local Value Ranges. The `Global` option uses preset limits for the chart axes, chosen as to cover the vast majority of the climatic ranges to be found on planet Earth. This allows the user to easily compare charts generated for any two different locations.  The `Local` option sets the upper and lower limits of the chart axes as a function of the data contained in the EPW file.

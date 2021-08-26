@@ -4,8 +4,6 @@
 
 ## Documentation
 
----
-
 * [Main features](main-features.md)
 
 ## Contributing
@@ -16,6 +14,6 @@
 
 ## Version
 
-* [Info](version/info.md)
+* [Info](version/versioning.md)
 * [Changelog](version/changelog.md)
 

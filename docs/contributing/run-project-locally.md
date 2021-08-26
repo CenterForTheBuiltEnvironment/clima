@@ -1,7 +1,5 @@
 ---
-description: >-
-  These instructions will get you a copy of the project up and running on your
-  local machine for development and testing purposes.
+description: These instructions will get you a copy of the project up and running on your   local machine for development and testing purposes.
 ---
 
 # Run project locally
@@ -26,15 +24,15 @@ This guide is for Mac OSX, Linux, or Windows.
 
 2. **Create a virtual environment using pipenv and install dependencies:**
 
-```text
-pipenv install --three
-```
+    ```text
+    pipenv install --three
+    ```
 
-**3. Run tool locally**
+3. ** Run tool locally**
 
-Now you should be ready to run the tool locally.
+    Now you should be ready to run the tool locally.
 
-`pipenv run python my_project.py`
+    `pipenv run python my_project.py`
 
 Visit [http://localhost:8080](http://localhost:8080) in your browser to check it out. Note that whenever you want to run the tool, you have to activate the virtualenv first.
 
@@ -42,7 +40,7 @@ Visit [http://localhost:8080](http://localhost:8080) in your browser to check it
 
 Pipfiles contain information about the dependencies of your project, and supersede the requirements.txt file that is typically used in Python projects.
 
-To install a Python package for your project use the install keyword. For example,
+To install a Python package for your project use the `install` keyword. For example,
 
 `pipenv install beautifulsoup4`
 
@@ -91,4 +89,3 @@ gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 
 gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated --region=us-central1
 ```
-

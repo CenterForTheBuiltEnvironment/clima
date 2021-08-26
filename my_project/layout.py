@@ -28,7 +28,7 @@ def footer():
                     ),
                     html.A(
                         "Version: 0.4.4",
-                        href="/changelog",
+                        href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
                     ),
                 ],
             ),
