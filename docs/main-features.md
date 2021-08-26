@@ -1,16 +1,8 @@
 # Main features
 
-The CBE Clima Tool is an interface that gives you direct access to high-quality visualization of almost 30,000 worldwide weather files from both[ Energy Plus](https://energyplus.net/weather) and[ Climate.One.Building.org](http://climate.onebuilding.org/). The interface also allows the upload of your own EPW weather files.
-
-![CBE Clima home page](.gitbook/assets/clima-home.png)
-
-## Tools structure
-
 Beyond allowing the display of daily, monthly, and yearly plots of most variables contained in EPW files,[ Clima](https://clima.cbe.berkeley.edu/) calculates heating and cooling degree days, generates customizable wind roses, sun paths, psychrometric charts, and more.
 
 Furthermore, there are tabs dedicated to understanding natural ventilation potential, investigating UTCI thermal stress and equivalent temperatures under different scenarios, and exploring correlations among data in the EPW.
-
-## Main features
 
 All the graphics are downloadable in high-quality vector format \(.svg\) and free to use for research, educational and professional purposes and are licensed under a permissive[ Creative Commons \(CC BY 4.0.\) license](https://creativecommons.org/licenses/by/4.0/). The source code -mostly Python- is also available on[ GitHub](https://github.com/CenterForTheBuiltEnvironment/clima) under[ MIT licence](https://github.com/CenterForTheBuiltEnvironment/clima/blob/main/LICENSE) for anyone to freely use, re-use, or misuse.
 
