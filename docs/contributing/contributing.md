@@ -2,6 +2,8 @@
 description: Guide on how to contribute to this project
 ---
 
+# How to contribute
+
 First off, thanks for taking the time to contribute!
 
 ## General Feedback
@@ -29,3 +31,4 @@ $ git commit -m "A brief summary of the commit
 ## Thanks
 
 Thank you again for being interested in this project! You are awesome!
+

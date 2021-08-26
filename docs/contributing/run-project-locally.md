@@ -1,17 +1,19 @@
 ---
-description: These instructions will get you a copy of the project up and running on your   local machine for development and testing purposes.
+description: >-
+  These instructions will get you a copy of the project up and running on your  
+  local machine for development and testing purposes.
 ---
 
 # Run project locally
 
-### Prerequisites
+## Prerequisites
 
 Python 3 installed on your machine and [pipenv](https://docs.pipenv.org).
 
 * If you do not have Python installed on your machine you can follow [this guide](https://wiki.python.org/moin/BeginnersGuide/Download)
 * You can install `pipenv` using the following command `pip install pipenv`.
 
-### Installation
+## Installation
 
 This guide is for Mac OSX, Linux, or Windows.
 
@@ -24,19 +26,19 @@ This guide is for Mac OSX, Linux, or Windows.
 
 2. **Create a virtual environment using pipenv and install dependencies:**
 
-    ```text
+   ```text
     pipenv install --three
-    ```
+   ```
 
-3. ** Run tool locally**
+3.  **Run tool locally**
 
-    Now you should be ready to run the tool locally.
+   Now you should be ready to run the tool locally.
 
-    `pipenv run python my_project.py`
+   `pipenv run python my_project.py`
 
 Visit [http://localhost:8080](http://localhost:8080) in your browser to check it out. Note that whenever you want to run the tool, you have to activate the virtualenv first.
 
-#### Adding new dependencies
+### Adding new dependencies
 
 Pipfiles contain information about the dependencies of your project, and supersede the requirements.txt file that is typically used in Python projects.
 
@@ -48,19 +50,19 @@ The package name, together with its version and a list of its own dependencies, 
 
 `pipenv lock`
 
-#### Managing your development environment
+### Managing your development environment
 
 There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. Pipenv will let you keep the two environments separate using the --dev flag. For example,
 
 `pipenv install --dev nose2`
 
-#### Generate and update the requirement.txt file
+### Generate and update the requirement.txt file
 
 You can update the requirement.txt file with the following command.
 
 `pipenv run pip freeze > requirements.txt`
 
-### Versioning
+## Versioning
 
 When you release a new version of the tool you should first use `bumpversion` to update the version of the tool. You can use the following command:
 
@@ -72,7 +74,7 @@ If the above command do not work even if you have committed all the files try wi
 
 Secondly, you should describe the changes in `CHANGELOG.md`
 
-### Deploy to Google Cloud Run
+## Deploy to Google Cloud Run
 
 You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed on your computer. A short guide on how to deploy on Google Cloud Run can be found [here](https://youtu.be/FPFDg5znLTM).
 
@@ -82,10 +84,11 @@ gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
 gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1
 ```
 
-#### Test project
+### Test project
 
 ```text
 gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 
 gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated --region=us-central1
 ```
+
