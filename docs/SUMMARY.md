@@ -4,7 +4,8 @@
 
 ## Documentation
 
-* [Main features](main-features.md)
+* [Main features](documentation/main-features.md)
+* [Home page](documentation/tab-home.md)
 
 ## Contributing
 

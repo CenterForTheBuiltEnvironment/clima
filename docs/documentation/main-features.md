@@ -7,4 +7,4 @@ Users can download:
 * all the charts and figures in Scalable Vector Graphics (SVG);
 * the data from the EPW file or those we used in the tool to generate the plots in Comma-Separated Values (CSV) format.
 
-When dis-playing the variables in the interactive plots users can either select to use the Global or Local Value Ranges. The `Global` option uses preset limits for the chart axes, chosen as to cover the vast majority of the climatic ranges to be found on planet Earth. This allows the user to easily compare charts generated for any two different locations.  The `Local` option sets the upper and lower limits of the chart axes as a function of the data contained in the EPW file.
+When displaying the variables in the interactive plots users can either select to use the Global or Local Value Ranges. The `Global` option uses preset limits for the chart axes, chosen to cover the vast majority of the climatic ranges to be found on planet Earth. This allows the user to easily compare charts generated for any two different locations.  The `Local` option sets the upper and lower limits of the chart axes as a function of the data contained in the EPW file.
