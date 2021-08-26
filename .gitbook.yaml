@@ -2,5 +2,5 @@ root: ./docs/
 
 structure:
     readme: ../README.md
-    summary: ./SUMMARY.md
+    conduct: ../CODE_OF_CONDUCT.md
 
