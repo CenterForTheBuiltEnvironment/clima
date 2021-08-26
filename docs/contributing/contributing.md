@@ -1,4 +1,8 @@
-# Contributing
+---
+description: Guide on how to contribute to this project
+---
+
+# How to contribute
 
 First off, thanks for taking the time to contribute!
 
@@ -6,17 +10,9 @@ First off, thanks for taking the time to contribute!
 
 If you have a general feedback about our project, please do not open an issue but instead please fill in this [form](https://forms.gle/LRUq3vsFnE1QCLiA6)
 
-## Documentation
-
-Documentation for this project is available [here](https://center-for-the-built-environment.gitbook.io/clima/)
-
 ## Code of Conduct
 
 Available [here](code_of_conduct.md)
-
-## Set up project locally
-
-Please read the [README.md]() file to set up your project locally.
 
 ## Code style
 
