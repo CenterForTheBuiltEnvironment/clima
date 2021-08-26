@@ -12,6 +12,7 @@ from pvlib import solarposition
 from pythermalcomfort.models import utci
 from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
+import math
 
 
 @code_timer
@@ -52,6 +53,7 @@ def create_df(lst, file_name):
         "period": None,
     }
 
+    # from OneClimaBuilding files extract info about reference years
     try:
         location_info["period"] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
     except AttributeError:
@@ -100,12 +102,24 @@ def create_df(lst, file_name):
         "DaySSnow",
     ]
 
+    # assign column names and if fewer cols are there than supposed assign 9999 to that col
     if len(lst[0]) < len(col_names):
         epw_df = pd.DataFrame(columns=col_names[: len(lst[0])], data=lst)
         for col in [x for ix, x in enumerate(col_names) if ix >= len(lst[0])]:
             epw_df[col] = 9999
     else:
         epw_df = pd.DataFrame(columns=col_names, data=lst)
+
+    # from EnergyPlus files extract info about reference years
+    if not location_info["period"]:
+        years = epw_df["year"].astype("int").unique()
+        if len(years) == 1:
+            year_rounded_up = int(math.ceil(years[0] / 10.0)) * 10
+            location_info["period"] = f"{year_rounded_up-10}-{year_rounded_up}"
+        else:
+            min_year = int(math.floor(min(years) / 10.0)) * 10
+            max_year = int(math.ceil(max(years) / 10.0)) * 10
+            location_info["period"] = f"{min_year}-{max_year}"
 
     # Add fake_year
     epw_df["fake_year"] = "year"
@@ -274,7 +288,7 @@ if __name__ == "__main__":
 
     # -----
     lines = get_data(test_url)
-    df, location_data = create_df(lines, test_url)
+    df, location_data = create_df(lst=lines, file_name=test_url)
 
     # ---- import a local file
     file_path = r"C:\Users\sbbfti\Downloads\PredictiveWeatherFilesEpw_20210712\PredictiveWeatherFilesEpw_20210712\01\RCP2.6\2030\01_CZ0101_DA_NH16_TMY_RCP26_2030.epw"
