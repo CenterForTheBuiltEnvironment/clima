@@ -15,7 +15,7 @@ def layout_t_rh():
             html.Div(
                 className="container-row full-width align-center justify-center",
                 children=[
-                    html.H3(
+                    html.H4(
                         className="text-next-to-input", children=["Select a variable: "]
                     ),
                     dcc.Dropdown(

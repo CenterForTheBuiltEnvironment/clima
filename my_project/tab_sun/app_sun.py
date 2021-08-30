@@ -1,5 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
+import dash_bootstrap_components as dbc
 from my_project.global_scheme import (
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
@@ -32,8 +33,9 @@ def sun_path():
                     id_button="sun-path-chart-label",
                 ),
             ),
-            html.Div(
-                className="container-row justify-center align-center",
+            dbc.Row(
+                align="center",
+                justify="center",
                 children=[
                     html.H6(
                         className="text-next-to-input",
@@ -47,12 +49,13 @@ def sun_path():
                             {"label": "Cartesian", "value": "cartesian"},
                         ],
                         value="polar",
-                        style={"width": "20rem"},
+                        style={"width": "10rem"},
                     ),
                 ],
             ),
-            html.Div(
-                className="container-row justify-center align-center",
+            dbc.Row(
+                align="center",
+                justify="center",
                 children=[
                     html.H6(
                         className="text-next-to-input",
@@ -66,21 +69,17 @@ def sun_path():
                             for i in sun_cloud_tab_dropdown_names
                         ],
                         value="None",
-                        style={"width": "20rem"},
+                        style={"width": "10rem"},
                     ),
                 ],
             ),
-            html.Div(
-                id="sunpath-container",
-                children=[
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(
-                            id="custom-sunpath",
-                            className="container-row full-width align-center justify-center",
-                        ),
-                    ),
-                ],
+            dcc.Loading(
+                type="circle",
+                children=dbc.Row(
+                    align="center",
+                    justify="center",
+                    id="custom-sunpath",
+                ),
             ),
         ],
     )
@@ -189,7 +188,11 @@ def monthly_and_cloud_chart(ts, df, meta):
 
     # Cloud Cover
     cover = barchart(df, "Tskycover", [False], [False, "", 3, 7], True)
-    cover = cover.update_layout(margin=tight_margins, title="")
+    cover = cover.update_layout(
+        margin=tight_margins,
+        title="",
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
+    )
 
     return dcc.Graph(
         config=generate_chart_name("monthly_sun", meta),

@@ -1,26 +1,10 @@
 /**Banner**/
 #banner { 
-    padding: 24px;
-    justify-content: space-between;
+    padding: 1rem;
     background-color: #003262;
     color: white;
     /* position: sticky; */
-    top: 0;
     z-index: 1;
-}
-
-#logo-small {
-    height: 5em;
-}
-
-#banner-text-left * {
-    margin: 6px;
-}
-
-#banner-text-right * {
-    margin: 3px;
-    text-align: left;
-    max-width: 220px;
 }
 
 #banner-title {
@@ -32,9 +16,4 @@
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
     max-height: 25px;
-}
-
-#banner-text-right * {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 400;
 }

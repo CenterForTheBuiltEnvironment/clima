@@ -1,9 +1,10 @@
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import dash
 import dash_core_components as dcc
 
-from my_project.layout import build_banner, build_tabs, footer
+from my_project.layout import banner, build_tabs, footer
 from my_project.tab_wind.app_wind import layout_wind
 from my_project.tab_sun.app_sun import layout_sun
 from my_project.tab_select.app_select import layout_select
@@ -22,11 +23,12 @@ from app import app
 server = app.server
 
 app.title = "CBE Clima Tool"
-app.layout = html.Div(
-    id="big-container",
+app.layout = dbc.Container(
+    fluid=True,
+    style={"padding": "0"},
     children=[
         dcc.Location(id="url", refresh=False),
-        build_banner(),
+        banner(),
         html.Div(id="page-content"),
         footer(),
     ],

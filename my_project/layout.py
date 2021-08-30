@@ -4,101 +4,101 @@ import dash_html_components as html
 
 
 def footer():
-    return html.Div(
+    return dbc.Row(
+        align="center",
         id="footer-container",
-        className="container-row",
         children=[
-            html.Div(
-                className="container-col",
-                id="footer-left-container",
+            dbc.Col(
                 children=[
-                    html.A(
-                        children=[
-                            html.Img(
-                                id="cbe-logo",
-                                src="assets/img/cbe-logo.png",
-                                className="mb-2",
-                            )
-                        ],
-                        href="https://cbe.berkeley.edu/",
+                    dbc.Row(
+                        html.A(
+                            children=[
+                                html.Img(
+                                    src="assets/img/cbe-logo.png",
+                                )
+                            ],
+                            href="https://cbe.berkeley.edu/",
+                        )
                     ),
-                    html.A(
-                        "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License (CC BY 4.0)",
-                        href="https://creativecommons.org/licenses/by/4.0/",
+                    dbc.Row(
+                        html.A(
+                            "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License (CC BY 4.0)",
+                            href="https://creativecommons.org/licenses/by/4.0/",
+                        ),
                     ),
-                    html.A(
-                        "Version: 0.4.5",
-                        href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
+                    dbc.Row(
+                        html.A(
+                            "Version: 0.4.5",
+                            href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
+                        ),
                     ),
                 ],
+                width=12,
+                md=6,
             ),
-            html.Div(
-                className="container-row",
-                id="footer-right-container",
-                children=[
-                    dcc.Markdown(
-                        """
-                    Developed by [Giovanni Betti](https://www.linkedin.com/in/gbetti/), 
+            dbc.Col(
+                dcc.Markdown(
+                    """
+                    Developed by [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
                     [Christine Nguyen](https://chrlng.github.io/),
                     [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
-                    
+
                     Supported browsers: Chromium-based browsers, Firefox.
-                    
+
                     Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
-                    
+
                     [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
                     """,
-                    ),
-                ],
+                ),
+                width=12,
+                md=6,
             ),
         ],
     )
 
 
-def build_banner():
-    """Build the banner at the top of the page.
-
-    TO DO: add in global and local buttons
-    """
+def banner():
+    """Build the banner at the top of the page."""
     return html.Div(
         id="banner",
-        className="container-row",
         children=[
-            html.Div(
-                id="banner-text-left",
-                className="container-row",
+            dbc.Row(
+                align="center",
                 children=[
-                    html.A(
-                        href="/",
-                        children=[
-                            html.Img(
-                                id="logo-small", src="assets/img/cbe-logo-small.png"
-                            ),
-                        ],
+                    dbc.Col(
+                        html.A(
+                            href="/",
+                            children=[
+                                html.Img(
+                                    src="assets/img/cbe-logo-small.png",
+                                ),
+                            ],
+                        ),
+                        width="auto",
                     ),
-                    html.Div(
-                        className="container-col",
+                    dbc.Col(
                         children=[
                             html.H1(id="banner-title", children=["CBE Clima Tool"]),
                             html.H5(
-                                id="banner-subtitle", children=["Current Location: N/A"]
+                                id="banner-subtitle",
+                                children=["Current Location:"],
                             ),
                         ],
                     ),
-                ],
-            ),
-            html.Div(
-                id="banner-text-right",
-                className="container-col",
-                children=[
-                    dbc.RadioItems(
-                        options=[
-                            {"label": "Global Value Ranges", "value": "global"},
-                            {"label": "Local Value Ranges", "value": "local"},
+                    dbc.Col(
+                        style={"fontWeight": "400", "padding": "1rem"},
+                        children=[
+                            dbc.RadioItems(
+                                options=[
+                                    {"label": "Global Value Ranges", "value": "global"},
+                                    {"label": "Local Value Ranges", "value": "local"},
+                                ],
+                                value="local",
+                                id="global-local-radio-input",
+                                inline=False,
+                            ),
                         ],
-                        value="local",
-                        id="global-local-radio-input",
-                        inline=True,
+                        width={"order": "last"},
                     ),
                 ],
             ),

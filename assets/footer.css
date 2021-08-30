@@ -1,13 +1,8 @@
 #footer-container {
-    padding: 3rem;
-    justify-content: space-between;
-    align-items: center;
+    padding: 1rem;
+    margin:0;
     color: white;
     background-color: #003262;
-}
-
-#cbe-logo {
-    height: 60px;
 }
 
 a {

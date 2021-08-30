@@ -53,26 +53,34 @@ def layout_summary():
                         ),
                     ),
                     dcc.Loading(
-                        className="container-row",
                         type="circle",
-                        children=[
-                            dbc.Button(
-                                "Download EPW",
-                                color="primary",
-                                className="ml-4",
-                                id="download-epw-button",
-                                style={"width": "20rem"},
-                            ),
-                            dbc.Button(
-                                "Download Clima dataframe",
-                                color="primary",
-                                className="ml-4",
-                                id="download-button",
-                                style={"width": "20rem"},
-                            ),
-                            dcc.Download(id="download-dataframe-csv"),
-                            dcc.Download(id="download-epw"),
-                        ],
+                        children=dbc.Row(
+                            [
+                                dbc.Col(
+                                    dbc.Button(
+                                        "Download EPW",
+                                        color="primary",
+                                        id="download-epw-button",
+                                    ),
+                                    width="auto",
+                                ),
+                                dbc.Col(
+                                    dbc.Button(
+                                        "Download Clima dataframe",
+                                        color="primary",
+                                        id="download-button",
+                                    ),
+                                    width="auto",
+                                ),
+                                dbc.Col(
+                                    [
+                                        dcc.Download(id="download-dataframe-csv"),
+                                        dcc.Download(id="download-epw"),
+                                    ],
+                                    width=1,
+                                ),
+                            ],
+                        ),
                     ),
                     html.Div(
                         children=title_with_tooltip(
@@ -87,35 +95,54 @@ def layout_summary():
                         is_open=False,
                         id="warning-cdd-higher-hdd",
                     ),
-                    html.Div(
+                    dbc.Row(
                         [
-                            html.Label(
-                                "Heating degree day (HDD) setpoint (°C)",
-                                style={"marginRight": "1rem"},
+                            dbc.Col(
+                                html.Label(
+                                    "Heating degree day (HDD) setpoint (°C)",
+                                ),
+                                width=9,
+                                md="auto",
                             ),
-                            dbc.Input(
-                                id="input-hdd-set-point",
-                                type="number",
-                                value=10,
-                                style={"marginRight": "2rem", "width": "5rem"},
+                            dbc.Col(
+                                dbc.Input(
+                                    id="input-hdd-set-point",
+                                    type="number",
+                                    value=10,
+                                    style={"width": "4rem"},
+                                ),
+                                width=3,
+                                md="auto",
                             ),
-                            html.Label(
-                                "Cooling degree day (CDD) setpoint (°C)",
-                                style={"marginRight": "1rem"},
+                            dbc.Col(
+                                html.Label(
+                                    "Cooling degree day (CDD) setpoint (°C)",
+                                ),
+                                width=9,
+                                md="auto",
                             ),
-                            dbc.Input(
-                                id="input-cdd-set-point",
-                                type="number",
-                                value=18,
-                                style={"marginRight": "2rem", "width": "5rem"},
+                            dbc.Col(
+                                dbc.Input(
+                                    id="input-cdd-set-point",
+                                    type="number",
+                                    value=18,
+                                    style={"width": "4rem"},
+                                ),
+                                width=3,
+                                md="auto",
                             ),
-                            dbc.Button(
-                                id="submit-set-points",
-                                children="Submit",
-                                color="primary",
+                            dbc.Col(
+                                dbc.Button(
+                                    id="submit-set-points",
+                                    children="Submit",
+                                    color="primary",
+                                ),
+                                width=12,
+                                md="auto",
                             ),
                         ],
-                        className="container-row justify-center align-center",
+                        align="center",
+                        justify="around",
                     ),
                     dcc.Loading(
                         type="circle",
@@ -128,22 +155,14 @@ def layout_summary():
                             id_button="climate-profiles-chart",
                         ),
                     ),
-                    html.Div(
+                    dbc.Row(
                         id="graph-container",
                         className="container-row",
                         children=[
-                            html.Div(
-                                id="temp-profile-graph",
-                            ),
-                            html.Div(
-                                id="humidity-profile-graph",
-                            ),
-                            html.Div(
-                                id="solar-radiation-graph",
-                            ),
-                            html.Div(
-                                id="wind-speed-graph",
-                            ),
+                            dbc.Col(id="temp-profile-graph", width=12, md=6, lg=3),
+                            dbc.Col(id="humidity-profile-graph", width=12, md=6, lg=3),
+                            dbc.Col(id="solar-radiation-graph", width=12, md=6, lg=3),
+                            dbc.Col(id="wind-speed-graph", width=12, md=6, lg=3),
                         ],
                     ),
                 ],
@@ -294,8 +313,15 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
         fig = go.Figure(
             data=data,
         )
-        fig.update_layout(barmode="relative", margin=tight_margins)
-        fig.update_layout(template=template, dragmode=False)
+        fig.update_layout(
+            barmode="relative",
+            margin=tight_margins,
+            template=template,
+            dragmode=False,
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1
+            ),
+        )
 
         fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
         fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)

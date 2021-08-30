@@ -37,7 +37,7 @@ def section_one_inputs():
     return html.Div(
         className="container-row full-width row-center",
         children=[
-            html.H3(className="text-next-to-input", children=["Select a variable: "]),
+            html.H4(className="text-next-to-input", children=["Select a variable: "]),
             dcc.Dropdown(
                 id="sec1-var-dropdown",
                 options=[
