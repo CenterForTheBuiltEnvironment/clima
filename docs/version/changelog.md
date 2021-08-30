@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 0.4.4 \(2021-08-30\)
+
+Fix:
+
+* wind rose was not displaying correctly
+
+Features:
+
+* first draft of the documentation
+* extracting reference years from EnergyPlus file
+* added title to daily profile chart
+* not displaying tooltips if no info is available
+
 ## Version 0.4.4 \(2021-08-16\)
 
 Fix:
