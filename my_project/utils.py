@@ -8,8 +8,6 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
-import dash_core_components as dcc
-from my_project.docs.doc_modals_body import documentation
 
 
 def code_timer(func):
@@ -77,94 +75,36 @@ def plot_location_epw_files():
 
 
 def title_with_tooltip(text, tooltip_text, id_button):
-    modal_body = False
-    try:
-        modal_body = documentation[id_button]
-    except KeyError:
-        pass
 
     display_tooltip = "none"
     if tooltip_text:
         display_tooltip = "block"
 
-    if not modal_body:
-        return html.Div(
-            className="container-row",
-            style={"padding": "1rem", "marginTop": "1rem"},
-            children=[
-                html.H5(text, style={"marginRight": "0.5rem"}),
-                html.Div(
-                    [
-                        html.Sup(
-                            html.Img(
-                                id=id_button,
-                                src="../assets/icons/help.png",
-                                alt="help",
-                                style={
-                                    "width": "1rem",
-                                    "height": "1rem",
-                                },
-                            ),
-                        ),
-                        dbc.Tooltip(
-                            tooltip_text,
-                            target=id_button,
-                            placement="right",
-                        ),
-                    ],
-                    style={"display": display_tooltip},
-                ),
-            ],
-        )
-    else:
-        return (
+    return html.Div(
+        className="container-row",
+        style={"padding": "1rem", "marginTop": "1rem"},
+        children=[
+            html.H5(text, style={"marginRight": "0.5rem"}),
             html.Div(
-                className="container-row",
-                style={"marginTop": "1rem"},
-                children=[
-                    dbc.Button(
-                        children=[
-                            html.H5(
-                                text,
-                            ),
-                        ],
-                        style={
-                            "textDecorationLine": "underline",
-                        },
-                        id=f"button_{id_button}",
-                        color="link",
+                [
+                    html.Sup(
+                        html.Img(
+                            id=id_button,
+                            src="../assets/icons/help.png",
+                            alt="help",
+                            style={
+                                "width": "1rem",
+                                "height": "1rem",
+                            },
+                        ),
                     ),
-                    dbc.Modal(
-                        [
-                            dbc.ModalHeader(dcc.Markdown(f"### {text}")),
-                            dbc.ModalBody(
-                                dcc.Markdown(modal_body), className="doc-modal-body"
-                            ),
-                        ],
-                        id=f"modal_{id_button}",
-                        is_open=False,
-                    ),
-                    html.Div(
-                        [
-                            html.Sup(
-                                html.Img(
-                                    id=id_button,
-                                    src="../assets/icons/help.png",
-                                    alt="help",
-                                    style={
-                                        "width": "1rem",
-                                        "height": "1rem",
-                                    },
-                                ),
-                            ),
-                            dbc.Tooltip(
-                                tooltip_text,
-                                target=id_button,
-                                placement="right",
-                            ),
-                        ],
-                        style={"display": display_tooltip},
+                    dbc.Tooltip(
+                        tooltip_text,
+                        target=id_button,
+                        placement="right",
                     ),
                 ],
+                style={"display": display_tooltip},
             ),
-        )
+        ],
+    )

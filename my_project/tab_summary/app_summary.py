@@ -420,30 +420,3 @@ def download_clima_dataframe(n_clicks, meta):
         )
     else:
         raise PreventUpdate
-
-
-def toggle_modal(n1, is_open):
-    if n1:
-        return not is_open
-    return is_open
-
-
-app.callback(
-    Output("modal_hdd-cdd-chart", "is_open"),
-    [Input("button_hdd-cdd-chart", "n_clicks")],
-    [State("modal_hdd-cdd-chart", "is_open")],
-)(toggle_modal)
-
-
-app.callback(
-    Output("modal_climate-profiles-chart", "is_open"),
-    [Input("button_climate-profiles-chart", "n_clicks")],
-    [State("modal_climate-profiles-chart", "is_open")],
-)(toggle_modal)
-
-
-app.callback(
-    Output("modal_download-button-label", "is_open"),
-    [Input("button_download-button-label", "n_clicks")],
-    [State("modal_download-button-label", "is_open")],
-)(toggle_modal)

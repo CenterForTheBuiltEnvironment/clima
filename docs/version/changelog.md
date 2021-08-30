@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.4.4 \(2021-08-30\)
+## Version 0.4.5 \(2021-08-30\)
 
 Fix:
 
