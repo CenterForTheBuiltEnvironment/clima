@@ -27,7 +27,7 @@ def footer():
                         href="https://creativecommons.org/licenses/by/4.0/",
                     ),
                     html.A(
-                        "Version: 0.4.4",
+                        "Version: 0.4.5",
                         href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
                     ),
                 ],
