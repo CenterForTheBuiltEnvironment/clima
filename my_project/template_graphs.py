@@ -490,8 +490,7 @@ def wind_rose(df, title, month, hour, labels):
         fig.add_trace(
             go.Barpolar(
                 r=rose[col],
-                # fixme I think we may need to remove the 360 - below
-                theta=360 - rose.index.categories,
+                theta=rose.index.categories,
                 name=col,
                 marker_color=spd_colors[i],
                 hovertemplate="frequency: %{r:.2f}%"
