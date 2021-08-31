@@ -6,6 +6,7 @@ import dash_html_components as html
 def footer():
     return dbc.Row(
         align="center",
+        justify="between",
         id="footer-container",
         children=[
             dbc.Col(
@@ -35,6 +36,8 @@ def footer():
                 ],
                 width=12,
                 md=6,
+                lg=4,
+                style={"padding": "15px"},
             ),
             dbc.Col(
                 dcc.Markdown(
@@ -48,10 +51,12 @@ def footer():
                     Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
 
                     [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
+                    
+                    [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
                     """,
                 ),
                 width=12,
-                md=6,
+                md=4,
             ),
         ],
     )

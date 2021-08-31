@@ -6,6 +6,7 @@
 
 * [Main features](documentation/main-features.md)
 * [Home page](documentation/tab-home.md)
+* [Summary tab](documentation/tab-summary.md)
 
 ## Contributing
 
