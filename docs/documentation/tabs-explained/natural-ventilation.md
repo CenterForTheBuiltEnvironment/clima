@@ -1,2 +1,2 @@
-# Natural Ventilation
+# Natural Ventilation Potential
 

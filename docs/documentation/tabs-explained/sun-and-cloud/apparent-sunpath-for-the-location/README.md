@@ -14,12 +14,27 @@ This allows the user to identify climatic patterns in relation to the apparent s
 
 ![Spherical and carthesian sunpaths for Berlin, DEU with various data overlays](../../../../.gitbook/assets/sunpath+variables.png)
 
-The full lists of variables that can be overlayed on the sunpath is:
+The variables that can be overlayed on the sunpath are:
 
-* lfäkbnadkln
-* kfnbldfbn
-* äsfknblkdfn
-* ökfjbnf
+* [Dry Bulb Temperature ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-dry-bulb-temperature)
+* [Dew Point Temperature ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-dew-point-temperature)
+* [Relative Humidity ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-relative-humidity)
+* [Atmospheric Pressure ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-atmospheric-station-pressure)
+* [Extraterrestrial Horizontal Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-extraterrestrial-horizontal-radiation)
+* [Extraterrestrial Direct Normal Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-extraterrestrial-direct-normal-radiation)
+* [Horizontal Infrared Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-horizontal-infrared-radiation-intensity)
+* [Global Horizontal Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-global-horizontal-radiation)
+* [Direct Normal Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-direct-normal-radiation)
+* Diffuse Horizontal Radiation 
+* Global Horizontal Illuminance 
+* Direct Normal Illuminance 
+* Diffuse Horizontal Illuminance 
+* Zenith Luminance 
+* Wind Direction 
+* Wind Speed 
+* Total Sky Cover 
+* Opaque Sky Cover 
+* Visibility
 
 
 
