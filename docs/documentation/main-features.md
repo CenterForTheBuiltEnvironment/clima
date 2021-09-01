@@ -1,4 +1,4 @@
-# Main features
+# Overview
 
 The CBE Clima Tool allows users to analyze and visualize climatic data. Via our tool users can be easily accessed via a map-based interface EPW files from two online repositories the [Energy Plus](https://energyplus.net/weather) and [Climate.One.Building.org](http://climate.onebuilding.org/). In addition, users can upload into our tool their own EPW file.
 
