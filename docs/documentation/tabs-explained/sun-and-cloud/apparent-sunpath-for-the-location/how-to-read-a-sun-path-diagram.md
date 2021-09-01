@@ -1,2 +1,2 @@
-# How to read a sun path diagram
+# How to read a spherical sun path diagram
 
