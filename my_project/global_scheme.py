@@ -411,7 +411,6 @@ fig_config = {
         "select2d",
         "zoom2d",
         "autoScale2d",
-        "resetScale2d",
         "pan2d",
         "lasso2d",
         "zoomIn2d",
