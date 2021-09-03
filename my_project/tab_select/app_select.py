@@ -132,7 +132,6 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["not_available"],
-                "one.",
                 "warning",
             )
         df, location_info = create_df(lines, url_store)

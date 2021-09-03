@@ -29,11 +29,16 @@ def get_data(url):
             data = repr(data).split("\\n")
             return data
         else:
+            print("returning none")
             return None
-    headers = {"User-Agent": "Mozilla/5.0"}
-    req = Request(url, headers=headers)
-    epw = urlopen(req).read().decode()
-    return epw.split("\n")
+    else:
+        try:
+            headers = {"User-Agent": "Mozilla/5.0"}
+            req = Request(url, headers=headers)
+            epw = urlopen(req).read().decode()
+            return epw.split("\n")
+        except:
+            return None
 
 
 @code_timer
@@ -287,7 +292,7 @@ if __name__ == "__main__":
     # fmt: on
 
     # -----
-    lines = get_data(test_url)
+    lines = get_data(url=test_url)
     df, location_data = create_df(lst=lines, file_name=test_url)
 
     # ---- import a local file
