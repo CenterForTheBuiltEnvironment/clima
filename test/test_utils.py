@@ -24,13 +24,7 @@ def import_epw_test():
 
 def test_summary_table_tmp_rh_tab():
     df = import_epw_test()
-    df_summary = summary_table_tmp_rh_tab(df, "RH")
+    data_table = summary_table_tmp_rh_tab(df, "RH")
 
-    assert df_summary.iloc[0, 0] == "Jan"
-    assert df_summary.iloc[0, 1] == 80.34
-
-
-def test_solar_global_radiation():
-    df = import_epw_test()
-
-    assert df["GHrad"].sum() == 1546122.0
+    assert data_table.data[0]["month"] == "Jan"
+    assert data_table.data[0]["mean"] == 80.34
