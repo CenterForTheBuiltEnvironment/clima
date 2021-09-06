@@ -1,5 +1,5 @@
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc, html
+import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from my_project.utils import generate_chart_name, title_with_tooltip
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile

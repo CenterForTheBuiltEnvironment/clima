@@ -11,6 +11,7 @@ gunicorn = "*"
 
 [dev-packages]
 cleanpy = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"

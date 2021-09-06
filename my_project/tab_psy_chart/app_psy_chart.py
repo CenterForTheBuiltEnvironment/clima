@@ -3,8 +3,8 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 from math import ceil, floor
 import dash_bootstrap_components as dbc
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,

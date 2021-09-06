@@ -1,5 +1,4 @@
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc, html
 from my_project.global_scheme import month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose

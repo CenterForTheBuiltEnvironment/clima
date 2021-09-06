@@ -1,8 +1,7 @@
 import dash_bootstrap_components as dbc
-import dash_html_components as html
+from dash import html, dcc
 from dash.dependencies import Input, Output
 import dash
-import dash_core_components as dcc
 
 from my_project.layout import banner, build_tabs, footer
 from my_project.tab_wind.app_wind import layout_wind
