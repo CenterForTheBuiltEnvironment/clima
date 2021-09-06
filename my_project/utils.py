@@ -8,6 +8,8 @@ from dash import html
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
+import dash_table
+from global_scheme import unit_dict
 
 
 def code_timer(func):
@@ -110,12 +112,9 @@ def title_with_tooltip(text, tooltip_text, id_button):
     )
 
 
-def summary_table_tmp_rh_tab(df, var_selected):
-    var = "RH"
-    if var_selected == "dd_tdb":
-        var = "DBT"
+def summary_table_tmp_rh_tab(df, value):
     df_summary = (
-        df.groupby(["month_names", "month"])[var]
+        df.groupby(["month_names", "month"])[value]
         .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
         .round(2)
     )
@@ -124,8 +123,31 @@ def summary_table_tmp_rh_tab(df, var_selected):
     df_summary = df_summary.rename(columns={"month_names": "month"})
 
     df_sum = (
-        df[var].describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99]).round(2).to_frame()
+        df[value]
+        .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
+        .round(2)
+        .to_frame()
     )
     df_sum = df_sum.T.assign(count="Year").rename(columns={"count": "month"})
 
-    return df_summary.append(df_sum)
+    df_summary = df_summary.append(df_sum)
+
+    unit = unit_dict[value + "_unit"].replace("<sup>", "").replace("</sup>", "")
+    return dash_table.DataTable(
+        columns=[
+            {"name": i, "id": i} if i == "month" else {"name": f"{i} [{unit}]", "id": i}
+            for i in df_summary.columns
+        ],
+        data=df_summary.to_dict("records"),
+        style_data={"whiteSpace": "normal", "height": "auto"},
+        style_cell={"textAlign": "center", "padding": "5px 20px"},
+        style_cell_conditional=[{"if": {"column_id": "month"}, "textAlign": "right"}],
+        style_header={"backgroundColor": "rgb(220, 220, 220)", "fontWeight": "bold"},
+        style_data_conditional=[
+            {"if": {"row_index": "odd"}, "backgroundColor": "white"},
+            {"if": {"row_index": "even"}, "backgroundColor": "rgb(250, 250, 250)"},
+            {"if": {"row_index": [12]}, "backgroundColor": "rgb(220, 220, 220)"},
+        ],
+        fill_width=False,
+        style_as_list_view=True,
+    )

@@ -122,7 +122,7 @@ color_dict = {
 }
 
 # Units Dictionary
-degrees_unit = "\u00B0 deg"
+degrees_unit = "\u00B0deg"
 temperature_unit = "\u00B0C"
 radiation_unit = "Wh/m<sup>2</sup>"
 thermal_stress_label = "Thermal stress"
@@ -151,7 +151,7 @@ unit_dict = {
     # Luminance
     "Zlumi_unit": "cd/m<sup>2</sup>",
     # Wind
-    "Wdir_unit": "\u00B0 deg",
+    "Wdir_unit": degrees_unit,
     "Wspeed_unit": "m/s",
     # Clouds
     "Tskycover_unit": "tenths",

@@ -2,7 +2,11 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
 from dash.exceptions import PreventUpdate
-from my_project.utils import generate_chart_name, title_with_tooltip
+from my_project.utils import (
+    generate_chart_name,
+    title_with_tooltip,
+    summary_table_tmp_rh_tab,
+)
 
 from my_project.global_scheme import (
     fig_config,
@@ -88,6 +92,18 @@ def section_one():
             dcc.Loading(
                 html.Div(className="full-width", id="query-heatmap"),
                 type="circle",
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Descriptive statistics",
+                    tooltip_text="count, mean, std, min, max, and percentiles",
+                    id_button="table-explore",
+                ),
+            ),
+            dbc.Row(
+                align="center",
+                justify="center",
+                id="table-data-explorer",
             ),
         ],
     )
@@ -757,3 +773,15 @@ def update_more_charts(
                 config=generate_chart_name("scatter_two_vars_explore", meta),
                 figure=two,
             )
+
+
+@app.callback(
+    Output("table-data-explorer", "children"),
+    [Input("sec1-var-dropdown", "value")],
+    [State("df-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_table(dd_value, df):
+    """Update the contents of tab three. Passing in general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+    return summary_table_tmp_rh_tab(df, dd_value)
