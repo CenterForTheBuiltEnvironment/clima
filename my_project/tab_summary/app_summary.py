@@ -26,24 +26,17 @@ def layout_summary():
                 className="container-col",
                 id="tab2-sec1-container",
                 children=[
-                    html.Div(
-                        className="container-col",
-                        id="location-info",
-                        children=[
-                            html.B(id="tab-two-location"),
-                            html.P(id="tab-two-long"),
-                            html.P(id="tab-two-lat"),
-                            html.P(id="tab-two-elevation"),
-                            html.P(id="period-of-record"),
-                        ],
+                    dcc.Loading(
+                        type="circle",
+                        children=html.Div(
+                            className="container-col",
+                            id="location-info",
+                            style={"padding": "12px"},
+                        ),
                     ),
                     dcc.Loading(
                         type="circle",
                         children=html.Div(className="tab-two-section", id="world-map"),
-                    ),
-                    html.Div(
-                        className="container-col",
-                        id="location-description",
                     ),
                     html.Div(
                         children=title_with_tooltip(
@@ -172,23 +165,30 @@ def layout_summary():
 
 
 @app.callback(
-    [
-        Output("world-map", "children"),
-        Output("tab-two-location", "children"),
-        Output("tab-two-long", "children"),
-        Output("tab-two-lat", "children"),
-        Output("tab-two-elevation", "children"),
-        Output("location-description", "children"),
-        Output("period-of-record", "children"),
-    ],
-    [
-        Input("df-store", "modified_timestamp"),
-    ],
-    [State("meta-store", "data")],
+    Output("world-map", "children"),
+    Input("df-store", "modified_timestamp"),
+    State("meta-store", "data"),
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_map(ts, meta):
+    """Update the contents of tab two. Passing in the general info (df, meta)."""
+    map_world = dcc.Graph(
+        id="gh_rad-profile-graph",
+        config=generate_chart_name("map_summary", meta),
+        figure=world_map(meta),
+    )
+
+    return map_world
+
+
+@app.callback(
+    Output("location-info", "children"),
+    Input("df-store", "modified_timestamp"),
+    [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
 # @code_timer
-def update_tab_map(ts, meta):
+def update_location_info(ts, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta['city']}, {meta['country']}"
     lon = f"Longitude: {meta['lon']}"
@@ -215,13 +215,23 @@ def update_tab_map(ts, meta):
         except KeyError:
             pass
 
-    map_world = dcc.Graph(
-        id="gh_rad-profile-graph",
-        config=generate_chart_name("map_summary", meta),
-        figure=world_map(meta),
+    # global horizontal irradiance
+    df = pd.read_json(df, orient="split")
+    total_g_hor = f"Annual total horizontal radiation: {df['GHrad'].sum() /1000} kWh/m2"
+
+    location_info = dbc.Col(
+        [
+            dbc.Row(location, style={"fontWeight": "bold"}),
+            dbc.Row(lon),
+            dbc.Row(lat),
+            dbc.Row(elevation),
+            dbc.Row(period),
+            dbc.Row(climate_text),
+            dbc.Row(total_g_hor),
+        ],
     )
 
-    return map_world, location, lon, lat, elevation, climate_text, period
+    return location_info
 
 
 @app.callback(
