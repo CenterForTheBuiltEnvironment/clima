@@ -67,16 +67,14 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
     if df[var].dropna().shape[0] == 0:
         return None
 
-    var_unit = str(var) + "_unit"
-    var_unit = unit_dict[var_unit]
+    var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
     var_color = color_dict[var]
     filter_name = str(filter_var) + "_name"
     filter_name = name_dict[filter_name]
-    filter_unit = str(filter_var) + "_unit"
-    filter_unit = unit_dict[filter_unit]
+    filter_unit = unit_dict[filter_var]
 
     if global_local == "global":
         # Set Global values for Max and minimum

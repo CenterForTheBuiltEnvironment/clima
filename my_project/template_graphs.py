@@ -17,8 +17,7 @@ def violin(df, var, global_local):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
-    var_unit = str(var) + "_unit"
-    var_unit = unit_dict[var_unit]
+    var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
@@ -123,7 +122,7 @@ def get_ashrae(df):
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
     lo80, hi80, lo90, hi90 = get_ashrae(df)
-    var_unit = unit_dict[str(var) + "_unit"]
+    var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_name = name_dict[str(var) + "_name"]
     var_color = color_dict[var]
@@ -271,7 +270,7 @@ def yearly_profile(df, var, global_local):
 def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
     var_name = name_dict[str(var) + "_name"]
-    var_unit = unit_dict[str(var) + "_unit"]
+    var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_color = color_dict[var]
     if global_local == "global":
@@ -380,7 +379,7 @@ def daily_profile(df, var, global_local):
 # @code_timer
 def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
-    var_unit = unit_dict[str(var) + "_unit"]
+    var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_color = color_dict[var]
     if global_local == "global":
@@ -551,11 +550,9 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
         filter_var = data_filter_info[1]
         filter_name = str(filter_var) + "_name"
         filter_name = name_dict[filter_name]
-        filter_unit = str(filter_var) + "_unit"
-        filter_unit = unit_dict[filter_unit]
+        filter_unit = unit_dict[filter_var]
 
-    var_unit = str(var) + "_unit"
-    var_unit = unit_dict[var_unit]
+    var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]

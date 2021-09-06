@@ -320,11 +320,9 @@ def nv_heatmap(
         else:
             df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
 
-    var_unit = str(var) + "_unit"
-    var_unit = unit_dict[var_unit]
+    var_unit = unit_dict[var]
 
-    filter_unit = str(filter_var) + "_unit"
-    filter_unit = unit_dict[filter_unit]
+    filter_unit = unit_dict[filter_var]
 
     var_range = range_dict[var]
 
@@ -468,11 +466,8 @@ def nv_bar_chart(
     var = "DBT"
     filter_var = "DPT"
 
-    var_unit = str(var) + "_unit"
-    var_unit = unit_dict[var_unit]
-
-    filter_unit = str(filter_var) + "_unit"
-    filter_unit = unit_dict[filter_unit]
+    var_unit = unit_dict[var]
+    filter_unit = unit_dict[filter_var]
 
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]

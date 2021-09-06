@@ -132,7 +132,7 @@ def summary_table_tmp_rh_tab(df, value):
 
     df_summary = df_summary.append(df_sum)
 
-    unit = unit_dict[value + "_unit"].replace("<sup>", "").replace("</sup>", "")
+    unit = unit_dict[value].replace("<sup>", "").replace("</sup>", "")
     return dash_table.DataTable(
         columns=[
             {"name": i, "id": i} if i == "month" else {"name": f"{i} [{unit}]", "id": i}

@@ -128,59 +128,59 @@ radiation_unit = "Wh/m<sup>2</sup>"
 thermal_stress_label = "Thermal stress"
 
 unit_dict = {
-    "DOY_unit": "days",
-    "month_unit": "months",
-    "hour_unit": "h",
+    "DOY": "days",
+    "month": "months",
+    "hour": "h",
     # Temp
-    "DBT_unit": temperature_unit,  # "&#8451"
-    "DPT_unit": temperature_unit,  # "&#8451"
+    "DBT": temperature_unit,  # "&#8451"
+    "DPT": temperature_unit,  # "&#8451"
     # Humidity
-    "RH_unit": "%",
+    "RH": "%",
     # Pressure
-    "Apressure_unit": "Pa",
+    "Apressure": "Pa",
     # Radiation
-    "EHrad_unit": radiation_unit,
-    "HIRrad_unit": radiation_unit,
-    "GHrad_unit": radiation_unit,
-    "DNrad_unit": radiation_unit,
-    "DifHrad_unit": radiation_unit,
+    "EHrad": radiation_unit,
+    "HIRrad": radiation_unit,
+    "GHrad": radiation_unit,
+    "DNrad": radiation_unit,
+    "DifHrad": radiation_unit,
     # Illuminance
-    "GHillum_unit": "lux",
-    "DNillum_unit": "lux",
-    "DifHillum_unit": "lux",
+    "GHillum": "lux",
+    "DNillum": "lux",
+    "DifHillum": "lux",
     # Luminance
-    "Zlumi_unit": "cd/m<sup>2</sup>",
+    "Zlumi": "cd/m<sup>2</sup>",
     # Wind
-    "Wdir_unit": degrees_unit,
-    "Wspeed_unit": "m/s",
+    "Wdir": degrees_unit,
+    "Wspeed": "m/s",
     # Clouds
-    "Tskycover_unit": "tenths",
-    "Oskycover_unit": "tenths",
+    "Tskycover": "tenths",
+    "Oskycover": "tenths",
     # Visibility
-    "Vis_unit": "Km",
+    "Vis": "Km",
     # Solar position
-    "apparent_zenith_unit": degrees_unit,
-    "zenith_unit": degrees_unit,
-    "apparent_elevation_unit": degrees_unit,
-    "elevation_unit": degrees_unit,
-    "azimuth_unit": degrees_unit,
-    "equation_of_time_unit": degrees_unit,
+    "apparent_zenith": degrees_unit,
+    "zenith": degrees_unit,
+    "apparent_elevation": degrees_unit,
+    "elevation": degrees_unit,
+    "azimuth": degrees_unit,
+    "equation_of_time": degrees_unit,
     # UTCI temperatures
-    "utci_Sun_Wind_unit": temperature_unit,  # "&#8451",
-    "utci_noSun_Wind_unit": temperature_unit,  # "&#8451",
-    "utci_Sun_noWind_unit": temperature_unit,  # "&#8451",
-    "utci_noSun_noWind_unit": temperature_unit,  # "&#8451",
+    "utci_Sun_Wind": temperature_unit,  # "&#8451",
+    "utci_noSun_Wind": temperature_unit,  # "&#8451",
+    "utci_Sun_noWind": temperature_unit,  # "&#8451",
+    "utci_noSun_noWind": temperature_unit,  # "&#8451",
     # UTCI categories
-    "utci_Sun_Wind_categories_unit": thermal_stress_label,
-    "utci_noSun_Wind_categories_unit": thermal_stress_label,
-    "utci_Sun_noWind_categories_unit": thermal_stress_label,
-    "utci_noSun_noWind_categories_unit": thermal_stress_label,
+    "utci_Sun_Wind_categories": thermal_stress_label,
+    "utci_noSun_Wind_categories": thermal_stress_label,
+    "utci_Sun_noWind_categories": thermal_stress_label,
+    "utci_noSun_noWind_categories": thermal_stress_label,
     # other psychrometric values
-    "p_vap_unit": "Pa",
-    "hr_unit": "kg water/kg dry air",
-    "t_wb_unit": temperature_unit,  # "&#8451"
-    "t_dp_unit": temperature_unit,  # "&#8451"
-    "h_unit": "J/kg dry air",
+    "p_vap": "Pa",
+    "hr": "kg water/kg dry air",
+    "t_wb": temperature_unit,  # "&#8451"
+    "t_dp": temperature_unit,  # "&#8451"
+    "h": "J/kg dry air",
 }
 
 # Global Names

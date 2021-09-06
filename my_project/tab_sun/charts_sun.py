@@ -61,7 +61,7 @@ def monthly_solar(epw_df):
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + unit_dict["GHrad_unit"]
+                    + unit_dict["GHrad"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -90,7 +90,7 @@ def monthly_solar(epw_df):
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + unit_dict["DifHrad_unit"]
+                    + unit_dict["DifHrad"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -118,7 +118,7 @@ def polar_graph(df, meta, global_local, var):
     solpos = df.loc[df["apparent_elevation"] > 0, :]
 
     if var != "None":
-        var_unit = unit_dict[str(var) + "_unit"]
+        var_unit = unit_dict[var]
         var_range = range_dict[var]
         var_name = name_dict[str(var) + "_name"]
         var_color = color_dict[var]
@@ -320,7 +320,7 @@ def custom_cartesian_solar(df, meta, global_local, var):
     time_zone = float(meta["time_zone"])
     tz = "UTC"
     if var != "None":
-        var_unit = unit_dict[str(var) + "_unit"]
+        var_unit = unit_dict[var]
         var_range = range_dict[var]
         var_name = name_dict[str(var) + "_name"]
         var_color = color_dict[var]

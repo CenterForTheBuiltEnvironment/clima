@@ -312,8 +312,7 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = str(var) + "_unit"
-        var_unit = unit_dict[var_unit]
+        var_unit = unit_dict[var]
 
         var_name = str(var) + "_name"
         var_name = name_dict[var_name]
@@ -380,9 +379,7 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=name_dict["DBT_name"]
-                + ": %{x:.2f}"
-                + unit_dict["DBT_unit"],
+                hovertemplate=name_dict["DBT_name"] + ": %{x:.2f}" + unit_dict["DBT"],
                 name="",
             )
         )
@@ -428,19 +425,19 @@ def update_psych_chart(
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
                 hovertemplate=name_dict["DBT_name"]
                 + ": %{x:.2f}"
-                + unit_dict["DBT_unit"]
+                + unit_dict["DBT"]
                 + "<br>"
                 + name_dict["RH_name"]
                 + ": %{customdata[0]:.2f}"
-                + unit_dict["RH_unit"]
+                + unit_dict["RH"]
                 + "<br>"
                 + name_dict["h_name"]
                 + ": %{customdata[1]:.2f}"
-                + unit_dict["h_unit"]
+                + unit_dict["h"]
                 + "<br>"
                 + name_dict["t_dp_name"]
                 + ": %{customdata[3]:.2f}"
-                + unit_dict["t_dp_unit"]
+                + unit_dict["t_dp"]
                 + "<br>"
                 + "<br>"
                 + var_name
