@@ -24,10 +24,7 @@ from app import app
 
 from my_project.global_scheme import (
     template,
-    unit_dict,
-    range_dict,
-    name_dict,
-    color_dict,
+    mapping_dictionary,
     tight_margins,
 )
 
@@ -312,15 +309,15 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = unit_dict[var]
+        var_unit = mapping_dictionary[var]["unit"]
 
-        var_name = name_dict[var]
+        var_name = mapping_dictionary[var]["name"]
 
-        var_color = color_dict[var]
+        var_color = mapping_dictionary[var]["color"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = range_dict["DBT"]
+        var_range_x = mapping_dictionary["DBT"]["range"]
         hr_range = [0, 0.03]
         var_range_y = hr_range
 
@@ -378,7 +375,9 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=name_dict["DBT"] + ": %{x:.2f}" + unit_dict["DBT"],
+                hovertemplate=mapping_dictionary["DBT"]["name"]
+                + ": %{x:.2f}"
+                + mapping_dictionary["DBT"]["name"],
                 name="",
             )
         )
@@ -422,21 +421,21 @@ def update_psych_chart(
                     colorbar=dict(thickness=30, title=var_unit + "<br>  "),
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=name_dict["DBT"]
+                hovertemplate=mapping_dictionary["DBT"]["name"]
                 + ": %{x:.2f}"
-                + unit_dict["DBT"]
+                + mapping_dictionary["DBT"]["unit"]
                 + "<br>"
-                + name_dict["RH"]
+                + mapping_dictionary["RH"]["name"]
                 + ": %{customdata[0]:.2f}"
-                + unit_dict["RH"]
+                + mapping_dictionary["RH"]["unit"]
                 + "<br>"
-                + name_dict["h"]
+                + mapping_dictionary["h"]["name"]
                 + ": %{customdata[1]:.2f}"
-                + unit_dict["h"]
+                + mapping_dictionary["h"]["unit"]
                 + "<br>"
-                + name_dict["t_dp"]
+                + mapping_dictionary["t_dp"]["name"]
                 + ": %{customdata[3]:.2f}"
-                + unit_dict["t_dp"]
+                + mapping_dictionary["t_dp"]["unit"]
                 + "<br>"
                 + "<br>"
                 + var_name

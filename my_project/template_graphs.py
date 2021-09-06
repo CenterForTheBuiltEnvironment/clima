@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
-from my_project.global_scheme import color_dict, name_dict, range_dict, unit_dict
+from my_project.global_scheme import mapping_dictionary
 
 from .global_scheme import month_lst, template, tight_margins
 
@@ -17,9 +17,9 @@ def violin(df, var, global_local):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
-    var_unit = unit_dict[var]
-    var_range = range_dict[var]
-    var_name = name_dict[var]
+    var_unit = mapping_dictionary[var]["unit"]
+    var_range = mapping_dictionary[var]["range"]
+    var_name = mapping_dictionary[var]["name"]
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
@@ -121,10 +121,10 @@ def get_ashrae(df):
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
     lo80, hi80, lo90, hi90 = get_ashrae(df)
-    var_unit = unit_dict[var]
-    var_range = range_dict[var]
-    var_name = name_dict[var]
-    var_color = color_dict[var]
+    var_unit = mapping_dictionary[var]["unit"]
+    var_range = mapping_dictionary[var]["range"]
+    var_name = mapping_dictionary[var]["name"]
+    var_color = mapping_dictionary[var]["color"]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -268,10 +268,10 @@ def yearly_profile(df, var, global_local):
 # @code_timer
 def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
-    var_name = name_dict[var]
-    var_unit = unit_dict[var]
-    var_range = range_dict[var]
-    var_color = color_dict[var]
+    var_name = mapping_dictionary[var]["name"]
+    var_unit = mapping_dictionary[var]["unit"]
+    var_range = mapping_dictionary[var]["range"]
+    var_color = mapping_dictionary[var]["color"]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -378,9 +378,9 @@ def daily_profile(df, var, global_local):
 # @code_timer
 def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
-    var_unit = unit_dict[var]
-    var_range = range_dict[var]
-    var_color = color_dict[var]
+    var_unit = mapping_dictionary[var]["unit"]
+    var_range = mapping_dictionary[var]["range"]
+    var_color = mapping_dictionary[var]["color"]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_z = var_range
@@ -455,7 +455,7 @@ def wind_rose(df, title, month, hour, labels):
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
 
-    spd_colors = color_dict["Wspeed"]
+    spd_colors = mapping_dictionary["Wspeed"]["color"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units="m/s")
     dir_bins = np.arange(-22.5 / 2, 370, 22.5)
@@ -547,13 +547,13 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
         end_hour = time_filter_info[2][1]
 
         filter_var = data_filter_info[1]
-        filter_name = name_dict[filter_var]
-        filter_unit = unit_dict[filter_var]
+        filter_name = mapping_dictionary[filter_var]["name"]
+        filter_unit = mapping_dictionary[filter_var]["unit"]
 
-    var_unit = unit_dict[var]
-    var_range = range_dict[var]
-    var_name = name_dict[var]
-    var_color = color_dict[var]
+    var_unit = mapping_dictionary[var]["unit"]
+    var_range = mapping_dictionary[var]["range"]
+    var_name = mapping_dictionary[var]["name"]
+    var_color = mapping_dictionary[var]["color"]
 
     color_below = var_color[0]
     color_above = var_color[-1]

@@ -1,4 +1,3 @@
-import dash_bootstrap_components as dbc
 from math import ceil, floor
 
 import numpy as np
@@ -6,11 +5,8 @@ import math
 import plotly.express as px
 import plotly.graph_objects as go
 from my_project.global_scheme import (
-    color_dict,
-    name_dict,
-    range_dict,
     template,
-    unit_dict,
+    mapping_dictionary,
 )
 
 month_lst = [
@@ -67,12 +63,12 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
     if df[var].dropna().shape[0] == 0:
         return None
 
-    var_unit = unit_dict[var]
-    var_range = range_dict[var]
-    var_name = name_dict[var]
-    var_color = color_dict[var]
-    filter_name = name_dict[filter_var]
-    filter_unit = unit_dict[filter_var]
+    var_unit = mapping_dictionary[var]["unit"]
+    var_range = mapping_dictionary[var]["range"]
+    var_name = mapping_dictionary[var]["name"]
+    var_color = mapping_dictionary[var]["color"]
+    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_unit = mapping_dictionary[filter_var]["unit"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -148,8 +144,8 @@ def three_var_graph(
     max_val = data_filter_info3[3]
 
     var = color_by
-    var_range = range_dict[var]
-    var_color = color_dict[var]
+    var_range = mapping_dictionary[var]["range"]
+    var_color = mapping_dictionary[var]["color"]
 
     if global_local != "global":
         # Set maximum and minimum according to data
@@ -180,11 +176,11 @@ def three_var_graph(
         return None
 
     title = (
-        name_dict[var_x]
+        mapping_dictionary[var_x]["name"]
         + " vs "
-        + name_dict[var_y]
+        + mapping_dictionary[var_y]["name"]
         + " colored by "
-        + name_dict[color_by]
+        + mapping_dictionary[color_by]["name"]
     )
 
     fig = px.scatter(
@@ -212,7 +208,10 @@ def three_var_graph(
 def two_var_graph(df, var_x, var_y):
 
     title = (
-        "Simultaneous frequency of " + name_dict[var_x] + " and  " + name_dict[var_y]
+        "Simultaneous frequency of "
+        + mapping_dictionary[var_x]["name"]
+        + " and  "
+        + mapping_dictionary[var_y]["name"]
     )
 
     fig = px.density_heatmap(

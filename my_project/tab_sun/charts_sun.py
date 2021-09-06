@@ -5,11 +5,8 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from my_project.global_scheme import (
-    color_dict,
-    name_dict,
-    range_dict,
     template,
-    unit_dict,
+    mapping_dictionary,
     degrees_unit,
     tight_margins,
 )
@@ -61,7 +58,7 @@ def monthly_solar(epw_df):
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + unit_dict["GHrad"]
+                    + mapping_dictionary["GHrad"]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -90,7 +87,7 @@ def monthly_solar(epw_df):
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + unit_dict["DifHrad"]
+                    + mapping_dictionary["DifHrad"]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -118,10 +115,10 @@ def polar_graph(df, meta, global_local, var):
     solpos = df.loc[df["apparent_elevation"] > 0, :]
 
     if var != "None":
-        var_unit = unit_dict[var]
-        var_range = range_dict[var]
-        var_name = name_dict[var]
-        var_color = color_dict[var]
+        var_unit = mapping_dictionary[var]["unit"]
+        var_range = mapping_dictionary[var]["range"]
+        var_name = mapping_dictionary[var]["name"]
+        var_color = mapping_dictionary[var]["color"]
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -320,10 +317,10 @@ def custom_cartesian_solar(df, meta, global_local, var):
     time_zone = float(meta["time_zone"])
     tz = "UTC"
     if var != "None":
-        var_unit = unit_dict[var]
-        var_range = range_dict[var]
-        var_name = name_dict[var]
-        var_color = color_dict[var]
+        var_unit = mapping_dictionary[var]["unit"]
+        var_range = mapping_dictionary[var]["range"]
+        var_name = mapping_dictionary[var]["name"]
+        var_color = mapping_dictionary[var]["color"]
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range

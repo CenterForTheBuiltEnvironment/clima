@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
 import dash_table
-from global_scheme import unit_dict
+from global_scheme import mapping_dictionary
 
 
 def code_timer(func):
@@ -132,7 +132,7 @@ def summary_table_tmp_rh_tab(df, value):
 
     df_summary = df_summary.append(df_sum)
 
-    unit = unit_dict[value].replace("<sup>", "").replace("</sup>", "")
+    unit = mapping_dictionary[value]["unit"].replace("<sup>", "").replace("</sup>", "")
     return dash_table.DataTable(
         columns=[
             {"name": i, "id": i} if i == "month" else {"name": f"{i} [{unit}]", "id": i}

@@ -5,10 +5,7 @@ from dash import html
 import plotly.graph_objects as go
 from my_project.global_scheme import (
     template,
-    unit_dict,
-    range_dict,
-    name_dict,
-    color_dict,
+    mapping_dictionary,
     tight_margins,
     month_lst,
     container_row_center_full,
@@ -320,17 +317,17 @@ def nv_heatmap(
         else:
             df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
 
-    var_unit = unit_dict[var]
+    var_unit = mapping_dictionary[var]["unit"]
 
-    filter_unit = unit_dict[filter_var]
+    filter_unit = mapping_dictionary[filter_var]["unit"]
 
-    var_range = range_dict[var]
+    var_range = mapping_dictionary[var]["range"]
 
-    var_name = name_dict[var]
+    var_name = mapping_dictionary[var]["name"]
 
-    filter_name = name_dict[filter_var]
+    filter_name = mapping_dictionary[filter_var]["name"]
 
-    var_color = color_dict[var]
+    var_color = mapping_dictionary[var]["color"]
 
     if global_local == "global":
         range_z = var_range
@@ -464,12 +461,12 @@ def nv_bar_chart(
     var = "DBT"
     filter_var = "DPT"
 
-    var_unit = unit_dict[var]
-    filter_unit = unit_dict[filter_var]
+    var_unit = mapping_dictionary[var]["unit"]
+    filter_unit = mapping_dictionary[filter_var]["unit"]
 
-    var_name = name_dict[var]
+    var_name = mapping_dictionary[var]["name"]
 
-    filter_name = name_dict[filter_var]
+    filter_name = mapping_dictionary[filter_var]["name"]
 
     color_in = "dodgerblue"
 

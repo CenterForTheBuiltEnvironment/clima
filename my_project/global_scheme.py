@@ -56,190 +56,11 @@ container_col_center_one_of_three = (
     "container-col justify-center one-of-three-container"
 )
 
-# color dictionary
-color_dict = {
-    # TEMP
-    "DBT": blue_red_yellow,
-    "DPT": blue_red_yellow,
-    # HUMIDITY
-    "DryHumid": dry_humid,
-    "RH": dry_humid,
-    # SOLAR
-    "GHrad": sun_colors,
-    "DNrad": sun_colors,
-    "DifHrad": sun_colors,
-    "EHrad": sun_colors,
-    "HIRrad": sun_colors,
-    # Solar position
-    "apparent_zenith": sun_colors,
-    "zenith": sun_colors,
-    "apparent_elevation": sun_colors,
-    "elevation": sun_colors,
-    "azimuth": sun_colors,
-    "equation_of_time": sun_colors,
-    # ILLUMINACE
-    "GHillum": light_colors,
-    "DNillum": light_colors,
-    "DifHillum": light_colors,
-    # LUMINANCE
-    "Zlumi": bright_colors,
-    # WIND
-    "Wspeed": wind_speed_color,
-    "Wdir": wind_dir_color,
-    # Clouds # Visibility
-    "CloudColors": cloud_colors,
-    "Tskycover": cloud_colors,
-    "Oskycover": cloud_colors,
-    "Vis": cloud_colors,
-    "hour": [
-        "#000000",
-        "#355e7e",
-        "#6b5c7b",
-        "#c06c84",
-        "#f8b195",
-        "#c92a42",
-        "#c92a42",
-        "#c92a42",
-        "#000000",
-    ],
-    "Apressure": wind_speed_color,
-    # UTCI temperatures
-    "utci_Sun_Wind": blue_red_yellow,
-    "utci_noSun_Wind": blue_red_yellow,
-    "utci_Sun_noWind": blue_red_yellow,
-    "utci_noSun_noWind": blue_red_yellow,
-    # UTCI categories
-    "utci_Sun_Wind_categories": utci_categories_color,
-    "utci_noSun_Wind_categories": utci_categories_color,
-    "utci_Sun_noWind_categories": utci_categories_color,
-    "utci_noSun_noWind_categories": utci_categories_color,
-    # other psychrometric quantities
-    "p_vap": dry_humid,
-    "hr": dry_humid,
-    "t_wb": blue_red_yellow,
-    "t_dp": blue_red_yellow,
-    "h": blue_red_yellow,
-}
-
 # Units Dictionary
 degrees_unit = "\u00B0deg"
 temperature_unit = "\u00B0C"
 radiation_unit = "Wh/m<sup>2</sup>"
 thermal_stress_label = "Thermal stress"
-
-unit_dict = {
-    "DOY": "days",
-    "month": "months",
-    "hour": "h",
-    # Temp
-    "DBT": temperature_unit,  # "&#8451"
-    "DPT": temperature_unit,  # "&#8451"
-    # Humidity
-    "RH": "%",
-    # Pressure
-    "Apressure": "Pa",
-    # Radiation
-    "EHrad": radiation_unit,
-    "HIRrad": radiation_unit,
-    "GHrad": radiation_unit,
-    "DNrad": radiation_unit,
-    "DifHrad": radiation_unit,
-    # Illuminance
-    "GHillum": "lux",
-    "DNillum": "lux",
-    "DifHillum": "lux",
-    # Luminance
-    "Zlumi": "cd/m<sup>2</sup>",
-    # Wind
-    "Wdir": degrees_unit,
-    "Wspeed": "m/s",
-    # Clouds
-    "Tskycover": "tenths",
-    "Oskycover": "tenths",
-    # Visibility
-    "Vis": "Km",
-    # Solar position
-    "apparent_zenith": degrees_unit,
-    "zenith": degrees_unit,
-    "apparent_elevation": degrees_unit,
-    "elevation": degrees_unit,
-    "azimuth": degrees_unit,
-    "equation_of_time": degrees_unit,
-    # UTCI temperatures
-    "utci_Sun_Wind": temperature_unit,  # "&#8451",
-    "utci_noSun_Wind": temperature_unit,  # "&#8451",
-    "utci_Sun_noWind": temperature_unit,  # "&#8451",
-    "utci_noSun_noWind": temperature_unit,  # "&#8451",
-    # UTCI categories
-    "utci_Sun_Wind_categories": thermal_stress_label,
-    "utci_noSun_Wind_categories": thermal_stress_label,
-    "utci_Sun_noWind_categories": thermal_stress_label,
-    "utci_noSun_noWind_categories": thermal_stress_label,
-    # other psychrometric values
-    "p_vap": "Pa",
-    "hr": "kg water/kg dry air",
-    "t_wb": temperature_unit,  # "&#8451"
-    "t_dp": temperature_unit,  # "&#8451"
-    "h": "J/kg dry air",
-}
-
-# Global Names
-name_dict = {
-    "DOY": "Day of the year",
-    "day": "day",
-    "month": "months",
-    "hour": "hours of the day",
-    # Temp
-    "DBT": "Dry bulb temperature",
-    "DPT": "Dew point temperature",
-    # Humidity
-    "RH": "Relative humidity",
-    # Pressure
-    "Apressure": "Atmospheric pressure",
-    # Radiation
-    "EHrad": "Extraterrestrial horizontal irradiation",
-    "HIRrad": "´Horizontal infrared radiation",
-    "GHrad": "Global horizontal radiation",
-    "DNrad": "Direct normal radiation",
-    "DifHrad": "Diffuse horizontal radiation",
-    # Illuminance
-    "GHillum": "Global horizontal illuminance",
-    "DNillum": "Direct normal illuminance",
-    "DifHillum": "Diffuse horizontal illuminance",
-    # Luminance
-    "Zlumi": "Zenith luminance",
-    # Wind
-    "Wdir": "Wind direction",
-    "Wspeed": "Wind speed",
-    # Clouds
-    "Tskycover": "Total sky cover",
-    "Oskycover": "Opaque sky cover",
-    # Visibility
-    "Vis": "Visibility",
-    # Solar position
-    "apparent_zenith": "Apparent zenith",
-    "zenith": "Zenith",
-    "apparent_elevation": "Apparent elevation",
-    "elevation": "Elevation",
-    "azimuth": "Azimuth",
-    "equation_of_time": "Equation of time",
-    # UTCI temperatures
-    "utci_Sun_Wind": "UTCI: Sun & Wind",
-    "utci_noSun_Wind": "UTCI: no Sun & Wind",
-    "utci_Sun_noWind": "UTCI: Sun & no WInd",
-    "utci_noSun_noWind": "UTCI: no Sun & no Wind",
-    # UTCI categories
-    "utci_Sun_Wind_categories": "UTCI: Sun & Wind : categories",
-    "utci_noSun_Wind_categories": "UTCI: no Sun & Wind : categories",
-    "utci_Sun_noWind_categories": "UTCI: Sun & no WInd : categories",
-    "utci_noSun_noWind_categories": "UTCI: no Sun & no Wind : categories",
-    # psychrometric variables
-    "p_vap": "Vapor partial pressure",
-    "hr": "Absolute humidity",
-    "t_wb": "Wet bulb temperature",
-    "t_dp": "Dew point temperature",
-    "h": "Enthalpy",
-}
 
 # Dropdown Names
 sun_cloud_tab_dropdown_names = {
@@ -323,64 +144,6 @@ outdoor_dropdown_names = {
     "Protected from the sun and the wind": "utci_noSun_noWind",
 }
 
-# Global Value Ranges
-range_dict = {
-    "DOY": [0, 365],
-    "month": [1, 12],
-    "day": [1, 31],
-    "hour": [1, 24],
-    # Temp
-    "DBT": [-40, 50],
-    "DPT": [-50, 35],
-    # Humidity
-    "RH": [0, 100],
-    # Pressure
-    "Apressure": [95000, 105000],
-    # Radiation
-    "EHrad": [0, 1200],
-    "HIRrad": [0, 500],
-    "GHrad": [0, 1200],
-    "DNrad": [0, 1200],
-    "DifHrad": [0, 1200],
-    # Illuminance
-    "GHillum": [0, 120000],
-    "DNillum": [0, 120000],
-    "DifHillum": [0, 120000],
-    # Luminance
-    "Zlumi": [0, 60000],
-    # Wind
-    "Wdir": [0, 360],
-    "Wspeed": [0, 20],
-    # Clouds
-    "Tskycover": [0, 10],
-    "Oskycover": [0, 10],
-    # Visibility
-    "Vis": [0, 100],
-    # Solar position
-    "apparent_zenith": [0, 180],
-    "zenith": [0, 180],
-    "apparent_elevation": [-90, 90],
-    "elevation": [-90, 90],
-    "azimuth": [0, 360],
-    "equation_of_time": [-20, 20],
-    # utci temperatures
-    "utci_Sun_Wind": [-70, 70],
-    "utci_noSun_Wind": [-70, 70],
-    "utci_Sun_noWind": [-70, 70],
-    "utci_noSun_noWind": [-70, 70],
-    # utci categories
-    "utci_Sun_Wind_categories": [-5, 4],
-    "utci_noSun_Wind_categories": [-5, 4],
-    "utci_Sun_noWind_categories": [-5, 4],
-    "utci_noSun_noWind_categories": [-5, 4],
-    # other psychrometric quantities
-    "p_vap": [0, 5000],
-    "hr": [0, 0.03],
-    "t_wb": [-40, 50],
-    "t_dp": [-40, 50],
-    "h": [0, 110000],
-}
-
 # Misc
 month_lst = [
     "Jan",
@@ -423,3 +186,441 @@ fig_config = {
 }
 
 tight_margins = dict(l=20, r=20, t=33, b=20)
+
+mapping_dictionary = {
+    "DOY": {"name": "Day of the year", "unit": "days", "range": [0, 365]},
+    "day": {"name": "day", "range": [1, 31]},
+    "month": {"name": "months", "unit": "months", "range": [1, 12]},
+    "hour": {
+        "name": "hours of the day",
+        "color": [
+            "#000000",
+            "#355e7e",
+            "#6b5c7b",
+            "#c06c84",
+            "#f8b195",
+            "#c92a42",
+            "#c92a42",
+            "#c92a42",
+            "#000000",
+        ],
+        "unit": "h",
+        "range": [1, 24],
+    },
+    "DBT": {
+        "name": "Dry bulb temperature",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-40, 50],
+    },
+    "DPT": {
+        "name": "Dew point temperature",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-50, 35],
+    },
+    "RH": {
+        "name": "Relative humidity",
+        "color": ["#ffe600", "#00c8ff", "#0000ff"],
+        "unit": "%",
+        "range": [0, 100],
+    },
+    "Apressure": {
+        "name": "Atmospheric pressure",
+        "color": [
+            "#ffffff",
+            "#b2f2ff",
+            "#33ddff",
+            "#00aaff",
+            "#0055ff",
+            "#0000ff",
+            "#aa00ff",
+            "#ff00ff",
+            "#cc0000",
+            "#ffaa00",
+        ],
+        "unit": "Pa",
+        "range": [95000, 105000],
+    },
+    "EHrad": {
+        "name": "Extraterrestrial horizontal irradiation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "Wh/m<sup>2</sup>",
+        "range": [0, 1200],
+    },
+    "HIRrad": {
+        "name": "´Horizontal infrared radiation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "Wh/m<sup>2</sup>",
+        "range": [0, 500],
+    },
+    "GHrad": {
+        "name": "Global horizontal radiation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "Wh/m<sup>2</sup>",
+        "range": [0, 1200],
+    },
+    "DNrad": {
+        "name": "Direct normal radiation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "Wh/m<sup>2</sup>",
+        "range": [0, 1200],
+    },
+    "DifHrad": {
+        "name": "Diffuse horizontal radiation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "Wh/m<sup>2</sup>",
+        "range": [0, 1200],
+    },
+    "GHillum": {
+        "name": "Global horizontal illuminance",
+        "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
+        "unit": "lux",
+        "range": [0, 120000],
+    },
+    "DNillum": {
+        "name": "Direct normal illuminance",
+        "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
+        "unit": "lux",
+        "range": [0, 120000],
+    },
+    "DifHillum": {
+        "name": "Diffuse horizontal illuminance",
+        "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
+        "unit": "lux",
+        "range": [0, 120000],
+    },
+    "Zlumi": {
+        "name": "Zenith luminance",
+        "color": ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"],
+        "unit": "cd/m<sup>2</sup>",
+        "range": [0, 60000],
+    },
+    "Wdir": {
+        "name": "Wind direction",
+        "color": ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
+        "unit": "°deg",
+        "range": [0, 360],
+    },
+    "Wspeed": {
+        "name": "Wind speed",
+        "color": [
+            "#ffffff",
+            "#b2f2ff",
+            "#33ddff",
+            "#00aaff",
+            "#0055ff",
+            "#0000ff",
+            "#aa00ff",
+            "#ff00ff",
+            "#cc0000",
+            "#ffaa00",
+        ],
+        "unit": "m/s",
+        "range": [0, 20],
+    },
+    "Tskycover": {
+        "name": "Total sky cover",
+        "color": ["#00aaff", "#ffffff", "#c2c2c2"],
+        "unit": "tenths",
+        "range": [0, 10],
+    },
+    "Oskycover": {
+        "name": "Opaque sky cover",
+        "color": ["#00aaff", "#ffffff", "#c2c2c2"],
+        "unit": "tenths",
+        "range": [0, 10],
+    },
+    "Vis": {
+        "name": "Visibility",
+        "color": ["#00aaff", "#ffffff", "#c2c2c2"],
+        "unit": "Km",
+        "range": [0, 100],
+    },
+    "apparent_zenith": {
+        "name": "Apparent zenith",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "°deg",
+        "range": [0, 180],
+    },
+    "zenith": {
+        "name": "Zenith",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "°deg",
+        "range": [0, 180],
+    },
+    "apparent_elevation": {
+        "name": "Apparent elevation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "°deg",
+        "range": [-90, 90],
+    },
+    "elevation": {
+        "name": "Elevation",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "°deg",
+        "range": [-90, 90],
+    },
+    "azimuth": {
+        "name": "Azimuth",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "°deg",
+        "range": [0, 360],
+    },
+    "equation_of_time": {
+        "name": "Equation of time",
+        "color": [
+            "#293a59",
+            "#960c2c",
+            "#ff0000",
+            "#ff7b00",
+            "#fffc00",
+            "#ffff7b",
+            "#ffffff",
+        ],
+        "unit": "°deg",
+        "range": [-20, 20],
+    },
+    "utci_Sun_Wind": {
+        "name": "UTCI: Sun & Wind",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-70, 70],
+    },
+    "utci_noSun_Wind": {
+        "name": "UTCI: no Sun & Wind",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-70, 70],
+    },
+    "utci_Sun_noWind": {
+        "name": "UTCI: Sun & no WInd",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-70, 70],
+    },
+    "utci_noSun_noWind": {
+        "name": "UTCI: no Sun & no Wind",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-70, 70],
+    },
+    "utci_Sun_Wind_categories": {
+        "name": "UTCI: Sun & Wind : categories",
+        "color": [
+            [0, "#2B2977"],
+            [0.0555, "#2B2977"],
+            [0.0555, "#38429B"],
+            [0.1665, "#38429B"],
+            [0.1665, "#4253A4"],
+            [0.2775, "#4253A4"],
+            [0.2775, "#4B62AD"],
+            [0.3885, "#4B62AD"],
+            [0.3885, "#68B8E7"],
+            [0.4995, "#68B8E7"],
+            [0.4995, "#53B848"],
+            [0.6105, "#53B848"],
+            [0.6105, "#EE8522"],
+            [0.7215, "#EE8522"],
+            [0.7215, "#EA2C24"],
+            [0.8325, "#EA2C24"],
+            [0.8325, "#B12224"],
+            [0.9435, "#B12224"],
+            [0.9435, "#751613"],
+            [1.0, "#751613"],
+        ],
+        "unit": "Thermal stress",
+        "range": [-5, 4],
+    },
+    "utci_noSun_Wind_categories": {
+        "name": "UTCI: no Sun & Wind : categories",
+        "color": [
+            [0, "#2B2977"],
+            [0.0555, "#2B2977"],
+            [0.0555, "#38429B"],
+            [0.1665, "#38429B"],
+            [0.1665, "#4253A4"],
+            [0.2775, "#4253A4"],
+            [0.2775, "#4B62AD"],
+            [0.3885, "#4B62AD"],
+            [0.3885, "#68B8E7"],
+            [0.4995, "#68B8E7"],
+            [0.4995, "#53B848"],
+            [0.6105, "#53B848"],
+            [0.6105, "#EE8522"],
+            [0.7215, "#EE8522"],
+            [0.7215, "#EA2C24"],
+            [0.8325, "#EA2C24"],
+            [0.8325, "#B12224"],
+            [0.9435, "#B12224"],
+            [0.9435, "#751613"],
+            [1.0, "#751613"],
+        ],
+        "unit": "Thermal stress",
+        "range": [-5, 4],
+    },
+    "utci_Sun_noWind_categories": {
+        "name": "UTCI: Sun & no WInd : categories",
+        "color": [
+            [0, "#2B2977"],
+            [0.0555, "#2B2977"],
+            [0.0555, "#38429B"],
+            [0.1665, "#38429B"],
+            [0.1665, "#4253A4"],
+            [0.2775, "#4253A4"],
+            [0.2775, "#4B62AD"],
+            [0.3885, "#4B62AD"],
+            [0.3885, "#68B8E7"],
+            [0.4995, "#68B8E7"],
+            [0.4995, "#53B848"],
+            [0.6105, "#53B848"],
+            [0.6105, "#EE8522"],
+            [0.7215, "#EE8522"],
+            [0.7215, "#EA2C24"],
+            [0.8325, "#EA2C24"],
+            [0.8325, "#B12224"],
+            [0.9435, "#B12224"],
+            [0.9435, "#751613"],
+            [1.0, "#751613"],
+        ],
+        "unit": "Thermal stress",
+        "range": [-5, 4],
+    },
+    "utci_noSun_noWind_categories": {
+        "name": "UTCI: no Sun & no Wind : categories",
+        "color": [
+            [0, "#2B2977"],
+            [0.0555, "#2B2977"],
+            [0.0555, "#38429B"],
+            [0.1665, "#38429B"],
+            [0.1665, "#4253A4"],
+            [0.2775, "#4253A4"],
+            [0.2775, "#4B62AD"],
+            [0.3885, "#4B62AD"],
+            [0.3885, "#68B8E7"],
+            [0.4995, "#68B8E7"],
+            [0.4995, "#53B848"],
+            [0.6105, "#53B848"],
+            [0.6105, "#EE8522"],
+            [0.7215, "#EE8522"],
+            [0.7215, "#EA2C24"],
+            [0.8325, "#EA2C24"],
+            [0.8325, "#B12224"],
+            [0.9435, "#B12224"],
+            [0.9435, "#751613"],
+            [1.0, "#751613"],
+        ],
+        "unit": "Thermal stress",
+        "range": [-5, 4],
+    },
+    "p_vap": {
+        "name": "Vapor partial pressure",
+        "color": ["#ffe600", "#00c8ff", "#0000ff"],
+        "unit": "Pa",
+        "range": [0, 5000],
+    },
+    "hr": {
+        "name": "Absolute humidity",
+        "color": ["#ffe600", "#00c8ff", "#0000ff"],
+        "unit": "kg water/kg dry air",
+        "range": [0, 0.03],
+    },
+    "t_wb": {
+        "name": "Wet bulb temperature",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-40, 50],
+    },
+    "t_dp": {
+        "name": "Dew point temperature",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "°C",
+        "range": [-40, 50],
+    },
+    "h": {
+        "name": "Enthalpy",
+        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+        "unit": "J/kg dry air",
+        "range": [0, 110000],
+    },
+}
