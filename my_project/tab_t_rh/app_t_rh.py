@@ -1,9 +1,14 @@
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
-from my_project.utils import generate_chart_name, title_with_tooltip
+from my_project.utils import (
+    generate_chart_name,
+    title_with_tooltip,
+    summary_table_tmp_rh_tab,
+)
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
+import dash_table
 
 from app import app, cache, TIMEOUT
 
@@ -64,6 +69,18 @@ def layout_t_rh():
                     dcc.Loading(
                         type="circle",
                         children=html.Div(id="heatmap"),
+                    ),
+                    html.Div(
+                        children=title_with_tooltip(
+                            text="Monthly descriptive statistics",
+                            tooltip_text="count, mean, std, min, max, and percentiles",
+                            id_button="heatmap-chart-label",
+                        ),
+                    ),
+                    dbc.Row(
+                        align="center",
+                        justify="center",
+                        id="table-tmp-hum",
                     ),
                 ],
             ),
@@ -141,3 +158,36 @@ def update_heatmap(global_local, dd_value, df, meta):
             config=generate_chart_name("rh_heatmap_t_rh", meta),
             figure=heatmap(df, "RH", global_local),
         )
+
+
+@app.callback(
+    Output("table-tmp-hum", "children"),
+    [Input("dropdown", "value")],
+    [State("df-store", "data")],
+)
+@cache.memoize(timeout=TIMEOUT)
+def update_table(dd_value, df):
+    """Update the contents of tab three. Passing in general info (df, meta)."""
+    df = pd.read_json(df, orient="split")
+    df_summary = summary_table_tmp_rh_tab(df, dd_value)
+    unit = "%"
+    if dd_value == "dd_tdb":
+        unit = "°C"
+    return dash_table.DataTable(
+        columns=[
+            {"name": i, "id": i} if i == "month" else {"name": f"{i} [{unit}]", "id": i}
+            for i in df_summary.columns
+        ],
+        data=df_summary.to_dict("records"),
+        style_data={"whiteSpace": "normal", "height": "auto"},
+        style_cell={"textAlign": "center", "padding": "5px 20px"},
+        style_cell_conditional=[{"if": {"column_id": "month"}, "textAlign": "right"}],
+        style_header={"backgroundColor": "rgb(220, 220, 220)", "fontWeight": "bold"},
+        style_data_conditional=[
+            {"if": {"row_index": "odd"}, "backgroundColor": "white"},
+            {"if": {"row_index": "even"}, "backgroundColor": "rgb(250, 250, 250)"},
+            {"if": {"row_index": [12]}, "backgroundColor": "rgb(220, 220, 220)"},
+        ],
+        fill_width=False,
+        style_as_list_view=True,
+    )

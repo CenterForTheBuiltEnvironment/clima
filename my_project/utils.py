@@ -108,3 +108,24 @@ def title_with_tooltip(text, tooltip_text, id_button):
             ),
         ],
     )
+
+
+def summary_table_tmp_rh_tab(df, var_selected):
+    var = "RH"
+    if var_selected == "dd_tdb":
+        var = "DBT"
+    df_summary = (
+        df.groupby(["month_names", "month"])[var]
+        .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
+        .round(2)
+    )
+    df_summary = df_summary.reset_index(level="month_names").sort_index()
+    df_summary = df_summary.drop(["count"], axis=1)
+    df_summary = df_summary.rename(columns={"month_names": "month"})
+
+    df_sum = (
+        df[var].describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99]).round(2).to_frame()
+    )
+    df_sum = df_sum.T.assign(count="Year").rename(columns={"count": "month"})
+
+    return df_summary.append(df_sum)
