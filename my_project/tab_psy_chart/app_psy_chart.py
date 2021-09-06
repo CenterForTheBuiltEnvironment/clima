@@ -314,8 +314,7 @@ def update_psych_chart(
     else:
         var_unit = unit_dict[var]
 
-        var_name = str(var) + "_name"
-        var_name = name_dict[var_name]
+        var_name = name_dict[var]
 
         var_color = color_dict[var]
 
@@ -379,7 +378,7 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=name_dict["DBT_name"] + ": %{x:.2f}" + unit_dict["DBT"],
+                hovertemplate=name_dict["DBT"] + ": %{x:.2f}" + unit_dict["DBT"],
                 name="",
             )
         )
@@ -423,19 +422,19 @@ def update_psych_chart(
                     colorbar=dict(thickness=30, title=var_unit + "<br>  "),
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=name_dict["DBT_name"]
+                hovertemplate=name_dict["DBT"]
                 + ": %{x:.2f}"
                 + unit_dict["DBT"]
                 + "<br>"
-                + name_dict["RH_name"]
+                + name_dict["RH"]
                 + ": %{customdata[0]:.2f}"
                 + unit_dict["RH"]
                 + "<br>"
-                + name_dict["h_name"]
+                + name_dict["h"]
                 + ": %{customdata[1]:.2f}"
                 + unit_dict["h"]
                 + "<br>"
-                + name_dict["t_dp_name"]
+                + name_dict["t_dp"]
                 + ": %{customdata[3]:.2f}"
                 + unit_dict["t_dp"]
                 + "<br>"

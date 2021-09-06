@@ -69,11 +69,9 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
 
     var_unit = unit_dict[var]
     var_range = range_dict[var]
-    var_name = str(var) + "_name"
-    var_name = name_dict[var_name]
+    var_name = name_dict[var]
     var_color = color_dict[var]
-    filter_name = str(filter_var) + "_name"
-    filter_name = name_dict[filter_name]
+    filter_name = name_dict[filter_var]
     filter_unit = unit_dict[filter_var]
 
     if global_local == "global":
@@ -182,11 +180,11 @@ def three_var_graph(
         return None
 
     title = (
-        name_dict[f"{var_x}_name"]
+        name_dict[var_x]
         + " vs "
-        + name_dict[f"{var_y}_name"]
+        + name_dict[var_y]
         + " colored by "
-        + name_dict[f"{color_by}_name"]
+        + name_dict[color_by]
     )
 
     fig = px.scatter(
@@ -214,10 +212,7 @@ def three_var_graph(
 def two_var_graph(df, var_x, var_y):
 
     title = (
-        "Simultaneous frequency of "
-        + name_dict[f"{var_x}_name"]
-        + " and  "
-        + name_dict[f"{var_y}_name"]
+        "Simultaneous frequency of " + name_dict[var_x] + " and  " + name_dict[var_y]
     )
 
     fig = px.density_heatmap(

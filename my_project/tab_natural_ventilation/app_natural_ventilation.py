@@ -326,11 +326,9 @@ def nv_heatmap(
 
     var_range = range_dict[var]
 
-    var_name = str(var) + "_name"
-    var_name = name_dict[var_name]
+    var_name = name_dict[var]
 
-    filter_name = str(filter_var) + "_name"
-    filter_name = name_dict[filter_name]
+    filter_name = name_dict[filter_var]
 
     var_color = color_dict[var]
 
@@ -469,11 +467,9 @@ def nv_bar_chart(
     var_unit = unit_dict[var]
     filter_unit = unit_dict[filter_var]
 
-    var_name = str(var) + "_name"
-    var_name = name_dict[var_name]
+    var_name = name_dict[var]
 
-    filter_name = str(filter_var) + "_name"
-    filter_name = name_dict[filter_name]
+    filter_name = name_dict[filter_var]
 
     color_in = "dodgerblue"
 

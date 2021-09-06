@@ -185,60 +185,60 @@ unit_dict = {
 
 # Global Names
 name_dict = {
-    "DOY_name": "Day of the year",
-    "day_name": "day",
-    "month_name": "months",
-    "hour_name": "hours of the day",
+    "DOY": "Day of the year",
+    "day": "day",
+    "month": "months",
+    "hour": "hours of the day",
     # Temp
-    "DBT_name": "Dry bulb temperature",
-    "DPT_name": "Dew point temperature",
+    "DBT": "Dry bulb temperature",
+    "DPT": "Dew point temperature",
     # Humidity
-    "RH_name": "Relative humidity",
+    "RH": "Relative humidity",
     # Pressure
-    "Apressure_name": "Atmospheric pressure",
+    "Apressure": "Atmospheric pressure",
     # Radiation
-    "EHrad_name": "Extraterrestrial horizontal irradiation",
-    "HIRrad_name": "´Horizontal infrared radiation",
-    "GHrad_name": "Global horizontal radiation",
-    "DNrad_name": "Direct normal radiation",
-    "DifHrad_name": "Diffuse horizontal radiation",
+    "EHrad": "Extraterrestrial horizontal irradiation",
+    "HIRrad": "´Horizontal infrared radiation",
+    "GHrad": "Global horizontal radiation",
+    "DNrad": "Direct normal radiation",
+    "DifHrad": "Diffuse horizontal radiation",
     # Illuminance
-    "GHillum_name": "Global horizontal illuminance",
-    "DNillum_name": "Direct normal illuminance",
-    "DifHillum_name": "Diffuse horizontal illuminance",
+    "GHillum": "Global horizontal illuminance",
+    "DNillum": "Direct normal illuminance",
+    "DifHillum": "Diffuse horizontal illuminance",
     # Luminance
-    "Zlumi_name": "Zenith luminance",
+    "Zlumi": "Zenith luminance",
     # Wind
-    "Wdir_name": "Wind direction",
-    "Wspeed_name": "Wind speed",
+    "Wdir": "Wind direction",
+    "Wspeed": "Wind speed",
     # Clouds
-    "Tskycover_name": "Total sky cover",
-    "Oskycover_name": "Opaque sky cover",
+    "Tskycover": "Total sky cover",
+    "Oskycover": "Opaque sky cover",
     # Visibility
-    "Vis_name": "Visibility",
+    "Vis": "Visibility",
     # Solar position
-    "apparent_zenith_name": "Apparent zenith",
-    "zenith_name": "Zenith",
-    "apparent_elevation_name": "Apparent elevation",
-    "elevation_name": "Elevation",
-    "azimuth_name": "Azimuth",
-    "equation_of_time_name": "Equation of time",
+    "apparent_zenith": "Apparent zenith",
+    "zenith": "Zenith",
+    "apparent_elevation": "Apparent elevation",
+    "elevation": "Elevation",
+    "azimuth": "Azimuth",
+    "equation_of_time": "Equation of time",
     # UTCI temperatures
-    "utci_Sun_Wind_name": "UTCI: Sun & Wind",
-    "utci_noSun_Wind_name": "UTCI: no Sun & Wind",
-    "utci_Sun_noWind_name": "UTCI: Sun & no WInd",
-    "utci_noSun_noWind_name": "UTCI: no Sun & no Wind",
+    "utci_Sun_Wind": "UTCI: Sun & Wind",
+    "utci_noSun_Wind": "UTCI: no Sun & Wind",
+    "utci_Sun_noWind": "UTCI: Sun & no WInd",
+    "utci_noSun_noWind": "UTCI: no Sun & no Wind",
     # UTCI categories
-    "utci_Sun_Wind_categories_name": "UTCI: Sun & Wind : categories",
-    "utci_noSun_Wind_categories_name": "UTCI: no Sun & Wind : categories",
-    "utci_Sun_noWind_categories_name": "UTCI: Sun & no WInd : categories",
-    "utci_noSun_noWind_categories_name": "UTCI: no Sun & no Wind : categories",
+    "utci_Sun_Wind_categories": "UTCI: Sun & Wind : categories",
+    "utci_noSun_Wind_categories": "UTCI: no Sun & Wind : categories",
+    "utci_Sun_noWind_categories": "UTCI: Sun & no WInd : categories",
+    "utci_noSun_noWind_categories": "UTCI: no Sun & no Wind : categories",
     # psychrometric variables
-    "p_vap_name": "Vapor partial pressure",
-    "hr_name": "Absolute humidity",
-    "t_wb_name": "Wet bulb temperature",
-    "t_dp_name": "Dew point temperature",
-    "h_name": "Enthalpy",
+    "p_vap": "Vapor partial pressure",
+    "hr": "Absolute humidity",
+    "t_wb": "Wet bulb temperature",
+    "t_dp": "Dew point temperature",
+    "h": "Enthalpy",
 }
 
 # Dropdown Names

@@ -19,8 +19,7 @@ def violin(df, var, global_local):
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
     var_unit = unit_dict[var]
     var_range = range_dict[var]
-    var_name = str(var) + "_name"
-    var_name = name_dict[var_name]
+    var_name = name_dict[var]
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
@@ -124,7 +123,7 @@ def yearly_profile(df, var, global_local):
     lo80, hi80, lo90, hi90 = get_ashrae(df)
     var_unit = unit_dict[var]
     var_range = range_dict[var]
-    var_name = name_dict[str(var) + "_name"]
+    var_name = name_dict[var]
     var_color = color_dict[var]
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -269,7 +268,7 @@ def yearly_profile(df, var, global_local):
 # @code_timer
 def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
-    var_name = name_dict[str(var) + "_name"]
+    var_name = name_dict[var]
     var_unit = unit_dict[var]
     var_range = range_dict[var]
     var_color = color_dict[var]
@@ -548,14 +547,12 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
         end_hour = time_filter_info[2][1]
 
         filter_var = data_filter_info[1]
-        filter_name = str(filter_var) + "_name"
-        filter_name = name_dict[filter_name]
+        filter_name = name_dict[filter_var]
         filter_unit = unit_dict[filter_var]
 
     var_unit = unit_dict[var]
     var_range = range_dict[var]
-    var_name = str(var) + "_name"
-    var_name = name_dict[var_name]
+    var_name = name_dict[var]
     var_color = color_dict[var]
 
     color_below = var_color[0]

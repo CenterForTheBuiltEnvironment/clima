@@ -120,7 +120,7 @@ def polar_graph(df, meta, global_local, var):
     if var != "None":
         var_unit = unit_dict[var]
         var_range = range_dict[var]
-        var_name = name_dict[str(var) + "_name"]
+        var_name = name_dict[var]
         var_color = color_dict[var]
         if global_local == "global":
             # Set Global values for Max and minimum
@@ -322,7 +322,7 @@ def custom_cartesian_solar(df, meta, global_local, var):
     if var != "None":
         var_unit = unit_dict[var]
         var_range = range_dict[var]
-        var_name = name_dict[str(var) + "_name"]
+        var_name = name_dict[var]
         var_color = color_dict[var]
         if global_local == "global":
             # Set Global values for Max and minimum
