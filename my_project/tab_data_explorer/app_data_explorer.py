@@ -100,9 +100,7 @@ def section_one():
                     id_button="table-explore",
                 ),
             ),
-            dbc.Row(
-                align="center",
-                justify="center",
+            html.Div(
                 id="table-data-explorer",
             ),
         ],

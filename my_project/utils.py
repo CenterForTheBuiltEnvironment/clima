@@ -138,9 +138,9 @@ def summary_table_tmp_rh_tab(df, value):
             {"name": i, "id": i} if i == "month" else {"name": f"{i} [{unit}]", "id": i}
             for i in df_summary.columns
         ],
+        style_table={"overflowX": "auto"},
         data=df_summary.to_dict("records"),
-        style_data={"whiteSpace": "normal", "height": "auto"},
-        style_cell={"textAlign": "center", "padding": "5px 20px"},
+        style_cell={"textAlign": "center", "padding": "5px 10px"},
         style_cell_conditional=[{"if": {"column_id": "month"}, "textAlign": "right"}],
         style_header={"backgroundColor": "rgb(220, 220, 220)", "fontWeight": "bold"},
         style_data_conditional=[
@@ -148,6 +148,5 @@ def summary_table_tmp_rh_tab(df, value):
             {"if": {"row_index": "even"}, "backgroundColor": "rgb(250, 250, 250)"},
             {"if": {"row_index": [12]}, "backgroundColor": "rgb(220, 220, 220)"},
         ],
-        fill_width=False,
         style_as_list_view=True,
     )

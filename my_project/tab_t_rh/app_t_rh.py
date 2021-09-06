@@ -1,5 +1,4 @@
 from dash import dcc, html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from my_project.utils import (
     generate_chart_name,
@@ -11,6 +10,8 @@ import pandas as pd
 from global_scheme import dropdown_names
 
 from app import app, cache, TIMEOUT
+
+var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
 
 def layout_t_rh():
@@ -28,15 +29,12 @@ def layout_t_rh():
                         className="dropdown-t-rh",
                         options=[
                             {
-                                "label": "Dry bulb temperature",
-                                "value": dropdown_names["Dry bulb temperature"],
-                            },
-                            {
-                                "label": "Relative humidity",
-                                "value": dropdown_names["Relative humidity"],
-                            },
+                                "label": var,
+                                "value": dropdown_names[var],
+                            }
+                            for var in var_to_plot
                         ],
-                        value=dropdown_names["Dry bulb temperature"],
+                        value=dropdown_names[var_to_plot[0]],
                     ),
                 ],
             ),
@@ -83,9 +81,7 @@ def layout_t_rh():
                             id_button="table-tmp-rh",
                         ),
                     ),
-                    dbc.Row(
-                        align="center",
-                        justify="center",
+                    html.Div(
                         id="table-tmp-hum",
                     ),
                 ],
@@ -104,7 +100,7 @@ def layout_t_rh():
 def update_yearly_chart(global_local, dd_value, df, meta):
     df = pd.read_json(df, orient="split")
 
-    if dd_value == dropdown_names["Dry bulb temperature"]:
+    if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, "DBT", global_local)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
@@ -132,7 +128,7 @@ def update_yearly_chart(global_local, dd_value, df, meta):
 def update_daily(global_local, dd_value, df, meta):
     df = pd.read_json(df, orient="split")
 
-    if dd_value == dropdown_names["Dry bulb temperature"]:
+    if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
             config=generate_chart_name("tdb_daily_t_rh", meta),
             figure=daily_profile(df, "DBT", global_local),
@@ -154,7 +150,7 @@ def update_daily(global_local, dd_value, df, meta):
 def update_heatmap(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-    if dd_value == dropdown_names["Dry bulb temperature"]:
+    if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
             config=generate_chart_name("tdb_heatmap_t_rh", meta),
             figure=heatmap(df, "DBT", global_local),
