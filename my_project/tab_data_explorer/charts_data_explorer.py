@@ -69,12 +69,10 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
 
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
-    var_range = str(var) + "_range"
-    var_range = range_dict[var_range]
+    var_range = range_dict[var]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
-    var_color = str(var) + "_color"
-    var_color = color_dict[var_color]
+    var_color = color_dict[var]
     filter_name = str(filter_var) + "_name"
     filter_name = name_dict[filter_name]
     filter_unit = str(filter_var) + "_unit"
@@ -154,8 +152,8 @@ def three_var_graph(
     max_val = data_filter_info3[3]
 
     var = color_by
-    var_range = range_dict[str(var) + "_range"]
-    var_color = color_dict[str(var) + "_color"]
+    var_range = range_dict[var]
+    var_color = color_dict[var]
 
     if global_local != "global":
         # Set maximum and minimum according to data

@@ -318,12 +318,11 @@ def update_psych_chart(
         var_name = str(var) + "_name"
         var_name = name_dict[var_name]
 
-        var_color = str(var) + "_color"
-        var_color = color_dict[var_color]
+        var_color = color_dict[var]
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = range_dict["DBT_range"]
+        var_range_x = range_dict["DBT"]
         hr_range = [0, 0.03]
         var_range_y = hr_range
 

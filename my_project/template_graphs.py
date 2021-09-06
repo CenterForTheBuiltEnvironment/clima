@@ -19,8 +19,7 @@ def violin(df, var, global_local):
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
-    var_range = str(var) + "_range"
-    var_range = range_dict[var_range]
+    var_range = range_dict[var]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
 
@@ -125,9 +124,9 @@ def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
     lo80, hi80, lo90, hi90 = get_ashrae(df)
     var_unit = unit_dict[str(var) + "_unit"]
-    var_range = range_dict[str(var) + "_range"]
+    var_range = range_dict[var]
     var_name = name_dict[str(var) + "_name"]
-    var_color = color_dict[str(var) + "_color"]
+    var_color = color_dict[var]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -273,8 +272,8 @@ def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
     var_name = name_dict[str(var) + "_name"]
     var_unit = unit_dict[str(var) + "_unit"]
-    var_range = range_dict[str(var) + "_range"]
-    var_color = color_dict[str(var) + "_color"]
+    var_range = range_dict[var]
+    var_color = color_dict[var]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -382,8 +381,8 @@ def daily_profile(df, var, global_local):
 def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
     var_unit = unit_dict[str(var) + "_unit"]
-    var_range = range_dict[str(var) + "_range"]
-    var_color = color_dict[str(var) + "_color"]
+    var_range = range_dict[var]
+    var_color = color_dict[var]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_z = var_range
@@ -458,7 +457,7 @@ def wind_rose(df, title, month, hour, labels):
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
 
-    spd_colors = color_dict["Wspeed_color"]
+    spd_colors = color_dict["Wspeed"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units="m/s")
     dir_bins = np.arange(-22.5 / 2, 370, 22.5)
@@ -557,12 +556,10 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
 
     var_unit = str(var) + "_unit"
     var_unit = unit_dict[var_unit]
-    var_range = str(var) + "_range"
-    var_range = range_dict[var_range]
+    var_range = range_dict[var]
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
-    var_color = str(var) + "_color"
-    var_color = color_dict[var_color]
+    var_color = color_dict[var]
 
     color_below = var_color[0]
     color_above = var_color[-1]

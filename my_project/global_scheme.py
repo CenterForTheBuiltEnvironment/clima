@@ -12,7 +12,7 @@ sun_colors = [
 ]
 light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
 bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
-Wspeed_color = [
+wind_speed_color = [
     "#ffffff",
     "#b2f2ff",
     "#33ddff",
@@ -24,7 +24,7 @@ Wspeed_color = [
     "#cc0000",
     "#ffaa00",
 ]
-Wdir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
+wind_dir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
 cloud_colors = ["#00aaff", "#ffffff", "#c2c2c2"]
 utci_categories_color = [
     # Let first 10% (0.1) of the values have color rgb(0, 0, 0)
@@ -59,39 +59,39 @@ container_col_center_one_of_three = (
 # color dictionary
 color_dict = {
     # TEMP
-    "DBT_color": blue_red_yellow,
-    "DPT_color": blue_red_yellow,
+    "DBT": blue_red_yellow,
+    "DPT": blue_red_yellow,
     # HUMIDITY
     "DryHumid": dry_humid,
-    "RH_color": dry_humid,
+    "RH": dry_humid,
     # SOLAR
-    "GHrad_color": sun_colors,
-    "DNrad_color": sun_colors,
-    "DifHrad_color": sun_colors,
-    "EHrad_color": sun_colors,
-    "HIRrad_color": sun_colors,
+    "GHrad": sun_colors,
+    "DNrad": sun_colors,
+    "DifHrad": sun_colors,
+    "EHrad": sun_colors,
+    "HIRrad": sun_colors,
     # Solar position
-    "apparent_zenith_color": sun_colors,
-    "zenith_color": sun_colors,
-    "apparent_elevation_color": sun_colors,
-    "elevation_color": sun_colors,
-    "azimuth_color": sun_colors,
-    "equation_of_time_color": sun_colors,
+    "apparent_zenith": sun_colors,
+    "zenith": sun_colors,
+    "apparent_elevation": sun_colors,
+    "elevation": sun_colors,
+    "azimuth": sun_colors,
+    "equation_of_time": sun_colors,
     # ILLUMINACE
-    "GHillum_color": light_colors,
-    "DNillum_color": light_colors,
-    "DifHillum_color": light_colors,
+    "GHillum": light_colors,
+    "DNillum": light_colors,
+    "DifHillum": light_colors,
     # LUMINANCE
-    "Zlumi_color": bright_colors,
+    "Zlumi": bright_colors,
     # WIND
-    "Wspeed_color": Wspeed_color,
-    "Wdir_color": Wdir_color,
+    "Wspeed": wind_speed_color,
+    "Wdir": wind_dir_color,
     # Clouds # Visibility
     "CloudColors": cloud_colors,
-    "Tskycover_color": cloud_colors,
-    "Oskycover_color": cloud_colors,
-    "Vis_color": cloud_colors,
-    "hour_color": [
+    "Tskycover": cloud_colors,
+    "Oskycover": cloud_colors,
+    "Vis": cloud_colors,
+    "hour": [
         "#000000",
         "#355e7e",
         "#6b5c7b",
@@ -102,23 +102,23 @@ color_dict = {
         "#c92a42",
         "#000000",
     ],
-    "Apressure_color": Wspeed_color,
+    "Apressure": wind_speed_color,
     # UTCI temperatures
-    "utci_Sun_Wind_color": blue_red_yellow,
-    "utci_noSun_Wind_color": blue_red_yellow,
-    "utci_Sun_noWind_color": blue_red_yellow,
-    "utci_noSun_noWind_color": blue_red_yellow,
+    "utci_Sun_Wind": blue_red_yellow,
+    "utci_noSun_Wind": blue_red_yellow,
+    "utci_Sun_noWind": blue_red_yellow,
+    "utci_noSun_noWind": blue_red_yellow,
     # UTCI categories
-    "utci_Sun_Wind_categories_color": utci_categories_color,
-    "utci_noSun_Wind_categories_color": utci_categories_color,
-    "utci_Sun_noWind_categories_color": utci_categories_color,
-    "utci_noSun_noWind_categories_color": utci_categories_color,
+    "utci_Sun_Wind_categories": utci_categories_color,
+    "utci_noSun_Wind_categories": utci_categories_color,
+    "utci_Sun_noWind_categories": utci_categories_color,
+    "utci_noSun_noWind_categories": utci_categories_color,
     # other psychrometric quantities
-    "p_vap_color": dry_humid,
-    "hr_color": dry_humid,
-    "t_wb_color": blue_red_yellow,
-    "t_dp_color": blue_red_yellow,
-    "h_color": blue_red_yellow,
+    "p_vap": dry_humid,
+    "hr": dry_humid,
+    "t_wb": blue_red_yellow,
+    "t_dp": blue_red_yellow,
+    "h": blue_red_yellow,
 }
 
 # Units Dictionary
@@ -325,60 +325,60 @@ outdoor_dropdown_names = {
 
 # Global Value Ranges
 range_dict = {
-    "DOY_range": [0, 365],
-    "month_range": [1, 12],
-    "day_range": [1, 31],
-    "hour_range": [1, 24],
+    "DOY": [0, 365],
+    "month": [1, 12],
+    "day": [1, 31],
+    "hour": [1, 24],
     # Temp
-    "DBT_range": [-40, 50],
-    "DPT_range": [-50, 35],
+    "DBT": [-40, 50],
+    "DPT": [-50, 35],
     # Humidity
-    "RH_range": [0, 100],
+    "RH": [0, 100],
     # Pressure
-    "Apressure_range": [95000, 105000],
+    "Apressure": [95000, 105000],
     # Radiation
-    "EHrad_range": [0, 1200],
-    "HIRrad_range": [0, 500],
-    "GHrad_range": [0, 1200],
-    "DNrad_range": [0, 1200],
-    "DifHrad_range": [0, 1200],
+    "EHrad": [0, 1200],
+    "HIRrad": [0, 500],
+    "GHrad": [0, 1200],
+    "DNrad": [0, 1200],
+    "DifHrad": [0, 1200],
     # Illuminance
-    "GHillum_range": [0, 120000],
-    "DNillum_range": [0, 120000],
-    "DifHillum_range": [0, 120000],
+    "GHillum": [0, 120000],
+    "DNillum": [0, 120000],
+    "DifHillum": [0, 120000],
     # Luminance
-    "Zlumi_range": [0, 60000],
+    "Zlumi": [0, 60000],
     # Wind
-    "Wdir_range": [0, 360],
-    "Wspeed_range": [0, 20],
+    "Wdir": [0, 360],
+    "Wspeed": [0, 20],
     # Clouds
-    "Tskycover_range": [0, 10],
-    "Oskycover_range": [0, 10],
+    "Tskycover": [0, 10],
+    "Oskycover": [0, 10],
     # Visibility
-    "Vis_range": [0, 100],
+    "Vis": [0, 100],
     # Solar position
-    "apparent_zenith_range": [0, 180],
-    "zenith_range": [0, 180],
-    "apparent_elevation_range": [-90, 90],
-    "elevation_range": [-90, 90],
-    "azimuth_range": [0, 360],
-    "equation_of_time_range": [-20, 20],
+    "apparent_zenith": [0, 180],
+    "zenith": [0, 180],
+    "apparent_elevation": [-90, 90],
+    "elevation": [-90, 90],
+    "azimuth": [0, 360],
+    "equation_of_time": [-20, 20],
     # utci temperatures
-    "utci_Sun_Wind_range": [-70, 70],
-    "utci_noSun_Wind_range": [-70, 70],
-    "utci_Sun_noWind_range": [-70, 70],
-    "utci_noSun_noWind_range": [-70, 70],
+    "utci_Sun_Wind": [-70, 70],
+    "utci_noSun_Wind": [-70, 70],
+    "utci_Sun_noWind": [-70, 70],
+    "utci_noSun_noWind": [-70, 70],
     # utci categories
-    "utci_Sun_Wind_categories_range": [-5, 4],
-    "utci_noSun_Wind_categories_range": [-5, 4],
-    "utci_Sun_noWind_categories_range": [-5, 4],
-    "utci_noSun_noWind_categories_range": [-5, 4],
+    "utci_Sun_Wind_categories": [-5, 4],
+    "utci_noSun_Wind_categories": [-5, 4],
+    "utci_Sun_noWind_categories": [-5, 4],
+    "utci_noSun_noWind_categories": [-5, 4],
     # other psychrometric quantities
-    "p_vap_range": [0, 5000],
-    "hr_range": [0, 0.03],
-    "t_wb_range": [-40, 50],
-    "t_dp_range": [-40, 50],
-    "h_range": [0, 110000],
+    "p_vap": [0, 5000],
+    "hr": [0, 0.03],
+    "t_wb": [-40, 50],
+    "t_dp": [-40, 50],
+    "h": [0, 110000],
 }
 
 # Misc

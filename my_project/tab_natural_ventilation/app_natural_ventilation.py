@@ -326,8 +326,7 @@ def nv_heatmap(
     filter_unit = str(filter_var) + "_unit"
     filter_unit = unit_dict[filter_unit]
 
-    var_range = str(var) + "_range"
-    var_range = range_dict[var_range]
+    var_range = range_dict[var]
 
     var_name = str(var) + "_name"
     var_name = name_dict[var_name]
@@ -335,8 +334,7 @@ def nv_heatmap(
     filter_name = str(filter_var) + "_name"
     filter_name = name_dict[filter_name]
 
-    var_color = str(var) + "_color"
-    var_color = color_dict[var_color]
+    var_color = color_dict[var]
 
     if global_local == "global":
         range_z = var_range
