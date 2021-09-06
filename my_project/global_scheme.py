@@ -56,94 +56,6 @@ container_col_center_one_of_three = (
     "container-col justify-center one-of-three-container"
 )
 
-# Units Dictionary
-degrees_unit = "\u00B0deg"
-temperature_unit = "\u00B0C"
-radiation_unit = "Wh/m<sup>2</sup>"
-thermal_stress_label = "Thermal stress"
-
-# Dropdown Names
-sun_cloud_tab_dropdown_names = {
-    "None": "None",
-    "Dry bulb temperature": "DBT",
-    "Dew point temperature": "DPT",
-    "Relative humidity": "RH",
-    "Atmospheric pressure": "Apressure",
-    "Extraterrestrial horizontal irradiation": "EHrad",
-    "Horizontal infrared radiation": "HIRrad",
-    "Global horizontal radiation": "GHrad",
-    "Direct normal radiation": "DNrad",
-    "Diffuse horizontal radiation": "DifHrad",
-    "Global horizontal illuminance": "GHillum",
-    "Direct normal illuminance": "DNillum",
-    "Diffuse horizontal illuminance": "DifHillum",
-    "Zenith luminance": "Zlumi",
-    "Wind direction": "Wdir",
-    "Wind speed": "Wspeed",
-    "Total sky cover": "Tskycover",
-    "Opaque sky cover": "Oskycover",
-    "Visibility": "Vis",
-}
-
-dropdown_names = {
-    "Dry bulb temperature": "DBT",
-    "Dew point temperature": "DPT",
-    "Relative humidity": "RH",
-    "Atmospheric pressure": "Apressure",
-    "Extraterrestrial horizontal irradiation": "EHrad",
-    "Horizontal infrared radiation": "HIRrad",
-    "Global horizontal radiation": "GHrad",
-    "Direct normal radiation": "DNrad",
-    "Diffuse horizontal radiation": "DifHrad",
-    "Global horizontal illuminance": "GHillum",
-    "Direct normal illuminance": "DNillum",
-    "Diffuse horizontal illuminance": "DifHillum",
-    "Zenith luminance": "Zlumi",
-    "Wind direction": "Wdir",
-    "Wind speed": "Wspeed",
-    "Total sky cover": "Tskycover",
-    "Opaque sky cover": "Oskycover",
-    "Visibility": "Vis",
-}
-
-more_variables_dropdown = {
-    "UTCI: Sun & Wind": "utci_Sun_Wind",
-    "UTCI: no Sun & Wind": "utci_noSun_Wind",
-    "UTCI: Sun & no WInd": "utci_Sun_noWind",
-    "UTCI: no Sun & no Wind": "utci_noSun_noWind",
-    "UTCI: Sun & Wind : categories": "utci_Sun_Wind_categories",
-    "UTCI: no Sun & Wind : categories": "utci_noSun_Wind_categories",
-    "UTCI: Sun & no WInd : categories": "utci_Sun_noWind_categories",
-    "UTCI: no Sun & no Wind : categories": "utci_noSun_noWind_categories",
-    "Vapor partial pressure": "p_vap",
-    "Absolute humidity": "hr",
-    "Wet bulb temperature": "t_wb",
-    "Dew point temperature": "t_dp",
-    "Solar elevation": "elevation",
-    "Solar azimuth": "azimuth",
-    "Saturation pressure": "p_sat",
-}
-
-sun_cloud_tab_explore_dropdown_names = {
-    "Extraterrestrial horizontal irradiation": "EHrad",
-    "Horizontal infrared radiation": "HIRrad",
-    "Global horizontal radiation": "GHrad",
-    "Direct normal radiation": "DNrad",
-    "Diffuse horizontal radiation": "DifHrad",
-    "Global horizontal illuminance": "GHillum",
-    "Direct normal illuminance": "DNillum",
-    "Diffuse horizontal illuminance": "DifHillum",
-    "Zenith luminance": "Zlumi",
-    "Opaque sky cover": "Oskycover",
-}
-
-outdoor_dropdown_names = {
-    "Exposed to the sun and the wind": "utci_Sun_Wind",
-    "Exposed to the sun and protected from the wind": "utci_Sun_noWind",
-    "Protected from the sun and exposed to the wind": "utci_noSun_Wind",
-    "Protected from the sun and the wind": "utci_noSun_noWind",
-}
-
 # Misc
 month_lst = [
     "Jan",
@@ -187,7 +99,14 @@ fig_config = {
 
 tight_margins = dict(l=20, r=20, t=33, b=20)
 
+# Units Dictionary
+degrees_unit = "\u00B0deg"
+temperature_unit = "\u00B0C"
+radiation_unit = "Wh/m<sup>2</sup>"
+thermal_stress_label = "Thermal stress"
+
 mapping_dictionary = {
+    "None": {"name": "None"},
     "DOY": {"name": "Day of the year", "unit": "days", "range": [0, 365]},
     "day": {"name": "day", "range": [1, 31]},
     "month": {"name": "months", "unit": "months", "range": [1, 12]},
@@ -253,7 +172,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": "Wh/m<sup>2</sup>",
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "HIRrad": {
@@ -267,7 +186,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": "Wh/m<sup>2</sup>",
+        "unit": radiation_unit,
         "range": [0, 500],
     },
     "GHrad": {
@@ -281,7 +200,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": "Wh/m<sup>2</sup>",
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "DNrad": {
@@ -295,7 +214,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": "Wh/m<sup>2</sup>",
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "DifHrad": {
@@ -309,7 +228,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": "Wh/m<sup>2</sup>",
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "GHillum": {
@@ -474,7 +393,7 @@ mapping_dictionary = {
         "range": [-70, 70],
     },
     "utci_Sun_noWind": {
-        "name": "UTCI: Sun & no WInd",
+        "name": "UTCI: Sun & no Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         "unit": "°C",
         "range": [-70, 70],
@@ -509,7 +428,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": "Thermal stress",
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "utci_noSun_Wind_categories": {
@@ -536,7 +455,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": "Thermal stress",
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "utci_Sun_noWind_categories": {
@@ -563,7 +482,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": "Thermal stress",
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "utci_noSun_noWind_categories": {
@@ -590,7 +509,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": "Thermal stress",
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "p_vap": {
@@ -598,6 +517,10 @@ mapping_dictionary = {
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
         "unit": "Pa",
         "range": [0, 5000],
+    },
+    "p_sat": {
+        "name": "Saturation pressure",
+        "unit": "Pa",
     },
     "hr": {
         "name": "Absolute humidity",
@@ -623,4 +546,101 @@ mapping_dictionary = {
         "unit": "J/kg dry air",
         "range": [0, 110000],
     },
+}
+
+# Dropdown Names
+variables_sun_cloud_tab_dropdown = [
+    "None",
+    "DBT",
+    "DPT",
+    "RH",
+    "Apressure",
+    "EHrad",
+    "HIRrad",
+    "GHrad",
+    "DNrad",
+    "DifHrad",
+    "GHillum",
+    "DNillum",
+    "DifHillum",
+    "Zlumi",
+    "Wdir",
+    "Wspeed",
+    "Tskycover",
+    "Oskycover",
+    "Vis",
+]
+variables_dropdown = [
+    "DBT",
+    "DPT",
+    "RH",
+    "Apressure",
+    "EHrad",
+    "HIRrad",
+    "GHrad",
+    "DNrad",
+    "DifHrad",
+    "GHillum",
+    "DNillum",
+    "DifHillum",
+    "Zlumi",
+    "Wdir",
+    "Wspeed",
+    "Tskycover",
+    "Oskycover",
+    "Vis",
+]
+variables_more_variables_dropdown = [
+    "utci_Sun_Wind",
+    "utci_noSun_Wind",
+    "utci_Sun_noWind",
+    "utci_noSun_noWind",
+    "utci_Sun_Wind_categories",
+    "utci_noSun_Wind_categories",
+    "utci_Sun_noWind_categories",
+    "utci_noSun_noWind_categories",
+    "p_vap",
+    "hr",
+    "t_wb",
+    "t_dp",
+    "elevation",
+    "azimuth",
+    "p_sat",
+]
+variables_sun_cloud_tab_explore_dropdown = [
+    "EHrad",
+    "HIRrad",
+    "GHrad",
+    "DNrad",
+    "DifHrad",
+    "GHillum",
+    "DNillum",
+    "DifHillum",
+    "Zlumi",
+    "Oskycover",
+]
+variables_outdoor_dropdown = [
+    "utci_Sun_Wind",
+    "utci_Sun_noWind",
+    "utci_noSun_Wind",
+    "utci_noSun_noWind",
+]
+
+sun_cloud_tab_dropdown_names = {
+    mapping_dictionary[key]["name"]: key for key in variables_sun_cloud_tab_dropdown
+}
+
+dropdown_names = {mapping_dictionary[key]["name"]: key for key in variables_dropdown}
+
+more_variables_dropdown = {
+    mapping_dictionary[key]["name"]: key for key in variables_more_variables_dropdown
+}
+
+sun_cloud_tab_explore_dropdown_names = {
+    mapping_dictionary[key]["name"]: key
+    for key in variables_sun_cloud_tab_explore_dropdown
+}
+
+outdoor_dropdown_names = {
+    mapping_dictionary[key]["name"]: key for key in variables_outdoor_dropdown
 }

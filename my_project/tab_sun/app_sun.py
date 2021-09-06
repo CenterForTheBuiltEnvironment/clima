@@ -69,7 +69,7 @@ def sun_path():
                             for i in sun_cloud_tab_dropdown_names
                         ],
                         value="None",
-                        style={"width": "10rem"},
+                        style={"width": "20rem"},
                     ),
                 ],
             ),
