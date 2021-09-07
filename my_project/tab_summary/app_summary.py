@@ -217,8 +217,8 @@ def update_location_info(ts, df, meta):
 
     # global horizontal irradiance
     df = pd.read_json(df, orient="split")
-    total_solar_rad = f"Annual cumulative horizontal solar radiation: {df['GHrad'].sum() /1000} kWh/m2"
-    total_diffuse_rad = f"Annual cumulative diffuse horizontal solar radiation: {df['DifHrad'].sum() /1000} kWh/m2"
+    total_solar_rad = f"Annual cumulative horizontal solar radiation: {df['glob_hor_rad'].sum() /1000} kWh/m2"
+    total_diffuse_rad = f"Annual cumulative diffuse horizontal solar radiation: {df['dif_hor_rad'].sum() /1000} kWh/m2"
     average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °C"
     hottest_yearly_tmp = (
         f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} °C"
@@ -390,7 +390,7 @@ def update_tab_wind(global_local, df, meta):
         id="wind-profile-graph",
         className="violin-container",
         config=generate_chart_name("wind_summary", meta),
-        figure=violin(df, "Wspeed", global_local),
+        figure=violin(df, "wind_speed", global_local),
     )
 
 
@@ -428,7 +428,7 @@ def update_tab_gh_rad(global_local, df, meta):
         id="gh_rad-profile-graph",
         className="violin-container",
         config=generate_chart_name("solar_summary", meta),
-        figure=violin(df, "GHrad", global_local),
+        figure=violin(df, "glob_hor_rad", global_local),
     )
 
 

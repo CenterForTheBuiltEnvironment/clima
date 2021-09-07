@@ -368,7 +368,7 @@ def section_three_inputs():
                                     {"label": i, "value": explore_dropdown_names[i]}
                                     for i in explore_dropdown_names
                                 ],
-                                value="GHrad",
+                                value="glob_hor_rad",
                                 style={"flex": "70%"},
                             ),
                         ],

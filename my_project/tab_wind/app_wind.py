@@ -374,7 +374,7 @@ def update_tab_wind_speed(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
 
-    speed = heatmap(df, "Wspeed", global_local)
+    speed = heatmap(df, "wind_speed", global_local)
 
     return dcc.Graph(
         config=generate_chart_name("wind_speed_wind", meta),
@@ -395,7 +395,7 @@ def update_tab_wind_speed(global_local, df, meta):
 def update_tab_wind_direction(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
     df = pd.read_json(df, orient="split")
-    direction = heatmap(df, "Wdir", global_local)
+    direction = heatmap(df, "wind_dir", global_local)
     return dcc.Graph(
         config=generate_chart_name("wind_direction_wind", meta),
         figure=direction,
@@ -475,7 +475,7 @@ def update_seasonal_graphs(df, meta):
     winter_df = df.loc[
         (df["month"] <= winter_months[1]) | (df["month"] >= winter_months[0])
     ]
-    query_calm_wind = "Wspeed == 0"
+    query_calm_wind = "wind_speed == 0"
     winter_total_count = winter_df.shape[0]
     winter_calm_count = winter_df.query(query_calm_wind).shape[0]
 
@@ -584,7 +584,7 @@ def update_daily_graphs(df, meta):
     night = wind_rose(df, "", months, night_times, True)
 
     # Text
-    query_calm_wind = "Wspeed == 0"
+    query_calm_wind = "wind_speed == 0"
     morning_df = df.loc[
         (df["hour"] >= morning_times[0]) & (df["hour"] <= morning_times[1])
     ]

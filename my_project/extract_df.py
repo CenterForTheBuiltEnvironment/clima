@@ -17,25 +17,25 @@ from global_scheme import month_lst
 
 
 @code_timer
-def get_data(url):
+def get_data(source_url):
     """Return a list of the data from api call."""
-    if url[-3:] == "zip" or url[-3:] == "all":
-        request = requests.get(url)
+    if source_url[-3:] == "zip" or source_url[-3:] == "all":
+        request = requests.get(source_url)
         if request.status_code != 404:
             zf = zipfile.ZipFile(io.BytesIO(request.content))
             for i in zf.namelist():
                 if i[-3:] == "epw":
                     epw_name = i
-            data = zf.read(epw_name)
-            data = repr(data).split("\\n")
-            return data
+                    data = zf.read(epw_name)
+                    data = repr(data).split("\\n")
+                    return data
         else:
             print("returning none")
             return None
     else:
         try:
             headers = {"User-Agent": "Mozilla/5.0"}
-            req = Request(url, headers=headers)
+            req = Request(source_url, headers=headers)
             epw = urlopen(req).read().decode()
             return epw.split("\n")
         except:
@@ -84,19 +84,19 @@ def create_df(lst, file_name):
         "DBT",
         "DPT",
         "RH",
-        "Apressure",
-        "EHrad",
-        "HIRrad",
-        "GHrad",
-        "DNrad",
-        "DifHrad",
-        "GHillum",
-        "DNillum",
-        "DifHillum",
+        "p_atm",
+        "extr_hor_rad",
+        "hor_ir_rad",
+        "glob_hor_rad",
+        "dir_nor_rad",
+        "dif_hor_rad",
+        "glob_hor_ill",
+        "dir_nor_ill",
+        "dif_hor_ill",
         "Zlumi",
-        "Wdir",
-        "Wspeed",
-        "Tskycover",
+        "wind_dir",
+        "wind_speed",
+        "tot_sky_cover",
         "Oskycover",
         "Vis",
         "Cheight",
@@ -153,19 +153,19 @@ def create_df(lst, file_name):
         "DBT",
         "DPT",
         "RH",
-        "Apressure",
-        "EHrad",
-        "HIRrad",
-        "GHrad",
-        "DNrad",
-        "DifHrad",
-        "GHillum",
-        "DNillum",
-        "DifHillum",
+        "p_atm",
+        "extr_hor_rad",
+        "hor_ir_rad",
+        "glob_hor_rad",
+        "dir_nor_rad",
+        "dif_hor_rad",
+        "glob_hor_ill",
+        "dir_nor_ill",
+        "dif_hor_ill",
         "Zlumi",
-        "Wdir",
-        "Wspeed",
-        "Tskycover",
+        "wind_dir",
+        "wind_speed",
+        "tot_sky_cover",
         "Oskycover",
         "Vis",
         "Cheight",
@@ -200,7 +200,7 @@ def create_df(lst, file_name):
     # Add in UTCI
     sol_altitude = epw_df["elevation"].mask(epw_df["elevation"] <= 0, 0)
     sharp = [45] * 8760
-    sol_radiation_dir = epw_df["DNrad"]
+    sol_radiation_dir = epw_df["dir_nor_rad"]
     sol_transmittance = [1] * 8760  # CHECK VALUE
     f_svv = [1] * 8760  # CHECK VALUE
     f_bes = [1] * 8760  # CHECK VALUE
@@ -226,27 +226,27 @@ def create_df(lst, file_name):
     epw_df = epw_df.join(mrt_df)
 
     epw_df["MRT"] = epw_df["delta_mrt"] + epw_df["DBT"]
-    epw_df["Wspeed_utci"] = epw_df["Wspeed"]
-    epw_df["Wspeed_utci"] = epw_df["Wspeed_utci"].mask(
-        epw_df["Wspeed_utci"] >= 17, 16.9
+    epw_df["wind_speed_utci"] = epw_df["wind_speed"]
+    epw_df["wind_speed_utci"] = epw_df["wind_speed_utci"].mask(
+        epw_df["wind_speed_utci"] >= 17, 16.9
     )
-    epw_df["Wspeed_utci"] = epw_df["Wspeed_utci"].mask(
-        epw_df["Wspeed_utci"] <= 0.5, 0.6
+    epw_df["wind_speed_utci"] = epw_df["wind_speed_utci"].mask(
+        epw_df["wind_speed_utci"] <= 0.5, 0.6
     )
-    epw_df["Wspeed_utci_0"] = epw_df["Wspeed_utci"].mask(
-        epw_df["Wspeed_utci"] >= 0, 0.5
+    epw_df["wind_speed_utci_0"] = epw_df["wind_speed_utci"].mask(
+        epw_df["wind_speed_utci"] >= 0, 0.5
     )
     epw_df["utci_noSun_Wind"] = np.vectorize(utci)(
-        epw_df["DBT"], epw_df["DBT"], epw_df["Wspeed_utci"], epw_df["RH"]
+        epw_df["DBT"], epw_df["DBT"], epw_df["wind_speed_utci"], epw_df["RH"]
     )
     epw_df["utci_noSun_noWind"] = np.vectorize(utci)(
-        epw_df["DBT"], epw_df["DBT"], epw_df["Wspeed_utci_0"], epw_df["RH"]
+        epw_df["DBT"], epw_df["DBT"], epw_df["wind_speed_utci_0"], epw_df["RH"]
     )
     epw_df["utci_Sun_Wind"] = np.vectorize(utci)(
-        epw_df["DBT"], epw_df["MRT"], epw_df["Wspeed_utci"], epw_df["RH"]
+        epw_df["DBT"], epw_df["MRT"], epw_df["wind_speed_utci"], epw_df["RH"]
     )
     epw_df["utci_Sun_noWind"] = np.vectorize(utci)(
-        epw_df["DBT"], epw_df["MRT"], epw_df["Wspeed_utci_0"], epw_df["RH"]
+        epw_df["DBT"], epw_df["MRT"], epw_df["wind_speed_utci_0"], epw_df["RH"]
     )
 
     utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
@@ -280,31 +280,5 @@ if __name__ == "__main__":
     # fmt: on
 
     # -----
-    lines = get_data(url=test_url)
+    lines = get_data(source_url=test_url)
     df, location_data = create_df(lst=lines, file_name=test_url)
-
-    # ---- import a local file
-    file_path = r"C:\Users\sbbfti\Downloads\PredictiveWeatherFilesEpw_20210712\PredictiveWeatherFilesEpw_20210712\01\RCP2.6\2030\01_CZ0101_DA_NH16_TMY_RCP26_2030.epw"
-
-    with open(
-        file_path,
-        "r",
-    ) as f:
-        lines = f.readlines()
-    df, location_data = create_df(lines, file_path)
-
-    # -----
-    import json
-    from pandas import json_normalize
-
-    with open("./assets/data/epw_location.json") as data_file:
-        data = json.load(data_file)
-
-    df = json_normalize(data["features"])
-    for value in df["properties.epw"][29:30]:
-        url = re.search(r'href=[\'"]?([^\'" >]+)', value).group(1)
-        print(url)
-
-        lines = get_data(url)
-        # print([x.split(",")[0] for x in lines[:]])
-        create_df(lines, test_url)

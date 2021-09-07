@@ -144,7 +144,7 @@ mapping_dictionary = {
         "unit": "%",
         "range": [0, 100],
     },
-    "Apressure": {
+    "p_atm": {
         "name": "Atmospheric pressure",
         "color": [
             "#ffffff",
@@ -161,7 +161,7 @@ mapping_dictionary = {
         "unit": "Pa",
         "range": [95000, 105000],
     },
-    "EHrad": {
+    "extr_hor_rad": {
         "name": "Extraterrestrial horizontal irradiation",
         "color": [
             "#293a59",
@@ -175,7 +175,7 @@ mapping_dictionary = {
         "unit": radiation_unit,
         "range": [0, 1200],
     },
-    "HIRrad": {
+    "hor_ir_rad": {
         "name": "´Horizontal infrared radiation",
         "color": [
             "#293a59",
@@ -189,7 +189,7 @@ mapping_dictionary = {
         "unit": radiation_unit,
         "range": [0, 500],
     },
-    "GHrad": {
+    "glob_hor_rad": {
         "name": "Global horizontal radiation",
         "color": [
             "#293a59",
@@ -203,7 +203,7 @@ mapping_dictionary = {
         "unit": radiation_unit,
         "range": [0, 1200],
     },
-    "DNrad": {
+    "dir_nor_rad": {
         "name": "Direct normal radiation",
         "color": [
             "#293a59",
@@ -217,7 +217,7 @@ mapping_dictionary = {
         "unit": radiation_unit,
         "range": [0, 1200],
     },
-    "DifHrad": {
+    "dif_hor_rad": {
         "name": "Diffuse horizontal radiation",
         "color": [
             "#293a59",
@@ -231,19 +231,19 @@ mapping_dictionary = {
         "unit": radiation_unit,
         "range": [0, 1200],
     },
-    "GHillum": {
+    "glob_hor_ill": {
         "name": "Global horizontal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
         "unit": "lux",
         "range": [0, 120000],
     },
-    "DNillum": {
+    "dir_nor_ill": {
         "name": "Direct normal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
         "unit": "lux",
         "range": [0, 120000],
     },
-    "DifHillum": {
+    "dif_hor_ill": {
         "name": "Diffuse horizontal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
         "unit": "lux",
@@ -255,13 +255,13 @@ mapping_dictionary = {
         "unit": "cd/m<sup>2</sup>",
         "range": [0, 60000],
     },
-    "Wdir": {
+    "wind_dir": {
         "name": "Wind direction",
         "color": ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
         "unit": "°deg",
         "range": [0, 360],
     },
-    "Wspeed": {
+    "wind_speed": {
         "name": "Wind speed",
         "color": [
             "#ffffff",
@@ -278,7 +278,7 @@ mapping_dictionary = {
         "unit": "m/s",
         "range": [0, 20],
     },
-    "Tskycover": {
+    "tot_sky_cover": {
         "name": "Total sky cover",
         "color": ["#00aaff", "#ffffff", "#c2c2c2"],
         "unit": "tenths",
@@ -554,19 +554,19 @@ variables_sun_cloud_tab_dropdown = [
     "DBT",
     "DPT",
     "RH",
-    "Apressure",
-    "EHrad",
-    "HIRrad",
-    "GHrad",
-    "DNrad",
-    "DifHrad",
-    "GHillum",
-    "DNillum",
-    "DifHillum",
+    "p_atm",
+    "extr_hor_rad",
+    "hor_ir_rad",
+    "glob_hor_rad",
+    "dir_nor_rad",
+    "dif_hor_rad",
+    "glob_hor_ill",
+    "dir_nor_ill",
+    "dif_hor_ill",
     "Zlumi",
-    "Wdir",
-    "Wspeed",
-    "Tskycover",
+    "wind_dir",
+    "wind_speed",
+    "tot_sky_cover",
     "Oskycover",
     "Vis",
 ]
@@ -574,19 +574,19 @@ variables_dropdown = [
     "DBT",
     "DPT",
     "RH",
-    "Apressure",
-    "EHrad",
-    "HIRrad",
-    "GHrad",
-    "DNrad",
-    "DifHrad",
-    "GHillum",
-    "DNillum",
-    "DifHillum",
+    "p_atm",
+    "extr_hor_rad",
+    "hor_ir_rad",
+    "glob_hor_rad",
+    "dir_nor_rad",
+    "dif_hor_rad",
+    "glob_hor_ill",
+    "dir_nor_ill",
+    "dif_hor_ill",
     "Zlumi",
-    "Wdir",
-    "Wspeed",
-    "Tskycover",
+    "wind_dir",
+    "wind_speed",
+    "tot_sky_cover",
     "Oskycover",
     "Vis",
 ]
@@ -608,14 +608,14 @@ variables_more_variables_dropdown = [
     "p_sat",
 ]
 variables_sun_cloud_tab_explore_dropdown = [
-    "EHrad",
-    "HIRrad",
-    "GHrad",
-    "DNrad",
-    "DifHrad",
-    "GHillum",
-    "DNillum",
-    "DifHillum",
+    "extr_hor_rad",
+    "hor_ir_rad",
+    "glob_hor_rad",
+    "dir_nor_rad",
+    "dif_hor_rad",
+    "glob_hor_ill",
+    "dir_nor_ill",
+    "dif_hor_ill",
     "Zlumi",
     "Oskycover",
 ]

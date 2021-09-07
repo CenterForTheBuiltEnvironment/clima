@@ -428,22 +428,22 @@ def wind_rose(df, title, month, hour, labels):
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
 
-    spd_colors = mapping_dictionary["Wspeed"]["color"]
+    spd_colors = mapping_dictionary["wind_speed"]["color"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units="m/s")
     dir_bins = np.arange(-22.5 / 2, 370, 22.5)
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
     total_count = df.shape[0]
-    calm_count = df.query("Wspeed == 0").shape[0]
+    calm_count = df.query("wind_speed == 0").shape[0]
     rose = (
         df.assign(
             WindSpd_bins=lambda df: pd.cut(
-                df["Wspeed"], bins=spd_bins, labels=spd_labels, right=True
+                df["wind_speed"], bins=spd_bins, labels=spd_labels, right=True
             )
         )
         .assign(
             WindDir_bins=lambda df: pd.cut(
-                df["Wdir"], bins=dir_bins, labels=dir_labels, right=False
+                df["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
             )
         )
         .replace({"WindDir_bins": {360: 0}})
@@ -519,7 +519,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
         start_hour = time_filter_info[2][0]
         end_hour = time_filter_info[2][1]
 
-        filter_var = data_filter_info[1]
+        filter_var = str(data_filter_info[1])
         filter_name = mapping_dictionary[filter_var]["name"]
         filter_unit = mapping_dictionary[filter_var]["unit"]
 
@@ -541,8 +541,6 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
 
     if len(time_filter_info) == 1:
         filter_var = str(var)
-    else:
-        filter_var = str(filter_var)
 
     for i in range(1, 13):
         query = (

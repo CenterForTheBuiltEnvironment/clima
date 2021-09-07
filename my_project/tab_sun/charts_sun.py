@@ -18,10 +18,10 @@ from pvlib import solarposition
 def monthly_solar(epw_df):
     """"""
     g_h_rad_month_ave = (
-        epw_df.groupby(["month", "hour"])["GHrad"].median().reset_index()
+        epw_df.groupby(["month", "hour"])["glob_hor_rad"].median().reset_index()
     )
     dif_h_rad_month_ave = (
-        epw_df.groupby(["month", "hour"])["DifHrad"].median().reset_index()
+        epw_df.groupby(["month", "hour"])["dif_hor_rad"].median().reset_index()
     )
     fig = make_subplots(
         rows=1,
@@ -34,7 +34,9 @@ def monthly_solar(epw_df):
         fig.add_trace(
             go.Scatter(
                 x=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "hour"],
-                y=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "GHrad"],
+                y=g_h_rad_month_ave.loc[
+                    g_h_rad_month_ave["month"] == i + 1, "glob_hor_rad"
+                ],
                 fill="tozeroy",
                 mode="lines",
                 line_color="orange",
@@ -46,7 +48,7 @@ def monthly_solar(epw_df):
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary["GHrad"]["unit"]
+                    + mapping_dictionary["glob_hor_rad"]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -62,7 +64,7 @@ def monthly_solar(epw_df):
                     dif_h_rad_month_ave["month"] == i + 1, "hour"
                 ],
                 y=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave["month"] == i + 1, "DifHrad"
+                    dif_h_rad_month_ave["month"] == i + 1, "dif_hor_rad"
                 ],
                 fill="tozeroy",
                 mode="lines",
@@ -75,7 +77,7 @@ def monthly_solar(epw_df):
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary["DifHrad"]["unit"]
+                    + mapping_dictionary["dif_hor_rad"]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"

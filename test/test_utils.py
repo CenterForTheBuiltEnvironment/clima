@@ -7,7 +7,7 @@ import os
 def save_epw_test(path_file):
     test_url = "http://climate.onebuilding.org/WMO_Region_6_Europe/ITA_Italy/ER_Emilia-Romagna/ITA_ER_Bologna-Marconi.AP.161400_TMYx.2004-2018.zip"
 
-    lines = get_data(url=test_url)
+    lines = get_data(source_url=test_url)
     df, location_data = create_df(lst=lines, file_name=test_url)
 
     df.to_pickle(path_file, compression="gzip")

@@ -114,7 +114,7 @@ def explore_daily_heatmap():
                             }
                             for i in sun_cloud_tab_explore_dropdown_names
                         ],
-                        value="GHrad",
+                        value="glob_hor_rad",
                         style={"width": "20rem"},
                     ),
                 ],
@@ -187,7 +187,7 @@ def monthly_and_cloud_chart(ts, df, meta):
     monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, "Tskycover", [False], [False, "", 3, 7], True)
+    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True)
     cover = cover.update_layout(
         margin=tight_margins,
         title="",
