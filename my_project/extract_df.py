@@ -13,7 +13,7 @@ from pythermalcomfort.models import utci
 from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
 import math
-from global_scheme import month_lst
+from my_project.global_scheme import month_lst
 
 
 @code_timer

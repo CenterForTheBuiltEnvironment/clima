@@ -4,14 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pythermalcomfort = "*"
 dash = "*"
-pvlib = "*"
 gunicorn = "*"
+pvlib = "*"
+pythermalcomfort = "*"
+dash-bootstrap-components = "*"
+flask-caching = "*"
 
 [dev-packages]
 cleanpy = "*"
 pytest = "*"
+bump2version = "*"
 
 [requires]
 python_version = "3.8"

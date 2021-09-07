@@ -1,6 +1,6 @@
 import functools
 import time
-from my_project.global_scheme import fig_config
+from my_project.global_scheme import fig_config, mapping_dictionary
 import pandas as pd
 import json
 from pandas import json_normalize
@@ -8,7 +8,6 @@ from dash import html, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
-from global_scheme import mapping_dictionary
 
 
 def code_timer(func):

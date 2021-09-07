@@ -7,7 +7,7 @@ from my_project.utils import (
 )
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
-from global_scheme import dropdown_names
+from my_project.global_scheme import dropdown_names
 
 from app import app, cache, TIMEOUT
 
