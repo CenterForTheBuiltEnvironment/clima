@@ -283,37 +283,10 @@ def daily_profile(df, var, global_local):
 
     var_single_color = var_color[len(var_color) // 2]
     var_month_ave = df.groupby(["month", "hour"])[var].median().reset_index()
-    month_list = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
     fig = make_subplots(
         rows=1,
         cols=12,
-        subplot_titles=(
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-        ),
+        subplot_titles=month_lst,
     )
 
     for i in range(12):
@@ -326,7 +299,7 @@ def daily_profile(df, var, global_local):
                 marker_color=var_single_color,
                 opacity=0.5,
                 marker_size=3,
-                name=month_list[i],
+                name=month_lst[i],
                 showlegend=False,
                 customdata=df.loc[df["month"] == i + 1, "month_names"],
                 hovertemplate=(
@@ -551,7 +524,6 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
         filter_unit = mapping_dictionary[filter_var]["unit"]
 
     var_unit = mapping_dictionary[var]["unit"]
-    var_range = mapping_dictionary[var]["range"]
     var_name = mapping_dictionary[var]["name"]
     var_color = mapping_dictionary[var]["color"]
 
@@ -566,6 +538,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
 
     min_val = str(min_val)
     max_val = str(max_val)
+
     if len(time_filter_info) == 1:
         filter_var = str(var)
     else:

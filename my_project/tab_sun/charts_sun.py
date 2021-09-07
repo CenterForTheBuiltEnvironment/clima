@@ -9,6 +9,7 @@ from my_project.global_scheme import (
     mapping_dictionary,
     degrees_unit,
     tight_margins,
+    month_lst,
 )
 from plotly.subplots import make_subplots
 from pvlib import solarposition
@@ -25,20 +26,7 @@ def monthly_solar(epw_df):
     fig = make_subplots(
         rows=1,
         cols=12,
-        subplot_titles=(
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-        ),
+        subplot_titles=month_lst,
     )
 
     for i in range(12):

@@ -13,6 +13,7 @@ from pythermalcomfort.models import utci
 from pythermalcomfort.models import solar_gain as sgain
 from pythermalcomfort import psychrometrics as psy
 import math
+from global_scheme import month_lst
 
 
 @code_timer
@@ -130,20 +131,7 @@ def create_df(lst, file_name):
     epw_df["fake_year"] = "year"
 
     # Add in month names
-    month_look_up = {
-        1: "Jan",
-        2: "Feb",
-        3: "Mar",
-        4: "Apr",
-        5: "May",
-        6: "Jun",
-        7: "Jul",
-        8: "Aug",
-        9: "Sep",
-        10: "Oct",
-        11: "Nov",
-        12: "Dec",
-    }
+    month_look_up = {ix + 1: month for ix, month in enumerate(month_lst)}
     epw_df["month_names"] = epw_df["month"].astype("int").map(month_look_up)
 
     # Add in DOY

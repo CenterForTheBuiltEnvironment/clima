@@ -4,25 +4,7 @@ import numpy as np
 import math
 import plotly.express as px
 import plotly.graph_objects as go
-from my_project.global_scheme import (
-    template,
-    mapping_dictionary,
-)
-
-month_lst = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-]
+from my_project.global_scheme import template, mapping_dictionary, month_lst
 
 
 def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
