@@ -217,7 +217,15 @@ def update_location_info(ts, df, meta):
 
     # global horizontal irradiance
     df = pd.read_json(df, orient="split")
-    total_g_hor = f"Annual total horizontal radiation: {df['GHrad'].sum() /1000} kWh/m2"
+    total_solar_rad = f"Annual cumulative horizontal solar radiation: {df['GHrad'].sum() /1000} kWh/m2"
+    total_diffuse_rad = f"Annual cumulative diffuse horizontal solar radiation: {df['DifHrad'].sum() /1000} kWh/m2"
+    average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °C"
+    hottest_yearly_tmp = (
+        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} °C"
+    )
+    coldest_yearly_tmp = (
+        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} °C"
+    )
 
     location_info = dbc.Col(
         [
@@ -227,7 +235,11 @@ def update_location_info(ts, df, meta):
             dbc.Row(elevation),
             dbc.Row(period),
             dbc.Row(climate_text),
-            dbc.Row(total_g_hor),
+            dbc.Row(average_yearly_tmp),
+            dbc.Row(hottest_yearly_tmp),
+            dbc.Row(coldest_yearly_tmp),
+            dbc.Row(total_solar_rad),
+            dbc.Row(total_diffuse_rad),
         ],
     )
 
