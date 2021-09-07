@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 0.4.6 \(2021-09-07\)
+
+Fix:
+
+* issue with dew-point temperature filter in nat ven tab
+
+Features:
+
+* implemented responsive layout in some tabs
+* linked GitBook documentation
+* returning a warning id EnergyPlus files are not available
+* added summary tables
+
 ## Version 0.4.5 \(2021-08-30\)
 
 Fix:
