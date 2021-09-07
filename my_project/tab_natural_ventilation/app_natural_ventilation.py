@@ -236,6 +236,7 @@ def inputs_tab():
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
         Input("global-local-radio-input", "value"),
+        Input("enable-condensation", "value"),
     ],
     [
         State("df-store", "data"),
@@ -247,7 +248,6 @@ def inputs_tab():
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
-        State("enable-condensation", "value"),
     ],
 )
 # @cache.memoize(timeout=TIMEOUT)
@@ -256,6 +256,7 @@ def nv_heatmap(
     dbt_data_filter,
     click_dpt_filter,
     global_local,
+    condensation_enabled,
     df,
     month,
     hour,
@@ -265,14 +266,12 @@ def nv_heatmap(
     meta,
     invert_month,
     invert_hour,
-    condensation_enabled,
 ):
 
     # enable or disable button apply filter DPT
+    dpt_data_filter = False
     if len(condensation_enabled) == 1:
         dpt_data_filter = True
-    else:
-        dpt_data_filter = False
 
     df = pd.read_json(df, orient="split")
 

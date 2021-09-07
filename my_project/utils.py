@@ -4,11 +4,10 @@ from my_project.global_scheme import fig_config
 import pandas as pd
 import json
 from pandas import json_normalize
-from dash import html
+from dash import html, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
-import dash_table
 from global_scheme import mapping_dictionary
 
 
