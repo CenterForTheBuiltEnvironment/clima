@@ -50,6 +50,10 @@ The package name, together with its version and a list of its own dependencies, 
 
 `pipenv lock`
 
+Remember also to update the `requirements.txt` file with this command:
+
+`pipenv run pip freeze > requirements.txt`
+
 ### Managing your development environment
 
 There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. Pipenv will let you keep the two environments separate using the --dev flag. For example,
