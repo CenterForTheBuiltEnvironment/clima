@@ -37,13 +37,14 @@ def generate_chart_name(tab_name, meta=None):
 
 
 def plot_location_epw_files():
-    with open("./assets/data/epw_location.json") as data_file:
+    with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
         data = json.load(data_file)
 
     df = json_normalize(data["features"])
     df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
     df["lat"] += 0.005
     df["lat"] += 0.005
+    df = df.rename(columns={"properties.epw": "Source"})
 
     df_one_building = pd.read_csv("./assets/data/one_building.csv")
 
@@ -53,7 +54,7 @@ def plot_location_epw_files():
         lon="lon",
         hover_name="properties.title",
         color_discrete_sequence=["#3a0ca3"],
-        hover_data=["properties.epw"],
+        hover_data=["Source"],
         zoom=2,
         height=500,
     )
