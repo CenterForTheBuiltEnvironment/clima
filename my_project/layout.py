@@ -39,21 +39,30 @@ def footer():
                 style={"padding": "15px"},
             ),
             dbc.Col(
-                dcc.Markdown(
-                    """
-                    Developed by [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
-                    [Christine Nguyen](https://chrlng.github.io/),
-                    [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
-
-                    Supported browsers: Chromium-based browsers, Firefox.
-
-                    Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
-
-                    [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
-                    
-                    [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
-                    """,
-                ),
+                children=[
+                    dbc.Row(" Please cite us if you use this software:"),
+                    dbc.Row(
+                        "Betti, G., Tartarini, F., Schiavon, S., Nguyen, C. (2021). CBE Clima Tool. Version 0.4.6. Center for the Built Environment, University of California Berkeley. https://clima.cbe.berkeley.edu"
+                    ),
+                    dbc.Row(
+                        dcc.Markdown(
+                            """
+                                Developed by" [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
+                                [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
+                                [Christine Nguyen](https://chrlng.github.io/),
+            
+                                Supported browsers: Chromium-based browsers, Firefox.
+            
+                                Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
+            
+                                [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
+                                
+                                [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
+                            """,
+                        ),
+                        style={"marginTop": "1rem"},
+                    ),
+                ],
                 width=12,
                 md=4,
             ),
