@@ -85,7 +85,7 @@ You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed o
 ```text
 gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
 
-gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1
+gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=1Gi
 ```
 
 ### Test project
