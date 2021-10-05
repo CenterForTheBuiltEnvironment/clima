@@ -47,7 +47,8 @@ def footer():
                     dbc.Row(
                         dcc.Markdown(
                             """
-                                Developed by" [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
+                                Developed by:
+                                [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
                                 [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
                                 [Christine Nguyen](https://chrlng.github.io/),
             
