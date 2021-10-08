@@ -8,6 +8,7 @@ from my_project.utils import (
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 import pandas as pd
 from my_project.global_scheme import dropdown_names
+from my_project.utils import code_timer
 
 from app import app, cache, TIMEOUT
 
@@ -96,7 +97,7 @@ def layout_t_rh():
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_yearly_chart(global_local, dd_value, df, meta):
     df = pd.read_json(df, orient="split")
 
@@ -124,7 +125,7 @@ def update_yearly_chart(global_local, dd_value, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_daily(global_local, dd_value, df, meta):
     df = pd.read_json(df, orient="split")
 
@@ -146,7 +147,7 @@ def update_daily(global_local, dd_value, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_heatmap(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")
@@ -168,6 +169,7 @@ def update_heatmap(global_local, dd_value, df, meta):
     [State("df-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     df = pd.read_json(df, orient="split")

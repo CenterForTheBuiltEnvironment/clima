@@ -193,7 +193,7 @@ def update_location_info(ts, df, meta):
     location = f"Location: {meta['city']}, {meta['country']}"
     lon = f"Longitude: {meta['lon']}"
     lat = f"Latitude: {meta['lat']}"
-    elevation = f"Elevation above sea level: {meta['site_elevation']}"
+    elevation = f"Elevation above sea level: {meta['site_elevation']} m"
     period = ""
     if meta["period"]:
         start, stop = meta["period"].split("-")
@@ -217,7 +217,7 @@ def update_location_info(ts, df, meta):
 
     # global horizontal irradiance
     df = pd.read_json(df, orient="split")
-    total_solar_rad = f"Annual cumulative horizontal solar radiation: {df['glob_hor_rad'].sum() /1000} kWh/m2"
+    total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)} kWh/m<sup>2</sup>"
     total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
     average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °C"
     hottest_yearly_tmp = (
@@ -238,7 +238,9 @@ def update_location_info(ts, df, meta):
             dbc.Row(average_yearly_tmp),
             dbc.Row(hottest_yearly_tmp),
             dbc.Row(coldest_yearly_tmp),
-            dbc.Row(total_solar_rad),
+            dbc.Row(
+                dcc.Markdown(dangerously_allow_html=True, children=[total_solar_rad])
+            ),
             dbc.Row(total_diffuse_rad),
         ],
     )
