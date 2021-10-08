@@ -10,6 +10,7 @@ pvlib = "*"
 pythermalcomfort = "*"
 dash-bootstrap-components = "*"
 flask-caching = "*"
+dash-extensions = "*"
 
 [dev-packages]
 cleanpy = "*"

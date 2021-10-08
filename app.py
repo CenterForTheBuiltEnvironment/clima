@@ -1,5 +1,5 @@
 import dash_bootstrap_components as dbc
-from dash import Dash
+from dash_extensions.enrich import Dash
 from flask_caching import Cache
 import warnings
 

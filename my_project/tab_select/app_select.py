@@ -5,12 +5,13 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
-from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from app import app
 from my_project.extract_df import create_df, get_data
 from my_project.utils import plot_location_epw_files, generate_chart_name
+
+from dash_extensions.enrich import ServersideOutput, Output, Input, State
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",
@@ -100,7 +101,7 @@ def alert():
 
 @app.callback(
     [
-        Output("df-store", "data"),
+        ServersideOutput("df-store", "data"),
         Output("meta-store", "data"),
         Output("alert", "is_open"),
         Output("alert", "children"),
@@ -135,8 +136,6 @@ def submitted_data(
                 "warning",
             )
         df, location_info = create_df(lines, url_store)
-        # fixme: DeprecationWarning: an integer is required (got type float).
-        df = df.to_json(date_format="iso", orient="split")
         return (
             df,
             location_info,
@@ -157,7 +156,6 @@ def submitted_data(
                 # Assume that the user uploaded a CSV file
                 lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
                 df, location_info = create_df(lines, list_of_names[0])
-                df = df.to_json(date_format="iso", orient="split")
                 return (
                     df,
                     location_info,

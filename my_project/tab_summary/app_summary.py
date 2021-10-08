@@ -3,7 +3,6 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State
 import dash
-import pandas as pd
 from dash.exceptions import PreventUpdate
 from app import app, cache, TIMEOUT
 from my_project.tab_summary.charts_summary import world_map
@@ -13,9 +12,10 @@ import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
 import requests
 from my_project.extract_df import get_data
+from my_project.utils import code_timer
+from dash_extensions.enrich import Trigger
 
 
-# @code_timer
 def layout_summary():
     """Contents in the second tab 'Climate Summary'."""
     return html.Div(
@@ -166,11 +166,12 @@ def layout_summary():
 
 @app.callback(
     Output("world-map", "children"),
-    Input("df-store", "modified_timestamp"),
+    Trigger("df-store", "modified_timestamp"),
     State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
-def update_map(ts, meta):
+@code_timer
+def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     map_world = dcc.Graph(
         id="gh_rad-profile-graph",
@@ -187,7 +188,7 @@ def update_map(ts, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_location_info(ts, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta['city']}, {meta['country']}"
@@ -216,7 +217,7 @@ def update_location_info(ts, df, meta):
             pass
 
     # global horizontal irradiance
-    df = pd.read_json(df, orient="split")
+
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)} kWh/m<sup>2</sup>"
     total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
     average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °C"
@@ -265,7 +266,7 @@ def update_location_info(ts, df, meta):
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
@@ -285,8 +286,6 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
 
         color_hdd = "red"
         color_cdd = "dodgerblue"
-
-        df = pd.read_json(df, orient="split")
 
         hdd_array = []
         cdd_array = []
@@ -365,9 +364,8 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_violin_tdb(global_local, df, meta):
-    df = pd.read_json(df, orient="split")
 
     return dcc.Graph(
         id="tdb-profile-graph",
@@ -383,10 +381,9 @@ def update_violin_tdb(global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_tab_wind(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     return dcc.Graph(
         id="wind-profile-graph",
@@ -402,10 +399,9 @@ def update_tab_wind(global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_tab_rh(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     return dcc.Graph(
         id="rh-profile-graph",
@@ -421,10 +417,9 @@ def update_tab_rh(global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
-# @code_timer
+@code_timer
 def update_tab_gh_rad(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     return dcc.Graph(
         id="gh_rad-profile-graph",
@@ -440,12 +435,12 @@ def update_tab_gh_rad(global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
     prevent_initial_call=True,
 )
-# @code_timer
+@code_timer
 def download_clima_dataframe(n_clicks, df, meta):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
-        df = pd.read_json(df, orient="split")
+
         return dcc.send_data_frame(
             df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima.csv"
         )
@@ -459,7 +454,7 @@ def download_clima_dataframe(n_clicks, df, meta):
     [State("meta-store", "data")],
     prevent_initial_call=True,
 )
-# @code_timer
+@code_timer
 def download_clima_dataframe(n_clicks, meta):
     if n_clicks is None:
         raise PreventUpdate

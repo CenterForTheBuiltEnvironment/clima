@@ -8,6 +8,10 @@ Pipfile.lock
 *.pyd
 __pycache__
 .pytest_cache
+file_system_store
+.git
+docs
+test
 
 assets/data/Region*.kml
 

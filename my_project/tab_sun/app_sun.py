@@ -14,7 +14,7 @@ from my_project.tab_sun.charts_sun import (
     custom_cartesian_solar,
 )
 from my_project.template_graphs import heatmap, barchart, daily_profile
-import pandas as pd
+from my_project.utils import code_timer
 from my_project.utils import title_with_tooltip, generate_chart_name
 
 from app import app, cache, TIMEOUT
@@ -178,9 +178,9 @@ def layout_sun():
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def monthly_and_cloud_chart(ts, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     # Sun Radiation
     monthly = monthly_solar(df)
@@ -213,9 +213,9 @@ def monthly_and_cloud_chart(ts, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def sun_path_chart(view, var, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     if view == "polar":
         return dcc.Graph(
@@ -238,9 +238,10 @@ def sun_path_chart(view, var, global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def daily(var, global_local, df, meta):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
+
     return dcc.Graph(
         config=generate_chart_name("daily_sun", meta),
         figure=daily_profile(df, var, global_local),
@@ -256,8 +257,9 @@ def daily(var, global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_heatmap(var, global_local, df, meta):
-    df = pd.read_json(df, orient="split")
+
     return dcc.Graph(
         config=generate_chart_name("heatmap_sun", meta),
         figure=heatmap(df, var, global_local),

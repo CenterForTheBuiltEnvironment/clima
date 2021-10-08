@@ -16,7 +16,7 @@ import pandas as pd
 import numpy as np
 from my_project.utils import title_with_tooltip, generate_chart_name
 
-from app import app
+from app import app, cache, TIMEOUT
 
 
 def layout_natural_ventilation():
@@ -250,7 +250,7 @@ def inputs_tab():
         State("invert-hour-nv", "value"),
     ],
 )
-# @cache.memoize(timeout=TIMEOUT)
+@cache.memoize(timeout=TIMEOUT)
 def nv_heatmap(
     time_filter,
     dbt_data_filter,
@@ -272,8 +272,6 @@ def nv_heatmap(
     dpt_data_filter = False
     if len(condensation_enabled) == 1:
         dpt_data_filter = True
-
-    df = pd.read_json(df, orient="split")
 
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
@@ -425,7 +423,7 @@ def nv_heatmap(
         State("enable-condensation", "value"),
     ],
 )
-# @cache.memoize(timeout=TIMEOUT)
+@cache.memoize(timeout=TIMEOUT)
 def nv_bar_chart(
     time_filter,
     dbt_data_filter,
@@ -447,8 +445,6 @@ def nv_bar_chart(
         dpt_data_filter = True
     else:
         dpt_data_filter = False
-
-    df = pd.read_json(df, orient="split")
 
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):

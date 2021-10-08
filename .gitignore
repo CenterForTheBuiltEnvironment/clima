@@ -2,6 +2,7 @@ venv
 .idea
 cache-directory
 cloud-run-key-file.json
+file_system_store
 
 # Created by .ignore support plugin (hsz.mobi)
 ### VisualStudioCode template

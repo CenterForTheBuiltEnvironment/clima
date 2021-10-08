@@ -95,4 +95,3 @@ gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
 
 gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated --region=us-central1 --memory=1Gi
 ```
-

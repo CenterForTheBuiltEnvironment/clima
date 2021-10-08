@@ -1,12 +1,11 @@
 from dash import dcc, html
-from dash.dependencies import Input, Output, State
+from dash_extensions.enrich import Output, Input, State
 from my_project.utils import (
     generate_chart_name,
     title_with_tooltip,
     summary_table_tmp_rh_tab,
 )
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
-import pandas as pd
 from my_project.global_scheme import dropdown_names
 from my_project.utils import code_timer
 
@@ -99,7 +98,6 @@ def layout_t_rh():
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_yearly_chart(global_local, dd_value, df, meta):
-    df = pd.read_json(df, orient="split")
 
     if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, "DBT", global_local)
@@ -127,7 +125,6 @@ def update_yearly_chart(global_local, dd_value, df, meta):
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_daily(global_local, dd_value, df, meta):
-    df = pd.read_json(df, orient="split")
 
     if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
@@ -150,7 +147,6 @@ def update_daily(global_local, dd_value, df, meta):
 @code_timer
 def update_heatmap(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
     if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
             config=generate_chart_name("tdb_heatmap_t_rh", meta),
@@ -172,5 +168,4 @@ def update_heatmap(global_local, dd_value, df, meta):
 @code_timer
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
     return summary_table_tmp_rh_tab(df, dd_value)

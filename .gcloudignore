@@ -17,3 +17,5 @@ __pycache__
 .pytest_cache
 
 assets/data/Region*.kml
+file_system_store
+test

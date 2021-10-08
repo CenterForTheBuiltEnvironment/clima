@@ -20,7 +20,7 @@ from my_project.global_scheme import (
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from app import app
+from app import app, cache, TIMEOUT
 
 from my_project.global_scheme import (
     template,
@@ -232,7 +232,7 @@ def layout_psy_chart():
         State("invert-hour-psy", "value"),
     ],
 )
-# @cache.memoize(timeout=TIMEOUT)
+@cache.memoize(timeout=TIMEOUT)
 def update_psych_chart(
     colorby_var,
     time_filter,
@@ -248,7 +248,7 @@ def update_psych_chart(
     invert_month,
     invert_hour,
 ):
-    df = pd.read_json(df, orient="split")
+
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]

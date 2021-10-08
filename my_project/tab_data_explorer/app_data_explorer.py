@@ -552,7 +552,7 @@ def layout_data_explorer():
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_yearly(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-    df = pd.read_json(df, orient="split")
+
     if df[var].mean() == 99990.0:
         return dbc.Alert(
             """The selected variable is not available,
@@ -575,7 +575,7 @@ def update_tab_yearly(var, global_local, df, meta):
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_daily(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-    df = pd.read_json(df, orient="split")
+
     return (
         dcc.Graph(
             config=generate_chart_name("daily_explore", meta),
@@ -592,7 +592,7 @@ def update_tab_daily(var, global_local, df, meta):
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_heatmap(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-    df = pd.read_json(df, orient="split")
+
     return (
         dcc.Graph(
             config=generate_chart_name("heatmap_explore", meta),
@@ -644,7 +644,7 @@ def update_heatmap(
     invert_month,
     invert_hour,
 ):
-    df = pd.read_json(df, orient="split")
+
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -715,6 +715,7 @@ def update_heatmap(
         State("invert-hour-explore-more-charts", "value"),
     ],
 )
+@cache.memoize(timeout=TIMEOUT)
 def update_more_charts(
     var_x,
     var_y,
@@ -736,7 +737,7 @@ def update_more_charts(
     # todo: dont allow to input if apply filter not checked
     # if (min_val3 is None or max_val3 is None) and data_filter3:
     #     raise PreventUpdate
-    df = pd.read_json(df, orient="split")
+
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -781,5 +782,5 @@ def update_more_charts(
 @cache.memoize(timeout=TIMEOUT)
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
+
     return summary_table_tmp_rh_tab(df, dd_value)

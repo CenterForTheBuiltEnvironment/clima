@@ -2,8 +2,8 @@ from dash import dcc, html
 from my_project.global_scheme import month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
-import pandas as pd
 from my_project.utils import title_with_tooltip, generate_chart_name
+from my_project.utils import code_timer
 
 from app import app, cache, TIMEOUT
 
@@ -350,9 +350,10 @@ def layout_wind():
     State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_annual_wind_rose(df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
+
     annual = wind_rose(df, "", [1, 12], [1, 24], True)
     return dcc.Graph(
         config=generate_chart_name("annual_wind_rose_wind", meta),
@@ -370,9 +371,9 @@ def update_annual_wind_rose(df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_tab_wind_speed(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     speed = heatmap(df, "wind_speed", global_local)
 
@@ -392,9 +393,10 @@ def update_tab_wind_speed(global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_tab_wind_direction(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
+
     direction = heatmap(df, "wind_dir", global_local)
     return dcc.Graph(
         config=generate_chart_name("wind_direction_wind", meta),
@@ -415,9 +417,10 @@ def update_tab_wind_direction(global_local, df, meta):
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_custom_wind_rose(start_month, start_hour, end_month, end_hour, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
+
     start_hour = int(start_hour)
     end_hour = int(end_hour)
     start_month = int(start_month)
@@ -456,8 +459,8 @@ def update_custom_wind_rose(start_month, start_hour, end_month, end_hour, df, me
     State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_seasonal_graphs(df, meta):
-    df = pd.read_json(df, orient="split")
 
     hours = [1, 24]
     winter_months = [12, 2]
@@ -569,9 +572,9 @@ def update_seasonal_graphs(df, meta):
     State("meta-store", "data"),
 )
 @cache.memoize(timeout=TIMEOUT)
+@code_timer
 def update_daily_graphs(df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
-    df = pd.read_json(df, orient="split")
 
     months = [1, 12]
     morning_times = [6, 13]

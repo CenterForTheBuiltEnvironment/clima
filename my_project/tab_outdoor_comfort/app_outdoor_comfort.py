@@ -3,7 +3,6 @@ from dash import html
 from my_project.global_scheme import outdoor_dropdown_names
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap
-import pandas as pd
 from my_project.utils import title_with_tooltip, generate_chart_name
 
 from app import app, cache, TIMEOUT
@@ -64,7 +63,7 @@ def layout_outdoor_comfort():
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_utci_value(var, global_local, df, meta):
-    df = pd.read_json(df, orient="split")
+
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap", meta),
         figure=heatmap(df, var, global_local),
@@ -97,7 +96,7 @@ def change_image_based_on_selection(value):
 )
 @cache.memoize(timeout=TIMEOUT)
 def update_tab_utci_category(var, df, meta):
-    df = pd.read_json(df, orient="split")
+
     utci_stress_cat = heatmap(df, var + "_categories")
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
