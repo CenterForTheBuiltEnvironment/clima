@@ -199,7 +199,7 @@ def inputs_tab():
                     dbc.Checklist(
                         options=[
                             {
-                                "label": "Include condensation risk by specifying below the dew-point temperature (to be used only if radiant systems are present).",
+                                "label": "Avoid condensation with radiant systems: If the outdoor dew point temperature is below the radiant system surface temperature, the data point is not plot.",
                                 "value": 1,
                             },
                         ],
@@ -210,7 +210,7 @@ def inputs_tab():
                         className=container_row_center_full,
                         children=[
                             html.H6(
-                                children=["Condensation risk:"],
+                                children=["Surface temperature:"],
                                 style={"marginRight": "1rem"},
                             ),
                             dbc.Input(
