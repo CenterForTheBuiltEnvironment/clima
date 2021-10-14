@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 0.5.0 \(2021-10-14\)
+
+Fix:
+
+* text condensation risk
+* links to EnergyPlus files
+
+Features:
+
+* implemented responsiveness of the tool
+
 ## Version 0.4.6 \(2021-09-07\)
 
 Fix:
