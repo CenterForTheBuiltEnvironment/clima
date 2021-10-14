@@ -28,7 +28,7 @@ def footer():
                     ),
                     dbc.Row(
                         html.A(
-                            "Version: 0.4.6",
+                            "Version: 0.5.0",
                             href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
                         ),
                     ),
