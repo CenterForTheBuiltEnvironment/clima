@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-env:
-  APP_ID: clima
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
 jobs:
   deploy:
     name: Deploying 🚀 Clima
@@ -24,19 +20,19 @@ jobs:
           version: '286.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
           service_account_email: "federico.tartarini@bears-berkeley.sg"
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: clima-316917
 
       - name: Building (🏗️)
         run: |-
           gcloud builds submit \
-            --tag gcr.io/$PROJECT_ID/$APP_ID --project=$PROJECT_ID
+            --tag gcr.io/clima-316917/clima
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
         uses: google-github-actions/deploy-cloudrun@main
         with:
           service: clima
-          image: gcr.io/$PROJECT_ID/$APP_ID
+          image: gcr.io/clima-316917/clima
           region: us-central1
           credentials: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: clima-316917
