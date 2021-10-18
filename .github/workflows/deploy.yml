@@ -29,4 +29,4 @@ jobs:
         run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
       - name: Deploy (🚀)
-        run: gcloud run deploy $APP_ID --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --region $RUN_REGION --project=$PROJECT_ID --allow-unauthenticated
+        run: gcloud run deploy clima --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --region $RUN_REGION --project=$PROJECT_ID --allow-unauthenticated
