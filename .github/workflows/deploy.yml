@@ -15,11 +15,11 @@ jobs:
 #    if: "contains(github.event.head_commit.message, 'bump version')"
     steps:
       - name: Checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       # Build and push image to Google Container Registry
-      - name: Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@master
+      - name: Setting up
+        uses: google-github-actions/setup-gcloud@master
         with:
           version: '286.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
