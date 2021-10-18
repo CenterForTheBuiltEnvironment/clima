@@ -14,19 +14,24 @@ jobs:
     runs-on: ubuntu-latest
 #    if: "contains(github.event.head_commit.message, 'bump version')"
     steps:
+      - name: Checkout
       - uses: actions/checkout@v2
-
-      # Setup gcloud CLI
-      - uses: google-github-actions/deploy-cloudrun@main
-        with:
-          service: clima
-          region: us-central1
-          secrets: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       # Build and push image to Google Container Registry
       - name: Building (🏗️)
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '286.0.0'
+          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
         run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
+      # Setup gcloud CLI
       - name: Deploy (🚀)
-        run: gcloud run deploy $APP_ID --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --project=$PROJECT_ID --allow-unauthenticated
+      - uses: google-github-actions/deploy-cloudrun@main
+        with:
+          service: clima
+          image: gcr.io/$PROJECT_ID/$APP_ID
+          region: us-central1
+          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
