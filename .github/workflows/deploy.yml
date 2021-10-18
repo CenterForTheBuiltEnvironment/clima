@@ -7,7 +7,6 @@ on:
 env:
   APP_ID: clima
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  RUN_REGION: us-central1
   SA_KEY_JSON: ${{ secrets.GCP_SA_KEY_JSON }}
 jobs:
   deploy:
@@ -20,7 +19,8 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/deploy-cloudrun@main
         with:
-          version: "290.0.1"
+          serice: clima
+          region: us-central1
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
@@ -29,4 +29,4 @@ jobs:
         run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
       - name: Deploy (🚀)
-        run: gcloud run deploy clima --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --region $RUN_REGION --project=$PROJECT_ID --allow-unauthenticated
+        run: gcloud run deploy $APP_ID --image gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --platform managed --project=$PROJECT_ID --allow-unauthenticated
