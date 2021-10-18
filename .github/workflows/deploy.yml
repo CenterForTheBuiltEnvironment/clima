@@ -19,7 +19,7 @@ jobs:
 
       # Build and push image to Google Container Registry
       - name: Setting up
-      - uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@master
         with:
           version: '286.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
@@ -27,13 +27,13 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Building (🏗️)
-      - run: |-
+        run: |-
           gcloud builds submit \
             --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
-      - uses: google-github-actions/deploy-cloudrun@main
+        uses: google-github-actions/deploy-cloudrun@main
         with:
           service: clima
           image: gcr.io/$PROJECT_ID/$APP_ID
