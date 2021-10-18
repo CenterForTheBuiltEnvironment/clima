@@ -27,9 +27,9 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Building (🏗️)
-      run: |-
-        gcloud builds submit \
-          --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
+        run: |-
+          gcloud builds submit \
+            --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
