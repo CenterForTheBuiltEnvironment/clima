@@ -29,7 +29,7 @@ jobs:
       - name: Building (🏗️)
         run: |-
           gcloud builds submit \
-            --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
+            --tag gcr.io/$PROJECT_ID/$APP_ID --project=$PROJECT_ID
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
