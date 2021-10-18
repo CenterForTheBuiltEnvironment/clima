@@ -18,13 +18,18 @@ jobs:
       - uses: actions/checkout@v2
 
       # Build and push image to Google Container Registry
-      - name: Building (🏗️)
+      - name: Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@master
         with:
           version: '286.0.0'
           service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
+          service_account_email: "federico.tartarini@bears-berkeley.sg"
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-        run: gcloud builds submit --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
+
+      - name: Building (🏗️)
+      run: |-
+        gcloud builds submit \
+          --tag gcr.io/$PROJECT_ID/$APP_ID:$GITHUB_SHA --project=$PROJECT_ID
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
