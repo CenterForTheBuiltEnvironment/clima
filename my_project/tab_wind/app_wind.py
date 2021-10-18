@@ -500,7 +500,7 @@ def update_seasonal_graphs(df, meta):
 
     def seasonal_chart_caption(month_start, month_end, count, n_calm):
         return (
-            f"Observations between the months of {month_start}and {month_end} "
+            f"Observations between the months of {month_start} and {month_end} "
             f"between 01:00 hours and 24:00 hours. "
             f"Selected observations {str(count)} of 8760, or "
             f"{str(int(100 * (count / 8760)))} %. {str(n_calm)} observations have "
