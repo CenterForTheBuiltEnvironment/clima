@@ -19,7 +19,7 @@ jobs:
       # Setup gcloud CLI
       - uses: google-github-actions/deploy-cloudrun@main
         with:
-          serice: clima
+          service: clima
           region: us-central1
           secrets: ${{ secrets.GCP_SA_KEY_JSON }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
