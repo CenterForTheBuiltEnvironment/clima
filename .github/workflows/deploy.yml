@@ -21,7 +21,7 @@ jobs:
         with:
           serice: clima
           region: us-central1
-          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
+          secrets: ${{ secrets.GCP_SA_KEY_JSON }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       # Build and push image to Google Container Registry
