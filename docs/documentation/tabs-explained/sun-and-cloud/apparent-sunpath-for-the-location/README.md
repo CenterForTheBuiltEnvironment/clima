@@ -2,11 +2,11 @@
 
 ### Sun and Cloud
 
-**Clima** allows the user to visualize the sunpath for the chosen location in spherical and cartesian projection.
+**Clima **allows the user to visualize the sunpath for the chosen location in spherical and cartesian projection.
 
-![Example: spherical sun path for Berlin, DEU ](../../../../.gitbook/assets/cbeclima_berlin_deu_spherical_sun_path_sun_tab.svg)
+![Example: spherical sun path for Berlin, DEU ](../../../../.gitbook/assets/cbeclima\_berlin\_deu\_spherical\_sun\_path\_sun\_tab.svg)
 
-![Example: cartesiansun path for Berlin, DEU ](../../../../.gitbook/assets/cbeclima_berlin_deu_cartesian_sun_path_sun_tab.svg)
+![Example: cartesiansun path for Berlin, DEU ](../../../../.gitbook/assets/cbeclima\_berlin\_deu\_cartesian\_sun\_path\_sun\_tab.svg)
 
 Clima optionlly allows a variety of variables to be overlayed on the either sunpath type.
 
@@ -25,16 +25,14 @@ The variables that can be overlayed on the sunpath are:
 * [Horizontal Infrared Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-horizontal-infrared-radiation-intensity)
 * [Global Horizontal Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-global-horizontal-radiation)
 * [Direct Normal Radiation ](https://bigladdersoftware.com/epx/docs/8-3/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-direct-normal-radiation)
-* Diffuse Horizontal Radiation 
-* Global Horizontal Illuminance 
-* Direct Normal Illuminance 
-* Diffuse Horizontal Illuminance 
-* Zenith Luminance 
-* Wind Direction 
-* Wind Speed 
-* Total Sky Cover 
-* Opaque Sky Cover 
+* Diffuse Horizontal Radiation&#x20;
+* Global Horizontal Illuminance&#x20;
+* Direct Normal Illuminance&#x20;
+* Diffuse Horizontal Illuminance&#x20;
+* Zenith Luminance&#x20;
+* Wind Direction&#x20;
+* Wind Speed&#x20;
+* Total Sky Cover&#x20;
+* Opaque Sky Cover&#x20;
 * Visibility
-
-
 
