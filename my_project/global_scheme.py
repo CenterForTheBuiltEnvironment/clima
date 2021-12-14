@@ -198,7 +198,7 @@ name_dict = {
     "Apressure_name": "Atmospheric pressure",
     # Radiation
     "EHrad_name": "Extraterrestrial horizontal irradiation",
-    "HIRrad_name": "´Horizontal infrared radiation",
+    "HIRrad_name": "Horizontal infrared radiation",
     "GHrad_name": "Global horizontal radiation",
     "DNrad_name": "Direct normal radiation",
     "DifHrad_name": "Diffuse horizontal radiation",
