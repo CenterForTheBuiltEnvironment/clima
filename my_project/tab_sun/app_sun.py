@@ -23,8 +23,7 @@ from app import app, cache, TIMEOUT
 def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
     return html.Div(
-        className="container-col full-width",
-        id="tab-four-custom-sun-container",
+        className="container-col justify-center",
         children=[
             html.Div(
                 children=title_with_tooltip(
@@ -75,9 +74,7 @@ def sun_path():
             ),
             dcc.Loading(
                 type="circle",
-                children=dbc.Row(
-                    align="center",
-                    justify="center",
+                children=html.Div(
                     id="custom-sunpath",
                 ),
             ),
@@ -86,7 +83,7 @@ def sun_path():
 
 
 def explore_daily_heatmap():
-    """ Contents of the bottom part of the tab"""
+    """Contents of the bottom part of the tab"""
     return html.Div(
         className="container-col full-width",
         children=[

@@ -150,7 +150,7 @@ def layout_summary():
                     ),
                     dbc.Row(
                         id="graph-container",
-                        className="container-row",
+                        # className="container-row",
                         children=[
                             dbc.Col(id="temp-profile-graph", width=12, md=6, lg=3),
                             dbc.Col(id="humidity-profile-graph", width=12, md=6, lg=3),

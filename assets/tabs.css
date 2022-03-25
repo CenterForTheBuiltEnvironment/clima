@@ -118,7 +118,7 @@ p {
 
 #temp-profile-graph, #humidity-profile-graph, #solar-radiation-graph, #wind-speed-graph {
     height: 50%;
-    width: 100%;
+    /*width: 100%;*/
 }
 
 /* Tab Temperature RH*/
@@ -133,11 +133,11 @@ p {
     align-items: center;
 }
 
-#tab-four-custom-sun-container {
-    justify-content: space-evenly;
-    align-items: stretch;
-    align-content: center;
-}
+/*#tab-four-custom-sun-container {*/
+/*    justify-content: space-evenly;*/
+/*    align-items: stretch;*/
+/*    align-content: center;*/
+/*}*/
 
 /* Tab Five */
 #tab-five-container {
