@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.5.2 \(2022-04-01\)
+
+Fix:
+
+* added units to all charts
+
 ## Version 0.5.0 \(2021-10-14\)
 
 Fix:
