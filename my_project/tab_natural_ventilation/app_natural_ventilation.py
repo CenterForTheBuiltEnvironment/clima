@@ -496,7 +496,10 @@ def nv_bar_chart(
         df.loc[(df[filter_var] > max_dpt_val), "nv_allowed"] = 0
 
     n_hours_nv_allowed = (
-        df.dropna().groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
+        df.dropna(subset="nv_allowed")
+        .groupby(df["UTC_time"].dt.month)["nv_allowed"]
+        .sum()
+        .values
     )
 
     per_time_nv_allowed = np.round(100 * (n_hours_nv_allowed / tot_month_hours))

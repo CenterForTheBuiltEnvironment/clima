@@ -100,7 +100,9 @@ def layout_t_rh():
 def update_yearly_chart(global_local, dd_value, df, meta):
 
     if dd_value == dropdown_names[var_to_plot[0]]:
-        dbt_yearly = yearly_profile(df, "DBT", global_local)
+        dbt_yearly = yearly_profile(
+            df[["DBT", "UTC_time", "month_names", "day", "DOY"]], "DBT", global_local
+        )
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
         return dcc.Graph(
@@ -108,7 +110,9 @@ def update_yearly_chart(global_local, dd_value, df, meta):
             figure=dbt_yearly,
         )
     else:
-        rh_yearly = yearly_profile(df, "RH", global_local)
+        rh_yearly = yearly_profile(
+            df[["RH", "UTC_time", "month_names", "day", "DOY"]], "RH", global_local
+        )
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
         return dcc.Graph(
@@ -129,12 +133,20 @@ def update_daily(global_local, dd_value, df, meta):
     if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
             config=generate_chart_name("tdb_daily_t_rh", meta),
-            figure=daily_profile(df, "DBT", global_local),
+            figure=daily_profile(
+                df[["DBT", "hour", "UTC_time", "month_names", "day", "month"]],
+                "DBT",
+                global_local,
+            ),
         )
     else:
         return dcc.Graph(
             config=generate_chart_name("rh_daily_t_rh", meta),
-            figure=daily_profile(df, "RH", global_local),
+            figure=daily_profile(
+                df[["RH", "hour", "UTC_time", "month_names", "day", "month"]],
+                "RH",
+                global_local,
+            ),
         )
 
 
@@ -150,12 +162,20 @@ def update_heatmap(global_local, dd_value, df, meta):
     if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
             config=generate_chart_name("tdb_heatmap_t_rh", meta),
-            figure=heatmap(df, "DBT", global_local),
+            figure=heatmap(
+                df[["DBT", "hour", "UTC_time", "month_names", "day"]],
+                "DBT",
+                global_local,
+            ),
         )
     else:
         return dcc.Graph(
             config=generate_chart_name("rh_heatmap_t_rh", meta),
-            figure=heatmap(df, "RH", global_local),
+            figure=heatmap(
+                df[["RH", "hour", "UTC_time", "month_names", "day"]],
+                "RH",
+                global_local,
+            ),
         )
 
 
@@ -168,4 +188,6 @@ def update_heatmap(global_local, dd_value, df, meta):
 @code_timer
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
-    return summary_table_tmp_rh_tab(df, dd_value)
+    return summary_table_tmp_rh_tab(
+        df[["month", "hour", dd_value, "month_names"]], dd_value
+    )

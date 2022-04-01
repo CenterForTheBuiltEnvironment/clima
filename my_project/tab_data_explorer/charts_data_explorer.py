@@ -154,7 +154,7 @@ def three_var_graph(
         else:
             df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] = None
 
-    if df.dropna().shape[0] == 0:
+    if df.dropna(subset=["month"]).shape[0] == 0:
         return None
 
     title = (

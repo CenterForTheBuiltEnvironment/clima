@@ -292,7 +292,7 @@ def update_psych_chart(
             mask = (df[data_filter_var] >= max_val) & (df[data_filter_var] <= min_val)
             df[mask] = None
 
-    if df.dropna().shape[0] == 0:
+    if df.dropna(subset=["month"]).shape[0] == 0:
         return (
             dbc.Alert(
                 "No data is available in this location under these conditions. Please "

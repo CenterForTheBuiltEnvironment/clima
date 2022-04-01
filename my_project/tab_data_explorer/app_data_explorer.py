@@ -6,6 +6,7 @@ from my_project.utils import (
     generate_chart_name,
     title_with_tooltip,
     summary_table_tmp_rh_tab,
+    code_timer,
 )
 
 from my_project.global_scheme import (
@@ -715,6 +716,7 @@ def update_heatmap(
         State("invert-hour-explore-more-charts", "value"),
     ],
 )
+@code_timer
 @cache.memoize(timeout=TIMEOUT)
 def update_more_charts(
     var_x,
@@ -782,5 +784,4 @@ def update_more_charts(
 @cache.memoize(timeout=TIMEOUT)
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
-
-    return summary_table_tmp_rh_tab(df, dd_value)
+    return summary_table_tmp_rh_tab(df[["month", "hour", dd_value, "Year"]], dd_value)
