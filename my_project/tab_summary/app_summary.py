@@ -94,8 +94,7 @@ def layout_summary():
                                 html.Label(
                                     "Heating degree day (HDD) setpoint (°C)",
                                 ),
-                                width=9,
-                                md="auto",
+                                width="auto",
                             ),
                             dbc.Col(
                                 dbc.Input(
@@ -104,15 +103,13 @@ def layout_summary():
                                     value=10,
                                     style={"width": "4rem"},
                                 ),
-                                width=3,
-                                md="auto",
+                                width="auto",
                             ),
                             dbc.Col(
                                 html.Label(
                                     "Cooling degree day (CDD) setpoint (°C)",
                                 ),
-                                width=9,
-                                md="auto",
+                                width="auto",
                             ),
                             dbc.Col(
                                 dbc.Input(
@@ -121,8 +118,7 @@ def layout_summary():
                                     value=18,
                                     style={"width": "4rem"},
                                 ),
-                                width=3,
-                                md="auto",
+                                width="auto",
                             ),
                             dbc.Col(
                                 dbc.Button(
@@ -130,12 +126,11 @@ def layout_summary():
                                     children="Submit",
                                     color="primary",
                                 ),
-                                width=12,
-                                md="auto",
+                                width="auto",
                             ),
                         ],
                         align="center",
-                        justify="around",
+                        justify="center",
                     ),
                     dcc.Loading(
                         type="circle",

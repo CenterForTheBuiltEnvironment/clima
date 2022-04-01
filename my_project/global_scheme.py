@@ -25,7 +25,11 @@ wind_speed_color = [
     "#ffaa00",
 ]
 wind_dir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
-cloud_colors = ["#00aaff", "#ffffff", "#c2c2c2"]
+cloud_colors = [
+    "#8CAFBD",
+    "#c2c2c2",
+    "#FBD07D",
+]
 utci_categories_color = [
     # Let first 10% (0.1) of the values have color rgb(0, 0, 0)
     [0, "#2B2977"],
@@ -111,7 +115,7 @@ mapping_dictionary = {
     "day": {"name": "day", "range": [1, 31]},
     "month": {"name": "months", "unit": "months", "range": [1, 12]},
     "hour": {
-        "name": "hours of the day",
+        "name": "Hour",
         "color": [
             "#000000",
             "#355e7e",
@@ -280,19 +284,19 @@ mapping_dictionary = {
     },
     "tot_sky_cover": {
         "name": "Total sky cover",
-        "color": ["#00aaff", "#ffffff", "#c2c2c2"],
+        "color": cloud_colors,
         "unit": "tenths",
         "range": [0, 10],
     },
     "Oskycover": {
         "name": "Opaque sky cover",
-        "color": ["#00aaff", "#ffffff", "#c2c2c2"],
+        "color": cloud_colors,
         "unit": "tenths",
         "range": [0, 10],
     },
     "Vis": {
         "name": "Visibility",
-        "color": ["#00aaff", "#ffffff", "#c2c2c2"],
+        "color": cloud_colors,
         "unit": "Km",
         "range": [0, 100],
     },

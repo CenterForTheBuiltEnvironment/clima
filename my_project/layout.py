@@ -21,21 +21,20 @@ def footer():
                         )
                     ),
                     dbc.Row(
-                        html.A(
-                            "The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License (CC BY 4.0)",
-                            href="https://creativecommons.org/licenses/by/4.0/",
+                        dcc.Markdown(
+                            """
+                            [The CBE Clima Tool is licensed under a Creative Commons 
+                            Attribution-Commercial 4.0 International License (CC BY 
+                            4.0)](https://creativecommons.org/licenses/by/4.0/)
+                            
+                            [Version: 0.5.1](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
+                            """
                         ),
-                    ),
-                    dbc.Row(
-                        html.A(
-                            "Version: 0.5.1",
-                            href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
-                        ),
+                        style={"padding": "25px 0px"},
                     ),
                 ],
                 width=12,
-                md=6,
-                lg=4,
+                md=4,
                 style={"padding": "15px"},
             ),
             dbc.Col(
@@ -44,7 +43,8 @@ def footer():
                         dcc.Markdown(
                             """
                                 Please cite us if you use this software:
-                                Betti, G., Tartarini, F., Schiavon, S., Nguyen, C. (2021). CBE Clima Tool. Version 0.4.6. Center for the Built Environment, University of California Berkeley
+                                Betti, G., Tartarini, F., Schiavon, S., Nguyen, C. (2021). 
+                                CBE Clima Tool. Version 0.4.6. Center for the Built Environment, University of California Berkeley
                             
                                 Developed by:
                                 [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
@@ -64,7 +64,7 @@ def footer():
                     ),
                 ],
                 width=12,
-                md=4,
+                md=6,
             ),
         ],
     )
