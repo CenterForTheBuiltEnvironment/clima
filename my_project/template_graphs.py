@@ -1,7 +1,7 @@
 from math import ceil, floor
 
 import numpy as np
-import pandas as pd
+import modin.pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from pythermalcomfort.models import adaptive_ashrae
@@ -120,7 +120,6 @@ def get_ashrae(df):
 # @code_timer
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
-    lo80, hi80, lo90, hi90 = get_ashrae(df)
     var_unit = mapping_dictionary[var]["unit"]
     var_range = mapping_dictionary[var]["range"]
     var_name = mapping_dictionary[var]["name"]
@@ -181,6 +180,7 @@ def yearly_profile(df, var, global_local):
 
     if var == "DBT":
         # plot ashrae adaptive comfort limits (80%)
+        lo80, hi80, lo90, hi90 = get_ashrae(df)
         lo80_df = pd.DataFrame({"lo80": lo80})
         hi80_df = pd.DataFrame({"hi80": hi80})
 

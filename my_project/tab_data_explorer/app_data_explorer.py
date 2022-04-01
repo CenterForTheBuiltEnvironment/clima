@@ -26,7 +26,6 @@ from my_project.tab_data_explorer.charts_data_explorer import (
     three_var_graph,
 )
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile, barchart
-import pandas as pd
 
 from app import app, cache, TIMEOUT
 
@@ -784,4 +783,6 @@ def update_more_charts(
 @cache.memoize(timeout=TIMEOUT)
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
-    return summary_table_tmp_rh_tab(df[["month", "hour", dd_value, "Year"]], dd_value)
+    return summary_table_tmp_rh_tab(
+        df[["month", "hour", dd_value, "month_names"]], dd_value
+    )

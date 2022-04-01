@@ -62,7 +62,7 @@ def plot_location_epw_files():
         df_one_building,
         lat="lat",
         lon="lon",
-        hover_name="name",
+        hover_name=df_one_building["name"],
         color_discrete_sequence=["#4895ef"],
         hover_data=["Source"],
         zoom=2,

@@ -12,7 +12,6 @@ from my_project.global_scheme import (
     container_col_center_one_of_three,
 )
 from dash.dependencies import Input, Output, State
-import pandas as pd
 import numpy as np
 from my_project.utils import title_with_tooltip, generate_chart_name
 

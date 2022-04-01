@@ -4,7 +4,7 @@ import zipfile
 from datetime import timedelta
 from urllib.request import Request, urlopen
 
-import pandas as pd
+import modin.pandas as pd
 import numpy as np
 import requests
 from my_project.utils import code_timer

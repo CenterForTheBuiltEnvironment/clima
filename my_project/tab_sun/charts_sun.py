@@ -2,7 +2,7 @@ from datetime import timedelta
 from math import ceil, cos, floor, radians
 
 import numpy as np
-import pandas as pd
+import modin.pandas as pd
 import plotly.graph_objects as go
 from my_project.global_scheme import (
     template,

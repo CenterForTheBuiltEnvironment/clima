@@ -1,4 +1,4 @@
-import pandas as pd
+import modin.pandas as pd
 from my_project.utils import code_timer
 import re
 
