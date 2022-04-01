@@ -27,7 +27,7 @@ def footer():
                             Attribution-Commercial 4.0 International License (CC BY 
                             4.0)](https://creativecommons.org/licenses/by/4.0/)
                             
-                            [Version: 0.5.1](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
+                            [Version: 0.5.2](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
                             """
                         ),
                         style={"padding": "25px 0px"},
