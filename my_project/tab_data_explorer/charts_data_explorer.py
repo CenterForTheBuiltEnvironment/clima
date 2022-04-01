@@ -106,8 +106,8 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
         yaxis=dict(range=(1, 24)),
         xaxis=dict(range=(1, 365)),
     )
-    fig.update_yaxes(title_text="hours of the day")
-    fig.update_xaxes(title_text="days of the year")
+    fig.update_yaxes(title_text="Hour")
+    fig.update_xaxes(title_text="Day")
     return fig
 
 

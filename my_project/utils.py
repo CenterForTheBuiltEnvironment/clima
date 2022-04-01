@@ -134,7 +134,7 @@ def summary_table_tmp_rh_tab(df, value):
     unit = mapping_dictionary[value]["unit"].replace("<sup>", "").replace("</sup>", "")
     return dash_table.DataTable(
         columns=[
-            {"name": i, "id": i} if i == "month" else {"name": f"{i} [{unit}]", "id": i}
+            {"name": i, "id": i} if i == "month" else {"name": f"{i} ({unit})", "id": i}
             for i in df_summary.columns
         ],
         style_table={"overflowX": "auto"},

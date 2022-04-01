@@ -386,14 +386,14 @@ def nv_heatmap(
         linewidth=1,
         linecolor="black",
         mirror=True,
-        title_text="days of the year",
+        title_text="Day",
     )
     fig.update_yaxes(
         showline=True,
         linewidth=1,
         linecolor="black",
         mirror=True,
-        title_text="hours of the day",
+        title_text="Hour",
     )
 
     return dcc.Graph(
@@ -545,7 +545,7 @@ def nv_bar_chart(
             + f" to {max_dbt_val}"
             + f" {var_unit}"
         )
-        fig.update_yaxes(title_text="% percent", range=[0, 100])
+        fig.update_yaxes(title_text="Percentage (%)", range=[0, 100])
 
     if time_filter:
         title += (

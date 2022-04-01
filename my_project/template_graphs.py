@@ -242,7 +242,7 @@ def yearly_profile(df, var, global_local):
         dtick="M1",
         tickformat="%b",
         ticklabelmode="period",
-        title_text="days of the year",
+        title_text="Day",
         showline=True,
         linewidth=1,
         linecolor="black",
@@ -250,7 +250,7 @@ def yearly_profile(df, var, global_local):
     )
     fig.update_yaxes(
         range=custom_ylim,
-        title_text=f"{var_name}, {var_unit}",
+        title_text=f"{var_name} ({var_unit})",
         showline=True,
         linewidth=1,
         linecolor="black",
@@ -343,7 +343,7 @@ def daily_profile(df, var, global_local):
         template=template,
         dragmode=False,
         margin=dict(l=20, r=20, t=55, b=20),
-        title=f"{var_name} {var_unit}",
+        title=f"{var_name} ({var_unit})",
     )
     return fig
 
@@ -386,8 +386,8 @@ def heatmap(df, var, global_local="global"):
 
     fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
 
-    fig.update_yaxes(title_text="hours of the day")
-    fig.update_xaxes(title_text="days of the year")
+    fig.update_yaxes(title_text="Hour")
+    fig.update_xaxes(title_text="Day")
 
     fig.update_layout(template=template, margin=tight_margins, yaxis_nticks=13)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
@@ -587,7 +587,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
             + " "
             + var_unit
         )
-        fig.update_yaxes(title_text="%")
+        fig.update_yaxes(title_text="Percentage (%)")
         fig.update_layout(title=title, barnorm="percent")
     else:
         title = (

@@ -447,7 +447,7 @@ def update_psych_chart(
 
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
-        title_text="Temperature, °C",
+        title_text="Temperature (°C)",
         range=var_range_x,
         showline=True,
         linewidth=1,
@@ -455,7 +455,7 @@ def update_psych_chart(
         mirror=True,
     )
     fig.update_yaxes(
-        title_text="Humidity Ratio, kg_water/kg_dry air",
+        title_text="Humidity Ratio (kg<sub>water</sub>/kg<sub>dry air</sub>)",
         range=var_range_y,
         showline=True,
         linewidth=1,
