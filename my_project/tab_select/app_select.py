@@ -44,11 +44,11 @@ def layout_select():
                     outline=True,
                     color="secondary",
                     className="mt-2",
-                    block=True,
                     style={"borderRadius": "5px", "borderStyle": "dashed"},
                 ),
                 # Allow multiple files to be uploaded
                 multiple=True,
+                className="d-grid",
             ),
             dcc.Graph(
                 id="tab-one-map",
