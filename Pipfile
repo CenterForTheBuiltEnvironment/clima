@@ -11,7 +11,6 @@ pythermalcomfort = "*"
 dash-bootstrap-components = "*"
 flask-caching = "*"
 dash-extensions = "*"
-modin = {extras = ["all"], version = "*"}
 
 [dev-packages]
 cleanpy = "*"

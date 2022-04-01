@@ -1,7 +1,7 @@
 from math import ceil, floor
 
 import numpy as np
-import modin.pandas as pd
+import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from pythermalcomfort.models import adaptive_ashrae
@@ -13,6 +13,9 @@ from .global_scheme import month_lst, template, tight_margins
 
 
 # violin template
+from .utils import code_timer
+
+
 def violin(df, var, global_local):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
@@ -117,7 +120,7 @@ def get_ashrae(df):
     return lo80, hi80, lo90, hi90
 
 
-# @code_timer
+@code_timer
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
     var_unit = mapping_dictionary[var]["unit"]

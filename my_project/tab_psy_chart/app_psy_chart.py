@@ -18,7 +18,7 @@ from my_project.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
 )
 from dash.dependencies import Input, Output, State
-import modin.pandas as pd
+import pandas as pd
 
 from app import app, cache, TIMEOUT
 
