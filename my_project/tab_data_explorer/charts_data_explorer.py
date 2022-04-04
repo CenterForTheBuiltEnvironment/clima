@@ -42,7 +42,7 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
             mask = (df[filter_var] >= max_val) & (df[filter_var] <= min_val)
             df[var][mask] = None
 
-    if df[var].dropna(subset=["hour"]).shape[0] == 0:
+    if df.dropna(subset=[var]).shape[0] == 0:
         return None
 
     var_unit = mapping_dictionary[var]["unit"]
@@ -125,6 +125,9 @@ def three_var_graph(
     min_val = data_filter_info3[2]
     max_val = data_filter_info3[3]
 
+    var_unit_x = mapping_dictionary[var_x]["unit"]
+    var_unit_y = mapping_dictionary[var_y]["unit"]
+
     var = color_by
     var_range = mapping_dictionary[var]["range"]
     var_color = mapping_dictionary[var]["color"]
@@ -176,14 +179,13 @@ def three_var_graph(
         marginal_x="histogram",
         marginal_y="histogram",
         title=title,
+        labels={var_x: f"{var_x} ({var_unit_x})", var_y: f"{var_y} ({var_unit_y})"},
     )
 
-    fig.update_layout(
-        template=template,
-        title=title,
-    )
+    fig.update_layout(template=template, title=title)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=False)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=False)
+
     return fig
 
 
@@ -196,6 +198,9 @@ def two_var_graph(df, var_x, var_y):
         + mapping_dictionary[var_y]["name"]
     )
 
+    var_unit_x = mapping_dictionary[var_x]["unit"]
+    var_unit_y = mapping_dictionary[var_y]["unit"]
+
     fig = px.density_heatmap(
         df,
         x=var_x,
@@ -203,6 +208,7 @@ def two_var_graph(df, var_x, var_y):
         title=title,
         marginal_x="histogram",
         marginal_y="histogram",
+        labels={var_x: f"{var_x} ({var_unit_x})", var_y: f"{var_y} ({var_unit_y})"},
     )
     fig.update_layout(dragmode=False)
     return fig
