@@ -268,16 +268,11 @@ def nv_heatmap(
 ):
 
     # enable or disable button apply filter DPT
-    dpt_data_filter = False
-    if len(condensation_enabled) == 1:
-        dpt_data_filter = True
+    dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        end_month, start_month = month
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        end_hour, start_hour = hour
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
+    )
 
     var = "DBT"
     filter_var = "DPT"
@@ -408,6 +403,7 @@ def nv_heatmap(
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
         Input("switches-input", "value"),
+        Input("enable-condensation", "value"),
     ],
     [
         State("df-store", "data"),
@@ -419,7 +415,6 @@ def nv_heatmap(
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
-        State("enable-condensation", "value"),
     ],
 )
 @cache.memoize(timeout=TIMEOUT)
@@ -428,6 +423,7 @@ def nv_bar_chart(
     dbt_data_filter,
     click_dpt_filter,
     normalize,
+    condensation_enabled,
     df,
     month,
     hour,
@@ -437,20 +433,13 @@ def nv_bar_chart(
     meta,
     invert_month,
     invert_hour,
-    condensation_enabled,
 ):
     # enable or disable button apply filter DPT
-    if len(condensation_enabled) == 1:
-        dpt_data_filter = True
-    else:
-        dpt_data_filter = False
+    dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        end_month, start_month = month
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        end_hour, start_hour = hour
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
+    )
 
     var = "DBT"
     filter_var = "DPT"
@@ -588,3 +577,21 @@ def enable_disable_button_data_filter(state_checklist):
         return False
     else:
         return True
+
+
+def enable_dew_point_data_filter(condensation_enabled):
+    if len(condensation_enabled) == 1:
+        return True
+    else:
+        return False
+
+
+def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        end_month, start_month = month
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        end_hour, start_hour = hour
+
+    return start_month, end_month, start_hour, end_hour
