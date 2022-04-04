@@ -288,7 +288,7 @@ def nv_heatmap(
     if dpt_data_filter:
         df.loc[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val), var] = None
 
-        if df.dropna().shape[0] == 0:
+        if df.dropna(subset=["month"]).shape[0] == 0:
             return (
                 dbc.Alert(
                     "Natural ventilation is not available in this location under these "

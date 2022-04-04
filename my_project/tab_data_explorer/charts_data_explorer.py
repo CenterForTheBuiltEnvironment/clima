@@ -42,7 +42,7 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
             mask = (df[filter_var] >= max_val) & (df[filter_var] <= min_val)
             df[var][mask] = None
 
-    if df[var].dropna().shape[0] == 0:
+    if df[var].dropna(subset=["hour"]).shape[0] == 0:
         return None
 
     var_unit = mapping_dictionary[var]["unit"]
