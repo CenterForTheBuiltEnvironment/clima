@@ -234,7 +234,11 @@ def update_location_info(ts, df, meta):
             dbc.Row(hottest_yearly_tmp),
             dbc.Row(coldest_yearly_tmp),
             dbc.Row(
-                dcc.Markdown(dangerously_allow_html=True, children=[total_solar_rad])
+                dcc.Markdown(
+                    dangerously_allow_html=True,
+                    children=[total_solar_rad],
+                    style={"padding": 0},
+                )
             ),
             dbc.Row(total_diffuse_rad),
         ],
