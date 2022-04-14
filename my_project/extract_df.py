@@ -135,8 +135,8 @@ def create_df(lst, file_name):
     epw_df["month_names"] = epw_df["month"].astype("int").map(month_look_up)
 
     # Change to int type
-    epw_df["year", "day", "month", "hour"] = epw_df[
-        "year", "day", "month", "hour"
+    epw_df[["year", "day", "month", "hour"]] = epw_df[
+        ["year", "day", "month", "hour"]
     ].astype(int)
 
     # Add in DOY
