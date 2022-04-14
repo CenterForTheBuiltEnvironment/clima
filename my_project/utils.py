@@ -149,3 +149,14 @@ def summary_table_tmp_rh_tab(df, value):
         ],
         style_as_list_view=True,
     )
+
+
+def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        end_month, start_month = month
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        end_hour, start_hour = hour
+
+    return start_month, end_month, start_hour, end_hour
