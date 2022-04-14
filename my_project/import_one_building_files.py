@@ -30,10 +30,52 @@ def import_kml_files(file_name):
             + re.findall(r"<td>URL (.+?)<\/td>", location)[0]
             + ' style="color: #fff">Climate.OneBuilding.Org</a>'
         )
+        # description
+        try:
+            location_info.append(
+                location.split("Period of Record=")[1].split("</td>")[0]
+            )
+        except IndexError:
+            location_info.append(None)
+        try:
+            location_info.append(location.split("Elevation <b>")[1].split("</b>")[0])
+        except IndexError:
+            location_info.append(None)
+        try:
+            location_info.append(
+                location.split("Time Zone {GMT <b>")[1].split("</b>")[0]
+            )
+        except IndexError:
+            location_info.append(None)
+        try:
+            location_info.append(
+                location.split("99% Heating DB <b>")[1].split("</b>")[0]
+            )
+        except IndexError:
+            location_info.append(None)
+        try:
+            location_info.append(
+                location.split("1% Cooling DB <b>")[1].split("</b>")[0]
+            )
+        except IndexError:
+            location_info.append(None)
 
         data.append(location_info)
 
-    df = pd.DataFrame(data, columns=["lon", "lat", "name", "Source"])
+    df = pd.DataFrame(
+        data,
+        columns=[
+            "lon",
+            "lat",
+            "name",
+            "Source",
+            "period",
+            "elevation (m)",
+            "time zone (GMT)",
+            "99% Heating DB",
+            "1% Cooling DB ",
+        ],
+    )
 
     try:
         df_old = pd.read_csv(f"./assets/data/one_building.csv")

@@ -244,7 +244,7 @@ def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_
     """display the modal to the user and check if he wants to use that file"""
     if click_map:
         url = re.search(
-            r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][0]
+            r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
         ).group(1)
         return not is_open, url
     return is_open, ""

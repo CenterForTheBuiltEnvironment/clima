@@ -64,7 +64,14 @@ def plot_location_epw_files():
         lon="lon",
         hover_name=df_one_building["name"],
         color_discrete_sequence=["#4895ef"],
-        hover_data=["Source"],
+        hover_data=[
+            "period",
+            "elevation (m)",
+            "time zone (GMT)",
+            "99% Heating DB",
+            "1% Cooling DB ",
+            "Source",
+        ],
         zoom=2,
         height=500,
     )
