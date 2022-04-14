@@ -10,7 +10,7 @@ import requests
 from my_project.utils import code_timer
 from pvlib import solarposition
 from pythermalcomfort.models import utci
-from pythermalcomfort.models import solar_gain as sgain
+from pythermalcomfort.models import solar_gain
 from pythermalcomfort import psychrometrics as psy
 import math
 from my_project.global_scheme import month_lst
@@ -108,7 +108,7 @@ def create_df(lst, file_name):
         "DaySSnow",
     ]
 
-    # assign column names and if fewer cols are there than supposed assign 9999 to that col
+    # assign column names, if fewer cols are there than supposed assign 9999 to that col
     if len(lst[0]) < len(col_names):
         epw_df = pd.DataFrame(columns=col_names[: len(lst[0])], data=lst)
         for col in [x for ix, x in enumerate(col_names) if ix >= len(lst[0])]:
@@ -134,20 +134,16 @@ def create_df(lst, file_name):
     month_look_up = {ix + 1: month for ix, month in enumerate(month_lst)}
     epw_df["month_names"] = epw_df["month"].astype("int").map(month_look_up)
 
+    # Change to int type
+    epw_df["year", "day", "month", "hour"] = epw_df[
+        "year", "day", "month", "hour"
+    ].astype(int)
+
     # Add in DOY
     epw_df["DOY"] = pd.to_datetime(
-        (
-            epw_df["year"].astype(int) * 10000
-            + epw_df["month"].astype(int) * 100
-            + epw_df["day"].astype(int)
-        ).apply(str),
+        (epw_df["year"] * 10000 + epw_df["month"] * 100 + epw_df["day"]).apply(str),
         format="%Y%m%d",
     ).dt.dayofyear
-
-    # Change to int type
-    change_to_int = ["year", "day", "month", "hour"]
-    for col in change_to_int:
-        epw_df[col] = epw_df[col].astype(int)
 
     change_to_float = [
         "DBT",
@@ -176,8 +172,7 @@ def create_df(lst, file_name):
         "SnowD",
         "DaySSnow",
     ]
-    for col in change_to_float:
-        epw_df[col] = epw_df[col].astype(float)
+    epw_df[change_to_float] = epw_df[change_to_float].astype(float)
 
     # Add in times df
     times = pd.date_range(
@@ -208,7 +203,7 @@ def create_df(lst, file_name):
     posture = ["standing"] * 8760
     floor_reflectance = [0.6] * 8760  # EXPOSE AS A VARIABLE?
 
-    mrt = np.vectorize(sgain)(
+    mrt = np.vectorize(solar_gain)(
         sol_altitude,
         sharp,
         sol_radiation_dir,
@@ -236,16 +231,16 @@ def create_df(lst, file_name):
     epw_df["wind_speed_utci_0"] = epw_df["wind_speed_utci"].mask(
         epw_df["wind_speed_utci"] >= 0, 0.5
     )
-    epw_df["utci_noSun_Wind"] = np.vectorize(utci)(
+    epw_df["utci_noSun_Wind"] = utci(
         epw_df["DBT"], epw_df["DBT"], epw_df["wind_speed_utci"], epw_df["RH"]
     )
-    epw_df["utci_noSun_noWind"] = np.vectorize(utci)(
+    epw_df["utci_noSun_noWind"] = utci(
         epw_df["DBT"], epw_df["DBT"], epw_df["wind_speed_utci_0"], epw_df["RH"]
     )
-    epw_df["utci_Sun_Wind"] = np.vectorize(utci)(
+    epw_df["utci_Sun_Wind"] = utci(
         epw_df["DBT"], epw_df["MRT"], epw_df["wind_speed_utci"], epw_df["RH"]
     )
-    epw_df["utci_Sun_noWind"] = np.vectorize(utci)(
+    epw_df["utci_Sun_noWind"] = utci(
         epw_df["DBT"], epw_df["MRT"], epw_df["wind_speed_utci_0"], epw_df["RH"]
     )
 
