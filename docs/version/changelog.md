@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 0.6.1 \(2022-04-01\)
+
+Feat:
+
+* added more and newer EPW files from climate.onebuildings.org
+* added more info in card displayed on mouse over epw file
+
 ## Version 0.5.2 \(2022-04-01\)
 
 Fix:
