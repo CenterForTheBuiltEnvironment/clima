@@ -46,7 +46,7 @@ def plot_location_epw_files():
     df["lat"] += 0.005
     df = df.rename(columns={"properties.epw": "Source"})
 
-    df_one_building = pd.read_csv("./assets/data/one_building.csv")
+    df_one_building = pd.read_csv("./assets/data/one_building.csv", compression="gzip")
 
     fig2 = px.scatter_mapbox(
         df.head(2585),

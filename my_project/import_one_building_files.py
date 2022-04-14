@@ -36,17 +36,17 @@ def import_kml_files(file_name):
                 location.split("Period of Record=")[1].split("</td>")[0]
             )
         except IndexError:
-            location_info.append(None)
+            location_info.append("not available")
         try:
             location_info.append(location.split("Elevation <b>")[1].split("</b>")[0])
         except IndexError:
-            location_info.append(None)
+            location_info.append("not available")
         try:
             location_info.append(
                 location.split("Time Zone {GMT <b>")[1].split("</b>")[0]
             )
         except IndexError:
-            location_info.append(None)
+            location_info.append("not available")
         try:
             location_info.append(
                 location.split("99% Heating DB <b>")[1].split("</b>")[0]
@@ -78,11 +78,13 @@ def import_kml_files(file_name):
     )
 
     try:
-        df_old = pd.read_csv(f"./assets/data/one_building.csv")
+        df_old = pd.read_csv(f"./assets/data/one_building.csv", compression="gzip")
         df_old = pd.concat([df_old, df]).drop_duplicates()
-        df_old.to_csv(f"./assets/data/one_building.csv", index=False)
+        df_old.to_csv(
+            f"./assets/data/one_building.csv", index=False, compression="gzip"
+        )
     except FileNotFoundError:
-        df.to_csv(f"./assets/data/one_building.csv", index=False)
+        df.to_csv(f"./assets/data/one_building.csv", index=False, compression="gzip")
 
 
 if __name__ == "__main__":
