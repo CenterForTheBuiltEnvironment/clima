@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.6.2 \(2022-05-27\)
+
+Fix:
+
+* Issue windrose
+
 ## Version 0.6.1 \(2022-04-01\)
 
 Feat:
