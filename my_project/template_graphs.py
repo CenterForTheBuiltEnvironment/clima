@@ -434,7 +434,7 @@ def wind_rose(df, title, month, hour, labels):
     spd_colors = mapping_dictionary["wind_speed"]["color"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     spd_labels = speed_labels(spd_bins, units="m/s")
-    dir_bins = np.arange(-22.5 / 2, 370, 22.5)
+    dir_bins = np.arange(-22.5 / 2, 360 + 22.5, 22.5)
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
     total_count = df.shape[0]
     calm_count = df.query("wind_speed == 0").shape[0]
