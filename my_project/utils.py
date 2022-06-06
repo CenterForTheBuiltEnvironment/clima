@@ -136,7 +136,7 @@ def summary_table_tmp_rh_tab(df, value):
     )
     df_sum = df_sum.T.assign(count="Year").rename(columns={"count": "month"})
 
-    df_summary = df_summary.append(df_sum)
+    df_summary = pd.concat([df_summary, df_sum])
 
     unit = mapping_dictionary[value]["unit"].replace("<sup>", "").replace("</sup>", "")
     return dash_table.DataTable(

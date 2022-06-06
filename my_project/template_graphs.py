@@ -4,8 +4,6 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from pythermalcomfort.models import adaptive_ashrae
-from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
 from my_project.global_scheme import mapping_dictionary
 
@@ -85,41 +83,6 @@ def violin(df, var, global_local):
     return fig
 
 
-# YEARLY PROFILE TEMPLATE
-def get_ashrae(df):
-    """calculate the ashrae for the yearly DBT. Helper function for yearly_profile"""
-    dbt_day_ave = df.groupby(["DOY"])["DBT"].mean().reset_index()
-    dbt_day_ave = dbt_day_ave["DBT"].tolist()
-    n = 7
-    cmf55 = []
-    lo80 = []
-    hi80 = []
-    lo90 = []
-    hi90 = []
-    for i in range(len(dbt_day_ave)):
-        if i < n:
-            last_days = dbt_day_ave[-n + i :] + dbt_day_ave[0:i]
-        else:
-            last_days = dbt_day_ave[i - n : i]
-        last_days.reverse()
-        last_days = [10 if x <= 10 else x for x in last_days]
-        last_days = [32 if x >= 32 else x for x in last_days]
-        rmt = running_mean_outdoor_temperature(last_days, alpha=0.9)
-        if dbt_day_ave[i] >= 40:
-            dbt_day_ave[i] = 40
-        elif dbt_day_ave[i] <= 10:
-            dbt_day_ave[i] = 10
-        r = adaptive_ashrae(
-            tdb=dbt_day_ave[i], tr=dbt_day_ave[i], t_running_mean=rmt, v=0.5
-        )
-        cmf55.append(r["tmp_cmf"])
-        lo80.append(r["tmp_cmf_80_low"])
-        hi80.append(r["tmp_cmf_80_up"])
-        lo90.append(r["tmp_cmf_90_low"])
-        hi90.append(r["tmp_cmf_90_up"])
-    return lo80, hi80, lo90, hi90
-
-
 @code_timer
 def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
@@ -183,14 +146,13 @@ def yearly_profile(df, var, global_local):
 
     if var == "DBT":
         # plot ashrae adaptive comfort limits (80%)
-        lo80, hi80, lo90, hi90 = get_ashrae(df)
-        lo80_df = pd.DataFrame({"lo80": lo80})
-        hi80_df = pd.DataFrame({"hi80": hi80})
+        lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
+        hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
 
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
-            y=hi80_df["hi80"] - lo80_df["lo80"],
-            base=lo80_df["lo80"],
+            y=hi80 - lo80,
+            base=lo80,
             name="ASHRAE adaptive comfort (80%)",
             marker_color="silver",
             marker_opacity=0.3,
@@ -200,13 +162,13 @@ def yearly_profile(df, var, global_local):
         )
 
         # plot ashrae adaptive comfort limits (90%)
-        lo90_df = pd.DataFrame({"lo90": lo90})
-        hi90_df = pd.DataFrame({"hi90": hi90})
+        lo90 = df.groupby("DOY")["adaptive_cmf_90_low"].mean().values
+        hi90 = df.groupby("DOY")["adaptive_cmf_90_up"].mean().values
 
         trace4 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
-            y=hi90_df["hi90"] - lo90_df["lo90"],
-            base=lo90_df["lo90"],
+            y=hi90 - lo90,
+            base=lo90,
             name="ASHRAE adaptive comfort (90%)",
             marker_color="silver",
             marker_opacity=0.3,

@@ -100,9 +100,7 @@ def layout_t_rh():
 def update_yearly_chart(global_local, dd_value, df, meta):
 
     if dd_value == dropdown_names[var_to_plot[0]]:
-        dbt_yearly = yearly_profile(
-            df[["DBT", "UTC_time", "month_names", "day", "DOY"]], "DBT", global_local
-        )
+        dbt_yearly = yearly_profile(df, "DBT", global_local)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
         return dcc.Graph(
@@ -110,9 +108,7 @@ def update_yearly_chart(global_local, dd_value, df, meta):
             figure=dbt_yearly,
         )
     else:
-        rh_yearly = yearly_profile(
-            df[["RH", "UTC_time", "month_names", "day", "DOY"]], "RH", global_local
-        )
+        rh_yearly = yearly_profile(df, "RH", global_local)
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
 
         return dcc.Graph(

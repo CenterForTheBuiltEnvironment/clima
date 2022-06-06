@@ -14,6 +14,8 @@ from pythermalcomfort.models import solar_gain
 from pythermalcomfort import psychrometrics as psy
 import math
 from my_project.global_scheme import month_lst
+from pythermalcomfort.models import adaptive_ashrae
+from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
 
 @code_timer
@@ -140,10 +142,11 @@ def create_df(lst, file_name):
     ].astype(int)
 
     # Add in DOY
-    epw_df["DOY"] = pd.to_datetime(
-        (epw_df["year"] * 10000 + epw_df["month"] * 100 + epw_df["day"]).apply(str),
-        format="%Y%m%d",
-    ).dt.dayofyear
+    df_doy = epw_df.groupby(["month", "day"])["hour"].count().reset_index()
+    df_doy["DOY"] = df_doy.index + 1
+    epw_df = pd.merge(
+        epw_df, df_doy[["month", "day", "DOY"]], on=["month", "day"], how="left"
+    )
 
     change_to_float = [
         "DBT",
@@ -176,7 +179,7 @@ def create_df(lst, file_name):
 
     # Add in times df
     times = pd.date_range(
-        "2019-01-01 00:00:00", "2020-01-01", closed="left", freq="H", tz="UTC"
+        "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="H", tz="UTC"
     )
     epw_df["UTC_time"] = pd.to_datetime(times)
     delta = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
@@ -264,6 +267,38 @@ def create_df(lst, file_name):
     psy_df = pd.DataFrame.from_records(ta_rh)
     psy_df = psy_df.set_index(epw_df.times)
     epw_df = epw_df.join(psy_df)
+
+    # calculate adaptive data
+    dbt_day_ave = epw_df.groupby(["DOY"])["DBT"].mean().to_list()
+    n = 7
+    epw_df["adaptive_comfort"] = np.nan
+    epw_df["adaptive_cmf_80_low"] = np.nan
+    epw_df["adaptive_cmf_80_up"] = np.nan
+    epw_df["adaptive_cmf_90_low"] = np.nan
+    epw_df["adaptive_cmf_90_up"] = np.nan
+    for day in epw_df.DOY.unique():
+        i = day - 1
+        if i < n:
+            last_days = dbt_day_ave[-n + i :] + dbt_day_ave[0:i]
+        else:
+            last_days = dbt_day_ave[i - n : i]
+        last_days.reverse()
+        last_days = [10 if x <= 10 else x for x in last_days]
+        last_days = [32 if x >= 32 else x for x in last_days]
+        rmt = running_mean_outdoor_temperature(last_days, alpha=0.9)
+        if dbt_day_ave[i] >= 40:
+            dbt_day_ave[i] = 40
+        elif dbt_day_ave[i] <= 10:
+            dbt_day_ave[i] = 10
+        r = adaptive_ashrae(
+            tdb=dbt_day_ave[i], tr=dbt_day_ave[i], t_running_mean=rmt, v=0.5
+        )
+
+        epw_df.loc[epw_df.DOY == day, "adaptive_comfort"] = r["tmp_cmf"]
+        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_80_low"] = r["tmp_cmf_80_low"]
+        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_80_up"] = r["tmp_cmf_80_up"]
+        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_90_low"] = r["tmp_cmf_90_low"]
+        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_90_up"] = r["tmp_cmf_90_up"]
 
     return epw_df, location_info
 
