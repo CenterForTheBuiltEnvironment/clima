@@ -16,7 +16,6 @@ from pvlib import solarposition
 
 
 def monthly_solar(epw_df):
-    """"""
     g_h_rad_month_ave = (
         epw_df.groupby(["month", "hour"])["glob_hor_rad"].median().reset_index()
     )
@@ -120,7 +119,7 @@ def polar_graph(df, meta, global_local, var):
 
     tz = "UTC"
     times = pd.date_range(
-        "2019-01-01 00:00:00", "2020-01-01", closed="left", freq="H", tz=tz
+        "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="H", tz=tz
     )
     delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
     times = times - delta
