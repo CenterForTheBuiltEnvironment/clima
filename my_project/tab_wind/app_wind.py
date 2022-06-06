@@ -203,7 +203,6 @@ def daily_wind_rose():
 
 
 def custom_wind_rose():
-    """"""
     return html.Div(
         className="container-col justify-center full-width",
         children=[
@@ -234,7 +233,7 @@ def custom_wind_rose():
                                             {"label": j, "value": i + 1}
                                             for i, j in enumerate(month_lst)
                                         ],
-                                        value="1",
+                                        value=1,
                                         style={"width": "6rem"},
                                     ),
                                 ],
@@ -252,7 +251,7 @@ def custom_wind_rose():
                                             {"label": str(i) + ":00", "value": i}
                                             for i in range(1, 25)
                                         ],
-                                        value="1",
+                                        value=1,
                                         style={"width": "6rem"},
                                     ),
                                 ],
@@ -275,7 +274,7 @@ def custom_wind_rose():
                                             {"label": j, "value": i + 1}
                                             for i, j in enumerate(month_lst)
                                         ],
-                                        value="12",
+                                        value=12,
                                         style={"width": "6rem"},
                                     ),
                                 ],
@@ -293,7 +292,7 @@ def custom_wind_rose():
                                             {"label": str(i) + ":00", "value": i}
                                             for i in range(1, 25)
                                         ],
-                                        value="24",
+                                        value=24,
                                         style={"width": "6rem"},
                                     ),
                                 ],
