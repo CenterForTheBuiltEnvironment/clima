@@ -291,7 +291,11 @@ def create_df(lst, file_name):
         elif rmt <= 10:
             rmt = 10
         r = adaptive_ashrae(
-            tdb=dbt_day_ave[i], tr=dbt_day_ave[i], t_running_mean=rmt, v=0.5
+            tdb=dbt_day_ave[i],
+            tr=dbt_day_ave[i],
+            t_running_mean=rmt,
+            v=0.5,
+            limit_inputs=False,
         )
 
         epw_df.loc[epw_df.DOY == day, "adaptive_comfort"] = r["tmp_cmf"]
