@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5ceb278ceb02c851d0775b36fa0041654875ba8b7c18ac373ccaeebdc335a8aa"
+            "sha256": "b55430a77150cca0d0b8d302423f77d9d1d63ef70ee32cb67df8096108282565"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -416,7 +416,7 @@
                 "sha256:f3eb268dbd5cfaffd9448113539e44e2dd1c5ca9ce25576f7c04a5453edc26fa",
                 "sha256:fb7a980c81dd932381f8228a426df8aeb70d59bbcda2af075b627bbc50207cba"
             ],
-            "markers": "python_version < '3.10' and platform_machine != 'aarch64' and platform_machine != 'arm64'",
+            "markers": "python_version >= '3.8'",
             "version": "==1.22.4"
         },
         "pandas": {
@@ -448,11 +448,11 @@
         },
         "plotly": {
             "hashes": [
-                "sha256:0e6e2382aafe2b2978d2c1b10ea93e73ad1ec80fa9a195ff6eea62af7905dfdc",
-                "sha256:58cef3292f5994d82154d51fbc7338c48009fc47ea32ffe052ad29aaa15e0df9"
+                "sha256:63b0d47d21ec285cf18c9b413182fcf9af6cba8faa52d47a43323f7f28a85646",
+                "sha256:f46424f191ea6656440a849c281685685c3154864bbf36bb1fcd0709cb59a496"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==5.8.0"
+            "version": "==5.8.1"
         },
         "pvlib": {
             "hashes": [
@@ -464,11 +464,11 @@
         },
         "pythermalcomfort": {
             "hashes": [
-                "sha256:1891fa5b1a234c0cd5511471edbd793a414af6491a617852f9d6fb85c940261d",
-                "sha256:879b07f5478ad287e4ff24371b0ae3e3c3c3fe8cf354e107536cf1eadc7ca78c"
+                "sha256:389ee2eee8d2912c48ecc18a7b0f600892fb12439b1bd2285e046f4f23627868",
+                "sha256:8028e703a70267f8c59335f142d3570971ff3aa29ebfddf2852d059ec44d2d1f"
             ],
             "index": "pypi",
-            "version": "==2.2.0"
+            "version": "==2.3.0"
         },
         "python-dateutil": {
             "hashes": [
@@ -521,6 +521,14 @@
             ],
             "markers": "python_version < '3.11' and python_version >= '3.8'",
             "version": "==1.8.1"
+        },
+        "setuptools": {
+            "hashes": [
+                "sha256:d1746e7fd520e83bbe210d02fff1aa1a425ad671c7a9da7d246ec2401a087198",
+                "sha256:e7d11f3db616cda0751372244c2ba798e8e56a28e096ec4529010b803485f3fe"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==62.3.3"
         },
         "six": {
             "hashes": [
