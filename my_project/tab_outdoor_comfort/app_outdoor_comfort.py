@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap
 from my_project.utils import title_with_tooltip, generate_chart_name
 
-from app import app, cache, TIMEOUT
+from app import app
 
 
 def layout_outdoor_comfort():
@@ -61,7 +61,6 @@ def layout_outdoor_comfort():
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_tab_utci_value(var, global_local, df, meta):
 
     return dcc.Graph(
@@ -94,7 +93,6 @@ def change_image_based_on_selection(value):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_tab_utci_category(var, df, meta):
 
     utci_stress_cat = heatmap(df, var + "_categories")

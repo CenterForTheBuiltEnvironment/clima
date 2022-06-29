@@ -20,7 +20,7 @@ from my_project.global_scheme import (
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-from app import app, cache, TIMEOUT
+from app import app
 
 from my_project.global_scheme import (
     template,
@@ -232,7 +232,6 @@ def layout_psy_chart():
         State("invert-hour-psy", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_psych_chart(
     colorby_var,
     time_filter,

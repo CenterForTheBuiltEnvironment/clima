@@ -5,7 +5,7 @@ from my_project.template_graphs import heatmap, wind_rose
 from my_project.utils import title_with_tooltip, generate_chart_name
 from my_project.utils import code_timer
 
-from app import app, cache, TIMEOUT
+from app import app
 
 
 def sliders():
@@ -348,7 +348,6 @@ def layout_wind():
     Input("df-store", "data"),
     State("meta-store", "data"),
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_annual_wind_rose(df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
@@ -369,7 +368,6 @@ def update_annual_wind_rose(df, meta):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_tab_wind_speed(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
@@ -391,7 +389,6 @@ def update_tab_wind_speed(global_local, df, meta):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_tab_wind_direction(global_local, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
@@ -415,7 +412,6 @@ def update_tab_wind_direction(global_local, df, meta):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_custom_wind_rose(start_month, start_hour, end_month, end_hour, df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
@@ -457,7 +453,6 @@ def update_custom_wind_rose(start_month, start_hour, end_month, end_hour, df, me
     Input("df-store", "data"),
     State("meta-store", "data"),
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_seasonal_graphs(df, meta):
 
@@ -570,7 +565,6 @@ def update_seasonal_graphs(df, meta):
     Input("df-store", "data"),
     State("meta-store", "data"),
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_daily_graphs(df, meta):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""

@@ -27,7 +27,7 @@ from my_project.tab_data_explorer.charts_data_explorer import (
 )
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile, barchart
 
-from app import app, cache, TIMEOUT
+from app import app
 
 explore_dropdown_names = {}
 explore_dropdown_names.update(dropdown_names.copy())
@@ -549,7 +549,6 @@ def layout_data_explorer():
     [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_tab_yearly(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
@@ -572,7 +571,6 @@ def update_tab_yearly(var, global_local, df, meta):
     [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_tab_daily(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
@@ -589,7 +587,6 @@ def update_tab_daily(var, global_local, df, meta):
     [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_tab_heatmap(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
@@ -716,7 +713,6 @@ def update_heatmap(
     ],
 )
 @code_timer
-@cache.memoize(timeout=TIMEOUT)
 def update_more_charts(
     var_x,
     var_y,
@@ -780,7 +776,6 @@ def update_more_charts(
     [Input("sec1-var-dropdown", "value")],
     [State("df-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     return summary_table_tmp_rh_tab(

@@ -9,7 +9,6 @@ gunicorn = "==20.1.0"
 pvlib = "==0.9.1"
 pythermalcomfort = "*"
 dash-bootstrap-components = "==1.1.0"
-flask-caching = "==1.10.1"
 dash-extensions = "*"
 
 [dev-packages]

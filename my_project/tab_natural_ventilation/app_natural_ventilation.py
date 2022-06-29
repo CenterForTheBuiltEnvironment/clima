@@ -19,7 +19,7 @@ from my_project.utils import (
     determine_month_and_hour_filter,
 )
 
-from app import app, cache, TIMEOUT
+from app import app
 
 
 def layout_natural_ventilation():
@@ -253,7 +253,6 @@ def inputs_tab():
         State("invert-hour-nv", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
 def nv_heatmap(
     time_filter,
     dbt_data_filter,
@@ -421,7 +420,6 @@ def nv_heatmap(
         State("invert-hour-nv", "value"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
 def nv_bar_chart(
     time_filter,
     dbt_data_filter,

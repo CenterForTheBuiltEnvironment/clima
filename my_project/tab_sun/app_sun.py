@@ -17,7 +17,7 @@ from my_project.template_graphs import heatmap, barchart, daily_profile
 from my_project.utils import code_timer
 from my_project.utils import title_with_tooltip, generate_chart_name
 
-from app import app, cache, TIMEOUT
+from app import app
 
 
 def sun_path():
@@ -174,7 +174,6 @@ def layout_sun():
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def monthly_and_cloud_chart(ts, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
@@ -209,7 +208,6 @@ def monthly_and_cloud_chart(ts, df, meta):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def sun_path_chart(view, var, global_local, df, meta):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
@@ -234,7 +232,6 @@ def sun_path_chart(view, var, global_local, df, meta):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def daily(var, global_local, df, meta):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
@@ -253,7 +250,6 @@ def daily(var, global_local, df, meta):
     ],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_heatmap(var, global_local, df, meta):
 

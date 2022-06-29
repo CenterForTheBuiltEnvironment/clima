@@ -4,7 +4,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 import dash
 from dash.exceptions import PreventUpdate
-from app import app, cache, TIMEOUT
+from app import app
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
 from my_project.utils import generate_chart_name, title_with_tooltip
@@ -163,7 +163,6 @@ def layout_summary():
     Trigger("df-store", "modified_timestamp"),
     State("meta-store", "data"),
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -181,7 +180,6 @@ def update_map(meta):
     Input("df-store", "modified_timestamp"),
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_location_info(ts, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -263,7 +261,6 @@ def update_location_info(ts, df, meta):
         State("submit-set-points", "n_clicks"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -361,7 +358,6 @@ def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_violin_tdb(global_local, df, meta):
 
@@ -378,7 +374,6 @@ def update_violin_tdb(global_local, df, meta):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_tab_wind(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -396,7 +391,6 @@ def update_tab_wind(global_local, df, meta):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_tab_rh(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -414,7 +408,6 @@ def update_tab_rh(global_local, df, meta):
     [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_tab_gh_rad(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
