@@ -9,7 +9,7 @@ from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 from my_project.global_scheme import dropdown_names
 from my_project.utils import code_timer
 
-from app import app
+from app import app, cache, TIMEOUT
 
 var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
@@ -95,6 +95,7 @@ def layout_t_rh():
     [Input("global-local-radio-input", "value"), Input("dropdown", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_yearly_chart(global_local, dd_value, df, meta):
 
@@ -121,6 +122,7 @@ def update_yearly_chart(global_local, dd_value, df, meta):
     [Input("global-local-radio-input", "value"), Input("dropdown", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_daily(global_local, dd_value, df, meta):
 
@@ -149,6 +151,7 @@ def update_daily(global_local, dd_value, df, meta):
     [Input("global-local-radio-input", "value"), Input("dropdown", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_heatmap(global_local, dd_value, df, meta):
     """Update the contents of tab three. Passing in general info (df, meta)."""
@@ -174,9 +177,9 @@ def update_heatmap(global_local, dd_value, df, meta):
 
 @app.callback(
     Output("table-tmp-hum", "children"),
-    [Input("dropdown", "value")],
-    [State("df-store", "data")],
+    [Input("dropdown", "value"), State("df-store", "data")],
 )
+@cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_table(dd_value, df):
     """Update the contents of tab three. Passing in general info (df, meta)."""
