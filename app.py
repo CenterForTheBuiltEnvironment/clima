@@ -1,12 +1,13 @@
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Dash
+from dash_extensions.enrich import DashProxy, ServersideOutputTransform
 
-app = Dash(
+app = DashProxy(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
-    suppress_callback_exceptions=True,
+    transforms=[ServersideOutputTransform()]
+    # suppress_callback_exceptions=True,
 )
-app.config.suppress_callback_exceptions = True
+# app.config.suppress_callback_exceptions = True
 
 app.index_string = """<!DOCTYPE html>
 <html lang="en-US">

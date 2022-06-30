@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0837e1c86ef59b9d0734c044042901b0c531865775be660b2684205f47397f96"
+            "sha256": "0b92982863a797653baf6afeba5105cdb7ed3236985ae622987a6f6bc083b6b2"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -83,14 +83,6 @@
             ],
             "version": "==1.0.9"
         },
-        "cachelib": {
-            "hashes": [
-                "sha256:38222cc7c1b79a23606de5c2607f4925779e37cdcea1c2ad21b8bae94b5425a5",
-                "sha256:811ceeb1209d2fe51cd2b62810bd1eccf70feba5c52641532498be5c675493b3"
-            ],
-            "markers": "python_version >= '3.7'",
-            "version": "==0.9.0"
-        },
         "certifi": {
             "hashes": [
                 "sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d",
@@ -101,11 +93,11 @@
         },
         "charset-normalizer": {
             "hashes": [
-                "sha256:2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597",
-                "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"
+                "sha256:5189b6f22b01957427f35b6a08d9a0bc45b46d3788ef5a92e978433c7a35f8a5",
+                "sha256:575e708016ff3a5e3681541cb9d79312c416835686d054a23accb873b254f413"
             ],
-            "markers": "python_version >= '3.5'",
-            "version": "==2.0.12"
+            "markers": "python_version >= '3.6'",
+            "version": "==2.1.0"
         },
         "click": {
             "hashes": [
@@ -133,11 +125,11 @@
         },
         "dash-bootstrap-components": {
             "hashes": [
-                "sha256:340755d3ca4d2e5b2745fc67398785e673092faef2097e2895f8580b1ad1816e",
-                "sha256:e0490bf865c61f14371e537bdab4be08db693cec01884eb5a9c55489ebd13d47"
+                "sha256:4f95470952ecb9a0f2dbef34be2969353c5c16925817d48da50db51ade80f50f",
+                "sha256:d7fd69cb2b1e86f9cc4bcee4036302e5d534d0bf102d331b29392a3c355d776a"
             ],
             "index": "pypi",
-            "version": "==1.1.0"
+            "version": "==1.2.0"
         },
         "dash-core-components": {
             "hashes": [
@@ -160,6 +152,14 @@
                 "sha256:b42cc903713c9706af03b3f2548bda4be7307a7cf89b7d6eae3da872717d1b63"
             ],
             "version": "==2.0.0"
+        },
+        "dash-mantine-components": {
+            "hashes": [
+                "sha256:5ec838653b856ae55869b7c661b7d74d2799c1259aa3ebaf57346c6a2f7282ea",
+                "sha256:e63ea6c623260e0f84ac4aee9c1928272adf3ca20478fd80bafce04eff017f8f"
+            ],
+            "index": "pypi",
+            "version": "==0.10.2"
         },
         "dash-table": {
             "hashes": [
@@ -185,11 +185,11 @@
         },
         "flask-caching": {
             "hashes": [
-                "sha256:28af189e97defb9e39b43ebe197b54a58aaee81bdeb759f46d969c26d7aa7810",
-                "sha256:36592812eec6cba86eca48bcda74eff24bfd6c8eaf6056ca0184474bb78c0dc4"
+                "sha256:bcda8acbc7508e31e50f63e9b1ab83185b446f6b6318bd9dd1d45626fba2e903",
+                "sha256:cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==1.11.1"
+            "index": "pypi",
+            "version": "==1.10.1"
         },
         "flask-compress": {
             "hashes": [
@@ -495,11 +495,11 @@
         },
         "requests": {
             "hashes": [
-                "sha256:bc7861137fbce630f17b03d3ad02ad0bf978c844f3536d0edda6499dafce2b6f",
-                "sha256:d568723a7ebd25875d8d1eaf5dfa068cd2fc8194b2e483d7b1f7c81918dbec6b"
+                "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983",
+                "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"
             ],
             "markers": "python_version >= '3.7' and python_version < '4'",
-            "version": "==2.28.0"
+            "version": "==2.28.1"
         },
         "scipy": {
             "hashes": [

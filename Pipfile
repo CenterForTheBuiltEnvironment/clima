@@ -8,8 +8,10 @@ dash = "==2.4.1"
 gunicorn = "==20.1.0"
 pvlib = "==0.9.1"
 pythermalcomfort = "*"
-dash-bootstrap-components = "==1.1.0"
+dash-bootstrap-components = "==1.2.0"
 dash-extensions = "*"
+flask-caching = "==1.10.1"
+dash-mantine-components = "*"
 
 [dev-packages]
 cleanpy = "*"

@@ -3,15 +3,13 @@ import io
 import re
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc
-from dash import html
 from dash.exceptions import PreventUpdate
 
 from app import app
 from my_project.extract_df import create_df, get_data
 from my_project.utils import plot_location_epw_files, generate_chart_name
 
-from dash_extensions.enrich import ServersideOutput, Output, Input, State
+from dash_extensions.enrich import ServersideOutput, Output, Input, State, html, dcc
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",
@@ -195,10 +193,10 @@ def submitted_data(
         Output("tab-natural-ventilation", "disabled"),
         Output("banner-subtitle", "children"),
     ],
-    [Input("df-store", "data")],
-    State("meta-store", "data"),
+    [Input("meta-store", "data")],
+    State("df-store", "data"),
 )
-def enable_tabs_when_data_is_loaded(data, meta):
+def enable_tabs_when_data_is_loaded(meta, data):
     """Hide tabs when data are not loaded"""
     default = "Current Location: N/A"
     if data is None:

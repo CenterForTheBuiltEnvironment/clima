@@ -1,7 +1,4 @@
 import dash_bootstrap_components as dbc
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output, State
 import dash
 from dash.exceptions import PreventUpdate
 from app import app
@@ -13,7 +10,7 @@ from my_project.global_scheme import template, tight_margins
 import requests
 from my_project.extract_df import get_data
 from my_project.utils import code_timer
-from dash_extensions.enrich import Trigger
+from dash_extensions.enrich import dcc, html, Output, Input, State
 
 
 def layout_summary():
@@ -160,8 +157,7 @@ def layout_summary():
 
 @app.callback(
     Output("world-map", "children"),
-    Trigger("df-store", "modified_timestamp"),
-    State("meta-store", "data"),
+    Input("meta-store", "data"),
 )
 @code_timer
 def update_map(meta):

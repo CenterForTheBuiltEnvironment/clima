@@ -213,8 +213,14 @@ def store():
     return html.Div(
         id="store",
         children=[
-            dcc.Store(id="df-store", storage_type="session"),
-            dcc.Store(id="meta-store", storage_type="session"),
-            dcc.Store(id="url-store", storage_type="session"),
+            dcc.Loading(
+                [
+                    dcc.Store(id="df-store", storage_type="session"),
+                    dcc.Store(id="meta-store", storage_type="session"),
+                    dcc.Store(id="url-store", storage_type="session"),
+                ],
+                fullscreen=True,
+                type="dot",
+            )
         ],
     )
