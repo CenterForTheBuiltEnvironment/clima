@@ -44,7 +44,7 @@ def footer():
                             """
                                 Please cite us if you use this software:
                                 Betti, G., Tartarini, F., Schiavon, S., Nguyen, C. (2021). 
-                                CBE Clima Tool. Version 0.4.6. Center for the Built Environment, University of California Berkeley
+                                CBE Clima Tool. Version 0.6.6. Center for the Built Environment, University of California Berkeley
                             
                                 Developed by:
                                 [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
