@@ -10,11 +10,13 @@
   * [Climate Summary](documentation/tabs-explained/tab-summary/README.md)
     * [Degree Days Explained](documentation/tabs-explained/tab-summary/degree-days-explained.md)
     * [Climate Profiles Explained](documentation/tabs-explained/tab-summary/climate-profiles-explained.md)
-  * [Temperature and Humidity](documentation/tabs-explained/temperature-and-humidity.md)
+  * [Temperature and Humidity](documentation/tabs-explained/temperature-and-humidity/README.md)
+    * [Dry bulb temperature](documentation/tabs-explained/temperature-and-humidity/dry-bulb-temperature.md)
+    * [Relative humidity](documentation/tabs-explained/temperature-and-humidity/relative-humidity.md)
   * [Sun and Clouds](documentation/tabs-explained/sun-and-cloud/README.md)
-    * [Apparent sunpath for the location](documentation/tabs-explained/sun-and-cloud/apparent-sunpath-for-the-location/README.md)
+    * [Apparent sun path for the location](documentation/tabs-explained/sun-and-cloud/apparent-sunpath-for-the-location/README.md)
       * [How to read a spherical sun path diagram](documentation/tabs-explained/sun-and-cloud/apparent-sunpath-for-the-location/how-to-read-a-carthesian-sun-path-diagram.md)
-      * [How to read a carthesian sun path diagram](documentation/tabs-explained/sun-and-cloud/apparent-sunpath-for-the-location/how-to-read-a-sun-path-diagram.md)
+      * [How to read a cartesian sun path diagram](documentation/tabs-explained/sun-and-cloud/apparent-sunpath-for-the-location/how-to-read-a-sun-path-diagram.md)
     * [Global and Diffuse Horizontal Solar Radiation](documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation/README.md)
       * [Global, diffuse and normal solar radiation explained](documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation/global-diffuse-and-normal-solar-radiation-explained.md)
     * [Cloud coverage](documentation/tabs-explained/sun-and-cloud/cloud-coverage.md)
@@ -26,15 +28,15 @@
   * [Outdoor Comfort](documentation/tabs-explained/outdoor-comfort/README.md)
     * [UTCI explained](documentation/tabs-explained/outdoor-comfort/utci-explained.md)
   * [Data Explorer](documentation/tabs-explained/data-explorer.md)
+  * [Charts Tips and tricks](documentation/tabs-explained/charts-tips-and-tricks.md)
 
 ## Contributing
 
 * [Run project locally](contributing/run-project-locally.md)
 * [How to contribute](contributing/contributing.md)
-* [Code of Conducts](contributing/code_of_conduct.md)
+* [Code of Conducts](contributing/code\_of\_conduct.md)
 
 ## Version
 
 * [Info](version/versioning.md)
 * [Changelog](version/changelog.md)
-
