@@ -4,8 +4,10 @@ Clima allows the user to visualize daily charts and heatmaps of all the variable
 
 <figure><img src="../../../.gitbook/assets/CBEClima_San Francisco_USA_daily_sun_tab.svg" alt=""><figcaption><p>Example: Global Horizontal radiation value for <strong>San Francisco, USA</strong></p></figcaption></figure>
 
-The cart above show the [scatter plot](https://en.wikipedia.org/wiki/Scatter\_plot) of all hourly data on all days of the month and the typical monthly trend.
+The chart above shows the [scatter plot](https://en.wikipedia.org/wiki/Scatter\_plot) of all hourly data on all days of the month and the typical monthly trend.
 
 <figure><img src="../../../.gitbook/assets/CBEClima_San Francisco_USA_heatmap_sun_tab.svg" alt=""><figcaption><p>Example: Heat map of the hourly Global Horizontal radiation on all days of the year for <strong>San Francisco, USA</strong> </p></figcaption></figure>
 
 [Heat maps](https://en.wikipedia.org/wiki/Heat\_map) allow the intensity of values to be perceived through color palettes. These graphs are very helpful in seeing how magnitudes vary throughout the year.
+
+<figure><img src="../../../.gitbook/assets/Daily sun exa.png" alt=""><figcaption><p>Examples of daily graphs with different variables</p></figcaption></figure>

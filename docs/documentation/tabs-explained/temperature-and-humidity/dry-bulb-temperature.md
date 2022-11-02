@@ -1,2 +1,0 @@
-# Dry bulb temperature
-

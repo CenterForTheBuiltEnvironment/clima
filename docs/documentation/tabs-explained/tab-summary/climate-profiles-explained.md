@@ -13,4 +13,4 @@ On mouse hover, they display various statistical properties of the data:
 * 1st quartile
 * 3rd quartile
 
-![Climate Profiles for Jerusalem Center, ISRAEL](<../../../.gitbook/assets/image (2).png>)
+![Climate Profiles for Jerusalem Center, ISRAEL](<../../../.gitbook/assets/image (2) (1).png>)

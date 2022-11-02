@@ -1,2 +1,0 @@
-# Temperature and Humidity
-

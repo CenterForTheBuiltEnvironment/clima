@@ -12,4 +12,4 @@ The base temperature does not necessarily correspond to the desired building int
 
 ![example deegree days for New York, Downtown Manhattan, NY, USA](<../../../.gitbook/assets/image (3).png>)
 
-![example deegree days for Palermo Boccadifalco Airport, ITALY](<../../../.gitbook/assets/image (1).png>)
+![example deegree days for Palermo Boccadifalco Airport, ITALY](<../../../.gitbook/assets/image (1) (1).png>)
