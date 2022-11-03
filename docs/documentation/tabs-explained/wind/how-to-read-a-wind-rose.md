@@ -14,9 +14,9 @@ The length of each radius around the circle shows how often the wind blew from t
 
 <figure><img src="../../../.gitbook/assets/Frequency.png" alt=""><figcaption><p>Frequency of wind intensity recurrence in the wind rose</p></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+As most graphs in **Clima Tool**, the wind rose is strongly interactive. Clicking on the legend will hide or highlight the selected category. As such, it is easy to go from a wind rose showing all the wind directions and frequency to one that highlights only the selected speed range. This can be particularly useful to identify low-frequency, high-speed wind patterns.&#x20;
 
-<figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Left: wind rose showing all velocity ranges<br>Right: the same data can be easily filtered (by clicking on the legend) to show only direction and frequency of wind speeds above 10.7m/s</p></figcaption></figure>
 
 In the seasonal graphs section, **Clima** shows 4 wind roses for the periods of:
 
@@ -29,9 +29,9 @@ Personal viewing periods are available using the last portion of the Wind sectio
 
 In building design, the wind is addressed in several forms:
 
-* pedestrian and outdoor comfort;
-* wind driven natural ventilation;
-* pollution dispersal/ outdoor air quality;
-* in very hot areas, thoughtful design of indoor patios or wind towers provide naturally mitigated environments;
+* assessing pedestrian and outdoor comfort;
+* design for wind-driven natural ventilation;
+* understanding pollution dispersal and outdoor air quality;
+* in warm climates, thoughtful design of indoor patios or wind towers can provide naturally mitigated environments;
 * in renewable energy, wind data are used to design wind turbines;
 * in structural analysis, wind load considerably influences the design of roofs, sheds, or overhanging elements.
