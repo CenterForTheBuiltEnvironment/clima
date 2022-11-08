@@ -4,7 +4,7 @@ The [wind rose](https://en.wikipedia.org/wiki/Wind\_rose) is used to provide a s
 
 Wind speed can be estimated with several scales. One of the first was created by Britain's Admiral Sir Francis Beaufort (1805). The [Beaufort scale](https://en.wikipedia.org/wiki/Beaufort\_scale) is an empirical scale that relates wind speed to observed conditions at sea or on land. The original scale goes from 0 to 12, but the **Clima Tool** will show the results from 1 to 9 since it is not common to construct buildings in places with recurrent winds over 100 km/h.
 
-<figure><img src="../../../.gitbook/assets/BeufortScale (1).png" alt=""><figcaption><p>Graphical illustration of the Beaufort scale. The colors shown for each scale value are those used in the tool's charts.                               Source: <a href="https://howtoons.com/The-Beaufort-Scale">howtoons</a></p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/BeufortScale.png" alt=""><figcaption><p>Graphical illustration of the Beaufort scale. The colors shown for each scale value are those used in the tool's charts.                               Source: <a href="https://howtoons.com/The-Beaufort-Scale">howtoons</a></p></figcaption></figure>
 
 Each circle segment shows the winds according to the cardinal direction along which they blow from.
 

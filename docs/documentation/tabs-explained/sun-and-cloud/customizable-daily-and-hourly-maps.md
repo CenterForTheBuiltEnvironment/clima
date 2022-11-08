@@ -8,6 +8,7 @@ The chart above shows the [scatter plot](https://en.wikipedia.org/wiki/Scatter\_
 
 <figure><img src="../../../.gitbook/assets/CBEClima_San Francisco_USA_heatmap_sun_tab.svg" alt=""><figcaption><p>Example: Heat map of the hourly Global Horizontal radiation on all days of the year for <strong>San Francisco, USA</strong> </p></figcaption></figure>
 
-[Heat maps](https://en.wikipedia.org/wiki/Heat\_map) allow the intensity of values to be perceived through color palettes. These graphs are very helpful in seeing how magnitudes vary throughout the year.
+[Heat maps](https://en.wikipedia.org/wiki/Heat\_map) allow the intensity of values to be perceived through color palettes. These graphs are very helpful in seeing how magnitudes vary throughout the year.&#x20;
 
-<figure><img src="../../../.gitbook/assets/Daily sun exa.png" alt=""><figcaption><p>Examples of daily graphs with different variables</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Daily sun exa.png" alt=""><figcaption><p>Examples of daily graphs with different variables (from top left to bottom right): global horizontal radiation, global horizontal illuminance, zenith luminance, opaque sky cover</p></figcaption></figure>
+
