@@ -11,6 +11,7 @@
   * [Climate Summary](documentation/tabs-explained/tab-summary/README.md)
     * [Degree Days Explained](documentation/tabs-explained/tab-summary/degree-days-explained.md)
     * [Climate Profiles Explained](documentation/tabs-explained/tab-summary/climate-profiles-explained.md)
+    * [Clima Dataframe](documentation/tabs-explained/tab-summary/clima-dataframe.md)
   * [Temperature and Humidity](documentation/tabs-explained/temperature-and-humidity.md)
   * [Sun and Clouds](documentation/tabs-explained/sun-and-cloud/README.md)
     * [How to read a cartesian sun path diagram](documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram.md)
