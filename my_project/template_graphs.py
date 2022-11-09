@@ -522,18 +522,18 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
 
     go.Figure()
     trace1 = go.Bar(
-        x=list(range(0, 13)), y=month_in, name=" IN range", marker_color=color_in
+        x=list(range(0, 13)), y=month_in, name="IN range", marker_color=color_in
     )
     trace2 = go.Bar(
         x=list(range(0, 13)),
         y=month_below,
-        name=" BELOW range",
+        name="BELOW range",
         marker_color=color_below,
     )
     trace3 = go.Bar(
         x=list(range(0, 13)),
         y=month_above,
-        name=" ABOVE range",
+        name="ABOVE range",
         marker_color=color_above,
     )
     data = [trace2, trace1, trace3]

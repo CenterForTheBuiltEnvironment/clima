@@ -1,3 +1,4 @@
+import numpy as np
 from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
@@ -5,6 +6,7 @@ from my_project.global_scheme import (
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
     tight_margins,
+    month_lst,
 )
 from dash.dependencies import Input, Output, State
 
@@ -188,6 +190,9 @@ def monthly_and_cloud_chart(ts, df, meta):
         margin=tight_margins,
         title="",
         legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
+    )
+    cover.update_xaxes(
+        dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
     )
 
     return dcc.Graph(

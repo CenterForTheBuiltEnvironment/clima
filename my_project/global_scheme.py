@@ -26,9 +26,9 @@ wind_speed_color = [
 ]
 wind_dir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
 cloud_colors = [
-    "#8CAFBD",
+    "#7ec9f3",
+    "#e6eae9",
     "#c2c2c2",
-    "#FBD07D",
 ]
 utci_categories_color = [
     # Let first 10% (0.1) of the values have color rgb(0, 0, 0)
