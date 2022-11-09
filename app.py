@@ -5,8 +5,8 @@ from flask_caching import Cache
 app = DashProxy(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
-    transforms=[ServersideOutputTransform()]
-    # suppress_callback_exceptions=True,
+    transforms=[ServersideOutputTransform()],
+    suppress_callback_exceptions=True,
 )
 cache = Cache(
     app.server,

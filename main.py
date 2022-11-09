@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 from dash.dependencies import Input, Output
 import dash
+import os
 
 from my_project.layout import banner, build_tabs, footer
 from my_project.tab_wind.app_wind import layout_wind
@@ -72,4 +73,10 @@ def render_content(tab):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False, host="0.0.0.0", port=8080, processes=1, threaded=True)
+    app.run_server(
+        debug=bool(os.environ.get("DEBUG", True)),
+        host="0.0.0.0",
+        port=8080,
+        processes=1,
+        threaded=True,
+    )
