@@ -74,7 +74,7 @@ def render_content(tab):
 
 if __name__ == "__main__":
     app.run_server(
-        debug=bool(os.environ.get("DEBUG", True)),
+        debug=bool(os.environ.get("DASH_DEBUG_MODE", True)),
         host="0.0.0.0",
         port=8080,
         processes=1,
