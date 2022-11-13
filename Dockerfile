@@ -16,6 +16,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8080
 
-ENV DASH_DEBUG_MODE False
-
 CMD python main.py
