@@ -26,8 +26,6 @@ def footer():
                             [The CBE Clima Tool is licensed under a Creative Commons 
                             Attribution-Commercial 4.0 International License (CC BY 
                             4.0)](https://creativecommons.org/licenses/by/4.0/)
-                            
-                            [Version: 0.7.2](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
                             """
                         ),
                         style={"padding": "25px 0px"},
@@ -45,7 +43,7 @@ def footer():
                                 """
                                 Please cite us:
                                 Betti, G., Tartarini, F., Nguyen, C., Schiavon, S. (2022). CBE Clima Tool: a free and open-source web application for climate analysis tailored to sustainable building design.
-                                Version 0.7.2 https://doi.org/10.48550/arxiv.2212.04609
+                                [Version: 0.7.2](https://center-for-the-built-environment.gitbook.io/clima/version/changelog) https://doi.org/10.48550/arxiv.2212.04609
                                 """
                             ),
                             dcc.Markdown(
@@ -70,7 +68,7 @@ def footer():
                     ),
                 ],
                 width=12,
-                md=6,
+                md=8,
             ),
         ],
     )
