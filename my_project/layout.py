@@ -40,26 +40,32 @@ def footer():
             dbc.Col(
                 children=[
                     dbc.Row(
-                        dcc.Markdown(
-                            """
-                                Please cite us if you use this software:
-                                Betti, G., Tartarini, F., Schiavon, S., Nguyen, C. (2021). 
-                                CBE Clima Tool. Version 0.6.6. Center for the Built Environment, University of California Berkeley
-                            
-                                Developed by:
-                                [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
-                                [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
-                                [Christine Nguyen](https://chrlng.github.io/),
-            
-                                Supported browsers: Chromium-based browsers, Firefox.
-            
-                                Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
-            
-                                [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
-                                
-                                [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
-                            """,
-                        ),
+                        [
+                            dcc.Markdown(
+                                """
+                                Please cite us:
+                                Betti, G., Tartarini, F., Nguyen, C., Schiavon, S. (2022). CBE Clima Tool: a free and open-source web application for climate analysis tailored to sustainable building design.
+                                Version 0.7.2 https://doi.org/10.48550/arxiv.2212.04609
+                                """
+                            ),
+                            dcc.Markdown(
+                                """
+                                    Developed by:
+                                    [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
+                                    [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
+                                    [Christine Nguyen](https://chrlng.github.io/),
+                
+                                    Supported browsers: Chromium-based browsers, Firefox.
+                
+                                    Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
+                
+                                    [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
+                                    
+                                    [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
+                                """,
+                                style={"marginTop": "1rem"},
+                            ),
+                        ],
                         style={"marginTop": "1rem"},
                     ),
                 ],
