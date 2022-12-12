@@ -1,6 +1,8 @@
 # Clima Dataframe
 
-**Clima** allows the user to overlay the following variables on the [sun path](../sun-and-cloud/), on the [psychometric chart](../psychrometric-chart/), and on the customizable graphs in the [data explorer](../data-explorer.md):
+**Clima** calculates new variables and creates a new **dataframe** containing the variables already inside the original EPW files and other we calculate. Users can overlay all the variables on the [sun path](../sun-and-cloud/), on the [psychometric chart](../psychrometric-chart/), and on the customizable graphs in the [data explorer](../data-explorer.md).
+
+All the variables in the new Clima dataframe are listed below.
 
 * [Dry Bulb Temperature ](https://bigladdersoftware.com/epx/docs/22-2/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-dry-bulb-temperature)
 * [Dew Point Temperature ](https://bigladdersoftware.com/epx/docs/22-2/auxiliary-programs/energyplus-weather-file-epw-data-dictionary.html#field-dew-point-temperature)

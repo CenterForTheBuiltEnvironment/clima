@@ -25,7 +25,7 @@
   * [Wind](documentation/tabs-explained/wind/README.md)
     * [How to read a Wind Rose](documentation/tabs-explained/wind/how-to-read-a-wind-rose.md)
   * [Psychrometric Chart](documentation/tabs-explained/psychrometric-chart/README.md)
-    * [Psychrometric Chart Explained](documentation/tabs-explained/psychrometric-chart/psychrometric-chart-explained.md)
+    * [How to read a Psychrometric Chart](documentation/tabs-explained/psychrometric-chart/psychrometric-chart-explained.md)
   * [Natural Ventilation Potential](documentation/tabs-explained/natural-ventilation.md)
   * [Outdoor Comfort](documentation/tabs-explained/outdoor-comfort/README.md)
     * [UTCI explained](documentation/tabs-explained/outdoor-comfort/utci-explained.md)

@@ -4,9 +4,9 @@ The **Temperature and Humidity** tab presents an overview of [air dry bulb tempe
 
 **Clima** allows the user to visualize the annual data trend through a customizable chart.&#x20;
 
-<figure><img src="../../../.gitbook/assets/CBEClima_Paris.MontSouris_FRA_tdb_yearly_t_rh_tab.svg" alt=""><figcaption><p>Example: annual dry bulb temperatures trend for <strong>Paris, FRA</strong></p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/CBEClima_Paris.MontSouris_FRA_tdb_yearly_t_rh_tab.png" alt=""><figcaption><p>Example: annual dry bulb temperatures trend for <strong>Paris, FRA</strong></p></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/CBEClima_Paris.MontSouris_FRA_rh_yearly_t_rh_tab.svg" alt=""><figcaption><p>Example: annual relative humidity trend for <strong>Paris, FRA</strong></p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/CBEClima_Paris.MontSouris_FRA_rh_yearly_t_rh_tab.png" alt=""><figcaption><p>Example: annual relative humidity trend for <strong>Paris, FRA</strong></p></figcaption></figure>
 
 Daily [scatter plot](https://en.wikipedia.org/wiki/Scatter\_plot) shows all hourly data on all days of the month and the typical monthly trend.
 
