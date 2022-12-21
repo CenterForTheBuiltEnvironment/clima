@@ -306,6 +306,63 @@ def create_df(lst, file_name):
 
     return epw_df, location_info
 
+def convert_data_name(df, name):
+    if name == "DBT" or name == "DPT" or name == "utci_noSun_Wind" or name == "utci_noSun_noWind" or name == "utci_Sun_Wind" or name == "utci_Sun_noWind" or name == "t_wb" or name == "t_dq" or name == "adaptive_comfort" or name == "adaptive_cmf_80_low" or name == "adaptive_cmf_80_high" or name == "adaptive_cmf_90_low" or name == "adaptive_cmf_90_high":
+        df[name] = df[name]*1.8+32
+        return df
+    if name == "p_atm" or name == "p_sat" or name == "p_vap":
+        df[name] = df[name]*0.000145038
+        return df
+    if name == "extr_hor_rad" or name == "hor_ir_rad" or name == "glob_hor_rad" or name == "dir_nor_rad" or name == "dif_hor_rad":
+        df[name]=df[name]**0.3169983306
+        return df
+    if name == "glob_hor_ill" or name == "dir_nor_ill" or name == "dif_hor_ill" or name == "Zlumi":
+        df[name] = df[name]*0.0929
+        return df
+    if name == "wind_speed":
+        df[name] = df[name]*0.3048
+        return df
+    if name == "Vis":
+        df[name] = df[name]*0.6215
+        return df
+    if name == "hr":
+        df[name] = df[name]*0.0624
+        return df
+    if name == "h":
+        df[name] = df[name]*0.0004
+        return df
+    
+def convert_data(df):
+    df["DBT"] = df["DBT"] *1.8+32
+    df["DPT"] = df["DPT"] *1.8+32
+    df["p_atm"] = df["p_atm"]*0.000145038
+    df["extr_hor_rad"] = df["extr_hor_rad"]*0.3169983306
+    df["hor_ir_rad"] = df["hor_ir_rad"]*0.3169983306
+    df["glob_hor_rad"] = df["glob_hor_rad"]*0.3169983306
+    df["dir_nor_rad"] = df["dir_nor_rad"]*0.3169983306
+    df["dif_hor_rad"] = df["dif_hor_rad"]*0.3169983306
+    df["glob_hor_ill"] = df["glob_hor_ill"]*0.0929
+    df["dir_nor_ill"] = df["dir_nor_ill"]*0.0929
+    df["dif_hor_ill"] = df["dif_hor_ill"]*0.0929
+    df["Zlumi"] = df["Zlumi"]*0.00929
+    df["wind_speed"] = df["wind_speed"]*0.3048
+    df["Vis"] = df["Vis"]*0.6215
+    df["utci_noSun_Wind"] = df["utci_noSun_Wind"]*1.8+32
+    df["utci_noSun_noWind"] = df["utci_noSun_noWind"]*1.8+32
+    df["utci_Sun_Wind"] = df["utci_Sun_Wind"]*1.8+32
+    df["utci_Sun_noWind"] = df["utci_Sun_noWind"]*1.8+32
+    df["p_sat"] = df["p_sat"]*0.000145038
+    df["p_vap"] = df["p_vap"]*0.000145038
+    df["hr"] = df["hr"] *0.0624
+    df["t_wb"] = df["t_wb"]*1.8+32
+    df["t_dp"] = df["t_dp"]*1.8+32
+    df["h"] = df["h"] * 0.0004
+    df["adaptive_comfort"] = df["adaptive_comfort"]*1.8+32
+    df["adaptive_cmf_80_low"] = df["adaptive_cmf_80_low"]*1.8+32
+    df["adaptive_cmf_80_up"] = df["adaptive_cmf_80_up"]*1.8+32
+    df["adaptive_cmf_90_low"] = df["adaptive_cmf_90_low"]*1.8+32
+    df["adaptive_cmf_90_up"] = df["adaptive_cmf_90_up"]*1.8+32
+    return df
 
 if __name__ == "__main__":
     # fmt: off
