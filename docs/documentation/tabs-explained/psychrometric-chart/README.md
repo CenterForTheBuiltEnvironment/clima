@@ -12,8 +12,8 @@ With the first choice in the drop-down list, "None", it is possible to view temp
 
 Then, users can overlay another variable on the graphs, choosing from [Clima dataframe](../tab-summary/clima-dataframe.md).
 
-<figure><img src="../../../.gitbook/assets/Psychometric variables.png" alt=""><figcaption><p>Example: Psychrometric charts with different variables (from top left to bottom right): dry bulb temperature, relative humidity, global horizontal radiation, and wind speed</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Psychometric variables (1).png" alt=""><figcaption><p>Example: Psychrometric charts with different variables (from top left to bottom right): dry bulb temperature, relative humidity, global horizontal radiation, and wind speed</p></figcaption></figure>
 
-Moreover, data can be filtered by date, time or by one of the [Clima dataframe](../tab-summary/clima-dataframe.md) variables.
+Moreover, data can be filtered by date, time, or one of the [Clima dataframe](../tab-summary/clima-dataframe.md) variables.
 
 <figure><img src="../../../.gitbook/assets/Schermata 2022-11-15 alle 10.37.43 AM.png" alt=""><figcaption><p>Psychrometric charts filters</p></figcaption></figure>
