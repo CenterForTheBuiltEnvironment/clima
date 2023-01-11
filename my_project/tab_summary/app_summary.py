@@ -8,14 +8,13 @@ from my_project.utils import generate_chart_name, title_with_tooltip
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins
 import requests
-from my_project.extract_df import convert_data, convert_data_name, get_data
+from my_project.extract_df import get_data
 from my_project.utils import code_timer
 from dash_extensions.enrich import dcc, html, Output, Input, State
 
 
 def layout_summary():
     """Contents in the second tab 'Climate Summary'."""
-        
     return html.Div(
         className="container-col",
         id="tab-two-container",
@@ -90,7 +89,7 @@ def layout_summary():
                         [
                             dbc.Col(
                                 html.Label(
-                                    "Heating degree day (HDD) setpoint (default: °C) / °F",
+                                    "Heating degree day (HDD) setpoint (°C)",
                                 ),
                                 width="auto",
                             ),
@@ -105,7 +104,7 @@ def layout_summary():
                             ),
                             dbc.Col(
                                 html.Label(
-                                    "Cooling degree day (CDD) setpoint (default: °C) / °F",
+                                    "Cooling degree day (CDD) setpoint (°C)",
                                 ),
                                 width="auto",
                             ),
@@ -174,21 +173,16 @@ def update_map(meta):
 
 @app.callback(
     Output("location-info", "children"),
-    [Input("df-store", "modified_timestamp"),Input("si-ip-radio-input", "value")],
+    Input("df-store", "modified_timestamp"),
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @code_timer
-def update_location_info(ts, si_ip, df, meta):
+def update_location_info(ts, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta['city']}, {meta['country']}"
     lon = f"Longitude: {meta['lon']}"
     lat = f"Latitude: {meta['lat']}"
-    if si_ip != "si":
-        site_elevation = float(meta['site_elevation'])
-        site_elevation = site_elevation*3.28
-        elevation = f"Elevation above sea level: {str(site_elevation)} ft"
-    else:
-        elevation = f"Elevation above sea level: {meta['site_elevation']} m"
+    elevation = f"Elevation above sea level: {meta['site_elevation']} m"
     period = ""
     if meta["period"]:
         start, stop = meta["period"].split("-")
@@ -211,30 +205,16 @@ def update_location_info(ts, si_ip, df, meta):
             pass
 
     # global horizontal irradiance
-    if si_ip == "si":
-        total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)} kWh/m<sup>2</sup>"
-        total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
-        average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °C"
-        hottest_yearly_tmp = (
-            f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} °C"
-        )
-        coldest_yearly_tmp = (
-            f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} °C"
-        )
-    else:
-        print ("info.ip")
-        df = convert_data_name(df,"glob_hor_rad")
-        df = convert_data_name(df,"dif_hor_rad")
-        df = convert_data_name(df,"DBT")
-        total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)} Btu(IT)/ft<sup>2</sup>"
-        total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
-        average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °F"
-        hottest_yearly_tmp = (
-            f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} °F"
-        )
-        coldest_yearly_tmp = (
-            f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} °F"
-        )
+
+    total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)} kWh/m<sup>2</sup>"
+    total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
+    average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)} °C"
+    hottest_yearly_tmp = (
+        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} °C"
+    )
+    coldest_yearly_tmp = (
+        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} °C"
+    )
 
     location_info = dbc.Col(
         [
@@ -267,7 +247,7 @@ def update_location_info(ts, si_ip, df, meta):
         Output("warning-cdd-higher-hdd", "is_open"),
     ],
     [
-        Input("submit-set-points", "n_clicks_timestamp"),Input("si-ip-radio-input", "value")
+        Input("submit-set-points", "n_clicks_timestamp"),
     ],
     [
         State("df-store", "data"),
@@ -278,7 +258,7 @@ def update_location_info(ts, si_ip, df, meta):
     ],
 )
 @code_timer
-def degree_day_chart(ts_click, si_ip, df, meta, hdd_value, cdd_value, n_clicks):
+def degree_day_chart(ts_click, df, meta, hdd_value, cdd_value, n_clicks):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     ctx = dash.callback_context
@@ -301,9 +281,6 @@ def degree_day_chart(ts_click, si_ip, df, meta, hdd_value, cdd_value, n_clicks):
         hdd_array = []
         cdd_array = []
         months = df["month_names"].unique()
-
-        if si_ip!= "si":
-            df = convert_data_name(df, "DBT")
 
         for i in range(1, 13):
             query_month = "month=="
@@ -374,98 +351,93 @@ def degree_day_chart(ts_click, si_ip, df, meta, hdd_value, cdd_value, n_clicks):
 
 @app.callback(
     Output("temp-profile-graph", "children"),
-    [Input("global-local-radio-input", "value"),Input("si-ip-radio-input", "value")],
+    [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @code_timer
-def update_violin_tdb(global_local, si_ip, df, meta):
+def update_violin_tdb(global_local, df, meta):
 
     return dcc.Graph(
         id="tdb-profile-graph",
         className="violin-container",
         config=generate_chart_name("tdb_summary", meta),
-        figure=violin(df, "DBT", global_local, si_ip),
+        figure=violin(df, "DBT", global_local),
     )
 
 
 @app.callback(
     Output("wind-speed-graph", "children"),
-    [Input("global-local-radio-input", "value"), Input("si-ip-radio-input", "value")],
+    [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @code_timer
-def update_tab_wind(global_local, si_ip, df, meta):
+def update_tab_wind(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         id="wind-profile-graph",
         className="violin-container",
         config=generate_chart_name("wind_summary", meta),
-        figure=violin(df, "wind_speed", global_local, si_ip),
+        figure=violin(df, "wind_speed", global_local),
     )
 
 
 @app.callback(
     Output("humidity-profile-graph", "children"),
-    [Input("global-local-radio-input", "value"), Input("si-ip-radio-input", "value")],
+    [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @code_timer
-def update_tab_rh(global_local, si_ip, df, meta):
+def update_tab_rh(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         id="rh-profile-graph",
         className="violin-container",
         config=generate_chart_name("rh_summary", meta),
-        figure=violin(df, "RH", global_local,si_ip),
+        figure=violin(df, "RH", global_local),
     )
 
 
 @app.callback(
     Output("solar-radiation-graph", "children"),
-    [Input("global-local-radio-input", "value"),Input("si-ip-radio-input", "value")],
+    [Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
 @code_timer
-def update_tab_gh_rad(global_local, si_ip, df, meta):
+def update_tab_gh_rad(global_local, df, meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         id="gh_rad-profile-graph",
         className="violin-container",
         config=generate_chart_name("solar_summary", meta),
-        figure=violin(df, "glob_hor_rad", global_local, si_ip),
+        figure=violin(df, "glob_hor_rad", global_local),
     )
 
 
 @app.callback(
     Output("download-dataframe-csv", "data"),
-    [Input("download-button", "n_clicks"),Input("si-ip-radio-input", "value")],
+    Input("download-button", "n_clicks"),
     [State("df-store", "data"), State("meta-store", "data")],
     prevent_initial_call=True,
 )
 @code_timer
-def download_clima_dataframe(n_clicks, si_ip, df, meta):
+def download_clima_dataframe(n_clicks, df, meta):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
-            if si_ip != "si":
-                df = convert_data(df)
-                return dcc.send_data_frame(
-                    df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_IPunit.csv"
-                )
-            else:
-                return dcc.send_data_frame(
-                    df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_SIunit.csv"
-                )
+
+        return dcc.send_data_frame(
+            df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima.csv"
+        )
     else:
         print("df not loaded yet")
 
 
 @app.callback(
     Output("download-epw", "data"),
-    [Input("download-epw-button", "n_clicks")],
+    Input("download-epw-button", "n_clicks"),
     [State("meta-store", "data")],
     prevent_initial_call=True,
 )

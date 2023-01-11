@@ -106,8 +106,7 @@ tight_margins = dict(l=20, r=20, t=33, b=20)
 # Units Dictionary
 degrees_unit = "\u00B0deg"
 temperature_unit = "\u00B0C"
-radiation_unit_si = "Wh/m<sup>2</sup>"
-radiation_unit_ip = "Btu(IT)/ft<sup>2</sup>"
+radiation_unit = "Wh/m<sup>2</sup>"
 thermal_stress_label = "Thermal stress"
 
 mapping_dictionary = {
@@ -128,25 +127,25 @@ mapping_dictionary = {
             "#c92a42",
             "#000000",
         ],
-        "unit": ["h","h"],
+        "unit": "h",
         "range": [1, 24],
     },
     "DBT": {
         "name": "Dry bulb temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-40, 50],
     },
     "DPT": {
         "name": "Dew point temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-50, 35],
     },
     "RH": {
         "name": "Relative humidity",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
-        "unit": ["%","%"],
+        "unit": "%",
         "range": [0, 100],
     },
     "p_atm": {
@@ -163,7 +162,7 @@ mapping_dictionary = {
             "#cc0000",
             "#ffaa00",
         ],
-        "unit": ["Pa","Psi"],
+        "unit": "Pa",
         "range": [95000, 105000],
     },
     "extr_hor_rad": {
@@ -177,11 +176,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": [radiation_unit_si,radiation_unit_ip],
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "hor_ir_rad": {
-        "name": "Horizontal infrared radiation",
+        "name": "´Horizontal infrared radiation",
         "color": [
             "#293a59",
             "#960c2c",
@@ -191,7 +190,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": [radiation_unit_si,radiation_unit_ip],
+        "unit": radiation_unit,
         "range": [0, 500],
     },
     "glob_hor_rad": {
@@ -205,7 +204,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": [radiation_unit_si,radiation_unit_ip],
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "dir_nor_rad": {
@@ -219,7 +218,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": [radiation_unit_si,radiation_unit_ip],
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "dif_hor_rad": {
@@ -233,37 +232,37 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": [radiation_unit_si,radiation_unit_ip],
+        "unit": radiation_unit,
         "range": [0, 1200],
     },
     "glob_hor_ill": {
         "name": "Global horizontal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
-        "unit": ["lux","lux"],
+        "unit": "lux",
         "range": [0, 120000],
     },
     "dir_nor_ill": {
         "name": "Direct normal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
-        "unit": ["lux","fc"],
+        "unit": "lux",
         "range": [0, 120000],
     },
     "dif_hor_ill": {
         "name": "Diffuse horizontal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
-        "unit": ["lux","fc"],
+        "unit": "lux",
         "range": [0, 120000],
     },
     "Zlumi": {
         "name": "Zenith luminance",
         "color": ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"],
-        "unit": ["cd/m<sup>2</sup>","cd/ft<sup>2</sup>"],
+        "unit": "cd/m<sup>2</sup>",
         "range": [0, 60000],
     },
     "wind_dir": {
         "name": "Wind direction",
         "color": ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [0, 360],
     },
     "wind_speed": {
@@ -280,25 +279,25 @@ mapping_dictionary = {
             "#cc0000",
             "#ffaa00",
         ],
-        "unit": ["m/s","fps"],
+        "unit": "m/s",
         "range": [0, 20],
     },
     "tot_sky_cover": {
         "name": "Total sky cover",
         "color": cloud_colors,
-        "unit": ["tenths","tenths"],
+        "unit": "tenths",
         "range": [0, 10],
     },
     "Oskycover": {
         "name": "Opaque sky cover",
         "color": cloud_colors,
-        "unit": ["tenths","tenths"],
+        "unit": "tenths",
         "range": [0, 10],
     },
     "Vis": {
         "name": "Visibility",
         "color": cloud_colors,
-        "unit": ["Km","mile"],
+        "unit": "Km",
         "range": [0, 100],
     },
     "apparent_zenith": {
@@ -312,7 +311,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [0, 180],
     },
     "zenith": {
@@ -326,7 +325,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [0, 180],
     },
     "apparent_elevation": {
@@ -340,7 +339,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [-90, 90],
     },
     "elevation": {
@@ -354,7 +353,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [-90, 90],
     },
     "azimuth": {
@@ -368,7 +367,7 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [0, 360],
     },
     "equation_of_time": {
@@ -382,31 +381,31 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "unit": ["°deg","°deg"],
+        "unit": "°deg",
         "range": [-20, 20],
     },
     "utci_Sun_Wind": {
         "name": "UTCI: Sun & Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-70, 70],
     },
     "utci_noSun_Wind": {
         "name": "UTCI: no Sun & Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-70, 70],
     },
     "utci_Sun_noWind": {
         "name": "UTCI: Sun & no Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-70, 70],
     },
     "utci_noSun_noWind": {
         "name": "UTCI: no Sun & no Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-70, 70],
     },
     "utci_Sun_Wind_categories": {
@@ -433,7 +432,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": [thermal_stress_label,thermal_stress_label],
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "utci_noSun_Wind_categories": {
@@ -460,7 +459,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": [thermal_stress_label,thermal_stress_label],
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "utci_Sun_noWind_categories": {
@@ -487,7 +486,7 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": [thermal_stress_label,thermal_stress_label],
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "utci_noSun_noWind_categories": {
@@ -514,41 +513,41 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "unit": [thermal_stress_label,thermal_stress_label],
+        "unit": thermal_stress_label,
         "range": [-5, 4],
     },
     "p_vap": {
         "name": "Vapor partial pressure",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
-        "unit": ["Pa","Psi"],
+        "unit": "Pa",
         "range": [0, 5000],
     },
     "p_sat": {
         "name": "Saturation pressure",
-        "unit": ["Pa","Psi"],
+        "unit": "Pa",
     },
     "hr": {
         "name": "Absolute humidity",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
-        "unit": ["kg water/m<sup>3</sup> dry air","lbs water/ft<sup>3</sup> dry air"],
+        "unit": "kg water/kg dry air",
         "range": [0, 0.03],
     },
     "t_wb": {
         "name": "Wet bulb temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-40, 50],
     },
     "t_dp": {
         "name": "Dew point temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["°C","°F"],
+        "unit": "°C",
         "range": [-40, 50],
     },
     "h": {
         "name": "Enthalpy",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "unit": ["J/kg dry air","Btu/lb dry air"],
+        "unit": "J/kg dry air",
         "range": [0, 110000],
     },
 }

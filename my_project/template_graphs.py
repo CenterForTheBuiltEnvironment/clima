@@ -4,34 +4,27 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
 from my_project.global_scheme import mapping_dictionary
 
 from .global_scheme import month_lst, template, tight_margins
 
 
-
 # violin template
 from .utils import code_timer
 
-# data convert
-from my_project.extract_df import convert_data_name
 
-
-def violin(df, var, global_local, si_ip):
+def violin(df, var, global_local):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
-    var_unit = mapping_dictionary[var]["unit"][0]
+    var_unit = mapping_dictionary[var]["unit"]
     var_range = mapping_dictionary[var]["range"]
     var_name = mapping_dictionary[var]["name"]
 
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
-        df = convert_data_name(df,var)
-
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
-    
+
     if global_local != "global":
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
@@ -91,13 +84,12 @@ def violin(df, var, global_local, si_ip):
 
 
 @code_timer
-def yearly_profile(df, var, global_local,si_ip):
+def yearly_profile(df, var, global_local):
     """Return yearly profile figure based on the 'var' col."""
-    var_unit = mapping_dictionary[var]["unit"][0]
+    var_unit = mapping_dictionary[var]["unit"]
     var_range = mapping_dictionary[var]["range"]
     var_name = mapping_dictionary[var]["name"]
     var_color = mapping_dictionary[var]["color"]
-
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -106,17 +98,12 @@ def yearly_profile(df, var, global_local,si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]
-
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
-    
     var_single_color = var_color[len(var_color) // 2]
     custom_ylim = range_y
     # Get min, max, and mean of each day
     dbt_day = df.groupby(np.arange(len(df.index)) // 24)[var].agg(
         ["min", "max", "mean"]
     )
-
     trace1 = go.Bar(
         x=df["UTC_time"].dt.date.unique(),
         y=dbt_day["max"] - dbt_day["min"],
@@ -157,13 +144,10 @@ def yearly_profile(df, var, global_local,si_ip):
         ),
     )
 
-    if var == "DBT":          
+    if var == "DBT":
         # plot ashrae adaptive comfort limits (80%)
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
-        if si_ip!= "si":
-            lo80 = lo80*1.8+32
-            hi80 = hi80*1.8+32
 
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
@@ -180,9 +164,6 @@ def yearly_profile(df, var, global_local,si_ip):
         # plot ashrae adaptive comfort limits (90%)
         lo90 = df.groupby("DOY")["adaptive_cmf_90_low"].mean().values
         hi90 = df.groupby("DOY")["adaptive_cmf_90_up"].mean().values
-        if si_ip!= "si":
-            lo90 = lo90*1.8+32
-            hi90 = hi90*1.8+32
 
         trace4 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
@@ -250,10 +231,10 @@ def yearly_profile(df, var, global_local,si_ip):
 
 
 # @code_timer
-def daily_profile(df, var, global_local, si_ip):
+def daily_profile(df, var, global_local):
     """Return the daily profile based on the 'var' col."""
     var_name = mapping_dictionary[var]["name"]
-    var_unit = mapping_dictionary[var]["unit"][0]
+    var_unit = mapping_dictionary[var]["unit"]
     var_range = mapping_dictionary[var]["range"]
     var_color = mapping_dictionary[var]["color"]
     if global_local == "global":
@@ -265,9 +246,6 @@ def daily_profile(df, var, global_local, si_ip):
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]
 
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
-
     var_single_color = var_color[len(var_color) // 2]
     var_month_ave = df.groupby(["month", "hour"])[var].median().reset_index()
     fig = make_subplots(
@@ -277,7 +255,7 @@ def daily_profile(df, var, global_local, si_ip):
     )
 
     for i in range(12):
-        
+
         fig.add_trace(
             go.Scatter(
                 x=df.loc[df["month"] == i + 1, "hour"],
@@ -300,7 +278,7 @@ def daily_profile(df, var, global_local, si_ip):
             row=1,
             col=i + 1,
         )
-        
+
         fig.add_trace(
             go.Scatter(
                 x=var_month_ave.loc[var_month_ave["month"] == i + 1, "hour"],
@@ -316,7 +294,7 @@ def daily_profile(df, var, global_local, si_ip):
             ),
             row=1,
             col=i + 1,
-            )
+        )
 
         # print(len(DBT_df.loc[DBT_df["month"]==i+1,"hour"])/24)
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
@@ -336,15 +314,11 @@ def daily_profile(df, var, global_local, si_ip):
 
 
 # @code_timer
-def heatmap(df, var, global_local, si_ip):
+def heatmap(df, var, global_local="global"):
     """General function that returns a heatmap."""
-    var_unit = mapping_dictionary[var]["unit"][0]
+    var_unit = mapping_dictionary[var]["unit"]
     var_range = mapping_dictionary[var]["range"]
     var_color = mapping_dictionary[var]["color"]
-
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
-
     if global_local == "global":
         # Set Global values for Max and minimum
         range_z = var_range

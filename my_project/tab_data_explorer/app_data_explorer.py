@@ -549,7 +549,7 @@ def layout_data_explorer():
     [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
     [State("df-store", "data"), State("meta-store", "data")],
 )
-def update_tab_yearly(var, global_local, si_ip, df, meta):
+def update_tab_yearly(var, global_local, df, meta):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
     if df[var].mean() == 99990.0:
@@ -562,7 +562,7 @@ def update_tab_yearly(var, global_local, si_ip, df, meta):
     else:
         return dcc.Graph(
             config=generate_chart_name("yearly_explore", meta),
-            figure=yearly_profile(df, var, global_local,si_ip),
+            figure=yearly_profile(df, var, global_local),
         )
 
 
