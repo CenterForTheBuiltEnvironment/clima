@@ -104,15 +104,34 @@ def banner():
                     ),
                     dbc.Col(
                         style={"fontWeight": "400", "padding": "1rem"},
+                        align="end",
                         children=[
-                            dbc.RadioItems(
-                                options=[
-                                    {"label": "Global Value Ranges", "value": "global"},
-                                    {"label": "Local Value Ranges", "value": "local"},
-                                ],
-                                value="local",
-                                id="global-local-radio-input",
-                                inline=False,
+                            dbc.Row(
+                                children=[
+                                    dbc.RadioItems(
+                                         options=[
+                                            {"label": "Global Value Ranges", "value": "global"},
+                                            {"label": "Local Value Ranges", "value": "local"},
+                                        ],
+                                         value="local",
+                                         id="global-local-radio-input",
+                                         inline=True,
+                                    ),
+                                ],    
+                            ),
+                            dbc.Row(
+                                align="end",
+                                children=[
+                                    dbc.RadioItems(
+                                         options=[
+                                            {"label": "SI", "value": "si"},
+                                            {"label": "IP", "value": "ip"},
+                                        ],
+                                         value="si",
+                                         id="si-ip-radio-input",
+                                         inline=True,
+                                    ),
+                                ],    
                             ),
                         ],
                         width="auto",
