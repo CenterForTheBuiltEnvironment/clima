@@ -8,7 +8,6 @@ from dash.exceptions import PreventUpdate
 from app import app
 from my_project.extract_df import create_df, get_data
 from my_project.utils import plot_location_epw_files, generate_chart_name
-from my_project.extract_df import convert_data
 
 from dash_extensions.enrich import ServersideOutput, Output, Input, State, html, dcc
 
@@ -110,7 +109,6 @@ def alert():
         Input("modal-yes-button", "n_clicks"),
         Input("upload-data-button", "n_clicks"),
         Input("upload-data", "contents"),
-        Input("si-ip-radio-input", "value"),
     ],
     [
         State("upload-data", "filename"),
@@ -120,7 +118,7 @@ def alert():
 )
 # @code_timer
 def submitted_data(
-    use_epw_click, upload_click, list_of_contents, si_ip, list_of_names, url_store
+    use_epw_click, upload_click, list_of_contents, list_of_names, url_store
 ):
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
@@ -136,8 +134,6 @@ def submitted_data(
                 "warning",
             )
         df, location_info = create_df(lines, url_store)
-        if si_ip == "ip":
-            df = convert_data(df)
         return (
             df,
             location_info,
