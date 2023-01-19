@@ -1,5 +1,6 @@
 import io
 import re
+import json
 import zipfile
 from datetime import timedelta
 from urllib.request import Request, urlopen
@@ -14,6 +15,7 @@ from pythermalcomfort.models import solar_gain
 from pythermalcomfort import psychrometrics as psy
 import math
 from my_project.global_scheme import month_lst
+from my_project.global_scheme import mapping_dictionary
 from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
@@ -306,63 +308,76 @@ def create_df(lst, file_name):
 
     return epw_df, location_info
 
-def convert_data_name(df, name):
-    if name == "DBT" or name == "DPT" or name == "utci_noSun_Wind" or name == "utci_noSun_noWind" or name == "utci_Sun_Wind" or name == "utci_Sun_noWind" or name == "t_wb" or name == "t_dq" or name == "adaptive_comfort" or name == "adaptive_cmf_80_low" or name == "adaptive_cmf_80_high" or name == "adaptive_cmf_90_low" or name == "adaptive_cmf_90_high":
-        df[name] = df[name]*1.8+32
-        return df
-    if name == "p_atm" or name == "p_sat" or name == "p_vap":
-        df[name] = df[name]*0.000145038
-        return df
-    if name == "extr_hor_rad" or name == "hor_ir_rad" or name == "glob_hor_rad" or name == "dir_nor_rad" or name == "dif_hor_rad":
-        df[name]=df[name]**0.3169983306
-        return df
-    if name == "glob_hor_ill" or name == "dir_nor_ill" or name == "dif_hor_ill" or name == "Zlumi":
-        df[name] = df[name]*0.0929
-        return df
-    if name == "wind_speed":
-        df[name] = df[name]*0.3048
-        return df
-    if name == "Vis":
-        df[name] = df[name]*0.6215
-        return df
-    if name == "hr":
-        df[name] = df[name]*0.0624
-        return df
-    if name == "h":
-        df[name] = df[name]*0.0004
-        return df
+#convert function
+def temperature(df,name, mapping):
+    df[name] = df[name]*1.8+32
+    mapping[name]["unit"] = "°F"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*1.8+32
+    mapping[name]["range"][1] = mapping[name]["range"][1]*1.8+32
+
+def pressure(df,name, mapping):
+    df[name] = df[name]*0.000145038
+    mapping[name]["unit"] = "Psi"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.000145038
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.000145038
     
-def convert_data(df):
-    df["DBT"] = df["DBT"] *1.8+32
-    df["DPT"] = df["DPT"] *1.8+32
-    df["p_atm"] = df["p_atm"]*0.000145038
-    df["extr_hor_rad"] = df["extr_hor_rad"]*0.3169983306
-    df["hor_ir_rad"] = df["hor_ir_rad"]*0.3169983306
-    df["glob_hor_rad"] = df["glob_hor_rad"]*0.3169983306
-    df["dir_nor_rad"] = df["dir_nor_rad"]*0.3169983306
-    df["dif_hor_rad"] = df["dif_hor_rad"]*0.3169983306
-    df["glob_hor_ill"] = df["glob_hor_ill"]*0.0929
-    df["dir_nor_ill"] = df["dir_nor_ill"]*0.0929
-    df["dif_hor_ill"] = df["dif_hor_ill"]*0.0929
-    df["Zlumi"] = df["Zlumi"]*0.00929
-    df["wind_speed"] = df["wind_speed"]*0.3048
-    df["Vis"] = df["Vis"]*0.6215
-    df["utci_noSun_Wind"] = df["utci_noSun_Wind"]*1.8+32
-    df["utci_noSun_noWind"] = df["utci_noSun_noWind"]*1.8+32
-    df["utci_Sun_Wind"] = df["utci_Sun_Wind"]*1.8+32
-    df["utci_Sun_noWind"] = df["utci_Sun_noWind"]*1.8+32
-    df["p_sat"] = df["p_sat"]*0.000145038
-    df["p_vap"] = df["p_vap"]*0.000145038
-    df["hr"] = df["hr"] *0.0624
-    df["t_wb"] = df["t_wb"]*1.8+32
-    df["t_dp"] = df["t_dp"]*1.8+32
-    df["h"] = df["h"] * 0.0004
+def irradiation(df,name, mapping):
+    df[name]=df[name]*0.3169983306
+    mapping[name]["unit"] = "Btu(IT)/ft<sup>2</sup>"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.3169983306
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.3169983306
+
+def illuminance(df,name, mapping):
+    df[name] = df[name]*0.0929
+    mapping[name]["unit"] = "fc"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0929
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0929
+
+def zenith_illuminance(df,name, mapping):
+    df[name] = df[name]*0.0929
+    mapping[name]["unit"] = "cd/ft<sup>2</sup>"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0929
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0929
+
+def speed(df,name, mapping):
+    df[name] = df[name]*3.281
+    mapping[name]["unit"] = "fps"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*3.281
+    mapping[name]["range"][1] = mapping[name]["range"][1]*3.281
+
+def visibility(df,name, mapping):
+    df[name] = df[name]*0.6215
+    mapping[name]["unit"] = "mile"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.6215
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.6215
+
+def humidity(df,name, mapping):
+    df[name] = df[name]*0.0624
+    mapping[name]["unit"] = "lbs water/ft<sup>3</sup> dry air"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0624
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0624
+
+def enthalpy(df,name, mapping):
+    df[name] = df[name]*0.0004
+    mapping[name]["unit"] = "Btu/lb dry air"
+    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0004
+    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0004
+    
+def convert_data(df,mapping_json):
     df["adaptive_comfort"] = df["adaptive_comfort"]*1.8+32
     df["adaptive_cmf_80_low"] = df["adaptive_cmf_80_low"]*1.8+32
     df["adaptive_cmf_80_up"] = df["adaptive_cmf_80_up"]*1.8+32
     df["adaptive_cmf_90_low"] = df["adaptive_cmf_90_low"]*1.8+32
     df["adaptive_cmf_90_up"] = df["adaptive_cmf_90_up"]*1.8+32
-    return df
+
+    mapping_dict = json.loads(mapping_json)
+    for key in json.loads(mapping_json):
+        if "conversion_function" in mapping_dict[key]:
+            conversion_function_name = mapping_dict[key]["conversion_function"]
+            if conversion_function_name!=None:
+                conversion_function = globals()[conversion_function_name]
+                conversion_function(df,key, mapping_dict)
+    return json.dumps(mapping_dict)
 
 if __name__ == "__main__":
     # fmt: off

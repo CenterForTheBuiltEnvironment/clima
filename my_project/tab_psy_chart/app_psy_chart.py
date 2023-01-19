@@ -1,5 +1,6 @@
 import numpy as np
 import plotly.graph_objects as go
+import json
 from pythermalcomfort import psychrometrics as psy
 from math import ceil, floor
 import dash_bootstrap_components as dbc
@@ -215,6 +216,7 @@ def layout_psy_chart():
 @app.callback(
     Output("psych-chart", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("psy-color-by-dropdown", "value"),
         Input("month-hour-filter", "n_clicks"),
         Input("data-filter", "n_clicks"),
@@ -230,9 +232,11 @@ def layout_psy_chart():
         State("meta-store", "data"),
         State("invert-month-psy", "value"),
         State("invert-hour-psy", "value"),
+        State("map-dictionary-store","data")
     ],
 )
 def update_psych_chart(
+    ts,
     colorby_var,
     time_filter,
     data_filter,
@@ -246,8 +250,10 @@ def update_psych_chart(
     meta,
     invert_month,
     invert_hour,
+    map_dictionary,
 ):
-
+    
+    map_dict = json.loads(map_dictionary)
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -308,15 +314,15 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = mapping_dictionary[var]["unit"]
+        var_unit = map_dict[var]["unit"]
 
-        var_name = mapping_dictionary[var]["name"]
+        var_name = map_dict[var]["name"]
 
-        var_color = mapping_dictionary[var]["color"]
+        var_color = map_dict[var]["color"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = mapping_dictionary["DBT"]["range"]
+        var_range_x = map_dict["DBT"]["range"]
         hr_range = [0, 0.03]
         var_range_y = hr_range
 
@@ -374,9 +380,9 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
+                hovertemplate=map_dict["DBT"]["name"]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"]["name"],
+                + map_dict["DBT"]["name"],
                 name="",
             )
         )
@@ -420,21 +426,21 @@ def update_psych_chart(
                     colorbar=dict(thickness=30, title=var_unit + "<br>  "),
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
+                hovertemplate=map_dict["DBT"]["name"]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"]["unit"]
+                + map_dict["DBT"]["unit"]
                 + "<br>"
-                + mapping_dictionary["RH"]["name"]
+                + map_dict["RH"]["name"]
                 + ": %{customdata[0]:.2f}"
-                + mapping_dictionary["RH"]["unit"]
+                + map_dict["RH"]["unit"]
                 + "<br>"
-                + mapping_dictionary["h"]["name"]
+                + map_dict["h"]["name"]
                 + ": %{customdata[1]:.2f}"
-                + mapping_dictionary["h"]["unit"]
+                + map_dict["h"]["unit"]
                 + "<br>"
-                + mapping_dictionary["t_dp"]["name"]
+                + map_dict["t_dp"]["name"]
                 + ": %{customdata[3]:.2f}"
-                + mapping_dictionary["t_dp"]["unit"]
+                + map_dict["t_dp"]["unit"]
                 + "<br>"
                 + "<br>"
                 + var_name
@@ -443,10 +449,12 @@ def update_psych_chart(
                 name="",
             )
         )
-
+    
+    xtitle_name = "Temperature"+"  "+map_dict["DBT"]["unit"]
+    ytitle_name = "Humidity Ratio"+"  "+map_dict["hr"]["unit"]
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
-        title_text="Temperature (°C)",
+        title_text = xtitle_name,
         range=var_range_x,
         showline=True,
         linewidth=1,
@@ -454,7 +462,7 @@ def update_psych_chart(
         mirror=True,
     )
     fig.update_yaxes(
-        title_text="Humidity Ratio (kg<sub>water</sub>/kg<sub>dry air</sub>)",
+        title_text = ytitle_name,
         range=var_range_y,
         showline=True,
         linewidth=1,

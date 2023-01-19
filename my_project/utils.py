@@ -118,7 +118,7 @@ def title_with_tooltip(text, tooltip_text, id_button):
     )
 
 
-def summary_table_tmp_rh_tab(df, value, si_ip):
+def summary_table_tmp_rh_tab(df, value, map_dictionary):
     df_summary = (
         df.groupby(["month_names", "month"])[value]
         .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
@@ -137,10 +137,9 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     df_sum = df_sum.T.assign(count="Year").rename(columns={"count": "month"})
 
     df_summary = pd.concat([df_summary, df_sum])
-
-    unit = mapping_dictionary[value]["unit"][0].replace("<sup>", "").replace("</sup>", "")
-    if si_ip!= "si":
-        unit = mapping_dictionary[value]["unit"][1].replace("<sup>", "").replace("</sup>", "")
+    
+    map_dict = json.loads(map_dictionary)
+    unit = map_dict[value]["unit"].replace("<sup>", "").replace("</sup>", "")
     return dash_table.DataTable(
         columns=[
             {"name": i, "id": i} if i == "month" else {"name": f"{i} ({unit})", "id": i}

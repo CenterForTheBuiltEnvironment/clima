@@ -1,5 +1,6 @@
 from math import ceil, floor
 
+import json
 import numpy as np
 import math
 import plotly.express as px
@@ -7,8 +8,9 @@ import plotly.graph_objects as go
 from my_project.global_scheme import template, mapping_dictionary, month_lst
 
 
-def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
+def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, map_dictionary):
     """Return the customizable heatmap."""
+    map_dict = json.loads(map_dictionary)
     time_filter = time_filter_info[0]
     start_month = time_filter_info[1][0]
     end_month = time_filter_info[1][1]
@@ -45,12 +47,12 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info):
     if df.dropna(subset=[var]).shape[0] == 0:
         return None
 
-    var_unit = mapping_dictionary[var]["unit"]
-    var_range = mapping_dictionary[var]["range"]
-    var_name = mapping_dictionary[var]["name"]
-    var_color = mapping_dictionary[var]["color"]
-    filter_name = mapping_dictionary[filter_var]["name"]
-    filter_unit = mapping_dictionary[filter_var]["unit"]
+    var_unit = map_dict[var]["unit"]
+    var_range = map_dict[var]["range"]
+    var_name = map_dict[var]["name"]
+    var_color = map_dict[var]["color"]
+    filter_name = map_dict[filter_var]["name"]
+    filter_unit = map_dict[filter_var]["unit"]
 
     if global_local == "global":
         # Set Global values for Max and minimum

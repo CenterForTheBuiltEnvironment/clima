@@ -1,5 +1,6 @@
 import base64
 import io
+import json
 import re
 import dash
 import dash_bootstrap_components as dbc
@@ -8,9 +9,11 @@ from dash.exceptions import PreventUpdate
 from app import app
 from my_project.extract_df import create_df, get_data
 from my_project.utils import plot_location_epw_files, generate_chart_name
+from my_project.global_scheme import mapping_dictionary
 from my_project.extract_df import convert_data
 
 from dash_extensions.enrich import ServersideOutput, Output, Input, State, html, dcc
+
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",
@@ -98,9 +101,9 @@ def alert():
     )
 
 
+# add si-ip and map dictionary in the output
 @app.callback(
     [
-        ServersideOutput("df-store", "data"),
         Output("meta-store", "data"),
         Output("alert", "is_open"),
         Output("alert", "children"),
@@ -120,7 +123,7 @@ def alert():
 )
 # @code_timer
 def submitted_data(
-    use_epw_click, upload_click, list_of_contents, si_ip, list_of_names, url_store
+    use_epw_click, upload_click, list_of_contents, si_ip_input, list_of_names, url_store,
 ):
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
@@ -130,16 +133,12 @@ def submitted_data(
         if lines is None:
             return (
                 None,
-                None,
                 True,
                 messages_alert["not_available"],
                 "warning",
             )
-        df, location_info = create_df(lines, url_store)
-        if si_ip == "ip":
-            df = convert_data(df)
+        _, location_info = create_df(lines, url_store)  # we might need to split this call into two, one returns df and one returns location_info
         return (
-            df,
             location_info,
             True,
             messages_alert["success"],
@@ -159,7 +158,6 @@ def submitted_data(
                 lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
                 df, location_info = create_df(lines, list_of_names[0])
                 return (
-                    df,
                     location_info,
                     True,
                     messages_alert["success"],
@@ -167,7 +165,6 @@ def submitted_data(
                 )
             else:
                 return (
-                    None,
                     None,
                     True,
                     messages_alert["invalid_format"],
@@ -177,12 +174,45 @@ def submitted_data(
             print(e)
             return (
                 None,
-                None,
                 True,
                 messages_alert["wrong_extension"],
                 "warning",
             )
     raise PreventUpdate
+
+#add switch_si_ip function and convert the data-store and mapping-dictionary-store
+@app.callback(
+    [
+        ServersideOutput("df-store", "data"),
+        Output("si-ip-unit-store","data"),
+        Output("map-dictionary-store","data"),
+    ],
+    [
+        Input("si-ip-radio-input", "value"),
+        Input("meta-store", "data"),
+    ],
+    State("url-store", "data"),
+)
+
+def switch_si_ip(si_ip_input, meta, url_store):
+    si_ip_store = si_ip_input
+    lines = get_data(url_store)
+    if lines is not None:
+        df, _ = create_df(lines, url_store)
+        map_json = json.dumps(mapping_dictionary)
+        if si_ip_input == "ip":
+            map_json = convert_data(df,map_json)
+        return (
+            df, 
+            si_ip_store,
+            map_json
+        )
+    else:
+        return (
+            None,
+            None,
+            None,
+        )
 
 
 @app.callback(
@@ -197,8 +227,10 @@ def submitted_data(
         Output("tab-natural-ventilation", "disabled"),
         Output("banner-subtitle", "children"),
     ],
-    [Input("meta-store", "data")],
-    State("df-store", "data"),
+    [
+        Input("meta-store", "data"),
+        Input("df-store", "data"),
+    ],
 )
 def enable_tabs_when_data_is_loaded(meta, data):
     """Hide tabs when data are not loaded"""

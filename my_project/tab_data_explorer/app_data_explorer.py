@@ -623,6 +623,7 @@ def update_tab_heatmap(var, global_local, df, meta):
         State("meta-store", "data"),
         State("invert-month-explore-heatmap", "value"),
         State("invert-hour-explore-heatmap", "value"),
+        State("map-dictionary-store","data"),
     ],
 )
 def update_heatmap(
@@ -640,6 +641,7 @@ def update_heatmap(
     meta,
     invert_month,
     invert_hour,
+    map_dictionary,
 ):
 
     start_month, end_month = month
@@ -676,7 +678,7 @@ def update_heatmap(
                 figure=heat_map,
             ),
             {},
-            barchart(df, var, time_filter_info, data_filter_info, normalize),
+            barchart(df, var, time_filter_info, data_filter_info, normalize, map_dictionary),
             {},
         )
     return (

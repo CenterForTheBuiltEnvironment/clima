@@ -131,17 +131,17 @@ def static_section():
     return html.Div(
         className="container-col full-width",
         children=[
-            html.Div(
-                children=title_with_tooltip(
-                    text="Global and Diffuse Horizontal Solar Radiation (Wh/m²)",
-                    tooltip_text=None,
-                    id_button="monthly-chart-label",
-                ),
-            ),
-            dcc.Loading(
-                type="circle",
-                children=html.Div(id="monthly-solar"),
-            ),
+            # html.Div(
+            #     children=title_with_tooltip(
+            #         text="Global and Diffuse Horizontal Solar Radiation (Wh/m²)",
+            #         tooltip_text=None,
+            #         id_button="monthly-chart-label",
+            #     ),
+            # ),
+            # dcc.Loading(
+            #     type="circle",
+            #     children=html.Div(id="monthly-solar"),
+            # ),
             html.Div(
                 children=title_with_tooltip(
                     text="Cloud coverage",
@@ -168,24 +168,24 @@ def layout_sun():
 
 @app.callback(
     [
-        Output("monthly-solar", "children"),
+        # Output("monthly-solar", "children"),
         Output("cloud-cover", "children"),
     ],
     [
         Input("df-store", "modified_timestamp"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store","data")],
 )
 @code_timer
-def monthly_and_cloud_chart(ts, df, meta):
+def monthly_and_cloud_chart(ts, df, meta, map_dictionary):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     # Sun Radiation
-    monthly = monthly_solar(df)
-    monthly = monthly.update_layout(margin=tight_margins)
+    # monthly = monthly_solar(df, map_dictionary)
+    # monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True)
+    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, map_dictionary)
     cover = cover.update_layout(
         margin=tight_margins,
         title="",
@@ -195,10 +195,11 @@ def monthly_and_cloud_chart(ts, df, meta):
         dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
     )
 
+    # return dcc.Graph(
+    #     config=generate_chart_name("monthly_sun", meta),
+    #     figure=monthly,
+    # ), 
     return dcc.Graph(
-        config=generate_chart_name("monthly_sun", meta),
-        figure=monthly,
-    ), dcc.Graph(
         config=generate_chart_name("cloud_cover_sun", meta),
         figure=cover,
     )
@@ -207,58 +208,61 @@ def monthly_and_cloud_chart(ts, df, meta):
 @app.callback(
     Output("custom-sunpath", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("custom-sun-view-dropdown", "value"),
         Input("custom-sun-var-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store","data")],
 )
 @code_timer
-def sun_path_chart(view, var, global_local, df, meta):
+def sun_path_chart(ts, view, var, global_local, df, meta, map_dictionary):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     if view == "polar":
         return dcc.Graph(
             config=generate_chart_name("spherical_sun_path_sun", meta),
-            figure=polar_graph(df, meta, global_local, var),
+            figure=polar_graph(df, meta, global_local, var, map_dictionary),
         )
     else:
         return dcc.Graph(
             config=generate_chart_name("cartesian_sun_path_sun", meta),
-            figure=custom_cartesian_solar(df, meta, global_local, var),
+            figure=custom_cartesian_solar(df, meta, global_local, var, map_dictionary),
         )
 
 
 @app.callback(
     Output("tab4-daily", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
 )
 @code_timer
-def daily(var, global_local, df, meta):
+def daily(ts, var, global_local, df, meta, map_dictionary):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         config=generate_chart_name("daily_sun", meta),
-        figure=daily_profile(df, var, global_local),
+        figure=daily_profile(df, var, global_local, map_dictionary),
     )
 
 
 @app.callback(
     Output("tab4-heatmap", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
 )
 @code_timer
-def update_heatmap(var, global_local, df, meta):
+def update_heatmap(ts, var, global_local, df, meta, map_dictionary):
 
     return dcc.Graph(
         config=generate_chart_name("heatmap_sun", meta),
-        figure=heatmap(df, var, global_local),
+        figure=heatmap(df, var, global_local, map_dictionary),
     )

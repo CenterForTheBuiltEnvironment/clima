@@ -2,6 +2,7 @@ from math import ceil, floor
 
 import numpy as np
 import pandas as pd
+import json
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from my_project.global_scheme import mapping_dictionary
@@ -13,21 +14,15 @@ from .global_scheme import month_lst, template, tight_margins
 # violin template
 from .utils import code_timer
 
-# data convert
-from my_project.extract_df import convert_data_name
 
-
-def violin(df, var, global_local, si_ip):
+def violin(df, var, global_local, map_dictionary):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
-    var_unit = mapping_dictionary[var]["unit"][0]
-    var_range = mapping_dictionary[var]["range"]
-    var_name = mapping_dictionary[var]["name"]
-
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
-        df = convert_data_name(df,var)
+    map_dict = json.loads(map_dictionary)
+    var_unit = map_dict[var]["unit"]
+    var_range = map_dict[var]["range"]
+    var_name = map_dict[var]["name"]
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
@@ -91,12 +86,13 @@ def violin(df, var, global_local, si_ip):
 
 
 @code_timer
-def yearly_profile(df, var, global_local,si_ip):
+def yearly_profile(df, var, global_local,map_dictionary):
     """Return yearly profile figure based on the 'var' col."""
-    var_unit = mapping_dictionary[var]["unit"][0]
-    var_range = mapping_dictionary[var]["range"]
-    var_name = mapping_dictionary[var]["name"]
-    var_color = mapping_dictionary[var]["color"]
+    map_dict = json.loads(map_dictionary)
+    var_unit = map_dict[var]["unit"]
+    var_range = map_dict[var]["range"]
+    var_name = map_dict[var]["name"]
+    var_color = map_dict[var]["color"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -106,9 +102,6 @@ def yearly_profile(df, var, global_local,si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]
-
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
     
     var_single_color = var_color[len(var_color) // 2]
     custom_ylim = range_y
@@ -161,10 +154,7 @@ def yearly_profile(df, var, global_local,si_ip):
         # plot ashrae adaptive comfort limits (80%)
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
-        if si_ip!= "si":
-            lo80 = lo80*1.8+32
-            hi80 = hi80*1.8+32
-
+        
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
             y=hi80 - lo80,
@@ -180,9 +170,6 @@ def yearly_profile(df, var, global_local,si_ip):
         # plot ashrae adaptive comfort limits (90%)
         lo90 = df.groupby("DOY")["adaptive_cmf_90_low"].mean().values
         hi90 = df.groupby("DOY")["adaptive_cmf_90_up"].mean().values
-        if si_ip!= "si":
-            lo90 = lo90*1.8+32
-            hi90 = hi90*1.8+32
 
         trace4 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
@@ -250,12 +237,13 @@ def yearly_profile(df, var, global_local,si_ip):
 
 
 # @code_timer
-def daily_profile(df, var, global_local, si_ip):
+def daily_profile(df, var, global_local, map_dictionary):
     """Return the daily profile based on the 'var' col."""
-    var_name = mapping_dictionary[var]["name"]
-    var_unit = mapping_dictionary[var]["unit"][0]
-    var_range = mapping_dictionary[var]["range"]
-    var_color = mapping_dictionary[var]["color"]
+    map_dict = json.loads(map_dictionary)
+    var_name = map_dict[var]["name"]
+    var_unit = map_dict[var]["unit"]
+    var_range = map_dict[var]["range"]
+    var_color = map_dict[var]["color"]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -264,9 +252,6 @@ def daily_profile(df, var, global_local, si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]
-
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
 
     var_single_color = var_color[len(var_color) // 2]
     var_month_ave = df.groupby(["month", "hour"])[var].median().reset_index()
@@ -336,14 +321,12 @@ def daily_profile(df, var, global_local, si_ip):
 
 
 # @code_timer
-def heatmap(df, var, global_local, si_ip):
+def heatmap(df, var, global_local, map_dictionary):
     """General function that returns a heatmap."""
-    var_unit = mapping_dictionary[var]["unit"][0]
-    var_range = mapping_dictionary[var]["range"]
-    var_color = mapping_dictionary[var]["color"]
-
-    if si_ip != "si":
-        var_unit = mapping_dictionary[var]["unit"][1]
+    map_dict = json.loads(map_dictionary)
+    var_unit = map_dict[var]["unit"]
+    var_range = map_dict[var]["range"]
+    var_color = map_dict[var]["color"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -353,7 +336,7 @@ def heatmap(df, var, global_local, si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_z = [data_min, data_max]
-
+        
     fig = go.Figure(
         data=go.Heatmap(
             y=df["hour"],
@@ -401,11 +384,12 @@ def speed_labels(bins, units):
     return labels
 
 
-def wind_rose(df, title, month, hour, labels):
+def wind_rose(df, title, month, hour, labels, map_dictionary):
     """Return the wind rose figure.
 
     Based on:  https://gist.github.com/phobson/41b41bdd157a2bcf6e14
     """
+    map_dict = json.loads(map_dictionary)
     start_month = month[0]
     end_month = month[1]
     start_hour = hour[0]
@@ -419,9 +403,17 @@ def wind_rose(df, title, month, hour, labels):
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
 
-    spd_colors = mapping_dictionary["wind_speed"]["color"]
+    spd_colors = map_dict["wind_speed"]["color"]
+    spd_unit = map_dict["wind_speed"]["unit"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
-    spd_labels = speed_labels(spd_bins, units="m/s")
+    if spd_unit == "fps":
+        i = 0
+        for x in spd_bins:
+            x = x*3.281
+            spd_bins[i] = round(x,1)
+            i= i+1
+
+    spd_labels = speed_labels(spd_bins, spd_unit)
     dir_bins = np.arange(-22.5 / 2, 360 + 22.5, 22.5)
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
     total_count = df.shape[0]
@@ -498,8 +490,9 @@ def wind_rose(df, title, month, hour, labels):
     return fig
 
 
-def barchart(df, var, time_filter_info, data_filter_info, normalize):
+def barchart(df, var, time_filter_info, data_filter_info, normalize, map_dictionary):
     """Return the custom summary bar chart."""
+    map_dict = json.loads(map_dictionary)
     time_filter = time_filter_info[0]
     data_filter = data_filter_info[0]
     min_val = data_filter_info[2]
@@ -511,12 +504,12 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize):
         end_hour = time_filter_info[2][1]
 
         filter_var = str(data_filter_info[1])
-        filter_name = mapping_dictionary[filter_var]["name"]
-        filter_unit = mapping_dictionary[filter_var]["unit"]
+        filter_name = map_dict[filter_var]["name"]
+        filter_unit = map_dict[filter_var]["unit"]
 
-    var_unit = mapping_dictionary[var]["unit"]
-    var_name = mapping_dictionary[var]["name"]
-    var_color = mapping_dictionary[var]["color"]
+    var_unit = map_dict[var]["unit"]
+    var_name = map_dict[var]["name"]
+    var_color = map_dict[var]["color"]
 
     color_below = var_color[0]
     color_above = var_color[-1]
