@@ -1,4 +1,5 @@
 import math
+import json
 from dash import dcc
 import dash_bootstrap_components as dbc
 from dash import html
@@ -85,7 +86,7 @@ def inputs_tab():
                         className="mb-2",
                         n_clicks=1,
                     ),
-                    html.H6("Outdoor dry-bulb air temperature range"),
+                    html.H6("Outdoor dry-bulb air temperature range -- (default: °C) / °F"),
                     html.Div(
                         className=container_row_center_full,
                         children=[
@@ -202,7 +203,7 @@ def inputs_tab():
                     dbc.Checklist(
                         options=[
                             {
-                                "label": "Avoid condensation with radiant systems: If the outdoor dew point temperature is below the radiant system surface temperature, the data point is not plot.",
+                                "label": "Avoid condensation with radiant systems: If the outdoor dew point temperature is below the radiant system surface temperature, the data point is not plot. -- (default: °C) / °F",
                                 "value": 1,
                             },
                         ],
@@ -235,6 +236,7 @@ def inputs_tab():
 @app.callback(
     Output("nv-heatmap-chart", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
@@ -251,9 +253,11 @@ def inputs_tab():
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
+        State("map-dictionary-store","data"),
     ],
 )
 def nv_heatmap(
+    ts,
     time_filter,
     dbt_data_filter,
     click_dpt_filter,
@@ -268,7 +272,9 @@ def nv_heatmap(
     meta,
     invert_month,
     invert_hour,
+    map_dictionary,
 ):
+    map_dict = json.loads(map_dictionary)
 
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
@@ -311,17 +317,17 @@ def nv_heatmap(
         else:
             df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
 
-    var_unit = mapping_dictionary[var]["unit"]
+    var_unit = map_dict[var]["unit"]
 
-    filter_unit = mapping_dictionary[filter_var]["unit"]
+    filter_unit = map_dict[filter_var]["unit"]
 
-    var_range = mapping_dictionary[var]["range"]
+    var_range = map_dict[var]["range"]
 
-    var_name = mapping_dictionary[var]["name"]
+    var_name = map_dict[var]["name"]
 
-    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_name = map_dict[filter_var]["name"]
 
-    var_color = mapping_dictionary[var]["color"]
+    var_color = map_dict[var]["color"]
 
     if global_local == "global":
         range_z = var_range
@@ -402,6 +408,7 @@ def nv_heatmap(
 @app.callback(
     Output("nv-bar-chart", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
@@ -418,9 +425,11 @@ def nv_heatmap(
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
+        State("map-dictionary-store", "data"),
     ],
 )
 def nv_bar_chart(
+    ts,
     time_filter,
     dbt_data_filter,
     click_dpt_filter,
@@ -435,7 +444,10 @@ def nv_bar_chart(
     meta,
     invert_month,
     invert_hour,
-):
+    map_dictionary,
+):  
+    map_dict = json.loads(map_dictionary)
+
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
@@ -446,12 +458,12 @@ def nv_bar_chart(
     var = "DBT"
     filter_var = "DPT"
 
-    var_unit = mapping_dictionary[var]["unit"]
-    filter_unit = mapping_dictionary[filter_var]["unit"]
+    var_unit = map_dict[var]["unit"]
+    filter_unit = map_dict[filter_var]["unit"]
 
-    var_name = mapping_dictionary[var]["name"]
+    var_name = map_dict[var]["name"]
 
-    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_name = map_dict[filter_var]["name"]
 
     color_in = "dodgerblue"
 

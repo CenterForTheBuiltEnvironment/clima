@@ -114,8 +114,10 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, ma
 
 
 def three_var_graph(
-    df, global_local, var_x, var_y, color_by, time_filter_info3, data_filter_info3
-):
+    df, global_local, var_x, var_y, color_by, time_filter_info3, data_filter_info3, map_dictionary
+):  
+    map_dict = json.loads(map_dictionary)
+
     """Return the custom graph plotting three variables."""
     time_filter = time_filter_info3[0]
     start_month = time_filter_info3[1][0]
@@ -127,12 +129,12 @@ def three_var_graph(
     min_val = data_filter_info3[2]
     max_val = data_filter_info3[3]
 
-    var_unit_x = mapping_dictionary[var_x]["unit"]
-    var_unit_y = mapping_dictionary[var_y]["unit"]
+    var_unit_x = map_dict[var_x]["unit"]
+    var_unit_y = map_dict[var_y]["unit"]
 
     var = color_by
-    var_range = mapping_dictionary[var]["range"]
-    var_color = mapping_dictionary[var]["color"]
+    var_range = map_dict[var]["range"]
+    var_color = map_dict[var]["color"]
 
     if global_local != "global":
         # Set maximum and minimum according to data
@@ -163,11 +165,11 @@ def three_var_graph(
         return None
 
     title = (
-        mapping_dictionary[var_x]["name"]
+        map_dict[var_x]["name"]
         + " vs "
-        + mapping_dictionary[var_y]["name"]
+        + map_dict[var_y]["name"]
         + " colored by "
-        + mapping_dictionary[color_by]["name"]
+        + map_dict[color_by]["name"]
     )
 
     fig = px.scatter(
@@ -191,17 +193,19 @@ def three_var_graph(
     return fig
 
 
-def two_var_graph(df, var_x, var_y):
+def two_var_graph(df, var_x, var_y, map_dictionary):
+    
+    map_dict = json.loads(map_dictionary)
 
     title = (
         "Simultaneous frequency of "
-        + mapping_dictionary[var_x]["name"]
+        + map_dict[var_x]["name"]
         + " and  "
-        + mapping_dictionary[var_y]["name"]
+        + map_dict[var_y]["name"]
     )
 
-    var_unit_x = mapping_dictionary[var_x]["unit"]
-    var_unit_y = mapping_dictionary[var_y]["unit"]
+    var_unit_x = map_dict[var_x]["unit"]
+    var_unit_y = map_dict[var_y]["unit"]
 
     fig = px.density_heatmap(
         df,
