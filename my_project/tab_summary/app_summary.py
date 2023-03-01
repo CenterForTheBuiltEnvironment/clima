@@ -7,7 +7,7 @@ from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
 from my_project.utils import generate_chart_name, title_with_tooltip
 import plotly.graph_objects as go
-from my_project.global_scheme import template, tight_margins
+from my_project.global_scheme import template, tight_margins, mapping_dictionary
 import requests
 from my_project.extract_df import convert_data, get_data
 from my_project.utils import code_timer
@@ -176,15 +176,14 @@ def update_map(meta):
 @app.callback(
     Output("location-info", "children"),
     Input("df-store", "modified_timestamp"), 
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_location_info(ts, df, meta, si_ip, map_dictionary):
+def update_location_info(ts, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta['city']}, {meta['country']}"
     lon = f"Longitude: {meta['lon']}"
     lat = f"Latitude: {meta['lat']}"
-    map_dict= json.loads(map_dictionary)
 
     site_elevation = float(meta['site_elevation'])
     site_elevation = round(site_elevation,2)
@@ -216,10 +215,10 @@ def update_location_info(ts, df, meta, si_ip, map_dictionary):
             pass
 
     # global horizontal irradiance
-    total_solar_rad_unit = map_dict["glob_hor_rad"]["unit"]
+    total_solar_rad_unit = mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)}"+total_solar_rad_unit
     total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
-    tmp_unit = map_dict["DBT"]["unit"]
+    tmp_unit = mapping_dictionary["DBT"][si_ip]["unit"]
     average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)}"+tmp_unit
     hottest_yearly_tmp = (
         f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)}"+tmp_unit
@@ -268,11 +267,10 @@ def update_location_info(ts, df, meta, si_ip, map_dictionary):
         State("input-cdd-set-point", "value"),
         State("submit-set-points", "n_clicks"),
         State("si-ip-unit-store","data"),
-        State("map-dictionary-store","data"),
     ],
 )
 @code_timer
-def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_ip, map_dictionary):
+def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     ctx = dash.callback_context
@@ -366,67 +364,67 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 @app.callback(
     Output("temp-profile-graph", "children"),
     [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_violin_tdb(ts, global_local, df, meta, map_dictionary):
+def update_violin_tdb(ts, global_local, df, meta, si_ip):
    
     return dcc.Graph(
         id="tdb-profile-graph",
         className="violin-container",
         config=generate_chart_name("tdb_summary", meta),
-        figure=violin(df, "DBT", global_local, map_dictionary),
+        figure=violin(df, "DBT", global_local, si_ip),
     )
 
 
 @app.callback(
     Output("wind-speed-graph", "children"),
     [Input("df-store", "modified_timestamp"),Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"),State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_tab_wind(ts, global_local, df, meta, map_dictionary):
+def update_tab_wind(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         id="wind-profile-graph",
         className="violin-container",
         config=generate_chart_name("wind_summary", meta),
-        figure=violin(df, "wind_speed", global_local, map_dictionary),
+        figure=violin(df, "wind_speed", global_local, si_ip),
     )
 
 
 @app.callback(
     Output("humidity-profile-graph", "children"),
     [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_tab_rh(ts, global_local, df, meta, map_dictionary):
+def update_tab_rh(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         id="rh-profile-graph",
         className="violin-container",
         config=generate_chart_name("rh_summary", meta),
-        figure=violin(df, "RH", global_local, map_dictionary),
+        figure=violin(df, "RH", global_local, si_ip),
     )
 
 
 @app.callback(
     Output("solar-radiation-graph", "children"),
     [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_tab_gh_rad(ts, global_local, df, meta, map_dictionary):
+def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         id="gh_rad-profile-graph",
         className="violin-container",
         config=generate_chart_name("solar_summary", meta),
-        figure=violin(df, "glob_hor_rad", global_local, map_dictionary),
+        figure=violin(df, "glob_hor_rad", global_local, si_ip),
     )
 
 

@@ -16,8 +16,7 @@ from plotly.subplots import make_subplots
 from pvlib import solarposition
 
 
-def monthly_solar(epw_df, map_dictionary):
-    map_dict = json.loads(map_dictionary)
+def monthly_solar(epw_df, si_ip):
     g_h_rad_month_ave = (
         epw_df.groupby(["month", "hour"])["glob_hor_rad"].median().reset_index()
     )
@@ -49,7 +48,7 @@ def monthly_solar(epw_df, map_dictionary):
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + map_dict["glob_hor_rad"]["unit"]
+                    + mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -78,7 +77,7 @@ def monthly_solar(epw_df, map_dictionary):
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + map_dict["dif_hor_rad"]["unit"]
+                    + mapping_dictionary["dif_hor_rad"][si_ip]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -98,19 +97,18 @@ def monthly_solar(epw_df, map_dictionary):
     return fig
 
 
-def polar_graph(df, meta, global_local, var, map_dictionary):
+def polar_graph(df, meta, global_local, var, si_ip):
     """Return the figure for the custom sun path."""
     latitude = float(meta["lat"])
     longitude = float(meta["lon"])
     time_zone = float(meta["time_zone"])
     solpos = df.loc[df["apparent_elevation"] > 0, :]
     
-    map_dict = json.loads(map_dictionary)
     if var != "None":
-        var_unit = map_dict[var]["unit"]
-        var_range = map_dict[var]["range"]
-        var_name = map_dict[var]["name"]
-        var_color = map_dict[var]["color"]
+        var_unit = mapping_dictionary[var][si_ip]["unit"]
+        var_range = mapping_dictionary[var][si_ip]["range"]
+        var_name = mapping_dictionary[var]["name"]
+        var_color = mapping_dictionary[var]["color"]
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -302,19 +300,18 @@ def polar_graph(df, meta, global_local, var, map_dictionary):
     return fig
 
 
-def custom_cartesian_solar(df, meta, global_local, var, map_dictionary):
+def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     """Return a graph of a latitude and longitude solar diagram."""
     latitude = float(meta["lat"])
     longitude = float(meta["lon"])
     time_zone = float(meta["time_zone"])
     tz = "UTC"
 
-    map_dict = json.loads(map_dictionary)
     if var != "None":
-        var_unit = map_dict[var]["unit"]
-        var_range = map_dict[var]["range"]
-        var_name = map_dict[var]["name"]
-        var_color = map_dict[var]["color"]
+        var_unit = mapping_dictionary[var][si_ip]["unit"]
+        var_range = mapping_dictionary[var][si_ip]["range"]
+        var_name = mapping_dictionary[var]["name"]
+        var_color = mapping_dictionary[var]["color"]
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range

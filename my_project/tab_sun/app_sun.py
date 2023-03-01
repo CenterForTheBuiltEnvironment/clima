@@ -7,6 +7,7 @@ from my_project.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     tight_margins,
     month_lst,
+    mapping_dictionary,
 )
 from dash.dependencies import Input, Output, State
 
@@ -174,10 +175,10 @@ def layout_sun():
     [
         Input("df-store", "modified_timestamp"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store","data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
 )
 @code_timer
-def monthly_and_cloud_chart(ts, df, meta, map_dictionary):
+def monthly_and_cloud_chart(ts, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     # Sun Radiation
@@ -185,7 +186,7 @@ def monthly_and_cloud_chart(ts, df, meta, map_dictionary):
     # monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, map_dictionary)
+    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, si_ip)
     cover = cover.update_layout(
         margin=tight_margins,
         title="",
@@ -213,21 +214,21 @@ def monthly_and_cloud_chart(ts, df, meta, map_dictionary):
         Input("custom-sun-var-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store","data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
 )
 @code_timer
-def sun_path_chart(ts, view, var, global_local, df, meta, map_dictionary):
+def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     if view == "polar":
         return dcc.Graph(
             config=generate_chart_name("spherical_sun_path_sun", meta),
-            figure=polar_graph(df, meta, global_local, var, map_dictionary),
+            figure=polar_graph(df, meta, global_local, var, si_ip),
         )
     else:
         return dcc.Graph(
             config=generate_chart_name("cartesian_sun_path_sun", meta),
-            figure=custom_cartesian_solar(df, meta, global_local, var, map_dictionary),
+            figure=custom_cartesian_solar(df, meta, global_local, var, si_ip),
         )
 
 
@@ -238,15 +239,15 @@ def sun_path_chart(ts, view, var, global_local, df, meta, map_dictionary):
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def daily(ts, var, global_local, df, meta, map_dictionary):
+def daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         config=generate_chart_name("daily_sun", meta),
-        figure=daily_profile(df, var, global_local, map_dictionary),
+        figure=daily_profile(df, var, global_local, si_ip),
     )
 
 
@@ -257,12 +258,12 @@ def daily(ts, var, global_local, df, meta, map_dictionary):
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_heatmap(ts, var, global_local, df, meta, map_dictionary):
+def update_heatmap(ts, var, global_local, df, meta, si_ip):
 
     return dcc.Graph(
         config=generate_chart_name("heatmap_sun", meta),
-        figure=heatmap(df, var, global_local, map_dictionary),
+        figure=heatmap(df, var, global_local, si_ip),
     )

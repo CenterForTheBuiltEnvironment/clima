@@ -242,7 +242,6 @@ def store():
                     dcc.Store(id="meta-store", storage_type="session"),
                     dcc.Store(id="url-store", storage_type="session"),
                     dcc.Store(id="si-ip-unit-store", storage_type="session"),
-                    dcc.Store(id="map-dictionary-store", storage_type="session"),
                 ],
                 fullscreen=True,
                 type="dot",

@@ -180,12 +180,11 @@ def submitted_data(
             )
     raise PreventUpdate
 
-#add switch_si_ip function and convert the data-store and mapping-dictionary-store
+#add switch_si_ip function and convert the data-store
 @app.callback(
     [
         ServersideOutput("df-store", "data"),
         Output("si-ip-unit-store","data"),
-        Output("map-dictionary-store","data"),
     ],
     [
         Input("si-ip-radio-input", "value"),
@@ -204,8 +203,7 @@ def switch_si_ip(si_ip_input, meta, url_store):
             map_json = convert_data(df,map_json)
         return (
             df, 
-            si_ip_store,
-            map_json
+            si_ip_store
         )
     else:
         return (

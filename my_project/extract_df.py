@@ -309,59 +309,32 @@ def create_df(lst, file_name):
     return epw_df, location_info
 
 #convert function
-def temperature(df,name, mapping):
+def temperature(df,name):
     df[name] = df[name]*1.8+32
-    mapping[name]["unit"] = "°F"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*1.8+32
-    mapping[name]["range"][1] = mapping[name]["range"][1]*1.8+32
 
-def pressure(df,name, mapping):
+def pressure(df,name):
     df[name] = df[name]*0.000145038
-    mapping[name]["unit"] = "Psi"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.000145038
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.000145038
     
-def irradiation(df,name, mapping):
+def irradiation(df,name):
     df[name]=df[name]*0.3169983306
-    mapping[name]["unit"] = "Btu(IT)/ft<sup>2</sup>"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.3169983306
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.3169983306
 
-def illuminance(df,name, mapping):
+def illuminance(df,name):
     df[name] = df[name]*0.0929
-    mapping[name]["unit"] = "fc"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0929
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0929
 
-def zenith_illuminance(df,name, mapping):
+def zenith_illuminance(df,name):
     df[name] = df[name]*0.0929
-    mapping[name]["unit"] = "cd/ft<sup>2</sup>"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0929
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0929
 
-def speed(df,name, mapping):
+def speed(df,name):
     df[name] = df[name]*3.281
-    mapping[name]["unit"] = "fps"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*3.281
-    mapping[name]["range"][1] = mapping[name]["range"][1]*3.281
 
-def visibility(df,name, mapping):
+def visibility(df,name):
     df[name] = df[name]*0.6215
-    mapping[name]["unit"] = "mile"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.6215
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.6215
 
-def humidity(df,name, mapping):
+def humidity(df,name):
     df[name] = df[name]*0.0624
-    mapping[name]["unit"] = "lbs water/ft<sup>3</sup> dry air"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0624
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0624
 
-def enthalpy(df,name, mapping):
+def enthalpy(df,name):
     df[name] = df[name]*0.0004
-    mapping[name]["unit"] = "Btu/lb dry air"
-    mapping[name]["range"][0] = mapping[name]["range"][0]*0.0004
-    mapping[name]["range"][1] = mapping[name]["range"][1]*0.0004
     
 def convert_data(df,mapping_json):
     df["adaptive_comfort"] = df["adaptive_comfort"]*1.8+32
@@ -376,7 +349,7 @@ def convert_data(df,mapping_json):
             conversion_function_name = mapping_dict[key]["conversion_function"]
             if conversion_function_name!=None:
                 conversion_function = globals()[conversion_function_name]
-                conversion_function(df,key, mapping_dict)
+                conversion_function(df,key)
     return json.dumps(mapping_dict)
 
 if __name__ == "__main__":

@@ -253,7 +253,7 @@ def inputs_tab():
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
-        State("map-dictionary-store","data"),
+        State("si-ip-unit-store","data"),
     ],
 )
 def nv_heatmap(
@@ -272,9 +272,8 @@ def nv_heatmap(
     meta,
     invert_month,
     invert_hour,
-    map_dictionary,
+    si_ip,
 ):
-    map_dict = json.loads(map_dictionary)
 
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
@@ -317,17 +316,17 @@ def nv_heatmap(
         else:
             df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
 
-    var_unit = map_dict[var]["unit"]
+    var_unit = mapping_dictionary[var][si_ip]["unit"]
 
-    filter_unit = map_dict[filter_var]["unit"]
+    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
 
-    var_range = map_dict[var]["range"]
+    var_range = mapping_dictionary[var][si_ip]["range"]
 
-    var_name = map_dict[var]["name"]
+    var_name = mapping_dictionary[var]["name"]
 
-    filter_name = map_dict[filter_var]["name"]
+    filter_name = mapping_dictionary[filter_var]["name"]
 
-    var_color = map_dict[var]["color"]
+    var_color = mapping_dictionary[var]["color"]
 
     if global_local == "global":
         range_z = var_range
@@ -425,7 +424,7 @@ def nv_heatmap(
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
-        State("map-dictionary-store", "data"),
+        State("si-ip-unit-store", "data"),
     ],
 )
 def nv_bar_chart(
@@ -444,9 +443,8 @@ def nv_bar_chart(
     meta,
     invert_month,
     invert_hour,
-    map_dictionary,
+    si_ip,
 ):  
-    map_dict = json.loads(map_dictionary)
 
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
@@ -458,12 +456,12 @@ def nv_bar_chart(
     var = "DBT"
     filter_var = "DPT"
 
-    var_unit = map_dict[var]["unit"]
-    filter_unit = map_dict[filter_var]["unit"]
+    var_unit = mapping_dictionary[var][si_ip]["unit"]
+    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
 
-    var_name = map_dict[var]["name"]
+    var_name = mapping_dictionary[var]["name"]
 
-    filter_name = map_dict[filter_var]["name"]
+    filter_name = mapping_dictionary[filter_var]["name"]
 
     color_in = "dodgerblue"
 

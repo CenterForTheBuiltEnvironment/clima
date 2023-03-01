@@ -61,13 +61,13 @@ def layout_outdoor_comfort():
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"),State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store", "data")],
 )
-def update_tab_utci_value(ts, var, global_local, df, meta, map_dictionary):
+def update_tab_utci_value(ts, var, global_local, df, meta, si_ip):
 
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap", meta),
-        figure=heatmap(df, var, global_local, map_dictionary),
+        figure=heatmap(df, var, global_local, si_ip),
     )
 
 
@@ -95,11 +95,11 @@ def change_image_based_on_selection(value):
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("map-dictionary-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
-def update_tab_utci_category(ts, var, global_local, df, meta, map_dictionary):
+def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
 
-    utci_stress_cat = heatmap(df, var + "_categories", global_local, map_dictionary)
+    utci_stress_cat = heatmap(df, var + "_categories", global_local, si_ip)
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
         titleside="top",

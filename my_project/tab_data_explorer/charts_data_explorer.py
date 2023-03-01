@@ -8,9 +8,8 @@ import plotly.graph_objects as go
 from my_project.global_scheme import template, mapping_dictionary, month_lst
 
 
-def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, map_dictionary):
+def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si_ip):
     """Return the customizable heatmap."""
-    map_dict = json.loads(map_dictionary)
     time_filter = time_filter_info[0]
     start_month = time_filter_info[1][0]
     end_month = time_filter_info[1][1]
@@ -47,12 +46,12 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, ma
     if df.dropna(subset=[var]).shape[0] == 0:
         return None
 
-    var_unit = map_dict[var]["unit"]
-    var_range = map_dict[var]["range"]
-    var_name = map_dict[var]["name"]
-    var_color = map_dict[var]["color"]
-    filter_name = map_dict[filter_var]["name"]
-    filter_unit = map_dict[filter_var]["unit"]
+    var_unit = mapping_dictionary[var][si_ip]["unit"]
+    var_range = mapping_dictionary[var][si_ip]["range"]
+    var_name = mapping_dictionary[var]["name"]
+    var_color = mapping_dictionary[var]["color"]
+    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -114,9 +113,8 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, ma
 
 
 def three_var_graph(
-    df, global_local, var_x, var_y, color_by, time_filter_info3, data_filter_info3, map_dictionary
+    df, global_local, var_x, var_y, color_by, time_filter_info3, data_filter_info3, si_ip
 ):  
-    map_dict = json.loads(map_dictionary)
 
     """Return the custom graph plotting three variables."""
     time_filter = time_filter_info3[0]
@@ -129,12 +127,12 @@ def three_var_graph(
     min_val = data_filter_info3[2]
     max_val = data_filter_info3[3]
 
-    var_unit_x = map_dict[var_x]["unit"]
-    var_unit_y = map_dict[var_y]["unit"]
+    var_unit_x = mapping_dictionary[var_x][si_ip]["unit"]
+    var_unit_y = mapping_dictionary[var_y][si_ip]["unit"]
 
     var = color_by
-    var_range = map_dict[var]["range"]
-    var_color = map_dict[var]["color"]
+    var_range = mapping_dictionary[var][si_ip]["range"]
+    var_color = mapping_dictionary[var]["color"]
 
     if global_local != "global":
         # Set maximum and minimum according to data
@@ -165,11 +163,11 @@ def three_var_graph(
         return None
 
     title = (
-        map_dict[var_x]["name"]
+        mapping_dictionary[var_x]["name"]
         + " vs "
-        + map_dict[var_y]["name"]
+        + mapping_dictionary[var_y]["name"]
         + " colored by "
-        + map_dict[color_by]["name"]
+        + mapping_dictionary[color_by]["name"]
     )
 
     fig = px.scatter(
@@ -193,19 +191,18 @@ def three_var_graph(
     return fig
 
 
-def two_var_graph(df, var_x, var_y, map_dictionary):
+def two_var_graph(df, var_x, var_y, si_ip):
     
-    map_dict = json.loads(map_dictionary)
 
     title = (
         "Simultaneous frequency of "
-        + map_dict[var_x]["name"]
+        + mapping_dictionary[var_x]["name"]
         + " and  "
-        + map_dict[var_y]["name"]
+        + mapping_dictionary[var_y]["name"]
     )
 
-    var_unit_x = map_dict[var_x]["unit"]
-    var_unit_y = map_dict[var_y]["unit"]
+    var_unit_x = mapping_dictionary[var_x][si_ip]["unit"]
+    var_unit_y = mapping_dictionary[var_y][si_ip]["unit"]
 
     fig = px.density_heatmap(
         df,

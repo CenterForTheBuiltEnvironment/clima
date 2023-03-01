@@ -232,7 +232,7 @@ def layout_psy_chart():
         State("meta-store", "data"),
         State("invert-month-psy", "value"),
         State("invert-hour-psy", "value"),
-        State("map-dictionary-store","data")
+        State("si-ip-unit-store","data")
     ],
 )
 def update_psych_chart(
@@ -250,10 +250,9 @@ def update_psych_chart(
     meta,
     invert_month,
     invert_hour,
-    map_dictionary,
+    si_ip,
 ):
     
-    map_dict = json.loads(map_dictionary)
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -314,15 +313,15 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = map_dict[var]["unit"]
+        var_unit = mapping_dictionary[var][si_ip]["unit"]
 
-        var_name = map_dict[var]["name"]
+        var_name = mapping_dictionary[var]["name"]
 
-        var_color = map_dict[var]["color"]
+        var_color = mapping_dictionary[var]["color"]
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = map_dict["DBT"]["range"]
+        var_range_x = mapping_dictionary["DBT"][si_ip]["range"]
         hr_range = [0, 0.03]
         var_range_y = hr_range
 
@@ -380,9 +379,9 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=map_dict["DBT"]["name"]
+                hovertemplate=mapping_dictionary["DBT"]["name"]
                 + ": %{x:.2f}"
-                + map_dict["DBT"]["name"],
+                + mapping_dictionary["DBT"]["name"],
                 name="",
             )
         )
@@ -426,21 +425,21 @@ def update_psych_chart(
                     colorbar=dict(thickness=30, title=var_unit + "<br>  "),
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=map_dict["DBT"]["name"]
+                hovertemplate=mapping_dictionary["DBT"]["name"]
                 + ": %{x:.2f}"
-                + map_dict["DBT"]["unit"]
+                + mapping_dictionary["DBT"][si_ip]["unit"]
                 + "<br>"
-                + map_dict["RH"]["name"]
+                + mapping_dictionary["RH"]["name"]
                 + ": %{customdata[0]:.2f}"
-                + map_dict["RH"]["unit"]
+                + mapping_dictionary["RH"][si_ip]["unit"]
                 + "<br>"
-                + map_dict["h"]["name"]
+                + mapping_dictionary["h"]["name"]
                 + ": %{customdata[1]:.2f}"
-                + map_dict["h"]["unit"]
+                + mapping_dictionary["h"][si_ip]["unit"]
                 + "<br>"
-                + map_dict["t_dp"]["name"]
+                + mapping_dictionary["t_dp"]["name"]
                 + ": %{customdata[3]:.2f}"
-                + map_dict["t_dp"]["unit"]
+                + mapping_dictionary["t_dp"][si_ip]["unit"]
                 + "<br>"
                 + "<br>"
                 + var_name
@@ -450,8 +449,8 @@ def update_psych_chart(
             )
         )
     
-    xtitle_name = "Temperature"+"  "+map_dict["DBT"]["unit"]
-    ytitle_name = "Humidity Ratio"+"  "+map_dict["hr"]["unit"]
+    xtitle_name = "Temperature"+"  "+mapping_dictionary["DBT"][si_ip]["unit"]
+    ytitle_name = "Humidity Ratio"+"  "+mapping_dictionary["hr"][si_ip]["unit"]
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
         title_text = xtitle_name,
