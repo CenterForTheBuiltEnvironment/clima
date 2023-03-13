@@ -10,6 +10,6 @@ If you can define a **base temperature** (the outside temperature above which a 
 
 The base temperature does not necessarily correspond to the desired building internal temperature, but is the homeostatic temperature between the interior and exterior. Base temperature might depend, among other factors, upon the use of the building, the internal heat gains and the level of insulation.
 
-![example deegree days for New York, Downtown Manhattan, NY, USA](<../../../.gitbook/assets/image (3).png>)
+![example deegree days for New York, Downtown Manhattan, NY, USA](<../../../.gitbook/assets/image (3) (1).png>)
 
 ![example deegree days for Palermo Boccadifalco Airport, ITALY](<../../../.gitbook/assets/image (1) (1).png>)
