@@ -22,12 +22,21 @@ from my_project.utils import (
 
 from app import app
 
+    
+def layout_natural_ventilation(si_ip):
+    if si_ip == "ip":
+        tdb_set_min = 50
+        tdb_set_max = 75
+        dpt_set = 61
+    else:
+        tdb_set_min = 10
+        tdb_set_max = 24
+        dpt_set = 16
 
-def layout_natural_ventilation():
     return html.Div(
         className="container-col",
         children=[
-            inputs_tab(),
+            inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
             dcc.Loading(
                 html.Div(
                     id="nv-heatmap-chart",
@@ -71,8 +80,7 @@ def layout_natural_ventilation():
         ],
     )
 
-
-def inputs_tab():
+def inputs_tab(t_min, t_max, d_set):
     return html.Div(
         className="container-row full-width three-inputs-container",
         children=[
@@ -86,7 +94,7 @@ def inputs_tab():
                         className="mb-2",
                         n_clicks=1,
                     ),
-                    html.H6("Outdoor dry-bulb air temperature range -- (default: °C) / °F"),
+                    html.H6("Outdoor dry-bulb air temperature range"),
                     html.Div(
                         className=container_row_center_full,
                         children=[
@@ -96,7 +104,7 @@ def inputs_tab():
                                 placeholder="Enter a number for the min val",
                                 type="number",
                                 step=1,
-                                value=10,
+                                value=t_min,
                                 style={"flex": "70%"},
                             ),
                         ],
@@ -109,7 +117,7 @@ def inputs_tab():
                                 id="nv-tdb-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
-                                value=24,
+                                value=t_max,
                                 step=1,
                                 style={"flex": "70%"},
                             ),
@@ -203,7 +211,7 @@ def inputs_tab():
                     dbc.Checklist(
                         options=[
                             {
-                                "label": "Avoid condensation with radiant systems: If the outdoor dew point temperature is below the radiant system surface temperature, the data point is not plot. -- (default: °C) / °F",
+                                "label": "Avoid condensation with radiant systems: If the outdoor dew point temperature is below the radiant system surface temperature, the data point is not plot.",
                                 "value": 1,
                             },
                         ],
@@ -221,7 +229,7 @@ def inputs_tab():
                                 id="nv-dpt-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
-                                value=16,
+                                value=d_set,
                                 step=1,
                                 style={"flex": "1"},
                             ),

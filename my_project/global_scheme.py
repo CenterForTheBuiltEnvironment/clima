@@ -208,7 +208,7 @@ mapping_dictionary = {
             "range": [0, 1200],
         },
         "ip":{
-            "unit":"Btu(IT)/ft<sup>2</sup>",
+            "unit":"Btu/ft<sup>2</sup>",
             "range": [0, 1200*0.3169983306],
         },
         "conversion_function": "irradiation",
@@ -229,7 +229,7 @@ mapping_dictionary = {
             "range": [0, 500],
         },
         "ip":{
-            "unit":"Btu(IT)/ft<sup>2</sup>",
+            "unit":"Btu/ft<sup>2</sup>",
             "range": [0, 500*0.3169983306],
         },
         "conversion_function": "irradiation",
@@ -250,7 +250,7 @@ mapping_dictionary = {
             "range": [0, 1200],
         },
         "ip":{
-            "unit":"Btu(IT)/ft<sup>2</sup>",
+            "unit":"Btu/ft<sup>2</sup>",
             "range": [0, 1200*0.3169983306],
         },
         "conversion_function": "irradiation",
@@ -271,7 +271,7 @@ mapping_dictionary = {
             "range": [0, 1200],
         },
         "ip":{
-            "unit":"Btu(IT)/ft<sup>2</sup>",
+            "unit":"Btu/ft<sup>2</sup>",
             "range": [0, 1200*0.3169983306],
         },
         "conversion_function": "irradiation",
@@ -292,7 +292,7 @@ mapping_dictionary = {
             "range": [0, 1200],
         },
         "ip":{
-            "unit":"Btu(IT)/ft<sup>2</sup>",
+            "unit":"Btu/ft<sup>2</sup>",
             "range": [0, 1200*0.3169983306],
         },
         "conversion_function": "irradiation",
@@ -381,8 +381,8 @@ mapping_dictionary = {
             "range": [0, 20],
         },
         "ip":{
-            "unit": "fps",
-            "range":[0,20*3.281],
+            "unit": "fpm",
+            "range":[0,20*196.85039370078738],
         },
         "conversion_function": "speed",
     },

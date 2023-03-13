@@ -325,7 +325,7 @@ def zenith_illuminance(df,name):
     df[name] = df[name]*0.0929
 
 def speed(df,name):
-    df[name] = df[name]*3.281
+    df[name] = df[name]*196.85039370078738
 
 def visibility(df,name):
     df[name] = df[name]*0.6215

@@ -131,7 +131,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
         marker_size = 3
     else:
         vals = solpos[var]
-        marker_size = (((vals - vals.min()) / vals.max()) + 1) * 4
+        marker_size = ((vals - vals.min()) / (vals.max()-vals.min()) + 1) * 4
 
     fig = go.Figure()
     # draw altitude circles
@@ -326,7 +326,7 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
         marker_size = 3
     else:
         vals = df[var]
-        marker_size = (((vals - vals.min()) / vals.max()) + 1) * 4
+        marker_size = ((vals - vals.min()) / (vals.max()-vals.min()) + 1) * 4
 
     fig = go.Figure()
 

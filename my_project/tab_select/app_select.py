@@ -105,6 +105,7 @@ def alert():
 @app.callback(
     [
         Output("meta-store", "data"),
+        Output("lines-store","data"),
         Output("alert", "is_open"),
         Output("alert", "children"),
         Output("alert", "color"),
@@ -113,7 +114,6 @@ def alert():
         Input("modal-yes-button", "n_clicks"),
         Input("upload-data-button", "n_clicks"),
         Input("upload-data", "contents"),
-        Input("si-ip-radio-input", "value"),
     ],
     [
         State("upload-data", "filename"),
@@ -123,8 +123,8 @@ def alert():
 )
 # @code_timer
 def submitted_data(
-    use_epw_click, upload_click, list_of_contents, si_ip_input, list_of_names, url_store,
-):
+    use_epw_click, upload_click, list_of_contents, list_of_names, url_store, 
+):  
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
 
@@ -133,18 +133,20 @@ def submitted_data(
         if lines is None:
             return (
                 None,
+                None,
                 True,
                 messages_alert["not_available"],
                 "warning",
             )
-        _, location_info = create_df(lines, url_store)  # we might need to split this call into two, one returns df and one returns location_info
+        df, location_info = create_df(lines, url_store)  # we might need to split this call into two, one returns df and one returns location_info
         return (
             location_info,
+            lines,
             True,
             messages_alert["success"],
             "success",
         )
-
+    
     elif (
         ctx.triggered[0]["prop_id"] == "upload-data.contents"
         and list_of_contents is not None
@@ -159,12 +161,14 @@ def submitted_data(
                 df, location_info = create_df(lines, list_of_names[0])
                 return (
                     location_info,
+                    lines,
                     True,
                     messages_alert["success"],
                     "success",
                 )
             else:
                 return (
+                    None,
                     None,
                     True,
                     messages_alert["invalid_format"],
@@ -173,6 +177,7 @@ def submitted_data(
         except Exception as e:
             print(e)
             return (
+                None,
                 None,
                 True,
                 messages_alert["wrong_extension"],
@@ -186,16 +191,14 @@ def submitted_data(
         ServersideOutput("df-store", "data"),
         Output("si-ip-unit-store","data"),
     ],
-    [
+    [   
+        Input("lines-store","modified_timestamp"),
         Input("si-ip-radio-input", "value"),
-        Input("meta-store", "data"),
     ],
-    State("url-store", "data"),
+    [State("url-store", "data"), State("lines-store","data")]
 )
 
-def switch_si_ip(si_ip_input, meta, url_store):
-    si_ip_store = si_ip_input
-    lines = get_data(url_store)
+def switch_si_ip(ts, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
         map_json = json.dumps(mapping_dictionary)
@@ -203,11 +206,10 @@ def switch_si_ip(si_ip_input, meta, url_store):
             map_json = convert_data(df,map_json)
         return (
             df, 
-            si_ip_store
+            si_ip_input
         )
     else:
         return (
-            None,
             None,
             None,
         )

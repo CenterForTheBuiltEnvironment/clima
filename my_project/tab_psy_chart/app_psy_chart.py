@@ -322,8 +322,7 @@ def update_psych_chart(
     if global_local == "global":
         # Set Global values for Max and minimum
         var_range_x = mapping_dictionary["DBT"][si_ip]["range"]
-        hr_range = [0, 0.03]
-        var_range_y = hr_range
+        var_range_y = mapping_dictionary["hr"][si_ip]["range"]
 
     else:
         # Set maximum and minimum according to data
@@ -331,8 +330,8 @@ def update_psych_chart(
         data_min = 5 * floor(df["DBT"].min() / 5)
         var_range_x = [data_min, data_max]
 
-        data_max = (5 * ceil(df["hr"].max() * 1000 / 5)) / 1000
-        data_min = (5 * floor(df["hr"].min() * 1000 / 5)) / 1000
+        data_max = round(df["hr"].max(),4)
+        data_min = round(df["hr"].min(),4)
         var_range_y = [data_min, data_max]
 
     title = "Psychrometric Chart"
@@ -355,10 +354,19 @@ def update_psych_chart(
     # Add traces
     for i, rh in enumerate(rh_list):
         name = "rh" + str(rh)
+
+        dbt_list_convert = list(dbt_list)
+        rh_convert = list(rh_df[name])
+
+        if si_ip == "ip":
+            for j in range(len(dbt_list)):
+                dbt_list_convert[j] = dbt_list_convert[j]*1.8+32
+            for k in range(len(rh_df[name])):
+                rh_convert[k] = rh_convert[k]*0.0624
         fig.add_trace(
             go.Scatter(
-                x=dbt_list,
-                y=rh_df[name],
+                x=dbt_list_convert,
+                y=rh_convert,
                 showlegend=False,
                 mode="lines",
                 name="",

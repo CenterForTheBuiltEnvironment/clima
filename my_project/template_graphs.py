@@ -161,7 +161,7 @@ def yearly_profile(df, var, global_local,si_ip):
             marker_color="silver",
             marker_opacity=0.3,
             hovertemplate=(
-                "Max: %{y:.2f} &#8451;<br>" + "Min: %{base:.2f} &#8451;<br>"
+                "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
             ),
         )
 
@@ -177,7 +177,7 @@ def yearly_profile(df, var, global_local,si_ip):
             marker_color="silver",
             marker_opacity=0.3,
             hovertemplate=(
-                "Max: %{y:.2f} &#8451;<br>" + "Min: %{base:.2f} &#8451;<br>"
+                "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
             ),
         )
         data = [trace3, trace4, trace1, trace2]
@@ -401,12 +401,8 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     spd_colors = mapping_dictionary["wind_speed"]["color"]
     spd_unit = mapping_dictionary["wind_speed"][si_ip]["unit"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
-    if spd_unit == "fps":
-        i = 0
-        for x in spd_bins:
-            x = x*3.281
-            spd_bins[i] = round(x,1)
-            i= i+1
+    if si_ip == "ip":
+        spd_bins = convert_bins (spd_bins)
 
     spd_labels = speed_labels(spd_bins, spd_unit)
     dir_bins = np.arange(-22.5 / 2, 360 + 22.5, 22.5)
@@ -484,6 +480,13 @@ def wind_rose(df, title, month, hour, labels, si_ip):
 
     return fig
 
+def convert_bins(sbins):
+    i = 0
+    for x in sbins:
+        x = x*196.85039370078738
+        sbins[i] = round(x,1)
+        i= i+1
+    return sbins
 
 def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     """Return the custom summary bar chart."""

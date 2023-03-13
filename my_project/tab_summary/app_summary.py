@@ -14,9 +14,15 @@ from my_project.utils import code_timer
 from dash_extensions.enrich import dcc, html, Output, Input, State
 
 
-def layout_summary():
+def layout_summary(si_ip):
     """Contents in the second tab 'Climate Summary'."""
-        
+    if si_ip == "si":
+        heating_setpoint = 10
+        cooling_setpoint = 18
+    else:
+        heating_setpoint = 50
+        cooling_setpoint = 64
+
     return html.Div(
         className="container-col",
         id="tab-two-container",
@@ -91,7 +97,7 @@ def layout_summary():
                         [
                             dbc.Col(
                                 html.Label(
-                                    "Heating degree day (HDD) setpoint (default: °C) / °F",
+                                    "Heating degree day (HDD) setpoint",
                                 ),
                                 width="auto",
                             ),
@@ -99,14 +105,14 @@ def layout_summary():
                                 dbc.Input(
                                     id="input-hdd-set-point",
                                     type="number",
-                                    value=10,
+                                    value=heating_setpoint,
                                     style={"width": "4rem"},
                                 ),
                                 width="auto",
                             ),
                             dbc.Col(
                                 html.Label(
-                                    "Cooling degree day (CDD) setpoint (default: °C) / °F",
+                                    "Cooling degree day (CDD) setpoint",
                                 ),
                                 width="auto",
                             ),
@@ -114,7 +120,7 @@ def layout_summary():
                                 dbc.Input(
                                     id="input-cdd-set-point",
                                     type="number",
-                                    value=18,
+                                    value=cooling_setpoint,
                                     style={"width": "4rem"},
                                 ),
                                 width="auto",
@@ -430,12 +436,12 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
 
 @app.callback(
     Output("download-dataframe-csv", "data"),
-    [Input("df-store", "modified_timestamp"), Input("download-button", "n_clicks")],
+    [Input("download-button", "n_clicks")],
     [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
     prevent_initial_call=True,
 )
 @code_timer
-def download_clima_dataframe(ts, n_clicks, df, meta, si_ip):
+def download_clima_dataframe(n_clicks, df, meta, si_ip):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
