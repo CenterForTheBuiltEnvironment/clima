@@ -128,21 +128,26 @@ def explore_daily_heatmap():
     )
 
 
-def static_section():
+def static_section(si_ip):
+    if si_ip == "si":
+        hor_unit = "Wh/m²"
+    if si_ip == "ip":
+        hor_unit = "Btu/ft²"
+    print (hor_unit)
     return html.Div(
         className="container-col full-width",
         children=[
-            # html.Div(
-            #     children=title_with_tooltip(
-            #         text="Global and Diffuse Horizontal Solar Radiation (Wh/m²)",
-            #         tooltip_text=None,
-            #         id_button="monthly-chart-label",
-            #     ),
-            # ),
-            # dcc.Loading(
-            #     type="circle",
-            #     children=html.Div(id="monthly-solar"),
-            # ),
+            html.Div(
+                children=title_with_tooltip(
+                    text= "Global and Diffuse Horizontal Solar Radiation ("+ hor_unit +")",
+                    tooltip_text=None,
+                    id_button="monthly-chart-label",
+                ),
+            ),
+            dcc.Loading(
+                type="circle",
+                children=html.Div(id="monthly-solar"),
+            ),
             html.Div(
                 children=title_with_tooltip(
                     text="Cloud coverage",
@@ -158,18 +163,18 @@ def static_section():
     )
 
 
-def layout_sun():
+def layout_sun(si_ip):
     """Contents of tab four."""
     return html.Div(
         className="container-col",
         id="tab-four-container",
-        children=[sun_path(), static_section(), explore_daily_heatmap()],
+        children=[sun_path(), static_section(si_ip), explore_daily_heatmap()],
     )
 
 
 @app.callback(
     [
-        # Output("monthly-solar", "children"),
+        Output("monthly-solar", "children"),
         Output("cloud-cover", "children"),
     ],
     [
@@ -182,8 +187,8 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     # Sun Radiation
-    # monthly = monthly_solar(df, map_dictionary)
-    # monthly = monthly.update_layout(margin=tight_margins)
+    monthly = monthly_solar(df, si_ip)
+    monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
     cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, si_ip)
@@ -196,11 +201,10 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
         dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
     )
 
-    # return dcc.Graph(
-    #     config=generate_chart_name("monthly_sun", meta),
-    #     figure=monthly,
-    # ), 
     return dcc.Graph(
+        config=generate_chart_name("monthly_sun", meta),
+        figure=monthly,
+    ), dcc.Graph(
         config=generate_chart_name("cloud_cover_sun", meta),
         figure=cover,
     )

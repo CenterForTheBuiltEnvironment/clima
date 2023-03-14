@@ -57,7 +57,7 @@ def render_content(tab,si_ip):
     elif tab == "tab-t-rh":
         return layout_t_rh()
     elif tab == "tab-sun":
-        return layout_sun()
+        return layout_sun(si_ip)
     elif tab == "tab-wind":
         return layout_wind()
     elif tab == "tab-data-explorer":
