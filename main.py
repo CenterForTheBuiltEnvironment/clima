@@ -47,8 +47,14 @@ def display_page(pathname):
 
 
 # Handle tab selection
-@app.callback(Output("tabs-content", "children"), [Input("tabs", "value"),Input("si-ip-radio-input", "value"),],)
-def render_content(tab,si_ip):
+@app.callback(
+    Output("tabs-content", "children"),
+    [
+        Input("tabs", "value"),
+        Input("si-ip-radio-input", "value"),
+    ],
+)
+def render_content(tab, si_ip):
     """Update the contents of the page depending on what tab the user selects."""
     if tab == "tab-select":
         return layout_select()

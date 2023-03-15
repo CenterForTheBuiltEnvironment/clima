@@ -308,49 +308,60 @@ def create_df(lst, file_name):
 
     return epw_df, location_info
 
-#convert function
-def temperature(df,name):
-    df[name] = df[name]*1.8+32
 
-def pressure(df,name):
-    df[name] = df[name]*0.000145038
-    
-def irradiation(df,name):
-    df[name]=df[name]*0.3169983306
+# convert function
+def temperature(df, name):
+    df[name] = df[name] * 1.8 + 32
 
-def illuminance(df,name):
-    df[name] = df[name]*0.0929
 
-def zenith_illuminance(df,name):
-    df[name] = df[name]*0.0929
+def pressure(df, name):
+    df[name] = df[name] * 0.000145038
 
-def speed(df,name):
-    df[name] = df[name]*196.85039370078738
 
-def visibility(df,name):
-    df[name] = df[name]*0.6215
+def irradiation(df, name):
+    df[name] = df[name] * 0.3169983306
 
-def humidity(df,name):
-    df[name] = df[name]*0.0624
 
-def enthalpy(df,name):
-    df[name] = df[name]*0.0004
-    
-def convert_data(df,mapping_json):
-    df["adaptive_comfort"] = df["adaptive_comfort"]*1.8+32
-    df["adaptive_cmf_80_low"] = df["adaptive_cmf_80_low"]*1.8+32
-    df["adaptive_cmf_80_up"] = df["adaptive_cmf_80_up"]*1.8+32
-    df["adaptive_cmf_90_low"] = df["adaptive_cmf_90_low"]*1.8+32
-    df["adaptive_cmf_90_up"] = df["adaptive_cmf_90_up"]*1.8+32
+def illuminance(df, name):
+    df[name] = df[name] * 0.0929
+
+
+def zenith_illuminance(df, name):
+    df[name] = df[name] * 0.0929
+
+
+def speed(df, name):
+    df[name] = df[name] * 196.85039370078738
+
+
+def visibility(df, name):
+    df[name] = df[name] * 0.6215
+
+
+def humidity(df, name):
+    df[name] = df[name] * 0.0624
+
+
+def enthalpy(df, name):
+    df[name] = df[name] * 0.0004
+
+
+def convert_data(df, mapping_json):
+    df["adaptive_comfort"] = df["adaptive_comfort"] * 1.8 + 32
+    df["adaptive_cmf_80_low"] = df["adaptive_cmf_80_low"] * 1.8 + 32
+    df["adaptive_cmf_80_up"] = df["adaptive_cmf_80_up"] * 1.8 + 32
+    df["adaptive_cmf_90_low"] = df["adaptive_cmf_90_low"] * 1.8 + 32
+    df["adaptive_cmf_90_up"] = df["adaptive_cmf_90_up"] * 1.8 + 32
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):
         if "conversion_function" in mapping_dict[key]:
             conversion_function_name = mapping_dict[key]["conversion_function"]
-            if conversion_function_name!=None:
+            if conversion_function_name != None:
                 conversion_function = globals()[conversion_function_name]
-                conversion_function(df,key)
+                conversion_function(df, key)
     return json.dumps(mapping_dict)
+
 
 if __name__ == "__main__":
     # fmt: off

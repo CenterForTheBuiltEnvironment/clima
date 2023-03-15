@@ -61,7 +61,11 @@ def layout_outdoor_comfort():
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store", "data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 def update_tab_utci_value(ts, var, global_local, df, meta, si_ip):
 
@@ -95,7 +99,11 @@ def change_image_based_on_selection(value):
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
 

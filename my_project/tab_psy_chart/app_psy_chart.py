@@ -232,7 +232,7 @@ def layout_psy_chart():
         State("meta-store", "data"),
         State("invert-month-psy", "value"),
         State("invert-hour-psy", "value"),
-        State("si-ip-unit-store","data")
+        State("si-ip-unit-store", "data"),
     ],
 )
 def update_psych_chart(
@@ -252,7 +252,7 @@ def update_psych_chart(
     invert_hour,
     si_ip,
 ):
-    
+
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -330,8 +330,8 @@ def update_psych_chart(
         data_min = 5 * floor(df["DBT"].min() / 5)
         var_range_x = [data_min, data_max]
 
-        data_max = round(df["hr"].max(),4)
-        data_min = round(df["hr"].min(),4)
+        data_max = round(df["hr"].max(), 4)
+        data_min = round(df["hr"].min(), 4)
         var_range_y = [data_min, data_max]
 
     title = "Psychrometric Chart"
@@ -360,9 +360,9 @@ def update_psych_chart(
 
         if si_ip == "ip":
             for j in range(len(dbt_list)):
-                dbt_list_convert[j] = dbt_list_convert[j]*1.8+32
+                dbt_list_convert[j] = dbt_list_convert[j] * 1.8 + 32
             for k in range(len(rh_df[name])):
-                rh_convert[k] = rh_convert[k]*0.0624
+                rh_convert[k] = rh_convert[k] * 0.0624
         fig.add_trace(
             go.Scatter(
                 x=dbt_list_convert,
@@ -456,12 +456,12 @@ def update_psych_chart(
                 name="",
             )
         )
-    
-    xtitle_name = "Temperature"+"  "+mapping_dictionary["DBT"][si_ip]["unit"]
-    ytitle_name = "Humidity Ratio"+"  "+mapping_dictionary["hr"][si_ip]["unit"]
+
+    xtitle_name = "Temperature" + "  " + mapping_dictionary["DBT"][si_ip]["unit"]
+    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary["hr"][si_ip]["unit"]
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
-        title_text = xtitle_name,
+        title_text=xtitle_name,
         range=var_range_x,
         showline=True,
         linewidth=1,
@@ -469,7 +469,7 @@ def update_psych_chart(
         mirror=True,
     )
     fig.update_yaxes(
-        title_text = ytitle_name,
+        title_text=ytitle_name,
         range=var_range_y,
         showline=True,
         linewidth=1,

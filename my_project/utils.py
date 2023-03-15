@@ -137,8 +137,12 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     df_sum = df_sum.T.assign(count="Year").rename(columns={"count": "month"})
 
     df_summary = pd.concat([df_summary, df_sum])
-    
-    unit = mapping_dictionary[value][si_ip]["unit"].replace("<sup>", "").replace("</sup>", "")
+
+    unit = (
+        mapping_dictionary[value][si_ip]["unit"]
+        .replace("<sup>", "")
+        .replace("</sup>", "")
+    )
     return dash_table.DataTable(
         columns=[
             {"name": i, "id": i} if i == "month" else {"name": f"{i} ({unit})", "id": i}

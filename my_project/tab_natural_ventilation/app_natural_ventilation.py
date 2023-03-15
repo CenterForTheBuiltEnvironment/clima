@@ -22,7 +22,7 @@ from my_project.utils import (
 
 from app import app
 
-    
+
 def layout_natural_ventilation(si_ip):
     if si_ip == "ip":
         tdb_set_min = 50
@@ -63,8 +63,10 @@ def layout_natural_ventilation(si_ip):
                     html.Div(
                         children=title_with_tooltip(
                             text="Normalize data",
-                            tooltip_text="If normalized is enabled it calculates the % "
-                            "time otherwise it calculates the total number of hours",
+                            tooltip_text=(
+                                "If normalized is enabled it calculates the % "
+                                "time otherwise it calculates the total number of hours"
+                            ),
                             id_button="nv_normalize",
                         ),
                     ),
@@ -79,6 +81,7 @@ def layout_natural_ventilation(si_ip):
             ),
         ],
     )
+
 
 def inputs_tab(t_min, t_max, d_set):
     return html.Div(
@@ -211,7 +214,12 @@ def inputs_tab(t_min, t_max, d_set):
                     dbc.Checklist(
                         options=[
                             {
-                                "label": "Avoid condensation with radiant systems: If the outdoor dew point temperature is below the radiant system surface temperature, the data point is not plot.",
+                                "label": (
+                                    "Avoid condensation with radiant systems: If the"
+                                    " outdoor dew point temperature is below the"
+                                    " radiant system surface temperature, the data"
+                                    " point is not plot."
+                                ),
                                 "value": 1,
                             },
                         ],
@@ -261,7 +269,7 @@ def inputs_tab(t_min, t_max, d_set):
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
-        State("si-ip-unit-store","data"),
+        State("si-ip-unit-store", "data"),
     ],
 )
 def nv_heatmap(
@@ -302,10 +310,10 @@ def nv_heatmap(
         if df.dropna(subset=["month"]).shape[0] == 0:
             return (
                 dbc.Alert(
-                    "Natural ventilation is not available in this location under these "
-                    "conditions. Please either select a different outdoor dry-bulb air "
-                    "temperature range, change the month and hour filter, or increase the"
-                    "dew-point temperature.",
+                    "Natural ventilation is not available in this location under these"
+                    " conditions. Please either select a different outdoor dry-bulb air"
+                    " temperature range, change the month and hour filter, or increase"
+                    " thedew-point temperature.",
                     color="danger",
                     style={"text-align": "center", "marginTop": "2rem"},
                 ),
@@ -343,7 +351,10 @@ def nv_heatmap(
         data_min = 5 * math.floor(df[var].min() / 5)
         range_z = [data_min, data_max]
 
-    title = f"Hours when the {var_name} is in the range {min_dbt_val} to {max_dbt_val} {var_unit}"
+    title = (
+        f"Hours when the {var_name} is in the range {min_dbt_val} to"
+        f" {max_dbt_val} {var_unit}"
+    )
 
     if time_filter:
         title += (
@@ -452,7 +463,7 @@ def nv_bar_chart(
     invert_month,
     invert_hour,
     si_ip,
-):  
+):
 
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
@@ -521,8 +532,8 @@ def nv_bar_chart(
                 marker_color=color_in,
                 customdata=np.stack((n_hours_nv_allowed, per_time_nv_allowed), axis=-1),
                 hovertemplate=(
-                    "natural ventilation possible for: <br>%{customdata[0]} hrs or <br>%{"
-                    "customdata[1]}% of selected time<br>"
+                    "natural ventilation possible for: <br>%{customdata[0]} hrs or"
+                    " <br>%{customdata[1]}% of selected time<br>"
                 ),
             )
         )
@@ -530,7 +541,7 @@ def nv_bar_chart(
         title = (
             f"Number of hours the {var_name}"
             + f" is in the range {min_dbt_val}"
-            + f" to "
+            + " to "
             + f" {max_dbt_val} {var_unit}"
         )
         fig.update_yaxes(title_text="hours", range=[0, 744])

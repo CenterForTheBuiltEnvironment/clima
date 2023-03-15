@@ -133,13 +133,15 @@ def static_section(si_ip):
         hor_unit = "Wh/m²"
     if si_ip == "ip":
         hor_unit = "Btu/ft²"
-    print (hor_unit)
+    print(hor_unit)
     return html.Div(
         className="container-col full-width",
         children=[
             html.Div(
                 children=title_with_tooltip(
-                    text= "Global and Diffuse Horizontal Solar Radiation ("+ hor_unit +")",
+                    text="Global and Diffuse Horizontal Solar Radiation ("
+                    + hor_unit
+                    + ")",
                     tooltip_text=None,
                     id_button="monthly-chart-label",
                 ),
@@ -180,7 +182,11 @@ def layout_sun(si_ip):
     [
         Input("df-store", "modified_timestamp"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def monthly_and_cloud_chart(ts, df, meta, si_ip):
@@ -218,7 +224,11 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
         Input("custom-sun-var-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
@@ -243,7 +253,11 @@ def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def daily(ts, var, global_local, df, meta, si_ip):
@@ -262,7 +276,11 @@ def daily(ts, var, global_local, df, meta, si_ip):
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_heatmap(ts, var, global_local, df, meta, si_ip):

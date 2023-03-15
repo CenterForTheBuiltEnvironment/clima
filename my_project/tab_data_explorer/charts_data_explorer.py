@@ -113,8 +113,15 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
 
 
 def three_var_graph(
-    df, global_local, var_x, var_y, color_by, time_filter_info3, data_filter_info3, si_ip
-):  
+    df,
+    global_local,
+    var_x,
+    var_y,
+    color_by,
+    time_filter_info3,
+    data_filter_info3,
+    si_ip,
+):
 
     """Return the custom graph plotting three variables."""
     time_filter = time_filter_info3[0]
@@ -192,7 +199,6 @@ def three_var_graph(
 
 
 def two_var_graph(df, var_x, var_y, si_ip):
-    
 
     title = (
         "Simultaneous frequency of "

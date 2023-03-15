@@ -346,7 +346,11 @@ def layout_wind():
 @app.callback(
     Output("wind-rose", "children"),
     Input("df-store", "modified_timestamp"),
-    [State("df-store","data"), State("meta-store", "data"), State("si-ip-unit-store","data")]
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_annual_wind_rose(ts, df, meta, si_ip):
@@ -364,12 +368,17 @@ def update_annual_wind_rose(ts, df, meta, si_ip):
     Output("wind-speed", "children"),
     # General
     [
-        Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value"),
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
-def update_tab_wind_speed(ts,global_local, df, meta, si_ip):
+def update_tab_wind_speed(ts, global_local, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     speed = heatmap(df, "wind_speed", global_local, si_ip)
@@ -411,10 +420,16 @@ def update_tab_wind_direction(global_local, df, meta):
         Input("tab5-custom-end-month", "value"),
         Input("tab5-custom-end-hour", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store","data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
-def update_custom_wind_rose(ts, start_month, start_hour, end_month, end_hour, df, meta, si_ip):
+def update_custom_wind_rose(
+    ts, start_month, start_hour, end_month, end_hour, df, meta, si_ip
+):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     start_hour = int(start_hour)
@@ -431,7 +446,9 @@ def update_custom_wind_rose(ts, start_month, start_hour, end_month, end_hour, df
         df = df.loc[(df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
-    custom = wind_rose(df, "", [start_month, end_month], [start_hour, end_hour], True, si_ip)
+    custom = wind_rose(
+        df, "", [start_month, end_month], [start_hour, end_hour], True, si_ip
+    )
 
     return dcc.Graph(
         config=generate_chart_name("custom_wind_rose_wind", meta),
@@ -451,8 +468,14 @@ def update_custom_wind_rose(ts, start_month, start_hour, end_month, end_hour, df
         Output("summer-wind-rose-text", "children"),
         Output("fall-wind-rose-text", "children"),
     ],
-    [Input("df-store", "modified_timestamp"),],
-    [State("df-store","data"), State("meta-store", "data"), State("si-ip-unit-store","data")]
+    [
+        Input("df-store", "modified_timestamp"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_seasonal_graphs(ts, df, meta, si_ip):
@@ -564,7 +587,11 @@ def update_seasonal_graphs(ts, df, meta, si_ip):
     ],
     # General
     Input("df-store", "modified_timestamp"),
-    [State("df-store","data"), State("meta-store", "data"), State("si-ip-unit-store","data")]
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_daily_graphs(ts, df, meta, si_ip):

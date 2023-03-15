@@ -93,8 +93,16 @@ def layout_t_rh():
 
 @app.callback(
     Output("yearly-chart", "children"),
-    [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value"), Input("dropdown", "value")],
-    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+        Input("dropdown", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
@@ -120,8 +128,16 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
 
 @app.callback(
     Output("daily", "children"),
-    [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value"), Input("dropdown", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+        Input("dropdown", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
@@ -133,7 +149,8 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
             figure=daily_profile(
                 df[["DBT", "hour", "UTC_time", "month_names", "day", "month"]],
                 "DBT",
-                global_local, si_ip
+                global_local,
+                si_ip,
             ),
         )
     else:
@@ -142,20 +159,29 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
             figure=daily_profile(
                 df[["RH", "hour", "UTC_time", "month_names", "day", "month"]],
                 "RH",
-                global_local, si_ip
+                global_local,
+                si_ip,
             ),
         )
 
 
 @app.callback(
     [Output("heatmap", "children")],
-    [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value"), Input("dropdown", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+        Input("dropdown", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
-    
+
     """Update the contents of tab three. Passing in general info (df, meta)."""
     if dd_value == dropdown_names[var_to_plot[0]]:
         return dcc.Graph(
@@ -163,7 +189,8 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
             figure=heatmap(
                 df[["DBT", "hour", "UTC_time", "month_names", "day"]],
                 "DBT",
-                global_local, si_ip
+                global_local,
+                si_ip,
             ),
         )
     else:
@@ -172,14 +199,18 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
             figure=heatmap(
                 df[["RH", "hour", "UTC_time", "month_names", "day"]],
                 "RH",
-                global_local, si_ip
+                global_local,
+                si_ip,
             ),
         )
 
 
 @app.callback(
     Output("table-tmp-hum", "children"),
-    [Input("df-store", "modified_timestamp"), Input("dropdown", "value"),],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("dropdown", "value"),
+    ],
     [State("df-store", "data"), State("si-ip-unit-store", "data")],
 )
 @cache.memoize(timeout=TIMEOUT)

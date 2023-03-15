@@ -181,8 +181,12 @@ def update_map(meta):
 
 @app.callback(
     Output("location-info", "children"),
-    Input("df-store", "modified_timestamp"), 
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    Input("df-store", "modified_timestamp"),
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_location_info(ts, df, meta, si_ip):
@@ -191,11 +195,11 @@ def update_location_info(ts, df, meta, si_ip):
     lon = f"Longitude: {meta['lon']}"
     lat = f"Latitude: {meta['lat']}"
 
-    site_elevation = float(meta['site_elevation'])
-    site_elevation = round(site_elevation,2)
-    if si_ip != "si": 
-        site_elevation = site_elevation*3.281
-        site_elevation = round(site_elevation,2)
+    site_elevation = float(meta["site_elevation"])
+    site_elevation = round(site_elevation, 2)
+    if si_ip != "si":
+        site_elevation = site_elevation * 3.281
+        site_elevation = round(site_elevation, 2)
         elevation = f"Elevation above sea level: {str(site_elevation)} ft"
     else:
         elevation = f"Elevation above sea level: {meta['site_elevation']} m"
@@ -222,15 +226,22 @@ def update_location_info(ts, df, meta, si_ip):
 
     # global horizontal irradiance
     total_solar_rad_unit = mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
-    total_solar_rad = f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)}"+total_solar_rad_unit
+    total_solar_rad = (
+        f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)}"
+        + total_solar_rad_unit
+    )
     total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
     tmp_unit = mapping_dictionary["DBT"][si_ip]["unit"]
-    average_yearly_tmp = f"Average yearly temperature: {df['DBT'].mean().round(1)}"+tmp_unit
+    average_yearly_tmp = (
+        f"Average yearly temperature: {df['DBT'].mean().round(1)}" + tmp_unit
+    )
     hottest_yearly_tmp = (
-        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)}"+tmp_unit
+        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)}"
+        + tmp_unit
     )
     coldest_yearly_tmp = (
-        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)}"+tmp_unit
+        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)}"
+        + tmp_unit
     )
 
     location_info = dbc.Col(
@@ -264,7 +275,8 @@ def update_location_info(ts, df, meta, si_ip):
         Output("warning-cdd-higher-hdd", "is_open"),
     ],
     [
-        Input("df-store", "modified_timestamp"), Input("submit-set-points", "n_clicks_timestamp"),
+        Input("df-store", "modified_timestamp"),
+        Input("submit-set-points", "n_clicks_timestamp"),
     ],
     [
         State("df-store", "data"),
@@ -272,7 +284,7 @@ def update_location_info(ts, df, meta, si_ip):
         State("input-hdd-set-point", "value"),
         State("input-cdd-set-point", "value"),
         State("submit-set-points", "n_clicks"),
-        State("si-ip-unit-store","data"),
+        State("si-ip-unit-store", "data"),
     ],
 )
 @code_timer
@@ -369,12 +381,19 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 
 @app.callback(
     Output("temp-profile-graph", "children"),
-    [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_violin_tdb(ts, global_local, df, meta, si_ip):
-   
+
     return dcc.Graph(
         id="tdb-profile-graph",
         className="violin-container",
@@ -385,8 +404,15 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
 
 @app.callback(
     Output("wind-speed-graph", "children"),
-    [Input("df-store", "modified_timestamp"),Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_tab_wind(ts, global_local, df, meta, si_ip):
@@ -402,8 +428,15 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
 
 @app.callback(
     Output("humidity-profile-graph", "children"),
-    [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_tab_rh(ts, global_local, df, meta, si_ip):
@@ -419,8 +452,15 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
 
 @app.callback(
     Output("solar-radiation-graph", "children"),
-    [Input("df-store", "modified_timestamp"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
 )
 @code_timer
 def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
@@ -437,7 +477,11 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
 @app.callback(
     Output("download-dataframe-csv", "data"),
     [Input("download-button", "n_clicks")],
-    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
     prevent_initial_call=True,
 )
 @code_timer
@@ -445,14 +489,14 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
-            if si_ip == "si":
-                return dcc.send_data_frame(
-                    df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_SIunit.csv"
-                )
-            else:
-                return dcc.send_data_frame(
-                    df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_IPunit.csv"
-                )
+        if si_ip == "si":
+            return dcc.send_data_frame(
+                df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_SIunit.csv"
+            )
+        else:
+            return dcc.send_data_frame(
+                df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_IPunit.csv"
+            )
     else:
         print("df not loaded yet")
 

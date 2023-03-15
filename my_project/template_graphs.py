@@ -10,12 +10,11 @@ from my_project.global_scheme import mapping_dictionary
 from .global_scheme import month_lst, template, tight_margins
 
 
-
 # violin template
 from .utils import code_timer
 
 
-def violin(df, var, global_local,si_ip):
+def violin(df, var, global_local, si_ip):
     """Return day night violin based on the 'var' col"""
     mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
     mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
@@ -25,7 +24,7 @@ def violin(df, var, global_local,si_ip):
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
-    
+
     if global_local != "global":
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
@@ -85,7 +84,7 @@ def violin(df, var, global_local,si_ip):
 
 
 @code_timer
-def yearly_profile(df, var, global_local,si_ip):
+def yearly_profile(df, var, global_local, si_ip):
     """Return yearly profile figure based on the 'var' col."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
     var_range = mapping_dictionary[var][si_ip]["range"]
@@ -100,7 +99,7 @@ def yearly_profile(df, var, global_local,si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_y = [data_min, data_max]
-    
+
     var_single_color = var_color[len(var_color) // 2]
     custom_ylim = range_y
     # Get min, max, and mean of each day
@@ -148,11 +147,11 @@ def yearly_profile(df, var, global_local,si_ip):
         ),
     )
 
-    if var == "DBT":          
+    if var == "DBT":
         # plot ashrae adaptive comfort limits (80%)
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
-        
+
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
             y=hi80 - lo80,
@@ -259,7 +258,7 @@ def daily_profile(df, var, global_local, si_ip):
     )
 
     for i in range(12):
-        
+
         fig.add_trace(
             go.Scatter(
                 x=df.loc[df["month"] == i + 1, "hour"],
@@ -282,7 +281,7 @@ def daily_profile(df, var, global_local, si_ip):
             row=1,
             col=i + 1,
         )
-        
+
         fig.add_trace(
             go.Scatter(
                 x=var_month_ave.loc[var_month_ave["month"] == i + 1, "hour"],
@@ -298,7 +297,7 @@ def daily_profile(df, var, global_local, si_ip):
             ),
             row=1,
             col=i + 1,
-            )
+        )
 
         # print(len(DBT_df.loc[DBT_df["month"]==i+1,"hour"])/24)
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
@@ -332,7 +331,7 @@ def heatmap(df, var, global_local, si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_z = [data_min, data_max]
-        
+
     fig = go.Figure(
         data=go.Heatmap(
             y=df["hour"],
@@ -402,7 +401,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     spd_unit = mapping_dictionary["wind_speed"][si_ip]["unit"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     if si_ip == "ip":
-        spd_bins = convert_bins (spd_bins)
+        spd_bins = convert_bins(spd_bins)
 
     spd_labels = speed_labels(spd_bins, spd_unit)
     dir_bins = np.arange(-22.5 / 2, 360 + 22.5, 22.5)
@@ -480,13 +479,15 @@ def wind_rose(df, title, month, hour, labels, si_ip):
 
     return fig
 
+
 def convert_bins(sbins):
     i = 0
     for x in sbins:
-        x = x*196.85039370078738
-        sbins[i] = round(x,1)
-        i= i+1
+        x = x * 196.85039370078738
+        sbins[i] = round(x, 1)
+        i = i + 1
     return sbins
+
 
 def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     """Return the custom summary bar chart."""

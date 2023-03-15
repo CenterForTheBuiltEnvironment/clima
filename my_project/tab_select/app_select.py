@@ -105,7 +105,7 @@ def alert():
 @app.callback(
     [
         Output("meta-store", "data"),
-        Output("lines-store","data"),
+        Output("lines-store", "data"),
         Output("alert", "is_open"),
         Output("alert", "children"),
         Output("alert", "color"),
@@ -123,8 +123,12 @@ def alert():
 )
 # @code_timer
 def submitted_data(
-    use_epw_click, upload_click, list_of_contents, list_of_names, url_store, 
-):  
+    use_epw_click,
+    upload_click,
+    list_of_contents,
+    list_of_names,
+    url_store,
+):
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
 
@@ -138,7 +142,9 @@ def submitted_data(
                 messages_alert["not_available"],
                 "warning",
             )
-        df, location_info = create_df(lines, url_store)  # we might need to split this call into two, one returns df and one returns location_info
+        df, location_info = create_df(
+            lines, url_store
+        )  # we might need to split this call into two, one returns df and one returns location_info
         return (
             location_info,
             lines,
@@ -146,7 +152,7 @@ def submitted_data(
             messages_alert["success"],
             "success",
         )
-    
+
     elif (
         ctx.triggered[0]["prop_id"] == "upload-data.contents"
         and list_of_contents is not None
@@ -185,29 +191,26 @@ def submitted_data(
             )
     raise PreventUpdate
 
-#add switch_si_ip function and convert the data-store
+
+# add switch_si_ip function and convert the data-store
 @app.callback(
     [
         ServersideOutput("df-store", "data"),
-        Output("si-ip-unit-store","data"),
+        Output("si-ip-unit-store", "data"),
     ],
-    [   
-        Input("lines-store","modified_timestamp"),
+    [
+        Input("lines-store", "modified_timestamp"),
         Input("si-ip-radio-input", "value"),
     ],
-    [State("url-store", "data"), State("lines-store","data")]
+    [State("url-store", "data"), State("lines-store", "data")],
 )
-
 def switch_si_ip(ts, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
         map_json = json.dumps(mapping_dictionary)
         if si_ip_input == "ip":
-            map_json = convert_data(df,map_json)
-        return (
-            df, 
-            si_ip_input
-        )
+            map_json = convert_data(df, map_json)
+        return (df, si_ip_input)
     else:
         return (
             None,
