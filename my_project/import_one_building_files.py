@@ -12,7 +12,6 @@ def import_kml_files(file_name):
 
     data = []
     for location in locations:
-        # print(location)
         location_info = []
         # lat
         location_info.append(
