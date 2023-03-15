@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash
 import os
 
@@ -47,17 +47,17 @@ def display_page(pathname):
 
 
 # Handle tab selection
-@app.callback(Output("tabs-content", "children"), [Input("tabs", "value")])
-def render_content(tab):
+@app.callback(Output("tabs-content", "children"), [Input("tabs", "value"),Input("si-ip-radio-input", "value"),],)
+def render_content(tab,si_ip):
     """Update the contents of the page depending on what tab the user selects."""
     if tab == "tab-select":
         return layout_select()
     elif tab == "tab-summary":
-        return layout_summary()
+        return layout_summary(si_ip)
     elif tab == "tab-t-rh":
         return layout_t_rh()
     elif tab == "tab-sun":
-        return layout_sun()
+        return layout_sun(si_ip)
     elif tab == "tab-wind":
         return layout_wind()
     elif tab == "tab-data-explorer":
@@ -65,7 +65,7 @@ def render_content(tab):
     elif tab == "tab-outdoor-comfort":
         return layout_outdoor_comfort()
     elif tab == "tab-natural-ventilation":
-        return layout_natural_ventilation()
+        return layout_natural_ventilation(si_ip)
     elif tab == "tab-psy-chart":
         return layout_psy_chart()
     else:

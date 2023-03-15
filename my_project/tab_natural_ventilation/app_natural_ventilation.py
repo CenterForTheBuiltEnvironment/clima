@@ -1,4 +1,5 @@
 import math
+import json
 from dash import dcc
 import dash_bootstrap_components as dbc
 from dash import html
@@ -21,12 +22,21 @@ from my_project.utils import (
 
 from app import app
 
+    
+def layout_natural_ventilation(si_ip):
+    if si_ip == "ip":
+        tdb_set_min = 50
+        tdb_set_max = 75
+        dpt_set = 61
+    else:
+        tdb_set_min = 10
+        tdb_set_max = 24
+        dpt_set = 16
 
-def layout_natural_ventilation():
     return html.Div(
         className="container-col",
         children=[
-            inputs_tab(),
+            inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
             dcc.Loading(
                 html.Div(
                     id="nv-heatmap-chart",
@@ -70,8 +80,7 @@ def layout_natural_ventilation():
         ],
     )
 
-
-def inputs_tab():
+def inputs_tab(t_min, t_max, d_set):
     return html.Div(
         className="container-row full-width three-inputs-container",
         children=[
@@ -95,7 +104,7 @@ def inputs_tab():
                                 placeholder="Enter a number for the min val",
                                 type="number",
                                 step=1,
-                                value=10,
+                                value=t_min,
                                 style={"flex": "70%"},
                             ),
                         ],
@@ -108,7 +117,7 @@ def inputs_tab():
                                 id="nv-tdb-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
-                                value=24,
+                                value=t_max,
                                 step=1,
                                 style={"flex": "70%"},
                             ),
@@ -220,7 +229,7 @@ def inputs_tab():
                                 id="nv-dpt-max-val",
                                 placeholder="Enter a number for the max val",
                                 type="number",
-                                value=16,
+                                value=d_set,
                                 step=1,
                                 style={"flex": "1"},
                             ),
@@ -235,6 +244,7 @@ def inputs_tab():
 @app.callback(
     Output("nv-heatmap-chart", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
@@ -251,9 +261,11 @@ def inputs_tab():
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
+        State("si-ip-unit-store","data"),
     ],
 )
 def nv_heatmap(
+    ts,
     time_filter,
     dbt_data_filter,
     click_dpt_filter,
@@ -268,6 +280,7 @@ def nv_heatmap(
     meta,
     invert_month,
     invert_hour,
+    si_ip,
 ):
 
     # enable or disable button apply filter DPT
@@ -311,11 +324,11 @@ def nv_heatmap(
         else:
             df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
 
-    var_unit = mapping_dictionary[var]["unit"]
+    var_unit = mapping_dictionary[var][si_ip]["unit"]
 
-    filter_unit = mapping_dictionary[filter_var]["unit"]
+    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
 
-    var_range = mapping_dictionary[var]["range"]
+    var_range = mapping_dictionary[var][si_ip]["range"]
 
     var_name = mapping_dictionary[var]["name"]
 
@@ -402,6 +415,7 @@ def nv_heatmap(
 @app.callback(
     Output("nv-bar-chart", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("nv-month-hour-filter", "n_clicks"),
         Input("nv-dbt-filter", "n_clicks"),
         Input("nv-dpt-filter", "n_clicks"),
@@ -418,9 +432,11 @@ def nv_heatmap(
         State("meta-store", "data"),
         State("invert-month-nv", "value"),
         State("invert-hour-nv", "value"),
+        State("si-ip-unit-store", "data"),
     ],
 )
 def nv_bar_chart(
+    ts,
     time_filter,
     dbt_data_filter,
     click_dpt_filter,
@@ -435,7 +451,9 @@ def nv_bar_chart(
     meta,
     invert_month,
     invert_hour,
-):
+    si_ip,
+):  
+
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
@@ -446,8 +464,8 @@ def nv_bar_chart(
     var = "DBT"
     filter_var = "DPT"
 
-    var_unit = mapping_dictionary[var]["unit"]
-    filter_unit = mapping_dictionary[filter_var]["unit"]
+    var_unit = mapping_dictionary[var][si_ip]["unit"]
+    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
 
     var_name = mapping_dictionary[var]["name"]
 

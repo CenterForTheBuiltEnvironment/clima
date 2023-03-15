@@ -1,5 +1,6 @@
 import numpy as np
 import plotly.graph_objects as go
+import json
 from pythermalcomfort import psychrometrics as psy
 from math import ceil, floor
 import dash_bootstrap_components as dbc
@@ -215,6 +216,7 @@ def layout_psy_chart():
 @app.callback(
     Output("psych-chart", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("psy-color-by-dropdown", "value"),
         Input("month-hour-filter", "n_clicks"),
         Input("data-filter", "n_clicks"),
@@ -230,9 +232,11 @@ def layout_psy_chart():
         State("meta-store", "data"),
         State("invert-month-psy", "value"),
         State("invert-hour-psy", "value"),
+        State("si-ip-unit-store","data")
     ],
 )
 def update_psych_chart(
+    ts,
     colorby_var,
     time_filter,
     data_filter,
@@ -246,8 +250,9 @@ def update_psych_chart(
     meta,
     invert_month,
     invert_hour,
+    si_ip,
 ):
-
+    
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -308,7 +313,7 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = mapping_dictionary[var]["unit"]
+        var_unit = mapping_dictionary[var][si_ip]["unit"]
 
         var_name = mapping_dictionary[var]["name"]
 
@@ -316,9 +321,8 @@ def update_psych_chart(
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = mapping_dictionary["DBT"]["range"]
-        hr_range = [0, 0.03]
-        var_range_y = hr_range
+        var_range_x = mapping_dictionary["DBT"][si_ip]["range"]
+        var_range_y = mapping_dictionary["hr"][si_ip]["range"]
 
     else:
         # Set maximum and minimum according to data
@@ -326,8 +330,8 @@ def update_psych_chart(
         data_min = 5 * floor(df["DBT"].min() / 5)
         var_range_x = [data_min, data_max]
 
-        data_max = (5 * ceil(df["hr"].max() * 1000 / 5)) / 1000
-        data_min = (5 * floor(df["hr"].min() * 1000 / 5)) / 1000
+        data_max = round(df["hr"].max(),4)
+        data_min = round(df["hr"].min(),4)
         var_range_y = [data_min, data_max]
 
     title = "Psychrometric Chart"
@@ -350,10 +354,19 @@ def update_psych_chart(
     # Add traces
     for i, rh in enumerate(rh_list):
         name = "rh" + str(rh)
+
+        dbt_list_convert = list(dbt_list)
+        rh_convert = list(rh_df[name])
+
+        if si_ip == "ip":
+            for j in range(len(dbt_list)):
+                dbt_list_convert[j] = dbt_list_convert[j]*1.8+32
+            for k in range(len(rh_df[name])):
+                rh_convert[k] = rh_convert[k]*0.0624
         fig.add_trace(
             go.Scatter(
-                x=dbt_list,
-                y=rh_df[name],
+                x=dbt_list_convert,
+                y=rh_convert,
                 showlegend=False,
                 mode="lines",
                 name="",
@@ -422,19 +435,19 @@ def update_psych_chart(
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
                 hovertemplate=mapping_dictionary["DBT"]["name"]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"]["unit"]
+                + mapping_dictionary["DBT"][si_ip]["unit"]
                 + "<br>"
                 + mapping_dictionary["RH"]["name"]
                 + ": %{customdata[0]:.2f}"
-                + mapping_dictionary["RH"]["unit"]
+                + mapping_dictionary["RH"][si_ip]["unit"]
                 + "<br>"
                 + mapping_dictionary["h"]["name"]
                 + ": %{customdata[1]:.2f}"
-                + mapping_dictionary["h"]["unit"]
+                + mapping_dictionary["h"][si_ip]["unit"]
                 + "<br>"
                 + mapping_dictionary["t_dp"]["name"]
                 + ": %{customdata[3]:.2f}"
-                + mapping_dictionary["t_dp"]["unit"]
+                + mapping_dictionary["t_dp"][si_ip]["unit"]
                 + "<br>"
                 + "<br>"
                 + var_name
@@ -443,10 +456,12 @@ def update_psych_chart(
                 name="",
             )
         )
-
+    
+    xtitle_name = "Temperature"+"  "+mapping_dictionary["DBT"][si_ip]["unit"]
+    ytitle_name = "Humidity Ratio"+"  "+mapping_dictionary["hr"][si_ip]["unit"]
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
-        title_text="Temperature (°C)",
+        title_text = xtitle_name,
         range=var_range_x,
         showline=True,
         linewidth=1,
@@ -454,7 +469,7 @@ def update_psych_chart(
         mirror=True,
     )
     fig.update_yaxes(
-        title_text="Humidity Ratio (kg<sub>water</sub>/kg<sub>dry air</sub>)",
+        title_text = ytitle_name,
         range=var_range_y,
         showline=True,
         linewidth=1,

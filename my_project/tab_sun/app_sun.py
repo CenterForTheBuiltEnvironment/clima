@@ -7,6 +7,7 @@ from my_project.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     tight_margins,
     month_lst,
+    mapping_dictionary,
 )
 from dash.dependencies import Input, Output, State
 
@@ -127,13 +128,18 @@ def explore_daily_heatmap():
     )
 
 
-def static_section():
+def static_section(si_ip):
+    if si_ip == "si":
+        hor_unit = "Wh/m²"
+    if si_ip == "ip":
+        hor_unit = "Btu/ft²"
+    print (hor_unit)
     return html.Div(
         className="container-col full-width",
         children=[
             html.Div(
                 children=title_with_tooltip(
-                    text="Global and Diffuse Horizontal Solar Radiation (Wh/m²)",
+                    text= "Global and Diffuse Horizontal Solar Radiation ("+ hor_unit +")",
                     tooltip_text=None,
                     id_button="monthly-chart-label",
                 ),
@@ -157,12 +163,12 @@ def static_section():
     )
 
 
-def layout_sun():
+def layout_sun(si_ip):
     """Contents of tab four."""
     return html.Div(
         className="container-col",
         id="tab-four-container",
-        children=[sun_path(), static_section(), explore_daily_heatmap()],
+        children=[sun_path(), static_section(si_ip), explore_daily_heatmap()],
     )
 
 
@@ -174,18 +180,18 @@ def layout_sun():
     [
         Input("df-store", "modified_timestamp"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
 )
 @code_timer
-def monthly_and_cloud_chart(ts, df, meta):
+def monthly_and_cloud_chart(ts, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     # Sun Radiation
-    monthly = monthly_solar(df)
+    monthly = monthly_solar(df, si_ip)
     monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True)
+    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, si_ip)
     cover = cover.update_layout(
         margin=tight_margins,
         title="",
@@ -207,58 +213,61 @@ def monthly_and_cloud_chart(ts, df, meta):
 @app.callback(
     Output("custom-sunpath", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("custom-sun-view-dropdown", "value"),
         Input("custom-sun-var-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store","data")],
 )
 @code_timer
-def sun_path_chart(view, var, global_local, df, meta):
+def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     if view == "polar":
         return dcc.Graph(
             config=generate_chart_name("spherical_sun_path_sun", meta),
-            figure=polar_graph(df, meta, global_local, var),
+            figure=polar_graph(df, meta, global_local, var, si_ip),
         )
     else:
         return dcc.Graph(
             config=generate_chart_name("cartesian_sun_path_sun", meta),
-            figure=custom_cartesian_solar(df, meta, global_local, var),
+            figure=custom_cartesian_solar(df, meta, global_local, var, si_ip),
         )
 
 
 @app.callback(
     Output("tab4-daily", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def daily(var, global_local, df, meta):
+def daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
 
     return dcc.Graph(
         config=generate_chart_name("daily_sun", meta),
-        figure=daily_profile(df, var, global_local),
+        figure=daily_profile(df, var, global_local, si_ip),
     )
 
 
 @app.callback(
     Output("tab4-heatmap", "children"),
     [
+        Input("df-store", "modified_timestamp"),
         Input("tab4-explore-dropdown", "value"),
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
 @code_timer
-def update_heatmap(var, global_local, df, meta):
+def update_heatmap(ts, var, global_local, df, meta, si_ip):
 
     return dcc.Graph(
         config=generate_chart_name("heatmap_sun", meta),
-        figure=heatmap(df, var, global_local),
+        figure=heatmap(df, var, global_local, si_ip),
     )

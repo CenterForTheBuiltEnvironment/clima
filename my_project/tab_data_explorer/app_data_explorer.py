@@ -546,10 +546,10 @@ def layout_data_explorer():
 @app.callback(
     Output("yearly-explore", "children"),
     # Section One
-    [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [Input("df-store", "modified_timestamp"), Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
-def update_tab_yearly(var, global_local, df, meta):
+def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
     if df[var].mean() == 99990.0:
@@ -562,38 +562,38 @@ def update_tab_yearly(var, global_local, df, meta):
     else:
         return dcc.Graph(
             config=generate_chart_name("yearly_explore", meta),
-            figure=yearly_profile(df, var, global_local),
+            figure=yearly_profile(df, var, global_local,si_ip),
         )
 
 
 @app.callback(
     Output("query-daily", "children"),
-    [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [Input("df-store", "modified_timestamp"), Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
-def update_tab_daily(var, global_local, df, meta):
+def update_tab_daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
     return (
         dcc.Graph(
             config=generate_chart_name("daily_explore", meta),
-            figure=daily_profile(df, var, global_local),
+            figure=daily_profile(df, var, global_local, si_ip),
         ),
     )
 
 
 @app.callback(
     Output("query-heatmap", "children"),
-    [Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [Input("df-store", "modified_timestamp"), Input("sec1-var-dropdown", "value"), Input("global-local-radio-input", "value")],
+    [State("df-store", "data"), State("meta-store", "data"), State("si-ip-unit-store", "data")],
 )
-def update_tab_heatmap(var, global_local, df, meta):
+def update_tab_heatmap(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
     return (
         dcc.Graph(
             config=generate_chart_name("heatmap_explore", meta),
-            figure=heatmap(df, var, global_local),
+            figure=heatmap(df, var, global_local, si_ip),
         ),
     )
 
@@ -606,6 +606,7 @@ def update_tab_heatmap(var, global_local, df, meta):
         Output("normalize", "style"),
     ],
     [
+        Input("df-store", "modified_timestamp"),
         Input("sec2-var-dropdown", "value"),
         Input("sec2-time-filter-input", "n_clicks"),
         Input("sec2-data-filter-input", "n_clicks"),
@@ -623,9 +624,11 @@ def update_tab_heatmap(var, global_local, df, meta):
         State("meta-store", "data"),
         State("invert-month-explore-heatmap", "value"),
         State("invert-hour-explore-heatmap", "value"),
+        State("si-ip-unit-store","data"),
     ],
 )
 def update_heatmap(
+    ts,
     var,
     time_filter,
     data_filter,
@@ -640,6 +643,7 @@ def update_heatmap(
     meta,
     invert_month,
     invert_hour,
+    si_ip,
 ):
 
     start_month, end_month = month
@@ -651,7 +655,7 @@ def update_heatmap(
     time_filter_info = [time_filter, month, hour]
     data_filter_info = [data_filter, filter_var, min_val, max_val]
 
-    heat_map = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info)
+    heat_map = custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si_ip)
 
     no_display = {"display": "none"}
 
@@ -676,7 +680,7 @@ def update_heatmap(
                 figure=heat_map,
             ),
             {},
-            barchart(df, var, time_filter_info, data_filter_info, normalize),
+            barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip),
             {},
         )
     return (
@@ -693,6 +697,7 @@ def update_heatmap(
 @app.callback(
     [Output("three-var", "children"), Output("two-var", "children")],
     [
+        Input("df-store", "modified_timestamp"),
         Input("tab6-sec3-var-x-dropdown", "value"),
         Input("tab6-sec3-var-y-dropdown", "value"),
         Input("tab6-sec3-colorby-dropdown", "value"),
@@ -710,10 +715,12 @@ def update_heatmap(
         State("meta-store", "data"),
         State("invert-month-explore-more-charts", "value"),
         State("invert-hour-explore-more-charts", "value"),
+        State("si-ip-unit-store", "data"),
     ],
 )
 @code_timer
 def update_more_charts(
+    ts,
     var_x,
     var_y,
     color_by,
@@ -729,6 +736,7 @@ def update_more_charts(
     meta,
     invert_month,
     invert_hour,
+    si_ip,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     # todo: dont allow to input if apply filter not checked
@@ -746,9 +754,9 @@ def update_more_charts(
     if data_filter and (min_val is None or max_val is None):
         raise PreventUpdate
     else:
-        two = two_var_graph(df, var_x, var_y)
+        two = two_var_graph(df, var_x, var_y, si_ip)
         three = three_var_graph(
-            df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info
+            df, global_local, var_x, var_y, color_by, time_filter_info, data_filter_info, si_ip
         )
         if not three:
             return dbc.Alert(
@@ -773,11 +781,11 @@ def update_more_charts(
 
 @app.callback(
     Output("table-data-explorer", "children"),
-    [Input("sec1-var-dropdown", "value")],
-    [State("df-store", "data")],
+    [Input("df-store", "modified_timestamp"),Input("sec1-var-dropdown", "value")],
+    [State("df-store", "data"), State("si-ip-unit-store", "data")],
 )
-def update_table(dd_value, df):
+def update_table(ts, dd_value, df, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     return summary_table_tmp_rh_tab(
-        df[["month", "hour", dd_value, "month_names"]], dd_value
+        df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
     )
