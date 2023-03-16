@@ -396,13 +396,13 @@ def update_tab_wind_speed(ts, global_local, df, meta, si_ip):
     [
         Input("global-local-radio-input", "value"),
     ],
-    [State("df-store", "data"), State("meta-store", "data")],
+    [State("df-store", "data"), State("meta-store", "data"),State("si-ip-unit-store","data")],
 )
 @code_timer
-def update_tab_wind_direction(global_local, df, meta):
+def update_tab_wind_direction(global_local, df, meta,si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
-    direction = heatmap(df, "wind_dir", global_local)
+    direction = heatmap(df, "wind_dir", global_local,si_ip)
     return dcc.Graph(
         config=generate_chart_name("wind_direction_wind", meta),
         figure=direction,

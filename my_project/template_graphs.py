@@ -299,7 +299,6 @@ def daily_profile(df, var, global_local, si_ip):
             col=i + 1,
         )
 
-        # print(len(DBT_df.loc[DBT_df["month"]==i+1,"hour"])/24)
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
         fig.update_yaxes(range=range_y, row=1, col=i + 1)
 

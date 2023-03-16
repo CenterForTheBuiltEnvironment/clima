@@ -133,7 +133,6 @@ def static_section(si_ip):
         hor_unit = "Wh/m²"
     if si_ip == "ip":
         hor_unit = "Btu/ft²"
-    print(hor_unit)
     return html.Div(
         className="container-col full-width",
         children=[

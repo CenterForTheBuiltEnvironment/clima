@@ -45,6 +45,30 @@ def get_data(source_url):
         except:
             return None
 
+@code_timer
+def get_location_info(lst, file_name):
+    """Extract and clean the data. Return a pandas data from a url."""
+    meta = lst[0].strip().replace("\\r", "").split(",")
+
+    location_info = {
+        "url": file_name,
+        "lat": float(meta[-4]),
+        "lon": float(meta[-3]),
+        "time_zone": float(meta[-2]),
+        "site_elevation": meta[-1],
+        "city": meta[1],
+        "state": meta[2],
+        "country": meta[3],
+        "period": None,
+    }
+
+     # from OneClimaBuilding files extract info about reference years
+    try:
+        location_info["period"] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
+    except AttributeError:
+        pass
+    
+    return location_info
 
 @code_timer
 def create_df(lst, file_name):

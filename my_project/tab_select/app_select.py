@@ -7,7 +7,7 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 
 from app import app
-from my_project.extract_df import create_df, get_data
+from my_project.extract_df import create_df, get_data, get_location_info
 from my_project.utils import plot_location_epw_files, generate_chart_name
 from my_project.global_scheme import mapping_dictionary
 from my_project.extract_df import convert_data
@@ -142,9 +142,7 @@ def submitted_data(
                 messages_alert["not_available"],
                 "warning",
             )
-        df, location_info = create_df(
-            lines, url_store
-        )  # we might need to split this call into two, one returns df and one returns location_info
+        location_info = get_location_info(lines, url_store)  # we might need to split this call into two, one returns df and one returns location_info
         return (
             location_info,
             lines,
@@ -181,7 +179,7 @@ def submitted_data(
                     "warning",
                 )
         except Exception as e:
-            print(e)
+            #print(e)
             return (
                 None,
                 None,
