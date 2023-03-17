@@ -332,7 +332,7 @@ def update_psych_chart(
 
         data_max = round(df["hr"].max(), 4)
         data_min = round(df["hr"].min(), 4)
-        var_range_y = [data_min, data_max]
+        var_range_y = [data_min*1000, data_max*1000]
 
     title = "Psychrometric Chart"
 
@@ -356,17 +356,19 @@ def update_psych_chart(
         name = "rh" + str(rh)
 
         dbt_list_convert = list(dbt_list)
-        rh_convert = list(rh_df[name])
+        rh_multiply = list(rh_df[name])
+        
+        for k in range(len(rh_df[name])):
+           rh_multiply[k] = rh_multiply[k] * 1000 
 
         if si_ip == "ip":
             for j in range(len(dbt_list)):
                 dbt_list_convert[j] = dbt_list_convert[j] * 1.8 + 32
-            for k in range(len(rh_df[name])):
-                rh_convert[k] = rh_convert[k] * 0.0624
+
         fig.add_trace(
             go.Scatter(
                 x=dbt_list_convert,
-                y=rh_convert,
+                y=rh_multiply,
                 showlegend=False,
                 mode="lines",
                 name="",
@@ -374,11 +376,15 @@ def update_psych_chart(
                 line=dict(width=1, color="lightgrey"),
             )
         )
+
+    df_hr_multiply = list(df["hr"])
+    for k in range(len(df_hr_multiply)):
+        df_hr_multiply[k] = df_hr_multiply[k] * 1000 
     if var == "None":
         fig.add_trace(
             go.Scatter(
                 x=df["DBT"],
-                y=df["hr"],
+                y=df_hr_multiply,
                 showlegend=False,
                 mode="markers",
                 marker=dict(
@@ -397,12 +403,12 @@ def update_psych_chart(
         fig.add_trace(
             go.Histogram2d(
                 x=df["DBT"],
-                y=df["hr"],
+                y=df_hr_multiply,
                 name="",
                 colorscale=var_color,
                 hovertemplate="",
                 autobinx=False,
-                xbins=dict(start=-50, end=60, size=1),
+                xbins=dict(start=-50, end=100, size=1),
             )
         )
         # fig.add_trace(
@@ -421,7 +427,7 @@ def update_psych_chart(
         fig.add_trace(
             go.Scatter(
                 x=df["DBT"],
-                y=df["hr"],
+                y=df_hr_multiply,
                 showlegend=False,
                 mode="markers",
                 marker=dict(

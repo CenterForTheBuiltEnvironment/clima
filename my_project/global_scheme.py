@@ -768,14 +768,14 @@ mapping_dictionary = {
         "name": "Absolute humidity",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
         "si": {
-            "unit": "kg water/m<sup>3</sup> dry air",
-            "range": [0, 0.03],
+            "unit": "g water/kg dry air",
+            "range": [0, 0.03*1000],
         },
         "ip": {
-            "unit": "lbs water/ft<sup>3</sup> dry air",
-            "range": [0, 0.03 * 0.0624],
+            "unit": "lb water/klb dry air",
+            "range": [0, 0.03*1000],
         },
-        "conversion_function": "humidity",
+        "conversion_function": None,
     },
     "t_wb": {
         "name": "Wet bulb temperature",

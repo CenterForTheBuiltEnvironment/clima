@@ -227,20 +227,20 @@ def update_location_info(ts, df, meta, si_ip):
     # global horizontal irradiance
     total_solar_rad_unit = mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
     total_solar_rad = (
-        f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)}"
+        f"Annual cumulative horizontal solar radiation: {round(df['glob_hor_rad'].sum() /1000, 2)} "
         + total_solar_rad_unit
     )
     total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum()/df['glob_hor_rad'].sum()*100, 1)} %"
     tmp_unit = mapping_dictionary["DBT"][si_ip]["unit"]
     average_yearly_tmp = (
-        f"Average yearly temperature: {df['DBT'].mean().round(1)}" + tmp_unit
+        f"Average yearly temperature: {df['DBT'].mean().round(1)} " + tmp_unit
     )
     hottest_yearly_tmp = (
-        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)}"
+        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} "
         + tmp_unit
     )
     coldest_yearly_tmp = (
-        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)}"
+        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} "
         + tmp_unit
     )
 

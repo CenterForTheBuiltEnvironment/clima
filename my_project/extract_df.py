@@ -362,8 +362,6 @@ def visibility(df, name):
     df[name] = df[name] * 0.6215
 
 
-def humidity(df, name):
-    df[name] = df[name] * 0.0624
 
 
 def enthalpy(df, name):
