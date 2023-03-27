@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 1.0.0 \(2023-03-27\)
+
+Feat:
+
+* Implemented the units converter from SI to IP
+* Updated the documentation
+* Added reference to ArXiV paper
+
+Fix:
+
+* Issue calculation of the running mean outdoor temperature
+* Issue cloud cover figure
+
 ## Version 0.6.2 \(2022-05-27\)
 
 Fix:
