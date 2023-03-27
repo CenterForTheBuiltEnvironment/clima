@@ -37,7 +37,7 @@ jobs:
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
-        uses: google-github-actions/deploy-cloudrun@main
+        uses: google-github-actions/deploy-cloudrun@v1
         with:
           service: clima
           image: gcr.io/clima-316917/clima
