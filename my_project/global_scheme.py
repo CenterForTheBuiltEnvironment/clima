@@ -769,11 +769,11 @@ mapping_dictionary = {
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
         "si": {
             "unit": "g water/kg dry air",
-            "range": [0, 0.03*1000],
+            "range": [0, 0.03 * 1000],
         },
         "ip": {
             "unit": "lb water/klb dry air",
-            "range": [0, 0.03*1000],
+            "range": [0, 0.03 * 1000],
         },
         "conversion_function": None,
     },

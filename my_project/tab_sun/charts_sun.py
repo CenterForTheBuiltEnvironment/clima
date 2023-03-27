@@ -86,7 +86,7 @@ def monthly_solar(epw_df, si_ip):
             row=1,
             col=i + 1,
         )
-        
+
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
         if si_ip == "si":
             fig.update_yaxes(range=[0, 1000], row=1, col=i + 1)

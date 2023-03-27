@@ -332,7 +332,7 @@ def update_psych_chart(
 
         data_max = round(df["hr"].max(), 4)
         data_min = round(df["hr"].min(), 4)
-        var_range_y = [data_min*1000, data_max*1000]
+        var_range_y = [data_min * 1000, data_max * 1000]
 
     title = "Psychrometric Chart"
 
@@ -357,9 +357,9 @@ def update_psych_chart(
 
         dbt_list_convert = list(dbt_list)
         rh_multiply = list(rh_df[name])
-        
+
         for k in range(len(rh_df[name])):
-           rh_multiply[k] = rh_multiply[k] * 1000 
+            rh_multiply[k] = rh_multiply[k] * 1000
 
         if si_ip == "ip":
             for j in range(len(dbt_list)):
@@ -379,7 +379,7 @@ def update_psych_chart(
 
     df_hr_multiply = list(df["hr"])
     for k in range(len(df_hr_multiply)):
-        df_hr_multiply[k] = df_hr_multiply[k] * 1000 
+        df_hr_multiply[k] = df_hr_multiply[k] * 1000
     if var == "None":
         fig.add_trace(
             go.Scatter(

@@ -45,6 +45,7 @@ def get_data(source_url):
         except:
             return None
 
+
 @code_timer
 def get_location_info(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
@@ -62,13 +63,14 @@ def get_location_info(lst, file_name):
         "period": None,
     }
 
-     # from OneClimaBuilding files extract info about reference years
+    # from OneClimaBuilding files extract info about reference years
     try:
         location_info["period"] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
     except AttributeError:
         pass
-    
+
     return location_info
+
 
 @code_timer
 def create_df(lst, file_name):
@@ -360,8 +362,6 @@ def speed(df, name):
 
 def visibility(df, name):
     df[name] = df[name] * 0.6215
-
-
 
 
 def enthalpy(df, name):

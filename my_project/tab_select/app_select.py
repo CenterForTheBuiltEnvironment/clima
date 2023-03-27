@@ -142,7 +142,9 @@ def submitted_data(
                 messages_alert["not_available"],
                 "warning",
             )
-        location_info = get_location_info(lines, url_store)  # we might need to split this call into two, one returns df and one returns location_info
+        location_info = get_location_info(
+            lines, url_store
+        )  # we might need to split this call into two, one returns df and one returns location_info
         return (
             location_info,
             lines,
@@ -179,7 +181,7 @@ def submitted_data(
                     "warning",
                 )
         except Exception as e:
-            #print(e)
+            # print(e)
             return (
                 None,
                 None,
