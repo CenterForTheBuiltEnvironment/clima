@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 1.0.0 \(2023-03-27\)
+## Version 0.8.0 \(2023-03-27\)
 
 Feat:
 
