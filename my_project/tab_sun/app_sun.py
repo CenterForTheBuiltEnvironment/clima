@@ -61,7 +61,7 @@ def sun_path():
                 children=[
                     html.H6(
                         className="text-next-to-input",
-                        children=["Variable: "],
+                        children=["Select variable: "],
                         style={"width": "10rem"},
                     ),
                     dcc.Dropdown(
