@@ -48,18 +48,12 @@ def footer():
                             ),
                             dcc.Markdown(
                                 """
-                                    Developed by:
-                                    [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
-                                    [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
-                                    [Christine Nguyen](https://chrlng.github.io/),
+                                    [Contributors](https://cbe-berkeley.gitbook.io/clima/#contributions).
                 
-                                    Supported browsers: Chromium-based browsers, Firefox.
-                
-                                    Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
-                
-                                    [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
+                                    Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues),
+                                    [Contact us page](https://forms.gle/LRUq3vsFnE1QCLiA6)
                                     
-                                    [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
+                                    [Documentation page](https://center-for-the-built-environment.gitbook.io/clima/)
                                 """,
                                 style={"marginTop": "1rem"},
                             ),
