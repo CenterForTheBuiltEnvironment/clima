@@ -13,12 +13,12 @@ The CBE Clima Tool is open source. We have released the source code on a [public
 ## Contributions
 This ongoing project results from the collaboration and contributions of the people listed below. 
 
-* [Giovanni Betti](https://www.linkedin.com/in/gbetti/): Conceptualization, methodology, coding, review, supervision, project administration.
-* [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/): Methodology, coding, review, supervision, code maintenance.
-* [Stefano Schiavon](https://www.linkedin.com/in/stefanoschiavon/): Conceptualization, review, supervision, project administration, funding acquisition.
+* [Giovanni Betti](https://www.linkedin.com/in/gbetti/): Conceptualization, methodology, coding, review, supervision, and project administration.
+* [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/): Methodology, coding, review, supervision, and code maintenance.
+* [Stefano Schiavon](https://www.linkedin.com/in/stefanoschiavon/): Conceptualization, review, supervision, project administration, and funding acquisition.
 * [Roberto Rugiani](https://www.linkedin.com/in/roberto-rugani/): Documentation.
-* [Christine Nguyen](https://chrlng.github.io/): Coding, methodology
-* Yunzhu Ji: Coding, review
+* [Christine Nguyen](https://chrlng.github.io/): Coding and methodology.
+* Yunzhu Ji: Coding and review.
 
 ## Acknowledgment
 
