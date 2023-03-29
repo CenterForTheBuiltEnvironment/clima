@@ -2,10 +2,11 @@
 
 The cloud coverage diagram reports, for every month of the year the frequency of "clear", "cloudy" or "intermediate" conditions.
 
-As the Cloud cover is reported in tenths of coverage (i.e. 1 is 1/10 covered. 10 is total coverage) for the purpose of this graph we have simplified the scale as per the table below.&#x20;
+As the Cloud cover is reported in tenths of coverage (i.e. 0 is 0/10 covered. 10 is total coverage) for the purpose of this graph we have simplified the scale as per the table below.&#x20;
 
 | Categorization          | Color                                                                           | Tenth of coverage |
 | ----------------------- | ------------------------------------------------------------------------------- | ----------------- |
+| Clear (BELOW range)     | <img src="../../../.gitbook/assets/clear.2.png" alt="" data-size="line">        | 0                 |
 | Clear (BELOW range)     | <img src="../../../.gitbook/assets/clear.2.png" alt="" data-size="line">        | 1                 |
 | Clear (BELOW range)     | <img src="../../../.gitbook/assets/clear.2.png" alt="" data-size="line">        | 2                 |
 | Clear (BELOW range)     | <img src="../../../.gitbook/assets/clear.2.png" alt="" data-size="line">        | 3                 |
