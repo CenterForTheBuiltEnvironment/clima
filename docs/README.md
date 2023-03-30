@@ -14,15 +14,23 @@ The CBE Clima Tool is open source. We have released the source code on a [public
 
 This ongoing project results from the collaboration and contributions of the people listed below.
 
-* [Giovanni Betti](https://www.linkedin.com/in/gbetti/): Conceptualization, methodology, coding, review, supervision, and project administration.
-* [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/): Methodology, coding, review, supervision, and code maintenance.
-* [Stefano Schiavon](https://www.linkedin.com/in/stefanoschiavon/): Conceptualization, review, supervision, project administration, and funding acquisition.
-* [Roberto Rugiani](https://www.linkedin.com/in/roberto-rugani/): Documentation.
-* [Christine Nguyen](https://chrlng.github.io/): Coding and methodology.
-* Yunzhu Ji: Coding and review.
+* [Giovanni Betti](https://www.linkedin.com/in/gbetti/): Conceptualization, methodology, coding, review, supervision, and project administration
+* [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/): Methodology, coding, review, supervision, and code maintenance
+* [Stefano Schiavon](https://www.linkedin.com/in/stefanoschiavon/): Conceptualization, review, supervision, project administration, and funding acquisition
+* [Roberto Rugiani](https://www.linkedin.com/in/roberto-rugani/): Documentation
+* [Christine Nguyen](https://chrlng.github.io/): Coding and methodology
+* Yunzhu Ji: Coding and review
+* [Daniel Harris](https://www.linkedin.com/in/daniel-harris-4005a5a2/): Coding and review
+* [Chun Him Lee](https://www.linkedin.com/in/chun-him-lee-01b553129/): Coding and review
+* [Tu Minh Phuong Doan](https://www.linkedin.com/in/harry-doan-legopher/): Coding and review
+* [Yixun Quan](https://www.linkedin.com/in/yixun-quan-929a661a3): Coding and review
 
 ## Acknowledgment
 
 We would like to thank for their valuable feedback and support: Ed Arens, Dru Crawley, David Lehrer, Noah Pitts, and Hui Zhang. [Clima](https://clima.cbe.berkeley.edu/) has been supported by the [Centre for the Built Environment at UC Berkeley](https://cbe.berkeley.edu/) at the University of California Berkeley and the Republic of Singapore's National Research Foundation for [SinBerBEST](https://sinberbest.berkeley.edu) Program.
 
-<figure><img src=".gitbook/assets/clima.cbe.berkeley.edu_ (1).png" alt=""><figcaption><p>CBE Clima Tool Home Page</p></figcaption></figure>
+<figure><img src=".gitbook/assets/clima_home_page.png" alt=""><figcaption><p>CBE Clima Tool Home Page</p></figcaption></figure>
+
+## License
+
+[The CBE Clima Tool is licensed under a Creative Commons Attribution-Commercial 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
