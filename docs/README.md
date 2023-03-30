@@ -29,7 +29,7 @@ This ongoing project results from the collaboration and contributions of the peo
 
 We would like to thank for their valuable feedback and support: Ed Arens, Dru Crawley, David Lehrer, Noah Pitts, and Hui Zhang. [Clima](https://clima.cbe.berkeley.edu/) has been supported by the [Centre for the Built Environment at UC Berkeley](https://cbe.berkeley.edu/) at the University of California Berkeley and the Republic of Singapore's National Research Foundation for [SinBerBEST](https://sinberbest.berkeley.edu) Program.
 
-<figure><img src=".gitbook/assets/clima_home_page.png" alt=""><figcaption><p>CBE Clima Tool Home Page</p></figcaption></figure>
+<figure><img src="assets/clima_home_page.png" alt=""><figcaption><p>CBE Clima Tool Home Page</p></figcaption></figure>
 
 ## License
 
