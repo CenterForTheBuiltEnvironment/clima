@@ -20,16 +20,6 @@ def footer():
                             href="https://cbe.berkeley.edu/",
                         )
                     ),
-                    dbc.Row(
-                        dcc.Markdown(
-                            """
-                            [The CBE Clima Tool is licensed under a Creative Commons 
-                            Attribution-Commercial 4.0 International License (CC BY 
-                            4.0)](https://creativecommons.org/licenses/by/4.0/)
-                            """
-                        ),
-                        style={"padding": "25px 0px"},
-                    ),
                 ],
                 width=12,
                 md=4,
@@ -42,24 +32,17 @@ def footer():
                             dcc.Markdown(
                                 """
                                 Please cite us:
-                                Betti, G., Tartarini, F., Nguyen, C., Schiavon, S. (2022). CBE Clima Tool: a free and open-source web application for climate analysis tailored to sustainable building design.
-                                [Version: 0.8.0](https://center-for-the-built-environment.gitbook.io/clima/version/changelog) https://doi.org/10.48550/arxiv.2212.04609
+                                Betti G., Tartarini F., Nguyen C., Schiavon S. (2022). CBE Clima Tool: a free and open-source web application for climate analysis tailored to sustainable building design.
+                                [Version: 0.8.2](https://center-for-the-built-environment.gitbook.io/clima/version/changelog) https://doi.org/10.48550/arxiv.2212.04609
                                 """
                             ),
                             dcc.Markdown(
                                 """
-                                    Developed by:
-                                    [Giovanni Betti](https://www.linkedin.com/in/gbetti/),
-                                    [Federico Tartarini](https://www.linkedin.com/in/federico-tartarini-3991995b/).
-                                    [Christine Nguyen](https://chrlng.github.io/),
-                
-                                    Supported browsers: Chromium-based browsers, Firefox.
-                
-                                    Report issues on [GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues).
-                
-                                    [Contact us](https://forms.gle/LRUq3vsFnE1QCLiA6)
-                                    
-                                    [Documentation](https://center-for-the-built-environment.gitbook.io/clima/)
+                                    [Contributors](https://cbe-berkeley.gitbook.io/clima/#contributions),
+                                    [Report issues on GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues),
+                                    [Contact us page](https://forms.gle/LRUq3vsFnE1QCLiA6),
+                                    [Documentation page](https://center-for-the-built-environment.gitbook.io/clima/),
+                                    [License](https://center-for-the-built-environment.gitbook.io/clima/#license)
                                 """,
                                 style={"marginTop": "1rem"},
                             ),
