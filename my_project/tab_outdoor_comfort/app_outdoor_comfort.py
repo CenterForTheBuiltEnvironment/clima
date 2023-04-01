@@ -1,11 +1,11 @@
 import json
 from dash import dcc
 from dash import html
-from my_project.global_scheme import outdoor_dropdown_names
+from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst
 from dash.dependencies import Input, Output, State
-from my_project.template_graphs import heatmap
+from my_project.template_graphs import heatmap, thermalStressStackedBarChart
 from my_project.utils import title_with_tooltip, generate_chart_name
-
+import numpy as np
 from app import app
 
 
@@ -48,6 +48,10 @@ def layout_outdoor_comfort():
             ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
+                type="circle",
+            ),
+            dcc.Loading(
+                html.Div(id="utci-summary-chart"),
                 type="circle",
             ),
         ],
@@ -106,7 +110,6 @@ def change_image_based_on_selection(value):
     ],
 )
 def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
-
     utci_stress_cat = heatmap(df, var + "_categories", global_local, si_ip)
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
@@ -130,4 +133,33 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap_category", meta),
         figure=utci_stress_cat,
+    )
+
+@app.callback(
+    Output("utci-summary-chart", "children"),
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("tab7-dropdown", "value"),
+        Input("global-local-radio-input", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
+)
+def update_tab_utci_summary_chart(ts, var, global_local, df, meta, si_ip):
+  
+    utci_summary_chart = thermalStressStackedBarChart(df, var + "_categories")
+    utci_summary_chart = utci_summary_chart.update_layout(
+        margin=tight_margins,
+        title="",
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
+    )
+    utci_summary_chart.update_xaxes(
+        dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
+    )
+    return dcc.Graph(
+        config=generate_chart_name("utci_summary_chart", meta),
+        figure=utci_summary_chart,
     )
