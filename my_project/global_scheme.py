@@ -672,7 +672,7 @@ mapping_dictionary = {
         "conversion_function": None,
     },
     "utci_Sun_noWind_categories": {
-        "name": "UTCI: Sun & no WInd : categories",
+        "name": "UTCI: Sun & no Wind : categories",
         "color": [
             [0, "#2B2977"],
             [0.0555, "#2B2977"],
