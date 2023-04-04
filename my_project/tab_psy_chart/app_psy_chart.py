@@ -424,6 +424,20 @@ def update_psych_chart(
         # )
 
     else:
+        description = {
+            -5: "extreme heat stress",
+            -4: "very strong heat stress",
+            -3: "strong heat stress",
+            -2: "moderate heat stress",
+            -1: "no thermal stress",
+            -0: "slight cold stress",
+             1: "moderate cold stress",
+             2: "strong cold stress",
+             3: "very strong cold stress",
+             4: "extreme cold stress",
+        }
+        description_df = df[var].map(lambda x: description[x])
+
         fig.add_trace(
             go.Scatter(
                 x=df["DBT"],
@@ -457,8 +471,10 @@ def update_psych_chart(
                 + "<br>"
                 + "<br>"
                 + var_name
-                + ": %{customdata[2]:.2f}"
-                + var_unit,
+                  + ": %{customdata[2]:.2f}"
+                + var_unit
+            #    + var_name
+            #  + ": %{customdata[2]}",
                 name="",
             )
         )
