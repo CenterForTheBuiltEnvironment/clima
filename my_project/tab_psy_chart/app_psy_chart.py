@@ -424,19 +424,25 @@ def update_psych_chart(
         # )
 
     else:
-        description = {
-            -5: "extreme heat stress",
-            -4: "very strong heat stress",
-            -3: "strong heat stress",
-            -2: "moderate heat stress",
-            -1: "no thermal stress",
-            -0: "slight cold stress",
-             1: "moderate cold stress",
-             2: "strong cold stress",
-             3: "very strong cold stress",
-             4: "extreme cold stress",
-        }
-        description_df = df[var].map(lambda x: description[x])
+        var_colorbar = dict(
+            thickness=30, 
+            title=var_unit + "<br>  ",
+        )
+
+        if var_unit == "Thermal stress":
+            var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+            var_colorbar["ticktext"] = [
+                "extreme heat stress",
+                "very strong heat stress",
+                "strong heat stress",
+                "moderate heat stress",
+                "no thermal stress",
+                "slight cold stress",
+                "moderate cold stress",
+                "strong cold stress",
+                "very strong cold stress",
+                "extreme cold stress",
+            ]
 
         fig.add_trace(
             go.Scatter(
@@ -450,7 +456,7 @@ def update_psych_chart(
                     showscale=True,
                     opacity=0.3,
                     colorscale=var_color,
-                    colorbar=dict(thickness=30, title=var_unit + "<br>  "),
+                    colorbar=var_colorbar,
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
                 hovertemplate=mapping_dictionary["DBT"]["name"]
@@ -472,9 +478,7 @@ def update_psych_chart(
                 + "<br>"
                 + var_name
                   + ": %{customdata[2]:.2f}"
-                + var_unit
-            #    + var_name
-            #  + ": %{customdata[2]}",
+                + var_unit,
                 name="",
             )
         )
