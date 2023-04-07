@@ -518,21 +518,29 @@ def thermalStressStackedBarChart(df, var):
 
     go.Figure()
     data = []
+
     def catch(func, handle=lambda e: e, *args, **kwargs):
         # Handle category not in dictionary
         try:
             return func(*args, **kwargs)
         except Exception as e:
             return 0
+
     for i in range(len(categories)):
         data.append(
             go.Bar(
                 x=list(range(0, 13)),
                 y=[catch(lambda : new_df.iloc[month - 1][categories[i]]) for month in range(1,13)],
                 name=categories[i],
-                marker_color=colors[i]
+                marker_color=colors[i],
+                hovertemplate=(
+                    "</b><br>Month: %{x}" +
+                    "<br>Category: " + categories[i] +
+                    "<br>Proportion: %{y:.1f}%<br><extra></extra>"
+                )
             )
         )
+
     fig = go.Figure(data=data)
     fig.update_layout(barmode="stack", dragmode=False)
 
