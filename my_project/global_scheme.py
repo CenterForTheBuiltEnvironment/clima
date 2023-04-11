@@ -820,7 +820,6 @@ mapping_dictionary = {
 
 # Dropdown Names
 variables_sun_cloud_tab_dropdown = [
-    "None",
     "DBT",
     "DPT",
     "RH",
