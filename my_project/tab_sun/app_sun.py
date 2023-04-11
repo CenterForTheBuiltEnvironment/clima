@@ -5,6 +5,8 @@ import dash_bootstrap_components as dbc
 from my_project.global_scheme import (
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
+    dropdown_names,
+    more_variables_dropdown,
     tight_margins,
     month_lst,
     mapping_dictionary,
@@ -21,6 +23,20 @@ from my_project.utils import code_timer
 from my_project.utils import title_with_tooltip, generate_chart_name
 
 from app import app
+
+sc_dropdown_names = {
+    "None": "None",
+    "Frequency": "Frequency",
+}
+sc_dropdown_names.update(dropdown_names.copy())
+sc_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
+sc_dropdown_names.update(more_variables_dropdown.copy())
+sc_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+# Remove the keys from the dictionary
+sc_dropdown_names.pop("UTCI: Sun & Wind : categories", None)
+sc_dropdown_names.pop("UTCI: no Sun & Wind : categories", None)
+sc_dropdown_names.pop("UTCI: Sun & no Wind : categories", None)
+sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
 
 
 def sun_path():
@@ -67,8 +83,8 @@ def sun_path():
                     dcc.Dropdown(
                         id="custom-sun-var-dropdown",
                         options=[
-                            {"label": i, "value": sun_cloud_tab_dropdown_names[i]}
-                            for i in sun_cloud_tab_dropdown_names
+                            {"label": i, "value": sc_dropdown_names[i]}
+                            for i in sc_dropdown_names
                         ],
                         value="None",
                         style={"width": "20rem"},
