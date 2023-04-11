@@ -416,11 +416,11 @@ mapping_dictionary = {
         "name": "Visibility",
         "color": cloud_colors,
         "si": {
-            "unit": "Km",
+            "unit": "km",
             "range": [0, 100],
         },
         "ip": {
-            "unit": "mile",
+            "unit": "miles",
             "range": [0, 100 * 0.6215],
         },
         "conversion_function": "visibility",
