@@ -424,6 +424,26 @@ def update_psych_chart(
         # )
 
     else:
+        var_colorbar = dict(
+            thickness=30, 
+            title=var_unit + "<br>  ",
+        )
+
+        if var_unit == "Thermal stress":
+            var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+            var_colorbar["ticktext"] = [
+                "extreme heat stress",
+                "very strong heat stress",
+                "strong heat stress",
+                "moderate heat stress",
+                "no thermal stress",
+                "slight cold stress",
+                "moderate cold stress",
+                "strong cold stress",
+                "very strong cold stress",
+                "extreme cold stress",
+            ]
+
         fig.add_trace(
             go.Scatter(
                 x=df["DBT"],
@@ -436,7 +456,7 @@ def update_psych_chart(
                     showscale=True,
                     opacity=0.3,
                     colorscale=var_color,
-                    colorbar=dict(thickness=30, title=var_unit + "<br>  "),
+                    colorbar=var_colorbar,
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
                 hovertemplate=mapping_dictionary["DBT"]["name"]
@@ -457,7 +477,7 @@ def update_psych_chart(
                 + "<br>"
                 + "<br>"
                 + var_name
-                + ": %{customdata[2]:.2f}"
+                  + ": %{customdata[2]:.2f}"
                 + var_unit,
                 name="",
             )
