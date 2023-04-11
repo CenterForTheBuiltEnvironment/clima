@@ -1,10 +1,11 @@
 # Changelog
 
-## Version 0.8.3 \(2023-04-11\)
+## Version 0.8.4 \(2023-04-11\)
 
 Feat:
 
 * Added stacked bar chart Outdoor Comfort
+* Fixed issues 144, 148, and 141
 
 ## Version 0.8.0 \(2023-03-27\)
 
