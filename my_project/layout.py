@@ -90,6 +90,7 @@ def banner():
                         align="end",
                         children=[
                             dbc.Row(
+                                style={"text-align": "right"},
                                 children=[
                                     dbc.RadioItems(
                                         options=[
@@ -110,6 +111,7 @@ def banner():
                             ),
                             dbc.Row(
                                 align="end",
+                                style={"text-align": "right"},
                                 children=[
                                     dbc.RadioItems(
                                         options=[
