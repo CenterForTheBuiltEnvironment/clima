@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+from copy import deepcopy
 from dash import dcc
 from dash import html
 from dash.exceptions import PreventUpdate
@@ -30,10 +31,10 @@ from my_project.template_graphs import heatmap, yearly_profile, daily_profile, b
 from app import app
 
 explore_dropdown_names = {}
-explore_dropdown_names.update(dropdown_names.copy())
-explore_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
-explore_dropdown_names.update(more_variables_dropdown.copy())
-explore_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+explore_dropdown_names.update(deepcopy(dropdown_names))
+explore_dropdown_names.update(deepcopy(sun_cloud_tab_dropdown_names))
+explore_dropdown_names.update(deepcopy(more_variables_dropdown))
+explore_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
 explore_dropdown_names.pop("None", None)
 
 
