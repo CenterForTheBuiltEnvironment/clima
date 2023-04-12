@@ -34,6 +34,7 @@ explore_dropdown_names.update(dropdown_names.copy())
 explore_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
 explore_dropdown_names.update(more_variables_dropdown.copy())
 explore_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+explore_dropdown_names.pop("None", None)
 
 
 def section_one_inputs():
