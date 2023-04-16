@@ -502,5 +502,12 @@ def update_psych_chart(
         linecolor="black",
         mirror=True,
     )
-
-    return dcc.Graph(config=generate_chart_name("psy", meta), figure=fig)
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    if colorby_var == "None":
+        custom_inputs = f"{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_var}_{min_val}-{max_val}"
+    else:
+        custom_inputs = f"{colorby_var}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_var}_{min_val}-{max_val}"
+    units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+    return dcc.Graph(config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig)
