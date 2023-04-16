@@ -18,6 +18,7 @@ from my_project.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     container_row_center_full,
     container_col_center_one_of_three,
+    mapping_dictionary,
 )
 from dash.dependencies import Input, Output, State
 
@@ -570,8 +571,11 @@ def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
             className="m-4",
         )
     else:
+        var_fullname = mapping_dictionary[var]["name"]
+        custom_inputs = ''.join(word.capitalize() for word in var_fullname.split(' '))
+        units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
         return dcc.Graph(
-            config=generate_chart_name("yearly_explore", meta),
+            config=generate_chart_name("yearly_explore", meta, custom_inputs, units),
             figure=yearly_profile(df, var, global_local, si_ip),
         )
 
@@ -591,10 +595,12 @@ def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
 )
 def update_tab_daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-
+    var_fullname = mapping_dictionary[var]["name"]
+    custom_inputs = ''.join(word.capitalize() for word in var_fullname.split(' '))
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return (
         dcc.Graph(
-            config=generate_chart_name("daily_explore", meta),
+            config=generate_chart_name("daily_explore", meta, custom_inputs, units),
             figure=daily_profile(df, var, global_local, si_ip),
         ),
     )
@@ -615,10 +621,12 @@ def update_tab_daily(ts, var, global_local, df, meta, si_ip):
 )
 def update_tab_heatmap(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-
+    var_fullname = mapping_dictionary[var]["name"]
+    custom_inputs = ''.join(word.capitalize() for word in var_fullname.split(' '))
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap_explore", meta),
+            config=generate_chart_name("heatmap_explore", meta, custom_inputs, units),
             figure=heatmap(df, var, global_local, si_ip),
         ),
     )
@@ -702,18 +710,25 @@ def update_heatmap(
         )
 
     if data_filter:
+        month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        start_month_abbr = month_names[int(start_month)]
+        end_month_abbr = month_names[int(end_month)]
+        custom_inputs = f"{var}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{filter_var}_{min_val}-{max_val}"
+        units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
         return (
             dcc.Graph(
-                config=generate_chart_name("heatmap_explore", meta),
+                config=generate_chart_name("heatmap", meta, custom_inputs, units),
                 figure=heat_map,
             ),
             {},
             barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip),
             {},
         )
+    custom_inputs = f"{var}"
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap_explore", meta),
+            config=generate_chart_name("heatmap", meta, custom_inputs, units),
             figure=heat_map,
         ),
         no_display,
@@ -794,6 +809,7 @@ def update_more_charts(
             si_ip,
         )
         if not three:
+            custom_inputs = f"{var_x}-{var_y}"
             return dbc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
@@ -801,15 +817,17 @@ def update_more_charts(
                 color="danger",
                 style={"text-align": "center", "marginTop": "2rem"},
             ), dcc.Graph(
-                config=generate_chart_name("scatter_two_vars_explore", meta),
+                config=generate_chart_name("scatter", meta, custom_inputs),
                 figure=two,
             )
         else:
+            custom_inputs_three = f"{var_x}-{var_y}-{color_by}"
+            custom_inputs_two = f"{var_x}-{var_y}"
             return dcc.Graph(
-                config=generate_chart_name("scatter_three_vars_explore", meta),
+                config=generate_chart_name("scatter", meta, custom_inputs_three),
                 figure=three,
             ), dcc.Graph(
-                config=generate_chart_name("scatter_two_vars_explore", meta),
+                config=generate_chart_name("scatter", meta, custom_inputs_two),
                 figure=two,
             )
 
