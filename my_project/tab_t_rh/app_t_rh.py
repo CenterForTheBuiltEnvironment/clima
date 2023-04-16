@@ -111,17 +111,17 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, "DBT", global_local, si_ip)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
-
+        units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
         return dcc.Graph(
-            config=generate_chart_name("tdb_yearly_t_rh", meta),
+            config=generate_chart_name("tdb_yearly", meta, units),
             figure=dbt_yearly,
         )
     else:
         rh_yearly = yearly_profile(df, "RH", global_local, si_ip)
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
-
+        units = "%"
         return dcc.Graph(
-            config=generate_chart_name("rh_yearly_t_rh", meta),
+            config=generate_chart_name("rh_yearly", meta, units),
             figure=rh_yearly,
         )
 
@@ -144,8 +144,9 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
 def update_daily(ts, global_local, dd_value, df, meta, si_ip):
 
     if dd_value == dropdown_names[var_to_plot[0]]:
+        units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
         return dcc.Graph(
-            config=generate_chart_name("tdb_daily_t_rh", meta),
+            config=generate_chart_name("tdb_daily", meta, units),
             figure=daily_profile(
                 df[["DBT", "hour", "UTC_time", "month_names", "day", "month"]],
                 "DBT",
@@ -154,8 +155,9 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
             ),
         )
     else:
+        units = "%"
         return dcc.Graph(
-            config=generate_chart_name("rh_daily_t_rh", meta),
+            config=generate_chart_name("rh_daily", meta, units),
             figure=daily_profile(
                 df[["RH", "hour", "UTC_time", "month_names", "day", "month"]],
                 "RH",
@@ -184,8 +186,9 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
 
     """Update the contents of tab three. Passing in general info (df, meta)."""
     if dd_value == dropdown_names[var_to_plot[0]]:
+        units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
         return dcc.Graph(
-            config=generate_chart_name("tdb_heatmap_t_rh", meta),
+            config=generate_chart_name("tdb_heatmap", meta, units),
             figure=heatmap(
                 df[["DBT", "hour", "UTC_time", "month_names", "day"]],
                 "DBT",
@@ -194,8 +197,9 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
             ),
         )
     else:
+        units = "%"
         return dcc.Graph(
-            config=generate_chart_name("rh_heatmap_t_rh", meta),
+            config=generate_chart_name("rh_heatmap", meta, units),
             figure=heatmap(
                 df[["RH", "hour", "UTC_time", "month_names", "day"]],
                 "RH",
