@@ -221,12 +221,13 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
     cover.update_xaxes(
         dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
     )
-
+    units_monthly = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
+    units_cover = "%"
     return dcc.Graph(
-        config=generate_chart_name("monthly_sun", meta),
+        config=generate_chart_name("monthly_sun", meta, units_monthly),
         figure=monthly,
     ), dcc.Graph(
-        config=generate_chart_name("cloud_cover_sun", meta),
+        config=generate_chart_name("cloud_cover_sun", meta, units_cover),
         figure=cover,
     )
 
@@ -248,15 +249,18 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
 @code_timer
 def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
-
+    if var == "None":
+        custom_inputs = ""
+    else:
+        custom_inputs = f"{var}"
     if view == "polar":
         return dcc.Graph(
-            config=generate_chart_name("spherical_sun_path_sun", meta),
+            config=generate_chart_name("spherical_sun_path", meta, custom_inputs),
             figure=polar_graph(df, meta, global_local, var, si_ip),
         )
     else:
         return dcc.Graph(
-            config=generate_chart_name("cartesian_sun_path_sun", meta),
+            config=generate_chart_name("cartesian_sun_path", meta, custom_inputs),
             figure=custom_cartesian_solar(df, meta, global_local, var, si_ip),
         )
 
@@ -277,9 +281,11 @@ def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
 @code_timer
 def daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
-
+    var_fullname = mapping_dictionary[var]["name"]
+    custom_inputs = ''.join(word.capitalize() for word in var_fullname.split(' '))
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return dcc.Graph(
-        config=generate_chart_name("daily_sun", meta),
+        config=generate_chart_name("daily", meta, custom_inputs, units),
         figure=daily_profile(df, var, global_local, si_ip),
     )
 
@@ -299,8 +305,9 @@ def daily(ts, var, global_local, df, meta, si_ip):
 )
 @code_timer
 def update_heatmap(ts, var, global_local, df, meta, si_ip):
-
+    custom_inputs = f"{var}"
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return dcc.Graph(
-        config=generate_chart_name("heatmap_sun", meta),
+        config=generate_chart_name("heatmap", meta, custom_inputs, units),
         figure=heatmap(df, var, global_local, si_ip),
     )
