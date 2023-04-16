@@ -416,9 +416,13 @@ def nv_heatmap(
         mirror=True,
         title_text="Hour",
     )
-
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    custom_inputs = f"{min_dbt_val:02d}-{max_dbt_val:02d}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}"
+    units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
     return dcc.Graph(
-        config=generate_chart_name("heatmap_nv", meta),
+        config=generate_chart_name("heatmap_nv", meta, custom_inputs, units),
         figure=fig,
     )
 
@@ -593,9 +597,13 @@ def nv_bar_chart(
         mirror=True,
     )
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    custom_inputs = f"{min_dbt_val:02d}-{max_dbt_val:02d}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}"
+    units = "%"
     return dcc.Graph(
-        config=generate_chart_name("bar_chart_nv", meta),
+        config=generate_chart_name("bar_nv", meta, custom_inputs, units),
         figure=fig,
     )
 
