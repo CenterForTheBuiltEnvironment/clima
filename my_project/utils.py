@@ -25,14 +25,19 @@ def code_timer(func):
     return wrapper_timer
 
 
-def generate_chart_name(tab_name, meta=None):
+def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
     figure_config = copy.deepcopy(fig_config)
+    custom_str = ""
+    if custom_inputs:
+        custom_str += f"_{custom_inputs}"
+    if units:
+        custom_str += f"_{units}"
     if meta:
         figure_config["toImageButtonOptions"][
             "filename"
-        ] = f"CBEClima_{meta['city']}_{meta['country']}_{tab_name}_tab"
+        ] = f"{meta['city']}_{meta['country']}_{tab_name}{custom_str}"
     else:
-        figure_config["toImageButtonOptions"]["filename"] = f"CBEClima_{tab_name}_tab"
+        figure_config["toImageButtonOptions"]["filename"] = f"{tab_name}{custom_str}"
     return figure_config
 
 
