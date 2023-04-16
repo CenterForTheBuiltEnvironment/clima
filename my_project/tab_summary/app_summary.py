@@ -172,7 +172,7 @@ def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     map_world = dcc.Graph(
         id="gh_rad-profile-graph",
-        config=generate_chart_name("map_summary", meta),
+        config=generate_chart_name("map", meta),
         figure=world_map(meta),
     )
 
@@ -370,9 +370,12 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
         fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
         fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
+        custom_inputs = f"{hdd_value}-{cdd_value}"
+        units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+
         chart = dcc.Graph(
             id="degree-days-chart",
-            config=generate_chart_name("hdd_cdd_summary", meta),
+            config=generate_chart_name("hdd_cdd", meta, custom_inputs, units),
             figure=fig,
         )
 
@@ -393,11 +396,11 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 )
 @code_timer
 def update_violin_tdb(ts, global_local, df, meta, si_ip):
-
+    units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
     return dcc.Graph(
         id="tdb-profile-graph",
         className="violin-container",
-        config=generate_chart_name("tdb_summary", meta),
+        config=generate_chart_name("tdb_summary", meta, units),
         figure=violin(df, "DBT", global_local, si_ip),
     )
 
@@ -417,11 +420,11 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
 @code_timer
 def update_tab_wind(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-
+    units = "SI" if si_ip == "si" else "FPM" if si_ip == "ip" else None
     return dcc.Graph(
         id="wind-profile-graph",
         className="violin-container",
-        config=generate_chart_name("wind_summary", meta),
+        config=generate_chart_name("wind_summary", meta, units),
         figure=violin(df, "wind_speed", global_local, si_ip),
     )
 
@@ -441,11 +444,11 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
 @code_timer
 def update_tab_rh(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-
+    units = "%"
     return dcc.Graph(
         id="rh-profile-graph",
         className="violin-container",
-        config=generate_chart_name("rh_summary", meta),
+        config=generate_chart_name("rh_summary", meta, units),
         figure=violin(df, "RH", global_local, si_ip),
     )
 
@@ -465,11 +468,11 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
 @code_timer
 def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return dcc.Graph(
         id="gh_rad-profile-graph",
         className="violin-container",
-        config=generate_chart_name("solar_summary", meta),
+        config=generate_chart_name("solar_summary", meta, units),
         figure=violin(df, "glob_hor_rad", global_local, si_ip),
     )
 
