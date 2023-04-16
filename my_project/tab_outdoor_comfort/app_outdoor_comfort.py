@@ -120,18 +120,32 @@ def layout_outdoor_comfort():
             ),
             html.Div(
                 children=title_with_tooltip(
-                    text="UTCI heatmap charts",
+                    text="UTCI heatmap chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label",
-                ),
+                    id_button="utci-charts-label"
+                )
             ),
             dcc.Loading(
                 html.Div(id="utci-heatmap"),
                 type="circle",
             ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="UTCI thermal stress chart",
+                    tooltip_text=None,
+                    id_button="utci-charts-label"
+                )
+            ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
                 type="circle",
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="UTCI thermal stress distribution chart",
+                    tooltip_text=None,
+                    id_button="utci-charts-label"
+                )
             ),
             dcc.Loading(
                 html.Div(id="utci-summary-chart"),
