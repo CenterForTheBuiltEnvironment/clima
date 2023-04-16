@@ -72,9 +72,10 @@ def layout_outdoor_comfort():
     ],
 )
 def update_tab_utci_value(ts, var, global_local, df, meta, si_ip):
-
+    custom_inputs = f"{var}"
+    units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
     return dcc.Graph(
-        config=generate_chart_name("utci_heatmap", meta),
+        config=generate_chart_name("heatmap", meta, custom_inputs, units),
         figure=heatmap(df, var, global_local, si_ip),
     )
 
@@ -130,8 +131,9 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
         ],
         ticks="outside",
     )
+    custom_inputs = f"{var}"
     return dcc.Graph(
-        config=generate_chart_name("utci_heatmap_category", meta),
+        config=generate_chart_name("heatmap_category", meta, custom_inputs),
         figure=utci_stress_cat,
     )
 
@@ -159,7 +161,9 @@ def update_tab_utci_summary_chart(ts, var, global_local, df, meta, si_ip):
     utci_summary_chart.update_xaxes(
         dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
     )
+    custom_inputs = f"{var}"
+    units = "%"
     return dcc.Graph(
-        config=generate_chart_name("utci_summary_chart", meta),
+        config=generate_chart_name("summary", meta, custom_inputs, units),
         figure=utci_summary_chart,
     )
