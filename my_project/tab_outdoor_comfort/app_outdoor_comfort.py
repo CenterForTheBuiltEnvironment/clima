@@ -1,7 +1,8 @@
 import json
 from dash import dcc
 from dash import html
-from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst
+import dash_bootstrap_components as dbc
+from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst, container_col_center_one_of_three
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, thermalStressStackedBarChart
 from my_project.utils import title_with_tooltip, generate_chart_name
@@ -14,41 +15,137 @@ def layout_outdoor_comfort():
         className="container-col",
         children=[
             html.Div(
-                className="container-row align-center justify-center",
+                className="container-row full-width three-inputs-container",
                 children=[
-                    html.H3(
-                        children=["Select a scenario: "],
-                    ),
-                    dcc.Dropdown(
-                        id="tab7-dropdown",
-                        style={
-                            "width": "25rem",
-                            "marginLeft": "1rem",
-                            "marginRight": "2rem",
-                        },
-                        options=[
-                            {"label": i, "value": outdoor_dropdown_names[i]}
-                            for i in outdoor_dropdown_names
+                    html.Div(
+                        className=container_col_center_one_of_three,
+                        children=[
+                            dbc.Button(
+                                "Apply month and hour filter",
+                                color="primary",
+                                id="month-hour-filter-outdoor-comfort",
+                                className="mb-2",
+                                n_clicks=0,
+                            ),
+                            html.Div(
+                                className="container-row full-width justify-center mt-2",
+                                children=[
+                                    html.H6("Month Range", style={"flex": "20%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="outdoor-comfort-month-slider",
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
+                                        ),
+                                        style={"flex": "50%"},
+                                    ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-month-outdoor-comfort",
+                                        labelStyle={"flex": "30%"},
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className="container-row align-center justify-center",
+                                children=[
+                                    html.H6("Hour Range", style={"flex": "20%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="outdoor-comfort-hour-slider",
+                                            min=1,
+                                            max=24,
+                                            step=1,
+                                            value=[1, 24],
+                                            marks={1: "1", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "topLeft",
+                                            },
+                                            allowCross=False,
+                                        ),
+                                        style={"flex": "50%"},
+                                    ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-hour-outdoor-comfort",
+                                        labelStyle={"flex": "30%"},
+                                    ),
+                                ],
+                            ),
                         ],
-                        value="utci_Sun_Wind",
                     ),
-                    html.Div(id="image-selection"),
+                    html.Div(
+                        className=container_col_center_one_of_three,
+                        children=[
+                            html.Div(
+                                className="container-row align-center justify-center",
+                                children=[
+                                    html.H3(
+                                        children=["Select a scenario: "],
+                                    ),
+                                    dcc.Dropdown(
+                                        id="tab7-dropdown",
+                                        style={
+                                            "width": "25rem",
+                                            "marginLeft": "1rem",
+                                            "marginRight": "2rem",
+                                        },
+                                        options=[
+                                            {"label": i, "value": outdoor_dropdown_names[i]}
+                                            for i in outdoor_dropdown_names
+                                        ],
+                                        value="utci_Sun_Wind",
+                                    ),
+                                    html.Div(id="image-selection"),
+                                ],
+                            )
+                        ]
+                    )
                 ],
             ),
             html.Div(
                 children=title_with_tooltip(
-                    text="UTCI heatmap charts",
+                    text="UTCI heatmap chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label",
-                ),
+                    id_button="utci-charts-label"
+                )
             ),
             dcc.Loading(
                 html.Div(id="utci-heatmap"),
                 type="circle",
             ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="UTCI thermal stress chart",
+                    tooltip_text=None,
+                    id_button="utci-charts-label"
+                )
+            ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
                 type="circle",
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="UTCI thermal stress distribution chart",
+                    tooltip_text=None,
+                    id_button="utci-charts-label"
+                )
             ),
             dcc.Loading(
                 html.Div(id="utci-summary-chart"),

@@ -62,6 +62,8 @@ def inputs():
                                 ],
                                 value="Frequency",
                                 style={"flex": "70%"},
+                                persistence_type="session",
+                                persistence=True
                             ),
                         ],
                     ),
