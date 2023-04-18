@@ -40,6 +40,67 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
         figure_config["toImageButtonOptions"]["filename"] = f"{tab_name}{custom_str}"
     return figure_config
 
+def generate_units(si_ip):
+    return "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
+
+def generate_units_degree(si_ip):
+    return "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+
+def generate_custom_inputs(var):
+    if var in mapping_dictionary:
+        var_fullname = mapping_dictionary[var]["name"]
+        custom_inputs = ''.join(word.capitalize() for word in var_fullname.split(' '))
+        return custom_inputs
+    else:
+        return None
+
+def generate_custom_inputs_time(start_month, end_month, start_hour, end_hour):
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    custom_inputs = f"{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}"
+    return custom_inputs
+
+def generate_custom_inputs_nv(start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val):
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    custom_inputs = f"{min_dbt_val:02d}-{max_dbt_val:02d}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}"
+    return custom_inputs
+
+def generate_custom_inputs_explorer(var, start_month, end_month, start_hour, end_hour, filter_var, min_val, max_val):
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    if var in mapping_dictionary:
+        var_fullname = ''.join(word.capitalize() for word in mapping_dictionary[var]["name"].split(' '))
+    else:
+        var_fullname = var
+    if filter_var in mapping_dictionary:
+        filter_fullname = ''.join(word.capitalize() for word in mapping_dictionary[filter_var]["name"].split(' '))
+    else:
+        filter_fullname = filter_var
+    custom_inputs = f"{var_fullname}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{filter_fullname}_{min_val}-{max_val}"
+    return custom_inputs
+
+def generate_custom_inputs_psy(start_month, end_month, start_hour, end_hour, colorby_var, data_filter_var, min_val, max_val):
+    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    start_month_abbr = month_names[int(start_month)]
+    end_month_abbr = month_names[int(end_month)]
+    if colorby_var in mapping_dictionary:
+        colorby_fullname = ''.join(word.capitalize() for word in mapping_dictionary[colorby_var]["name"].split(' '))
+    else:
+        colorby_fullname = colorby_var
+    if data_filter_var in mapping_dictionary:
+        data_filter_fullname = ''.join(word.capitalize() for word in mapping_dictionary[data_filter_var]["name"].split(' '))
+    else:
+        data_filter_fullname = data_filter_var
+
+    if colorby_var == "None":
+        custom_inputs = f"{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_fullname}_{min_val}-{max_val}"
+    else:
+        custom_inputs = f"{colorby_fullname}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_fullname}_{min_val}-{max_val}"
+    return custom_inputs
 
 def plot_location_epw_files():
     with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
