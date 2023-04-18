@@ -336,7 +336,6 @@ def heatmap(df, var, global_local, si_ip):
         data_max = 5 * ceil(df[var].max() / 5)
         data_min = 5 * floor(df[var].min() / 5)
         range_z = [data_min, data_max]
-
     fig = go.Figure(
         data=go.Heatmap(
             y=df["hour"],
@@ -493,6 +492,69 @@ def convert_bins(sbins):
         i = i + 1
     return sbins
 
+
+def thermalStressStackedBarChart(df, var):
+    """Return the summary bar chart."""
+    categories = [
+        'extreme cold stress',
+         'very strong cold stress',
+         'strong cold stress',
+         'moderate cold stress',
+         'slight cold stress',
+         'no thermal stress',
+         'moderate heat stress',
+         'strong heat stress',
+         'very strong heat stress',
+         'extreme heat stress'
+    ]
+    colors = [
+        '#2A2B72',
+        '#394396',
+        '#44549F',
+        '#4F63A8',
+        '#7AB7E2',
+        '#6EB557',
+        '#E0893D',
+        '#D84032',
+        '#A3302B',
+        '#6B1F18'
+    ]
+    new_df = df.groupby('month')[var].value_counts(normalize=True).unstack(var).fillna(0)
+    new_df.set_axis(categories, axis=1, inplace=True)
+
+    go.Figure()
+    data = []
+
+    def catch(func, handle=lambda e: e, *args, **kwargs):
+        # Handle category not in dictionary
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            return 0
+
+    for i in range(len(categories)):
+        data.append(
+            go.Bar(
+                x=list(range(0, 13)),
+                y=[catch(lambda : new_df.iloc[month - 1][categories[i]]) for month in range(1,13)],
+                name=categories[i],
+                marker_color=colors[i],
+                hovertemplate=(
+                    "</b><br>Month: %{x}" +
+                    "<br>Category: " + categories[i] +
+                    "<br>Proportion: %{y:.1f}%<br><extra></extra>"
+                )
+            )
+        )
+
+    fig = go.Figure(data=data)
+    fig.update_layout(barmode="stack", dragmode=False)
+
+    fig.update_yaxes(title_text="Percentage (%)")
+    fig.update_xaxes(title_text="Day")
+    fig.update_layout(barnorm="percent")
+
+    return fig
 
 def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     """Return the custom summary bar chart."""
