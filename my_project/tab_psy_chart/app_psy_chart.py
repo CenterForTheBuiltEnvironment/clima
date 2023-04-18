@@ -10,7 +10,7 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name
+from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
 
 from my_project.global_scheme import (
     dropdown_names,
@@ -502,12 +502,6 @@ def update_psych_chart(
         linecolor="black",
         mirror=True,
     )
-    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    start_month_abbr = month_names[int(start_month)]
-    end_month_abbr = month_names[int(end_month)]
-    if colorby_var == "None":
-        custom_inputs = f"{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_var}_{min_val}-{max_val}"
-    else:
-        custom_inputs = f"{colorby_var}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_var}_{min_val}-{max_val}"
-    units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+    custom_inputs = generate_custom_inputs_psy(start_month, end_month, start_hour, end_hour, colorby_var, data_filter_var, min_val, max_val)
+    units = generate_units(si_ip)
     return dcc.Graph(config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig)
