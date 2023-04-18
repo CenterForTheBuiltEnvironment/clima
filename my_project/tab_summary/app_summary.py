@@ -5,7 +5,7 @@ from dash.exceptions import PreventUpdate
 from app import app
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
-from my_project.utils import generate_chart_name, title_with_tooltip
+from my_project.utils import generate_chart_name, generate_units, generate_units_degree, title_with_tooltip
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins, mapping_dictionary
 import requests
@@ -371,7 +371,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
         fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
         custom_inputs = f"{hdd_value}-{cdd_value}"
-        units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+        units = generate_units_degree(si_ip)
 
         chart = dcc.Graph(
             id="degree-days-chart",
@@ -396,11 +396,11 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 )
 @code_timer
 def update_violin_tdb(ts, global_local, df, meta, si_ip):
-    units = "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+    units = generate_units_degree(si_ip)
     return dcc.Graph(
         id="tdb-profile-graph",
         className="violin-container",
-        config=generate_chart_name("tdb_summary", meta, units),
+        config=generate_chart_name("DryBulbTemperature", meta, units),
         figure=violin(df, "DBT", global_local, si_ip),
     )
 
@@ -420,11 +420,11 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
 @code_timer
 def update_tab_wind(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    units = "SI" if si_ip == "si" else "FPM" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return dcc.Graph(
         id="wind-profile-graph",
         className="violin-container",
-        config=generate_chart_name("wind_summary", meta, units),
+        config=generate_chart_name("WindSpeed", meta, units),
         figure=violin(df, "wind_speed", global_local, si_ip),
     )
 
@@ -444,11 +444,11 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
 @code_timer
 def update_tab_rh(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    units = "%"
+    units = generate_units(si_ip)
     return dcc.Graph(
         id="rh-profile-graph",
         className="violin-container",
-        config=generate_chart_name("rh_summary", meta, units),
+        config=generate_chart_name("RelativeHumidity", meta, units),
         figure=violin(df, "RH", global_local, si_ip),
     )
 
@@ -468,11 +468,11 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
 @code_timer
 def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return dcc.Graph(
         id="gh_rad-profile-graph",
         className="violin-container",
-        config=generate_chart_name("solar_summary", meta, units),
+        config=generate_chart_name("GlobalHorizontalRadiation", meta, units),
         figure=violin(df, "glob_hor_rad", global_local, si_ip),
     )
 
