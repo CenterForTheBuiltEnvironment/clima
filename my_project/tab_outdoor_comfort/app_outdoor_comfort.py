@@ -53,6 +53,24 @@ def layout_outdoor_comfort():
         ],
     )
 
+def most_frequent_zeros(df):
+    stress_values1 = df["utci_Sun_noWind_categories"][1]
+    stress_values2 = df["utci_noSun_Wind_categories"][1]
+    stress_values3 = df["utci_noSun_noWind_categories"][1]
+    stress_values4 = df["utci_Sun_Wind_categories"][1]
+    stress_index1 = stress_values1.count(0)
+    stress_index2 = stress_values2.count(0)
+    stress_index3 = stress_values3.count(0)
+    stress_index4 = stress_values4.count(0)
+    max_index = max(stress_index1, stress_index2, stress_index3, stress_index4)
+    if max_index == stress_index1:
+        return "utci_Sun_noWind_categories"
+    elif max_index == stress_index2:
+        return "utci_noSun_Wind_categories"
+    elif max_index == stress_index3:
+        return "utci_noSun_noWind_categories"
+    else:
+        return "utci_Sun_Wind_categories"
 
 @app.callback(
     Output("utci-heatmap", "children"),

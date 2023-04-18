@@ -149,15 +149,20 @@ def yearly_profile(df, var, global_local, si_ip):
 
     if var == "DBT":
         # plot ashrae adaptive comfort limits (80%)
+        map80= dbt_day["mean"]
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
+        # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implemention 
+        var_barcolors =np.where((map80 > 40) | (map80 < -10), 'darkgray', 'silver')
+        
+
 
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
             y=hi80 - lo80,
             base=lo80,
             name="ASHRAE adaptive comfort (80%)",
-            marker_color="silver",
+            marker_color=var_barcolors,
             marker_opacity=0.3,
             hovertemplate=(
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
@@ -167,13 +172,14 @@ def yearly_profile(df, var, global_local, si_ip):
         # plot ashrae adaptive comfort limits (90%)
         lo90 = df.groupby("DOY")["adaptive_cmf_90_low"].mean().values
         hi90 = df.groupby("DOY")["adaptive_cmf_90_up"].mean().values
+        
 
         trace4 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
             y=hi90 - lo90,
             base=lo90,
             name="ASHRAE adaptive comfort (90%)",
-            marker_color="silver",
+            marker_color=var_barcolors,
             marker_opacity=0.3,
             hovertemplate=(
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
