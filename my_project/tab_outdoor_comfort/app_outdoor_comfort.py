@@ -235,19 +235,29 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
 @app.callback(
     Output("utci-summary-chart", "children"),
     [
-        Input("df-store", "modified_timestamp"),
         Input("tab7-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
     ],
     [
         State("df-store", "data"),
+        State("outdoor-comfort-month-slider", "value"),
+        State("outdoor-comfort-hour-slider", "value"),
         State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State("invert-month-outdoor-comfort", "value"),
+        State("invert-hour-outdoor-comfort", "value")
     ],
 )
-def update_tab_utci_summary_chart(ts, var, global_local, df, meta, si_ip):
-  
-    utci_summary_chart = thermalStressStackedBarChart(df, var + "_categories")
+def update_tab_utci_summary_chart(
+        var,
+        time_filter,
+        df,
+        month,
+        hour,
+        meta,
+        invert_month,
+        invert_hour
+):
+    utci_summary_chart = thermalStressStackedBarChart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour)
     utci_summary_chart = utci_summary_chart.update_layout(
         margin=tight_margins,
         title="",

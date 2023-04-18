@@ -6,7 +6,7 @@ import json
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from my_project.global_scheme import mapping_dictionary
-
+import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
 
 
@@ -487,7 +487,7 @@ def convert_bins(sbins):
     return sbins
 
 
-def thermalStressStackedBarChart(df, var):
+def thermalStressStackedBarChart(df, var, time_filter, month, hour, invert_month, invert_hour):
     """Return the summary bar chart."""
     categories = [
         'extreme cold stress',
@@ -501,18 +501,49 @@ def thermalStressStackedBarChart(df, var):
          'very strong heat stress',
          'extreme heat stress'
     ]
-    colors = [
-        '#2A2B72',
-        '#394396',
-        '#44549F',
-        '#4F63A8',
-        '#7AB7E2',
-        '#6EB557',
-        '#E0893D',
-        '#D84032',
-        '#A3302B',
-        '#6B1F18'
-    ]
+    colors = ['#2A2B72', '#394396', '#44549F', '#4F63A8', '#7AB7E2', '#6EB557', '#E0893D', '#D84032', '#A3302B', '#6B1F18']
+
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        month = month[::-1]
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        hour = hour[::-1]
+    time_filter_info = [time_filter, month, hour]
+    time_filter = time_filter_info[0]
+    start_month = time_filter_info[1][0]
+    end_month = time_filter_info[1][1]
+    start_hour = time_filter_info[2][0]
+    end_hour = time_filter_info[2][1]
+
+    if time_filter:
+        if start_month <= end_month:
+            mask = (df["month"] < start_month) | (df["month"] > end_month)
+            df[mask] = None
+        else:
+            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
+            df[mask] = None
+
+        if start_hour <= end_hour:
+            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
+            df[mask] = None
+        else:
+            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
+            df[mask] = None
+
+    if df.dropna(subset=["month"]).shape[0] == 0:
+        return (
+            dbc.Alert(
+                "No data is available in this location under these conditions. Please "
+                "either change the month and hour filters, or select a wider range for "
+                "the filter variable",
+                color="danger",
+                style={"text-align": "center", "marginTop": "2rem"},
+            ),
+        )
+
+
+
     new_df = df.groupby('month')[var].value_counts(normalize=True).unstack(var).fillna(0)
     new_df.set_axis(categories, axis=1, inplace=True)
 
@@ -530,7 +561,7 @@ def thermalStressStackedBarChart(df, var):
         data.append(
             go.Bar(
                 x=list(range(0, 13)),
-                y=[catch(lambda : new_df.iloc[month - 1][categories[i]]) for month in range(1,13)],
+                y=[catch(lambda : new_df.iloc[month - 1][categories[i]]) for month in range(start_month, end_month+1)],
                 name=categories[i],
                 marker_color=colors[i],
                 hovertemplate=(
