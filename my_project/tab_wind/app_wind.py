@@ -2,7 +2,7 @@ from dash import dcc, html
 from my_project.global_scheme import month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
-from my_project.utils import title_with_tooltip, generate_chart_name
+from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs_time
 from my_project.utils import code_timer
 
 from app import app
@@ -357,7 +357,7 @@ def update_annual_wind_rose(ts, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     annual = wind_rose(df, "", [1, 12], [1, 24], True, si_ip)
-    units = "SI" if si_ip == "si" else "FPM" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name("annual_wind_rose", meta, units),
         figure=annual,
@@ -383,7 +383,7 @@ def update_tab_wind_speed(ts, global_local, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     speed = heatmap(df, "wind_speed", global_local, si_ip)
-    units = "SI" if si_ip == "si" else "FPM" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name("wind_speed", meta, units),
         figure=speed,
@@ -408,7 +408,7 @@ def update_tab_wind_direction(global_local, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     direction = heatmap(df, "wind_dir", global_local, si_ip)
-    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name("wind_direction", meta, units),
         figure=direction,
@@ -455,12 +455,10 @@ def update_custom_wind_rose(
     custom = wind_rose(
         df, "", [start_month, end_month], [start_hour, end_hour], True, si_ip
     )
-    month_names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    start_month_abbr = month_names[int(start_month)]
-    end_month_abbr = month_names[int(end_month)]
-    custom_inputs = f"{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}"
+    custom_inputs = generate_custom_inputs_time(start_month, end_month, start_hour, end_hour)
+    units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("custom_wind_rose", meta, custom_inputs),
+        config=generate_chart_name("custom_wind_rose", meta, custom_inputs, units),
         figure=custom,
     )
 
@@ -558,7 +556,7 @@ def update_seasonal_graphs(ts, df, meta, si_ip):
         fall_total_count,
         fall_calm_count,
     )
-    units = "SI" if si_ip == "si" else "FPM" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return (
         dcc.Graph(
             config=generate_chart_name("winter_wind_rose", meta, units),
@@ -654,7 +652,7 @@ def update_daily_graphs(ts, df, meta, si_ip):
     night_text = daily_chart_caption(
         night_times[0], night_times[1], night_total_count, night_calm_count
     )
-    units = "SI" if si_ip == "si" else "FPM" if si_ip == "ip" else None
+    units = generate_units(si_ip)
     return (
         dcc.Graph(
             config=generate_chart_name("morning_wind_rose", meta, units),
