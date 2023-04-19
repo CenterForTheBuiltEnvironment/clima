@@ -895,6 +895,57 @@ variables_outdoor_dropdown = [
     "utci_noSun_Wind",
     "utci_noSun_noWind",
 ]
+variables_sun_path_chart_dropdown = [
+    "t_wb",
+    "t_dp",
+    "DBT",
+    "RH",
+    "extr_hor_rad",
+    "hor_ir_rad",
+    "glob_hor_rad",
+    "dir_nor_rad",
+    "dif_hor_rad",
+    "glob_hor_ill",
+    "dir_nor_ill",
+    "dif_hor_ill",
+    "Zlumi",
+    "wind_dir",
+    "wind_speed",
+    "tot_sky_cover",
+    "Oskycover",
+    "Vis",
+]
+variables_psychrometric_chart_dropdown = [
+    "t_wb",
+    "t_dp",
+    "DBT",
+    "RH",
+    "p_vap",
+    "hr",
+    "extr_hor_rad",
+    "hor_ir_rad",
+    "glob_hor_rad",
+    "dir_nor_rad",
+    "dif_hor_rad",
+    "glob_hor_ill",
+    "dir_nor_ill",
+    "dif_hor_ill",
+    "Zlumi",
+    "wind_dir",
+    "wind_speed",
+    "tot_sky_cover",
+    "Oskycover",
+    "Vis",
+    "utci_Sun_Wind",
+    "utci_noSun_Wind",
+    "utci_Sun_noWind",
+    "utci_noSun_noWind",
+    "utci_Sun_Wind_categories",
+    "utci_noSun_Wind_categories",
+    "utci_Sun_noWind_categories",
+    "utci_noSun_noWind_categories",
+]
+
 
 sun_cloud_tab_dropdown_names = {
     mapping_dictionary[key]["name"]: key for key in variables_sun_cloud_tab_dropdown
@@ -913,4 +964,12 @@ sun_cloud_tab_explore_dropdown_names = {
 
 outdoor_dropdown_names = {
     mapping_dictionary[key]["name"]: key for key in variables_outdoor_dropdown
+}
+
+sun_path_chart_dropdown_names = {
+    mapping_dictionary[key]["name"]: key for key in variables_sun_path_chart_dropdown
+}
+
+psychrometric_chart_dropdown_names = {
+    mapping_dictionary[key]["name"]: key for key in variables_psychrometric_chart_dropdown
 }
