@@ -7,6 +7,7 @@ Feat:
 * Added stacked bar chart Outdoor Comfort
 
 Fix:
+* Fixed issues 157: Align the legend bar of "Thermal Stress" with the text
 * Fixed issues 122
 * Fixed issues 144, 148, and 141
 * Correctly aligned SI and IP buttons
