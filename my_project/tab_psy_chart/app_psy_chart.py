@@ -13,6 +13,7 @@ from my_project.global_scheme import (
 from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
 
 from my_project.global_scheme import (
+    psychrometric_chart_dropdown_names,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
@@ -33,10 +34,8 @@ psy_dropdown_names = {
     "None": "None",
     "Frequency": "Frequency",
 }
-psy_dropdown_names.update(dropdown_names.copy())
-psy_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
-psy_dropdown_names.update(more_variables_dropdown.copy())
-psy_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+psy_dropdown_names.update(psychrometric_chart_dropdown_names.copy())
+
 
 
 def inputs():
