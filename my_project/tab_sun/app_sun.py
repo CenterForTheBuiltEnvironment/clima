@@ -3,6 +3,7 @@ from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
 from my_project.global_scheme import (
+    sun_path_chart_dropdown_names,
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
     dropdown_names,
@@ -28,10 +29,7 @@ sc_dropdown_names = {
     "None": "None",
     "Frequency": "Frequency",
 }
-sc_dropdown_names.update(dropdown_names.copy())
-sc_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
-sc_dropdown_names.update(more_variables_dropdown.copy())
-sc_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+sc_dropdown_names.update(sun_path_chart_dropdown_names.copy())
 # Remove the keys from the dictionary
 sc_dropdown_names.pop("UTCI: Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & Wind : categories", None)
