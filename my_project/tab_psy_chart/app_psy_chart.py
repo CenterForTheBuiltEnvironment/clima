@@ -10,7 +10,7 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name
+from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
 
 from my_project.global_scheme import (
     dropdown_names,
@@ -504,5 +504,6 @@ def update_psych_chart(
         linecolor="black",
         mirror=True,
     )
-
-    return dcc.Graph(config=generate_chart_name("psy", meta), figure=fig)
+    custom_inputs = generate_custom_inputs_psy(start_month, end_month, start_hour, end_hour, colorby_var, data_filter_var, min_val, max_val)
+    units = generate_units(si_ip)
+    return dcc.Graph(config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig)

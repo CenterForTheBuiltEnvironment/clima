@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst, container_col_center_one_of_three
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, thermalStressStackedBarChart
-from my_project.utils import title_with_tooltip, generate_chart_name
+from my_project.utils import title_with_tooltip, generate_chart_name, generate_units_degree, generate_units
 import numpy as np
 from app import app
 
@@ -169,9 +169,10 @@ def layout_outdoor_comfort():
     ],
 )
 def update_tab_utci_value(ts, var, global_local, df, meta, si_ip):
-
+    custom_inputs = f"{var}"
+    units = generate_units_degree(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("utci_heatmap", meta),
+        config=generate_chart_name("heatmap", meta, custom_inputs, units),
         figure=heatmap(df, var, global_local, si_ip),
     )
 
@@ -227,8 +228,10 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
         ],
         ticks="outside",
     )
+    custom_inputs = f"{var}"
+    units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("utci_heatmap_category", meta),
+        config=generate_chart_name("heatmap_category", meta, custom_inputs, units),
         figure=utci_stress_cat,
     )
 
@@ -256,7 +259,9 @@ def update_tab_utci_summary_chart(ts, var, global_local, df, meta, si_ip):
     utci_summary_chart.update_xaxes(
         dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
     )
+    custom_inputs = f"{var}"
+    units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("utci_summary_chart", meta),
+        config=generate_chart_name("summary", meta, custom_inputs, units),
         figure=utci_summary_chart,
     )
