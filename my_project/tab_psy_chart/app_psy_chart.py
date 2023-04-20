@@ -4,6 +4,7 @@ import json
 from pythermalcomfort import psychrometrics as psy
 from math import ceil, floor
 import dash_bootstrap_components as dbc
+from copy import deepcopy
 from dash import dcc
 from dash import html
 from my_project.global_scheme import (
@@ -13,7 +14,6 @@ from my_project.global_scheme import (
 from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
 
 from my_project.global_scheme import (
-    psychrometric_chart_dropdown_names,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
@@ -34,9 +34,13 @@ psy_dropdown_names = {
     "None": "None",
     "Frequency": "Frequency",
 }
-psy_dropdown_names.update(psychrometric_chart_dropdown_names.copy())
-
-
+psy_dropdown_names.update(deepcopy(dropdown_names))
+psy_dropdown_names.update(deepcopy(sun_cloud_tab_dropdown_names))
+psy_dropdown_names.update(deepcopy(more_variables_dropdown))
+psy_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
+psy_dropdown_names.pop("Elevation", None)
+psy_dropdown_names.pop("Azimuth", None)
+psy_dropdown_names.pop("Saturation pressure", None)
 
 def inputs():
     """"""
