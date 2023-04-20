@@ -1,4 +1,5 @@
 import numpy as np
+from copy import deepcopy
 from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
@@ -28,11 +29,12 @@ sc_dropdown_names = {
     "None": "None",
     "Frequency": "Frequency",
 }
-sc_dropdown_names.update(dropdown_names.copy())
-sc_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
-sc_dropdown_names.update(more_variables_dropdown.copy())
-sc_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
+sc_dropdown_names.update(deepcopy(dropdown_names))
+sc_dropdown_names.update(deepcopy(sun_cloud_tab_dropdown_names))
+sc_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
 # Remove the keys from the dictionary
+sc_dropdown_names.pop("Vapor partial pressure", None)
+sc_dropdown_names.pop("Absolute humidity", None)
 sc_dropdown_names.pop("UTCI: Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: Sun & no Wind : categories", None)

@@ -213,7 +213,7 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
         title="Thermal stress",
         titleside="top",
         tickmode="array",
-        tickvals=[4, 3, 2, 1, 0, -1, -2, -3, -4, -5],
+        tickvals = np.linspace(-4.75, 4.75, 10),
         ticktext=[
             "extreme heat stress",
             "very strong heat stress",
