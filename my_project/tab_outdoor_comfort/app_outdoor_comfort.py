@@ -9,7 +9,6 @@ from my_project.utils import title_with_tooltip, generate_chart_name
 import numpy as np
 from app import app
 
-
 def layout_outdoor_comfort():
     return html.Div(
         className="container-col",
@@ -118,6 +117,8 @@ def layout_outdoor_comfort():
                     )
                 ],
             ),
+            html.Label("Here's the return value of my function:"),
+            html.Div(id='output'),
             html.Div(
                 children=title_with_tooltip(
                     text="UTCI heatmap chart",
@@ -154,24 +155,33 @@ def layout_outdoor_comfort():
         ],
     )
 
-def most_frequent_zeros(df):
-    stress_values1 = df["utci_Sun_noWind_categories"][1]
-    stress_values2 = df["utci_noSun_Wind_categories"][1]
-    stress_values3 = df["utci_noSun_noWind_categories"][1]
-    stress_values4 = df["utci_Sun_Wind_categories"][1]
-    stress_index1 = stress_values1.count(0)
-    stress_index2 = stress_values2.count(0)
-    stress_index3 = stress_values3.count(0)
-    stress_index4 = stress_values4.count(0)
-    max_index = max(stress_index1, stress_index2, stress_index3, stress_index4)
-    if max_index == stress_index1:
-        return "utci_Sun_noWind_categories"
-    elif max_index == stress_index2:
-        return "utci_noSun_Wind_categories"
-    elif max_index == stress_index3:
-        return "utci_noSun_noWind_categories"
-    else:
-        return "utci_Sun_Wind_categories"
+@app.callback(
+    Output("output", "children"),
+    [
+        Input("df-store", "modified_timestamp"),
+    ],
+    [
+        State("df-store", "data"),
+    ],
+)
+def update_output(ts,df):
+    cols = ['utci_noSun_Wind_categories', 'utci_noSun_noWind_categories',
+       'utci_Sun_Wind_categories', 'utci_Sun_noWind_categories']
+    colsWithTheHighestNumberOfZero = []
+    highestCount = 0
+    for col in cols:
+        try:
+            count = df[col].value_counts()[0] # this can cause error if there is no 0
+            if(count > highestCount):
+                highestCount = count
+                colsWithTheHighestNumberOfZero.clear()
+                colsWithTheHighestNumberOfZero.append(col)
+            elif count == highestCount:
+                colsWithTheHighestNumberOfZero.append(col)
+        except:
+            continue
+    return f"Cols with highest number of zeros: {', '.join(colsWithTheHighestNumberOfZero)}"
+
 
 @app.callback(
     Output("utci-heatmap", "children"),
@@ -244,10 +254,12 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
             "extreme cold stress",
         ],
         ticks="outside",
+        
     )
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap_category", meta),
         figure=utci_stress_cat,
+        # num_categories = len(utci_stress_cat['layout']['xaxis']['tickvals'][0])
     )
 
 @app.callback(
