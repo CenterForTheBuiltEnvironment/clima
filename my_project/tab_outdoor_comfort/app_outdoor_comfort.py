@@ -4,7 +4,7 @@ from dash import html
 import dash_bootstrap_components as dbc
 from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst, container_col_center_one_of_three
 from dash.dependencies import Input, Output, State
-from my_project.template_graphs import heatmap_with_filter, thermalStressStackedBarChart
+from my_project.template_graphs import heatmap_with_filter, thermal_stress_stacked_barchart
 from my_project.utils import title_with_tooltip, generate_chart_name
 import numpy as np
 from app import app
@@ -267,7 +267,7 @@ def update_tab_utci_summary_chart(
         invert_month,
         invert_hour
 ):
-    utci_summary_chart = thermalStressStackedBarChart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour)
+    utci_summary_chart = thermal_stress_stacked_barchart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour)
     utci_summary_chart = utci_summary_chart.update_layout(
         margin=tight_margins,
         title="",

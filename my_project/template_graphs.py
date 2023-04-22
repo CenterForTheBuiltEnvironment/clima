@@ -545,7 +545,7 @@ def convert_bins(sbins):
     return sbins
 
 
-def thermalStressStackedBarChart(df, var, time_filter, month, hour, invert_month, invert_hour):
+def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_month, invert_hour):
     """Return the summary bar chart."""
     categories = [
         'extreme cold stress',
