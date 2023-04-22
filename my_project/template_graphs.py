@@ -322,33 +322,7 @@ def heatmap(df, var, global_local, si_ip, time_filter, month, hour, invert_month
     var_range = mapping_dictionary[var][si_ip]["range"]
     var_color = mapping_dictionary[var]["color"]
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        month = month[::-1]
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        hour = hour[::-1]
-    time_filter_info = [time_filter, month, hour]
-    time_filter = time_filter_info[0]
-    start_month = time_filter_info[1][0]
-    end_month = time_filter_info[1][1]
-    start_hour = time_filter_info[2][0]
-    end_hour = time_filter_info[2][1]
-
-    if time_filter:
-        if start_month <= end_month:
-            mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[mask] = None
-        else:
-            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[mask] = None
-
-        if start_hour <= end_hour:
-            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[mask] = None
-        else:
-            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[mask] = None
+    df, start_month, end_month, start_hour, end_hour = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
 
     if df.dropna(subset=["month"]).shape[0] == 0:
         return (
@@ -542,33 +516,7 @@ def thermalStressStackedBarChart(df, var, time_filter, month, hour, invert_month
     ]
     colors = ['#2A2B72', '#394396', '#44549F', '#4F63A8', '#7AB7E2', '#6EB557', '#E0893D', '#D84032', '#A3302B', '#6B1F18']
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        month = month[::-1]
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        hour = hour[::-1]
-    time_filter_info = [time_filter, month, hour]
-    time_filter = time_filter_info[0]
-    start_month = time_filter_info[1][0]
-    end_month = time_filter_info[1][1]
-    start_hour = time_filter_info[2][0]
-    end_hour = time_filter_info[2][1]
-
-    if time_filter:
-        if start_month <= end_month:
-            mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[mask] = None
-        else:
-            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[mask] = None
-
-        if start_hour <= end_hour:
-            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[mask] = None
-        else:
-            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[mask] = None
+    df, start_month, end_month, start_hour, end_hour = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
 
     if df.dropna(subset=["month"]).shape[0] == 0:
         return (
@@ -580,8 +528,6 @@ def thermalStressStackedBarChart(df, var, time_filter, month, hour, invert_month
                 style={"text-align": "center", "marginTop": "2rem"},
             ),
         )
-
-
 
     new_df = df.groupby('month')[var].value_counts(normalize=True).unstack(var).fillna(0)
     new_df.set_axis(categories, axis=1, inplace=True)
@@ -738,3 +684,33 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
             + filter_unit
         )
     return fig
+def filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour):
+    start_month, end_month = month
+    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+        month = month[::-1]
+    start_hour, end_hour = hour
+    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
+        hour = hour[::-1]
+    time_filter_info = [time_filter, month, hour]
+    time_filter = time_filter_info[0]
+    start_month = time_filter_info[1][0]
+    end_month = time_filter_info[1][1]
+    start_hour = time_filter_info[2][0]
+    end_hour = time_filter_info[2][1]
+
+    if time_filter:
+        if start_month <= end_month:
+            mask = (df["month"] < start_month) | (df["month"] > end_month)
+            df[mask] = None
+        else:
+            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
+            df[mask] = None
+
+        if start_hour <= end_hour:
+            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
+            df[mask] = None
+        else:
+            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
+            df[mask] = None
+
+    return df, start_month, end_month, start_hour, end_hour
