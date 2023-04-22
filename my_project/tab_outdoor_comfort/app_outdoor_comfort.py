@@ -161,18 +161,23 @@ def layout_outdoor_comfort():
         Input("df-store", "modified_timestamp"),
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
     ],
     [
         State("df-store", "data"),
         State("meta-store", "data"),
         State("si-ip-unit-store", "data"),
+        State("outdoor-comfort-month-slider", "value"),
+        State("outdoor-comfort-hour-slider", "value"),
+        State("invert-month-outdoor-comfort", "value"),
+        State("invert-hour-outdoor-comfort", "value")
     ],
 )
-def update_tab_utci_value(ts, var, global_local, df, meta, si_ip):
+def update_tab_utci_value(ts, var, global_local, time_filter, df, meta, si_ip, month, hour, invert_month, invert_hour):
 
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap", meta),
-        figure=heatmap(df, var, global_local, si_ip),
+        figure=heatmap(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour),
     )
 
 
@@ -199,15 +204,20 @@ def change_image_based_on_selection(value):
         Input("df-store", "modified_timestamp"),
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
     ],
     [
         State("df-store", "data"),
         State("meta-store", "data"),
         State("si-ip-unit-store", "data"),
+        State("outdoor-comfort-month-slider", "value"),
+        State("outdoor-comfort-hour-slider", "value"),
+        State("invert-month-outdoor-comfort", "value"),
+        State("invert-hour-outdoor-comfort", "value")
     ],
 )
-def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
-    utci_stress_cat = heatmap(df, var + "_categories", global_local, si_ip)
+def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip, month, hour, invert_month, invert_hour):
+    utci_stress_cat = heatmap(df, var + "_categories", global_local, si_ip, time_filter, month, hour, invert_month, invert_hour)
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
         titleside="top",
