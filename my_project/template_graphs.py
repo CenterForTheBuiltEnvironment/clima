@@ -316,7 +316,7 @@ def daily_profile(df, var, global_local, si_ip):
 
 
 # @code_timer
-def heatmap(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour):
+def heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour):
     """General function that returns a heatmap."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
     var_range = mapping_dictionary[var][si_ip]["range"]
@@ -375,6 +375,51 @@ def heatmap(df, var, global_local, si_ip, time_filter, month, hour, invert_month
 
     return fig
 
+def heatmap(df, var, global_local, si_ip):
+    """General function that returns a heatmap."""
+    var_unit = mapping_dictionary[var][si_ip]["unit"]
+    var_range = mapping_dictionary[var][si_ip]["range"]
+    var_color = mapping_dictionary[var]["color"]
+
+    if global_local == "global":
+        # Set Global values for Max and minimum
+        range_z = var_range
+    else:
+        # Set maximum and minimum according to data
+        data_max = 5 * ceil(df[var].max() / 5)
+        data_min = 5 * floor(df[var].min() / 5)
+        range_z = [data_min, data_max]
+    fig = go.Figure(
+        data=go.Heatmap(
+            y=df["hour"],
+            x=df["UTC_time"].dt.date,
+            z=df[var],
+            colorscale=var_color,
+            zmin=range_z[0],
+            zmax=range_z[1],
+            customdata=np.stack((df["month_names"], df["day"]), axis=-1),
+            hovertemplate=(
+                "<b>"
+                + var
+                + ": %{z:.2f} "
+                + var_unit
+                + "</b><br>Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour: %{y}:00<br>"
+            ),
+            name="",
+            colorbar=dict(title=var_unit),
+        )
+    )
+
+    fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
+
+    fig.update_yaxes(title_text="Hour")
+    fig.update_xaxes(title_text="Day")
+
+    fig.update_layout(template=template, margin=tight_margins, yaxis_nticks=13)
+    fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+
+    return fig
 
 ### WIND ROSE TEMPLATE
 def speed_labels(bins, units):
@@ -684,6 +729,8 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
             + filter_unit
         )
     return fig
+
+
 def filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour):
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
