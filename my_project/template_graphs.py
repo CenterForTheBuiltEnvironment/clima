@@ -375,6 +375,7 @@ def heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, 
 
     return fig
 
+
 def heatmap(df, var, global_local, si_ip):
     """General function that returns a heatmap."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
@@ -420,6 +421,7 @@ def heatmap(df, var, global_local, si_ip):
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
     return fig
+
 
 ### WIND ROSE TEMPLATE
 def speed_labels(bins, units):
@@ -610,6 +612,7 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
     fig.update_layout(barnorm="percent")
 
     return fig
+
 
 def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     """Return the custom summary bar chart."""
