@@ -322,7 +322,7 @@ def heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, 
     var_range = mapping_dictionary[var][si_ip]["range"]
     var_color = mapping_dictionary[var]["color"]
 
-    df, start_month, end_month, start_hour, end_hour = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
+    df, start_month, end_month = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
 
     if df.dropna(subset=["month"]).shape[0] == 0:
         return (
@@ -563,7 +563,7 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
     ]
     colors = ['#2A2B72', '#394396', '#44549F', '#4F63A8', '#7AB7E2', '#6EB557', '#E0893D', '#D84032', '#A3302B', '#6B1F18']
 
-    df, start_month, end_month, start_hour, end_hour = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
+    df, start_month, end_month = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
 
     if df.dropna(subset=["month"]).shape[0] == 0:
         return (
@@ -578,6 +578,7 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
 
     new_df = df.groupby('month')[var].value_counts(normalize=True).unstack(var).fillna(0)
     new_df.set_axis(categories, axis=1, inplace=True)
+    new_df.reset_index(inplace=True)
 
     go.Figure()
     data = []
@@ -590,10 +591,12 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
             return 0
 
     for i in range(len(categories)):
+        x_data = list(range(start_month - 1, end_month + 1))
+        y_data = [catch(lambda: new_df.iloc[idx][categories[i]]) for idx in range(0, end_month - start_month + 1)]
         data.append(
             go.Bar(
-                x=list(range(0, 13)),
-                y=[catch(lambda : new_df.iloc[month - 1][categories[i]]) for month in range(start_month, end_month+1)],
+                x=x_data,
+                y=y_data,
                 name=categories[i],
                 marker_color=colors[i],
                 hovertemplate=(
@@ -763,4 +766,8 @@ def filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, inve
             mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
             df[mask] = None
 
-    return df, start_month, end_month, start_hour, end_hour
+    df.dropna(inplace = True)
+    start_month = int(df.iloc[0]['month'])
+    end_month = int(df.iloc[-1]['month'])
+
+    return df, start_month, end_month
