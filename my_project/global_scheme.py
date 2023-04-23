@@ -672,7 +672,7 @@ mapping_dictionary = {
         "conversion_function": None,
     },
     "utci_Sun_noWind_categories": {
-        "name": "UTCI: Sun & no WInd : categories",
+        "name": "UTCI: Sun & no Wind : categories",
         "color": [
             [0, "#2B2977"],
             [0.0555, "#2B2977"],
@@ -821,10 +821,12 @@ mapping_dictionary = {
 # Dropdown Names
 variables_sun_cloud_tab_dropdown = [
     "None",
-    "DBT",
+    "t_wb",
     "DPT",
+    "DBT",
     "RH",
-    "p_atm",
+    "p_vap",
+    "hr",
     "extr_hor_rad",
     "hor_ir_rad",
     "glob_hor_rad",
@@ -841,10 +843,12 @@ variables_sun_cloud_tab_dropdown = [
     "Vis",
 ]
 variables_dropdown = [
-    "DBT",
+    "t_wb",
     "DPT",
+    "DBT",
     "RH",
-    "p_atm",
+    "p_vap",
+    "hr",
     "extr_hor_rad",
     "hor_ir_rad",
     "glob_hor_rad",
@@ -869,9 +873,6 @@ variables_more_variables_dropdown = [
     "utci_noSun_Wind_categories",
     "utci_Sun_noWind_categories",
     "utci_noSun_noWind_categories",
-    "p_vap",
-    "hr",
-    "t_wb",
     "t_dp",
     "elevation",
     "azimuth",

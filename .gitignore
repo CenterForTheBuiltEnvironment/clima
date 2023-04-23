@@ -3,6 +3,7 @@ venv
 cache-directory
 cloud-run-key-file.json
 file_system_store
+.DS_Store
 
 # Created by .ignore support plugin (hsz.mobi)
 ### VisualStudioCode template

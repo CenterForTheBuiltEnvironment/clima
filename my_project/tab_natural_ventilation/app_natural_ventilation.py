@@ -17,6 +17,9 @@ import numpy as np
 from my_project.utils import (
     title_with_tooltip,
     generate_chart_name,
+    generate_units_degree,
+    generate_units,
+    generate_custom_inputs_nv,
     determine_month_and_hour_filter,
 )
 
@@ -416,9 +419,10 @@ def nv_heatmap(
         mirror=True,
         title_text="Hour",
     )
-
+    custom_inputs = generate_custom_inputs_nv(start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val)
+    units = generate_units_degree(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap_nv", meta),
+        config=generate_chart_name("heatmap", meta, custom_inputs, units),
         figure=fig,
     )
 
@@ -593,9 +597,10 @@ def nv_bar_chart(
         mirror=True,
     )
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-
+    custom_inputs = generate_custom_inputs_nv(start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val)
+    units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("bar_chart_nv", meta),
+        config=generate_chart_name("barchart", meta, custom_inputs, units),
         figure=fig,
     )
 

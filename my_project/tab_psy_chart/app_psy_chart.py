@@ -4,13 +4,14 @@ import json
 from pythermalcomfort import psychrometrics as psy
 from math import ceil, floor
 import dash_bootstrap_components as dbc
+from copy import deepcopy
 from dash import dcc
 from dash import html
 from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name
+from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
 
 from my_project.global_scheme import (
     dropdown_names,
@@ -33,11 +34,13 @@ psy_dropdown_names = {
     "None": "None",
     "Frequency": "Frequency",
 }
-psy_dropdown_names.update(dropdown_names.copy())
-psy_dropdown_names.update(sun_cloud_tab_dropdown_names.copy())
-psy_dropdown_names.update(more_variables_dropdown.copy())
-psy_dropdown_names.update(sun_cloud_tab_explore_dropdown_names.copy())
-
+psy_dropdown_names.update(deepcopy(dropdown_names))
+psy_dropdown_names.update(deepcopy(sun_cloud_tab_dropdown_names))
+psy_dropdown_names.update(deepcopy(more_variables_dropdown))
+psy_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
+psy_dropdown_names.pop("Elevation", None)
+psy_dropdown_names.pop("Azimuth", None)
+psy_dropdown_names.pop("Saturation pressure", None)
 
 def inputs():
     """"""
@@ -426,6 +429,26 @@ def update_psych_chart(
         # )
 
     else:
+        var_colorbar = dict(
+            thickness=30, 
+            title=var_unit + "<br>  ",
+        )
+
+        if var_unit == "Thermal stress":
+            var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+            var_colorbar["ticktext"] = [
+                "extreme heat stress",
+                "very strong heat stress",
+                "strong heat stress",
+                "moderate heat stress",
+                "no thermal stress",
+                "slight cold stress",
+                "moderate cold stress",
+                "strong cold stress",
+                "very strong cold stress",
+                "extreme cold stress",
+            ]
+
         fig.add_trace(
             go.Scatter(
                 x=df["DBT"],
@@ -438,7 +461,7 @@ def update_psych_chart(
                     showscale=True,
                     opacity=0.3,
                     colorscale=var_color,
-                    colorbar=dict(thickness=30, title=var_unit + "<br>  "),
+                    colorbar=var_colorbar,
                 ),
                 customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
                 hovertemplate=mapping_dictionary["DBT"]["name"]
@@ -459,7 +482,7 @@ def update_psych_chart(
                 + "<br>"
                 + "<br>"
                 + var_name
-                + ": %{customdata[2]:.2f}"
+                  + ": %{customdata[2]:.2f}"
                 + var_unit,
                 name="",
             )
@@ -484,5 +507,6 @@ def update_psych_chart(
         linecolor="black",
         mirror=True,
     )
-
-    return dcc.Graph(config=generate_chart_name("psy", meta), figure=fig)
+    custom_inputs = generate_custom_inputs_psy(start_month, end_month, start_hour, end_hour, colorby_var, data_filter_var, min_val, max_val)
+    units = generate_units(si_ip)
+    return dcc.Graph(config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig)

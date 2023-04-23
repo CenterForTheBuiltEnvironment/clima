@@ -1,5 +1,19 @@
 # Changelog
 
+## Version 0.8.5 \(2023-04-12\)
+
+Feat:
+
+* Added stacked bar chart Outdoor Comfort
+
+Fix:
+* Fixed issues 154, 156: Update the option list 
+* Fixed issues 157: Align the legend bar of "Thermal Stress" with the text
+* Fixed issues 122
+* Fixed issues 144, 148, and 141
+* Correctly aligned SI and IP buttons
+* Fixed typos in variables
+
 ## Version 0.8.0 \(2023-03-27\)
 
 Feat:

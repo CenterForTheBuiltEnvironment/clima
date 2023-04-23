@@ -210,7 +210,7 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
         map_json = json.dumps(mapping_dictionary)
         if si_ip_input == "ip":
             map_json = convert_data(df, map_json)
-        return (df, si_ip_input)
+        return df, si_ip_input
     else:
         return (
             None,
