@@ -117,7 +117,6 @@ def layout_outdoor_comfort():
                     )
                 ],
             ),
-            html.Label("Here's the return value of my function:"),
             html.Div(id='output'),
             html.Div(
                 children=title_with_tooltip(
@@ -180,7 +179,7 @@ def update_output(ts,df):
                 colsWithTheHighestNumberOfZero.append(col)
         except:
             continue
-    return f"Cols with highest number of zeros: {', '.join(colsWithTheHighestNumberOfZero)}"
+    return f"The Best Weather Condition is: {', '.join(colsWithTheHighestNumberOfZero)}"
 
 
 @app.callback(
