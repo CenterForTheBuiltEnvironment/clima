@@ -5,6 +5,7 @@
 Feat:
 
 * Added stacked bar chart Outdoor Comfort
+* Added filter for the descriptive statistics table in the Data Explorer tab
 
 Fix:
 * Fixed issues 154, 156: Update the option list 

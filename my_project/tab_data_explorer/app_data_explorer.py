@@ -107,6 +107,67 @@ def section_one():
                 ),
             ),
             html.Div(
+                className="container-row justify-content-center",
+                children=[
+                    html.Div(
+                        className=container_col_center_one_of_three,
+                        children=[
+                            dbc.Button(
+                                "Apply month and hour filter",
+                                color="primary",
+                                id="sec1-time-filter-input",
+                                className="mb-2",
+                                n_clicks=0,
+                            ),
+                            html.Div(
+                                className="container-row full-width justify-center mt-2",
+                                children=[
+                                    html.H6("Month Range", style={"flex": "20%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="sec1-month-slider",
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
+                                        ),
+                                        style={"flex": "50%"},
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className="container-row justify-center",
+                                children=[
+                                    html.H6("Hour Range", style={"flex": "20%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="sec1-hour-slider",
+                                            min=1,
+                                            max=24,
+                                            step=1,
+                                            value=[1, 24],
+                                            marks={1: "1", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "topLeft",
+                                            },
+                                            allowCross=False,
+                                        ),
+                                        style={"flex": "50%"},
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            html.Div(
                 id="table-data-explorer",
             ),
         ],
@@ -833,11 +894,22 @@ def update_more_charts(
 
 @app.callback(
     Output("table-data-explorer", "children"),
-    [Input("df-store", "modified_timestamp"), Input("sec1-var-dropdown", "value")],
-    [State("df-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("sec1-var-dropdown", "value"),
+        Input("sec1-time-filter-input", "n_clicks"),
+    ],
+    [
+        State("df-store", "data"),
+        State("si-ip-unit-store", "data"),
+        State("sec1-month-slider", "value"),
+        State("sec1-hour-slider", "value"),
+    ],
 )
-def update_table(ts, dd_value, df, si_ip):
-    """Update the contents of tab three. Passing in general info (df, meta)."""
+def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range):
+    start_month, end_month = month_range
+    start_hour, end_hour = hour_range
+    filtered_df = df[(df["month"] >= start_month) & (df["month"] <= end_month) & (df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
     return summary_table_tmp_rh_tab(
-        df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
+        filtered_df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
     )
