@@ -5,6 +5,9 @@ from dash import html
 from dash.exceptions import PreventUpdate
 from my_project.utils import (
     generate_chart_name,
+    generate_custom_inputs,
+    generate_custom_inputs_explorer,
+    generate_units,
     title_with_tooltip,
     summary_table_tmp_rh_tab,
     code_timer,
@@ -18,6 +21,7 @@ from my_project.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     container_row_center_full,
     container_col_center_one_of_three,
+    mapping_dictionary,
 )
 from dash.dependencies import Input, Output, State
 
@@ -101,6 +105,67 @@ def section_one():
                     tooltip_text="count, mean, std, min, max, and percentiles",
                     id_button="table-explore",
                 ),
+            ),
+            html.Div(
+                className="container-row justify-content-center",
+                children=[
+                    html.Div(
+                        className=container_col_center_one_of_three,
+                        children=[
+                            dbc.Button(
+                                "Apply month and hour filter",
+                                color="primary",
+                                id="sec1-time-filter-input",
+                                className="mb-2",
+                                n_clicks=0,
+                            ),
+                            html.Div(
+                                className="container-row full-width justify-center mt-2",
+                                children=[
+                                    html.H6("Month Range", style={"flex": "20%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="sec1-month-slider",
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
+                                        ),
+                                        style={"flex": "50%"},
+                                    ),
+                                ],
+                            ),
+                            html.Div(
+                                className="container-row justify-center",
+                                children=[
+                                    html.H6("Hour Range", style={"flex": "20%"}),
+                                    html.Div(
+                                        dcc.RangeSlider(
+                                            id="sec1-hour-slider",
+                                            min=1,
+                                            max=24,
+                                            step=1,
+                                            value=[1, 24],
+                                            marks={1: "1", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "topLeft",
+                                            },
+                                            allowCross=False,
+                                        ),
+                                        style={"flex": "50%"},
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
             ),
             html.Div(
                 id="table-data-explorer",
@@ -570,8 +635,10 @@ def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
             className="m-4",
         )
     else:
+        custom_inputs = generate_custom_inputs(var)
+        units = generate_units(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("yearly_explore", meta),
+            config=generate_chart_name("yearly_explore", meta, custom_inputs, units),
             figure=yearly_profile(df, var, global_local, si_ip),
         )
 
@@ -591,10 +658,11 @@ def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
 )
 def update_tab_daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-
+    custom_inputs = generate_custom_inputs(var)
+    units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("daily_explore", meta),
+            config=generate_chart_name("daily_explore", meta, custom_inputs, units),
             figure=daily_profile(df, var, global_local, si_ip),
         ),
     )
@@ -615,10 +683,11 @@ def update_tab_daily(ts, var, global_local, df, meta, si_ip):
 )
 def update_tab_heatmap(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
-
+    custom_inputs = generate_custom_inputs(var)
+    units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap_explore", meta),
+            config=generate_chart_name("heatmap_explore", meta, custom_inputs, units),
             figure=heatmap(df, var, global_local, si_ip),
         ),
     )
@@ -702,18 +771,22 @@ def update_heatmap(
         )
 
     if data_filter:
+        custom_inputs = generate_custom_inputs_explorer(var, start_month, end_month, start_hour, end_hour, filter_var, min_val, max_val)
+        units = generate_units(si_ip)
         return (
             dcc.Graph(
-                config=generate_chart_name("heatmap_explore", meta),
+                config=generate_chart_name("heatmap", meta, custom_inputs, units),
                 figure=heat_map,
             ),
             {},
             barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip),
             {},
         )
+    custom_inputs = f"{var}"
+    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap_explore", meta),
+            config=generate_chart_name("heatmap", meta, custom_inputs, units),
             figure=heat_map,
         ),
         no_display,
@@ -794,6 +867,8 @@ def update_more_charts(
             si_ip,
         )
         if not three:
+            custom_inputs = f"{var_x}-{var_y}"
+            units = generate_units(si_ip)
             return dbc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
@@ -801,26 +876,40 @@ def update_more_charts(
                 color="danger",
                 style={"text-align": "center", "marginTop": "2rem"},
             ), dcc.Graph(
-                config=generate_chart_name("scatter_two_vars_explore", meta),
+                config=generate_chart_name("scatter", meta, custom_inputs, units),
                 figure=two,
             )
         else:
+            custom_inputs_three = f"{var_x}-{var_y}-{color_by}"
+            custom_inputs_two = f"{var_x}-{var_y}"
+            units = generate_units(si_ip)
             return dcc.Graph(
-                config=generate_chart_name("scatter_three_vars_explore", meta),
+                config=generate_chart_name("scatter", meta, custom_inputs_three, units),
                 figure=three,
             ), dcc.Graph(
-                config=generate_chart_name("scatter_two_vars_explore", meta),
+                config=generate_chart_name("scatter", meta, custom_inputs_two, units),
                 figure=two,
             )
 
 
 @app.callback(
     Output("table-data-explorer", "children"),
-    [Input("df-store", "modified_timestamp"), Input("sec1-var-dropdown", "value")],
-    [State("df-store", "data"), State("si-ip-unit-store", "data")],
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("sec1-var-dropdown", "value"),
+        Input("sec1-time-filter-input", "n_clicks"),
+    ],
+    [
+        State("df-store", "data"),
+        State("si-ip-unit-store", "data"),
+        State("sec1-month-slider", "value"),
+        State("sec1-hour-slider", "value"),
+    ],
 )
-def update_table(ts, dd_value, df, si_ip):
-    """Update the contents of tab three. Passing in general info (df, meta)."""
+def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range):
+    start_month, end_month = month_range
+    start_hour, end_hour = hour_range
+    filtered_df = df[(df["month"] >= start_month) & (df["month"] <= end_month) & (df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
     return summary_table_tmp_rh_tab(
-        df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
+        filtered_df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
     )
