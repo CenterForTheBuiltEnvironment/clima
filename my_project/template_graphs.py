@@ -153,7 +153,7 @@ def yearly_profile(df, var, global_local, si_ip):
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
         # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implemention 
-        var_barcolors =np.where((map80 > 40) | (map80 < 10), 'black', 'silver')
+        var_barcolors =np.where((map80 > 40) | (map80 < 10), 'white', 'lightgray')
         
 
 
@@ -163,7 +163,7 @@ def yearly_profile(df, var, global_local, si_ip):
             base=lo80,
             name="ASHRAE adaptive comfort (80%)",
             marker_color=var_barcolors,
-            marker_opacity=0.5,
+            marker_opacity=0.3,
             hovertemplate=(
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
             ),
@@ -180,7 +180,7 @@ def yearly_profile(df, var, global_local, si_ip):
             base=lo90,
             name="ASHRAE adaptive comfort (90%)",
             marker_color=var_barcolors,
-            marker_opacity=0.5,
+            marker_opacity=0.3,
             hovertemplate=(
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
             ),

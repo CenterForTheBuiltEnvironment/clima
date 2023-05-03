@@ -2,12 +2,18 @@ import json
 from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
-from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst, container_col_center_one_of_three
+from my_project.global_scheme import (
+    outdoor_dropdown_names,
+    tight_margins,
+    month_lst,
+    container_col_center_one_of_three,
+)
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, thermalStressStackedBarChart
 from my_project.utils import title_with_tooltip, generate_chart_name
 import numpy as np
 from app import app
+
 
 def layout_outdoor_comfort():
     return html.Div(
@@ -105,7 +111,10 @@ def layout_outdoor_comfort():
                                             "marginRight": "2rem",
                                         },
                                         options=[
-                                            {"label": i, "value": outdoor_dropdown_names[i]}
+                                            {
+                                                "label": i,
+                                                "value": outdoor_dropdown_names[i],
+                                            }
                                             for i in outdoor_dropdown_names
                                         ],
                                         value="utci_Sun_Wind",
@@ -113,16 +122,16 @@ def layout_outdoor_comfort():
                                     html.Div(id="image-selection"),
                                 ],
                             )
-                        ]
-                    )
+                        ],
+                    ),
                 ],
             ),
-            html.Div(id='output'),
+            html.Div(id="outdoor-comfort-output"),
             html.Div(
                 children=title_with_tooltip(
                     text="UTCI heatmap chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label"
+                    id_button="utci-charts-label",
                 )
             ),
             dcc.Loading(
@@ -133,7 +142,7 @@ def layout_outdoor_comfort():
                 children=title_with_tooltip(
                     text="UTCI thermal stress chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label"
+                    id_button="utci-charts-label",
                 )
             ),
             dcc.Loading(
@@ -144,7 +153,7 @@ def layout_outdoor_comfort():
                 children=title_with_tooltip(
                     text="UTCI thermal stress distribution chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label"
+                    id_button="utci-charts-label",
                 )
             ),
             dcc.Loading(
@@ -154,8 +163,9 @@ def layout_outdoor_comfort():
         ],
     )
 
+
 @app.callback(
-    Output("output", "children"),
+    Output("outdoor-comfort-output", "children"),
     [
         Input("df-store", "modified_timestamp"),
     ],
@@ -163,15 +173,19 @@ def layout_outdoor_comfort():
         State("df-store", "data"),
     ],
 )
-def update_output(ts,df):
-    cols = ['utci_noSun_Wind_categories', 'utci_noSun_noWind_categories',
-       'utci_Sun_Wind_categories', 'utci_Sun_noWind_categories']
+def update_outdoor_comfort_output(ts, df):
+    cols = [
+        "utci_noSun_Wind_categories",
+        "utci_noSun_noWind_categories",
+        "utci_Sun_Wind_categories",
+        "utci_Sun_noWind_categories",
+    ]
     colsWithTheHighestNumberOfZero = []
     highestCount = 0
     for col in cols:
         try:
-            count = df[col].value_counts()[0] # this can cause error if there is no 0
-            if(count > highestCount):
+            count = df[col].value_counts()[0]  # this can cause error if there is no 0
+            if count > highestCount:
                 highestCount = count
                 colsWithTheHighestNumberOfZero.clear()
                 colsWithTheHighestNumberOfZero.append(col)
@@ -196,7 +210,6 @@ def update_output(ts,df):
     ],
 )
 def update_tab_utci_value(ts, var, global_local, df, meta, si_ip):
-
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap", meta),
         figure=heatmap(df, var, global_local, si_ip),
@@ -253,13 +266,13 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
             "extreme cold stress",
         ],
         ticks="outside",
-        
     )
     return dcc.Graph(
         config=generate_chart_name("utci_heatmap_category", meta),
         figure=utci_stress_cat,
         # num_categories = len(utci_stress_cat['layout']['xaxis']['tickvals'][0])
     )
+
 
 @app.callback(
     Output("utci-summary-chart", "children"),
@@ -275,7 +288,6 @@ def update_tab_utci_category(ts, var, global_local, df, meta, si_ip):
     ],
 )
 def update_tab_utci_summary_chart(ts, var, global_local, df, meta, si_ip):
-  
     utci_summary_chart = thermalStressStackedBarChart(df, var + "_categories")
     utci_summary_chart = utci_summary_chart.update_layout(
         margin=tight_margins,
