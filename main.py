@@ -77,7 +77,7 @@ def render_content(tab, si_ip, month_range_filter_store, hour_range_filter_store
     elif tab == "tab-natural-ventilation":
         return layout_natural_ventilation(si_ip)
     elif tab == "tab-psy-chart":
-        return layout_psy_chart()
+        return layout_psy_chart(month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store)
     else:
         return "404"
 
