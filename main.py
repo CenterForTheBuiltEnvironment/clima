@@ -52,9 +52,13 @@ def display_page(pathname):
     [
         Input("tabs", "value"),
         Input("si-ip-radio-input", "value"),
+        State("month-range-filter-store", "data"),
+        State("hour-range-filter-store", "data"),
+        State("month-invert-filter-store", "data"),
+        State("hour-invert-filter-store", "data"),
     ],
 )
-def render_content(tab, si_ip):
+def render_content(tab, si_ip, month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store):
     """Update the contents of the page depending on what tab the user selects."""
     if tab == "tab-select":
         return layout_select()
@@ -69,7 +73,7 @@ def render_content(tab, si_ip):
     elif tab == "tab-data-explorer":
         return layout_data_explorer()
     elif tab == "tab-outdoor-comfort":
-        return layout_outdoor_comfort()
+        return layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store)
     elif tab == "tab-natural-ventilation":
         return layout_natural_ventilation(si_ip)
     elif tab == "tab-psy-chart":
@@ -80,7 +84,7 @@ def render_content(tab, si_ip):
 
 if __name__ == "__main__":
     app.run_server(
-        debug=False,
+        debug=True,
         host="0.0.0.0",
         port=8080,
         processes=1,

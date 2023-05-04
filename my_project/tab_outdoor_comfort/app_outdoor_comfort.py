@@ -10,7 +10,7 @@ import numpy as np
 from app import app
 
 
-def layout_outdoor_comfort():
+def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store):
     return html.Div(
         className="container-col",
         children=[
@@ -37,7 +37,7 @@ def layout_outdoor_comfort():
                                             min=1,
                                             max=12,
                                             step=1,
-                                            value=[1, 12],
+                                            value=[1, 12] if (month_range_filter_store is None or len(month_range_filter_store["data"]) == 0) else month_range_filter_store["data"],
                                             marks={1: "1", 12: "12"},
                                             tooltip={
                                                 "always_visible": False,
@@ -51,7 +51,7 @@ def layout_outdoor_comfort():
                                         options=[
                                             {"label": "Invert", "value": "invert"},
                                         ],
-                                        value=[],
+                                        value=[] if (month_invert_filter_store is None or len(month_invert_filter_store["data"]) == 0) else month_invert_filter_store["data"],
                                         id="invert-month-outdoor-comfort",
                                         labelStyle={"flex": "30%"},
                                     ),
@@ -67,7 +67,7 @@ def layout_outdoor_comfort():
                                             min=1,
                                             max=24,
                                             step=1,
-                                            value=[1, 24],
+                                            value=[1, 24] if (hour_range_filter_store is None or len(hour_range_filter_store["data"]) == 0) else hour_range_filter_store["data"],
                                             marks={1: "1", 24: "24"},
                                             tooltip={
                                                 "always_visible": False,
@@ -81,7 +81,7 @@ def layout_outdoor_comfort():
                                         options=[
                                             {"label": "Invert", "value": "invert"},
                                         ],
-                                        value=[],
+                                        value=[] if (hour_invert_filter_store is None or len(hour_invert_filter_store["data"]) == 0) else hour_invert_filter_store["data"],
                                         id="invert-hour-outdoor-comfort",
                                         labelStyle={"flex": "30%"},
                                     ),
@@ -258,7 +258,8 @@ def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip
         State("meta-store", "data"),
         State("invert-month-outdoor-comfort", "value"),
         State("invert-hour-outdoor-comfort", "value"),
-        State("si-ip-unit-store", "data")
+        State("si-ip-unit-store", "data"),
+        State("month-range-filter-store", "data"),
     ],
 )
 def update_tab_utci_summary_chart(
@@ -270,9 +271,11 @@ def update_tab_utci_summary_chart(
         meta,
         invert_month,
         invert_hour,
-        si_ip
+        si_ip,
+        month_range_filter_store
 ):
-    utci_summary_chart = thermal_stress_stacked_barchart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour)
+    month_range_data = month if (month_range_filter_store is None or len(month_range_filter_store["data"]) == 0) else month_range_filter_store["data"]
+    utci_summary_chart = thermal_stress_stacked_barchart(df, var + "_categories", time_filter, month_range_data, hour, invert_month, invert_hour)
     utci_summary_chart = utci_summary_chart.update_layout(
         margin=tight_margins,
         title="",
@@ -287,3 +290,68 @@ def update_tab_utci_summary_chart(
         config=generate_chart_name("summary", meta, custom_inputs, units),
         figure=utci_summary_chart,
     )
+
+
+@app.callback(
+    Output("month-range-filter-store", "data"),
+    [
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+    ],
+    [
+        State("outdoor-comfort-month-slider", "value"),
+        State("month-range-filter-store", "data"),
+    ],
+)
+def update_month_range_filter_store(time_filter, month_range_filter, month_range_filter_store):
+    if time_filter:
+        return {"data": month_range_filter}
+    return month_range_filter_store
+
+
+@app.callback(
+    Output("hour-range-filter-store", "data"),
+    [
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+    ],
+    [
+        State("outdoor-comfort-hour-slider", "value"),
+        State("hour-range-filter-store", "data"),
+    ],
+)
+def update_hour_range_filter_store(time_filter, hour_range_filter, hour_range_filter_store):
+    if time_filter:
+        return {"data": hour_range_filter}
+    return hour_range_filter_store
+
+
+@app.callback(
+    Output("month-invert-filter-store", "data"),
+    [
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+    ],
+    [
+        State("invert-month-outdoor-comfort", "value"),
+        State("month-invert-filter-store", "data"),
+    ],
+)
+def update_month_invert_filter_store(time_filter, month_invert_filter, month_invert_filter_store):
+    if time_filter:
+        return {"data": month_invert_filter}
+    return month_invert_filter_store
+
+
+@app.callback(
+    Output("hour-invert-filter-store", "data"),
+    [
+        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+    ],
+    [
+        State("invert-hour-outdoor-comfort", "value"),
+        State("hour-invert-filter-store", "data"),
+    ],
+)
+def update_hour_invert_filter_store(time_filter, hour_invert_filter, hour_invert_filter_store):
+    if time_filter:
+        return {"data": hour_invert_filter}
+    return hour_invert_filter_store
+
