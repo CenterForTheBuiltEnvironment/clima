@@ -149,13 +149,11 @@ def yearly_profile(df, var, global_local, si_ip):
 
     if var == "DBT":
         # plot ashrae adaptive comfort limits (80%)
-        map80= dbt_day["mean"]
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
-        # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implemention 
-        var_barcolors =np.where((map80 > 40) | (map80 < 10), 'lightgray', 'darkgray')
-        
-
+        rmt = df.groupby("DOY")["adaptive_cmf_rmt"].mean().values
+        # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implemention
+        var_barcolors = np.where((rmt > 40) | (rmt < 10), "lightgray", "darkgray")
 
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
@@ -172,7 +170,6 @@ def yearly_profile(df, var, global_local, si_ip):
         # plot ashrae adaptive comfort limits (90%)
         lo90 = df.groupby("DOY")["adaptive_cmf_90_low"].mean().values
         hi90 = df.groupby("DOY")["adaptive_cmf_90_up"].mean().values
-        
 
         trace4 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
@@ -264,7 +261,6 @@ def daily_profile(df, var, global_local, si_ip):
     )
 
     for i in range(12):
-
         fig.add_trace(
             go.Scatter(
                 x=df.loc[df["month"] == i + 1, "hour"],
@@ -322,13 +318,17 @@ def daily_profile(df, var, global_local, si_ip):
 
 
 # @code_timer
-def heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour):
+def heatmap_with_filter(
+    df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour
+):
     """General function that returns a heatmap."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
     var_range = mapping_dictionary[var][si_ip]["range"]
     var_color = mapping_dictionary[var]["color"]
 
-    df, start_month, end_month = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
+    df, start_month, end_month = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour
+    )
 
     if df.dropna(subset=["month"]).shape[0] == 0:
         return (
@@ -553,23 +553,38 @@ def convert_bins(sbins):
     return sbins
 
 
-def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_month, invert_hour):
+def thermal_stress_stacked_barchart(
+    df, var, time_filter, month, hour, invert_month, invert_hour
+):
     """Return the summary bar chart."""
     categories = [
-        'extreme cold stress',
-         'very strong cold stress',
-         'strong cold stress',
-         'moderate cold stress',
-         'slight cold stress',
-         'no thermal stress',
-         'moderate heat stress',
-         'strong heat stress',
-         'very strong heat stress',
-         'extreme heat stress'
+        "extreme cold stress",
+        "very strong cold stress",
+        "strong cold stress",
+        "moderate cold stress",
+        "slight cold stress",
+        "no thermal stress",
+        "moderate heat stress",
+        "strong heat stress",
+        "very strong heat stress",
+        "extreme heat stress",
     ]
-    colors = ['#2A2B72', '#394396', '#44549F', '#4F63A8', '#7AB7E2', '#6EB557', '#E0893D', '#D84032', '#A3302B', '#6B1F18']
+    colors = [
+        "#2A2B72",
+        "#394396",
+        "#44549F",
+        "#4F63A8",
+        "#7AB7E2",
+        "#6EB557",
+        "#E0893D",
+        "#D84032",
+        "#A3302B",
+        "#6B1F18",
+    ]
 
-    df, start_month, end_month = filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour)
+    df, start_month, end_month = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour
+    )
 
     if df.dropna(subset=["month"]).shape[0] == 0:
         return (
@@ -582,7 +597,9 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
             ),
         )
 
-    new_df = df.groupby('month')[var].value_counts(normalize=True).unstack(var).fillna(0)
+    new_df = (
+        df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0)
+    )
     new_df.set_axis(categories, axis=1, inplace=True)
     new_df.reset_index(inplace=True)
 
@@ -598,7 +615,10 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
 
     for i in range(len(categories)):
         x_data = list(range(start_month - 1, end_month + 1))
-        y_data = [catch(lambda: new_df.iloc[idx][categories[i]]) for idx in range(0, end_month - start_month + 1)]
+        y_data = [
+            catch(lambda: new_df.iloc[idx][categories[i]])
+            for idx in range(0, end_month - start_month + 1)
+        ]
         data.append(
             go.Bar(
                 x=x_data,
@@ -606,10 +626,11 @@ def thermal_stress_stacked_barchart(df, var, time_filter, month, hour, invert_mo
                 name=categories[i],
                 marker_color=colors[i],
                 hovertemplate=(
-                    "</b><br>Month: %{x}" +
-                    "<br>Category: " + categories[i] +
-                    "<br>Proportion: %{y:.1f}%<br><extra></extra>"
-                )
+                    "</b><br>Month: %{x}"
+                    + "<br>Category: "
+                    + categories[i]
+                    + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
+                ),
             )
         )
 
@@ -743,7 +764,9 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     return fig
 
 
-def filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, invert_hour):
+def filter_df_by_month_and_hour(
+    df, time_filter, month, hour, invert_month, invert_hour
+):
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
         month = month[::-1]
@@ -772,8 +795,8 @@ def filter_df_by_month_and_hour(df, time_filter, month, hour, invert_month, inve
             mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
             df[mask] = None
 
-    df.dropna(inplace = True)
-    start_month = int(df.iloc[0]['month'])
-    end_month = int(df.iloc[-1]['month'])
+    df.dropna(inplace=True)
+    start_month = int(df.iloc[0]["month"])
+    end_month = int(df.iloc[-1]["month"])
 
     return df, start_month, end_month
