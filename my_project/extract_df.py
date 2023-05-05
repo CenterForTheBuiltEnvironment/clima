@@ -304,6 +304,7 @@ def create_df(lst, file_name):
     epw_df["adaptive_cmf_80_up"] = np.nan
     epw_df["adaptive_cmf_90_low"] = np.nan
     epw_df["adaptive_cmf_90_up"] = np.nan
+    epw_df["adaptive_cmf_rmt"] = np.nan
     for day in epw_df.DOY.unique():
         i = day - 1
         if i < n:
@@ -311,13 +312,14 @@ def create_df(lst, file_name):
         else:
             last_days = dbt_day_ave[i - n : i]
         last_days.reverse()
-        last_days = [10 if x <= 10 else x for x in last_days]
-        last_days = [32 if x >= 32 else x for x in last_days]
+        # last_days = [10 if x <= 10 else x for x in last_days]
+        # last_days = [32 if x >= 32 else x for x in last_days]
         rmt = running_mean_outdoor_temperature(last_days, alpha=0.9)
-        if rmt >= 40:
-            rmt = 40
-        elif rmt <= 10:
-            rmt = 10
+
+        # if rmt >= 40:
+        #     rmt = 40
+        # elif rmt <= 10:
+        #     rmt = 10
         r = adaptive_ashrae(
             tdb=dbt_day_ave[i],
             tr=dbt_day_ave[i],
@@ -325,7 +327,7 @@ def create_df(lst, file_name):
             v=0.5,
             limit_inputs=False,
         )
-
+        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_rmt"] = rmt
         epw_df.loc[epw_df.DOY == day, "adaptive_comfort"] = r["tmp_cmf"]
         epw_df.loc[epw_df.DOY == day, "adaptive_cmf_80_low"] = r["tmp_cmf_80_low"]
         epw_df.loc[epw_df.DOY == day, "adaptive_cmf_80_up"] = r["tmp_cmf_80_up"]
