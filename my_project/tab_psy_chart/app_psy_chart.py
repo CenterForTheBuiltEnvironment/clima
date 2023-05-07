@@ -11,7 +11,7 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
+from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy, get_valid_month_and_hour_from_store
 
 from my_project.global_scheme import (
     dropdown_names,
@@ -229,14 +229,14 @@ def layout_psy_chart(month_range_filter_store, hour_range_filter_store, month_in
     ],
     [
         State("df-store", "data"),
-        State("month-range-filter-store", "value"),
-        State("hour-range-filter-store", "value"),
+        State("month-range-filter-store", "data"),
+        State("hour-range-filter-store", "data"),
         State("psy-min-val", "value"),
         State("psy-max-val", "value"),
         State("psy-var-dropdown", "value"),
         State("meta-store", "data"),
-        State("month-invert-filter-store", "value"),
-        State("hour-invert-filter-store", "value"),
+        State("month-invert-filter-store", "data"),
+        State("hour-invert-filter-store", "data"),
         State("si-ip-unit-store", "data"),
     ],
 )
@@ -257,10 +257,7 @@ def update_psych_chart(
     invert_hour,
     si_ip,
 ):
-    month = month if month is not None else [1, 12]
-    invert_month = invert_month if invert_month is not None else []
-    hour = hour if hour is not None else [1, 24]
-    invert_hour = invert_hour if invert_hour is not None else []
+    month, invert_month, hour, invert_hour = get_valid_month_and_hour_from_store(month, invert_month, hour, invert_hour)
 
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
