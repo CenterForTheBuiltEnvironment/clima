@@ -41,70 +41,70 @@ triggersAndCorresponding = {
     },
 }
 
-
-@app.callback(
-    Output("month-range-filter-store", "data"),
-    [
-        State("month-range-filter-store", "data"),
-        *[State(triggersAndCorresponding[trigger]["month-range"], "value") for trigger in triggersAndCorresponding.keys()]
-    ],
-    [
-        Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
-    ]
-)
-def update_month_range_filter_store(global_data_store, *args):
-    trigger = ctx.triggered_id
-    if trigger is not None and trigger != 0:
-        return {"data": triggersAndCorresponding[trigger]["month-range"]}
-    return global_data_store
-
-
-@app.callback(
-    Output("hour-range-filter-store", "data"),
-    [
-        State("hour-range-filter-store", "data"),
-        *[State(triggersAndCorresponding[trigger]["hour-range"], "value") for trigger in triggersAndCorresponding.keys()]
-    ],
-    [
-        Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
-    ]
-)
-def update_hour_range_filter_store(global_data_store, *args):
-    trigger = ctx.triggered_id
-    if trigger is not None and trigger != 0:
-        return {"data": triggersAndCorresponding[trigger]["hour-range"]}
-    return global_data_store
-
-
-@app.callback(
-    Output("month-invert-filter-store", "data"),
-    [
-        State("month-invert-filter-store", "data"),
-        *[State(triggersAndCorresponding[trigger]["month-invert"], "value") for trigger in triggersAndCorresponding.keys()]
-    ],
-    [
-        Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
-    ]
-)
-def update_month_invert_filter_store(global_data_store, *args):
-    trigger = ctx.triggered_id
-    if trigger is not None and trigger != 0:
-        return {"data": triggersAndCorresponding[trigger]["month-invert"]}
-    return global_data_store
-
-
-@app.callback(
-    Output("hour-invert-filter-store", "data"),
-    [
-        State("hour-invert-filter-store", "data"),
-        *[State(triggersAndCorresponding[trigger]["hour-invert"], "value") for trigger in triggersAndCorresponding.keys()]
-    ],
-    [
-        Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
-    ]
-)
-def update_hour_invert_filter_store(global_data_store, *args):
-    trigger = ctx.triggered_id
-    if trigger is not None and trigger != 0:
-        return {"data": triggersAndCorresponding[trigger]["hour-invert"]}
-    return global_data_store
+#
+# @app.callback(
+#     Output("month-range-filter-store", "data"),
+#     [
+#         State("month-range-filter-store", "data"),
+#         *[State(triggersAndCorresponding[trigger]["month-range"], "value") for trigger in triggersAndCorresponding.keys()]
+#     ],
+#     [
+#         Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
+#     ]
+# )
+# def update_month_range_filter_store(global_data_store, *args):
+#     trigger = ctx.triggered_id
+#     if trigger is not None and trigger != 0:
+#         return {"data": triggersAndCorresponding[trigger]["month-range"]}
+#     return global_data_store
+#
+#
+# @app.callback(
+#     Output("hour-range-filter-store", "data"),
+#     [
+#         State("hour-range-filter-store", "data"),
+#         *[State(triggersAndCorresponding[trigger]["hour-range"], "value") for trigger in triggersAndCorresponding.keys()]
+#     ],
+#     [
+#         Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
+#     ]
+# )
+# def update_hour_range_filter_store(global_data_store, *args):
+#     trigger = ctx.triggered_id
+#     if trigger is not None and trigger != 0:
+#         return {"data": triggersAndCorresponding[trigger]["hour-range"]}
+#     return global_data_store
+#
+#
+# @app.callback(
+#     Output("month-invert-filter-store", "data"),
+#     [
+#         State("month-invert-filter-store", "data"),
+#         *[State(triggersAndCorresponding[trigger]["month-invert"], "value") for trigger in triggersAndCorresponding.keys()]
+#     ],
+#     [
+#         Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
+#     ]
+# )
+# def update_month_invert_filter_store(global_data_store, *args):
+#     trigger = ctx.triggered_id
+#     if trigger is not None and trigger != 0:
+#         return {"data": triggersAndCorresponding[trigger]["month-invert"]}
+#     return global_data_store
+#
+#
+# @app.callback(
+#     Output("hour-invert-filter-store", "data"),
+#     [
+#         State("hour-invert-filter-store", "data"),
+#         *[State(triggersAndCorresponding[trigger]["hour-invert"], "value") for trigger in triggersAndCorresponding.keys()]
+#     ],
+#     [
+#         Input(triggerKey, "n_clicks") for triggerKey in triggersAndCorresponding.keys()
+#     ]
+# )
+# def update_hour_invert_filter_store(global_data_store, *args):
+#     trigger = ctx.triggered_id
+#     if trigger is not None and trigger != 0:
+#         return {"data": triggersAndCorresponding[trigger]["hour-invert"]}
+#     return global_data_store
