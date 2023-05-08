@@ -11,7 +11,7 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
+from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy, get_valid_month_and_hour_from_store
 
 from my_project.global_scheme import (
     dropdown_names,
@@ -42,7 +42,7 @@ psy_dropdown_names.pop("Elevation", None)
 psy_dropdown_names.pop("Azimuth", None)
 psy_dropdown_names.pop("Saturation pressure", None)
 
-def inputs():
+def inputs(month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store):
     """"""
     return html.Div(
         className="container-row full-width three-inputs-container",
@@ -92,7 +92,7 @@ def inputs():
                                     min=1,
                                     max=12,
                                     step=1,
-                                    value=[1, 12],
+                                    value=[1, 12] if (month_range_filter_store is None or len(month_range_filter_store["data"]) == 0) else month_range_filter_store["data"],
                                     marks={1: "1", 12: "12"},
                                     tooltip={
                                         "always_visible": False,
@@ -106,7 +106,7 @@ def inputs():
                                 options=[
                                     {"label": "Invert", "value": "invert"},
                                 ],
-                                value=[],
+                                value=[] if (month_invert_filter_store is None or len(month_invert_filter_store["data"]) == 0) else month_invert_filter_store["data"],
                                 id="invert-month-psy",
                                 labelStyle={"flex": "30%"},
                             ),
@@ -122,7 +122,7 @@ def inputs():
                                     min=1,
                                     max=24,
                                     step=1,
-                                    value=[1, 24],
+                                    value=[1, 24] if (hour_range_filter_store is None or len(hour_range_filter_store["data"]) == 0) else hour_range_filter_store["data"],
                                     marks={1: "1", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
@@ -136,7 +136,7 @@ def inputs():
                                 options=[
                                     {"label": "Invert", "value": "invert"},
                                 ],
-                                value=[],
+                                value=[] if (hour_invert_filter_store is None or len(hour_invert_filter_store["data"]) == 0) else hour_invert_filter_store["data"],
                                 id="invert-hour-psy",
                                 labelStyle={"flex": "30%"},
                             ),
@@ -205,13 +205,13 @@ def inputs():
     )
 
 
-def layout_psy_chart():
+def layout_psy_chart(month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store):
     return (
         dcc.Loading(
             type="circle",
             children=html.Div(
                 className="container-col",
-                children=[inputs(), html.Div(id="psych-chart")],
+                children=[inputs(month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store), html.Div(id="psych-chart")],
             ),
         ),
     )
@@ -229,14 +229,14 @@ def layout_psy_chart():
     ],
     [
         State("df-store", "data"),
-        State("psy-month-slider", "value"),
-        State("psy-hour-slider", "value"),
+        State("month-range-filter-store", "data"),
+        State("hour-range-filter-store", "data"),
         State("psy-min-val", "value"),
         State("psy-max-val", "value"),
         State("psy-var-dropdown", "value"),
         State("meta-store", "data"),
-        State("invert-month-psy", "value"),
-        State("invert-hour-psy", "value"),
+        State("month-invert-filter-store", "data"),
+        State("hour-invert-filter-store", "data"),
         State("si-ip-unit-store", "data"),
     ],
 )
@@ -257,6 +257,7 @@ def update_psych_chart(
     invert_hour,
     si_ip,
 ):
+    month, invert_month, hour, invert_hour = get_valid_month_and_hour_from_store(month, invert_month, hour, invert_hour)
 
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
@@ -510,3 +511,4 @@ def update_psych_chart(
     custom_inputs = generate_custom_inputs_psy(start_month, end_month, start_hour, end_hour, colorby_var, data_filter_var, min_val, max_val)
     units = generate_units(si_ip)
     return dcc.Graph(config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig)
+

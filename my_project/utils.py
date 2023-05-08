@@ -237,3 +237,12 @@ def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
         end_hour, start_hour = hour
 
     return start_month, end_month, start_hour, end_hour
+
+
+def get_valid_month_and_hour_from_store(month, invert_month, hour, invert_hour):
+    month = month["data"] if (month is not None and len(month["data"]) != 0) else [1, 12]
+    invert_month = invert_month["data"] if (invert_month is not None and len(invert_month["data"]) != 0) else []
+    hour = hour["data"] if (hour is not None and len(hour["data"]) != 0) else [1, 24]
+    invert_hour = invert_hour["data"] if (invert_hour is not None and len(invert_hour["data"]) != 0) else []
+    return month, invert_month, hour, invert_hour
+

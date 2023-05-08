@@ -21,12 +21,13 @@ from my_project.utils import (
     generate_units,
     generate_custom_inputs_nv,
     determine_month_and_hour_filter,
+    get_valid_month_and_hour_from_store
 )
 
 from app import app
 
 
-def layout_natural_ventilation(si_ip):
+def layout_natural_ventilation(si_ip, month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store):
     if si_ip == "ip":
         tdb_set_min = 50
         tdb_set_max = 75
@@ -39,7 +40,7 @@ def layout_natural_ventilation(si_ip):
     return html.Div(
         className="container-col",
         children=[
-            inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
+            inputs_tab(tdb_set_min, tdb_set_max, dpt_set, month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store),
             dcc.Loading(
                 html.Div(
                     id="nv-heatmap-chart",
@@ -86,7 +87,7 @@ def layout_natural_ventilation(si_ip):
     )
 
 
-def inputs_tab(t_min, t_max, d_set):
+def inputs_tab(t_min, t_max, d_set, month_range_filter_store, hour_range_filter_store, month_invert_filter_store, hour_invert_filter_store):
     return html.Div(
         className="container-row full-width three-inputs-container",
         children=[
@@ -151,7 +152,7 @@ def inputs_tab(t_min, t_max, d_set):
                                     min=1,
                                     max=12,
                                     step=1,
-                                    value=[1, 12],
+                                    value=[1, 12] if (month_range_filter_store is None or len(month_range_filter_store["data"]) == 0) else month_range_filter_store["data"],
                                     marks={1: "1", 12: "12"},
                                     tooltip={
                                         "always_visible": False,
@@ -165,7 +166,7 @@ def inputs_tab(t_min, t_max, d_set):
                                 options=[
                                     {"label": "Invert", "value": "invert"},
                                 ],
-                                value=[],
+                                value=[] if (month_invert_filter_store is None or len(month_invert_filter_store["data"]) == 0) else month_invert_filter_store["data"],
                                 id="invert-month-nv",
                                 labelStyle={"flex": "30%"},
                             ),
@@ -181,7 +182,7 @@ def inputs_tab(t_min, t_max, d_set):
                                     min=1,
                                     max=24,
                                     step=1,
-                                    value=[1, 24],
+                                    value=[1, 24] if (hour_range_filter_store is None or len(hour_range_filter_store["data"]) == 0) else hour_range_filter_store["data"],
                                     marks={1: "1", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
@@ -195,7 +196,7 @@ def inputs_tab(t_min, t_max, d_set):
                                 options=[
                                     {"label": "Invert", "value": "invert"},
                                 ],
-                                value=[],
+                                value=[] if (hour_invert_filter_store is None or len(hour_invert_filter_store["data"]) == 0) else hour_invert_filter_store["data"],
                                 id="invert-hour-nv",
                                 labelStyle={"flex": "30%"},
                             ),
@@ -264,14 +265,14 @@ def inputs_tab(t_min, t_max, d_set):
     ],
     [
         State("df-store", "data"),
-        State("nv-month-slider", "value"),
-        State("nv-hour-slider", "value"),
+        State("month-range-filter-store", "data"),
+        State("hour-range-filter-store", "data"),
         State("nv-tdb-min-val", "value"),
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
         State("meta-store", "data"),
-        State("invert-month-nv", "value"),
-        State("invert-hour-nv", "value"),
+        State("month-invert-filter-store", "data"),
+        State("hour-invert-filter-store", "data"),
         State("si-ip-unit-store", "data"),
     ],
 )
@@ -293,6 +294,7 @@ def nv_heatmap(
     invert_hour,
     si_ip,
 ):
+    month, invert_month, hour, invert_hour = get_valid_month_and_hour_from_store(month, invert_month, hour, invert_hour)
 
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
@@ -439,14 +441,14 @@ def nv_heatmap(
     ],
     [
         State("df-store", "data"),
-        State("nv-month-slider", "value"),
-        State("nv-hour-slider", "value"),
+        State("month-range-filter-store", "data"),
+        State("hour-range-filter-store", "data"),
         State("nv-tdb-min-val", "value"),
         State("nv-tdb-max-val", "value"),
         State("nv-dpt-max-val", "value"),
         State("meta-store", "data"),
-        State("invert-month-nv", "value"),
-        State("invert-hour-nv", "value"),
+        State("month-invert-filter-store", "data"),
+        State("hour-invert-filter-store", "data"),
         State("si-ip-unit-store", "data"),
     ],
 )
@@ -468,6 +470,7 @@ def nv_bar_chart(
     invert_hour,
     si_ip,
 ):
+    month, invert_month, hour, invert_hour = get_valid_month_and_hour_from_store(month, invert_month, hour, invert_hour)
 
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
