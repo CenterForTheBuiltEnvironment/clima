@@ -2,7 +2,12 @@ import json
 from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
-from my_project.global_scheme import outdoor_dropdown_names, tight_margins, month_lst, container_col_center_one_of_three
+from my_project.global_scheme import (
+    outdoor_dropdown_names,
+    tight_margins,
+    month_lst,
+    container_col_center_one_of_three,
+)
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap_with_filter, thermal_stress_stacked_barchart
 from my_project.utils import title_with_tooltip, generate_chart_name, generate_units_degree, generate_units
@@ -106,7 +111,10 @@ def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, mo
                                             "marginRight": "2rem",
                                         },
                                         options=[
-                                            {"label": i, "value": outdoor_dropdown_names[i]}
+                                            {
+                                                "label": i,
+                                                "value": outdoor_dropdown_names[i],
+                                            }
                                             for i in outdoor_dropdown_names
                                         ],
                                         value="utci_Sun_Wind",
@@ -114,15 +122,16 @@ def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, mo
                                     html.Div(id="image-selection"),
                                 ],
                             )
-                        ]
-                    )
+                        ],
+                    ),
                 ],
             ),
+            html.Div(id="outdoor-comfort-output"),
             html.Div(
                 children=title_with_tooltip(
                     text="UTCI heatmap chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label"
+                    id_button="utci-charts-label",
                 )
             ),
             dcc.Loading(
@@ -133,7 +142,7 @@ def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, mo
                 children=title_with_tooltip(
                     text="UTCI thermal stress chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label"
+                    id_button="utci-charts-label",
                 )
             ),
             dcc.Loading(
@@ -144,7 +153,7 @@ def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, mo
                 children=title_with_tooltip(
                     text="UTCI thermal stress distribution chart",
                     tooltip_text=None,
-                    id_button="utci-charts-label"
+                    id_button="utci-charts-label",
                 )
             ),
             dcc.Loading(
@@ -153,6 +162,38 @@ def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, mo
             ),
         ],
     )
+
+
+@app.callback(
+    Output("outdoor-comfort-output", "children"),
+    [
+        Input("df-store", "modified_timestamp"),
+    ],
+    [
+        State("df-store", "data"),
+    ],
+)
+def update_outdoor_comfort_output(ts, df):
+    cols = [
+        "utci_noSun_Wind_categories",
+        "utci_noSun_noWind_categories",
+        "utci_Sun_Wind_categories",
+        "utci_Sun_noWind_categories",
+    ]
+    colsWithTheHighestNumberOfZero = []
+    highestCount = 0
+    for col in cols:
+        try:
+            count = df[col].value_counts()[0]  # this can cause error if there is no 0
+            if count > highestCount:
+                highestCount = count
+                colsWithTheHighestNumberOfZero.clear()
+                colsWithTheHighestNumberOfZero.append(col)
+            elif count == highestCount:
+                colsWithTheHighestNumberOfZero.append(col)
+        except:
+            continue
+    return f"The Best Weather Condition is: {', '.join(colsWithTheHighestNumberOfZero)}"
 
 
 @app.callback(
@@ -173,6 +214,7 @@ def layout_outdoor_comfort(month_range_filter_store, hour_range_filter_store, mo
         State("invert-hour-outdoor-comfort", "value")
     ],
 )
+
 def update_tab_utci_value(ts, var, global_local, time_filter, df, meta, si_ip, month, hour, invert_month, invert_hour):
     custom_inputs = f"{var}"
     units = generate_units_degree(si_ip)
@@ -243,7 +285,9 @@ def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip
     return dcc.Graph(
         config=generate_chart_name("heatmap_category", meta, custom_inputs, units),
         figure=utci_stress_cat,
+        # num_categories = len(utci_stress_cat['layout']['xaxis']['tickvals'][0])
     )
+
 
 @app.callback(
     Output("utci-summary-chart", "children"),
@@ -262,6 +306,7 @@ def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip
         State("month-range-filter-store", "data"),
     ],
 )
+
 def update_tab_utci_summary_chart(
         var,
         time_filter,
@@ -290,7 +335,6 @@ def update_tab_utci_summary_chart(
         config=generate_chart_name("summary", meta, custom_inputs, units),
         figure=utci_summary_chart,
     )
-
 
 @app.callback(
     Output("month-range-filter-store", "data"),
@@ -354,4 +398,3 @@ def update_hour_invert_filter_store(time_filter, hour_invert_filter, hour_invert
     if time_filter:
         return {"data": hour_invert_filter}
     return hour_invert_filter_store
-
