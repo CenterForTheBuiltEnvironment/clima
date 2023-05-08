@@ -327,7 +327,7 @@ def heatmap_with_filter(
     var_color = mapping_dictionary[var]["color"]
 
     df, start_month, end_month = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour
+        df, time_filter, month, hour, invert_month, invert_hour, var
     )
 
     if df.dropna(subset=["month"]).shape[0] == 0:
@@ -583,7 +583,7 @@ def thermal_stress_stacked_barchart(
     ]
 
     df, start_month, end_month = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour
+        df, time_filter, month, hour, invert_month, invert_hour, var
     )
 
     if df.dropna(subset=["month"]).shape[0] == 0:
@@ -765,7 +765,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
 
 
 def filter_df_by_month_and_hour(
-    df, time_filter, month, hour, invert_month, invert_hour
+    df, time_filter, month, hour, invert_month, invert_hour, var
 ):
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
@@ -783,19 +783,18 @@ def filter_df_by_month_and_hour(
     if time_filter:
         if start_month <= end_month:
             mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[mask] = None
+            df.loc[mask, var] = None
         else:
             mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[mask] = None
+            df.loc[mask, var] = None
 
         if start_hour <= end_hour:
             mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[mask] = None
+            df.loc[mask, var] = None
         else:
             mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[mask] = None
+            df.loc[mask, var] = None
 
-    df.dropna(inplace=True)
     start_month = int(df.iloc[0]["month"])
     end_month = int(df.iloc[-1]["month"])
 
