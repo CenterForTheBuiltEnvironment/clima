@@ -127,34 +127,13 @@ def layout_outdoor_comfort():
                 ],
             ),
             html.Div(id="outdoor-comfort-output"),
-            html.Div(
-                children=title_with_tooltip(
-                    text="UTCI heatmap chart",
-                    tooltip_text=None,
-                    id_button="utci-charts-label",
-                )
-            ),
             dcc.Loading(
                 html.Div(id="utci-heatmap"),
                 type="circle",
             ),
-            html.Div(
-                children=title_with_tooltip(
-                    text="UTCI thermal stress chart",
-                    tooltip_text=None,
-                    id_button="utci-charts-label",
-                )
-            ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
                 type="circle",
-            ),
-            html.Div(
-                children=title_with_tooltip(
-                    text="UTCI thermal stress distribution chart",
-                    tooltip_text=None,
-                    id_button="utci-charts-label",
-                )
             ),
             dcc.Loading(
                 html.Div(id="utci-summary-chart"),
@@ -220,7 +199,7 @@ def update_tab_utci_value(ts, var, global_local, time_filter, df, meta, si_ip, m
     units = generate_units_degree(si_ip)
     return dcc.Graph(
         config=generate_chart_name("heatmap", meta, custom_inputs, units),
-        figure=heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour)
+        figure=heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour, "UTCI heatmap")
     )
 
 
@@ -260,7 +239,7 @@ def change_image_based_on_selection(value):
     ],
 )
 def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip, month, hour, invert_month, invert_hour):
-    utci_stress_cat = heatmap_with_filter(df, var + "_categories", global_local, si_ip, time_filter, month, hour, invert_month, invert_hour)
+    utci_stress_cat = heatmap_with_filter(df, var + "_categories", global_local, si_ip, time_filter, month, hour, invert_month, invert_hour, "UTCI thermal stress")
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
         titleside="top",
@@ -317,15 +296,7 @@ def update_tab_utci_summary_chart(
         invert_hour,
         si_ip
 ):
-    utci_summary_chart = thermal_stress_stacked_barchart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour)
-    utci_summary_chart = utci_summary_chart.update_layout(
-        margin=tight_margins,
-        title="",
-        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
-    )
-    utci_summary_chart.update_xaxes(
-        dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
-    )
+    utci_summary_chart = thermal_stress_stacked_barchart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour, "UTCI thermal stress distribution")
     custom_inputs = f"{var}"
     units = generate_units(si_ip)
     return dcc.Graph(

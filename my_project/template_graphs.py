@@ -11,7 +11,7 @@ from .global_scheme import month_lst, template, tight_margins
 
 
 # violin template
-from .utils import code_timer
+from .utils import code_timer, determine_month_and_hour_filter
 
 
 def violin(df, var, global_local, si_ip):
@@ -319,15 +319,19 @@ def daily_profile(df, var, global_local, si_ip):
 
 # @code_timer
 def heatmap_with_filter(
-    df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour
+    df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour, title
 ):
     """General function that returns a heatmap."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
     var_range = mapping_dictionary[var][si_ip]["range"]
     var_color = mapping_dictionary[var]["color"]
 
-    df, start_month, end_month = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, var
+    )
+
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
     )
 
     if df.dropna(subset=["month"]).shape[0] == 0:
@@ -375,7 +379,13 @@ def heatmap_with_filter(
     fig.update_yaxes(title_text="Hour")
     fig.update_xaxes(title_text="Day")
 
-    fig.update_layout(template=template, margin=tight_margins, yaxis_nticks=13)
+    if time_filter:
+        title += (
+            f" between the months of {month_lst[start_month - 1]} and "
+            f"{month_lst[end_month - 1]}<br>and between the hours {start_hour}"
+            f":00 and {end_hour}:00"
+        )
+    fig.update_layout(template=template, title=title, margin=tight_margins.copy().update({"t": 55}), yaxis_nticks=13)
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
@@ -554,7 +564,7 @@ def convert_bins(sbins):
 
 
 def thermal_stress_stacked_barchart(
-    df, var, time_filter, month, hour, invert_month, invert_hour
+    df, var, time_filter, month, hour, invert_month, invert_hour, title
 ):
     """Return the summary bar chart."""
     categories = [
@@ -582,8 +592,12 @@ def thermal_stress_stacked_barchart(
         "#6B1F18",
     ]
 
-    df, start_month, end_month = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, var
+    )
+
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
     )
 
     if df.dropna(subset=["month"]).shape[0] == 0:
@@ -614,10 +628,9 @@ def thermal_stress_stacked_barchart(
             return 0
 
     for i in range(len(categories)):
-        x_data = list(range(start_month - 1, end_month + 1))
+        x_data = list(range(0, 12))
         y_data = [
-            catch(lambda: new_df.iloc[idx][categories[i]])
-            for idx in range(0, end_month - start_month + 1)
+            catch(lambda: new_df.iloc[mth][categories[i]]) for mth in range(0, 12)
         ]
         data.append(
             go.Bar(
@@ -634,13 +647,27 @@ def thermal_stress_stacked_barchart(
             )
         )
 
+    if time_filter:
+        title += (
+            f" between the months of {month_lst[start_month - 1]} and "
+            f"{month_lst[end_month - 1]} and between the hours {start_hour}"
+            f":00 and {end_hour}:00"
+        )
+
     fig = go.Figure(data=data)
-    fig.update_layout(barmode="stack", dragmode=False)
-
-    fig.update_yaxes(title_text="Percentage (%)")
-    fig.update_xaxes(title_text="Day")
-    fig.update_layout(barnorm="percent")
-
+    fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
+                      barmode="stack",
+                      dragmode=False,
+                      title=title,
+                      barnorm="percent",
+                      margin=tight_margins.copy().update({"t": 65}))
+    fig.update_yaxes(title_text="Percentage (%)", showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_xaxes(dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst),
+                     title_text="Day",
+                     showline=True,
+                     linewidth=1,
+                     linecolor="black",
+                     mirror=True)
     return fig
 
 
@@ -765,7 +792,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
 
 
 def filter_df_by_month_and_hour(
-    df, time_filter, month, hour, invert_month, invert_hour
+    df, time_filter, month, hour, invert_month, invert_hour, var
 ):
     start_month, end_month = month
     if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
@@ -783,20 +810,16 @@ def filter_df_by_month_and_hour(
     if time_filter:
         if start_month <= end_month:
             mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[mask] = None
+            df.loc[mask, var] = None
         else:
             mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[mask] = None
+            df.loc[mask, var] = None
 
         if start_hour <= end_hour:
             mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[mask] = None
+            df.loc[mask, var] = None
         else:
             mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[mask] = None
+            df.loc[mask, var] = None
 
-    df.dropna(inplace=True)
-    start_month = int(df.iloc[0]["month"])
-    end_month = int(df.iloc[-1]["month"])
-
-    return df, start_month, end_month
+    return df
