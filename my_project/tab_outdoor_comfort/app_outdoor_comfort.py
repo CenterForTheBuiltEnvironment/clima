@@ -1,16 +1,16 @@
-import json
 from dash import dcc
 from dash import html
 import dash_bootstrap_components as dbc
 from my_project.global_scheme import (
     outdoor_dropdown_names,
-    tight_margins,
-    month_lst,
     container_col_center_one_of_three,
 )
 from dash.dependencies import Input, Output, State
-from my_project.template_graphs import heatmap_with_filter, thermal_stress_stacked_barchart
-from my_project.utils import title_with_tooltip, generate_chart_name, generate_units_degree, generate_units
+from my_project.template_graphs import (
+    heatmap_with_filter,
+    thermal_stress_stacked_barchart,
+)
+from my_project.utils import generate_chart_name, generate_units_degree, generate_units
 import numpy as np
 from app import app
 
@@ -33,7 +33,9 @@ def layout_outdoor_comfort():
                                 n_clicks=0,
                             ),
                             html.Div(
-                                className="container-row full-width justify-center mt-2",
+                                className=(
+                                    "container-row full-width justify-center mt-2"
+                                ),
                                 children=[
                                     html.H6("Month Range", style={"flex": "20%"}),
                                     html.Div(
@@ -69,11 +71,11 @@ def layout_outdoor_comfort():
                                     html.Div(
                                         dcc.RangeSlider(
                                             id="outdoor-comfort-hour-slider",
-                                            min=1,
+                                            min=0,
                                             max=24,
                                             step=1,
-                                            value=[1, 24],
-                                            marks={1: "1", 24: "24"},
+                                            value=[0, 24],
+                                            marks={0: "0", 24: "24"},
                                             tooltip={
                                                 "always_visible": False,
                                                 "placement": "topLeft",
@@ -181,7 +183,7 @@ def update_outdoor_comfort_output(ts, df):
         Input("df-store", "modified_timestamp"),
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
-        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+        Input("month-hour-filter-outdoor-comfort", "n_clicks"),
     ],
     [
         State("df-store", "data"),
@@ -190,16 +192,38 @@ def update_outdoor_comfort_output(ts, df):
         State("outdoor-comfort-month-slider", "value"),
         State("outdoor-comfort-hour-slider", "value"),
         State("invert-month-outdoor-comfort", "value"),
-        State("invert-hour-outdoor-comfort", "value")
+        State("invert-hour-outdoor-comfort", "value"),
     ],
 )
-
-def update_tab_utci_value(ts, var, global_local, time_filter, df, meta, si_ip, month, hour, invert_month, invert_hour):
+def update_tab_utci_value(
+    ts,
+    var,
+    global_local,
+    time_filter,
+    df,
+    meta,
+    si_ip,
+    month,
+    hour,
+    invert_month,
+    invert_hour,
+):
     custom_inputs = f"{var}"
     units = generate_units_degree(si_ip)
     return dcc.Graph(
         config=generate_chart_name("heatmap", meta, custom_inputs, units),
-        figure=heatmap_with_filter(df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour, "UTCI heatmap")
+        figure=heatmap_with_filter(
+            df,
+            var,
+            global_local,
+            si_ip,
+            time_filter,
+            month,
+            hour,
+            invert_month,
+            invert_hour,
+            "UTCI heatmap",
+        ),
     )
 
 
@@ -226,7 +250,7 @@ def change_image_based_on_selection(value):
         Input("df-store", "modified_timestamp"),
         Input("tab7-dropdown", "value"),
         Input("global-local-radio-input", "value"),
-        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+        Input("month-hour-filter-outdoor-comfort", "n_clicks"),
     ],
     [
         State("df-store", "data"),
@@ -235,16 +259,39 @@ def change_image_based_on_selection(value):
         State("outdoor-comfort-month-slider", "value"),
         State("outdoor-comfort-hour-slider", "value"),
         State("invert-month-outdoor-comfort", "value"),
-        State("invert-hour-outdoor-comfort", "value")
+        State("invert-hour-outdoor-comfort", "value"),
     ],
 )
-def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip, month, hour, invert_month, invert_hour):
-    utci_stress_cat = heatmap_with_filter(df, var + "_categories", global_local, si_ip, time_filter, month, hour, invert_month, invert_hour, "UTCI thermal stress")
+def update_tab_utci_category(
+    ts,
+    var,
+    global_local,
+    time_filter,
+    df,
+    meta,
+    si_ip,
+    month,
+    hour,
+    invert_month,
+    invert_hour,
+):
+    utci_stress_cat = heatmap_with_filter(
+        df,
+        var + "_categories",
+        global_local,
+        si_ip,
+        time_filter,
+        month,
+        hour,
+        invert_month,
+        invert_hour,
+        "UTCI thermal stress",
+    )
     utci_stress_cat["data"][0]["colorbar"] = dict(
         title="Thermal stress",
         titleside="top",
         tickmode="array",
-        tickvals = np.linspace(4.75, -4.75, 10),
+        tickvals=np.linspace(4.75, -4.75, 10),
         ticktext=[
             "extreme heat stress",
             "very strong heat stress",
@@ -264,7 +311,6 @@ def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip
     return dcc.Graph(
         config=generate_chart_name("heatmap_category", meta, custom_inputs, units),
         figure=utci_stress_cat,
-        # num_categories = len(utci_stress_cat['layout']['xaxis']['tickvals'][0])
     )
 
 
@@ -272,7 +318,7 @@ def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip
     Output("utci-summary-chart", "children"),
     [
         Input("tab7-dropdown", "value"),
-        Input("month-hour-filter-outdoor-comfort", "n_clicks")
+        Input("month-hour-filter-outdoor-comfort", "n_clicks"),
     ],
     [
         State("df-store", "data"),
@@ -281,22 +327,22 @@ def update_tab_utci_category(ts, var, global_local, time_filter, df, meta, si_ip
         State("meta-store", "data"),
         State("invert-month-outdoor-comfort", "value"),
         State("invert-hour-outdoor-comfort", "value"),
-        State("si-ip-unit-store", "data")
+        State("si-ip-unit-store", "data"),
     ],
 )
-
 def update_tab_utci_summary_chart(
-        var,
-        time_filter,
+    var, time_filter, df, month, hour, meta, invert_month, invert_hour, si_ip
+):
+    utci_summary_chart = thermal_stress_stacked_barchart(
         df,
+        var + "_categories",
+        time_filter,
         month,
         hour,
-        meta,
         invert_month,
         invert_hour,
-        si_ip
-):
-    utci_summary_chart = thermal_stress_stacked_barchart(df, var + "_categories", time_filter, month, hour, invert_month, invert_hour, "UTCI thermal stress distribution")
+        "UTCI thermal stress distribution",
+    )
     custom_inputs = f"{var}"
     units = generate_units(si_ip)
     return dcc.Graph(

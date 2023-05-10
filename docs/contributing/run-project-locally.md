@@ -82,6 +82,12 @@ Secondly, you should describe the changes in `CHANGELOG.md`
 
 You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed on your computer. A short guide on how to deploy on Google Cloud Run can be found [here](https://youtu.be/FPFDg5znLTM).
 
+First make sure you that gcloud is up-to-date and that you are logged in with the right account.
+```text
+gcloud components update
+gcloud auth list
+```
+
 ```text
 gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
 

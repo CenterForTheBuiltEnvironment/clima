@@ -2,7 +2,6 @@ from math import ceil, floor
 
 import numpy as np
 import pandas as pd
-import json
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from my_project.global_scheme import mapping_dictionary
@@ -10,7 +9,6 @@ import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
 
 
-# violin template
 from .utils import code_timer, determine_month_and_hour_filter
 
 
@@ -319,7 +317,16 @@ def daily_profile(df, var, global_local, si_ip):
 
 # @code_timer
 def heatmap_with_filter(
-    df, var, global_local, si_ip, time_filter, month, hour, invert_month, invert_hour, title
+    df,
+    var,
+    global_local,
+    si_ip,
+    time_filter,
+    month,
+    hour,
+    invert_month,
+    invert_hour,
+    title,
 ):
     """General function that returns a heatmap."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
@@ -367,7 +374,8 @@ def heatmap_with_filter(
                 + var
                 + ": %{z:.2f} "
                 + var_unit
-                + "</b><br>Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour: %{y}:00<br>"
+                + "</b><br>Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour:"
+                " %{y}:00<br>"
             ),
             name="",
             colorbar=dict(title=var_unit),
@@ -385,7 +393,12 @@ def heatmap_with_filter(
             f"{month_lst[end_month - 1]}<br>and between the hours {start_hour}"
             f":00 and {end_hour}:00"
         )
-    fig.update_layout(template=template, title=title, margin=tight_margins.copy().update({"t": 55}), yaxis_nticks=13)
+    fig.update_layout(
+        template=template,
+        title=title,
+        margin=tight_margins.copy().update({"t": 55}),
+        yaxis_nticks=13,
+    )
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
 
@@ -420,7 +433,8 @@ def heatmap(df, var, global_local, si_ip):
                 + var
                 + ": %{z:.2f} "
                 + var_unit
-                + "</b><br>Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour: %{y}:00<br>"
+                + "</b><br>Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour:"
+                " %{y}:00<br>"
             ),
             name="",
             colorbar=dict(title=var_unit),
@@ -655,19 +669,29 @@ def thermal_stress_stacked_barchart(
         )
 
     fig = go.Figure(data=data)
-    fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
-                      barmode="stack",
-                      dragmode=False,
-                      title=title,
-                      barnorm="percent",
-                      margin=tight_margins.copy().update({"t": 65}))
-    fig.update_yaxes(title_text="Percentage (%)", showline=True, linewidth=1, linecolor="black", mirror=True)
-    fig.update_xaxes(dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst),
-                     title_text="Day",
-                     showline=True,
-                     linewidth=1,
-                     linecolor="black",
-                     mirror=True)
+    fig.update_layout(
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
+        barmode="stack",
+        dragmode=False,
+        title=title,
+        barnorm="percent",
+        margin=tight_margins.copy().update({"t": 65}),
+    )
+    fig.update_yaxes(
+        title_text="Percentage (%)",
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
+    fig.update_xaxes(
+        dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst),
+        title_text="Day",
+        showline=True,
+        linewidth=1,
+        linecolor="black",
+        mirror=True,
+    )
     return fig
 
 
@@ -794,18 +818,9 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
 def filter_df_by_month_and_hour(
     df, time_filter, month, hour, invert_month, invert_hour, var
 ):
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        month = month[::-1]
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        hour = hour[::-1]
-    time_filter_info = [time_filter, month, hour]
-    time_filter = time_filter_info[0]
-    start_month = time_filter_info[1][0]
-    end_month = time_filter_info[1][1]
-    start_hour = time_filter_info[2][0]
-    end_hour = time_filter_info[2][1]
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
+    )
 
     if time_filter:
         if start_month <= end_month:
