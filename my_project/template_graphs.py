@@ -578,7 +578,7 @@ def convert_bins(sbins):
 
 
 def thermal_stress_stacked_barchart(
-    df, var, time_filter, month, hour, invert_month, invert_hour, title
+    df, var, time_filter, month, hour, invert_month, invert_hour, normalize, title
 ):
     """Return the summary bar chart."""
     categories = [
@@ -605,11 +605,9 @@ def thermal_stress_stacked_barchart(
         "#A3302B",
         "#6B1F18",
     ]
-
     df = filter_df_by_month_and_hour(
         df, time_filter, month, hour, invert_month, invert_hour, var
     )
-
     start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
         month, hour, invert_month, invert_hour
     )
@@ -624,42 +622,32 @@ def thermal_stress_stacked_barchart(
                 style={"text-align": "center", "marginTop": "2rem"},
             ),
         )
-
-    new_df = (
-        df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0)
-    )
-    new_df.set_axis(categories, axis=1, inplace=True)
-    new_df.reset_index(inplace=True)
+    isNormalized = True if len(normalize) != 0 else False
+    if isNormalized:
+        new_df = (df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0))
+        new_df.set_axis(categories, axis=1, inplace=True)
+        new_df.reset_index(inplace=True)
+    else:
+        new_df = (df.groupby("month")[var].value_counts().unstack(var).fillna(0))
+        new_df.set_axis(categories, axis=1, inplace=True)
+        new_df.reset_index(inplace=True)
 
     go.Figure()
     data = []
-
-    def catch(func, handle=lambda e: e, *args, **kwargs):
-        # Handle category not in dictionary
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            return 0
-
     for i in range(len(categories)):
         x_data = list(range(0, 12))
-        y_data = [
-            catch(lambda: new_df.iloc[mth][categories[i]]) for mth in range(0, 12)
-        ]
+        y_data = [catch(lambda: new_df.iloc[mth][categories[i]]) for mth in range(0, 12)]
         data.append(
             go.Bar(
-                x=x_data,
-                y=y_data,
-                name=categories[i],
-                marker_color=colors[i],
+                x=x_data, y=y_data, name=categories[i], marker_color=colors[i],
                 hovertemplate=(
-                    "</b><br>Month: %{x}"
-                    + "<br>Category: "
-                    + categories[i]
-                    + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
+                    "</b><br>Month: %{x}<br>Category: " + categories[i]+ "<br>Count: %{y:.1f}<br><extra></extra>" if len(normalize) == 0
+                    else "</b><br>Month: %{x}<br>Category: " + categories[i] + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
                 ),
             )
         )
+
+    fig = go.Figure(data=data)
 
     if time_filter:
         title += (
@@ -668,17 +656,17 @@ def thermal_stress_stacked_barchart(
             f":00 and {end_hour}:00"
         )
 
-    fig = go.Figure(data=data)
     fig.update_layout(
         legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
         barmode="stack",
         dragmode=False,
         title=title,
-        barnorm="percent",
-        margin=tight_margins.copy().update({"t": 65}),
+        margin=tight_margins,
     )
+    if isNormalized:
+        fig.update_layout(barnorm="percent")
     fig.update_yaxes(
-        title_text="Percentage (%)",
+        title_text="Percentage (%)" if isNormalized else "Count",
         showline=True,
         linewidth=1,
         linecolor="black",
@@ -838,3 +826,11 @@ def filter_df_by_month_and_hour(
             df.loc[mask, var] = None
 
     return df
+
+
+def catch(func, handle=lambda e: e, *args, **kwargs):
+    # Handle category not in dictionary
+    try:
+        return func(*args, **kwargs)
+    except Exception as e:
+        return 0
