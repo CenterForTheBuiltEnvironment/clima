@@ -58,10 +58,11 @@ def layout_t_rh():
                         children=html.Div(id="yearly-chart"),
                     ),
                     html.Div(
-                        children=title_with_tooltip(
+                        children=title_with_link(
                             text="Daily chart",
-                            tooltip_text=None,
+                            tooltip_text="Click to learn more about the Daily chart",
                             id_button="daily-chart-label",
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
                         ),
                     ),
                     dcc.Loading(
@@ -69,10 +70,11 @@ def layout_t_rh():
                         children=html.Div(id="daily"),
                     ),
                     html.Div(
-                        children=title_with_tooltip(
+                        children=title_with_link(
                             text="Heatmap chart",
-                            tooltip_text=None,
+                            tooltip_text="Click to learn more about the Heatmap chart",
                             id_button="heatmap-chart-label",
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
                         ),
                     ),
                     dcc.Loading(

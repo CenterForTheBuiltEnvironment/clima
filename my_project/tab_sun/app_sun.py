@@ -110,10 +110,11 @@ def explore_daily_heatmap():
         className="container-col full-width",
         children=[
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Daily charts",
-                    tooltip_text=None,
+                    tooltip_text="Click to learn more about the Daily charts",
                     id_button="daily-chart-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/customizable-daily-and-hourly-maps"
                 ),
             ),
             html.Div(

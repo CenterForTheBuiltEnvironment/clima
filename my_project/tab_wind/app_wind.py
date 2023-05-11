@@ -142,10 +142,11 @@ def daily_wind_rose():
         id="tab5-daily-container",
         children=[
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Daily Wind Rose",
-                    tooltip_text=None,
+                    tooltip_text="Click here to learn more about Daily wind rose.",
                     id_button="daily-rose-chart",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
                 ),
             ),
             html.Div(
