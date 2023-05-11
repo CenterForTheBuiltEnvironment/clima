@@ -11,8 +11,14 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy,title_with_link
-
+from my_project.template_graphs import filter_df_by_month_and_hour
+from my_project.utils import (
+    generate_chart_name,
+    generate_units,
+    generate_custom_inputs_psy,
+    determine_month_and_hour_filter,
+    title_with_link,
+)
 from my_project.global_scheme import (
     dropdown_names,
     sun_cloud_tab_dropdown_names,
@@ -42,6 +48,7 @@ psy_dropdown_names.pop("Elevation", None)
 psy_dropdown_names.pop("Azimuth", None)
 psy_dropdown_names.pop("Saturation pressure", None)
 
+
 def inputs():
     """"""
     return html.Div(
@@ -66,7 +73,7 @@ def inputs():
                                 value="Frequency",
                                 style={"flex": "70%"},
                                 persistence_type="session",
-                                persistence=True
+                                persistence=True,
                             ),
                         ],
                     ),
@@ -119,11 +126,11 @@ def inputs():
                             html.Div(
                                 dcc.RangeSlider(
                                     id="psy-hour-slider",
-                                    min=1,
+                                    min=0,
                                     max=24,
                                     step=1,
-                                    value=[1, 24],
-                                    marks={1: "1", 24: "24"},
+                                    value=[0, 24],
+                                    marks={0: "0", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
                                         "placement": "topLeft",
@@ -265,40 +272,13 @@ def update_psych_chart(
     si_ip,
 ):
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        month = month[::-1]
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        hour = hour[::-1]
-    time_filter_info = [time_filter, month, hour]
-    data_filter_info = [data_filter, data_filter_var, min_val, max_val]
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
+    )
 
-    time_filter = time_filter_info[0]
-    start_month = time_filter_info[1][0]
-    end_month = time_filter_info[1][1]
-    start_hour = time_filter_info[2][0]
-    end_hour = time_filter_info[2][1]
-
-    data_filter = data_filter_info[0]
-    data_filter_var = data_filter_info[1]
-    min_val = data_filter_info[2]
-    max_val = data_filter_info[3]
-
-    if time_filter:
-        if start_month <= end_month:
-            mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[mask] = None
-        else:
-            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[mask] = None
-
-        if start_hour <= end_hour:
-            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[mask] = None
-        else:
-            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[mask] = None
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, df.columns
+    )
 
     if data_filter:
         if min_val <= max_val:
@@ -437,7 +417,7 @@ def update_psych_chart(
 
     else:
         var_colorbar = dict(
-            thickness=30, 
+            thickness=30,
             title=var_unit + "<br>  ",
         )
 
@@ -489,7 +469,7 @@ def update_psych_chart(
                 + "<br>"
                 + "<br>"
                 + var_name
-                  + ": %{customdata[2]:.2f}"
+                + ": %{customdata[2]:.2f}"
                 + var_unit,
                 name="",
             )
@@ -514,6 +494,17 @@ def update_psych_chart(
         linecolor="black",
         mirror=True,
     )
-    custom_inputs = generate_custom_inputs_psy(start_month, end_month, start_hour, end_hour, colorby_var, data_filter_var, min_val, max_val)
+    custom_inputs = generate_custom_inputs_psy(
+        start_month,
+        end_month,
+        start_hour,
+        end_hour,
+        colorby_var,
+        data_filter_var,
+        min_val,
+        max_val,
+    )
     units = generate_units(si_ip)
-    return dcc.Graph(config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig)
+    return dcc.Graph(
+        config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig
+    )

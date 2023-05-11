@@ -14,6 +14,8 @@ from my_project.global_scheme import (
 )
 from dash.dependencies import Input, Output, State
 import numpy as np
+
+from my_project.template_graphs import filter_df_by_month_and_hour
 from my_project.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -178,11 +180,11 @@ def inputs_tab(t_min, t_max, d_set):
                             html.Div(
                                 dcc.RangeSlider(
                                     id="nv-hour-slider",
-                                    min=1,
+                                    min=0,
                                     max=24,
                                     step=1,
-                                    value=[1, 24],
-                                    marks={1: "1", 24: "24"},
+                                    value=[0, 24],
+                                    marks={0: "0", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
                                         "placement": "topLeft",
@@ -322,18 +324,9 @@ def nv_heatmap(
                 ),
             )
 
-    if time_filter:
-        if start_month <= end_month:
-            df.loc[(df["month"] < start_month) | (df["month"] > end_month), var] = None
-        else:
-            df.loc[
-                (df["month"] >= end_month) & (df["month"] <= start_month), var
-            ] = None
-
-        if start_hour <= end_hour:
-            df.loc[(df["hour"] < start_hour) | (df["hour"] > end_hour), var] = None
-        else:
-            df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour), var] = None
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, var
+    )
 
     var_unit = mapping_dictionary[var][si_ip]["unit"]
 
@@ -419,7 +412,9 @@ def nv_heatmap(
         mirror=True,
         title_text="Hour",
     )
-    custom_inputs = generate_custom_inputs_nv(start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val)
+    custom_inputs = generate_custom_inputs_nv(
+        start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val
+    )
     units = generate_units_degree(si_ip)
     return dcc.Graph(
         config=generate_chart_name("heatmap", meta, custom_inputs, units),
@@ -490,24 +485,9 @@ def nv_bar_chart(
 
     df["nv_allowed"] = 1
 
-    if time_filter:
-        if start_month <= end_month:
-            df.loc[
-                (df["month"] < start_month) | (df["month"] > end_month), "nv_allowed"
-            ] = 0
-        else:
-            df.loc[
-                (df["month"] >= end_month) & (df["month"] <= start_month), "nv_allowed"
-            ] = 0
-
-        if start_hour <= end_hour:
-            df.loc[
-                (df["hour"] < start_hour) | (df["hour"] > end_hour), "nv_allowed"
-            ] = 0
-        else:
-            df.loc[
-                (df["hour"] >= end_hour) & (df["hour"] <= start_hour), "nv_allowed"
-            ] = 0
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, "nv_allowed"
+    )
 
     # this should be the total after filtering by time
     tot_month_hours = df.groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
@@ -597,7 +577,9 @@ def nv_bar_chart(
         mirror=True,
     )
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-    custom_inputs = generate_custom_inputs_nv(start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val)
+    custom_inputs = generate_custom_inputs_nv(
+        start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val
+    )
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name("barchart", meta, custom_inputs, units),

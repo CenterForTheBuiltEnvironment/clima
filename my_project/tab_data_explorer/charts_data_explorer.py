@@ -20,21 +20,6 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
     min_val = data_filter_info[2]
     max_val = data_filter_info[3]
 
-    if time_filter:
-        if start_month <= end_month:
-            mask = (df["month"] < start_month) | (df["month"] > end_month)
-            df[var][mask] = None
-        else:
-            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
-            df[var][mask] = None
-
-        if start_hour <= end_hour:
-            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
-            df[var][mask] = None
-        else:
-            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
-            df[var][mask] = None
-
     if data_filter:
         if min_val <= max_val:
             mask = (df[filter_var] < min_val) | (df[filter_var] > max_val)
@@ -118,17 +103,11 @@ def three_var_graph(
     var_x,
     var_y,
     color_by,
-    time_filter_info3,
     data_filter_info3,
     si_ip,
 ):
 
     """Return the custom graph plotting three variables."""
-    time_filter = time_filter_info3[0]
-    start_month = time_filter_info3[1][0]
-    end_month = time_filter_info3[1][1]
-    start_hour = time_filter_info3[2][0]
-    end_hour = time_filter_info3[2][1]
     data_filter = data_filter_info3[0]
     filter_var = data_filter_info3[1]
     min_val = data_filter_info3[2]
@@ -148,17 +127,6 @@ def three_var_graph(
         var_range = [data_min, data_max]
 
     color_scale = var_color
-
-    if time_filter:
-        if start_month <= end_month:
-            df.loc[(df["month"] < start_month) | (df["month"] > end_month)] = None
-        else:
-            df.loc[(df["month"] >= end_month) & (df["month"] <= start_month)] = None
-
-        if start_hour <= end_hour:
-            df.loc[(df["hour"] < start_hour) | (df["hour"] > end_hour)] = None
-        else:
-            df.loc[(df["hour"] >= end_hour) & (df["hour"] <= start_hour)] = None
 
     if data_filter:
         if min_val <= max_val:
