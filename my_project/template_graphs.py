@@ -641,7 +641,7 @@ def thermal_stress_stacked_barchart(
             go.Bar(
                 x=x_data, y=y_data, name=categories[i], marker_color=colors[i],
                 hovertemplate=(
-                    "</b><br>Month: %{x}<br>Category: " + categories[i]+ "<br>Count: %{y:.1f}<br><extra></extra>" if len(normalize) == 0
+                    "</b><br>Month: %{x}<br>Category: " + categories[i] + "<br>Count: %{y}<br><extra></extra>" if len(normalize) == 0
                     else "</b><br>Month: %{x}<br>Category: " + categories[i] + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
                 ),
             )
@@ -661,7 +661,7 @@ def thermal_stress_stacked_barchart(
         barmode="stack",
         dragmode=False,
         title=title,
-        margin=tight_margins,
+        margin=tight_margins.copy().update({"t": 55}),
     )
     if isNormalized:
         fig.update_layout(barnorm="percent")
@@ -834,3 +834,4 @@ def catch(func, handle=lambda e: e, *args, **kwargs):
         return func(*args, **kwargs)
     except Exception as e:
         return 0
+
