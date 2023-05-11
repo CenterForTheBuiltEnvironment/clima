@@ -183,6 +183,44 @@ def title_with_tooltip(text, tooltip_text, id_button):
         ],
     )
 
+def title_with_link(text, tooltip_text, id_button,doc_link):
+
+    display_tooltip = "none"
+    if tooltip_text:
+        display_tooltip = "block"
+
+    return html.Div(
+        className="container-row",
+        style={"padding": "1rem", "marginTop": "1rem"},
+        children=[
+            html.H5(text, style={"marginRight": "0.5rem"}),
+            html.Div(
+                [
+                    html.Sup(
+                        html.A(
+                            html.Img(
+                                id=id_button,
+                                src="../assets/icons/book.png",
+                                alt="book",
+                                style={
+                                    "width": "1rem",
+                                    "height": "1rem",
+                                },
+                            ),
+                            href=doc_link,
+                            target="_blank",
+                        ),
+                    ),
+                    dbc.Tooltip(
+                        tooltip_text,
+                        target=id_button,
+                        placement="right",
+                    ),
+                ],
+                style={"display": display_tooltip},
+            ),
+        ],
+    )
 
 def summary_table_tmp_rh_tab(df, value, si_ip):
     df_summary = (

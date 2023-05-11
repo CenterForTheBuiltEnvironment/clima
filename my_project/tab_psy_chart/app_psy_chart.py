@@ -11,7 +11,7 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy
+from my_project.utils import generate_chart_name, generate_units, generate_custom_inputs_psy,title_with_link
 
 from my_project.global_scheme import (
     dropdown_names,
@@ -200,13 +200,20 @@ def inputs():
                         ],
                     ),
                 ],
-            ),
+            ),          
         ],
     )
 
 
 def layout_psy_chart():
     return (
+        html.Div(
+                children=title_with_link(
+                    tooltip_text="Click here ",
+                    id_button="Psychrometric-Chart-chart",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/psychrometric-chart"
+                ),
+            ),
         dcc.Loading(
             type="circle",
             children=html.Div(

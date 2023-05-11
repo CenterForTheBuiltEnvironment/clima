@@ -21,7 +21,7 @@ from my_project.tab_sun.charts_sun import (
 )
 from my_project.template_graphs import heatmap, barchart, daily_profile
 from my_project.utils import code_timer
-from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs
+from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs,title_with_link
 
 from app import app
 
@@ -47,10 +47,11 @@ def sun_path():
         className="container-col justify-center",
         children=[
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Sun path chart",
-                    tooltip_text=None,
+                    tooltip_text='Click to learn more about the sun path chart',
                     id_button="sun-path-chart-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram"
                 ),
             ),
             dbc.Row(
@@ -155,12 +156,13 @@ def static_section(si_ip):
         className="container-col full-width",
         children=[
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Global and Diffuse Horizontal Solar Radiation ("
                     + hor_unit
                     + ")",
-                    tooltip_text=None,
+                    tooltip_text="Click to learn more about the global and diffuse horizontal solar radiation",
                     id_button="monthly-chart-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation"
                 ),
             ),
             dcc.Loading(
@@ -168,10 +170,11 @@ def static_section(si_ip):
                 children=html.Div(id="monthly-solar"),
             ),
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Cloud coverage",
-                    tooltip_text=None,
+                    tooltip_text="Click to learn more about the cloud coverage",
                     id_button="cloud-chart-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage"
                 ),
             ),
             dcc.Loading(

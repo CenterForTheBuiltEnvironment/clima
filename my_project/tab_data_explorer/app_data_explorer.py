@@ -11,6 +11,7 @@ from my_project.utils import (
     title_with_tooltip,
     summary_table_tmp_rh_tab,
     code_timer,
+    title_with_link
 )
 
 from my_project.global_scheme import (
@@ -67,10 +68,11 @@ def section_one():
         children=[
             section_one_inputs(),
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Yearly chart",
-                    tooltip_text=None,
+                    tooltip_text="Click to learn more about the yearly chart",
                     id_button="explore-yearly-chart-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
                 ),
             ),
             dcc.Loading(

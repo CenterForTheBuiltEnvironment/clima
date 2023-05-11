@@ -2,7 +2,7 @@ from dash import dcc, html
 from my_project.global_scheme import month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
-from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs_time
+from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs_time,title_with_link
 from my_project.utils import code_timer
 
 from app import app
@@ -56,10 +56,11 @@ def seasonal_wind_rose():
         className="container-col",
         children=[
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Seasonal Wind Rose",
-                    tooltip_text=None,
+                    tooltip_text="Click here to learn more about wind rose.",
                     id_button="seasonal-rose-chart",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
                 ),
             ),
             html.Div(
@@ -315,10 +316,11 @@ def layout_wind():
         className="container-col justify-center",
         children=[
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="Annual Wind Rose",
-                    tooltip_text=None,
-                    id_button="annual-rose-chart",
+                    tooltip_text="Click here to learn more about wind rose.",
+                    id_button="seasonal-rose-chart",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
                 ),
             ),
             dcc.Loading(

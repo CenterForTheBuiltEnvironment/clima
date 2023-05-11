@@ -10,7 +10,7 @@ from my_project.global_scheme import (
 )
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap_with_filter, thermal_stress_stacked_barchart
-from my_project.utils import title_with_tooltip, generate_chart_name, generate_units_degree, generate_units
+from my_project.utils import title_with_tooltip, generate_chart_name, generate_units_degree, generate_units,title_with_link
 import numpy as np
 from app import app
 
@@ -128,10 +128,11 @@ def layout_outdoor_comfort():
             ),
             html.Div(id="outdoor-comfort-output"),
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="UTCI heatmap chart",
-                    tooltip_text=None,
+                    tooltip_text="Click here to learn more about UTCI",
                     id_button="utci-charts-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
                 )
             ),
             dcc.Loading(
