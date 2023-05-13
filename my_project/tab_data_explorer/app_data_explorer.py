@@ -11,6 +11,7 @@ from my_project.utils import (
     title_with_tooltip,
     summary_table_tmp_rh_tab,
     code_timer,
+    determine_month_and_hour_filter,
 )
 
 from my_project.global_scheme import (
@@ -30,7 +31,13 @@ from my_project.tab_data_explorer.charts_data_explorer import (
     two_var_graph,
     three_var_graph,
 )
-from my_project.template_graphs import heatmap, yearly_profile, daily_profile, barchart
+from my_project.template_graphs import (
+    heatmap,
+    yearly_profile,
+    daily_profile,
+    barchart,
+    filter_df_by_month_and_hour,
+)
 
 from app import app
 
@@ -120,7 +127,9 @@ def section_one():
                                 n_clicks=0,
                             ),
                             html.Div(
-                                className="container-row full-width justify-center mt-2",
+                                className=(
+                                    "container-row full-width justify-center mt-2"
+                                ),
                                 children=[
                                     html.H6("Month Range", style={"flex": "20%"}),
                                     html.Div(
@@ -139,6 +148,14 @@ def section_one():
                                         ),
                                         style={"flex": "50%"},
                                     ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-month-explore-descriptive",
+                                        labelStyle={"flex": "30%"},
+                                    ),
                                 ],
                             ),
                             html.Div(
@@ -148,11 +165,11 @@ def section_one():
                                     html.Div(
                                         dcc.RangeSlider(
                                             id="sec1-hour-slider",
-                                            min=1,
+                                            min=0,
                                             max=24,
                                             step=1,
-                                            value=[1, 24],
-                                            marks={1: "1", 24: "24"},
+                                            value=[0, 24],
+                                            marks={0: "0", 24: "24"},
                                             tooltip={
                                                 "always_visible": False,
                                                 "placement": "topLeft",
@@ -160,6 +177,14 @@ def section_one():
                                             allowCross=False,
                                         ),
                                         style={"flex": "50%"},
+                                    ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-hour-explore-descriptive",
+                                        labelStyle={"flex": "30%"},
                                     ),
                                 ],
                             ),
@@ -225,7 +250,9 @@ def section_two_inputs():
                                 n_clicks=0,
                             ),
                             html.Div(
-                                className="container-row full-width justify-center mt-2",
+                                className=(
+                                    "container-row full-width justify-center mt-2"
+                                ),
                                 children=[
                                     html.H6("Month Range", style={"flex": "20%"}),
                                     html.Div(
@@ -261,11 +288,11 @@ def section_two_inputs():
                                     html.Div(
                                         dcc.RangeSlider(
                                             id="sec2-hour-slider",
-                                            min=1,
+                                            min=0,
                                             max=24,
                                             step=1,
-                                            value=[1, 24],
-                                            marks={1: "1", 24: "24"},
+                                            value=[0, 24],
+                                            marks={0: "0", 24: "24"},
                                             tooltip={
                                                 "always_visible": False,
                                                 "placement": "topLeft",
@@ -489,11 +516,11 @@ def section_three_inputs():
                             html.Div(
                                 dcc.RangeSlider(
                                     id="tab6-sec3-query-hour-slider",
-                                    min=1,
+                                    min=0,
                                     max=24,
                                     step=1,
-                                    value=[1, 24],
-                                    marks={1: "1", 24: "24"},
+                                    value=[0, 24],
+                                    marks={0: "0", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
                                         "placement": "top",
@@ -741,14 +768,17 @@ def update_heatmap(
     si_ip,
 ):
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        month = month[::-1]
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        hour = hour[::-1]
-    time_filter_info = [time_filter, month, hour]
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, var
+    )
     data_filter_info = [data_filter, filter_var, min_val, max_val]
+
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month, hour, invert_month, invert_hour
+    )
+    month = [start_month, end_month]
+    hour = [start_hour, end_hour]
+    time_filter_info = [time_filter, month, hour]
 
     heat_map = custom_heatmap(
         df, global_local, var, time_filter_info, data_filter_info, si_ip
@@ -771,7 +801,16 @@ def update_heatmap(
         )
 
     if data_filter:
-        custom_inputs = generate_custom_inputs_explorer(var, start_month, end_month, start_hour, end_hour, filter_var, min_val, max_val)
+        custom_inputs = generate_custom_inputs_explorer(
+            var,
+            start_month,
+            end_month,
+            start_hour,
+            end_hour,
+            filter_var,
+            min_val,
+            max_val,
+        )
         units = generate_units(si_ip)
         return (
             dcc.Graph(
@@ -844,13 +883,10 @@ def update_more_charts(
     # if (min_val3 is None or max_val3 is None) and data_filter3:
     #     raise PreventUpdate
 
-    start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
-        month = month[::-1]
-    start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 1 or end_hour != 24):
-        hour = hour[::-1]
-    time_filter_info = [time_filter, month, hour]
+    df = filter_df_by_month_and_hour(
+        df, time_filter, month, hour, invert_month, invert_hour, df.columns
+    )
+
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
     if data_filter and (min_val is None or max_val is None):
         raise PreventUpdate
@@ -862,7 +898,6 @@ def update_more_charts(
             var_x,
             var_y,
             color_by,
-            time_filter_info,
             data_filter_info,
             si_ip,
         )
@@ -904,12 +939,19 @@ def update_more_charts(
         State("si-ip-unit-store", "data"),
         State("sec1-month-slider", "value"),
         State("sec1-hour-slider", "value"),
+        State("invert-month-explore-descriptive", "value"),
+        State("invert-hour-explore-descriptive", "value"),
     ],
 )
-def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range):
-    start_month, end_month = month_range
-    start_hour, end_hour = hour_range
-    filtered_df = df[(df["month"] >= start_month) & (df["month"] <= end_month) & (df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
+def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range, invert_month, invert_hour):
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(month_range, hour_range, invert_month, invert_hour)
+
+    filtered_df = df[
+        (df["month"] >= start_month)
+        & (df["month"] <= end_month)
+        & (df["hour"] >= start_hour)
+        & (df["hour"] <= end_hour)
+    ]
     return summary_table_tmp_rh_tab(
         filtered_df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
     )
