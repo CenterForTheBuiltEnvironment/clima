@@ -216,7 +216,7 @@ def layout_psy_chart():
     return (
         html.Div(
                 children=title_with_link(
-                    tooltip_text="Click here ",
+                    text="Psychrometric Chart",
                     id_button="Psychrometric-Chart-chart",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/psychrometric-chart"
                 ),

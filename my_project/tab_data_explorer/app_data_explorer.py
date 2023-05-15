@@ -77,7 +77,6 @@ def section_one():
             html.Div(
                 children=title_with_link(
                     text="Yearly chart",
-                    tooltip_text="Click to learn more about the Yearly chart",
                     id_button="explore-yearly-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
                 ),
@@ -89,7 +88,6 @@ def section_one():
             html.Div(
                 children=title_with_link(
                     text="Daily chart",
-                    tooltip_text="Click to learn more about the Daily chart",
                     id_button="explore-daily-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
                 ),
@@ -101,7 +99,6 @@ def section_one():
             html.Div(
                 children=title_with_link(
                     text="Heatmap chart",
-                    tooltip_text="Click to learn more about the Heatmap chart",
                     id_button="explore-heatmap-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
                 ),

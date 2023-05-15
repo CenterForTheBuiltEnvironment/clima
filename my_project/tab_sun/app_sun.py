@@ -49,7 +49,6 @@ def sun_path():
             html.Div(
                 children=title_with_link(
                     text="Sun path chart",
-                    tooltip_text='Click to learn more about the sun path chart',
                     id_button="sun-path-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram"
                 ),
@@ -112,7 +111,6 @@ def explore_daily_heatmap():
             html.Div(
                 children=title_with_link(
                     text="Daily charts",
-                    tooltip_text="Click to learn more about the Daily charts",
                     id_button="daily-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/customizable-daily-and-hourly-maps"
                 ),
@@ -161,7 +159,6 @@ def static_section(si_ip):
                     text="Global and Diffuse Horizontal Solar Radiation ("
                     + hor_unit
                     + ")",
-                    tooltip_text="Click to learn more about the global and diffuse horizontal solar radiation",
                     id_button="monthly-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation"
                 ),
@@ -173,7 +170,6 @@ def static_section(si_ip):
             html.Div(
                 children=title_with_link(
                     text="Cloud coverage",
-                    tooltip_text="Click to learn more about the cloud coverage",
                     id_button="cloud-chart-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage"
                 ),

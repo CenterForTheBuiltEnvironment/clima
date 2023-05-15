@@ -135,7 +135,6 @@ def layout_outdoor_comfort():
             html.Div(
                 children=title_with_link(
                     text="UTCI heatmap chart",
-                    tooltip_text="Click here to learn more about UTCI",
                     id_button="utci-charts-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
                 )
@@ -149,7 +148,6 @@ def layout_outdoor_comfort():
             html.Div(
                 children=title_with_link(
                     text="UTCI thermal stress chart",
-                    tooltip_text="Click here to learn more about UTCI thermal stress chart",
                     id_button="utci-charts-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained"
                 )
@@ -162,7 +160,6 @@ def layout_outdoor_comfort():
             html.Div(
                 children=title_with_link(
                     text="UTCI thermal stress distribution chart",
-                    tooltip_text="Click here to learn more about UTCI thermal stress distribution chart",
                     id_button="utci-charts-label",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained"
                 )

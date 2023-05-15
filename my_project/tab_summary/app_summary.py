@@ -83,7 +83,6 @@ def layout_summary(si_ip):
                     html.Div(
                         children=title_with_link(
                             text="Heating and Cooling Degree Days",
-                            tooltip_text='Click to the degree days documentation',
                             id_button="hdd-cdd-chart",
                             doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/degree-days-explained",
                         ),
@@ -145,7 +144,6 @@ def layout_summary(si_ip):
                     html.Div(
                         children=title_with_link(
                             text="Climate Profiles",
-                            tooltip_text='Click to the climate profiles documentation',
                             id_button="climate-profiles-chart",
                             doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/climate-profiles-explained",
                         ),

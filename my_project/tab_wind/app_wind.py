@@ -58,7 +58,6 @@ def seasonal_wind_rose():
             html.Div(
                 children=title_with_link(
                     text="Seasonal Wind Rose",
-                    tooltip_text="Click here to learn more about wind rose.",
                     id_button="seasonal-rose-chart",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
                 ),
@@ -144,7 +143,6 @@ def daily_wind_rose():
             html.Div(
                 children=title_with_link(
                     text="Daily Wind Rose",
-                    tooltip_text="Click here to learn more about Daily wind rose.",
                     id_button="daily-rose-chart",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
                 ),
@@ -319,7 +317,6 @@ def layout_wind():
             html.Div(
                 children=title_with_link(
                     text="Annual Wind Rose",
-                    tooltip_text="Click here to learn more about wind rose.",
                     id_button="seasonal-rose-chart",
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
                 ),
