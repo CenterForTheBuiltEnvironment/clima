@@ -149,6 +149,14 @@ def section_one():
                                         ),
                                         style={"flex": "50%"},
                                     ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-month-explore-descriptive",
+                                        labelStyle={"flex": "30%"},
+                                    ),
                                 ],
                             ),
                             html.Div(
@@ -170,6 +178,14 @@ def section_one():
                                             allowCross=False,
                                         ),
                                         style={"flex": "50%"},
+                                    ),
+                                    dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id="invert-hour-explore-descriptive",
+                                        labelStyle={"flex": "30%"},
                                     ),
                                 ],
                             ),
@@ -924,11 +940,13 @@ def update_more_charts(
         State("si-ip-unit-store", "data"),
         State("sec1-month-slider", "value"),
         State("sec1-hour-slider", "value"),
+        State("invert-month-explore-descriptive", "value"),
+        State("invert-hour-explore-descriptive", "value"),
     ],
 )
-def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range):
-    start_month, end_month = month_range
-    start_hour, end_hour = hour_range
+def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range, invert_month, invert_hour):
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(month_range, hour_range, invert_month, invert_hour)
+
     filtered_df = df[
         (df["month"] >= start_month)
         & (df["month"] <= end_month)
