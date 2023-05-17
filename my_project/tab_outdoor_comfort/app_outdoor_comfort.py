@@ -26,7 +26,7 @@ def inputs_outdoor_comfort():
         className="container-row full-width three-inputs-container",
         children=[
             dbc.Col(
-                md=6, sm=12, xs=12,
+                md=6, sm=12,
                 children=[
                     html.Div(
                         className="container-row center-block",
@@ -56,7 +56,7 @@ def inputs_outdoor_comfort():
                 ],
             ),
             dbc.Col(
-                md=6, sm=12, xs=12,
+                md=6, sm=12,
                 children=[
                     dbc.Button(
                         "Apply month and hour filter",
@@ -105,11 +105,11 @@ def inputs_outdoor_comfort():
                             html.Div(
                                 dcc.RangeSlider(
                                     id="outdoor-comfort-hour-slider",
-                                    min=1,
+                                    min=0,
                                     max=24,
                                     step=1,
-                                    value=[1, 24],
-                                    marks={1: "1", 24: "24"},
+                                    value=[0, 24],
+                                    marks={0: "0", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
                                         "placement": "topLeft",
