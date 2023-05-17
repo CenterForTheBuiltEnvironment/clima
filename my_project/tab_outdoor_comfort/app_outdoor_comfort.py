@@ -6,11 +6,14 @@ from my_project.global_scheme import (
     container_col_center_one_of_three,
 )
 from dash.dependencies import Input, Output, State
+
 from my_project.template_graphs import (
     heatmap_with_filter,
     thermal_stress_stacked_barchart,
 )
-from my_project.utils import generate_chart_name, generate_units_degree, generate_units, title_with_tooltip
+from my_project.utils import generate_chart_name, generate_units_degree, generate_units,title_with_link, title_with_tooltip
+
+
 import numpy as np
 from app import app
 
@@ -129,14 +132,32 @@ def layout_outdoor_comfort():
                 ],
             ),
             html.Div(id="outdoor-comfort-output"),
+
+            html.Div(
+                children=title_with_link(
+                    text="UTCI heatmap chart",
+                    id_button="utci-charts-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
+                )
+            ),
+
             dcc.Loading(
                 html.Div(id="utci-heatmap"),
                 type="circle",
+            ),
+
+            html.Div(
+                children=title_with_link(
+                    text="UTCI thermal stress chart",
+                    id_button="utci-charts-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained"
+                )
             ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
                 type="circle",
             ),
+          
             html.Div(
                 className="container-row align-center justify-center",
                 children=[
@@ -165,6 +186,7 @@ def layout_outdoor_comfort():
                     ),
                 ],
             ),
+
             dcc.Loading(
                 html.Div(id="utci-summary-chart"),
                 type="circle",
