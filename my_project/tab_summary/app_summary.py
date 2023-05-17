@@ -5,7 +5,7 @@ from dash.exceptions import PreventUpdate
 from app import app
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
-from my_project.utils import generate_chart_name, generate_units, generate_units_degree, title_with_tooltip
+from my_project.utils import generate_chart_name, generate_units, generate_units_degree, title_with_tooltip,title_with_link
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins, mapping_dictionary
 import requests
@@ -81,10 +81,10 @@ def layout_summary(si_ip):
                         ),
                     ),
                     html.Div(
-                        children=title_with_tooltip(
+                        children=title_with_link(
                             text="Heating and Cooling Degree Days",
-                            tooltip_text=None,
                             id_button="hdd-cdd-chart",
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/degree-days-explained",
                         ),
                     ),
                     dbc.Alert(
@@ -142,10 +142,10 @@ def layout_summary(si_ip):
                         children=html.Div(id="degree-days-chart-wrapper"),
                     ),
                     html.Div(
-                        children=title_with_tooltip(
+                        children=title_with_link(
                             text="Climate Profiles",
-                            tooltip_text=None,
                             id_button="climate-profiles-chart",
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/climate-profiles-explained",
                         ),
                     ),
                     dbc.Row(

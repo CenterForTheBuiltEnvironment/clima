@@ -9,16 +9,14 @@ from my_project.global_scheme import (
     container_col_center_one_of_three,
 )
 from dash.dependencies import Input, Output, State
+
 from my_project.template_graphs import (
     heatmap_with_filter,
     thermal_stress_stacked_barchart,
 )
-from my_project.utils import (
-    title_with_tooltip,
-    generate_chart_name,
-    generate_units_degree,
-    generate_units,
-)
+from my_project.utils import generate_chart_name, generate_units_degree, generate_units,title_with_link, title_with_tooltip
+
+
 import numpy as np
 from app import app
 
@@ -138,35 +136,61 @@ def outdoor_comfort_chart():
     return html.Div(
         children=[
             html.Div(id="outdoor-comfort-output"),
+
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="UTCI heatmap chart",
-                    tooltip_text=None,
                     id_button="utci-charts-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
                 )
             ),
+
             dcc.Loading(
                 html.Div(id="utci-heatmap"),
                 type="circle",
             ),
+
             html.Div(
-                children=title_with_tooltip(
+                children=title_with_link(
                     text="UTCI thermal stress chart",
-                    tooltip_text=None,
                     id_button="utci-charts-label",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained"
                 )
             ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
                 type="circle",
             ),
+          
             html.Div(
-                children=title_with_tooltip(
-                    text="UTCI thermal stress distribution chart",
-                    tooltip_text=None,
-                    id_button="utci-charts-label",
-                )
+                className="container-row align-center justify-center",
+                children=[
+                    dbc.Checklist(
+                        options=[
+                            {"label": "", "value": 1},
+                        ],
+                        value=[1],
+                        id="outdoor-comfort-switches-input",
+                        switch=True,
+                        style={
+                            "padding": "1rem",
+                            "marginTop": "1rem",
+                            "marginRight": "-2rem",
+                        },
+                    ),
+                    html.Div(
+                        children=title_with_tooltip(
+                            text="Normalize data",
+                            tooltip_text=(
+                                "If normalized is enabled it calculates the % "
+                                "time otherwise it calculates the total number of hours"
+                            ),
+                            id_button="outdoor-comfort-normalize",
+                        ),
+                    ),
+                ],
             ),
+
             dcc.Loading(
                 html.Div(id="utci-summary-chart"),
                 type="circle",
@@ -359,6 +383,7 @@ def update_tab_utci_category(
     [
         Input("tab7-dropdown", "value"),
         Input("month-hour-filter-outdoor-comfort", "n_clicks"),
+        Input("outdoor-comfort-switches-input", "value"),
     ],
     [
         State("df-store", "data"),
@@ -371,7 +396,7 @@ def update_tab_utci_category(
     ],
 )
 def update_tab_utci_summary_chart(
-    var, time_filter, df, month, hour, meta, invert_month, invert_hour, si_ip
+    var, time_filter, normalize, df, month, hour, meta, invert_month, invert_hour, si_ip
 ):
     utci_summary_chart = thermal_stress_stacked_barchart(
         df,
@@ -381,6 +406,7 @@ def update_tab_utci_summary_chart(
         hour,
         invert_month,
         invert_hour,
+        normalize,
         "UTCI thermal stress distribution",
     )
     custom_inputs = f"{var}"
