@@ -14,7 +14,13 @@ from my_project.template_graphs import (
     heatmap_with_filter,
     thermal_stress_stacked_barchart,
 )
-from my_project.utils import generate_chart_name, generate_units_degree, generate_units,title_with_link, title_with_tooltip
+from my_project.utils import (
+    generate_chart_name,
+    generate_units_degree,
+    generate_units,
+    title_with_link,
+    title_with_tooltip,
+)
 
 
 import numpy as np
@@ -26,13 +32,13 @@ def inputs_outdoor_comfort():
         className="container-row full-width three-inputs-container",
         children=[
             dbc.Col(
-                md=6, sm=12,
+                md=6,
+                sm=12,
                 children=[
                     html.Div(
                         className="container-row center-block",
                         children=[
                             html.H4(
-                                #className="text-next-to-input",
                                 children=["Select a scenario:"],
                                 style={"flex": "30%"},
                             ),
@@ -50,13 +56,14 @@ def inputs_outdoor_comfort():
                                 ],
                                 value="utci_Sun_Wind",
                             ),
-                            html.Div(id="image-selection",style={"flex": "10%"}),
+                            html.Div(id="image-selection", style={"flex": "10%"}),
                         ],
                     ),
                 ],
             ),
             dbc.Col(
-                md=6, sm=12,
+                md=6,
+                sm=12,
                 children=[
                     dbc.Button(
                         "Apply month and hour filter",
@@ -132,11 +139,12 @@ def inputs_outdoor_comfort():
             ),
         ],
     )
+
+
 def outdoor_comfort_chart():
     return html.Div(
         children=[
             html.Div(id="outdoor-comfort-output"),
-
             html.Div(
                 children=title_with_link(
                     text="UTCI heatmap chart",
@@ -144,24 +152,21 @@ def outdoor_comfort_chart():
                     doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
                 )
             ),
-
             dcc.Loading(
                 html.Div(id="utci-heatmap"),
                 type="circle",
             ),
-
             html.Div(
                 children=title_with_link(
                     text="UTCI thermal stress chart",
                     id_button="utci-charts-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
                 )
             ),
             dcc.Loading(
                 html.Div(id="utci-category-heatmap"),
                 type="circle",
             ),
-          
             html.Div(
                 className="container-row align-center justify-center",
                 children=[
@@ -190,13 +195,14 @@ def outdoor_comfort_chart():
                     ),
                 ],
             ),
-
             dcc.Loading(
                 html.Div(id="utci-summary-chart"),
                 type="circle",
             ),
         ],
     )
+
+
 def layout_outdoor_comfort():
     return (
         dcc.Loading(
