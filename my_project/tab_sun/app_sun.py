@@ -21,7 +21,13 @@ from my_project.tab_sun.charts_sun import (
 )
 from my_project.template_graphs import heatmap, barchart, daily_profile
 from my_project.utils import code_timer
-from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs,title_with_link
+from my_project.utils import (
+    title_with_tooltip,
+    generate_chart_name,
+    generate_units,
+    generate_custom_inputs,
+    title_with_link,
+)
 
 from app import app
 
@@ -50,7 +56,7 @@ def sun_path():
                 children=title_with_link(
                     text="Sun path chart",
                     id_button="sun-path-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram",
                 ),
             ),
             dbc.Row(
@@ -112,7 +118,7 @@ def explore_daily_heatmap():
                 children=title_with_link(
                     text="Daily charts",
                     id_button="daily-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/customizable-daily-and-hourly-maps"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/customizable-daily-and-hourly-maps",
                 ),
             ),
             html.Div(
@@ -160,7 +166,7 @@ def static_section(si_ip):
                     + hor_unit
                     + ")",
                     id_button="monthly-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation",
                 ),
             ),
             dcc.Loading(
@@ -171,7 +177,7 @@ def static_section(si_ip):
                 children=title_with_link(
                     text="Cloud coverage",
                     id_button="cloud-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage",
                 ),
             ),
             dcc.Loading(
@@ -225,7 +231,9 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("Global_and_Diffuse_Horizontal_Solar_Radiation", meta, units),
+        config=generate_chart_name(
+            "Global_and_Diffuse_Horizontal_Solar_Radiation", meta, units
+        ),
         figure=monthly,
     ), dcc.Graph(
         config=generate_chart_name("cloud_cover", meta, units),

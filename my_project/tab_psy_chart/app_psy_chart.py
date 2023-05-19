@@ -207,7 +207,7 @@ def inputs():
                         ],
                     ),
                 ],
-            ),          
+            ),
         ],
     )
 
@@ -215,12 +215,12 @@ def inputs():
 def layout_psy_chart():
     return (
         html.Div(
-                children=title_with_link(
-                    text="Psychrometric Chart",
-                    id_button="Psychrometric-Chart-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/psychrometric-chart"
-                ),
+            children=title_with_link(
+                text="Psychrometric Chart",
+                id_button="Psychrometric-Chart-chart",
+                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/psychrometric-chart",
             ),
+        ),
         dcc.Loading(
             type="circle",
             children=html.Div(

@@ -5,7 +5,13 @@ from dash.exceptions import PreventUpdate
 from app import app
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
-from my_project.utils import generate_chart_name, generate_units, generate_units_degree, title_with_tooltip,title_with_link
+from my_project.utils import (
+    generate_chart_name,
+    generate_units,
+    generate_units_degree,
+    title_with_tooltip,
+    title_with_link,
+)
 import plotly.graph_objects as go
 from my_project.global_scheme import template, tight_margins, mapping_dictionary
 import requests

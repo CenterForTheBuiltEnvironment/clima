@@ -78,7 +78,7 @@ def section_one():
                 children=title_with_link(
                     text="Yearly chart",
                     id_button="explore-yearly-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
                 ),
             ),
             dcc.Loading(
@@ -89,7 +89,7 @@ def section_one():
                 children=title_with_link(
                     text="Daily chart",
                     id_button="explore-daily-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
                 ),
             ),
             dcc.Loading(
@@ -100,7 +100,7 @@ def section_one():
                 children=title_with_link(
                     text="Heatmap chart",
                     id_button="explore-heatmap-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
                 ),
             ),
             dcc.Loading(
@@ -944,8 +944,20 @@ def update_more_charts(
         State("invert-hour-explore-descriptive", "value"),
     ],
 )
-def update_table(ts, dd_value, n_clicks, df, si_ip, month_range, hour_range, invert_month, invert_hour):
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(month_range, hour_range, invert_month, invert_hour)
+def update_table(
+    ts,
+    dd_value,
+    n_clicks,
+    df,
+    si_ip,
+    month_range,
+    hour_range,
+    invert_month,
+    invert_hour,
+):
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month_range, hour_range, invert_month, invert_hour
+    )
 
     filtered_df = df[
         (df["month"] >= start_month)

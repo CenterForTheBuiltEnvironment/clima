@@ -242,7 +242,7 @@ def title_with_tooltip(text, tooltip_text, id_button):
 
     display_tooltip = "none"
     if tooltip_text:
-     display_tooltip = "block"
+        display_tooltip = "block"
 
     return html.Div(
         className="container-row",
@@ -273,7 +273,13 @@ def title_with_tooltip(text, tooltip_text, id_button):
         ],
     )
 
-def title_with_link(text, tooltip_text="Click to access the official documentation", id_button=None, doc_link=None):
+
+def title_with_link(
+    text,
+    tooltip_text="Click to access the official documentation",
+    id_button=None,
+    doc_link=None,
+):
     return html.Div(
         className="container-row",
         style={"padding": "1rem", "marginTop": "1rem"},
@@ -305,6 +311,7 @@ def title_with_link(text, tooltip_text="Click to access the official documentati
             ),
         ],
     )
+
 
 def summary_table_tmp_rh_tab(df, value, si_ip):
     df_summary = (

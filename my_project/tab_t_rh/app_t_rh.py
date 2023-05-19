@@ -6,7 +6,7 @@ from my_project.utils import (
     generate_units_degree,
     title_with_tooltip,
     summary_table_tmp_rh_tab,
-    title_with_link
+    title_with_link,
 )
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 from my_project.global_scheme import dropdown_names
@@ -49,7 +49,7 @@ def layout_t_rh():
                         children=title_with_link(
                             text="Yearly chart",
                             id_button="yearly-chart-label",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
                         ),
                     ),
                     dcc.Loading(
@@ -60,7 +60,7 @@ def layout_t_rh():
                         children=title_with_link(
                             text="Daily chart",
                             id_button="daily-chart-label",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
                         ),
                     ),
                     dcc.Loading(
@@ -71,7 +71,7 @@ def layout_t_rh():
                         children=title_with_link(
                             text="Heatmap chart",
                             id_button="heatmap-chart-label",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
                         ),
                     ),
                     dcc.Loading(

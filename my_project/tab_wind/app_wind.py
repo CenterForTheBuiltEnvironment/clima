@@ -2,7 +2,13 @@ from dash import dcc, html
 from my_project.global_scheme import month_lst, container_row_center_full
 from dash.dependencies import Input, Output, State
 from my_project.template_graphs import heatmap, wind_rose
-from my_project.utils import title_with_tooltip, generate_chart_name, generate_units, generate_custom_inputs_time,title_with_link
+from my_project.utils import (
+    title_with_tooltip,
+    generate_chart_name,
+    generate_units,
+    generate_custom_inputs_time,
+    title_with_link,
+)
 from my_project.utils import code_timer
 
 from app import app
@@ -59,7 +65,7 @@ def seasonal_wind_rose():
                 children=title_with_link(
                     text="Seasonal Wind Rose",
                     id_button="seasonal-rose-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose",
                 ),
             ),
             html.Div(
@@ -144,7 +150,7 @@ def daily_wind_rose():
                 children=title_with_link(
                     text="Daily Wind Rose",
                     id_button="daily-rose-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose",
                 ),
             ),
             html.Div(
@@ -318,7 +324,7 @@ def layout_wind():
                 children=title_with_link(
                     text="Annual Wind Rose",
                     id_button="seasonal-rose-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose",
                 ),
             ),
             dcc.Loading(
@@ -455,7 +461,9 @@ def update_custom_wind_rose(
     custom = wind_rose(
         df, "", [start_month, end_month], [start_hour, end_hour], True, si_ip
     )
-    custom_inputs = generate_custom_inputs_time(start_month, end_month, start_hour, end_hour)
+    custom_inputs = generate_custom_inputs_time(
+        start_month, end_month, start_hour, end_hour
+    )
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name("custom_wind_rose", meta, custom_inputs, units),
