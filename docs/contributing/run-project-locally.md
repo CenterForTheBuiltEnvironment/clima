@@ -89,15 +89,15 @@ gcloud auth list
 ```
 
 ```text
-gcloud builds submit --tag gcr.io/clima-316917/clima  --project=clima-316917
+gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima  --project=clima-316917
 
-gcloud run deploy clima --image gcr.io/clima-316917/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=2Gi --concurrency=80 --cpu=2
+gcloud run deploy clima --image us-docker.pkg.dev/clima-316917/gcr.io/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=2Gi --concurrency=80 --cpu=2
 ```
 
 ### Test project
 
 ```text
-gcloud builds submit --tag gcr.io/testbed-310521/clima  --project=testbed-310521
+gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima-test  --project=clima-316917
 
-gcloud run deploy clima --image gcr.io/testbed-310521/clima --platform managed  --project=testbed-310521 --allow-unauthenticated --region=us-central1 --memory=1Gi
+gcloud run deploy clima-test --image us-docker.pkg.dev/clima-316917/gcr.io/clima-test --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=2Gi --concurrency=80 --cpu=2
 ```

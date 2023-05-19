@@ -33,7 +33,7 @@ jobs:
       - name: Building (🏗️)
         run: |-
           gcloud builds submit \
-            --tag gcr.io/clima-316917/clima
+            --tag us-docker.pkg.dev/clima-316917/gcr.io/clima
 
       # Setup gcloud CLI
       - name: Deploy (🚀)
