@@ -312,14 +312,12 @@ def create_df(lst, file_name):
         else:
             last_days = dbt_day_ave[i - n : i]
         last_days.reverse()
-        # last_days = [10 if x <= 10 else x for x in last_days]
-        # last_days = [32 if x >= 32 else x for x in last_days]
         rmt = running_mean_outdoor_temperature(last_days, alpha=0.9)
 
-        # if rmt >= 40:
-        #     rmt = 40
-        # elif rmt <= 10:
-        #     rmt = 10
+        if rmt > 40:
+            rmt = 40.1
+        elif rmt < 10:
+            rmt = 9.9
         r = adaptive_ashrae(
             tdb=dbt_day_ave[i],
             tr=dbt_day_ave[i],

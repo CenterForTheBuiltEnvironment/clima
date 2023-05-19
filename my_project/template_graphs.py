@@ -150,15 +150,15 @@ def yearly_profile(df, var, global_local, si_ip):
         lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
         hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
         rmt = df.groupby("DOY")["adaptive_cmf_rmt"].mean().values
-        # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implemention
-        var_barcolors = np.where((rmt > 40) | (rmt < 10), "lightgray", "darkgray")
+        # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implementation
+        var_bar_colors = np.where((rmt > 40) | (rmt < 10), "lightgray", "darkgray")
 
         trace3 = go.Bar(
             x=df["UTC_time"].dt.date.unique(),
             y=hi80 - lo80,
             base=lo80,
             name="ASHRAE adaptive comfort (80%)",
-            marker_color=var_barcolors,
+            marker_color=var_bar_colors,
             marker_opacity=0.5,
             hovertemplate=(
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
@@ -174,7 +174,7 @@ def yearly_profile(df, var, global_local, si_ip):
             y=hi90 - lo90,
             base=lo90,
             name="ASHRAE adaptive comfort (90%)",
-            marker_color=var_barcolors,
+            marker_color=var_bar_colors,
             marker_opacity=0.5,
             hovertemplate=(
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
@@ -624,11 +624,13 @@ def thermal_stress_stacked_barchart(
         )
     isNormalized = True if len(normalize) != 0 else False
     if isNormalized:
-        new_df = (df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0))
+        new_df = (
+            df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0)
+        )
         new_df.set_axis(categories, axis=1, inplace=True)
         new_df.reset_index(inplace=True)
     else:
-        new_df = (df.groupby("month")[var].value_counts().unstack(var).fillna(0))
+        new_df = df.groupby("month")[var].value_counts().unstack(var).fillna(0)
         new_df.set_axis(categories, axis=1, inplace=True)
         new_df.reset_index(inplace=True)
 
@@ -636,13 +638,23 @@ def thermal_stress_stacked_barchart(
     data = []
     for i in range(len(categories)):
         x_data = list(range(0, 12))
-        y_data = [catch(lambda: new_df.iloc[mth][categories[i]]) for mth in range(0, 12)]
+        y_data = [
+            catch(lambda: new_df.iloc[mth][categories[i]]) for mth in range(0, 12)
+        ]
         data.append(
             go.Bar(
-                x=x_data, y=y_data, name=categories[i], marker_color=colors[i],
+                x=x_data,
+                y=y_data,
+                name=categories[i],
+                marker_color=colors[i],
                 hovertemplate=(
-                    "</b><br>Month: %{x}<br>Category: " + categories[i] + "<br>Count: %{y}<br><extra></extra>" if len(normalize) == 0
-                    else "</b><br>Month: %{x}<br>Category: " + categories[i] + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
+                    "</b><br>Month: %{x}<br>Category: "
+                    + categories[i]
+                    + "<br>Count: %{y}<br><extra></extra>"
+                    if len(normalize) == 0
+                    else "</b><br>Month: %{x}<br>Category: "
+                    + categories[i]
+                    + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
                 ),
             )
         )
@@ -834,4 +846,3 @@ def catch(func, handle=lambda e: e, *args, **kwargs):
         return func(*args, **kwargs)
     except Exception as e:
         return 0
-
