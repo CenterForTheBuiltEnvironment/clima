@@ -1,6 +1,6 @@
 # How to read a Psychrometric Chart
 
-A [psychrometric diagram](https://en.wikipedia.org/wiki/Psychrometrics) is a psychrometry tool used to understand the relationship between humidity and air temperature conditions. Through the use of the psychrometric diagram and appropriate calculations, it is possible to know the amount of heat or coolth needed to achieve the desired temperature and humidity.
+A [psychrometric diagram](https://en.wikipedia.org/wiki/Psychrometrics) is a psychrometry tool used to understand the relationship between humidity and air temperature conditions. Through the use of the psychrometric diagram and appropriate calculations, it is possible to know the amount of heat or cooling needed to achieve the desired temperature and humidity.
 
 The **Clima** psychometric diagram shows dry bulb temperature on the abscissae, specific humidity on the ordinates, and relative humidity as parametric curves inside the graph.
 
@@ -18,7 +18,7 @@ The simplest transformation to be analyzed on the psychometric diagram is the he
 
 <figure><img src="../../../.gitbook/assets/heating cooling (1).png" alt=""><figcaption><p>Cooling and heating process</p></figcaption></figure>
 
-A common application of the diagram is humidification and dehumidification of environments, where the saturation curve is used. The air is cooled to [dew temperature](https://en.wikipedia.org/wiki/Dew\_point) (2), then heat continues to be removed, so condensing some of the vapor and decreasing the specific humidity until the desired value (2'). Therefore, a post-heating process could bring the air back to the starting relative humidity (3).
+A common application of the diagram is humidification and dehumidification of environments, where the saturation curve is used. The air is cooled to [dew temperature](https://en.wikipedia.org/wiki/Dew\_point) (2), and then heat continues to be removed, so condensing some of the vapor and decreasing the specific humidity until the desired value (2'). Therefore, a post-heating process could bring the air back to the starting relative humidity (3).
 
 <figure><img src="../../../.gitbook/assets/Deumidification.png" alt=""><figcaption><p>Dehumidification and post-heating process</p></figcaption></figure>
 
