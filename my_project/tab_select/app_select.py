@@ -163,7 +163,7 @@ def submitted_data(
         try:
             if "epw" in list_of_names[0]:
                 # Assume that the user uploaded a CSV file
-                lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
+                lines = io.StringIO(decoded.decode("latin-1")).read().split("\n")
                 df, location_info = create_df(lines, list_of_names[0])
                 return (
                     location_info,
