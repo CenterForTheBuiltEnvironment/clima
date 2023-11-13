@@ -4,7 +4,7 @@ The **Outdoor Comfort** tab shows an overview of the perceived environmental con
 
 The [Universal Thermal Climate Index](http://www.utci.org/index.php) (UTCI), introduced in 1994, aims to be the measure of human physiological reaction to the atmospheric environment.&#x20;
 
-<figure><img src="../../../.gitbook/assets/image (9).png" alt=""><figcaption><p>Graphical scheme of the UTCI calculation methodology</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/utci_image.png" alt=""><figcaption><p>Graphical scheme of the UTCI calculation methodology</p></figcaption></figure>
 
 It considers:
 
