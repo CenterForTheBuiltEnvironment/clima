@@ -34,7 +34,7 @@ This guide is for Mac OSX, Linux, or Windows.
 
    Now you should be ready to run the tool locally.
 
-   `pipenv run python my_project.py`
+   `pipenv run python main.py`
 
 Visit [http://localhost:8080](http://localhost:8080) in your browser to check it out. Note that whenever you want to run the tool, you have to activate the virtualenv first.
 

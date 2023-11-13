@@ -159,11 +159,15 @@ def submitted_data(
     ):
         content_type, content_string = list_of_contents[0].split(",")
 
-        decoded = base64.b64decode(content_string)
+        decoded_bytes = base64.b64decode(content_string)
         try:
             if "epw" in list_of_names[0]:
                 # Assume that the user uploaded a CSV file
-                lines = io.StringIO(decoded.decode("utf-8")).read().split("\n")
+                try:
+                    decoded_string = decoded_bytes.decode("utf-8")
+                except UnicodeDecodeError:
+                    decoded_string = decoded_bytes.decode("latin-1")
+                lines = decoded_string.split("\n")
                 df, location_info = create_df(lines, list_of_names[0])
                 return (
                     location_info,
