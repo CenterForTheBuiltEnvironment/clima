@@ -12,11 +12,12 @@ jobs:
 
       - name: Build Clima
         run: |-
-          # TODO
+          pip install pipenv
+          pipenv install
 
       - name: Start Clima
         run: |-
-          # TODO
+          pipenv run python main.py &
 
       - uses: actions/setup-node@v4
         with:
