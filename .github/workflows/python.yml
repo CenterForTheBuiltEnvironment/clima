@@ -1,7 +1,7 @@
-name: Pytest 🐍 
+name: Python 🐍 
 on: [push, pull_request]
 jobs:
-  cypress:
+  pytest:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
