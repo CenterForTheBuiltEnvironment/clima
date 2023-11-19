@@ -2,7 +2,6 @@
   "name": "clima",
   "version": "0.0.0",
   "description": "Tests for Clima",
-  "main": "index.js",
   "directories": {
     "doc": "docs",
     "test": "tests"
@@ -10,16 +9,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mccalluc/clima.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mccalluc/clima/issues"
-  },
-  "homepage": "https://github.com/mccalluc/clima#readme",
   "devDependencies": {
     "cypress": "^13.5.1"
   }
