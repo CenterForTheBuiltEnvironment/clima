@@ -19,4 +19,4 @@ jobs:
 
       - name: Test Clima
         run: |-
-          pipenv run pytest
+          pipenv run python -m pytest

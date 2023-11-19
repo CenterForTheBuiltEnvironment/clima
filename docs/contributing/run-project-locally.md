@@ -68,14 +68,15 @@ You can update the requirement.txt file with the following command.
 
 ## Testing
 
-This project run both Python unit tests, and Cypress end-to-end tests in CI.
+This project runs both Python unit tests, and Cypress end-to-end tests in CI.
 
 To run Python tests locally:
-- **TODO**
+- If you haven't already, install Python dev dependencies.
+- Then: `pipenv run python -m pytest`
 
 To run Cypress locally:
 - If you haven't already, start the Clima application and confirm that http://localhost:8080/ is up.
-- `cd tests/node; npm install; npx run cypress open`
+- Then: `cd tests/node; npm install; npx run cypress open`
 
 ## Versioning
 

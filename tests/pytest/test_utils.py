@@ -1,5 +1,5 @@
-from utils import summary_table_tmp_rh_tab
-from extract_df import get_data, create_df
+from my_project.utils import summary_table_tmp_rh_tab
+from my_project.extract_df import get_data, create_df
 import pandas as pd
 import os
 
