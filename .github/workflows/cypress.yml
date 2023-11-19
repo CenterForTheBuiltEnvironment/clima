@@ -33,6 +33,5 @@ jobs:
 
       - name: Run Cypress
         run: |-
-          pwd
           cd tests/node
           npx cypress run 

@@ -66,6 +66,17 @@ You can update the requirement.txt file with the following command.
 
 `pipenv run pip freeze > requirements.txt`
 
+## Testing
+
+This project run both Python unit tests, and Cypress end-to-end tests in CI.
+
+To run Python tests locally:
+- **TODO**
+
+To run Cypress locally:
+- If you haven't already, start the Clima application and confirm that http://localhost:8080/ is up.
+- `cd tests/node; npm install; npx run cypress open`
+
 ## Versioning
 
 When you release a new version of the tool you should first use `bumpversion` to update the version of the tool. You can use the following command:
