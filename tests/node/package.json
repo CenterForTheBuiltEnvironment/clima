@@ -2,13 +2,6 @@
   "name": "clima",
   "version": "0.0.0",
   "description": "Tests for Clima",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "devDependencies": {
     "cypress": "^13.5.1"
   }
