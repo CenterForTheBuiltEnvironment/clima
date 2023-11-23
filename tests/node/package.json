@@ -1,0 +1,8 @@
+{
+  "name": "clima",
+  "version": "0.0.0",
+  "description": "Tests for Clima",
+  "devDependencies": {
+    "cypress": "^13.5.1"
+  }
+}

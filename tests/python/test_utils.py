@@ -1,5 +1,5 @@
-from utils import summary_table_tmp_rh_tab
-from extract_df import get_data, create_df
+from my_project.utils import summary_table_tmp_rh_tab
+from my_project.extract_df import get_data, create_df
 import pandas as pd
 import os
 
@@ -24,7 +24,7 @@ def import_epw_test():
 
 def test_summary_table_tmp_rh_tab():
     df = import_epw_test()
-    data_table = summary_table_tmp_rh_tab(df, "RH")
+    data_table = summary_table_tmp_rh_tab(df, "RH", 'si')
 
     assert data_table.data[0]["month"] == "Jan"
     assert data_table.data[0]["mean"] == 80.34
