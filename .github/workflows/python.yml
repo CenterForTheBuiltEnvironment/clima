@@ -20,3 +20,7 @@ jobs:
       - name: Test Clima
         run: |-
           pipenv run python -m pytest
+
+      - name: Run Black
+        run: |-
+          pipenv run black . --check
