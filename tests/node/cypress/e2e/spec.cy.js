@@ -65,17 +65,31 @@ describe('template spec', () => {
     cy.contains('Daily Wind Rose');
     // TODO
     cy.contains('Customizable Wind Rose');
+    // TODO
 
     // Psychrometric Chart
     click_tab('Psychrometric Chart');
+    // TODO
+    cy.contains('Humidity Ratio  g water/kg dry air');
 
     // Natural Ventilation
     click_tab('Natural Ventilation');
+    // TODO
+    cy.contains('Outdoor dry-bulb air temperature range');
+    cy.contains('Hours when the Dry bulb temperature is in the range 10 to 24 °C');
+    cy.contains('Percentage of hours the Dry bulb temperature is in the range 10 to 24 °C');
 
     // Outdoor Comfort
     click_tab('Outdoor Comfort');
+    // TODO
+    cy.contains('The Best Weather Condition is: utci_noSun_noWind_categories');
+    // TODO
+    cy.contains('UTCI thermal stress chart');
+    cy.contains('no thermal stress');
+    cy.contains('UTCI thermal stress distribution');
 
     // Data Explorer
     click_tab('Data Explorer');
+    // TODO
   })
 })
