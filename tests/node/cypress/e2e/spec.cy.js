@@ -17,7 +17,7 @@ describe('Clima', () => {
     
     // Upload
     load_epw()
-    cy.contains('The EPW was successfully loaded!!!!');
+    cy.contains('The EPW was successfully loaded!');
     cy.contains('Current Location: Bologna Marconi AP, ITA');
 
     // Climate Summary
