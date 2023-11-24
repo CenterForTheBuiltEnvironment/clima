@@ -239,7 +239,6 @@ def plot_location_epw_files():
 
 
 def title_with_tooltip(text, tooltip_text, id_button):
-
     display_tooltip = "none"
     if tooltip_text:
         display_tooltip = "block"

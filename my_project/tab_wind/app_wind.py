@@ -494,7 +494,6 @@ def update_custom_wind_rose(
 )
 @code_timer
 def update_seasonal_graphs(ts, df, meta, si_ip):
-
     hours = [1, 24]
     winter_months = [12, 2]
     spring_months = [3, 5]
