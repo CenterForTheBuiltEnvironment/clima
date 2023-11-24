@@ -22,5 +22,8 @@ jobs:
           pipenv run python -m pytest
 
       - name: Run Black
+        # TODO: Add to dev dependencies: Adding it right now
+        # bumps other dependencies and the application won't run.
         run: |-
-          pipenv run black . --check
+          pip install black
+          black . --check
