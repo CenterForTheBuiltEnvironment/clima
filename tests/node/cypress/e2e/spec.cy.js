@@ -1,7 +1,7 @@
 function click_tab(name) {
   cy.get('.custom-tab')
     .not('.tab--disabled')
-    .contains(name, {timeout: 30 * 1000})
+    .contains(name)
     .click();
 }
 
@@ -32,12 +32,39 @@ describe('template spec', () => {
 
     // Temperature and Humidity
     click_tab('Temperature and Humidity');
+    cy.contains('Yearly chart');
+    cy.contains('Dry bulb temperature (°C)');
+    // TODO: simulate mouseover
+    cy.contains('Daily chart');
+    // TODO: simulate mouseover
+    cy.contains('Heatmap chart');
+    // TODO: simulate mouseover
+    cy.contains('Descriptive statistics');
+    cy.contains('12.1'); // January max
 
     // Sun and Clouds
     click_tab('Sun and Clouds');
+    cy.contains('Sun path chart');
+    // TODO
+    cy.contains('Global and Diffuse Horizontal Solar Radiation (Wh/m²)');
+    // TODO
+    cy.contains('Cloud coverage');
+    // TODO
+    cy.contains('Daily charts');
+    // TODO
 
     // Wind
     click_tab('Wind');
+    cy.contains('Annual Wind Rose');
+    // TODO
+    cy.contains('Seasonal Wind Rose');
+    cy.contains('Observations between the months of Dec and Feb between 01:00 hours and 24:00 hours.');
+    cy.contains('Selected observations 2160 of 8760, or 24 %.');
+    cy.contains('40 observations have calm winds.');
+    // TODO
+    cy.contains('Daily Wind Rose');
+    // TODO
+    cy.contains('Customizable Wind Rose');
 
     // Psychrometric Chart
     click_tab('Psychrometric Chart');
