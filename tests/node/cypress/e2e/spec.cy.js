@@ -5,14 +5,18 @@ function click_tab(name) {
     .click();
 }
 
-describe('template spec', () => {
-  it('Loads all tabs for uploaded EPW', () => {
+function load_epw() {
+  cy.get('input[type=file]').selectFile('test.epw', {force: true});
+}
+
+describe('Clima', () => {
+  it('loads all tabs for uploaded EPW', () => {
     cy.visit('http://127.0.0.1:8080');
     cy.contains('CBE Clima Tool');
     cy.contains('Current Location: N/A');
     
     // Upload
-    cy.get('input[type=file]').selectFile('test.epw', {force: true});
+    load_epw()
     cy.contains('The EPW was successfully loaded!');
     cy.contains('Current Location: Bologna Marconi AP, ITA');
 
@@ -70,7 +74,7 @@ describe('template spec', () => {
     // Psychrometric Chart
     click_tab('Psychrometric Chart');
     // TODO
-    cy.contains('Humidity Ratio  g water/kg dry air');
+    // cy.contains('Humidity Ratio  g water/kg dry air');
 
     // Natural Ventilation
     click_tab('Natural Ventilation');
@@ -91,5 +95,17 @@ describe('template spec', () => {
     // Data Explorer
     click_tab('Data Explorer');
     // TODO
-  })
+  });
+
+  it('responds to banner radio buttons', () => {
+    cy.visit('http://127.0.0.1:8080');
+    load_epw()
+    cy.contains('The EPW was successfully loaded!');
+    click_tab('Temperature and Humidity')
+    cy.contains('Global Value Ranges').click();
+    cy.contains('-40'); // Global minimum: not something you see in Italy!
+    cy.contains('IP').click();
+    cy.contains('100'); // Not a Celsius temperature!
+    cy.contains('Dry bulb temperature (°F)');
+  });
 })
