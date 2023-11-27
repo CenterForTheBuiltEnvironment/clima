@@ -1,19 +1,25 @@
 # Use the official lightweight Python image.
 # https://hub.docker.com/_/python
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 RUN apt-get update \
 && apt-get install gcc -y \
 && apt-get clean
 
-# Copy local code to the container image.
 ENV APP_HOME /app
 WORKDIR $APP_HOME
-COPY . ./
 
 # Install production dependencies.
-RUN pip install -r requirements.txt
+COPY Pipfile Pipfile.lock .
+RUN pip install pipenv==2023.10.24
+RUN pipenv install
+
+# Code changes more frequently than dependencies, so we should copy our code
+# only after dependencies are installed, to preserve layers in the cache.
+COPY app.py main.py .
+COPY assets ./assets
+COPY my_project ./my_project
 
 EXPOSE 8080
 
-CMD python main.py
+CMD pipenv run python main.py
