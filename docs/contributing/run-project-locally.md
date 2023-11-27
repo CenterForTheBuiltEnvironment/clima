@@ -76,7 +76,7 @@ To run Python tests locally:
 
 To run Cypress locally:
 - If you haven't already, start the Clima application and confirm that http://localhost:8080/ is up.
-- Then: `cd tests/node; npm install; npx run cypress open`
+- Then: `cd tests/node; npm install; npm run cy:open`
 
 ## Versioning
 

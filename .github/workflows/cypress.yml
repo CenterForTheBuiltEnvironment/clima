@@ -34,4 +34,19 @@ jobs:
       - name: Run Cypress
         run: |-
           cd tests/node
-          npx cypress run 
+          npm run cy:run
+
+      - name: Archive screenshots
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-screenshots
+          path: tests/node/cypress/screenshots
+
+      - name: Archive videos
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: tests/node/cypress/videos
+          retention-days: 3
