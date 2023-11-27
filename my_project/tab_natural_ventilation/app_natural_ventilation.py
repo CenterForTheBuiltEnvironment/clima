@@ -295,7 +295,6 @@ def nv_heatmap(
     invert_hour,
     si_ip,
 ):
-
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
@@ -463,7 +462,6 @@ def nv_bar_chart(
     invert_hour,
     si_ip,
 ):
-
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 

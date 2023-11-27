@@ -271,7 +271,6 @@ def update_psych_chart(
     invert_hour,
     si_ip,
 ):
-
     start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
         month, hour, invert_month, invert_hour
     )
