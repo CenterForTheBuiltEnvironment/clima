@@ -8,7 +8,7 @@ description: >-
 
 ## Prerequisites
 
-Python 3 should be installed on your machine.
+Python 3.10 should be installed on your machine.
 
 * If you do not have Python installed on your machine you can follow [this guide](https://wiki.python.org/moin/BeginnersGuide/Download)
 

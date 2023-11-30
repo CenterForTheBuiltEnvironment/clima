@@ -40,7 +40,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v1
         with:
           service: clima
-          image: us-docker.pkg.dev/clima-316917/gcr.io/clima
+          source: ./
           region: us-central1
           credentials: ${{ secrets.GCP_SA_KEY_JSON }}
           project_id: clima-316917
