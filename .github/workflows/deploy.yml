@@ -25,5 +25,4 @@ jobs:
           service: clima
           source: ./
           region: us-central1
-          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
           project_id: TEST-clima-316917 # TODO: If it works, revert.
