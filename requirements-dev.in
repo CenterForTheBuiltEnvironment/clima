@@ -1,0 +1,5 @@
+-c requirements.txt
+cleanpy
+pytest
+bump2version
+pip-tools
