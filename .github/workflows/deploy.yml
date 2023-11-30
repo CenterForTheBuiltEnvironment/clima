@@ -3,7 +3,7 @@ name: Deploy 🚀 Clima to Google Cloud Run (☁🏃)
 on:
   push:
     branches:
-      - main
+      - TEST-main # TODO: If it works, revert to "main".
 jobs:
   deploy:
     name: Deploying 🚀 Clima
@@ -26,4 +26,4 @@ jobs:
           source: ./
           region: us-central1
           credentials: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: clima-316917
+          project_id: TEST-clima-316917 # TODO: If it works, revert.
