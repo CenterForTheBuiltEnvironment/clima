@@ -8,10 +8,9 @@ description: >-
 
 ## Prerequisites
 
-Python 3 installed on your machine and [pipenv](https://docs.pipenv.org).
+Python 3 should be installed on your machine.
 
 * If you do not have Python installed on your machine you can follow [this guide](https://wiki.python.org/moin/BeginnersGuide/Download)
-* You can install `pipenv` using the following command `pip install pipenv`.
 
 ## Installation
 
@@ -24,47 +23,38 @@ This guide is for Mac OSX, Linux, or Windows.
    $ cd clima
    ```
 
-2. **Create a virtual environment using pipenv and install dependencies:**
+2. **Create a virtual environment and install dependencies:**
 
    ```text
-    pipenv install --three
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   pip install -r requirements-dev.txt
    ```
 
 3.  **Run tool locally**
 
    Now you should be ready to run the tool locally.
 
-   `pipenv run python main.py`
+   `python main.py`
 
 Visit [http://localhost:8080](http://localhost:8080) in your browser to check it out. Note that whenever you want to run the tool, you have to activate the virtualenv first.
 
 ### Adding new dependencies
 
-Pipfiles contain information about the dependencies of your project, and supersede the requirements.txt file that is typically used in Python projects.
+For production dependencies, add them to `requirements.in` and then
 
-To install a Python package for your project use the `install` keyword. For example,
+```
+pip-compile requirements.in
+pip install -r requirements.txt
+```
 
-`pipenv install beautifulsoup4`
+For development-only dependencies, add them to `requirements-dev.in` and then
 
-The package name, together with its version and a list of its own dependencies, can be frozen by updating the Pipfile.lock. This is done using the lock keyword,
-
-`pipenv lock`
-
-Remember also to update the `requirements.txt` file with this command:
-
-`pipenv run pip freeze > requirements.txt`
-
-### Managing your development environment
-
-There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. Pipenv will let you keep the two environments separate using the --dev flag. For example,
-
-`pipenv install --dev nose2`
-
-### Generate and update the requirement.txt file
-
-You can update the requirement.txt file with the following command.
-
-`pipenv run pip freeze > requirements.txt`
+```
+pip-compile requirements-dev.in
+pip install -r requirements-dev.txt
+```
 
 ## Testing
 
@@ -72,7 +62,7 @@ This project runs both Python unit tests, and Cypress end-to-end tests in CI.
 
 To run Python tests locally:
 - If you haven't already, install Python dev dependencies.
-- Then: `pipenv run python -m pytest`
+- Then: `python -m pytest`
 
 To run Cypress locally:
 - If you haven't already, start the Clima application and confirm that http://localhost:8080/ is up.

@@ -12,11 +12,11 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Build Clima
+      - name: Install dependencies
         run: |-
-          pip install pipenv
-          pipenv install --dev
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
 
       - name: Test Clima
         run: |-
-          pipenv run python -m pytest
+          python -m pytest
