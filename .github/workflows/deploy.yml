@@ -13,29 +13,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup python
-        uses: actions/setup-python@v4
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v0'
         with:
-          python-version: '3.9'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Export gcloud related env variable
-        run: export CLOUDSDK_PYTHON="/usr/bin/python3"
-
-      # Build and push image to Google Container Registry
-      - name: Setting up
-        uses: google-github-actions/setup-gcloud@v0
-        with:
-          version: '318.0.0'
-          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          service_account_email: "federico.tartarini@bears-berkeley.sg"
-          project_id: clima-316917
-
-      - name: Building (🏗️)
-        run: |-
-          gcloud builds submit \
-            --tag us-docker.pkg.dev/clima-316917/gcr.io/clima
-
-      # Setup gcloud CLI
       - name: Deploy (🚀)
         uses: google-github-actions/deploy-cloudrun@v1
         with:
