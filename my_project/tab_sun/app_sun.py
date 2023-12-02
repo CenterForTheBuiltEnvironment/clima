@@ -93,6 +93,7 @@ def sun_path():
                         options=[
                             {"label": i, "value": sc_dropdown_names[i]}
                             for i in sc_dropdown_names
+                            if i != "Frequency"
                         ],
                         value="None",
                         style={"width": "20rem"},
