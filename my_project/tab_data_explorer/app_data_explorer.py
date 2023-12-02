@@ -13,7 +13,7 @@ from my_project.utils import (
     code_timer,
     title_with_link,
     determine_month_and_hour_filter,
-    dropdown
+    dropdown,
 )
 
 from my_project.global_scheme import (

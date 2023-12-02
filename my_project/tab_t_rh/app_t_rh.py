@@ -32,10 +32,7 @@ def layout_t_rh():
                     dropdown(
                         id="dropdown",
                         className="dropdown-t-rh",
-                        options={
-                            var: dropdown_names[var]
-                            for var in var_to_plot
-                        },
+                        options={var: dropdown_names[var] for var in var_to_plot},
                         value=dropdown_names[var_to_plot[0]],
                     ),
                 ],

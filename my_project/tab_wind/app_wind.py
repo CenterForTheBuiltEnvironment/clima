@@ -8,7 +8,7 @@ from my_project.utils import (
     generate_units,
     generate_custom_inputs_time,
     title_with_link,
-    dropdown
+    dropdown,
 )
 from my_project.utils import code_timer
 
@@ -237,8 +237,7 @@ def custom_wind_rose():
                                     dropdown(
                                         id="tab5-custom-start-month",
                                         options={
-                                            j: i + 1
-                                            for i, j in enumerate(month_lst)
+                                            j: i + 1 for i, j in enumerate(month_lst)
                                         },
                                         value=1,
                                         style={"width": "6rem"},
@@ -255,8 +254,7 @@ def custom_wind_rose():
                                     dropdown(
                                         id="tab5-custom-start-hour",
                                         options={
-                                            str(i) + ":00": i
-                                            for i in range(1, 25)
+                                            str(i) + ":00": i for i in range(1, 25)
                                         },
                                         value=1,
                                         style={"width": "6rem"},
@@ -278,8 +276,7 @@ def custom_wind_rose():
                                     dropdown(
                                         id="tab5-custom-end-month",
                                         options={
-                                            j: i + 1
-                                            for i, j in enumerate(month_lst)
+                                            j: i + 1 for i, j in enumerate(month_lst)
                                         },
                                         value=12,
                                         style={"width": "6rem"},
@@ -296,8 +293,7 @@ def custom_wind_rose():
                                     dropdown(
                                         id="tab5-custom-end-hour",
                                         options={
-                                            str(i) + ":00": i
-                                            for i in range(1, 25)
+                                            str(i) + ":00": i for i in range(1, 25)
                                         },
                                         value=24,
                                         style={"width": "6rem"},
