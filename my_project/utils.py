@@ -4,7 +4,7 @@ from my_project.global_scheme import fig_config, mapping_dictionary
 import pandas as pd
 import json
 from pandas import json_normalize
-from dash import html, dash_table
+from dash import html, dash_table, dcc
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
@@ -365,3 +365,19 @@ def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
         end_hour, start_hour = hour
 
     return start_month, end_month, start_hour, end_hour
+
+
+def dropdown(options={}, **kwargs):
+    '''
+    Wrapper for dcc.Dropdown which
+    - makes "clearable=False" the default, so we don't need to handle None
+    - accepts dicts, and preserves order.
+    '''
+    return dcc.Dropdown(
+        options=[
+            {"label": k, "value": v}
+            for k, v in options.items()
+        ],
+        clearable=False,
+        **kwargs
+    )

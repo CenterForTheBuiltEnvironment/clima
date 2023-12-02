@@ -8,6 +8,7 @@ from my_project.utils import (
     generate_units,
     generate_custom_inputs_time,
     title_with_link,
+    dropdown
 )
 from my_project.utils import code_timer
 
@@ -233,15 +234,14 @@ def custom_wind_rose():
                                         style={"width": "8rem"},
                                         children=["Start Month:"],
                                     ),
-                                    dcc.Dropdown(
+                                    dropdown(
                                         id="tab5-custom-start-month",
-                                        options=[
-                                            {"label": j, "value": i + 1}
+                                        options={
+                                            j: i + 1
                                             for i, j in enumerate(month_lst)
-                                        ],
+                                        },
                                         value=1,
                                         style={"width": "6rem"},
-                                        clearable=False,
                                     ),
                                 ],
                             ),
@@ -252,15 +252,14 @@ def custom_wind_rose():
                                         style={"width": "8rem"},
                                         children=["Start Hour:"],
                                     ),
-                                    dcc.Dropdown(
+                                    dropdown(
                                         id="tab5-custom-start-hour",
-                                        options=[
-                                            {"label": str(i) + ":00", "value": i}
+                                        options={
+                                            str(i) + ":00": i
                                             for i in range(1, 25)
-                                        ],
+                                        },
                                         value=1,
                                         style={"width": "6rem"},
-                                        clearable=False,
                                     ),
                                 ],
                             ),
@@ -276,15 +275,14 @@ def custom_wind_rose():
                                         style={"width": "8rem"},
                                         children=["End Month:"],
                                     ),
-                                    dcc.Dropdown(
+                                    dropdown(
                                         id="tab5-custom-end-month",
-                                        options=[
-                                            {"label": j, "value": i + 1}
+                                        options={
+                                            j: i + 1
                                             for i, j in enumerate(month_lst)
-                                        ],
+                                        },
                                         value=12,
                                         style={"width": "6rem"},
-                                        clearable=False,
                                     ),
                                 ],
                             ),
@@ -295,15 +293,14 @@ def custom_wind_rose():
                                         style={"width": "8rem"},
                                         children=["End Hour:"],
                                     ),
-                                    dcc.Dropdown(
+                                    dropdown(
                                         id="tab5-custom-end-hour",
-                                        options=[
-                                            {"label": str(i) + ":00", "value": i}
+                                        options={
+                                            str(i) + ":00": i
                                             for i in range(1, 25)
-                                        ],
+                                        },
                                         value=24,
                                         style={"width": "6rem"},
-                                        clearable=False,
                                     ),
                                 ],
                             ),

@@ -7,6 +7,7 @@ from my_project.utils import (
     title_with_tooltip,
     summary_table_tmp_rh_tab,
     title_with_link,
+    dropdown,
 )
 from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 from my_project.global_scheme import dropdown_names
@@ -28,18 +29,14 @@ def layout_t_rh():
                     html.H4(
                         className="text-next-to-input", children=["Select a variable: "]
                     ),
-                    dcc.Dropdown(
+                    dropdown(
                         id="dropdown",
                         className="dropdown-t-rh",
-                        options=[
-                            {
-                                "label": var,
-                                "value": dropdown_names[var],
-                            }
+                        options={
+                            var: dropdown_names[var]
                             for var in var_to_plot
-                        ],
+                        },
                         value=dropdown_names[var_to_plot[0]],
-                        clearable=False,
                     ),
                 ],
             ),

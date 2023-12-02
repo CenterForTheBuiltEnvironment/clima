@@ -18,6 +18,7 @@ from my_project.utils import (
     generate_custom_inputs_psy,
     determine_month_and_hour_filter,
     title_with_link,
+    dropdown,
 )
 from my_project.global_scheme import (
     dropdown_names,
@@ -64,17 +65,13 @@ def inputs():
                                 children=["Color By:"],
                                 style={"flex": "30%"},
                             ),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="psy-color-by-dropdown",
-                                options=[
-                                    {"label": i, "value": psy_dropdown_names[i]}
-                                    for i in psy_dropdown_names
-                                ],
+                                options=psy_dropdown_names,
                                 value="Frequency",
                                 style={"flex": "70%"},
                                 persistence_type="session",
                                 persistence=True,
-                                clearable=False,
                             ),
                         ],
                     ),
@@ -168,15 +165,11 @@ def inputs():
                             html.H6(
                                 children=["Filter Variable:"], style={"flex": "30%"}
                             ),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="psy-var-dropdown",
-                                options=[
-                                    {"label": i, "value": dropdown_names[i]}
-                                    for i in dropdown_names
-                                ],
+                                options=dropdown_names,
                                 value="RH",
                                 style={"flex": "70%"},
-                                clearable=False,
                             ),
                         ],
                     ),

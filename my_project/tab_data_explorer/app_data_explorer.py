@@ -13,6 +13,7 @@ from my_project.utils import (
     code_timer,
     title_with_link,
     determine_month_and_hour_filter,
+    dropdown
 )
 
 from my_project.global_scheme import (
@@ -56,14 +57,10 @@ def section_one_inputs():
         className="container-row full-width row-center",
         children=[
             html.H4(className="text-next-to-input", children=["Select a variable: "]),
-            dcc.Dropdown(
+            dropdown(
                 id="sec1-var-dropdown",
-                options=[
-                    {"label": i, "value": explore_dropdown_names[i]}
-                    for i in explore_dropdown_names
-                ],
+                options=explore_dropdown_names,
                 value="DBT",
-                clearable=False,
             ),
         ],
     )
@@ -225,18 +222,11 @@ def section_two_inputs():
                                         children=["Variable:"],
                                         style={"flex": "30%"},
                                     ),
-                                    dcc.Dropdown(
+                                    dropdown(
                                         id="sec2-var-dropdown",
-                                        options=[
-                                            {
-                                                "label": i,
-                                                "value": explore_dropdown_names[i],
-                                            }
-                                            for i in explore_dropdown_names
-                                        ],
+                                        options=explore_dropdown_names,
                                         value="RH",
                                         style={"flex": "70%"},
-                                        clearable=False,
                                     ),
                                 ],
                             ),
@@ -333,18 +323,11 @@ def section_two_inputs():
                                         children=["Filter Variable:"],
                                         style={"flex": "30%"},
                                     ),
-                                    dcc.Dropdown(
+                                    dropdown(
                                         id="sec2-data-filter-var",
-                                        options=[
-                                            {
-                                                "label": i,
-                                                "value": explore_dropdown_names[i],
-                                            }
-                                            for i in explore_dropdown_names
-                                        ],
+                                        options=explore_dropdown_names,
                                         value="RH",
                                         style={"flex": "70%"},
-                                        clearable=False,
                                     ),
                                 ],
                             ),
@@ -430,15 +413,11 @@ def section_three_inputs():
                         className=container_row_center_full,
                         children=[
                             html.H6(style={"flex": "30%"}, children=["X Variable:"]),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="tab6-sec3-var-x-dropdown",
-                                options=[
-                                    {"label": i, "value": explore_dropdown_names[i]}
-                                    for i in explore_dropdown_names
-                                ],
+                                options=explore_dropdown_names,
                                 value="DBT",
                                 style={"flex": "70%"},
-                                clearable=False,
                             ),
                         ],
                     ),
@@ -446,15 +425,11 @@ def section_three_inputs():
                         className=container_row_center_full,
                         children=[
                             html.H6(style={"flex": "30%"}, children=["Y Variable:"]),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="tab6-sec3-var-y-dropdown",
-                                options=[
-                                    {"label": i, "value": explore_dropdown_names[i]}
-                                    for i in explore_dropdown_names
-                                ],
+                                options=explore_dropdown_names,
                                 value="RH",
                                 style={"flex": "70%"},
-                                clearable=False,
                             ),
                         ],
                     ),
@@ -462,15 +437,11 @@ def section_three_inputs():
                         className=container_row_center_full,
                         children=[
                             html.H6(style={"flex": "30%"}, children=["Color By:"]),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="tab6-sec3-colorby-dropdown",
-                                options=[
-                                    {"label": i, "value": explore_dropdown_names[i]}
-                                    for i in explore_dropdown_names
-                                ],
+                                options=explore_dropdown_names,
                                 value="glob_hor_rad",
                                 style={"flex": "70%"},
-                                clearable=False,
                             ),
                         ],
                     ),
@@ -564,15 +535,11 @@ def section_three_inputs():
                             html.H6(
                                 children=["Filter Variable:"], style={"flex": "30%"}
                             ),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="tab6-sec3-filter-var-dropdown",
-                                options=[
-                                    {"label": i, "value": explore_dropdown_names[i]}
-                                    for i in explore_dropdown_names
-                                ],
+                                options=explore_dropdown_names,
                                 value="RH",
                                 style={"flex": "70%"},
-                                clearable=False,
                             ),
                         ],
                     ),
