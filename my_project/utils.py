@@ -8,6 +8,7 @@ from dash import html, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import copy
+import requests
 
 
 def code_timer(func):
@@ -202,9 +203,7 @@ def plot_location_epw_files():
     df["lat"] += 0.005
     df = df.rename(columns={"properties.epw": "Source"})
 
-    df_one_building = pd.read_csv("./assets/data/one_building.csv", compression="gzip")
-
-    fig2 = px.scatter_mapbox(
+    fig = px.scatter_mapbox(
         df.head(2585),
         lat="lat",
         lon="lon",
@@ -214,24 +213,33 @@ def plot_location_epw_files():
         zoom=2,
         height=500,
     )
-    fig = px.scatter_mapbox(
-        df_one_building,
-        lat="lat",
-        lon="lon",
-        hover_name=df_one_building["name"],
-        color_discrete_sequence=["#4895ef"],
-        hover_data=[
-            "period",
-            "elevation (m)",
-            "time zone (GMT)",
-            "99% Heating DB",
-            "1% Cooling DB ",
-            "Source",
-        ],
-        zoom=2,
-        height=500,
-    )
-    fig.add_trace(fig2.data[0])
+    try:
+        print(requests.get("https://climate.onebuilding.org", timeout=2))
+
+        df_one_building = pd.read_csv(
+            "./assets/data/one_building.csv", compression="gzip"
+        )
+
+        fig2 = px.scatter_mapbox(
+            df_one_building,
+            lat="lat",
+            lon="lon",
+            hover_name=df_one_building["name"],
+            color_discrete_sequence=["#4895ef"],
+            hover_data=[
+                "period",
+                "elevation (m)",
+                "time zone (GMT)",
+                "99% Heating DB",
+                "1% Cooling DB ",
+                "Source",
+            ],
+            zoom=2,
+            height=500,
+        )
+        fig.add_trace(fig2.data[0])
+    except requests.exceptions.ConnectTimeout:
+        pass
     fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
