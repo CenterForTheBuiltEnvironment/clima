@@ -1,23 +1,23 @@
 import io
-import re
 import json
+import math
+import re
 import zipfile
 from datetime import timedelta
 from urllib.request import Request, urlopen
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import requests
-from my_project.utils import code_timer
 from pvlib import solarposition
-from pythermalcomfort.models import utci
-from pythermalcomfort.models import solar_gain
 from pythermalcomfort import psychrometrics as psy
-import math
-from my_project.global_scheme import month_lst
-from my_project.global_scheme import mapping_dictionary
 from pythermalcomfort.models import adaptive_ashrae
+from pythermalcomfort.models import solar_gain
+from pythermalcomfort.models import utci
 from pythermalcomfort.utilities import running_mean_outdoor_temperature
+
+from my_project.global_scheme import month_lst
+from my_project.utils import code_timer
 
 
 @code_timer
