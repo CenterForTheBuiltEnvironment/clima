@@ -1,0 +1,52 @@
+name: Cypress 🌲 
+on: [push, pull_request]
+jobs:
+  cypress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build Clima
+        run: |-
+          pip install pipenv
+          pipenv install
+
+      - name: Start Clima
+        run: |-
+          pipenv run python main.py &
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+
+      - name: Install Cypress
+        run: |-
+          cd tests/node
+          npm ci
+
+      - name: Run Cypress
+        run: |-
+          cd tests/node
+          npm run cy:run
+
+      - name: Archive screenshots
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-screenshots
+          path: tests/node/cypress/screenshots
+
+      - name: Archive videos
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: tests/node/cypress/videos
+          retention-days: 3

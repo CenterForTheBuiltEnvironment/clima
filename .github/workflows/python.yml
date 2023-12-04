@@ -1,0 +1,29 @@
+name: Python 🐍 
+on: [push, pull_request]
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Build Clima
+        run: |-
+          pip install pipenv
+          pipenv install --dev
+
+      - name: Test Clima
+        run: |-
+          pipenv run python -m pytest
+
+      - name: Run Black
+        # TODO: Add to dev dependencies: Adding it right now
+        # bumps other dependencies and the application won't run.
+        run: |-
+          pip install black
+          black . --check

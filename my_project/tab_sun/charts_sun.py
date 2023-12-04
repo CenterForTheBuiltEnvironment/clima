@@ -30,7 +30,6 @@ def monthly_solar(epw_df, si_ip):
     )
 
     for i in range(12):
-
         fig.add_trace(
             go.Scatter(
                 x=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "hour"],

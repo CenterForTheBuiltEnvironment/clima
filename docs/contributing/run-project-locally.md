@@ -50,21 +50,23 @@ The package name, together with its version and a list of its own dependencies, 
 
 `pipenv lock`
 
-Remember also to update the `requirements.txt` file with this command:
-
-`pipenv run pip freeze > requirements.txt`
-
 ### Managing your development environment
 
 There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. Pipenv will let you keep the two environments separate using the --dev flag. For example,
 
 `pipenv install --dev nose2`
 
-### Generate and update the requirement.txt file
+## Testing
 
-You can update the requirement.txt file with the following command.
+This project runs both Python unit tests, and Cypress end-to-end tests in CI.
 
-`pipenv run pip freeze > requirements.txt`
+To run Python tests locally:
+- If you haven't already, install Python dev dependencies.
+- Then: `pipenv run python -m pytest`
+
+To run Cypress locally:
+- If you haven't already, start the Clima application and confirm that http://localhost:8080/ is up.
+- Then: `cd tests/node; npm install; npm run cy:open`
 
 ## Versioning
 

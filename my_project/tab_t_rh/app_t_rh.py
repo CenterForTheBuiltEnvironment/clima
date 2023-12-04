@@ -110,7 +110,6 @@ def layout_t_rh():
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
-
     if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, "DBT", global_local, si_ip)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
@@ -145,7 +144,6 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_daily(ts, global_local, dd_value, df, meta, si_ip):
-
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
         return dcc.Graph(
@@ -186,7 +184,6 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
 @cache.memoize(timeout=TIMEOUT)
 @code_timer
 def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
-
     """Update the contents of tab three. Passing in general info (df, meta)."""
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)

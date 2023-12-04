@@ -768,7 +768,6 @@ def update_heatmap(
     invert_hour,
     si_ip,
 ):
-
     df = filter_df_by_month_and_hour(
         df, time_filter, month, hour, invert_month, invert_hour, var
     )

@@ -1,0 +1,12 @@
+{
+  "name": "clima",
+  "version": "0.0.0",
+  "description": "Tests for Clima",
+  "scripts": {
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
+  },
+  "devDependencies": {
+    "cypress": "^13.5.1"
+  }
+}

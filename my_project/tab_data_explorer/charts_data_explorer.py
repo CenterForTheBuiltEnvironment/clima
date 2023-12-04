@@ -106,7 +106,6 @@ def three_var_graph(
     data_filter_info3,
     si_ip,
 ):
-
     """Return the custom graph plotting three variables."""
     data_filter = data_filter_info3[0]
     filter_var = data_filter_info3[1]
@@ -167,7 +166,6 @@ def three_var_graph(
 
 
 def two_var_graph(df, var_x, var_y, si_ip):
-
     title = (
         "Simultaneous frequency of "
         + mapping_dictionary[var_x]["name"]

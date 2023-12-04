@@ -87,7 +87,6 @@ def import_kml_files(file_name):
 
 
 if __name__ == "__main__":
-
     import os
 
     directory = os.fsencode("./assets/data/")
