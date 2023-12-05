@@ -84,10 +84,16 @@ Secondly, you should describe the changes in `CHANGELOG.md`
 
 You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed on your computer. A short guide on how to deploy on Google Cloud Run can be found [here](https://youtu.be/FPFDg5znLTM).
 
-First make sure you that gcloud is up-to-date and that you are logged in with the right account.
+First make sure you that:
+
+* gcloud is up-to-date
+* that you are logged in with the right account
+* you have updated the Pipfile.lock.
+
 ```text
 gcloud components update
 gcloud auth list
+pipenv lock
 ```
 
 ```text
@@ -101,5 +107,5 @@ gcloud run deploy clima --image us-docker.pkg.dev/clima-316917/gcr.io/clima --pl
 ```text
 gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima-test  --project=clima-316917
 
-gcloud run deploy clima-test --image us-docker.pkg.dev/clima-316917/gcr.io/clima-test --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=2Gi --concurrency=80 --cpu=2
+gcloud run deploy clima-test --image us-docker.pkg.dev/clima-316917/gcr.io/clima-test --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=4Gi --concurrency=80 --cpu=2
 ```

@@ -9,8 +9,6 @@ README.md
 LICENSE
 Procfile
 Procfile.windows
-Pipfile.lock
-*.pyc
 *.pyo
 *.pyd
 __pycache__

@@ -1,24 +1,22 @@
+import dash
 import dash_bootstrap_components as dbc
 from dash import html, dcc
-from dash.dependencies import Input, Output, State
-import dash
-import os
+from dash.dependencies import Input, Output
 
+from app import app
 from my_project.layout import banner, build_tabs, footer
-from my_project.tab_wind.app_wind import layout_wind
-from my_project.tab_sun.app_sun import layout_sun
-from my_project.tab_select.app_select import layout_select
+from my_project.page_changelog.app_changelog import changelog
 from my_project.tab_data_explorer.app_data_explorer import layout_data_explorer
-from my_project.tab_outdoor_comfort.app_outdoor_comfort import layout_outdoor_comfort
-from my_project.tab_t_rh.app_t_rh import layout_t_rh
-from my_project.tab_psy_chart.app_psy_chart import layout_psy_chart
 from my_project.tab_natural_ventilation.app_natural_ventilation import (
     layout_natural_ventilation,
 )
+from my_project.tab_outdoor_comfort.app_outdoor_comfort import layout_outdoor_comfort
+from my_project.tab_psy_chart.app_psy_chart import layout_psy_chart
+from my_project.tab_select.app_select import layout_select
 from my_project.tab_summary.app_summary import layout_summary
-from my_project.page_changelog.app_changelog import changelog
-
-from app import app
+from my_project.tab_sun.app_sun import layout_sun
+from my_project.tab_t_rh.app_t_rh import layout_t_rh
+from my_project.tab_wind.app_wind import layout_wind
 
 server = app.server
 

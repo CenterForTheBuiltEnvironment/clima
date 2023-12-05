@@ -10,13 +10,15 @@ ENV APP_HOME /app
 WORKDIR $APP_HOME
 
 # Install production dependencies.
-COPY Pipfile Pipfile.lock .
+COPY Pipfile ./
+COPY Pipfile.lock ./
 RUN pip install pipenv==2023.10.24
 RUN pipenv install
 
 # Code changes more frequently than dependencies, so we should copy our code
 # only after dependencies are installed, to preserve layers in the cache.
-COPY app.py main.py .
+COPY app.py ./
+COPY main.py ./
 COPY assets ./assets
 COPY my_project ./my_project
 

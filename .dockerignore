@@ -2,7 +2,6 @@ README.md
 LICENSE
 Procfile
 Procfile.windows
-*.pyc
 *.pyo
 *.pyd
 __pycache__
