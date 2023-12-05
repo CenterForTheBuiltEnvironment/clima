@@ -94,6 +94,7 @@ First make sure you that:
 gcloud components update
 gcloud auth list
 pipenv lock
+pipenv run pip3 freeze > requirements.txt
 ```
 
 ```text
