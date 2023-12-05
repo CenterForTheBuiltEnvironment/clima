@@ -90,7 +90,7 @@ First make sure you that:
 * that you are logged in with the right account
 * you have updated the Pipfile.lock.
 
-```bash
+```text
 gcloud components update
 gcloud auth list
 pipenv lock
