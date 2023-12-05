@@ -8,6 +8,7 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
+from my_project.utils import dropdown
 from dash.dependencies import Input, Output, State
 
 from my_project.template_graphs import (
@@ -42,18 +43,10 @@ def inputs_outdoor_comfort():
                                 children=["Select a scenario:"],
                                 style={"flex": "30%"},
                             ),
-                            dcc.Dropdown(
+                            dropdown(
                                 id="tab7-dropdown",
-                                style={
-                                    "flex": "60%",
-                                },
-                                options=[
-                                    {
-                                        "label": i,
-                                        "value": outdoor_dropdown_names[i],
-                                    }
-                                    for i in outdoor_dropdown_names
-                                ],
+                                style={"flex": "60%"},
+                                options=outdoor_dropdown_names,
                                 value="utci_Sun_Wind",
                             ),
                             html.Div(id="image-selection", style={"flex": "10%"}),

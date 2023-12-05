@@ -12,6 +12,7 @@ from my_project.global_scheme import (
     month_lst,
     mapping_dictionary,
 )
+from my_project.utils import dropdown
 from dash.dependencies import Input, Output, State
 
 from my_project.tab_sun.charts_sun import (
@@ -68,12 +69,12 @@ def sun_path():
                         children=["View: "],
                         style={"width": "10rem"},
                     ),
-                    dcc.Dropdown(
+                    dropdown(
                         id="custom-sun-view-dropdown",
-                        options=[
-                            {"label": "Spherical", "value": "polar"},
-                            {"label": "Cartesian", "value": "cartesian"},
-                        ],
+                        options={
+                            "Spherical": "polar",
+                            "Cartesian": "cartesian",
+                        },
                         value="polar",
                         style={"width": "10rem"},
                     ),
@@ -88,12 +89,9 @@ def sun_path():
                         children=["Select variable: "],
                         style={"width": "10rem"},
                     ),
-                    dcc.Dropdown(
+                    dropdown(
                         id="custom-sun-var-dropdown",
-                        options=[
-                            {"label": i, "value": sc_dropdown_names[i]}
-                            for i in sc_dropdown_names
-                        ],
+                        options=sc_dropdown_names,
                         value="None",
                         style={"width": "20rem"},
                     ),
@@ -129,15 +127,9 @@ def explore_daily_heatmap():
                         children=["Select variable: "],
                         style={"width": "10rem"},
                     ),
-                    dcc.Dropdown(
+                    dropdown(
                         id="tab4-explore-dropdown",
-                        options=[
-                            {
-                                "label": i,
-                                "value": sun_cloud_tab_explore_dropdown_names[i],
-                            }
-                            for i in sun_cloud_tab_explore_dropdown_names
-                        ],
+                        options=sun_cloud_tab_explore_dropdown_names,
                         value="glob_hor_rad",
                         style={"width": "20rem"},
                     ),
