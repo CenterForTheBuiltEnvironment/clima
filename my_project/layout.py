@@ -32,8 +32,10 @@ def footer():
                             dcc.Markdown(
                                 """
                                 Please cite us:
-                                Betti G., Tartarini F., Nguyen C., Schiavon S. (2022). CBE Clima Tool: a free and open-source web application for climate analysis tailored to sustainable building design.
-                                [Version: 0.8.12](https://center-for-the-built-environment.gitbook.io/clima/version/changelog) https://doi.org/10.48550/arxiv.2212.04609
+                                Betti, G., Tartarini, F., Nguyen, C, Schiavon, S. CBE Clima Tool: 
+                                A free and open-source web application for climate analysis tailored to sustainable building design. 
+                                Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
+                                [Version: 0.8.13](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
                                 """
                             ),
                             dcc.Markdown(
