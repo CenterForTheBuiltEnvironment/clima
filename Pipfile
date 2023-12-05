@@ -19,6 +19,8 @@ werkzeug = "==2.2.2"
 cleanpy = "*"
 pytest = "*"
 bump2version = "*"
+pandas = "*"
+requests = "*"
 
 [requires]
 python_version = "3.10"
