@@ -14,12 +14,11 @@ jobs:
 
       - name: Build Clima
         run: |-
-          pip install pipenv
-          pipenv install
+          pip install -r requirements.txt
 
       - name: Start Clima
         run: |-
-          pipenv run python main.py &
+          python main.py &
 
       - name: Setup Node
         uses: actions/setup-node@v4
