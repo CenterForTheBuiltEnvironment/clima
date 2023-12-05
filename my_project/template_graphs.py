@@ -627,11 +627,11 @@ def thermal_stress_stacked_barchart(
         new_df = (
             df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0)
         )
-        new_df.set_axis(categories, axis=1, inplace=True)
+        new_df = new_df.set_axis(categories, axis=1)
         new_df.reset_index(inplace=True)
     else:
         new_df = df.groupby("month")[var].value_counts().unstack(var).fillna(0)
-        new_df.set_axis(categories, axis=1, inplace=True)
+        new_df = new_df.set_axis(categories, axis=1)
         new_df.reset_index(inplace=True)
 
     go.Figure()
