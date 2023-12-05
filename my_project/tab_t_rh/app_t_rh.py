@@ -39,6 +39,7 @@ def layout_t_rh():
                             for var in var_to_plot
                         ],
                         value=dropdown_names[var_to_plot[0]],
+                        clearable=False,
                     ),
                 ],
             ),

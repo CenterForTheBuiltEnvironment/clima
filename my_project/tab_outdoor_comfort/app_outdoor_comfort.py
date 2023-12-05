@@ -55,6 +55,7 @@ def inputs_outdoor_comfort():
                                     for i in outdoor_dropdown_names
                                 ],
                                 value="utci_Sun_Wind",
+                                clearable=False,
                             ),
                             html.Div(id="image-selection", style={"flex": "10%"}),
                         ],
