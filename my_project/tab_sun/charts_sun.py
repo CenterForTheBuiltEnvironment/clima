@@ -54,7 +54,7 @@ def monthly_solar(epw_df, si_ip):
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
-                    + "<extra></extra>" # Hides the "secondary box"
+                    + "<extra></extra>"  # Hides the "secondary box"
                 ),
             ),
             row=1,
