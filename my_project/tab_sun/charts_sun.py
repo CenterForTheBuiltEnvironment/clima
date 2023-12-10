@@ -30,6 +30,9 @@ def monthly_solar(epw_df, si_ip):
     )
 
     for i in range(12):
+        # We only need legend entries for the first pair, since the others repeat.
+        is_first = i == 0
+
         fig.add_trace(
             go.Scatter(
                 x=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "hour"],
@@ -40,8 +43,8 @@ def monthly_solar(epw_df, si_ip):
                 mode="lines",
                 line_color="orange",
                 line_width=2,
-                name=None,
-                showlegend=False,
+                name="Global",
+                showlegend=is_first,
                 customdata=epw_df.loc[epw_df["month"] == i + 1, "month_names"],
                 hovertemplate=(
                     "<b>"
@@ -51,6 +54,7 @@ def monthly_solar(epw_df, si_ip):
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
+                    + "<extra></extra>"  # Hides the "secondary box"
                 ),
             ),
             row=1,
@@ -69,8 +73,8 @@ def monthly_solar(epw_df, si_ip):
                 mode="lines",
                 line_color="dodgerblue",
                 line_width=2,
-                name=None,
-                showlegend=False,
+                name="Diffuse",
+                showlegend=is_first,
                 customdata=epw_df.loc[epw_df["month"] == i + 1, "month_names"],
                 hovertemplate=(
                     "<b>"
@@ -80,6 +84,7 @@ def monthly_solar(epw_df, si_ip):
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
+                    + "<extra></extra>"  # Hides the "secondary box"
                 ),
             ),
             row=1,
