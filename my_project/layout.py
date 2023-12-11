@@ -35,7 +35,7 @@ def footer():
                                 Betti, G., Tartarini, F., Nguyen, C, Schiavon, S. CBE Clima Tool: 
                                 A free and open-source web application for climate analysis tailored to sustainable building design. 
                                 Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
-                                [Version: 0.8.15](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
+                                [Version: 0.8.16](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
                                 """
                             ),
                             dcc.Markdown(
