@@ -1,8 +1,13 @@
-import dash_bootstrap_components as dbc
 import dash
-import json
+import dash_bootstrap_components as dbc
+import plotly.graph_objects as go
+import requests
 from dash.exceptions import PreventUpdate
+from dash_extensions.enrich import dcc, html, Output, Input, State
+
 from app import app
+from my_project.extract_df import get_data
+from my_project.global_scheme import template, tight_margins, mapping_dictionary
 from my_project.tab_summary.charts_summary import world_map
 from my_project.template_graphs import violin
 from my_project.utils import (
@@ -12,12 +17,6 @@ from my_project.utils import (
     title_with_tooltip,
     title_with_link,
 )
-import plotly.graph_objects as go
-from my_project.global_scheme import template, tight_margins, mapping_dictionary
-import requests
-from my_project.extract_df import convert_data, get_data
-from my_project.utils import code_timer
-from dash_extensions.enrich import dcc, html, Output, Input, State
 
 
 def layout_summary(si_ip):
@@ -173,7 +172,6 @@ def layout_summary(si_ip):
     Output("world-map", "children"),
     Input("meta-store", "data"),
 )
-@code_timer
 def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     map_world = dcc.Graph(
@@ -194,7 +192,6 @@ def update_map(meta):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_location_info(ts, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta['city']}, {meta['country']}"
@@ -293,7 +290,6 @@ def update_location_info(ts, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
 
@@ -399,7 +395,6 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_violin_tdb(ts, global_local, df, meta, si_ip):
     units = generate_units_degree(si_ip)
     return dcc.Graph(
@@ -422,7 +417,6 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_tab_wind(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     units = generate_units(si_ip)
@@ -446,7 +440,6 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_tab_rh(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     units = generate_units(si_ip)
@@ -470,7 +463,6 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     units = generate_units(si_ip)
@@ -492,7 +484,6 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     ],
     prevent_initial_call=True,
 )
-@code_timer
 def download_clima_dataframe(n_clicks, df, meta, si_ip):
     if n_clicks is None:
         raise PreventUpdate
@@ -515,7 +506,6 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
     [State("meta-store", "data")],
     prevent_initial_call=True,
 )
-@code_timer
 def download_clima_dataframe(n_clicks, meta):
     if n_clicks is None:
         raise PreventUpdate

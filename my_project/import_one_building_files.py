@@ -1,9 +1,8 @@
-import pandas as pd
-from my_project.utils import code_timer
 import re
 
+import pandas as pd
 
-@code_timer
+
 def import_kml_files(file_name):
     with open(f"./assets/data/{file_name}", encoding="utf8", errors="ignore") as data:
         text = data.read()

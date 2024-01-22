@@ -90,22 +90,22 @@ First make sure you that:
 * that you are logged in with the right account
 * you have updated the Pipfile.lock.
 
-```text
+```bash
 gcloud components update
 gcloud auth list
 pipenv lock
 pipenv run pip3 freeze > requirements.txt
 ```
 
-```text
+```bash
 gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima  --project=clima-316917
 
-gcloud run deploy clima --image us-docker.pkg.dev/clima-316917/gcr.io/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=2Gi --concurrency=80 --cpu=2
+gcloud run deploy clima --image us-docker.pkg.dev/clima-316917/gcr.io/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=4Gi --concurrency=80 --cpu=2
 ```
 
 ### Test project
 
-```text
+```bash
 gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima-test  --project=clima-316917
 
 gcloud run deploy clima-test --image us-docker.pkg.dev/clima-316917/gcr.io/clima-test --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=4Gi --concurrency=80 --cpu=2

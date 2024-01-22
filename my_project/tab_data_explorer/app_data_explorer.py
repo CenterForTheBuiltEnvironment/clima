@@ -832,7 +832,6 @@ def update_heatmap(
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_more_charts(
     ts,
     var_x,

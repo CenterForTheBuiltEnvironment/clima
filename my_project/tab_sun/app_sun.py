@@ -203,7 +203,6 @@ def layout_sun(si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def monthly_and_cloud_chart(ts, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
@@ -247,7 +246,6 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     custom_inputs = "" if var == "None" else f"{var}"
@@ -277,7 +275,6 @@ def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     custom_inputs = generate_custom_inputs(var)
@@ -301,7 +298,6 @@ def daily(ts, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_heatmap(ts, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)

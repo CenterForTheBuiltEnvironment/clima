@@ -1,19 +1,11 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import DashProxy, ServersideOutputTransform
-from flask_caching import Cache
 
 app = DashProxy(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     transforms=[ServersideOutputTransform()],
     suppress_callback_exceptions=True,
-)
-cache = Cache(
-    app.server,
-    config={
-        "CACHE_TYPE": "flask_caching.backends.SimpleCache",
-        "CACHE_DIR": "cache-directory",
-    },
 )
 TIMEOUT = 600
 

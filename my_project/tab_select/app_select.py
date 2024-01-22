@@ -1,19 +1,17 @@
 import base64
-import io
 import json
 import re
+
 import dash
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
+from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc
 
 from app import app
-from my_project.extract_df import create_df, get_data, get_location_info
-from my_project.utils import plot_location_epw_files, generate_chart_name
-from my_project.global_scheme import mapping_dictionary
 from my_project.extract_df import convert_data
-
-from dash_extensions.enrich import ServersideOutput, Output, Input, State, html, dcc
-
+from my_project.extract_df import create_df, get_data, get_location_info
+from my_project.global_scheme import mapping_dictionary
+from my_project.utils import plot_location_epw_files, generate_chart_name
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",
@@ -199,7 +197,7 @@ def submitted_data(
 # add switch_si_ip function and convert the data-store
 @app.callback(
     [
-        ServersideOutput("df-store", "data"),
+        Output("df-store", "data"),
         Output("si-ip-unit-store", "data"),
     ],
     [
@@ -214,7 +212,7 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
         map_json = json.dumps(mapping_dictionary)
         if si_ip_input == "ip":
             map_json = convert_data(df, map_json)
-        return df, si_ip_input
+        return Serverside(df), si_ip_input
     else:
         return (
             None,

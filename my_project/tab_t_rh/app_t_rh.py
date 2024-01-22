@@ -1,5 +1,9 @@
 from dash import dcc, html
 from dash_extensions.enrich import Output, Input, State
+
+from app import app
+from my_project.global_scheme import dropdown_names
+from my_project.template_graphs import heatmap, yearly_profile, daily_profile
 from my_project.utils import (
     generate_chart_name,
     generate_units,
@@ -9,12 +13,6 @@ from my_project.utils import (
     title_with_link,
     dropdown,
 )
-from my_project.template_graphs import heatmap, yearly_profile, daily_profile
-from my_project.global_scheme import dropdown_names
-from my_project.utils import code_timer
-from my_project.extract_df import convert_data
-
-from app import app, cache, TIMEOUT
 
 var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
@@ -102,8 +100,6 @@ def layout_t_rh():
         State("si-ip-unit-store", "data"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, "DBT", global_local, si_ip)
@@ -136,8 +132,6 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_daily(ts, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
@@ -176,8 +170,6 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     if dd_value == dropdown_names[var_to_plot[0]]:
@@ -212,8 +204,6 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
     ],
     [State("df-store", "data"), State("si-ip-unit-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_table(ts, dd_value, df, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     return summary_table_tmp_rh_tab(

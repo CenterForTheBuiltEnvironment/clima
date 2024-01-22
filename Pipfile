@@ -4,16 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dash = "==2.4.1"
-gunicorn = "==20.1.0"
+dash = "==2.14.2"
 pvlib = "==0.9.1"
 pythermalcomfort = "*"
 dash-bootstrap-components = "==1.2.0"
-dash-extensions = "*"
-flask-caching = "==1.10.1"
+dash-extensions = "==1.0.7"
 dash-mantine-components = "*"
-flask = "==2.2.2"
-werkzeug = "==2.2.2"
+requests = "*"
+plotly = "*"
+pandas = "*"
+numpy = "*"
 
 [dev-packages]
 cleanpy = "*"
@@ -23,4 +23,4 @@ pandas = "*"
 requests = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
