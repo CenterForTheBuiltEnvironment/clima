@@ -430,6 +430,18 @@ def update_psych_chart(
                 "extreme cold stress",
             ]
 
+        # Comfort envelope:
+        fig.add_trace(
+            go.Scatter(
+                # Approximate figure 5.3.1 from
+                # https://www.ashrae.org/file%20library/technical%20resources/standards%20and%20guidelines/standards%20addenda/55_2017_d_20200731.pdf
+                x=[f if si_ip == "ip" else (f - 32) / 1.8 for f in [71, 67, 75, 79]],
+                y=[0, 12, 12, 0],
+                fill="toself",
+                name="Comfort Envelope",
+            )
+        )
+
         fig.add_trace(
             go.Scatter(
                 x=df["DBT"],
