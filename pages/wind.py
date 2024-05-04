@@ -1,8 +1,10 @@
+import dash
 from dash import dcc, html
-from my_project.global_scheme import month_lst, container_row_center_full
-from dash.dependencies import Input, Output, State
-from my_project.template_graphs import heatmap, wind_rose
-from my_project.utils import (
+from dash_extensions.enrich import Output, Input, State, callback
+
+from pages.lib.global_scheme import month_lst, container_row_center_full
+from pages.lib.template_graphs import heatmap, wind_rose
+from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
     generate_units,
@@ -10,9 +12,10 @@ from my_project.utils import (
     title_with_link,
     dropdown,
 )
-from my_project.utils import code_timer
+from pages.lib.utils import code_timer
 
-from app import app
+
+dash.register_page(__name__, name= 'Wind', order=4)
 
 
 def sliders():
@@ -312,7 +315,7 @@ def custom_wind_rose():
     )
 
 
-def layout_wind():
+def layout():
     """Contents in the fifth tab 'Wind'."""
     return html.Div(
         className="container-col justify-center",
@@ -346,7 +349,7 @@ def layout_wind():
 
 
 # wind rose
-@app.callback(
+@callback(
     Output("wind-rose", "children"),
     Input("df-store", "modified_timestamp"),
     [
@@ -367,7 +370,7 @@ def update_annual_wind_rose(ts, df, meta, si_ip):
 
 
 # wind speed
-@app.callback(
+@callback(
     Output("wind-speed", "children"),
     # General
     [
@@ -392,7 +395,7 @@ def update_tab_wind_speed(ts, global_local, df, meta, si_ip):
 
 
 # wind direction
-@app.callback(
+@callback(
     Output("wind-direction", "children"),
     # General
     [
@@ -416,7 +419,7 @@ def update_tab_wind_direction(global_local, df, meta, si_ip):
 
 
 # Custom Wind rose
-@app.callback(
+@callback(
     Output("custom-wind-rose", "children"),
     # Custom Graph Input
     [
@@ -465,7 +468,7 @@ def update_custom_wind_rose(
 
 
 ### Seasonal Graphs ###
-@app.callback(
+@callback(
     [
         Output("winter-wind-rose", "children"),
         Output("spring-wind-rose", "children"),
@@ -581,7 +584,7 @@ def update_seasonal_graphs(ts, df, meta, si_ip):
 
 
 ### Daily Graphs ###
-@app.callback(
+@callback(
     # Daily Graphs
     [
         Output("morning-wind-rose", "children"),

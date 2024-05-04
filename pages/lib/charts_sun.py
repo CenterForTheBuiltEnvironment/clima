@@ -5,7 +5,7 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from my_project.global_scheme import (
+from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
     degrees_unit,

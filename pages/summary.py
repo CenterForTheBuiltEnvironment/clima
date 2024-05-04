@@ -3,14 +3,13 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import requests
 from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import dcc, html, Output, Input, State
+from dash_extensions.enrich import dcc, html, Output, Input, State, callback
 
-from app import app
-from my_project.extract_df import get_data
-from my_project.global_scheme import template, tight_margins, mapping_dictionary
-from my_project.tab_summary.charts_summary import world_map
-from my_project.template_graphs import violin
-from my_project.utils import (
+from pages.lib.extract_df import get_data
+from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
+from pages.lib.charts_summary import world_map
+from pages.lib.template_graphs import violin
+from pages.lib.utils import (
     generate_chart_name,
     generate_units,
     generate_units_degree,
@@ -18,9 +17,28 @@ from my_project.utils import (
     title_with_link,
 )
 
+dash.register_page(__name__, name='Climate Summary', order=1)
 
-def layout_summary(si_ip):
+
+def layout():
     """Contents in the second tab 'Climate Summary'."""
+
+    return html.Div(
+        className="container-col",
+        id="tab-two-container",
+        children=[
+            #
+        ]
+    )
+
+
+
+@callback(
+    Output('tab-two-container', 'children'),
+    [Input('si-ip-radio-input', 'value')]
+)
+def update_layout(si_ip):
+
     if si_ip == "si":
         heating_setpoint = 10
         cooling_setpoint = 18
@@ -29,10 +47,6 @@ def layout_summary(si_ip):
         cooling_setpoint = 64
 
     return html.Div(
-        className="container-col",
-        id="tab-two-container",
-        children=[
-            html.Div(
                 className="container-col",
                 id="tab2-sec1-container",
                 children=[
@@ -163,12 +177,24 @@ def layout_summary(si_ip):
                         ],
                     ),
                 ],
-            ),
-        ],
-    )
+            )
 
 
-@app.callback(
+
+
+# @callback(
+#     [Output('input-hdd-set-point', 'value'), Output('input-cdd-set-point', 'value')],
+#     [Input('si-ip-radio-input', 'value')]
+# )
+# def update_setpoints(si_ip_unit_store_data):
+#     if si_ip_unit_store_data == 'si':
+#         return 10, 18
+#     else:
+#         return 50, 64
+
+
+
+@callback(
     Output("world-map", "children"),
     Input("meta-store", "data"),
 )
@@ -183,7 +209,7 @@ def update_map(meta):
     return map_world
 
 
-@app.callback(
+@callback(
     Output("location-info", "children"),
     Input("df-store", "modified_timestamp"),
     [
@@ -272,7 +298,10 @@ def update_location_info(ts, df, meta, si_ip):
     return location_info
 
 
-@app.callback(
+
+
+
+@callback(
     [
         Output("degree-days-chart-wrapper", "children"),
         Output("warning-cdd-higher-hdd", "is_open"),
@@ -383,7 +412,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
         return chart, warning_setpoint
 
 
-@app.callback(
+@callback(
     Output("temp-profile-graph", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -405,7 +434,7 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("wind-speed-graph", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -428,7 +457,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("humidity-profile-graph", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -451,7 +480,7 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("solar-radiation-graph", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -474,7 +503,7 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("download-dataframe-csv", "data"),
     [Input("download-button", "n_clicks")],
     [
@@ -500,7 +529,7 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
         print("df not loaded yet")
 
 
-@app.callback(
+@callback(
     Output("download-epw", "data"),
     [Input("download-epw-button", "n_clicks")],
     [State("meta-store", "data")],

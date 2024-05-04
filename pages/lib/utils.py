@@ -1,16 +1,14 @@
-import copy
 import functools
-import json
 import time
-
-import dash_bootstrap_components as dbc
+from pages.lib.global_scheme import fig_config, mapping_dictionary
 import pandas as pd
-import plotly.express as px
-import requests
-from dash import html, dash_table, dcc
+import json
 from pandas import json_normalize
-
-from my_project.global_scheme import fig_config, mapping_dictionary
+from dash import html, dash_table, dcc
+import dash_bootstrap_components as dbc
+import plotly.express as px
+import copy
+import requests
 
 
 def code_timer(func):
@@ -216,7 +214,7 @@ def plot_location_epw_files():
         height=500,
     )
     try:
-        print(requests.get("https://climate.onebuilding.org", timeout=6))
+        print(requests.get("https://climate.onebuilding.org", timeout=2))
 
         df_one_building = pd.read_csv(
             "./assets/data/one_building.csv", compression="gzip"

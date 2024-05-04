@@ -1,10 +1,15 @@
+import dash
+from dash import dcc, html
+import dash_bootstrap_components as dbc
+from dash_extensions.enrich import Output, Input, State, callback
+
+import numpy as np
 import math
 import json
-from dash import dcc
-import dash_bootstrap_components as dbc
-from dash import html
 import plotly.graph_objects as go
-from my_project.global_scheme import (
+
+
+from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
     tight_margins,
@@ -12,11 +17,10 @@ from my_project.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from dash.dependencies import Input, Output, State
-import numpy as np
 
-from my_project.template_graphs import filter_df_by_month_and_hour
-from my_project.utils import (
+from pages.lib.template_graphs import filter_df_by_month_and_hour
+
+from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
     generate_units_degree,
@@ -25,10 +29,24 @@ from my_project.utils import (
     determine_month_and_hour_filter,
 )
 
-from app import app
+dash.register_page(__name__, name= 'Natural Ventilation', order=6)
 
 
-def layout_natural_ventilation(si_ip):
+def layout():
+    return html.Div(
+        className="container-col",
+        id='main-nv-section',
+        children=[
+            # 
+        ]
+    )
+
+
+@callback(
+    Output('main-nv-section', 'children'),
+    [Input('si-ip-radio-input', 'value')]
+)
+def update_layout(si_ip):
     if si_ip == "ip":
         tdb_set_min = 50
         tdb_set_max = 75
@@ -37,55 +55,54 @@ def layout_natural_ventilation(si_ip):
         tdb_set_min = 10
         tdb_set_max = 24
         dpt_set = 16
-
-    return html.Div(
-        className="container-col",
-        children=[
-            inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
-            dcc.Loading(
-                html.Div(
-                    id="nv-heatmap-chart",
-                    style={"marginTop": "1rem"},
-                ),
-                type="circle",
-            ),
+    
+    return [
+        inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
+        dcc.Loading(
             html.Div(
-                className="container-row align-center justify-center",
-                children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "", "value": 1},
-                        ],
-                        value=[1],
-                        id="switches-input",
-                        switch=True,
-                        style={
-                            "padding": "1rem",
-                            "marginTop": "1rem",
-                            "marginRight": "-2rem",
-                        },
-                    ),
-                    html.Div(
-                        children=title_with_tooltip(
-                            text="Normalize data",
-                            tooltip_text=(
-                                "If normalized is enabled it calculates the % "
-                                "time otherwise it calculates the total number of hours"
-                            ),
-                            id_button="nv_normalize",
-                        ),
-                    ),
-                ],
+                id="nv-heatmap-chart",
+                style={"marginTop": "1rem"},
             ),
-            dcc.Loading(
-                html.Div(
-                    id="nv-bar-chart",
-                    style={"marginTop": "1rem"},
+            type="circle",
+        ),
+        html.Div(
+            className="container-row align-center justify-center",
+            children=[
+                dbc.Checklist(
+                    options=[
+                        {"label": "", "value": 1},
+                    ],
+                    value=[1],
+                    id="switches-input",
+                    switch=True,
+                    style={
+                        "padding": "1rem",
+                        "marginTop": "1rem",
+                        "marginRight": "-2rem",
+                    },
                 ),
-                type="circle",
+                html.Div(
+                    children=title_with_tooltip(
+                        text="Normalize data",
+                        tooltip_text=(
+                            "If normalized is enabled it calculates the % "
+                            "time otherwise it calculates the total number of hours"
+                        ),
+                        id_button="nv_normalize",
+                    ),
+                ),
+            ],
+        ),
+        dcc.Loading(
+            html.Div(
+                id="nv-bar-chart",
+                style={"marginTop": "1rem"},
             ),
-        ],
-    )
+            type="circle",
+        ),
+    ]
+
+    
 
 
 def inputs_tab(t_min, t_max, d_set):
@@ -254,7 +271,7 @@ def inputs_tab(t_min, t_max, d_set):
     )
 
 
-@app.callback(
+@callback(
     Output("nv-heatmap-chart", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -421,7 +438,7 @@ def nv_heatmap(
     )
 
 
-@app.callback(
+@callback(
     Output("nv-bar-chart", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -585,7 +602,7 @@ def nv_bar_chart(
     )
 
 
-@app.callback(
+@callback(
     Output("nv-dpt-filter", "disabled"), Input("enable-condensation", "value")
 )
 def enable_disable_button_data_filter(state_checklist):

@@ -3,6 +3,7 @@ from dash_extensions.enrich import DashProxy, ServersideOutputTransform
 
 app = DashProxy(
     __name__,
+    use_pages=True,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     transforms=[ServersideOutputTransform()],
     suppress_callback_exceptions=True,

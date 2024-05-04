@@ -1,10 +1,9 @@
-from dash import dcc, html
-from dash_extensions.enrich import Output, Input, State
+import dash
+from dash_extensions.enrich import Output, Input, State, dcc, html, callback
 
-from app import app
-from my_project.global_scheme import dropdown_names
-from my_project.template_graphs import heatmap, yearly_profile, daily_profile
-from my_project.utils import (
+from pages.lib.global_scheme import dropdown_names
+from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
+from pages.lib.utils import (
     generate_chart_name,
     generate_units,
     generate_units_degree,
@@ -14,10 +13,12 @@ from my_project.utils import (
     dropdown,
 )
 
+dash.register_page(__name__, name= 'Temperature and Humidity', order=2)
+
 var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
 
-def layout_t_rh():
+def layout():
     return html.Div(
         className="container-col full-width",
         children=[
@@ -87,7 +88,7 @@ def layout_t_rh():
     )
 
 
-@app.callback(
+@callback(
     Output("yearly-chart", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -119,7 +120,7 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     Output("daily", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -157,7 +158,7 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     [Output("heatmap", "children")],
     [
         Input("df-store", "modified_timestamp"),
@@ -196,7 +197,7 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     Output("table-tmp-hum", "children"),
     [
         Input("df-store", "modified_timestamp"),

@@ -1,13 +1,15 @@
-import dash_bootstrap_components as dbc
+from math import ceil, floor
+
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from math import ceil, floor
 from plotly.subplots import make_subplots
-
-from my_project.global_scheme import mapping_dictionary
+from pages.lib.global_scheme import mapping_dictionary
+import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
-from .utils import determine_month_and_hour_filter
+
+
+from .utils import code_timer, determine_month_and_hour_filter
 
 
 def violin(df, var, global_local, si_ip):
@@ -79,6 +81,7 @@ def violin(df, var, global_local, si_ip):
     return fig
 
 
+@code_timer
 def yearly_profile(df, var, global_local, si_ip):
     """Return yearly profile figure based on the 'var' col."""
     var_unit = mapping_dictionary[var][si_ip]["unit"]
@@ -231,6 +234,7 @@ def yearly_profile(df, var, global_local, si_ip):
     return fig
 
 
+# @code_timer
 def daily_profile(df, var, global_local, si_ip):
     """Return the daily profile based on the 'var' col."""
     var_name = mapping_dictionary[var]["name"]
@@ -311,6 +315,7 @@ def daily_profile(df, var, global_local, si_ip):
     return fig
 
 
+# @code_timer
 def heatmap_with_filter(
     df,
     var,
@@ -502,14 +507,14 @@ def wind_rose(df, title, month, hour, labels, si_ip):
                 df["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
             )
         )
-        .replace({"WindDir_bins": {360: 0}})
-        .groupby(by=["WindSpd_bins", "WindDir_bins"])
+        .ser.cat.rename_categories({"WindDir_bins": {360: 0}})
+        .groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
         .size()
         .unstack(level="WindSpd_bins")
         .fillna(0)
         .assign(calm=lambda df: calm_count / df.shape[0])
         .sort_index(axis=1)
-        .applymap(lambda x: x / total_count * 100)
+        .map(lambda x: x / total_count * 100)
     )
     fig = go.Figure()
     for i, col in enumerate(rose.columns):
