@@ -1,21 +1,24 @@
-from dash import dcc
-from dash import html
+import dash
+from dash import dcc, html
 import dash_bootstrap_components as dbc
-from my_project.global_scheme import (
+from dash_extensions.enrich import Output, Input, State, callback
+
+import numpy as np
+
+from pages.lib.global_scheme import (
     outdoor_dropdown_names,
     tight_margins,
     month_lst,
     container_row_center_full,
     container_col_center_one_of_three,
 )
-from my_project.utils import dropdown
-from dash.dependencies import Input, Output, State
 
-from my_project.template_graphs import (
+from pages.lib.template_graphs import (
     heatmap_with_filter,
     thermal_stress_stacked_barchart,
 )
-from my_project.utils import (
+from pages.lib.utils import (
+    dropdown,
     generate_chart_name,
     generate_units_degree,
     generate_units,
@@ -24,8 +27,7 @@ from my_project.utils import (
 )
 
 
-import numpy as np
-from app import app
+dash.register_page(__name__, name= 'Outdoor Comfort', order=7)
 
 
 def inputs_outdoor_comfort():
@@ -196,7 +198,7 @@ def outdoor_comfort_chart():
     )
 
 
-def layout_outdoor_comfort():
+def layout():
     return (
         dcc.Loading(
             type="circle",
@@ -208,7 +210,7 @@ def layout_outdoor_comfort():
     )
 
 
-@app.callback(
+@callback(
     Output("outdoor-comfort-output", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -240,7 +242,7 @@ def update_outdoor_comfort_output(ts, df):
     return f"The Best Weather Condition is: {', '.join(colsWithTheHighestNumberOfZero)}"
 
 
-@app.callback(
+@callback(
     Output("utci-heatmap", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -290,7 +292,7 @@ def update_tab_utci_value(
     )
 
 
-@app.callback(
+@callback(
     Output("image-selection", "children"),
     Input("tab7-dropdown", "value"),
 )
@@ -307,7 +309,7 @@ def change_image_based_on_selection(value):
     return html.Img(src=source, height=50)
 
 
-@app.callback(
+@callback(
     Output("utci-category-heatmap", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -377,7 +379,7 @@ def update_tab_utci_category(
     )
 
 
-@app.callback(
+@callback(
     Output("utci-summary-chart", "children"),
     [
         Input("tab7-dropdown", "value"),

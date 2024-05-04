@@ -3,7 +3,7 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from dash_extensions import Lottie
 
-dash.register_page(__name__)
+dash.register_page(__name__, name= '404')
 
 layout = [
     dmc.Title("I could not find the page you are currently looking for", order=4),

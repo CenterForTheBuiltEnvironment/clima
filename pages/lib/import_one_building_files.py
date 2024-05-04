@@ -1,5 +1,5 @@
 import pandas as pd
-from my_project.utils import code_timer
+from pages.lib.utils import code_timer
 import re
 
 

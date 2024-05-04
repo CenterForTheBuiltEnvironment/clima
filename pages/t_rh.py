@@ -1,6 +1,9 @@
-from dash import dcc, html
-from dash_extensions.enrich import Output, Input, State
-from my_project.utils import (
+import dash
+from dash_extensions.enrich import Output, Input, State, dcc, html, callback
+
+from pages.lib.global_scheme import dropdown_names
+from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
+from pages.lib.utils import (
     generate_chart_name,
     generate_units,
     generate_units_degree,
@@ -9,17 +12,13 @@ from my_project.utils import (
     title_with_link,
     dropdown,
 )
-from my_project.template_graphs import heatmap, yearly_profile, daily_profile
-from my_project.global_scheme import dropdown_names
-from my_project.utils import code_timer
-from my_project.extract_df import convert_data
 
-from app import app, cache, TIMEOUT
+dash.register_page(__name__, name= 'Temperature and Humidity', order=2)
 
 var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
 
-def layout_t_rh():
+def layout():
     return html.Div(
         className="container-col full-width",
         children=[
@@ -89,7 +88,7 @@ def layout_t_rh():
     )
 
 
-@app.callback(
+@callback(
     Output("yearly-chart", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -102,8 +101,6 @@ def layout_t_rh():
         State("si-ip-unit-store", "data"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, "DBT", global_local, si_ip)
@@ -123,7 +120,7 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     Output("daily", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -136,8 +133,6 @@ def update_yearly_chart(ts, global_local, dd_value, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_daily(ts, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
@@ -163,7 +158,7 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     [Output("heatmap", "children")],
     [
         Input("df-store", "modified_timestamp"),
@@ -176,8 +171,6 @@ def update_daily(ts, global_local, dd_value, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     if dd_value == dropdown_names[var_to_plot[0]]:
@@ -204,7 +197,7 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     Output("table-tmp-hum", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -212,8 +205,6 @@ def update_heatmap(ts, global_local, dd_value, df, meta, si_ip):
     ],
     [State("df-store", "data"), State("si-ip-unit-store", "data")],
 )
-@cache.memoize(timeout=TIMEOUT)
-@code_timer
 def update_table(ts, dd_value, df, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     return summary_table_tmp_rh_tab(

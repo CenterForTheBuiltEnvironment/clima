@@ -16,8 +16,8 @@ from pythermalcomfort.models import solar_gain
 from pythermalcomfort.models import utci
 from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
-from my_project.global_scheme import month_lst
-from my_project.utils import code_timer
+from pages.lib.global_scheme import month_lst
+from pages.lib.utils import code_timer
 
 
 @code_timer
@@ -207,7 +207,7 @@ def create_df(lst, file_name):
 
     # Add in times df
     times = pd.date_range(
-        "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="H", tz="UTC"
+        "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="h", tz="UTC"
     )
     epw_df["UTC_time"] = pd.to_datetime(times)
     delta = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)

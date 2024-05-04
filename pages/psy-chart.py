@@ -1,18 +1,18 @@
+import dash
+from dash import dcc, html
+import dash_bootstrap_components as dbc
+from dash_extensions.enrich import Output, Input, State, callback
+
 import numpy as np
+import pandas as pd
 import plotly.graph_objects as go
 import json
 from pythermalcomfort import psychrometrics as psy
 from math import ceil, floor
-import dash_bootstrap_components as dbc
 from copy import deepcopy
-from dash import dcc
-from dash import html
-from my_project.global_scheme import (
-    container_row_center_full,
-    container_col_center_one_of_three,
-)
-from my_project.template_graphs import filter_df_by_month_and_hour
-from my_project.utils import (
+
+from pages.lib.template_graphs import filter_df_by_month_and_hour
+from pages.lib.utils import (
     generate_chart_name,
     generate_units,
     generate_custom_inputs_psy,
@@ -20,22 +20,20 @@ from my_project.utils import (
     title_with_link,
     dropdown,
 )
-from my_project.global_scheme import (
+from pages.lib.global_scheme import (
+    container_row_center_full,
+    container_col_center_one_of_three,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
     sun_cloud_tab_explore_dropdown_names,
-)
-from dash.dependencies import Input, Output, State
-import pandas as pd
-
-from app import app
-
-from my_project.global_scheme import (
     template,
     mapping_dictionary,
     tight_margins,
 )
+
+
+dash.register_page(__name__, name= 'Psychrometric Chart', order=5)
 
 psy_dropdown_names = {
     "None": "None",
@@ -207,7 +205,7 @@ def inputs():
     )
 
 
-def layout_psy_chart():
+def layout():
     return (
         html.Div(
             children=title_with_link(
@@ -227,7 +225,7 @@ def layout_psy_chart():
 
 
 # psychrometric chart
-@app.callback(
+@callback(
     Output("psych-chart", "children"),
     [
         Input("df-store", "modified_timestamp"),

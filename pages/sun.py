@@ -1,9 +1,13 @@
+import dash
+from dash import html, dcc
+from dash_extensions.enrich import Output, Input, State, callback
+import dash_bootstrap_components as dbc
+
+
 import numpy as np
 from copy import deepcopy
-from dash import dcc
-from dash import html
-import dash_bootstrap_components as dbc
-from my_project.global_scheme import (
+
+from pages.lib.global_scheme import (
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
     dropdown_names,
@@ -12,17 +16,17 @@ from my_project.global_scheme import (
     month_lst,
     mapping_dictionary,
 )
-from my_project.utils import dropdown
+from pages.lib.utils import dropdown
 from dash.dependencies import Input, Output, State
 
-from my_project.tab_sun.charts_sun import (
+from pages.lib.charts_sun import (
     monthly_solar,
     polar_graph,
     custom_cartesian_solar,
 )
-from my_project.template_graphs import heatmap, barchart, daily_profile
-from my_project.utils import code_timer
-from my_project.utils import (
+from pages.lib.template_graphs import heatmap, barchart, daily_profile
+from pages.lib.utils import code_timer
+from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
     generate_units,
@@ -30,7 +34,9 @@ from my_project.utils import (
     title_with_link,
 )
 
-from app import app
+
+dash.register_page(__name__, name= 'Sun and Clouds', order=3)
+
 
 sc_dropdown_names = {
     "None": "None",
@@ -46,6 +52,7 @@ sc_dropdown_names.pop("UTCI: Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: Sun & no Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
+
 
 
 def sun_path():
@@ -144,52 +151,64 @@ def explore_daily_heatmap():
     )
 
 
-def static_section(si_ip):
-    if si_ip == "si":
-        hor_unit = "Wh/m²"
-    if si_ip == "ip":
-        hor_unit = "Btu/ft²"
+
+def static_section():
     return html.Div(
+        id='static-section', 
         className="container-col full-width",
         children=[
-            html.Div(
-                children=title_with_link(
-                    text="Global and Diffuse Horizontal Solar Radiation ("
-                    + hor_unit
-                    + ")",
-                    id_button="monthly-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation",
-                ),
-            ),
-            dcc.Loading(
-                type="circle",
-                children=html.Div(id="monthly-solar"),
-            ),
-            html.Div(
-                children=title_with_link(
-                    text="Cloud coverage",
-                    id_button="cloud-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage",
-                ),
-            ),
-            dcc.Loading(
-                type="circle",
-                children=html.Div(id="cloud-cover"),
-            ),
+            # ...
         ],
     )
 
 
-def layout_sun(si_ip):
+def layout():
     """Contents of tab four."""
     return html.Div(
         className="container-col",
         id="tab-four-container",
-        children=[sun_path(), static_section(si_ip), explore_daily_heatmap()],
+        children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
 
 
-@app.callback(
+@callback(
+    Output('static-section', 'children'),
+    [Input('si-ip-radio-input', 'value')]
+)
+def update_static_section(si_ip):
+    if si_ip == "si":
+        hor_unit = "Wh/m²"
+    if si_ip == "ip":
+        hor_unit = "Btu/ft²"
+    return [
+        html.Div(
+            children=title_with_link(
+                text="Global and Diffuse Horizontal Solar Radiation ("
+                + hor_unit
+                + ")",
+                id_button="monthly-chart-label",
+                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation",
+            ),
+        ),
+        dcc.Loading(
+            type="circle",
+            children=html.Div(id="monthly-solar"),
+        ),
+        html.Div(
+            children=title_with_link(
+                text="Cloud coverage",
+                id_button="cloud-chart-label",
+                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage",
+            ),
+        ),
+        dcc.Loading(
+            type="circle",
+            children=html.Div(id="cloud-cover"),
+        ),
+    ]
+
+
+@callback(
     [
         Output("monthly-solar", "children"),
         Output("cloud-cover", "children"),
@@ -203,7 +222,6 @@ def layout_sun(si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def monthly_and_cloud_chart(ts, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
@@ -233,7 +251,7 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("custom-sunpath", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -247,7 +265,6 @@ def monthly_and_cloud_chart(ts, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     custom_inputs = "" if var == "None" else f"{var}"
@@ -264,7 +281,7 @@ def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     Output("tab4-daily", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -277,7 +294,6 @@ def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def daily(ts, var, global_local, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     custom_inputs = generate_custom_inputs(var)
@@ -288,7 +304,7 @@ def daily(ts, var, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("tab4-heatmap", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -301,7 +317,6 @@ def daily(ts, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_heatmap(ts, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)

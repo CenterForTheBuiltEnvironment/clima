@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from my_project.global_scheme import mapping_dictionary
+from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
 
@@ -507,14 +507,14 @@ def wind_rose(df, title, month, hour, labels, si_ip):
                 df["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
             )
         )
-        .replace({"WindDir_bins": {360: 0}})
-        .groupby(by=["WindSpd_bins", "WindDir_bins"])
+        .ser.cat.rename_categories({"WindDir_bins": {360: 0}})
+        .groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
         .size()
         .unstack(level="WindSpd_bins")
         .fillna(0)
         .assign(calm=lambda df: calm_count / df.shape[0])
         .sort_index(axis=1)
-        .applymap(lambda x: x / total_count * 100)
+        .map(lambda x: x / total_count * 100)
     )
     fig = go.Figure()
     for i, col in enumerate(rose.columns):

@@ -1,9 +1,12 @@
+import dash
+from dash import dcc, html
 import dash_bootstrap_components as dbc
-from copy import deepcopy
-from dash import dcc
-from dash import html
+from dash_extensions.enrich import Output, Input, State, callback
 from dash.exceptions import PreventUpdate
-from my_project.utils import (
+
+from copy import deepcopy
+
+from pages.lib.utils import (
     generate_chart_name,
     generate_custom_inputs,
     generate_custom_inputs_explorer,
@@ -16,7 +19,7 @@ from my_project.utils import (
     dropdown,
 )
 
-from my_project.global_scheme import (
+from pages.lib.global_scheme import (
     fig_config,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
@@ -26,14 +29,13 @@ from my_project.global_scheme import (
     container_col_center_one_of_three,
     mapping_dictionary,
 )
-from dash.dependencies import Input, Output, State
 
-from my_project.tab_data_explorer.charts_data_explorer import (
+from pages.lib.charts_data_explorer import (
     custom_heatmap,
     two_var_graph,
     three_var_graph,
 )
-from my_project.template_graphs import (
+from pages.lib.template_graphs import (
     heatmap,
     yearly_profile,
     daily_profile,
@@ -41,7 +43,8 @@ from my_project.template_graphs import (
     filter_df_by_month_and_hour,
 )
 
-from app import app
+dash.register_page(__name__, name= 'Data Explorer', order=8)
+
 
 explore_dropdown_names = {}
 explore_dropdown_names.update(deepcopy(dropdown_names))
@@ -604,7 +607,7 @@ def section_three():
     )
 
 
-def layout_data_explorer():
+def layout():
     """Return the contents of tab six." """
     return html.Div(
         className="continer-col justify-center",
@@ -612,7 +615,7 @@ def layout_data_explorer():
     )
 
 
-@app.callback(
+@callback(
     Output("yearly-explore", "children"),
     # Section One
     [
@@ -645,7 +648,7 @@ def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
         )
 
 
-@app.callback(
+@callback(
     Output("query-daily", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -670,7 +673,7 @@ def update_tab_daily(ts, var, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     Output("query-heatmap", "children"),
     [
         Input("df-store", "modified_timestamp"),
@@ -695,7 +698,7 @@ def update_tab_heatmap(ts, var, global_local, df, meta, si_ip):
     )
 
 
-@app.callback(
+@callback(
     [
         Output("custom-heatmap", "children"),
         Output("custom-summary", "style"),
@@ -808,7 +811,7 @@ def update_heatmap(
     )
 
 
-@app.callback(
+@callback(
     [Output("three-var", "children"), Output("two-var", "children")],
     [
         Input("df-store", "modified_timestamp"),
@@ -832,7 +835,6 @@ def update_heatmap(
         State("si-ip-unit-store", "data"),
     ],
 )
-@code_timer
 def update_more_charts(
     ts,
     var_x,
@@ -901,7 +903,7 @@ def update_more_charts(
             )
 
 
-@app.callback(
+@callback(
     Output("table-data-explorer", "children"),
     [
         Input("df-store", "modified_timestamp"),

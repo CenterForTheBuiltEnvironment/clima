@@ -5,7 +5,7 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from my_project.global_scheme import (
+from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
     degrees_unit,
@@ -122,7 +122,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
 
     tz = "UTC"
     times = pd.date_range(
-        "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="H", tz=tz
+        "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="h", tz=tz
     )
     delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
     times = times - delta

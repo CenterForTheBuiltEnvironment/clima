@@ -1,6 +1,6 @@
 import functools
 import time
-from my_project.global_scheme import fig_config, mapping_dictionary
+from pages.lib.global_scheme import fig_config, mapping_dictionary
 import pandas as pd
 import json
 from pandas import json_normalize

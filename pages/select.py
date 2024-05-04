@@ -1,19 +1,19 @@
 import base64
-import io
 import json
 import re
+
 import dash
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
+from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
 
-from app import app
-from my_project.extract_df import create_df, get_data, get_location_info
-from my_project.utils import plot_location_epw_files, generate_chart_name
-from my_project.global_scheme import mapping_dictionary
-from my_project.extract_df import convert_data
 
-from dash_extensions.enrich import ServersideOutput, Output, Input, State, html, dcc
+from pages.lib.extract_df import convert_data
+from pages.lib.extract_df import create_df, get_data, get_location_info
+from pages.lib.global_scheme import mapping_dictionary
+from pages.lib.utils import plot_location_epw_files, generate_chart_name
 
+dash.register_page(__name__, path='/', name='Select Weather File', order=0)
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",
@@ -23,8 +23,7 @@ messages_alert = {
     "wrong_extension": "The file you have uploaded is not an EPW file",
 }
 
-
-def layout_select():
+def layout(): 
     """Contents in the first tab 'Select Weather File'"""
     return html.Div(
         className="container-col tab-container",
@@ -84,7 +83,6 @@ def layout_select():
         ],
     )
 
-
 def alert():
     """Alert layout for the submit button."""
     return html.Div(
@@ -102,7 +100,7 @@ def alert():
 
 
 # add si-ip and map dictionary in the output
-@app.callback(
+@callback(
     [
         Output("meta-store", "data"),
         Output("lines-store", "data"),
@@ -197,9 +195,9 @@ def submitted_data(
 
 
 # add switch_si_ip function and convert the data-store
-@app.callback(
+@callback(
     [
-        ServersideOutput("df-store", "data"),
+        Output("df-store", "data"),
         Output("si-ip-unit-store", "data"),
     ],
     [
@@ -214,7 +212,7 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
         map_json = json.dumps(mapping_dictionary)
         if si_ip_input == "ip":
             map_json = convert_data(df, map_json)
-        return df, si_ip_input
+        return Serverside(df), si_ip_input
     else:
         return (
             None,
@@ -222,53 +220,7 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
         )
 
 
-@app.callback(
-    [
-        Output("tab-summary", "disabled"),
-        Output("tab-t-rh", "disabled"),
-        Output("tab-sun", "disabled"),
-        Output("tab-wind", "disabled"),
-        Output("tab-psy-chart", "disabled"),
-        Output("tab-data-explorer", "disabled"),
-        Output("tab-outdoor-comfort", "disabled"),
-        Output("tab-natural-ventilation", "disabled"),
-        Output("banner-subtitle", "children"),
-    ],
-    [
-        Input("meta-store", "data"),
-        Input("df-store", "data"),
-    ],
-)
-def enable_tabs_when_data_is_loaded(meta, data):
-    """Hide tabs when data are not loaded"""
-    default = "Current Location: N/A"
-    if data is None:
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            default,
-        )
-    else:
-        return (
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            "Current Location: " + meta["city"] + ", " + meta["country"],
-        )
-
-
-@app.callback(
+@callback(
     [
         Output("modal", "is_open"),
         Output("url-store", "data"),
@@ -291,7 +243,7 @@ def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_
     return is_open, ""
 
 
-@app.callback(
+@callback(
     [
         Output("modal-header", "children"),
     ],
@@ -305,3 +257,25 @@ def display_modal_when_data_clicked(click_map):
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
     return ["Analyse data from this location?"]
+
+
+@callback(
+    [
+        Output("banner-subtitle", "children"),
+    ],
+    [
+        Input("meta-store", "data"),
+        Input("df-store", "data"),
+    ],
+)
+def enable_location_display(meta, data):
+    """Display current location in banner"""
+    default = "Current Location: N/A"
+    if data is None:
+        return (
+            default,
+        )
+    else:
+        return (
+            "Current Location: " + meta["city"] + ", " + meta["country"],
+        )
