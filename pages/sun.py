@@ -2,11 +2,16 @@ import dash
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 import dash_bootstrap_components as dbc
-
+# from dash.dependencies import Input, Output, State
 
 import numpy as np
 from copy import deepcopy
 
+from pages.lib.charts_sun import (
+    monthly_solar,
+    polar_graph,
+    custom_cartesian_solar,
+)
 from pages.lib.global_scheme import (
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
@@ -16,17 +21,10 @@ from pages.lib.global_scheme import (
     month_lst,
     mapping_dictionary,
 )
-from pages.lib.utils import dropdown
-from dash.dependencies import Input, Output, State
-
-from pages.lib.charts_sun import (
-    monthly_solar,
-    polar_graph,
-    custom_cartesian_solar,
-)
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
-from pages.lib.utils import code_timer
 from pages.lib.utils import (
+    code_timer,
+    dropdown,
     title_with_tooltip,
     generate_chart_name,
     generate_units,
@@ -35,7 +33,7 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__, name= 'Sun and Clouds', order=3)
+dash.register_page(__name__, name= 'Sun and Cloud Coverage', order=3)
 
 
 sc_dropdown_names = {

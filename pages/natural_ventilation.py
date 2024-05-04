@@ -1,13 +1,13 @@
+import math
+import json
+
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
-import math
-import json
 import plotly.graph_objects as go
-
 
 from pages.lib.global_scheme import (
     template,
@@ -17,9 +17,7 @@ from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-
 from pages.lib.template_graphs import filter_df_by_month_and_hour
-
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,

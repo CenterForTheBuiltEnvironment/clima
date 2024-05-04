@@ -1,25 +1,17 @@
+import json
+from math import ceil, floor
+
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
+from copy import deepcopy
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import json
 from pythermalcomfort import psychrometrics as psy
-from math import ceil, floor
-from copy import deepcopy
 
-from pages.lib.template_graphs import filter_df_by_month_and_hour
-from pages.lib.utils import (
-    generate_chart_name,
-    generate_units,
-    generate_custom_inputs_psy,
-    determine_month_and_hour_filter,
-    title_with_link,
-    dropdown,
-)
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -30,6 +22,15 @@ from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
     tight_margins,
+)
+from pages.lib.template_graphs import filter_df_by_month_and_hour
+from pages.lib.utils import (
+    generate_chart_name,
+    generate_units,
+    generate_custom_inputs_psy,
+    determine_month_and_hour_filter,
+    title_with_link,
+    dropdown,
 )
 
 
