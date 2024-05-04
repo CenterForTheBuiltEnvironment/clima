@@ -1,13 +1,18 @@
 import dash
 import dash_bootstrap_components as dbc
-import plotly.graph_objects as go
-import requests
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import dcc, html, Output, Input, State, callback
 
-from pages.lib.extract_df import get_data
-from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
+import plotly.graph_objects as go
+import requests
+
 from pages.lib.charts_summary import world_map
+from pages.lib.extract_df import get_data
+from pages.lib.global_scheme import (
+    template,
+    tight_margins,
+    mapping_dictionary
+)
 from pages.lib.template_graphs import violin
 from pages.lib.utils import (
     generate_chart_name,

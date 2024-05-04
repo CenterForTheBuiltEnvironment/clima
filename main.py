@@ -21,7 +21,7 @@ app.layout = dbc.Container(
                     html.Div(page["name"], className="ms-2"),
                     href=page["path"],
                     active="exact",
-                    style={'color':'white','text-align': 'center', 'height': '100%'}
+                    style={'color':'white'}
                 )
                 for page in dash.page_registry.values() if page["name"] not in ["404", "changelog"]
             ],
@@ -29,8 +29,6 @@ app.layout = dbc.Container(
             justified=True,
             style={'background-color': '#003262',
                    'padding': '0.25rem 0.5rem',
-                   'justify-content': 'center',
-                    'align-items': 'center',
                 } 
         ),
         html.Div(id="store-container", children=[store()]),

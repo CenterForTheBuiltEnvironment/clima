@@ -6,6 +6,29 @@ from dash.exceptions import PreventUpdate
 
 from copy import deepcopy
 
+from pages.lib.charts_data_explorer import (
+    custom_heatmap,
+    two_var_graph,
+    three_var_graph,
+)
+from pages.lib.global_scheme import (
+    fig_config,
+    dropdown_names,
+    sun_cloud_tab_dropdown_names,
+    more_variables_dropdown,
+    sun_cloud_tab_explore_dropdown_names,
+    container_row_center_full,
+    container_col_center_one_of_three,
+    mapping_dictionary,
+)
+from pages.lib.template_graphs import (
+    heatmap,
+    yearly_profile,
+    daily_profile,
+    barchart,
+    filter_df_by_month_and_hour,
+)
+
 from pages.lib.utils import (
     generate_chart_name,
     generate_custom_inputs,
@@ -19,29 +42,6 @@ from pages.lib.utils import (
     dropdown,
 )
 
-from pages.lib.global_scheme import (
-    fig_config,
-    dropdown_names,
-    sun_cloud_tab_dropdown_names,
-    more_variables_dropdown,
-    sun_cloud_tab_explore_dropdown_names,
-    container_row_center_full,
-    container_col_center_one_of_three,
-    mapping_dictionary,
-)
-
-from pages.lib.charts_data_explorer import (
-    custom_heatmap,
-    two_var_graph,
-    three_var_graph,
-)
-from pages.lib.template_graphs import (
-    heatmap,
-    yearly_profile,
-    daily_profile,
-    barchart,
-    filter_df_by_month_and_hour,
-)
 
 dash.register_page(__name__, name= 'Data Explorer', order=8)
 

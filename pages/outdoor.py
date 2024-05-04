@@ -12,7 +12,6 @@ from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
-
 from pages.lib.template_graphs import (
     heatmap_with_filter,
     thermal_stress_stacked_barchart,

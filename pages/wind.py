@@ -5,6 +5,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.utils import (
+    code_timer,
     title_with_tooltip,
     generate_chart_name,
     generate_units,
@@ -12,7 +13,6 @@ from pages.lib.utils import (
     title_with_link,
     dropdown,
 )
-from pages.lib.utils import code_timer
 
 
 dash.register_page(__name__, name= 'Wind', order=4)

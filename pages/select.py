@@ -7,11 +7,18 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
 
-
 from pages.lib.extract_df import convert_data
-from pages.lib.extract_df import create_df, get_data, get_location_info
+from pages.lib.extract_df import (
+    create_df,
+    get_data,
+    get_location_info
+)
 from pages.lib.global_scheme import mapping_dictionary
-from pages.lib.utils import plot_location_epw_files, generate_chart_name
+from pages.lib.utils import (
+    plot_location_epw_files,
+    generate_chart_name
+)
+
 
 dash.register_page(__name__, path='/', name='Select Weather File', order=0)
 
