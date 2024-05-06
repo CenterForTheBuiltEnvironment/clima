@@ -1,6 +1,5 @@
 function click_tab(name) {
-  cy.get('.custom-tab')
-    .not('.tab--disabled')
+  cy.get('a.nav-link div') // adjusted to new page structure
     .contains(name)
     .click();
 }
