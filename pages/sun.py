@@ -2,7 +2,6 @@ import dash
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 import dash_bootstrap_components as dbc
-# from dash.dependencies import Input, Output, State
 
 import numpy as np
 from copy import deepcopy
@@ -33,7 +32,7 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__, name= 'Sun and Cloud Coverage', order=3)
+dash.register_page(__name__, name= 'Sun and Clouds', order=3)
 
 
 sc_dropdown_names = {

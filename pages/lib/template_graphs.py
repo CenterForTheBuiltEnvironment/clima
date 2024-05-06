@@ -507,7 +507,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
                 df["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
             )
         )
-        .ser.cat.rename_categories({"WindDir_bins": {360: 0}})
+        .replace({"WindDir_bins": {360: 0}})
         .groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
         .size()
         .unstack(level="WindSpd_bins")

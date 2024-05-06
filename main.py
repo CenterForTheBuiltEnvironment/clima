@@ -4,7 +4,7 @@ from dash import html, dcc
 from dash.dependencies import Input, Output
 
 from app import app
-from pages.lib.layout import banner, build_tabs, footer, store
+from pages.lib.layout import banner, footer, store #, build_tabs
 
 server = app.server
 
