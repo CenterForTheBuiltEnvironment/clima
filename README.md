@@ -7,6 +7,8 @@ It furthermore calculates a number of climate-related values \(i.e.
 solar azimuth and altitude, Universal Thermal Climate Index \(UTCI\), comfort indices, etc.\) that are not contained in the EPW files but can be derived from the information therein contained. 
 It can be freely accessed at [clima.cbe.berkeley.edu](http://clima.cbe.berkeley.edu)
 
+For any questions and feedback related to this tool, please use the [Discussions](https://github.com/CenterForTheBuiltEnvironment/clima/discussions) section.
+
 If you use this tool please consider citing us.
 
 ## Official documentation
