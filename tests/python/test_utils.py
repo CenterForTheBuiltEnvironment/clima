@@ -1,7 +1,8 @@
 import requests
 
-from my_project.utils import summary_table_tmp_rh_tab
-from my_project.extract_df import get_data, create_df
+from pages.lib.utils import summary_table_tmp_rh_tab
+from pages.lib.extract_df import get_data, create_df
+
 import pandas as pd
 import os
 
