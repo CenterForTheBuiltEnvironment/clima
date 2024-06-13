@@ -2,7 +2,14 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc
 
-dash.register_page(__name__, path='/changelog', name='changelog')
+from pages.lib.page_urls import PageUrls
+
+
+dash.register_page(__name__,
+                   name='changelog',
+                   path=PageUrls.CHANGELOG.value
+                   )
+
 
 def layout():
     """changelog page"""
