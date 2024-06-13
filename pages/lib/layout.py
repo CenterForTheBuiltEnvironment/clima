@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+import dash
 from dash import dcc, html
 
 
@@ -152,4 +153,47 @@ def store():
                 type="dot",
             )
         ],
+    )
+
+
+def build_tabs():
+    return html.Div(
+        id="tabs-container",
+        children=[
+            html.Div(
+                id="tabs-parent",
+                className="custom-tabs",
+                children=[
+                    dbc.Nav(
+                        [
+                        dbc.NavItem(
+                            dbc.NavLink(
+                                page["name"],
+                                href=page["path"],
+                                active="exact",
+                                className="nav-link"
+                            ),
+                            className="custom-tab"
+                        )
+                        for page in dash.page_registry.values() if page["name"] not in ["404", "changelog"]
+                        ],
+                        id="tabs",
+                        class_name="tab-container",
+                        pills=True,
+                        justified=True
+                    )
+                ]
+            ),
+            
+            html.Div(
+                id="store-container",
+                children=[
+                    store(),
+                    html.Div(
+                        id="tabs-content",
+                        children=dash.page_container
+                    )
+                ]
+            ),
+        ]
     )

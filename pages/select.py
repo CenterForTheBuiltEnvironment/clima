@@ -7,6 +7,7 @@ import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
 
+from pages.lib.page_urls import PageUrls
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import (
     create_df,
@@ -20,7 +21,12 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__, path='/', name='Select Weather File', order=0)
+dash.register_page(__name__,
+                   name='Select Weather File',
+                   path=PageUrls.SELECT.value,
+                   order=0
+                   )
+
 
 messages_alert = {
     "start": "To start, upload an EPW file or click on a point on the map!",

@@ -6,6 +6,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 from copy import deepcopy
 
+from pages.lib.page_urls import PageUrls
 from pages.lib.charts_sun import (
     monthly_solar,
     polar_graph,
@@ -32,7 +33,11 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__, name= 'Sun and Clouds', order=3)
+dash.register_page(__name__,
+                   name= 'Sun and Clouds',
+                   path=PageUrls.SUN.value,
+                   order=3
+                   )
 
 
 sc_dropdown_names = {

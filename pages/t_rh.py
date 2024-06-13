@@ -1,6 +1,7 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
 
+from pages.lib.page_urls import PageUrls
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import (
     heatmap,
@@ -17,7 +18,13 @@ from pages.lib.utils import (
     dropdown,
 )
 
-dash.register_page(__name__, name= 'Temperature and Humidity', order=2)
+
+dash.register_page(__name__,
+                   name= 'Temperature and Humidity',
+                   path=PageUrls.T_RH.value,
+                   order=2
+                   )
+
 
 var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 

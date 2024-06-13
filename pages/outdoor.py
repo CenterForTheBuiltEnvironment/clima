@@ -5,6 +5,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
 
+from pages.lib.page_urls import PageUrls
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
     tight_margins,
@@ -26,7 +27,11 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__, name= 'Outdoor Comfort', order=7)
+dash.register_page(__name__,
+                   name= 'Outdoor Comfort',
+                   path=PageUrls.OUTDOOR.value,
+                   order=7
+                   )
 
 
 def inputs_outdoor_comfort():

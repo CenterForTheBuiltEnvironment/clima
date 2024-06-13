@@ -3,7 +3,11 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from dash_extensions import Lottie
 
+from pages.lib.page_urls import PageUrls
+
+
 dash.register_page(__name__, name= '404')
+
 
 layout = [
     dmc.Title("I could not find the page you are currently looking for", order=4),
@@ -25,6 +29,6 @@ layout = [
             rendererSettings=dict(preserveAspectRatio="xMidYMid slice"),
         ),
         width="100%",
-        url="../assets/animations/page_not_found.json",
+        url=PageUrls.NOT_FOUND.value,
     ),
 ]

@@ -56,12 +56,25 @@
     align-items: center;
     justify-content: center;
 }
-.custom-tab--selected {
-    color: black;
+
+.custom-tab:has(.active) {
+    background-color: white;
     box-shadow: 1px 1px 0 white;
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;
     border-top: 6px solid #abd2ff !important;
+}
+
+.nav-pills .nav-link {
+    padding: 0;
+    color: #586069;
+    font-family: "system-ui";
+    background-color: transparent;
+}
+
+.nav-pills .nav-link.active {
+    color: black;
+    background-color: white;
 }
 
 /* Tab One */

@@ -4,7 +4,7 @@ from dash import html, dcc
 from dash.dependencies import Input, Output
 
 from app import app
-from pages.lib.layout import banner, footer, store #, build_tabs
+from pages.lib.layout import banner, footer, build_tabs #, build_tabs
 
 server = app.server
 
@@ -15,28 +15,13 @@ app.layout = dbc.Container(
     children=[
         dcc.Location(id="url", refresh=False), # connected to callback below
         banner(),
-        dbc.Nav(
-            [
-                dbc.NavLink(
-                    html.Div(page["name"], className="ms-2"),
-                    href=page["path"],
-                    active="exact",
-                    style={'color':'white'}
-                )
-                for page in dash.page_registry.values() if page["name"] not in ["404", "changelog"]
-            ],
-            pills=True,
-            justified=True,
-            style={'background-color': '#003262',
-                   'padding': '0.25rem 0.5rem',
-                } 
-        ),
-        html.Div(id="store-container", children=[store()]),
-        dash.page_container,
+        html.Div(
+            id="page-content",
+            children=build_tabs()
+        ),    
         footer(),
     ],
 )
-
 
 if __name__ == "__main__":
     app.run_server(
