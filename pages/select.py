@@ -231,6 +231,56 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
             None,
             None,
         )
+    
+
+@callback(
+    [
+        Output("/", "disabled"),
+        Output("/summary", "disabled"),
+        Output("/t-rh", "disabled"),
+        Output("/sun", "disabled"),
+        Output("/wind", "disabled"),
+        Output("/psy-chart", "disabled"),
+        Output("/explorer", "disabled"),
+        Output("/outdoor", "disabled"),
+        Output("/natural-ventilation", "disabled"),
+        Output("banner-subtitle", "children"),
+    ],
+    [
+        Input("meta-store", "data"),
+        Input("df-store", "data"),
+    ],
+)
+def enable_tabs_when_data_is_loaded(meta, data):
+    """Hide tabs when data are not loaded"""
+    default = "Current Location: N/A"
+    if data is None:
+        return (
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            True,
+            default,
+        )
+    else:
+        return (
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            False,
+            "Current Location: " + meta["city"] + ", " + meta["country"],
+        )
+
 
 
 @callback(
@@ -270,25 +320,3 @@ def display_modal_when_data_clicked(click_map):
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
     return ["Analyse data from this location?"]
-
-
-@callback(
-    [
-        Output("banner-subtitle", "children"),
-    ],
-    [
-        Input("meta-store", "data"),
-        Input("df-store", "data"),
-    ],
-)
-def enable_location_display(meta, data):
-    """Display current location in banner"""
-    default = "Current Location: N/A"
-    if data is None:
-        return (
-            default,
-        )
-    else:
-        return (
-            "Current Location: " + meta["city"] + ", " + meta["country"],
-        )

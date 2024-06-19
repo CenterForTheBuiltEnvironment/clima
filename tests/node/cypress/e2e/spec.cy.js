@@ -1,5 +1,5 @@
 function click_tab(name) {
-  cy.get('a.nav-link div') // adjusted to new page structure
+  cy.get('.custom-tab')
     .contains(name)
     .click();
 }
