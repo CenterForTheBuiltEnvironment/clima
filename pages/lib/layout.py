@@ -3,6 +3,80 @@ import dash
 from dash import dcc, html
 
 
+def alert():
+    """Alert for survey."""
+    return html.Div(
+        id="alert-container",
+        children=[
+
+            dbc.Toast(
+                [
+                    "If you have a moment, help us improving Clima and take a ",
+                    html.A(
+                        "quick user survey",
+                        href="https://forms.gle/k289zP3R92jdu14M7",
+                        className="alert-link",
+                        target="_blank"
+                    ),
+                    "! ☀️"
+                ],
+                id="alert-auto",
+                header="CBE Clima User Survey",
+                icon="info",
+                is_open=False,
+                dismissable=True,
+                className="survey-alert",
+                style={"position": "fixed", "top": 25, "right": 10, "width": 400},
+            ),
+
+
+            # Alert style solution
+            # dbc.Alert(
+            #     [
+            #         "If you have a moment, help us improving Clima and take a ",
+            #         html.A("quick user survey", href="https://lnkd.in/gFheGNrt", className="alert-link"),
+            #         "!"
+            #     ],
+            #     id="alert-auto",
+            #     class_name= "survey-alert",
+            #     is_open=False,
+            # ),
+
+            # Pop-up window solution
+            # dbc.Modal(
+            #     [
+            #         dbc.ModalHeader(dbc.ModalTitle("CBE Clima User Survey")),
+            #         dbc.ModalBody([
+            #             "If you have a moment, help us improving Clima and take the quick ",
+            #             html.A(
+            #                 "user survey",
+            #                 href="https://forms.gle/k289zP3R92jdu14M7",
+            #                 style={'color':'black', 'font-weight': 'bold'}
+            #                 ),
+            #             "!"
+            #         ]),
+            #         dbc.ModalFooter(
+            #             dbc.Button(
+            #                 "Close", id="close", className="ms-auto", n_clicks=0
+            #             )
+            #         ),
+            #     ],
+            #     id="alert-auto",
+            #     centered=True,
+            #     autofocus=True,
+            #     is_open=False,
+            #     size="lg",
+            # ),
+
+            dcc.Interval(
+                id='interval-component',
+                interval=12*1000,
+                n_intervals=0
+            )
+        ]
+    )
+
+
 def footer():
     return dbc.Row(
         align="center",
@@ -166,16 +240,18 @@ def build_tabs():
                 children=[
                     dbc.Nav(
                         [
-                        dbc.NavItem(
-                            dbc.NavLink(
-                                page["name"],
-                                href=page["path"],
-                                active="exact",
-                                className="nav-link"
-                            ),
-                            className="custom-tab"
-                        )
-                        for page in dash.page_registry.values() if page["name"] not in ["404", "changelog"]
+                            dbc.NavItem(
+                                dbc.NavLink(
+                                    page["name"],
+                                    id=page["path"],
+                                    href=page["path"],
+                                    active="exact",
+                                    className="nav-link",
+                                    disabled=True,
+                                ),
+                                className="custom-tab"
+                            )
+                            for page in dash.page_registry.values() if page["name"] not in ["404", "changelog"]
                         ],
                         id="tabs",
                         class_name="tab-container",
@@ -191,7 +267,10 @@ def build_tabs():
                     store(),
                     html.Div(
                         id="tabs-content",
-                        children=dash.page_container
+                        children=[
+                            alert(),    # alert can be removed after survey is done
+                            dash.page_container
+                        ],
                     )
                 ]
             ),

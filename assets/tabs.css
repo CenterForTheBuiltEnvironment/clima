@@ -34,22 +34,22 @@
 .custom-tabs-container {
     width: 85%;
 }
+
 .custom-tabs {
-    border-top-left-radius: 3px;
     background-color: #f9f9f9;
     padding: 0 24px;
     border-bottom: 1px solid #d6d6d6;
 }
 
 .custom-tab {
-    color:#586069;
-    border-color: lightgrey;
+    border-color: rgb(238, 236, 236);
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     border-top: 3px solid transparent !important;
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;
-    background-color: #fafbfc;
+    border-bottom: 1px solid #d6d6d6;
+    background-color: #f6f8f8;
     padding: 12px !important;
     font-family: "system-ui";
     display: flex !important;
@@ -58,11 +58,24 @@
 }
 
 .custom-tab:has(.active) {
+    color:#586069;
     background-color: white;
     box-shadow: 1px 1px 0 white;
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;
     border-top: 6px solid #abd2ff !important;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+    .nav-pills {
+        flex-direction: column;
+    }
 }
 
 .nav-pills .nav-link {
@@ -70,6 +83,10 @@
     color: #586069;
     font-family: "system-ui";
     background-color: transparent;
+}
+
+.nav-pills .nav-link.disabled {
+    color: #c8c6c6;
 }
 
 .nav-pills .nav-link.active {
@@ -259,7 +276,12 @@ p {
     align-items: stretch;
 }
 
-
-
-
-
+.survey-alert {
+    color: white;
+    background-color: #0c2772;
+    opacity: 0.98;
+    font-family: "system-ui";
+    font-size: 15px;
+    border-radius: 0.25rem;
+    border: 0.5px solid lightgrey;
+}
