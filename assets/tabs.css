@@ -284,4 +284,5 @@ p {
     font-size: 15px;
     border-radius: 0.25rem;
     border: 0.5px solid lightgrey;
+    z-index: 1000;
 }

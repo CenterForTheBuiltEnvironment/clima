@@ -1,5 +1,5 @@
 function click_tab(name) {
-  cy.get('.custom-tab')
+  cy.get('.nav-item')
     .contains(name)
     .click();
 }
