@@ -26,54 +26,20 @@ def alert():
                 is_open=False,
                 dismissable=True,
                 className="survey-alert",
-                style={"position": "fixed", "top": 25, "right": 10, "width": 400},
+                style={
+                    "position": "fixed",
+                    "top": 25,
+                    "right": 10,
+                    "width": 400
+                },
             ),
-
-
-            # Alert style solution
-            # dbc.Alert(
-            #     [
-            #         "If you have a moment, help us improving Clima and take a ",
-            #         html.A("quick user survey", href="https://lnkd.in/gFheGNrt", className="alert-link"),
-            #         "!"
-            #     ],
-            #     id="alert-auto",
-            #     class_name= "survey-alert",
-            #     is_open=False,
-            # ),
-
-            # Pop-up window solution
-            # dbc.Modal(
-            #     [
-            #         dbc.ModalHeader(dbc.ModalTitle("CBE Clima User Survey")),
-            #         dbc.ModalBody([
-            #             "If you have a moment, help us improving Clima and take the quick ",
-            #             html.A(
-            #                 "user survey",
-            #                 href="https://forms.gle/k289zP3R92jdu14M7",
-            #                 style={'color':'black', 'font-weight': 'bold'}
-            #                 ),
-            #             "!"
-            #         ]),
-            #         dbc.ModalFooter(
-            #             dbc.Button(
-            #                 "Close", id="close", className="ms-auto", n_clicks=0
-            #             )
-            #         ),
-            #     ],
-            #     id="alert-auto",
-            #     centered=True,
-            #     autofocus=True,
-            #     is_open=False,
-            #     size="lg",
-            # ),
 
             dcc.Interval(
                 id='interval-component',
                 interval=12*1000,
                 n_intervals=0
             )
-        ]
+        ],
     )
 
 

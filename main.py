@@ -24,27 +24,13 @@ app.layout = dbc.Container(
 )
 
 
-# callbrack for Alert solution
+# callback for survey alert (dbc.Toast)
 @callback(
     Output('alert-auto', 'is_open'),
     Input('interval-component', 'n_intervals')
 )
 def display_alert(n):
     return n == 1
-
-
-# callback for Modal solution
-# @callback(
-#     Output('alert-auto', 'is_open'),
-#     [Input('interval-component', 'n_intervals'), Input("close", "n_clicks")],
-#     [State('alert-auto', 'is_open')]
-# )
-# def toggle_alert(n_intervals, n_clicks, is_open):
-#     if n_intervals == 1 and not is_open:
-#         return True
-#     elif n_clicks:
-#         return False
-#     return is_open
 
 
 if __name__ == "__main__":
