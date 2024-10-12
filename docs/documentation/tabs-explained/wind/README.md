@@ -11,3 +11,10 @@ Moreover, **Clima** shows wind intensity and direction using [heat maps](https:/
 <figure><img src="../../../.gitbook/assets/CBEClima_Rome_ITA_wind_speed_wind_tab.svg" alt=""><figcaption><p>Example: Heat map of the hourly wind intensity on all days of the year for <strong>Rome, ITA</strong></p></figcaption></figure>
 
 <figure><img src="../../../.gitbook/assets/CBEClima_Rome_ITA_wind_direction_wind_tab.svg" alt=""><figcaption><p>Example: Heat map of the hourly wind direction on all days of the year for <strong>Rome, ITA</strong></p></figcaption></figure>
+
+### Video Tutorial
+
+Learn more about the Wind tab by watching the following video.
+
+{% embed url="https://youtu.be/VJ_wOHadVdw?si=W90QpOb4VoqUPcbA&t=524" %}
+

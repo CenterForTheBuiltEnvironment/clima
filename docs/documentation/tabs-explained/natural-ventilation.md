@@ -26,4 +26,12 @@ The minimum temperature threshold is typically dictated by local discomfort near
 
 Natural ventilation can be used in combination with and in aid of radiant cooling systems. The most common risk is that condensation will form on cold surfaces, creating slippery floors or potential mold. **Clima** allows this control to be performed with the "surface temperature" filter, which is a function of the dew temperature.
 
-_\[video as for psychometric chart]_
+### Video Tutorial
+
+Learn more about the Natural Ventilation tab by watching the following video.
+
+{% embed url="https://youtu.be/VJ_wOHadVdw?si=_cUoFQGyxJD7V85a&t=703" %}
+
+
+
+&#x20;
