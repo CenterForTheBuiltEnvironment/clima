@@ -6,11 +6,17 @@ description: Web application for climate data analysis and visualization
 
 The CBE Clima Tool is a web-based application built to support climate analysis specifically designed to support the need of architects and engineers interested in climate-adapted design. It allows users to analyze the climate data of more than 27,500 locations worldwide from both [Energy Plus](https://energyplus.net/weather) and [Climate.One.Building.org](http://climate.onebuilding.org/). You can, however, also choose to upload your own EPW weather file. Our tool can be used to analyze and visualize data contained in EnergyPlus Weather (EPW) files. It furthermore calculates a number of climate-related values (i.e. solar azimuth and altitude, Universal Thermal Climate Index (UTCI), comfort indices, etc.) that are not contained in the EPW files but can be derived from the information therein contained. It can be freely accessed at [clima.cbe.berkeley.edu](http://clima.cbe.berkeley.edu)
 
-> If you use this tool please consider citing us. Betti, G., Tartarini, F., Nguyen, C, Schiavon, S. CBE Clima Tool: 
-> A free and open-source web application for climate analysis tailored to sustainable building design. 
-> Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
+> If you use this tool please consider citing us. Betti, G., Tartarini, F., Nguyen, C, Schiavon, S. CBE Clima Tool: A free and open-source web application for climate analysis tailored to sustainable building design. Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
 
 The CBE Clima Tool is open source. We have released the source code on a [public repository](https://github.com/CenterForTheBuiltEnvironment/clima). We welcome contributions from the community ([more info here](contributing/contributing.md)).
+
+### Video Tutorial
+
+Learn more about the CBE Clima Tool by watching the following video.
+
+{% embed url="https://www.youtube.com/watch?v=VJ_wOHadVdw" %}
+CBE Clima tool tutorial and overview
+{% endembed %}
 
 ## Contributions
 

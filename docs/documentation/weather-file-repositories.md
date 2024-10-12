@@ -1,6 +1,6 @@
 # Weather file repositories
 
-In addition to the data from  [Energy Plus](https://energyplus.net/weather) and [Climate.One.Building.org](http://climate.onebuilding.org/) CBE Clima Tool allows users to visualize any valid EPW file. Below we list some free sources from which climate files can be obtained.&#x20;
+In addition to the data from [Energy Plus](https://energyplus.net/weather) and [Climate.One.Building.org](http://climate.onebuilding.org/) CBE Clima Tool allows users to visualize any valid EPW file. Below we list some free sources from which climate files can be obtained.
 
 The following sources will be divided according to:
 
@@ -9,16 +9,13 @@ The following sources will be divided according to:
 
 **TMY repositories:**
 
-* ****[Climate.OneBuilding](https://climate.onebuilding.org/);
+* [Climate.OneBuilding](https://climate.onebuilding.org/);
 * [EnergyPlus](https://energyplus.net/weather);
 * European commission [Photovoltaic Geographical Information System](https://re.jrc.ec.europa.eu/pvg\_tools/it/#TMY);
 * [CSIRO](https://agdatashop.csiro.au/future-climate-predictive-weather) projected weather files for future climate scenarios for Australian locations;
 * University of Exeter [Prometheus](https://engineering.exeter.ac.uk/research/cee/research/prometheus/termsandconditions/futureweatherfiles/), current and future weather files for British cities
 
-
-
 **AMY repositories:**
 
 * NASA [Power tool](https://power.larc.nasa.gov/data-access-viewer/);
 * Pacific Northwest National Laboratory [diyepw tool](https://github.com/IMMM-SFA/diyepw) (given set of WMOs station)
-

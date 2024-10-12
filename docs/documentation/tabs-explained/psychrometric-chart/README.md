@@ -1,6 +1,6 @@
 # Psychrometric Chart
 
-**Clima** allows the user to visualize all annual weather conditions on a [psychometric diagram.](psychrometric-chart-explained.md)&#x20;
+**Clima** allows the user to visualize all annual weather conditions on a [psychometric diagram.](psychrometric-chart-explained.md)
 
 The default diagram allows the users to overlay the frequency with which weather conditions recur throughout the year.
 
@@ -17,3 +17,10 @@ Then, users can overlay another variable on the graphs, choosing from [Clima dat
 Moreover, data can be filtered by date, time, or one of the [Clima dataframe](../tab-summary/clima-dataframe.md) variables.
 
 <figure><img src="../../../.gitbook/assets/Schermata 2022-11-15 alle 10.37.43 AM.png" alt=""><figcaption><p>Psychrometric charts filters</p></figcaption></figure>
+
+### Video Tutorial
+
+Learn more about the Psychrometric tab by watching the following video.
+
+{% embed url="https://youtu.be/VJ_wOHadVdw?si=iAcBQpq3IgCNY-H6&t=582" %}
+

@@ -7,3 +7,10 @@ The top section of the page provides information about the selected location suc
 The bottom section of the page comprises the heating and cooling degree day chart and four violin plots showing the distribution of the dry-bulb air temperature (Tdb), relative humidity (RH), Global Horizontal Irradiance (GHI), and wind speed (U).
 
 ![Tab summary top](../../../.gitbook/assets/clima-summary-bottom.png)
+
+### Video Tutorial
+
+Learn more about the Climate Summary tab by watching the following video.
+
+{% embed url="https://youtu.be/VJ_wOHadVdw?si=H-93XRhh5Neuby_b&t=220" %}
+
