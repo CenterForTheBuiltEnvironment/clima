@@ -496,26 +496,30 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
     total_count = df.shape[0]
     calm_count = df.query("wind_speed == 0").shape[0]
+
+    # Create a temporary DataFrame with binned data
+    df_binned = df.assign(
+        WindSpd_bins=lambda d: pd.cut(
+            d["wind_speed"], bins=spd_bins, labels=spd_labels, right=True
+        ),
+        WindDir_bins=lambda d: pd.cut(
+            d["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
+        ),
+    )
+
+    # Rename the category in the 'WindDir_bins' column
+    df_binned["WindDir_bins"] = df_binned["WindDir_bins"].rename({360.0: 0.0})
+
     rose = (
-        df.assign(
-            WindSpd_bins=lambda df: pd.cut(
-                df["wind_speed"], bins=spd_bins, labels=spd_labels, right=True
-            )
-        )
-        .assign(
-            WindDir_bins=lambda df: pd.cut(
-                df["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
-            )
-        )
-        .replace({"WindDir_bins": {360: 0}})
-        .groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
+        df_binned.groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
         .size()
         .unstack(level="WindSpd_bins")
         .fillna(0)
-        .assign(calm=lambda df: calm_count / df.shape[0])
+        .assign(calm=lambda d: calm_count / d.shape[0])
         .sort_index(axis=1)
         .map(lambda x: x / total_count * 100)
     )
+
     fig = go.Figure()
     for i, col in enumerate(rose.columns):
         fig.add_trace(
