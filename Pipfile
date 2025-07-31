@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+dash = "==2.14.2"
+pvlib = "==0.9.1"
+pythermalcomfort = "*"
+dash-bootstrap-components = "==1.2.0"
+dash-extensions = "==1.0.7"
+dash-mantine-components = "*"
+requests = "*"
+plotly = "*"
+pandas = "*"
+numpy = "*"
+dash-iconify = "*"
+
+[dev-packages]
+cleanpy = "*"
+pytest = "*"
+bump2version = "*"
+pandas = "*"
+requests = "*"
+
+[requires]
+python_version = "3.11"
