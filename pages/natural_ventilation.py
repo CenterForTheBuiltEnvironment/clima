@@ -386,7 +386,7 @@ def nv_heatmap(
 
     fig = go.Figure(
         data=go.Heatmap(
-            y=df["hour"] - 0.5,
+            y=df["hour"] - 0.5,  # Offset by 0.5 to center the hour labels
             x=df["UTC_time"].dt.date,
             z=df[var],
             colorscale=var_color,
