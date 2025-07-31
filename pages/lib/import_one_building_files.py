@@ -79,9 +79,7 @@ def import_kml_files(file_name):
     try:
         df_old = pd.read_csv("./assets/data/one_building.csv", compression="gzip")
         df_old = pd.concat([df_old, df]).drop_duplicates()
-        df_old.to_csv(
-            "./assets/data/one_building.csv", index=False, compression="gzip"
-        )
+        df_old.to_csv("./assets/data/one_building.csv", index=False, compression="gzip")
     except FileNotFoundError:
         df.to_csv("./assets/data/one_building.csv", index=False, compression="gzip")
 
