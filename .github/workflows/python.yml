@@ -12,13 +12,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install
+      - name: Build Clima
         run: |-
-          pip install -r requirements.txt
+          pip install pipenv
+          pipenv install --dev
 
       - name: Test Clima
         run: |-
-          python -m pytest
+          pipenv run python -m pytest
 
       - name: Run Black
         # TODO: Add to dev dependencies: Adding it right now
