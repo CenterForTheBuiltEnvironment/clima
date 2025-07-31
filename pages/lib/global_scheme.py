@@ -365,7 +365,7 @@ mapping_dictionary = {
     "wind_speed": {
         "name": "Wind speed",
         "color": [
-            "#ffffff",
+            "#D3D3D3",
             "#b2f2ff",
             "#33ddff",
             "#00aaff",
