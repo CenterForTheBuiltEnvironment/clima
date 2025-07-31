@@ -110,3 +110,12 @@ gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima-test  --p
 
 gcloud run deploy clima-test --image us-docker.pkg.dev/clima-316917/gcr.io/clima-test --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=4Gi --concurrency=80 --cpu=2
 ```
+
+### Test project
+
+```text
+gcloud components update
+gcloud config set run/region us-central1
+gcloud config set project clima-316917
+gcloud run deploy clima-test --source .
+```
