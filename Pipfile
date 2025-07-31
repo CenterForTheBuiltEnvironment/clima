@@ -4,24 +4,23 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dash = "==2.14.2"
+dash = "==2.15"
 pvlib = "==0.9.1"
-pythermalcomfort = "*"
+pythermalcomfort = "==2.9.1"
 dash-bootstrap-components = "==1.2.0"
 dash-extensions = "==1.0.7"
-dash-mantine-components = "*"
-requests = "*"
-plotly = "*"
-pandas = "*"
-numpy = "*"
+dash-mantine-components = "==0.12.1"
+requests = "==2.32.4"
+plotly = "==5.18.0"
+pandas = "==2.2.0"
+numpy = "==1.26.3"
 dash-iconify = "*"
+scipy = "==1.12.0"
 
 [dev-packages]
 cleanpy = "*"
 pytest = "*"
 bump2version = "*"
-pandas = "*"
-requests = "*"
 
 [requires]
 python_version = "3.11"
