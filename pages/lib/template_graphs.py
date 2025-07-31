@@ -8,7 +8,6 @@ from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
 
-
 from .utils import code_timer, determine_month_and_hour_filter
 
 
@@ -454,7 +453,6 @@ def heatmap(df, var, global_local, si_ip):
     return fig
 
 
-### WIND ROSE TEMPLATE
 def speed_labels(bins, units):
     """Return nice labels for a wind speed range."""
     labels = []
@@ -566,6 +564,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
         showlegend=labels,
         dragmode=False,
         margin=tight_margins,
+        legend_title_text=f"Wind Speed ({spd_unit})",
     )
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
