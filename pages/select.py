@@ -310,7 +310,7 @@ def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_
     ],
     prevent_initial_call=True,
 )
-def display_modal_when_data_clicked(click_map):
+def change_text_modal(click_map):
     """change the text of the modal header"""
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]

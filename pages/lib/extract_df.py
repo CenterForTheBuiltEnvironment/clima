@@ -379,7 +379,7 @@ def convert_data(df, mapping_json):
     for key in json.loads(mapping_json):
         if "conversion_function" in mapping_dict[key]:
             conversion_function_name = mapping_dict[key]["conversion_function"]
-            if conversion_function_name != None:
+            if conversion_function_name is not None:
                 conversion_function = globals()[conversion_function_name]
                 conversion_function(df, key)
     return json.dumps(mapping_dict)

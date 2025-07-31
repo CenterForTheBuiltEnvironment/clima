@@ -531,7 +531,7 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
     [State("meta-store", "data")],
     prevent_initial_call=True,
 )
-def download_clima_dataframe(n_clicks, meta):
+def download_epw(n_clicks, meta):
     if n_clicks is None:
         raise PreventUpdate
     elif meta is not None:

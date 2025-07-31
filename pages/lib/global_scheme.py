@@ -1,3 +1,5 @@
+import plotly.io as pio
+
 # Colors Dictionary
 blue_red_yellow = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
 dry_humid = ["#ffe600", "#00c8ff", "#0000ff"]
@@ -75,8 +77,6 @@ month_lst = [
     "Nov",
     "Dec",
 ]
-
-import plotly.io as pio
 
 clima_template = "plotly_white"
 
