@@ -16,6 +16,7 @@ docs
 file_system_backend
 tests
 .gitbook.yaml
+assets/data/OneBuilding*.zip
 
 assets/data/Region*.kml
 file_system_store
