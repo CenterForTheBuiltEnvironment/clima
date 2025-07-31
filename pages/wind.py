@@ -257,9 +257,9 @@ def custom_wind_rose():
                                     dropdown(
                                         id="tab5-custom-start-hour",
                                         options={
-                                            str(i) + ":00": i for i in range(1, 25)
+                                            str(i) + ":00": i for i in range(0, 24)
                                         },
-                                        value=1,
+                                        value=0,
                                         style={"width": "6rem"},
                                     ),
                                 ],

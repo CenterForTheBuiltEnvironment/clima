@@ -480,7 +480,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     else:
         df = df.loc[(df["month"] <= end_month) | (df["month"] >= start_month)]
     if start_hour <= end_hour:
-        df = df.loc[(df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
+        df = df.loc[(df["hour"] > start_hour) & (df["hour"] <= end_hour)]
     else:
         df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
 
@@ -838,7 +838,7 @@ def filter_df_by_month_and_hour(
             mask = (df["hour"] <= start_hour) | (df["hour"] > end_hour)
             df.loc[mask, var] = None
         else:
-            mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
+            mask = (df["hour"] > end_hour) & (df["hour"] <= start_hour)
             df.loc[mask, var] = None
 
     return df
