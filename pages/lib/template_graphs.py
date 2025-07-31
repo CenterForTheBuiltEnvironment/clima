@@ -527,7 +527,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
                 hovertemplate="frequency: %{r:.2f}%"
                 + "<br>"
                 + "direction: %{theta:.2f}"
-                + "\u00B0 deg"
+                + "\u00b0 deg"
                 + "<br>",
             )
         )

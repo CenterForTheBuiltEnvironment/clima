@@ -29,27 +29,25 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__,
-                   name= 'Natural Ventilation',
-                   path=PageUrls.NATURAL_VENTILATION.value,
-                   order=6
-                   )
+dash.register_page(
+    __name__,
+    name="Natural Ventilation",
+    path=PageUrls.NATURAL_VENTILATION.value,
+    order=6,
+)
 
 
 def layout():
     return html.Div(
         className="container-col",
-        id='main-nv-section',
+        id="main-nv-section",
         children=[
-            # 
-        ]
+            #
+        ],
     )
 
 
-@callback(
-    Output('main-nv-section', 'children'),
-    [Input('si-ip-radio-input', 'value')]
-)
+@callback(Output("main-nv-section", "children"), [Input("si-ip-radio-input", "value")])
 def update_layout(si_ip):
     if si_ip == "ip":
         tdb_set_min = 50
@@ -59,7 +57,7 @@ def update_layout(si_ip):
         tdb_set_min = 10
         tdb_set_max = 24
         dpt_set = 16
-    
+
     return [
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
         dcc.Loading(
@@ -105,8 +103,6 @@ def update_layout(si_ip):
             type="circle",
         ),
     ]
-
-    
 
 
 def inputs_tab(t_min, t_max, d_set):
@@ -606,9 +602,7 @@ def nv_bar_chart(
     )
 
 
-@callback(
-    Output("nv-dpt-filter", "disabled"), Input("enable-condensation", "value")
-)
+@callback(Output("nv-dpt-filter", "disabled"), Input("enable-condensation", "value"))
 def enable_disable_button_data_filter(state_checklist):
     if len(state_checklist) == 1:
         return False

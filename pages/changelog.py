@@ -5,10 +5,7 @@ from dash import dcc
 from pages.lib.page_urls import PageUrls
 
 
-dash.register_page(__name__,
-                   name='changelog',
-                   path=PageUrls.CHANGELOG.value
-                   )
+dash.register_page(__name__, name="changelog", path=PageUrls.CHANGELOG.value)
 
 
 def layout():

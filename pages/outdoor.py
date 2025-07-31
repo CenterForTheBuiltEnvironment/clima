@@ -27,11 +27,9 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__,
-                   name= 'Outdoor Comfort',
-                   path=PageUrls.OUTDOOR.value,
-                   order=7
-                   )
+dash.register_page(
+    __name__, name="Outdoor Comfort", path=PageUrls.OUTDOOR.value, order=7
+)
 
 
 def inputs_outdoor_comfort():

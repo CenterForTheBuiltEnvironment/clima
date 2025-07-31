@@ -6,7 +6,7 @@ from dash_extensions import Lottie
 from pages.lib.page_urls import PageUrls
 
 
-dash.register_page(__name__, name= '404')
+dash.register_page(__name__, name="404")
 
 
 layout = [

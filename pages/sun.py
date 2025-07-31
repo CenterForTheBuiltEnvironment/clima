@@ -33,11 +33,7 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__,
-                   name= 'Sun and Clouds',
-                   path=PageUrls.SUN.value,
-                   order=3
-                   )
+dash.register_page(__name__, name="Sun and Clouds", path=PageUrls.SUN.value, order=3)
 
 
 sc_dropdown_names = {
@@ -54,7 +50,6 @@ sc_dropdown_names.pop("UTCI: Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & Wind : categories", None)
 sc_dropdown_names.pop("UTCI: Sun & no Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
-
 
 
 def sun_path():
@@ -153,10 +148,9 @@ def explore_daily_heatmap():
     )
 
 
-
 def static_section():
     return html.Div(
-        id='static-section', 
+        id="static-section",
         className="container-col full-width",
         children=[
             # ...
@@ -173,10 +167,7 @@ def layout():
     )
 
 
-@callback(
-    Output('static-section', 'children'),
-    [Input('si-ip-radio-input', 'value')]
-)
+@callback(Output("static-section", "children"), [Input("si-ip-radio-input", "value")])
 def update_static_section(si_ip):
     if si_ip == "si":
         hor_unit = "Wh/m²"
@@ -185,9 +176,7 @@ def update_static_section(si_ip):
     return [
         html.Div(
             children=title_with_link(
-                text="Global and Diffuse Horizontal Solar Radiation ("
-                + hor_unit
-                + ")",
+                text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
                 id_button="monthly-chart-label",
                 doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation",
             ),

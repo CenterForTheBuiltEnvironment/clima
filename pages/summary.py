@@ -9,11 +9,7 @@ import requests
 from pages.lib.page_urls import PageUrls
 from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
-from pages.lib.global_scheme import (
-    template,
-    tight_margins,
-    mapping_dictionary
-)
+from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
 from pages.lib.template_graphs import violin
 from pages.lib.utils import (
     generate_chart_name,
@@ -24,11 +20,9 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__,
-                   name='Climate Summary',
-                   path=PageUrls.SUMMARY.value,
-                   order=1
-                   )
+dash.register_page(
+    __name__, name="Climate Summary", path=PageUrls.SUMMARY.value, order=1
+)
 
 
 def layout():
@@ -39,14 +33,12 @@ def layout():
         id="tab-two-container",
         children=[
             #
-        ]
+        ],
     )
 
 
-
 @callback(
-    Output('tab-two-container', 'children'),
-    [Input('si-ip-radio-input', 'value')]
+    Output("tab-two-container", "children"), [Input("si-ip-radio-input", "value")]
 )
 def update_layout(si_ip):
 
@@ -58,139 +50,137 @@ def update_layout(si_ip):
         cooling_setpoint = 64
 
     return html.Div(
-                className="container-col",
-                id="tab2-sec1-container",
-                children=[
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(
-                            className="container-col",
-                            id="location-info",
-                            style={"padding": "12px"},
+        className="container-col",
+        id="tab2-sec1-container",
+        children=[
+            dcc.Loading(
+                type="circle",
+                children=html.Div(
+                    className="container-col",
+                    id="location-info",
+                    style={"padding": "12px"},
+                ),
+            ),
+            dcc.Loading(
+                type="circle",
+                children=html.Div(className="tab-two-section", id="world-map"),
+            ),
+            html.Div(
+                children=title_with_tooltip(
+                    text="Download",
+                    id_button="download-button-label",
+                    tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
+                ),
+            ),
+            dcc.Loading(
+                type="circle",
+                children=dbc.Row(
+                    [
+                        dbc.Col(
+                            dbc.Button(
+                                "Download EPW",
+                                color="primary",
+                                id="download-epw-button",
+                            ),
+                            width="auto",
                         ),
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(className="tab-two-section", id="world-map"),
-                    ),
-                    html.Div(
-                        children=title_with_tooltip(
-                            text="Download",
-                            id_button="download-button-label",
-                            tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
+                        dbc.Col(
+                            dbc.Button(
+                                "Download Clima dataframe",
+                                color="primary",
+                                id="download-button",
+                            ),
+                            width="auto",
                         ),
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=dbc.Row(
+                        dbc.Col(
                             [
-                                dbc.Col(
-                                    dbc.Button(
-                                        "Download EPW",
-                                        color="primary",
-                                        id="download-epw-button",
-                                    ),
-                                    width="auto",
-                                ),
-                                dbc.Col(
-                                    dbc.Button(
-                                        "Download Clima dataframe",
-                                        color="primary",
-                                        id="download-button",
-                                    ),
-                                    width="auto",
-                                ),
-                                dbc.Col(
-                                    [
-                                        dcc.Download(id="download-dataframe-csv"),
-                                        dcc.Download(id="download-epw"),
-                                    ],
-                                    width=1,
-                                ),
+                                dcc.Download(id="download-dataframe-csv"),
+                                dcc.Download(id="download-epw"),
                             ],
+                            width=1,
                         ),
-                    ),
-                    html.Div(
-                        children=title_with_link(
-                            text="Heating and Cooling Degree Days",
-                            id_button="hdd-cdd-chart",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/degree-days-explained",
+                    ],
+                ),
+            ),
+            html.Div(
+                children=title_with_link(
+                    text="Heating and Cooling Degree Days",
+                    id_button="hdd-cdd-chart",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/degree-days-explained",
+                ),
+            ),
+            dbc.Alert(
+                "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
+                color="warning",
+                is_open=False,
+                id="warning-cdd-higher-hdd",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        html.Label(
+                            "Heating degree day (HDD) setpoint",
                         ),
+                        width="auto",
                     ),
-                    dbc.Alert(
-                        "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
-                        color="warning",
-                        is_open=False,
-                        id="warning-cdd-higher-hdd",
-                    ),
-                    dbc.Row(
-                        [
-                            dbc.Col(
-                                html.Label(
-                                    "Heating degree day (HDD) setpoint",
-                                ),
-                                width="auto",
-                            ),
-                            dbc.Col(
-                                dbc.Input(
-                                    id="input-hdd-set-point",
-                                    type="number",
-                                    value=heating_setpoint,
-                                    style={"width": "4rem"},
-                                ),
-                                width="auto",
-                            ),
-                            dbc.Col(
-                                html.Label(
-                                    "Cooling degree day (CDD) setpoint",
-                                ),
-                                width="auto",
-                            ),
-                            dbc.Col(
-                                dbc.Input(
-                                    id="input-cdd-set-point",
-                                    type="number",
-                                    value=cooling_setpoint,
-                                    style={"width": "4rem"},
-                                ),
-                                width="auto",
-                            ),
-                            dbc.Col(
-                                dbc.Button(
-                                    id="submit-set-points",
-                                    children="Submit",
-                                    color="primary",
-                                ),
-                                width="auto",
-                            ),
-                        ],
-                        align="center",
-                        justify="center",
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(id="degree-days-chart-wrapper"),
-                    ),
-                    html.Div(
-                        children=title_with_link(
-                            text="Climate Profiles",
-                            id_button="climate-profiles-chart",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/climate-profiles-explained",
+                    dbc.Col(
+                        dbc.Input(
+                            id="input-hdd-set-point",
+                            type="number",
+                            value=heating_setpoint,
+                            style={"width": "4rem"},
                         ),
+                        width="auto",
                     ),
-                    dbc.Row(
-                        id="graph-container",
-                        children=[
-                            dbc.Col(id="temp-profile-graph", width=12, md=6, lg=3),
-                            dbc.Col(id="humidity-profile-graph", width=12, md=6, lg=3),
-                            dbc.Col(id="solar-radiation-graph", width=12, md=6, lg=3),
-                            dbc.Col(id="wind-speed-graph", width=12, md=6, lg=3),
-                        ],
+                    dbc.Col(
+                        html.Label(
+                            "Cooling degree day (CDD) setpoint",
+                        ),
+                        width="auto",
+                    ),
+                    dbc.Col(
+                        dbc.Input(
+                            id="input-cdd-set-point",
+                            type="number",
+                            value=cooling_setpoint,
+                            style={"width": "4rem"},
+                        ),
+                        width="auto",
+                    ),
+                    dbc.Col(
+                        dbc.Button(
+                            id="submit-set-points",
+                            children="Submit",
+                            color="primary",
+                        ),
+                        width="auto",
                     ),
                 ],
-            )
-
-
+                align="center",
+                justify="center",
+            ),
+            dcc.Loading(
+                type="circle",
+                children=html.Div(id="degree-days-chart-wrapper"),
+            ),
+            html.Div(
+                children=title_with_link(
+                    text="Climate Profiles",
+                    id_button="climate-profiles-chart",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/climate-profiles-explained",
+                ),
+            ),
+            dbc.Row(
+                id="graph-container",
+                children=[
+                    dbc.Col(id="temp-profile-graph", width=12, md=6, lg=3),
+                    dbc.Col(id="humidity-profile-graph", width=12, md=6, lg=3),
+                    dbc.Col(id="solar-radiation-graph", width=12, md=6, lg=3),
+                    dbc.Col(id="wind-speed-graph", width=12, md=6, lg=3),
+                ],
+            ),
+        ],
+    )
 
 
 # @callback(
@@ -202,7 +192,6 @@ def update_layout(si_ip):
 #         return 10, 18
 #     else:
 #         return 50, 64
-
 
 
 @callback(
@@ -307,9 +296,6 @@ def update_location_info(ts, df, meta, si_ip):
     )
 
     return location_info
-
-
-
 
 
 @callback(

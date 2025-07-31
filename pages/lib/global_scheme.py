@@ -104,8 +104,8 @@ fig_config = {
 tight_margins = dict(l=20, r=20, t=33, b=20)
 
 # Units Dictionary
-degrees_unit = "\u00B0deg"
-temperature_unit = "\u00B0C"
+degrees_unit = "\u00b0deg"
+temperature_unit = "\u00b0C"
 thermal_stress_label = "Thermal stress"
 
 mapping_dictionary = {

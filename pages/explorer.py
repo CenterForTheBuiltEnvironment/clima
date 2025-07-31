@@ -44,11 +44,9 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__,
-                   name= 'Data Explorer',
-                   path=PageUrls.EXPLORER.value,
-                   order=8
-                   )
+dash.register_page(
+    __name__, name="Data Explorer", path=PageUrls.EXPLORER.value, order=8
+)
 
 
 explore_dropdown_names = {}

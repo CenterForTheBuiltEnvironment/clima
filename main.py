@@ -13,22 +13,16 @@ app.layout = dbc.Container(
     fluid=True,
     style={"padding": "0"},
     children=[
-        dcc.Location(id="url", refresh=False), # connected to callback below
+        dcc.Location(id="url", refresh=False),  # connected to callback below
         banner(),
-        html.Div(
-            id="page-content",
-            children=build_tabs()
-        ),    
+        html.Div(id="page-content", children=build_tabs()),
         footer(),
     ],
 )
 
 
 # callback for survey alert (dbc.Toast)
-@callback(
-    Output('alert-auto', 'is_open'),
-    Input('interval-component', 'n_intervals')
-)
+@callback(Output("alert-auto", "is_open"), Input("interval-component", "n_intervals"))
 def display_alert(n):
     return n == 1
 

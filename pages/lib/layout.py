@@ -8,7 +8,6 @@ def alert():
     return html.Div(
         id="alert-container",
         children=[
-
             dbc.Toast(
                 [
                     "If you have a moment, help us improving Clima and take a ",
@@ -16,9 +15,9 @@ def alert():
                         "quick user survey",
                         href="https://forms.gle/k289zP3R92jdu14M7",
                         className="alert-link",
-                        target="_blank"
+                        target="_blank",
                     ),
-                    "! ☀️"
+                    "! ☀️",
                 ],
                 id="alert-auto",
                 header="CBE Clima User Survey",
@@ -26,19 +25,9 @@ def alert():
                 is_open=False,
                 dismissable=True,
                 className="survey-alert",
-                style={
-                    "position": "fixed",
-                    "top": 25,
-                    "right": 10,
-                    "width": 400
-                },
+                style={"position": "fixed", "top": 25, "right": 10, "width": 400},
             ),
-
-            dcc.Interval(
-                id='interval-component',
-                interval=12*1000,
-                n_intervals=0
-            )
+            dcc.Interval(id="interval-component", interval=12 * 1000, n_intervals=0),
         ],
     )
 
@@ -176,7 +165,6 @@ def banner():
     )
 
 
-
 def store():
     return html.Div(
         id="store",
@@ -215,18 +203,18 @@ def build_tabs():
                                     className="nav-link",
                                     disabled=True,
                                 ),
-                                className="custom-tab"
+                                className="custom-tab",
                             )
-                            for page in dash.page_registry.values() if page["name"] not in ["404", "changelog"]
+                            for page in dash.page_registry.values()
+                            if page["name"] not in ["404", "changelog"]
                         ],
                         id="tabs",
                         class_name="tab-container",
                         pills=True,
-                        justified=True
+                        justified=True,
                     )
-                ]
+                ],
             ),
-            
             html.Div(
                 id="store-container",
                 children=[
@@ -234,11 +222,11 @@ def build_tabs():
                     html.Div(
                         id="tabs-content",
                         children=[
-                            alert(),    # alert can be removed after survey is done
-                            dash.page_container
+                            alert(),  # alert can be removed after survey is done
+                            dash.page_container,
                         ],
-                    )
-                ]
+                    ),
+                ],
             ),
-        ]
+        ],
     )

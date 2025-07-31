@@ -9,23 +9,14 @@ from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, 
 
 from pages.lib.page_urls import PageUrls
 from pages.lib.extract_df import convert_data
-from pages.lib.extract_df import (
-    create_df,
-    get_data,
-    get_location_info
-)
+from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_scheme import mapping_dictionary
-from pages.lib.utils import (
-    plot_location_epw_files,
-    generate_chart_name
+from pages.lib.utils import plot_location_epw_files, generate_chart_name
+
+
+dash.register_page(
+    __name__, name="Select Weather File", path=PageUrls.SELECT.value, order=0
 )
-
-
-dash.register_page(__name__,
-                   name='Select Weather File',
-                   path=PageUrls.SELECT.value,
-                   order=0
-                   )
 
 
 messages_alert = {
@@ -35,6 +26,7 @@ messages_alert = {
     "invalid_format": "The format of the EPW file you have uploaded is invalid.",
     "wrong_extension": "The file you have uploaded is not an EPW file",
 }
+
 
 def layout():
     """Contents in the first tab 'Select Weather File'"""
@@ -95,6 +87,7 @@ def layout():
             ),
         ],
     )
+
 
 def alert():
     """Alert layout for the submit button."""
@@ -231,7 +224,7 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
             None,
             None,
         )
-    
+
 
 @callback(
     [
@@ -280,7 +273,6 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             "Current Location: " + meta["city"] + ", " + meta["country"],
         )
-
 
 
 @callback(

@@ -16,11 +16,7 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__,
-                   name= 'Wind',
-                   path=PageUrls.WIND.value,
-                   order=4
-                   )
+dash.register_page(__name__, name="Wind", path=PageUrls.WIND.value, order=4)
 
 
 def sliders():
