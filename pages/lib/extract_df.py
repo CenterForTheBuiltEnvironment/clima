@@ -151,7 +151,7 @@ def create_df(lst, file_name):
         years = epw_df["year"].astype("int").unique()
         if len(years) == 1:
             year_rounded_up = int(math.ceil(years[0] / 10.0)) * 10
-            location_info["period"] = f"{year_rounded_up-10}-{year_rounded_up}"
+            location_info["period"] = f"{year_rounded_up - 10}-{year_rounded_up}"
         else:
             min_year = int(math.floor(min(years) / 10.0)) * 10
             max_year = int(math.ceil(max(years) / 10.0)) * 10

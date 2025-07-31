@@ -20,7 +20,6 @@ from pages.lib.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     container_row_center_full,
     container_col_center_one_of_three,
-    mapping_dictionary,
 )
 from pages.lib.template_graphs import (
     heatmap,
@@ -37,7 +36,6 @@ from pages.lib.utils import (
     generate_units,
     title_with_tooltip,
     summary_table_tmp_rh_tab,
-    code_timer,
     title_with_link,
     determine_month_and_hour_filter,
     dropdown,

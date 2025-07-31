@@ -1,7 +1,6 @@
 from datetime import timedelta
 from math import ceil, cos, floor, radians
 
-import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go

@@ -22,6 +22,7 @@ cleanpy = "*"
 pytest = "*"
 bump2version = "*"
 black = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.11"

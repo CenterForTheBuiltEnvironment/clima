@@ -191,7 +191,7 @@ def submitted_data(
                     messages_alert["invalid_format"],
                     "warning",
                 )
-        except Exception as e:
+        except Exception:
             # print(e)
             return (
                 None,

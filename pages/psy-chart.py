@@ -1,4 +1,3 @@
-import json
 from math import ceil, floor
 
 import dash

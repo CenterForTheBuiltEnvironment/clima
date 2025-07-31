@@ -1,12 +1,11 @@
-import dash
-from dash import html, dcc
-from dash_extensions.enrich import Output, Input, State, callback
-import dash_bootstrap_components as dbc
-
-import numpy as np
 from copy import deepcopy
 
-from pages.lib.page_urls import PageUrls
+import dash
+import dash_bootstrap_components as dbc
+import numpy as np
+from dash import html, dcc
+from dash_extensions.enrich import Output, Input, State, callback
+
 from pages.lib.charts_sun import (
     monthly_solar,
     polar_graph,
@@ -16,22 +15,18 @@ from pages.lib.global_scheme import (
     sun_cloud_tab_dropdown_names,
     sun_cloud_tab_explore_dropdown_names,
     dropdown_names,
-    more_variables_dropdown,
     tight_margins,
     month_lst,
-    mapping_dictionary,
 )
+from pages.lib.page_urls import PageUrls
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
 from pages.lib.utils import (
-    code_timer,
     dropdown,
-    title_with_tooltip,
     generate_chart_name,
     generate_units,
     generate_custom_inputs,
     title_with_link,
 )
-
 
 dash.register_page(__name__, name="Sun and Clouds", path=PageUrls.SUN.value, order=3)
 

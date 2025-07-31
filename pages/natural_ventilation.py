@@ -1,5 +1,4 @@
 import math
-import json
 
 import dash
 from dash import dcc, html

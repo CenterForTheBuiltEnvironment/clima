@@ -1,6 +1,5 @@
 from math import ceil, floor
 
-import json
 import numpy as np
 import math
 import plotly.express as px

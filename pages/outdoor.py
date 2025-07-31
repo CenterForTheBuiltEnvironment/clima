@@ -8,10 +8,6 @@ import numpy as np
 from pages.lib.page_urls import PageUrls
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
-    tight_margins,
-    month_lst,
-    container_row_center_full,
-    container_col_center_one_of_three,
 )
 from pages.lib.template_graphs import (
     heatmap_with_filter,

@@ -848,5 +848,5 @@ def catch(func, handle=lambda e: e, *args, **kwargs):
     # Handle category not in dictionary
     try:
         return func(*args, **kwargs)
-    except Exception as e:
+    except Exception:
         return 0

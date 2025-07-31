@@ -6,7 +6,6 @@ from pages.lib.page_urls import PageUrls
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.utils import (
-    code_timer,
     title_with_tooltip,
     generate_chart_name,
     generate_units,
