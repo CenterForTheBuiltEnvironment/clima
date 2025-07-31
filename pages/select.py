@@ -4,15 +4,18 @@ import re
 
 import dash
 import dash_bootstrap_components as dbc
+import dash_mantine_components as dmc
+import pandas as pd
+import plotly.express as px
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
+from pandas import json_normalize
 
-from pages.lib.page_urls import PageUrls
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_scheme import mapping_dictionary
-from pages.lib.utils import plot_location_epw_files, generate_chart_name
-
+from pages.lib.page_urls import PageUrls
+from pages.lib.utils import generate_chart_name
 
 dash.register_page(
     __name__, name="Select Weather File", path=PageUrls.SELECT.value, order=0
@@ -56,14 +59,14 @@ def layout():
                 multiple=True,
                 className="d-grid",
             ),
-            dcc.Graph(
-                id="tab-one-map",
-                figure=plot_location_epw_files(),
-                config=generate_chart_name("epw_location_select"),
+            dmc.Skeleton(
+                visible=False,
+                id="skeleton-graph-container",
+                height=500,
+                children=html.Div(id="tab-one-map"),
             ),
             dbc.Modal(
                 [
-                    # dbc.ModalHeader("Header"),
                     dbc.ModalHeader(id="modal-header"),
                     dbc.ModalFooter(
                         children=[
@@ -312,3 +315,63 @@ def display_modal_when_data_clicked(click_map):
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
     return ["Analyse data from this location?"]
+
+
+@callback(
+    Output("skeleton-graph-container", "children"),
+    Input("url", "pathname"),
+)
+def plot_location_epw_files(pathname):
+    # print(pathname)
+    if pathname != "/":
+        raise PreventUpdate
+
+    with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
+        data = json.load(data_file)
+
+    df = json_normalize(data["features"])
+    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
+    df["lat"] += 0.005
+    df["lat"] += 0.005
+    df = df.rename(columns={"properties.epw": "Source"})
+
+    fig = px.scatter_mapbox(
+        df.head(2585),
+        lat="lat",
+        lon="lon",
+        hover_name="properties.title",
+        color_discrete_sequence=["#3a0ca3"],
+        hover_data=["Source"],
+        zoom=2,
+        height=500,
+    )
+    df_one_building = pd.read_csv("./assets/data/one_building.csv", compression="gzip")
+
+    fig2 = px.scatter_mapbox(
+        df_one_building,
+        lat="lat",
+        lon="lon",
+        hover_name=df_one_building["name"],
+        color_discrete_sequence=["#4895ef"],
+        hover_data=[
+            "period",
+            "elevation (m)",
+            "time zone (GMT)",
+            "99% Heating DB",
+            "1% Cooling DB ",
+            "Source",
+        ],
+        zoom=2,
+        height=500,
+    )
+    fig.add_trace(fig2.data[0])
+    fig.update_layout(mapbox_style="carto-positron")
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+
+    return (
+        dcc.Graph(
+            id="tab-one-map",
+            figure=fig,
+            config=generate_chart_name("epw_location_select"),
+        ),
+    )

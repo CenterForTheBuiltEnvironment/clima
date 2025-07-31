@@ -1,14 +1,12 @@
+import copy
 import functools
 import time
-from pages.lib.global_scheme import fig_config, mapping_dictionary
-import pandas as pd
-import json
-from pandas import json_normalize
-from dash import html, dash_table, dcc
+
 import dash_bootstrap_components as dbc
-import plotly.express as px
-import copy
-import requests
+import pandas as pd
+from dash import html, dash_table, dcc
+
+from pages.lib.global_scheme import fig_config, mapping_dictionary
 
 
 def code_timer(func):
@@ -191,59 +189,6 @@ def generate_custom_inputs_psy(
     else:
         custom_inputs = f"{colorby_fullname}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_fullname}_{min_val}-{max_val}"
     return custom_inputs
-
-
-def plot_location_epw_files():
-    with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
-        data = json.load(data_file)
-
-    df = json_normalize(data["features"])
-    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
-    df["lat"] += 0.005
-    df["lat"] += 0.005
-    df = df.rename(columns={"properties.epw": "Source"})
-
-    fig = px.scatter_mapbox(
-        df.head(2585),
-        lat="lat",
-        lon="lon",
-        hover_name="properties.title",
-        color_discrete_sequence=["#3a0ca3"],
-        hover_data=["Source"],
-        zoom=2,
-        height=500,
-    )
-    try:
-        print(requests.get("https://climate.onebuilding.org", timeout=2))
-
-        df_one_building = pd.read_csv(
-            "./assets/data/one_building.csv", compression="gzip"
-        )
-
-        fig2 = px.scatter_mapbox(
-            df_one_building,
-            lat="lat",
-            lon="lon",
-            hover_name=df_one_building["name"],
-            color_discrete_sequence=["#4895ef"],
-            hover_data=[
-                "period",
-                "elevation (m)",
-                "time zone (GMT)",
-                "99% Heating DB",
-                "1% Cooling DB ",
-                "Source",
-            ],
-            zoom=2,
-            height=500,
-        )
-        fig.add_trace(fig2.data[0])
-    except requests.exceptions.ConnectTimeout:
-        pass
-    fig.update_layout(mapbox_style="carto-positron")
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-
-    return fig
 
 
 def title_with_tooltip(text, tooltip_text, id_button):

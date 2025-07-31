@@ -1,7 +1,6 @@
-import dash
 import dash_bootstrap_components as dbc
-from dash import html, dcc, no_update
-from dash_extensions.enrich import Output, Input, State, callback
+from dash import html, dcc
+from dash_extensions.enrich import Output, Input, callback
 
 from app import app
 from pages.lib.layout import banner, footer, build_tabs
