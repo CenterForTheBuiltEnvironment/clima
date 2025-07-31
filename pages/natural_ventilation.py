@@ -386,7 +386,7 @@ def nv_heatmap(
 
     fig = go.Figure(
         data=go.Heatmap(
-            y=df["hour"],
+            y=df["hour"] - 0.5,
             x=df["UTC_time"].dt.date,
             z=df[var],
             colorscale=var_color,
@@ -414,7 +414,7 @@ def nv_heatmap(
         template=template,
         title=title,
         yaxis_nticks=13,
-        yaxis=dict(range=(1, 24)),
+        yaxis=dict(range=(0, 24)),
         margin=tight_margins.copy().update({"t": 55}),
     )
 

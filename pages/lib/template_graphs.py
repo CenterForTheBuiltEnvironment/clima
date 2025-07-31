@@ -835,7 +835,7 @@ def filter_df_by_month_and_hour(
             df.loc[mask, var] = None
 
         if start_hour <= end_hour:
-            mask = (df["hour"] < start_hour) | (df["hour"] > end_hour)
+            mask = (df["hour"] <= start_hour) | (df["hour"] > end_hour)
             df.loc[mask, var] = None
         else:
             mask = (df["hour"] >= end_hour) & (df["hour"] <= start_hour)
