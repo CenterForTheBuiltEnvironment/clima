@@ -256,6 +256,7 @@ def daily_profile(df, var, global_local, si_ip):
         rows=1,
         cols=12,
         subplot_titles=month_lst,
+        shared_yaxes=True,
     )
 
     for i in range(12):
@@ -461,9 +462,9 @@ def speed_labels(bins, units):
         if left == bins[0]:
             labels.append("calm")
         elif np.isinf(right):
-            labels.append(">{} {}".format(left, units))
+            labels.append(f">{left} {units}")
         else:
-            labels.append("{} - {} {}".format(left, right, units))
+            labels.append(f"{left} - {right} {units}")
     return labels
 
 

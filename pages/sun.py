@@ -208,7 +208,7 @@ def update_static_section(si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def monthly_and_cloud_chart(ts, df, meta, si_ip):
+def monthly_and_cloud_chart(_, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
 
     # Sun Radiation
@@ -303,7 +303,7 @@ def daily(ts, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_heatmap(ts, var, global_local, df, meta, si_ip):
+def update_heatmap(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(

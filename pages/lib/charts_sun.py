@@ -26,6 +26,7 @@ def monthly_solar(epw_df, si_ip):
         rows=1,
         cols=12,
         subplot_titles=month_lst,
+        shared_yaxes=True,
     )
 
     for i in range(12):
@@ -91,10 +92,11 @@ def monthly_solar(epw_df, si_ip):
         )
 
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
-        if si_ip == "si":
-            fig.update_yaxes(range=[0, 1000], row=1, col=i + 1)
-        if si_ip == "ip":
-            fig.update_yaxes(range=[0, 400], row=1, col=i + 1)
+
+    if si_ip == "si":
+        fig.update_yaxes(range=[0, 1000])
+    if si_ip == "ip":
+        fig.update_yaxes(range=[0, 400])
 
     fig.update_layout(
         template=template,
