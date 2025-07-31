@@ -24,8 +24,8 @@ from pages.lib.utils import (
     generate_units_degree,
     generate_units,
     generate_custom_inputs_nv,
-    determine_month_and_hour_filter,
-)
+    determine_month_and_hour_filter, title_with_link,
+    )
 
 
 dash.register_page(
@@ -58,6 +58,13 @@ def update_layout(si_ip):
         dpt_set = 16
 
     return [
+            html.Div(
+                children=title_with_link(
+                    text="Natural ventilation potential",
+                    id_button="natural-ventilation-potential",
+                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/natural-ventilation",
+                    ),
+                ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
         dcc.Loading(
             html.Div(
