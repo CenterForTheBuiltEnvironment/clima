@@ -92,30 +92,17 @@ First make sure you that:
 
 ```text
 gcloud components update --quiet
-gcloud auth list
-pipenv lock
-pipenv run pip3 freeze > requirements.txt
+pipenv requirements > requirements.txt
 ```
 
-```bash
-gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima  --project=clima-316917
-
-gcloud run deploy clima --image us-docker.pkg.dev/clima-316917/gcr.io/clima --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=4Gi --concurrency=80 --cpu=2
-```
-
-### Test project
-
-```bash
-gcloud builds submit --tag us-docker.pkg.dev/clima-316917/gcr.io/clima-test  --project=clima-316917
-
-gcloud run deploy clima-test --image us-docker.pkg.dev/clima-316917/gcr.io/clima-test --platform managed  --project=clima-316917 --allow-unauthenticated --region=us-central1 --memory=4Gi --concurrency=80 --cpu=2
-```
-
-### Test project
+### Deploy test version of the project
 
 ```text
-gcloud components update
-gcloud config set run/region us-central1
-gcloud config set project clima-316917
-gcloud run deploy clima-test --source .
+gcloud builds submit --project=clima-316917 --substitutions=_REPO_NAME="clima-test",_PROJ_NAME="clima-316917",_IMG_NAME="test",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"
+```
+
+### Deploy main version of the project
+
+```text
+gcloud builds submit --project=clima-316917 --substitutions=_REPO_NAME="clima",_PROJ_NAME="clima-316917",_IMG_NAME="main",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"
 ```
