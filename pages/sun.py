@@ -6,6 +6,7 @@ import numpy as np
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
+from config import PageUrls, DocLinks
 from pages.lib.charts_sun import (
     monthly_solar,
     polar_graph,
@@ -17,8 +18,7 @@ from pages.lib.global_scheme import (
     dropdown_names,
     tight_margins,
     month_lst,
-)
-from config import PageUrls
+    )
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
 from pages.lib.utils import (
     dropdown,
@@ -53,12 +53,10 @@ def sun_path():
         className="container-col justify-center",
         children=[
             html.Div(
-                children=title_with_link(
                     text="Sun path chart",
                     id_button="sun-path-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram",
+                    doc_link=DocLinks.SUN_PATH_DIAGRAM,
                 ),
-            ),
             dbc.Row(
                 align="center",
                 justify="center",
@@ -115,7 +113,7 @@ def explore_daily_heatmap():
                 children=title_with_link(
                     text="Daily charts",
                     id_button="daily-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/customizable-daily-and-hourly-maps",
+                    doc_link=DocLinks.CUSTOM_HEATMAP,
                 ),
             ),
             html.Div(
@@ -173,7 +171,7 @@ def update_static_section(si_ip):
             children=title_with_link(
                 text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
                 id_button="monthly-chart-label",
-                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation",
+                doc_link=DocLinks.SOLAR_RADIATION,
             ),
         ),
         dcc.Loading(
@@ -184,7 +182,7 @@ def update_static_section(si_ip):
             children=title_with_link(
                 text="Cloud coverage",
                 id_button="cloud-chart-label",
-                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage",
+                doc_link=DocLinks.CLOUD_COVER,
             ),
         ),
         dcc.Loading(

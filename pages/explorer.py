@@ -6,7 +6,7 @@ from dash.exceptions import PreventUpdate
 
 from copy import deepcopy
 
-from config import PageUrls
+from config import PageUrls, PageInfo, DocLinks
 from pages.lib.charts_data_explorer import (
     custom_heatmap,
     two_var_graph,
@@ -43,7 +43,10 @@ from pages.lib.utils import (
 
 
 dash.register_page(
-    __name__, name="Data Explorer", path=PageUrls.EXPLORER.value, order=8
+    __name__,
+    name=PageInfo.EXPLORER_NAME,
+    path=PageUrls.EXPLORER.value,
+    order=PageInfo.EXPLORER_ORDER,
 )
 
 
@@ -80,7 +83,7 @@ def section_one():
                 children=title_with_link(
                     text="Yearly chart",
                     id_button="explore-yearly-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
+                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                 ),
             ),
             dcc.Loading(
@@ -91,7 +94,7 @@ def section_one():
                 children=title_with_link(
                     text="Daily chart",
                     id_button="explore-daily-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
+                    doc_link=DocLinks.CLIMA_DOCS,
                 ),
             ),
             dcc.Loading(
@@ -102,7 +105,7 @@ def section_one():
                 children=title_with_link(
                     text="Heatmap chart",
                     id_button="explore-heatmap-chart-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
+                    doc_link=DocLinks.CLIMA_DOCS,
                 ),
             ),
             dcc.Loading(

@@ -6,7 +6,7 @@ from dash_extensions.enrich import dcc, html, Output, Input, State, callback
 import plotly.graph_objects as go
 import requests
 
-from config import PageUrls
+from config import PageUrls, DocLinks
 from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
 from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
@@ -105,7 +105,7 @@ def update_layout(si_ip):
                 children=title_with_link(
                     text="Heating and Cooling Degree Days",
                     id_button="hdd-cdd-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/degree-days-explained",
+                    doc_link=DocLinks.DEGREE_DAYS,
                 ),
             ),
             dbc.Alert(
@@ -166,7 +166,7 @@ def update_layout(si_ip):
                 children=title_with_link(
                     text="Climate Profiles",
                     id_button="climate-profiles-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/climate-profiles-explained",
+                    doc_link=DocLinks.CLIMATE_PROFILES,
                 ),
             ),
             dbc.Row(

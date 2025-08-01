@@ -5,7 +5,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
 
-from config import PageUrls
+from config import PageUrls, DocLinks
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )
@@ -142,7 +142,7 @@ def outdoor_comfort_chart():
                 children=title_with_link(
                     text="UTCI heatmap chart",
                     id_button="utci-charts-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
+                    doc_link=DocLinks.UTCI_CHART,
                 )
             ),
             dcc.Loading(
@@ -153,7 +153,7 @@ def outdoor_comfort_chart():
                 children=title_with_link(
                     text="UTCI thermal stress chart",
                     id_button="utci-charts-label",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained",
+                    doc_link=DocLinks.UTCI_CHART,
                 )
             ),
             dcc.Loading(

@@ -230,7 +230,7 @@ def title_with_link(
     text,
     tooltip_text="Click to access the official documentation",
     id_button=None,
-    doc_link=None,
+    doc_link: str = "",
 ):
     return html.Div(
         className="container-row",

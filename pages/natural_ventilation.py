@@ -8,7 +8,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 import numpy as np
 import plotly.graph_objects as go
 
-from config import PageUrls
+from config import PageUrls, DocLinks
 from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
@@ -61,9 +61,9 @@ def update_layout(si_ip):
     return [
         html.Div(
             children=title_with_link(
-                text="Natural ventilation potential",
-                id_button="natural-ventilation-potential",
-                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/natural-ventilation",
+                text="Natural Ventilation Potential",
+                id_button="natural-ventilation-label",
+                doc_link=DocLinks.NATURAL_VENTILATION,
             ),
         ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),

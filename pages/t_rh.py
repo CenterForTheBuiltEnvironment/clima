@@ -1,7 +1,7 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
 
-from config import PageUrls
+from config import PageUrls, DocLinks
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
 from pages.lib.utils import (
@@ -48,7 +48,7 @@ def layout():
                         children=title_with_link(
                             text="Yearly chart",
                             id_button="yearly-chart-label",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
+                            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
                     dcc.Loading(
@@ -59,7 +59,7 @@ def layout():
                         children=title_with_link(
                             text="Daily chart",
                             id_button="daily-chart-label",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
+                            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
                     dcc.Loading(
@@ -70,7 +70,7 @@ def layout():
                         children=title_with_link(
                             text="Heatmap chart",
                             id_button="heatmap-chart-label",
-                            doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained",
+                            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
                     dcc.Loading(

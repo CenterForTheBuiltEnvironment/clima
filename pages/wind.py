@@ -2,7 +2,7 @@ import dash
 from dash import dcc, html
 from dash_extensions.enrich import Output, Input, State, callback
 
-from config import PageUrls
+from config import PageUrls, DocLinks
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.utils import (
@@ -69,7 +69,7 @@ def seasonal_wind_rose():
                 children=title_with_link(
                     text="Seasonal Wind Rose",
                     id_button="seasonal-rose-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose",
+                    doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
             html.Div(
@@ -154,7 +154,7 @@ def daily_wind_rose():
                 children=title_with_link(
                     text="Daily Wind Rose",
                     id_button="daily-rose-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose",
+                    doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
             html.Div(
@@ -322,9 +322,9 @@ def layout():
         children=[
             html.Div(
                 children=title_with_link(
-                    text="Annual Wind Rose",
-                    id_button="seasonal-rose-chart",
-                    doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose",
+                    text="Wind Rose",
+                    id_button="wind-rose-label",
+                    doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
             dcc.Loading(

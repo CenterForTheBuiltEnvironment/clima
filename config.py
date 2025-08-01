@@ -44,5 +44,29 @@ class Assets:
     NOT_FOUND_ANIMATION = "/assets/animations/page_not_found.json"
 
 
+class PageInfo:
+    """Stores page names and orders for registration."""
+
+    EXPLORER_NAME = "Data Explorer"
+    EXPLORER_ORDER = 8
+
+
+class DocLinks(str, Enum):
+    """Stores documentation links."""
+
+    CLIMA_DOCS = "https://cbe-berkeley.gitbook.io/clima/documentation"
+    TEMP_HUMIDITY_EXPLAINED = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
+    SUN_PATH_DIAGRAM = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram"
+    WIND_ROSE = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"
+    NATURAL_VENTILATION = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/natural-ventilation"
+    UTCI_CHART = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/outdoor-comfort/utci-explained"
+    PSYCHROMETRIC_CHART = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/psychrometric-chart"
+    CLOUD_COVER = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/cloud-coverage"
+    CUSTOM_HEATMAP = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/customizable-daily-and-hourly-maps"
+    DEGREE_DAYS = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/degree-days-explained"
+    CLIMATE_PROFILES = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/tab-summary/climate-profiles-explained"
+    SOLAR_RADIATION = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/global-and-diffuse-horizontal-solar-radiation"
+
+
 # You can also store other constants or settings here
 DEFAULT_UNITS = "si"

@@ -11,7 +11,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
-from config import PageUrls
+from config import PageUrls, DocLinks
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -215,7 +215,7 @@ def layout():
             children=title_with_link(
                 text="Psychrometric Chart",
                 id_button="Psychrometric-Chart-chart",
-                doc_link="https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/psychrometric-chart",
+                doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
         ),
         dcc.Loading(
