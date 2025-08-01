@@ -75,7 +75,7 @@ class PageInfo:
 class DocLinks(str, Enum):
     """Stores documentation links."""
 
-    CLIMA_DOCS = "https://cbe-berkeley.gitbook.io/clima/documentation"
+    MAIN = "https://cbe-berkeley.gitbook.io/clima"
     TEMP_HUMIDITY_EXPLAINED = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/temperature-and-humidity/temperatures-explained"
     SUN_PATH_DIAGRAM = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/sun-and-cloud/how-to-read-a-sun-path-diagram"
     WIND_ROSE = "https://cbe-berkeley.gitbook.io/clima/documentation/tabs-explained/wind/how-to-read-a-wind-rose"

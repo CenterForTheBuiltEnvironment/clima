@@ -97,17 +97,13 @@ def layout():
 
 def alert():
     """Alert layout for the submit button."""
-    return html.Div(
-        [
-            dbc.Alert(
-                messages_alert["start"],
-                color="primary",
-                id="alert",
-                dismissable=False,
-                is_open=True,
-                style={"maxHeight": "66px"},
-            )
-        ]
+    return dbc.Alert(
+        messages_alert["start"],
+        color="primary",
+        id="alert",
+        dismissable=False,
+        is_open=True,
+        style={"maxHeight": "66px"},
     )
 
 

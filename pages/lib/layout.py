@@ -1,6 +1,10 @@
 import dash_bootstrap_components as dbc
 import dash
 from dash import dcc, html
+import dash_mantine_components as dmc
+from dash_iconify import DashIconify
+
+from config import DocLinks
 
 
 def alert():
@@ -94,73 +98,77 @@ def banner():
     return html.Div(
         id="banner",
         children=[
-            dbc.Row(
+            dmc.Group(
+                position="apart",
                 align="center",
                 children=[
-                    dbc.Col(
-                        html.A(
-                            href="/",
-                            children=[
-                                html.Img(
-                                    src="assets/img/cbe-logo-small.png",
+                    dmc.Group(
+                        align="center",
+                        children=[
+                            html.A(
+                                href="/",
+                                children=[
+                                    dmc.Image(
+                                        src="assets/img/cbe-logo-small.png",
+                                        height=40,
+                                        width="auto",
+                                    )
+                                ],
+                            ),
+                            dmc.Stack(
+                                spacing=0,
+                                children=[
+                                    dmc.Title(
+                                        "CBE Clima Tool",
+                                        order=1,
+                                        id="banner-title",
+                                        style={"fontSize": "2rem"},
+                                    ),
+                                    dmc.Text(
+                                        "Current Location:",
+                                        id="banner-subtitle",
+                                        size="sm",
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                    dmc.Group(
+                        align="center",
+                        children=[
+                            html.A(
+                                dmc.Button(
+                                    "Documentation",
+                                    leftIcon=DashIconify(icon="bi:book-half", width=20),
+                                    variant="filled",
+                                    color="#5c7cfa",
                                 ),
-                            ],
-                        ),
-                        width="auto",
-                    ),
-                    dbc.Col(
-                        children=[
-                            html.H1(id="banner-title", children=["CBE Clima Tool"]),
-                            html.H5(
-                                id="banner-subtitle",
-                                children=["Current Location:"],
+                                href=DocLinks.MAIN.value,
+                                target="_blank",
+                                style={"textDecoration": "none"},
                             ),
-                        ],
-                    ),
-                    dbc.Col(
-                        style={"fontWeight": "400", "padding": "1rem"},
-                        align="end",
-                        children=[
-                            dbc.Row(
-                                style={"text-align": "right"},
-                                children=[
-                                    dbc.RadioItems(
-                                        options=[
-                                            {
-                                                "label": "Global Value Ranges",
-                                                "value": "global",
-                                            },
-                                            {
-                                                "label": "Local Value Ranges",
-                                                "value": "local",
-                                            },
-                                        ],
-                                        value="local",
-                                        id="global-local-radio-input",
-                                        inline=True,
-                                    ),
+                            dmc.SegmentedControl(
+                                id="global-local-radio-input",
+                                value="local",
+                                radius="md",
+                                data=[
+                                    {"label": "Global Value Ranges", "value": "global"},
+                                    {"label": "Local Value Ranges", "value": "local"},
                                 ],
                             ),
-                            dbc.Row(
-                                align="end",
-                                style={"text-align": "right"},
-                                children=[
-                                    dbc.RadioItems(
-                                        options=[
-                                            {"label": "SI", "value": "si"},
-                                            {"label": "IP", "value": "ip"},
-                                        ],
-                                        value="si",
-                                        id="si-ip-radio-input",
-                                        inline=True,
-                                    ),
+                            dmc.SegmentedControl(
+                                id="si-ip-radio-input",
+                                value="si",
+                                radius="md",
+                                data=[
+                                    {"label": "SI", "value": "si"},
+                                    {"label": "IP", "value": "ip"},
                                 ],
                             ),
                         ],
-                        width="auto",
                     ),
                 ],
-            ),
+            )
         ],
     )
 
