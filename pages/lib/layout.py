@@ -75,6 +75,13 @@ def footer():
                             dmc.Group(
                                 [
                                     dmc.Anchor(
+                                        "Version: 0.8.17",
+                                        href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
+                                        underline=True,
+                                        c="white",
+                                        target="_blank",
+                                    ),
+                                    dmc.Anchor(
                                         "Contributors",
                                         href="https://cbe-berkeley.gitbook.io/clima/#contributions",
                                         underline=True,
