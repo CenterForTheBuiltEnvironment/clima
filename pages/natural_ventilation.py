@@ -8,7 +8,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 import numpy as np
 import plotly.graph_objects as go
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
@@ -31,9 +31,9 @@ from pages.lib.utils import (
 
 dash.register_page(
     __name__,
-    name="Natural Ventilation",
+    name=PageInfo.NATURAL_VENTILATION_NAME,
     path=PageUrls.NATURAL_VENTILATION.value,
-    order=6,
+    order=PageInfo.NATURAL_VENTILATION_ORDER,
 )
 
 

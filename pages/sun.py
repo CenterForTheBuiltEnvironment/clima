@@ -6,7 +6,7 @@ import numpy as np
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.charts_sun import (
     monthly_solar,
     polar_graph,
@@ -28,7 +28,9 @@ from pages.lib.utils import (
     title_with_link,
 )
 
-dash.register_page(__name__, name="Sun and Clouds", path=PageUrls.SUN.value, order=3)
+dash.register_page(
+    __name__, name=PageInfo.SUN_NAME, path=PageUrls.SUN.value, order=PageInfo.SUN_ORDER
+)
 
 
 sc_dropdown_names = {

@@ -14,11 +14,14 @@ from pandas import json_normalize
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_scheme import mapping_dictionary
-from config import PageUrls
+from config import PageUrls, PageInfo
 from pages.lib.utils import generate_chart_name
 
 dash.register_page(
-    __name__, name="Select Weather File", path=PageUrls.SELECT.value, order=0
+    __name__,
+    name=PageInfo.SELECT_NAME,
+    path=PageUrls.SELECT.value,
+    order=PageInfo.SELECT_ORDER,
 )
 
 

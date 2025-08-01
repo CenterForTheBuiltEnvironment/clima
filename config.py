@@ -47,8 +47,29 @@ class Assets:
 class PageInfo:
     """Stores page names and orders for registration."""
 
+    SELECT_NAME = "Select Weather File"
+    SELECT_ORDER = 0
+    SUMMARY_NAME = "Climate Summary"
+    SUMMARY_ORDER = 1
+    TEMP_RH_NAME = "Temperature and Humidity"
+    TEMP_RH_ORDER = 2
+    SOLAR_RADIATION_NAME = "Solar Radiation"
+    SOLAR_RADIATION_ORDER = 2
+    SUN_NAME = "Sun and Clouds"
+    SUN_ORDER = 3
+    WIND_NAME = "Wind"
+    WIND_ORDER = 4
+    PSYCHROMETRIC_NAME = "Psychrometric Chart"
+    PSYCHROMETRIC_ORDER = 5
+    NATURAL_VENTILATION_NAME = "Natural Ventilation"
+    NATURAL_VENTILATION_ORDER = 6
+    UTCI_NAME = "Outdoor Comfort"
+    UTCI_ORDER = 7
     EXPLORER_NAME = "Data Explorer"
     EXPLORER_ORDER = 8
+    CHANGELOG_NAME = "Changelog"
+    CHANGELOG_ORDER = 9
+    NOT_FOUND_NAME = "404"
 
 
 class DocLinks(str, Enum):

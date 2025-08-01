@@ -11,7 +11,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -35,7 +35,10 @@ from pages.lib.utils import (
 
 
 dash.register_page(
-    __name__, name="Psychrometric Chart", path=PageUrls.PSY_CHART.value, order=5
+    __name__,
+    name=PageInfo.PSYCHROMETRIC_NAME,
+    path=PageUrls.PSY_CHART.value,
+    order=PageInfo.PSYCHROMETRIC_ORDER,
 )
 
 

@@ -1,7 +1,7 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
 from pages.lib.utils import (
@@ -16,7 +16,10 @@ from pages.lib.utils import (
 
 
 dash.register_page(
-    __name__, name="Temperature and Humidity", path=PageUrls.T_RH.value, order=2
+    __name__,
+    name=PageInfo.TEMP_RH_NAME,
+    path=PageUrls.T_RH.value,
+    order=PageInfo.TEMP_RH_ORDER,
 )
 
 

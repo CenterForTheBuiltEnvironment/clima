@@ -5,7 +5,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )
@@ -24,7 +24,10 @@ from pages.lib.utils import (
 
 
 dash.register_page(
-    __name__, name="Outdoor Comfort", path=PageUrls.OUTDOOR.value, order=7
+    __name__,
+    name=PageInfo.UTCI_NAME,
+    path=PageUrls.OUTDOOR.value,
+    order=PageInfo.UTCI_ORDER,
 )
 
 

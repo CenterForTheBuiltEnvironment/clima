@@ -3,10 +3,12 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from dash_extensions import Lottie
 
-from config import PageUrls, Assets
+from config import PageUrls, Assets, PageInfo
 
 
-dash.register_page(__name__, name="404", path=PageUrls.NOT_FOUND.value)
+dash.register_page(
+    __name__, name=PageInfo.NOT_FOUND_NAME, path=PageUrls.NOT_FOUND.value
+)
 
 
 layout = [

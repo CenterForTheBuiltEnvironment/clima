@@ -2,7 +2,7 @@ import dash
 from dash import dcc, html
 from dash_extensions.enrich import Output, Input, State, callback
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.utils import (
@@ -15,7 +15,9 @@ from pages.lib.utils import (
 )
 
 
-dash.register_page(__name__, name="Wind", path=PageUrls.WIND.value, order=4)
+dash.register_page(
+    __name__, name=PageInfo.WIND_NAME, path=PageUrls.WIND.value, order=PageInfo.WIND_ORDER
+)
 
 
 def sliders():

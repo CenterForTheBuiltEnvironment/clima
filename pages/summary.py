@@ -6,7 +6,7 @@ from dash_extensions.enrich import dcc, html, Output, Input, State, callback
 import plotly.graph_objects as go
 import requests
 
-from config import PageUrls, DocLinks
+from config import PageUrls, DocLinks, PageInfo
 from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
 from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
@@ -21,7 +21,10 @@ from pages.lib.utils import (
 
 
 dash.register_page(
-    __name__, name="Climate Summary", path=PageUrls.SUMMARY.value, order=1
+    __name__,
+    name=PageInfo.SUMMARY_NAME,
+    path=PageUrls.SUMMARY.value,
+    order=PageInfo.SUMMARY_ORDER,
 )
 
 
