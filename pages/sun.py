@@ -55,9 +55,11 @@ def sun_path():
         className="container-col justify-center",
         children=[
             html.Div(
-                text="Sun path chart",
-                id_button="sun-path-chart-label",
-                doc_link=DocLinks.SUN_PATH_DIAGRAM,
+                children=title_with_link(
+                    text="Sun path chart",
+                    id_button="sun-path-chart-label",
+                    doc_link=DocLinks.SUN_PATH_DIAGRAM,
+                ),
             ),
             dbc.Row(
                 align="center",
