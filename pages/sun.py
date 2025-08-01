@@ -164,8 +164,7 @@ def layout():
 
 @callback(Output("static-section", "children"), [Input("si-ip-radio-input", "value")])
 def update_static_section(si_ip):
-    if si_ip == UnitSystem.SI:
-        hor_unit = "Wh/m²"
+    hor_unit = "Wh/m²"
     if si_ip == UnitSystem.IP:
         hor_unit = "Btu/ft²"
     return [
@@ -251,7 +250,7 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
+def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     custom_inputs = "" if var == "None" else f"{var}"
     units = "" if var == "None" else generate_units(si_ip)
@@ -280,7 +279,7 @@ def sun_path_chart(ts, view, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def daily(ts, var, global_local, df, meta, si_ip):
+def daily(_, var, global_local, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)

@@ -269,12 +269,14 @@ def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
     return start_month, end_month, start_hour, end_hour
 
 
-def dropdown(options={}, **kwargs):
+def dropdown(options=None, **kwargs):
     """
     Wrapper for dcc.Dropdown which
     - makes "clearable=False" the default, so we don't need to handle None
     - accepts dicts, and preserves order.
     """
+    if options is None:
+        options = {}
     return dcc.Dropdown(
         options=[{"label": k, "value": v} for k, v in options.items()],
         clearable=False,

@@ -129,8 +129,8 @@ def alert():
 )
 # @code_timer
 def submitted_data(
-    use_epw_click,
-    upload_click,
+    _,
+    __,
     list_of_contents,
     list_of_names,
     url_store,
@@ -214,7 +214,7 @@ def submitted_data(
     ],
     [State("url-store", "data"), State("lines-store", "data")],
 )
-def switch_si_ip(ts, si_ip_input, url_store, lines):
+def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
         map_json = json.dumps(mapping_dictionary)
@@ -290,7 +290,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
     [State("modal", "is_open")],
     prevent_initial_call=True,
 )
-def display_modal_when_data_clicked(clicks_use_epw, click_map, close_clicks, is_open):
+def display_modal_when_data_clicked(_, click_map, __, is_open):
     """display the modal to the user and check if he wants to use that file"""
     if click_map:
         url = re.search(

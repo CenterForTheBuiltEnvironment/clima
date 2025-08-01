@@ -220,27 +220,27 @@ def layout():
         State("df-store", "data"),
     ],
 )
-def update_outdoor_comfort_output(ts, df):
+def update_outdoor_comfort_output(_, df):
     cols = [
         "utci_noSun_Wind_categories",
         "utci_noSun_noWind_categories",
         "utci_Sun_Wind_categories",
         "utci_Sun_noWind_categories",
     ]
-    colsWithTheHighestNumberOfZero = []
-    highestCount = 0
+    cols_with_the_highest_number_of_zero = []
+    highest_count = 0
     for col in cols:
         try:
             count = df[col].value_counts()[0]  # this can cause error if there is no 0
-            if count > highestCount:
-                highestCount = count
-                colsWithTheHighestNumberOfZero.clear()
-                colsWithTheHighestNumberOfZero.append(col)
-            elif count == highestCount:
-                colsWithTheHighestNumberOfZero.append(col)
+            if count > highest_count:
+                highest_count = count
+                cols_with_the_highest_number_of_zero.clear()
+                cols_with_the_highest_number_of_zero.append(col)
+            elif count == highest_count:
+                cols_with_the_highest_number_of_zero.append(col)
         except:
             continue
-    return f"The Best Weather Condition is: {', '.join(colsWithTheHighestNumberOfZero)}"
+    return f"The Best Weather Condition is: {', '.join(cols_with_the_highest_number_of_zero)}"
 
 
 @callback(
@@ -262,7 +262,7 @@ def update_outdoor_comfort_output(ts, df):
     ],
 )
 def update_tab_utci_value(
-    ts,
+    _,
     var,
     global_local,
     time_filter,
@@ -329,7 +329,7 @@ def change_image_based_on_selection(value):
     ],
 )
 def update_tab_utci_category(
-    ts,
+    _,
     var,
     global_local,
     time_filter,

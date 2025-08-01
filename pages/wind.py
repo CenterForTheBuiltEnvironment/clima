@@ -363,7 +363,7 @@ def layout():
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_annual_wind_rose(ts, df, meta, si_ip):
+def update_annual_wind_rose(_, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     annual = wind_rose(df, "", [1, 12], [1, 24], True, si_ip)
@@ -388,7 +388,7 @@ def update_annual_wind_rose(ts, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_tab_wind_speed(ts, global_local, df, meta, si_ip):
+def update_tab_wind_speed(_, global_local, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     speed = heatmap(df, "wind_speed", global_local, si_ip)
@@ -441,7 +441,7 @@ def update_tab_wind_direction(global_local, df, meta, si_ip):
     ],
 )
 def update_custom_wind_rose(
-    ts, start_month, start_hour, end_month, end_hour, df, meta, si_ip
+    _, start_month, start_hour, end_month, end_hour, df, meta, si_ip
 ):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
@@ -472,7 +472,6 @@ def update_custom_wind_rose(
     )
 
 
-### Seasonal Graphs ###
 @callback(
     [
         Output("winter-wind-rose", "children"),
@@ -493,7 +492,7 @@ def update_custom_wind_rose(
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_seasonal_graphs(ts, df, meta, si_ip):
+def update_seasonal_graphs(_, df, meta, si_ip):
     hours = [1, 24]
     winter_months = [12, 2]
     spring_months = [3, 5]
@@ -588,7 +587,6 @@ def update_seasonal_graphs(ts, df, meta, si_ip):
     )
 
 
-### Daily Graphs ###
 @callback(
     # Daily Graphs
     [
@@ -607,7 +605,7 @@ def update_seasonal_graphs(ts, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_daily_graphs(ts, df, meta, si_ip):
+def update_daily_graphs(_, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
     months = [1, 12]

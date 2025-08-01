@@ -94,7 +94,7 @@ def section_one():
                 children=title_with_link(
                     text="Daily chart",
                     id_button="explore-daily-chart-label",
-                    doc_link=DocLinks.CLIMA_DOCS,
+                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                 ),
             ),
             dcc.Loading(
@@ -105,7 +105,7 @@ def section_one():
                 children=title_with_link(
                     text="Heatmap chart",
                     id_button="explore-heatmap-chart-label",
-                    doc_link=DocLinks.CLIMA_DOCS,
+                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                 ),
             ),
             dcc.Loading(
@@ -612,9 +612,9 @@ def section_three():
 
 
 def layout():
-    """Return the contents of tab six." """
+    """Return the contents of tab six."""
     return html.Div(
-        className="continer-col justify-center",
+        className="justify-center",
         children=[section_one(), section_two(), section_three()],
     )
 
@@ -633,7 +633,7 @@ def layout():
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
+def update_tab_yearly(_, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
     if df[var].mean() == 99990.0:
@@ -665,7 +665,7 @@ def update_tab_yearly(ts, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_tab_daily(ts, var, global_local, df, meta, si_ip):
+def update_tab_daily(_, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
@@ -690,7 +690,7 @@ def update_tab_daily(ts, var, global_local, df, meta, si_ip):
         State("si-ip-unit-store", "data"),
     ],
 )
-def update_tab_heatmap(ts, var, global_local, df, meta, si_ip):
+def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
@@ -732,7 +732,7 @@ def update_tab_heatmap(ts, var, global_local, df, meta, si_ip):
     ],
 )
 def update_heatmap(
-    ts,
+    _,
     var,
     time_filter,
     data_filter,
@@ -846,7 +846,7 @@ def update_heatmap(
     ],
 )
 def update_more_charts(
-    ts,
+    _,
     var_x,
     var_y,
     color_by,
@@ -930,9 +930,9 @@ def update_more_charts(
     ],
 )
 def update_table(
-    ts,
+    _,
     dd_value,
-    n_clicks,
+    __,
     df,
     si_ip,
     month_range,
