@@ -18,7 +18,7 @@ from pages.lib.global_scheme import (
     dropdown_names,
     tight_margins,
     month_lst,
-    )
+)
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
 from pages.lib.utils import (
     dropdown,
@@ -55,10 +55,10 @@ def sun_path():
         className="container-col justify-center",
         children=[
             html.Div(
-                    text="Sun path chart",
-                    id_button="sun-path-chart-label",
-                    doc_link=DocLinks.SUN_PATH_DIAGRAM,
-                ),
+                text="Sun path chart",
+                id_button="sun-path-chart-label",
+                doc_link=DocLinks.SUN_PATH_DIAGRAM,
+            ),
             dbc.Row(
                 align="center",
                 justify="center",

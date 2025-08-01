@@ -16,7 +16,10 @@ from pages.lib.utils import (
 
 
 dash.register_page(
-    __name__, name=PageInfo.WIND_NAME, path=PageUrls.WIND.value, order=PageInfo.WIND_ORDER
+    __name__,
+    name=PageInfo.WIND_NAME,
+    path=PageUrls.WIND.value,
+    order=PageInfo.WIND_ORDER,
 )
 
 
