@@ -2,7 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc
 
-from pages.lib.page_urls import PageUrls
+from config import PageUrls, FilePaths
 
 
 dash.register_page(__name__, name="changelog", path=PageUrls.CHANGELOG.value)
@@ -10,9 +10,10 @@ dash.register_page(__name__, name="changelog", path=PageUrls.CHANGELOG.value)
 
 def layout():
     """changelog page"""
-    f = open("CHANGELOG.md", "r")
+    with open(FilePaths.CHANGELOG, "r") as f:
+        changelog_content = f.read()
 
     return dbc.Container(
         className="container p-4",
-        children=[dcc.Markdown(f.read())],
+        children=[dcc.Markdown(changelog_content)],
     )

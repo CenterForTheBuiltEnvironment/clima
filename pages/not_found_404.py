@@ -3,10 +3,10 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from dash_extensions import Lottie
 
-from pages.lib.page_urls import PageUrls
+from config import PageUrls, Assets
 
 
-dash.register_page(__name__, name="404")
+dash.register_page(__name__, name="404", path=PageUrls.NOT_FOUND.value)
 
 
 layout = [
@@ -14,21 +14,21 @@ layout = [
     dmc.Text(
         "Please navigate the the home page by using the button below", className="mb-2"
     ),
-    dmc.Anchor(
-        dmc.Button(
-            "Home page",
-            fullWidth=True,
-            leftIcon=DashIconify(icon="material-symbols:home-outline-rounded"),
-        ),
-        href="/",
-    ),
     Lottie(
         options=dict(
             loop=True,
             autoplay=True,
             rendererSettings=dict(preserveAspectRatio="xMidYMid slice"),
         ),
-        width="100%",
-        url=PageUrls.NOT_FOUND.value,
+        width="20%",
+        url=Assets.NOT_FOUND_ANIMATION,
+    ),
+    dmc.Anchor(
+        dmc.Button(
+            "Home page",
+            fullWidth=True,
+            leftIcon=DashIconify(icon="material-symbols:home-outline-rounded"),
+        ),
+        href=PageUrls.SELECT.value,
     ),
 ]

@@ -2,7 +2,7 @@ import dash
 from dash import dcc, html
 from dash_extensions.enrich import Output, Input, State, callback
 
-from pages.lib.page_urls import PageUrls
+from config import PageUrls
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.utils import (

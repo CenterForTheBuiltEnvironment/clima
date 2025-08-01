@@ -1,7 +1,7 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
 
-from pages.lib.page_urls import PageUrls
+from config import PageUrls
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
 from pages.lib.utils import (

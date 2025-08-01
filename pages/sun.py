@@ -18,7 +18,7 @@ from pages.lib.global_scheme import (
     tight_margins,
     month_lst,
 )
-from pages.lib.page_urls import PageUrls
+from config import PageUrls
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
 from pages.lib.utils import (
     dropdown,

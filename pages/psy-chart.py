@@ -11,7 +11,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
-from pages.lib.page_urls import PageUrls
+from config import PageUrls
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,

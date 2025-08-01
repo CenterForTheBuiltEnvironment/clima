@@ -4,10 +4,11 @@ from dash_extensions.enrich import Output, Input, callback
 
 from app import app
 from pages.lib.layout import banner, footer, build_tabs
+from config import AppConfig
 
 server = app.server
 
-app.title = "CBE Clima Tool"
+app.title = AppConfig.TITLE
 app.layout = dbc.Container(
     fluid=True,
     style={"padding": "0"},
@@ -28,9 +29,9 @@ def display_alert(n):
 
 if __name__ == "__main__":
     app.run_server(
-        debug=False,
-        host="0.0.0.0",
-        port=8080,
-        processes=1,
-        threaded=True,
+        debug=AppConfig.DEBUG,
+        host=AppConfig.HOST,
+        port=AppConfig.PORT,
+        processes=AppConfig.PROCESSES,
+        threaded=AppConfig.THREADED,
     )

@@ -14,7 +14,7 @@ from pandas import json_normalize
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_scheme import mapping_dictionary
-from pages.lib.page_urls import PageUrls
+from config import PageUrls
 from pages.lib.utils import generate_chart_name
 
 dash.register_page(

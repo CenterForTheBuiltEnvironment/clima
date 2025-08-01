@@ -6,7 +6,7 @@ from dash.exceptions import PreventUpdate
 
 from copy import deepcopy
 
-from pages.lib.page_urls import PageUrls
+from config import PageUrls
 from pages.lib.charts_data_explorer import (
     custom_heatmap,
     two_var_graph,
