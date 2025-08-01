@@ -37,6 +37,7 @@ def alert():
 
 
 def footer():
+    """Build the footer at the bottom of the page."""
     return dbc.Row(
         align="center",
         justify="between",
@@ -69,17 +70,47 @@ def footer():
                                 Betti, G., Tartarini, F., Nguyen, C, Schiavon, S. CBE Clima Tool: 
                                 A free and open-source web application for climate analysis tailored to sustainable building design. 
                                 Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
-                                [Version: 0.8.17](https://center-for-the-built-environment.gitbook.io/clima/version/changelog)
                                 """
                             ),
-                            dcc.Markdown(
-                                """
-                                    [Contributors](https://cbe-berkeley.gitbook.io/clima/#contributions),
-                                    [Report issues on GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues),
-                                    [Contact us page](https://github.com/CenterForTheBuiltEnvironment/clima/discussions),
-                                    [Documentation page](https://center-for-the-built-environment.gitbook.io/clima/),
-                                    [License](https://center-for-the-built-environment.gitbook.io/clima/#license)
-                                """,
+                            dmc.Group(
+                                [
+                                    dmc.Anchor(
+                                        "Contributors",
+                                        href="https://cbe-berkeley.gitbook.io/clima/#contributions",
+                                        underline=True,
+                                        c="white",
+                                        target="_blank",
+                                    ),
+                                    dmc.Anchor(
+                                        "Report issues on GitHub",
+                                        href="https://github.com/CenterForTheBuiltEnvironment/clima/issues",
+                                        underline=True,
+                                        c="white",
+                                        target="_blank",
+                                    ),
+                                    dmc.Anchor(
+                                        "Contact us",
+                                        href="https://github.com/CenterForTheBuiltEnvironment/clima/discussions",
+                                        underline=True,
+                                        c="white",
+                                        target="_blank",
+                                    ),
+                                    dmc.Anchor(
+                                        "Documentation",
+                                        href="https://center-for-the-built-environment.gitbook.io/clima/",
+                                        underline=True,
+                                        c="white",
+                                        target="_blank",
+                                    ),
+                                    dmc.Anchor(
+                                        "License",
+                                        href="https://center-for-the-built-environment.gitbook.io/clima/#license",
+                                        underline=True,
+                                        c="white",
+                                        target="_blank",
+                                    ),
+                                ],
+                                spacing="sm",
                                 style={"marginTop": "1rem"},
                             ),
                         ],
