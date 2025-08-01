@@ -33,9 +33,8 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
     if units:
         custom_str += f"_{units}"
     if meta:
-        figure_config["toImageButtonOptions"]["filename"] = (
-            f"{meta['city']}_{meta['country']}_{tab_name}{custom_str}"
-        )
+        file_name = f"{meta['city']}_{meta['country']}_{tab_name}{custom_str}"
+        figure_config["toImageButtonOptions"]["filename"] = file_name
     else:
         figure_config["toImageButtonOptions"]["filename"] = f"{tab_name}{custom_str}"
     return figure_config

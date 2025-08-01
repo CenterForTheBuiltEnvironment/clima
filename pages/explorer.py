@@ -803,13 +803,11 @@ def update_heatmap(
             {},
         )
     custom_inputs = f"{var}"
-    units = (
-        UnitSystem.SI.upper()
-        if si_ip == UnitSystem.SI
-        else UnitSystem.IP.upper()
-        if si_ip == UnitSystem.IP
-        else None
-    )
+
+    units = UnitSystem.SI.upper()
+    if si_ip == UnitSystem.IP:
+        units = UnitSystem.IP.upper()
+
     return (
         dcc.Graph(
             config=generate_chart_name("heatmap", meta, custom_inputs, units),
