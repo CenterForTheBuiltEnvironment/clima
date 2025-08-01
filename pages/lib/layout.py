@@ -72,7 +72,7 @@ def footer():
                                 """
                                     [Contributors](https://cbe-berkeley.gitbook.io/clima/#contributions),
                                     [Report issues on GitHub](https://github.com/CenterForTheBuiltEnvironment/clima/issues),
-                                    [Contact us page](https://forms.gle/LRUq3vsFnE1QCLiA6),
+                                    [Contact us page](https://github.com/CenterForTheBuiltEnvironment/clima/discussions),
                                     [Documentation page](https://center-for-the-built-environment.gitbook.io/clima/),
                                     [License](https://center-for-the-built-environment.gitbook.io/clima/#license)
                                 """,
