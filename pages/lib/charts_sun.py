@@ -4,6 +4,8 @@ from math import ceil, cos, floor, radians
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+
+from config import UnitSystem
 from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
@@ -93,9 +95,9 @@ def monthly_solar(epw_df, si_ip):
 
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
 
-    if si_ip == "si":
+    if si_ip == UnitSystem.SI:
         fig.update_yaxes(range=[0, 1000])
-    if si_ip == "ip":
+    if si_ip == UnitSystem.IP:
         fig.update_yaxes(range=[0, 400])
 
     fig.update_layout(

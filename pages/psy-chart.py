@@ -11,7 +11,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
-from config import PageUrls, DocLinks, PageInfo
+from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -352,7 +352,7 @@ def update_psych_chart(
         for k in range(len(rh_df[name])):
             rh_multiply[k] = rh_multiply[k] * 1000
 
-        if si_ip == "ip":
+        if si_ip == UnitSystem.IP:
             for j in range(len(dbt_list)):
                 dbt_list_convert[j] = dbt_list_convert[j] * 1.8 + 32
 

@@ -4,7 +4,7 @@ from dash import dcc, html
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 
-from config import DocLinks
+from config import DocLinks, UnitSystem
 
 
 def alert():
@@ -158,11 +158,17 @@ def banner():
                             ),
                             dmc.SegmentedControl(
                                 id="si-ip-radio-input",
-                                value="si",
+                                value=UnitSystem.SI,
                                 radius="md",
                                 data=[
-                                    {"label": "SI", "value": "si"},
-                                    {"label": "IP", "value": "ip"},
+                                    {
+                                        "label": UnitSystem.SI.upper(),
+                                        "value": UnitSystem.SI,
+                                    },
+                                    {
+                                        "label": UnitSystem.IP.upper(),
+                                        "value": UnitSystem.IP,
+                                    },
                                 ],
                             ),
                         ],

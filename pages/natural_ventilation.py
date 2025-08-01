@@ -8,7 +8,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 import numpy as np
 import plotly.graph_objects as go
 
-from config import PageUrls, DocLinks, PageInfo
+from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
@@ -49,7 +49,7 @@ def layout():
 
 @callback(Output("main-nv-section", "children"), [Input("si-ip-radio-input", "value")])
 def update_layout(si_ip):
-    if si_ip == "ip":
+    if si_ip == UnitSystem.IP:
         tdb_set_min = 50
         tdb_set_max = 75
         dpt_set = 61

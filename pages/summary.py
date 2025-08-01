@@ -6,7 +6,7 @@ from dash_extensions.enrich import dcc, html, Output, Input, State, callback
 import plotly.graph_objects as go
 import requests
 
-from config import PageUrls, DocLinks, PageInfo
+from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
 from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
@@ -44,7 +44,7 @@ def layout():
     Output("tab-two-container", "children"), [Input("si-ip-radio-input", "value")]
 )
 def update_layout(si_ip):
-    if si_ip == "si":
+    if si_ip == UnitSystem.SI:
         heating_setpoint = 10
         cooling_setpoint = 18
     else:
@@ -228,7 +228,7 @@ def update_location_info(ts, df, meta, si_ip):
 
     site_elevation = float(meta["site_elevation"])
     site_elevation = round(site_elevation, 2)
-    if si_ip != "si":
+    if si_ip != UnitSystem.SI:
         site_elevation = site_elevation * 3.281
         site_elevation = round(site_elevation, 2)
         elevation = f"Elevation above sea level: {str(site_elevation)} ft"
@@ -516,7 +516,7 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
     if n_clicks is None:
         raise PreventUpdate
     elif df is not None:
-        if si_ip == "si":
+        if si_ip == UnitSystem.SI:
             return dcc.send_data_frame(
                 df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_SIunit.csv"
             )

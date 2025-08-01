@@ -6,7 +6,7 @@ from dash.exceptions import PreventUpdate
 
 from copy import deepcopy
 
-from config import PageUrls, PageInfo, DocLinks
+from config import PageUrls, PageInfo, DocLinks, UnitSystem
 from pages.lib.charts_data_explorer import (
     custom_heatmap,
     two_var_graph,
@@ -803,7 +803,13 @@ def update_heatmap(
             {},
         )
     custom_inputs = f"{var}"
-    units = "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
+    units = (
+        UnitSystem.SI.upper()
+        if si_ip == UnitSystem.SI
+        else UnitSystem.IP.upper()
+        if si_ip == UnitSystem.IP
+        else None
+    )
     return (
         dcc.Graph(
             config=generate_chart_name("heatmap", meta, custom_inputs, units),

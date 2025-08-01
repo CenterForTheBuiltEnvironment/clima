@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
+from config import UnitSystem
 from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
@@ -487,7 +489,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     spd_colors = mapping_dictionary["wind_speed"]["color"]
     spd_unit = mapping_dictionary["wind_speed"][si_ip]["unit"]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
-    if si_ip == "ip":
+    if si_ip == UnitSystem.IP:
         spd_bins = convert_bins(spd_bins)
 
     spd_labels = speed_labels(spd_bins, spd_unit)

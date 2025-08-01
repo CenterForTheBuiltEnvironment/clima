@@ -6,7 +6,7 @@ import numpy as np
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
-from config import PageUrls, DocLinks, PageInfo
+from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_sun import (
     monthly_solar,
     polar_graph,
@@ -164,9 +164,9 @@ def layout():
 
 @callback(Output("static-section", "children"), [Input("si-ip-radio-input", "value")])
 def update_static_section(si_ip):
-    if si_ip == "si":
+    if si_ip == UnitSystem.SI:
         hor_unit = "Wh/m²"
-    if si_ip == "ip":
+    if si_ip == UnitSystem.IP:
         hor_unit = "Btu/ft²"
     return [
         html.Div(

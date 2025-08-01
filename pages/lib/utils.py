@@ -6,7 +6,8 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import html, dash_table, dcc
 
-from pages.lib.global_scheme import fig_config, mapping_dictionary
+from config import UnitSystem
+from pages.lib.global_scheme import fig_config, mapping_dictionary, month_lst
 
 
 def code_timer(func):
@@ -41,11 +42,15 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
 
 
 def generate_units(si_ip):
-    return "SI" if si_ip == "si" else "IP" if si_ip == "ip" else None
+    """Generate units for the chart titles."""
+    if si_ip == UnitSystem.SI:
+        return UnitSystem.SI
+    else:
+        return UnitSystem.IP
 
 
 def generate_units_degree(si_ip):
-    return "C" if si_ip == "si" else "F" if si_ip == "ip" else None
+    return "C" if si_ip == UnitSystem.SI else "F" if si_ip == UnitSystem.IP else None
 
 
 def generate_custom_inputs(var):
@@ -58,21 +63,7 @@ def generate_custom_inputs(var):
 
 
 def generate_custom_inputs_time(start_month, end_month, start_hour, end_hour):
-    month_names = [
-        "",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
+    month_names = [""] + month_lst
     start_month_abbr = month_names[int(start_month)]
     end_month_abbr = month_names[int(end_month)]
     custom_inputs = (
@@ -84,21 +75,7 @@ def generate_custom_inputs_time(start_month, end_month, start_hour, end_hour):
 def generate_custom_inputs_nv(
     start_month, end_month, start_hour, end_hour, min_dbt_val, max_dbt_val
 ):
-    month_names = [
-        "",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
+    month_names = [""] + month_lst
     start_month_abbr = month_names[int(start_month)]
     end_month_abbr = month_names[int(end_month)]
     custom_inputs = f"{min_dbt_val:02d}-{max_dbt_val:02d}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}"
@@ -108,21 +85,7 @@ def generate_custom_inputs_nv(
 def generate_custom_inputs_explorer(
     var, start_month, end_month, start_hour, end_hour, filter_var, min_val, max_val
 ):
-    month_names = [
-        "",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
+    month_names = [""] + month_lst
     start_month_abbr = month_names[int(start_month)]
     end_month_abbr = month_names[int(end_month)]
     if var in mapping_dictionary:
@@ -152,21 +115,7 @@ def generate_custom_inputs_psy(
     min_val,
     max_val,
 ):
-    month_names = [
-        "",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    ]
+    month_names = [""] + month_lst
     start_month_abbr = month_names[int(start_month)]
     end_month_abbr = month_names[int(end_month)]
     if colorby_var in mapping_dictionary:

@@ -3,6 +3,8 @@ import os
 
 import pandas as pd
 
+from config import UnitSystem
+
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 if root_dir not in sys.path:
     sys.path.append(root_dir)
@@ -36,7 +38,7 @@ def test_summary_table_tmp_rh_tab():
         # check tha the climate.onebuilding website is on
         print(requests.get("https://climate.onebuilding.org", timeout=2))
         df = import_epw_test()
-        data_table = summary_table_tmp_rh_tab(df, "RH", "si")
+        data_table = summary_table_tmp_rh_tab(df, "RH", UnitSystem.SI)
 
         assert data_table.data[0]["month"] == "Jan"
     except requests.exceptions.ConnectionError:

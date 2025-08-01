@@ -1,5 +1,7 @@
 import plotly.io as pio
 
+from config import UnitSystem
+
 # Colors Dictionary
 blue_red_yellow = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
 dry_humid = ["#ffe600", "#00c8ff", "#0000ff"]
@@ -132,11 +134,11 @@ mapping_dictionary = {
     "DBT": {
         "name": "Dry bulb temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-40, 50],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-40, 122],
         },
@@ -145,11 +147,11 @@ mapping_dictionary = {
     "DPT": {
         "name": "Dew point temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-50, 35],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-58, 95],
         },
@@ -158,11 +160,11 @@ mapping_dictionary = {
     "RH": {
         "name": "Relative humidity",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "%",
             "range": [0, 100],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "%",
             "range": [0, 100],
         },
@@ -182,11 +184,11 @@ mapping_dictionary = {
             "#cc0000",
             "#ffaa00",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Pa",
             "range": [95000, 105000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Psi",
             "range": [95000 * 0.000145038, 1050000.000145038],
         },
@@ -203,11 +205,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Wh/m<sup>2</sup>",
             "range": [0, 1200],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Btu/ft<sup>2</sup>",
             "range": [0, 1200 * 0.3169983306],
         },
@@ -224,11 +226,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Wh/m<sup>2</sup>",
             "range": [0, 500],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Btu/ft<sup>2</sup>",
             "range": [0, 500 * 0.3169983306],
         },
@@ -245,11 +247,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Wh/m<sup>2</sup>",
             "range": [0, 1200],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Btu/ft<sup>2</sup>",
             "range": [0, 1200 * 0.3169983306],
         },
@@ -266,11 +268,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Wh/m<sup>2</sup>",
             "range": [0, 1200],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Btu/ft<sup>2</sup>",
             "range": [0, 1200 * 0.3169983306],
         },
@@ -287,11 +289,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Wh/m<sup>2</sup>",
             "range": [0, 1200],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Btu/ft<sup>2</sup>",
             "range": [0, 1200 * 0.3169983306],
         },
@@ -300,11 +302,11 @@ mapping_dictionary = {
     "glob_hor_ill": {
         "name": "Global horizontal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "lux",
             "range": [0, 120000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "fc",
             "range": [0, 120000 * 0.0929],
         },
@@ -313,11 +315,11 @@ mapping_dictionary = {
     "dir_nor_ill": {
         "name": "Direct normal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "lux",
             "range": [0, 120000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "fc",
             "range": [0, 120000 * 0.0929],
         },
@@ -326,11 +328,11 @@ mapping_dictionary = {
     "dif_hor_ill": {
         "name": "Diffuse horizontal illuminance",
         "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "lux",
             "range": [0, 120000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "fc",
             "range": [0, 120000 * 0.0929],
         },
@@ -339,11 +341,11 @@ mapping_dictionary = {
     "Zlumi": {
         "name": "Zenith luminance",
         "color": ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "cd/m<sup>2</sup>",
             "range": [0, 60000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "cd/ft<sup>2</sup>",
             "range": [0, 60000 * 0.0929],
         },
@@ -352,11 +354,11 @@ mapping_dictionary = {
     "wind_dir": {
         "name": "Wind direction",
         "color": ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [0, 360],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [0, 360],
         },
@@ -376,11 +378,11 @@ mapping_dictionary = {
             "#cc0000",
             "#ffaa00",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "m/s",
             "range": [0, 20],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "fpm",
             "range": [0, 20 * 196.85039370078738],
         },
@@ -389,11 +391,11 @@ mapping_dictionary = {
     "tot_sky_cover": {
         "name": "Total sky cover",
         "color": cloud_colors,
-        "si": {
+        UnitSystem.SI: {
             "unit": "tenths",
             "range": [0, 10],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "tenths",
             "range": [0, 10],
         },
@@ -402,11 +404,11 @@ mapping_dictionary = {
     "Oskycover": {
         "name": "Opaque sky cover",
         "color": cloud_colors,
-        "si": {
+        UnitSystem.SI: {
             "unit": "tenths",
             "range": [0, 10],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "tenths",
             "range": [0, 10],
         },
@@ -415,11 +417,11 @@ mapping_dictionary = {
     "Vis": {
         "name": "Visibility",
         "color": cloud_colors,
-        "si": {
+        UnitSystem.SI: {
             "unit": "km",
             "range": [0, 100],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "miles",
             "range": [0, 100 * 0.6215],
         },
@@ -436,11 +438,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [0, 180],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [0, 180],
         },
@@ -457,11 +459,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [0, 180],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [0, 180],
         },
@@ -478,11 +480,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [-90, 90],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [-90, 90],
         },
@@ -499,11 +501,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [-90, 90],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [-90, 90],
         },
@@ -520,11 +522,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [0, 360],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [0, 360],
         },
@@ -541,11 +543,11 @@ mapping_dictionary = {
             "#ffff7b",
             "#ffffff",
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°deg",
             "range": [-20, 20],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°deg",
             "range": [-20, 20],
         },
@@ -554,11 +556,11 @@ mapping_dictionary = {
     "utci_Sun_Wind": {
         "name": "UTCI: Sun & Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-70, 70],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-94, 158],
         },
@@ -567,11 +569,11 @@ mapping_dictionary = {
     "utci_noSun_Wind": {
         "name": "UTCI: no Sun & Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-70, 70],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-94, 158],
         },
@@ -580,11 +582,11 @@ mapping_dictionary = {
     "utci_Sun_noWind": {
         "name": "UTCI: Sun & no Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-70, 70],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-94, 158],
         },
@@ -593,11 +595,11 @@ mapping_dictionary = {
     "utci_noSun_noWind": {
         "name": "UTCI: no Sun & no Wind",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-70, 70],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-94, 158],
         },
@@ -627,11 +629,11 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
@@ -661,11 +663,11 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
@@ -695,11 +697,11 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
@@ -729,11 +731,11 @@ mapping_dictionary = {
             [0.9435, "#751613"],
             [1.0, "#751613"],
         ],
-        "si": {
+        UnitSystem.SI: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": thermal_stress_label,
             "range": [-5, 4],
         },
@@ -742,11 +744,11 @@ mapping_dictionary = {
     "p_vap": {
         "name": "Vapor partial pressure",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "Pa",
             "range": [0, 5000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Psi",
             "range": [0, 5000 * 0.000145038],
         },
@@ -754,11 +756,11 @@ mapping_dictionary = {
     },
     "p_sat": {
         "name": "Saturation pressure",
-        "si": {
+        UnitSystem.SI: {
             "unit": "Pa",
             "range": [0, 5000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Psi",
             "range": [0, 5000 * 0.000145038],
         },
@@ -767,11 +769,11 @@ mapping_dictionary = {
     "hr": {
         "name": "Absolute humidity",
         "color": ["#ffe600", "#00c8ff", "#0000ff"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "g water/kg dry air",
             "range": [0, 0.03 * 1000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "lb water/klb dry air",
             "range": [0, 0.03 * 1000],
         },
@@ -780,11 +782,11 @@ mapping_dictionary = {
     "t_wb": {
         "name": "Wet bulb temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-40, 50],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-40, 122],
         },
@@ -793,11 +795,11 @@ mapping_dictionary = {
     "t_dp": {
         "name": "Dew point temperature",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "°C",
             "range": [-40, 50],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "°F",
             "range": [-40, 122],
         },
@@ -806,11 +808,11 @@ mapping_dictionary = {
     "h": {
         "name": "Enthalpy",
         "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
-        "si": {
+        UnitSystem.SI: {
             "unit": "J/kg dry air",
             "range": [0, 110000],
         },
-        "ip": {
+        UnitSystem.IP: {
             "unit": "Btu/lb dry air",
             "range": [0, 110000 * 0.000429923],
         },

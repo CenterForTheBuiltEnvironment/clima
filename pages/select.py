@@ -14,7 +14,7 @@ from pandas import json_normalize
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_scheme import mapping_dictionary
-from config import PageUrls, PageInfo
+from config import PageUrls, PageInfo, UnitSystem
 from pages.lib.utils import generate_chart_name
 
 dash.register_page(
@@ -218,7 +218,7 @@ def switch_si_ip(ts, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
         map_json = json.dumps(mapping_dictionary)
-        if si_ip_input == "ip":
+        if si_ip_input == UnitSystem.IP:
             map_json = convert_data(df, map_json)
         return Serverside(df), si_ip_input
     else:

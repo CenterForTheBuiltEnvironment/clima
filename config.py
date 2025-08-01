@@ -13,23 +13,30 @@ class AppConfig:
     THREADED = True
 
 
+class UnitSystem(str, Enum):
+    """Unit systems."""
+
+    SI = "si"
+    IP = "ip"
+
+
 class PageUrls(str, Enum):
     """
     Stores application routes.
     Inheriting from `str` allows the enum members to be used as strings directly.
     """
 
-    SELECT: str = "/"
-    SUMMARY: str = "/summary"
-    T_RH: str = "/t-rh"
-    SUN: str = "/sun"
-    WIND: str = "/wind"
-    PSY_CHART: str = "/psy-chart"
-    NATURAL_VENTILATION: str = "/natural-ventilation"
-    OUTDOOR: str = "/outdoor"
-    EXPLORER: str = "/explorer"
-    CHANGELOG: str = "/changelog"
-    NOT_FOUND: str = "/404"
+    SELECT = "/"
+    SUMMARY = "/summary"
+    T_RH = "/t-rh"
+    SUN = "/sun"
+    WIND = "/wind"
+    PSY_CHART = "/psy-chart"
+    NATURAL_VENTILATION = "/natural-ventilation"
+    OUTDOOR = "/outdoor"
+    EXPLORER = "/explorer"
+    CHANGELOG = "/changelog"
+    NOT_FOUND = "/404"
 
 
 class FilePaths:
@@ -90,4 +97,4 @@ class DocLinks(str, Enum):
 
 
 # You can also store other constants or settings here
-DEFAULT_UNITS = "si"
+DEFAULT_UNITS = UnitSystem.SI
