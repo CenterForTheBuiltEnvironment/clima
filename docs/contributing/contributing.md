@@ -77,6 +77,38 @@ Available [here](code_of_conduct.md)
 
 We use Black.exe to format the code.
 
+Install Black:
+
+```bash
+pip install black
+```
+
+Format your code before committing:
+
+```bash
+black .
+```
+
+## Testing
+
+Before submitting a Pull Request, please make sure:
+- All tests should pass.
+- Make sure you have installed project dependencies:
+
+```bash
+npm install
+
+pip install -r requirements.txt
+```
+
+From the root directory, run:
+
+```bash
+cd tests/node
+
+npx cypress run
+```
+
 ## Submitting changes
 
 Please send a Pull Request with a clear list of what you've done. Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
