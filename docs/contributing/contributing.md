@@ -103,7 +103,7 @@ We use Black.exe to format the code.
 Install Black:
 
 ```bash
-pip install black
+pipenv install black
 ```
 
 Format your code before committing:
@@ -121,7 +121,7 @@ Before submitting a Pull Request, please make sure:
 ```bash
 npm install
 
-pip install -r requirements.txt
+pipenv install -r requirements.txt
 ```
 
 From the root directory, run:
