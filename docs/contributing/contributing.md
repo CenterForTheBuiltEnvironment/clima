@@ -68,28 +68,31 @@ git push origin (your branch name)
 ```
 
 ## Pull Request Regulation
-1.Time to submit PR:
-User requirements/issues have been addressed or discussed in Issue and consensus has been reached.
-Changes have been minimised (small steps/phased submission) to avoid "mega PRs".
+**Time to submit PR:**
 
-2.Classification of Common PR Types:
-a. Main (Master):Stable branch, merge code that passes review and CI; merge and release every time,
-b. Develop: Continuous Integration branch for daily integration with multiple collaborators.
-c. feature/*: feature development branch, cut out from main or develop, send PR to merge in after completing the feature.
-d. Fix/*: defect repair branch, the same process as feature
-e. Release/*: release preparation branch for freezing versions, fixing documentation, doing regressions and tagging.
-f. docs/*, chore/*, refactor/*, test/*: documentation, miscellaneous, refactor, test type branches.
-g. Style: style modification (does not affect the function): code formatting, space adjustment, naming rules unity.
-h. Refactor: Code Refactoring: Refactor existing code to improve maintainability.
-i. Test: Add or modify tests: add unit tests, integration tests, or modify test logic.
-j. Chore: Build Configuration, Dependency Management, CI/CD Configuration Updates.
-k. Perf: Performance Optimisation: Optimising code execution efficiency or memory usage.
-l. Ci: CI Configuration Related: Changing Continuous Integration Configurations for Github Actions, Travis, Jenkins, etc.
-m. Build: build system related: modify build scripts, packaging configuration.
-n. Revert: Rollback Commit: Undoing a Previous Commit
-o. Security: Security fixes, fixing security vulnerabilities, updating dependencies to prevent attacks.
-p. Deps: Dependency Management: Dependency Management/Adding, updating, and removing dependency libraries
-q. Infra: Infrastructure related: changes to development environments, containers, server configurations, etc.
+- User requirements/issues have been addressed or discussed in Issue and consensus has been reached.
+- Changes have been minimised (small steps/phased submission) to avoid "mega PRs".
+
+**Classification of Common PR Types:**
+
+- `Main (Master)`: Stable branch, merge code that passes review and CI; merge and release every time,
+
+- `Develop`: Continuous Integration branch for daily integration with multiple collaborators.
+- `Feature/*`: feature development branch, cut out from main or develop, send PR to merge in after completing the feature.
+- `Fix/*`: defect repair branch, the same process as feature
+- `Release/*`: release preparation branch for freezing versions, fixing documentation, doing regressions and tagging.
+- `docs/*`, `chore/*`, `refactor/*`, `test/*`: documentation, miscellaneous, refactor, test type branches.
+- `Style`: style modification (does not affect the function): code formatting, space adjustment, naming rules unity.
+- `Refactor`: Code Refactoring: Refactor existing code to improve maintainability.
+- `Test`: Add or modify tests: add unit tests, integration tests, or modify test logic.
+- `Chore`: Build Configuration, Dependency Management, CI/CD Configuration Updates.
+- `Perf`: Performance Optimisation: Optimising code execution efficiency or memory usage.
+- `Ci`: CI Configuration Related: Changing Continuous Integration Configurations for Github Actions, Travis, Jenkins, etc.
+- `Build`: build system related: modify build scripts, packaging configuration.
+- `Revert`: Rollback Commit: Undoing a Previous Commit
+- `Security`: Security fixes, fixing security vulnerabilities, updating dependencies to prevent attacks.
+- `Deps`: Dependency Management: Dependency Management/Adding, updating, and removing dependency libraries
+- `Infra`: Infrastructure related: changes to development environments, containers, server configurations, etc.
 
 
 ## Code of Conduct
