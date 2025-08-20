@@ -147,6 +147,10 @@ $ git commit -m "A brief summary of the commit
 > A paragraph describing what changed and its impact."
 ```
 
+## Hint
+This project requires Python 3.11. Do not use Python 3.12 or newer, as it may cause dependency incompatibilities, build failure or runtime errors
+
+
 ## Thanks
 
 Thank you again for being interested in this project! You are awesome!
