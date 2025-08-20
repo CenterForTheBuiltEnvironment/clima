@@ -98,6 +98,193 @@ git push origin (your branch name)
 - `Deps`: Dependency Management: Dependency Management/Adding, updating, and removing dependency libraries
 - `Infra`: Infrastructure related: changes to development environments, containers, server configurations, etc.
 
+**Pull Request Strategy**
+- `Constant centralization`: Added `ElementIds/ComponentProperty/ClassNames` to `components.py`. Introduce `ElementIds/ComponentProperty` for all UI IDs, replace magic strings with constants. This enables single-source-of-truth and prevents typos. No business logic changed. Verified by running callback smoke tests and snapshot tests. This is an example of modifications made in the `t_rh.py` file.
+
+`Orginal t_rh.py file(extract)`
+```python
+@callback(
+    Output("yearly-chart", "children"),
+    [
+        Input("df-store", "modified_timestamp"),
+        Input("global-local-radio-input", "value"),
+        Input("dropdown", "value"),
+    ],
+    [
+        State("df-store", "data"),
+        State("meta-store", "data"),
+        State("si-ip-unit-store", "data"),
+    ],
+)
+```
+`Component.py: store repeated string`
+```python
+class ClassNames:
+    CONTAINER_COL = "container-col"
+    CONTAINER_COL_FULL_WIDTH = " container-col full-width"
+    TEXT_NEXT_TO_INPUT = "text-next-to-input"
+
+
+class ElementIds:
+    DAILY = "daily"
+    DF_STORE = "df-store"
+    DROPDOWN = "dropdown"
+    HEATMAP = "heatmap"
+    GLOBAL_LOCAL_RADIO_INPUT = "global-local-radio-input"
+    META_STORE = "meta-store"
+    SI_IP_UNIT_STORE = "si-ip-unit-store"
+    TABLE_TMP_HUM = "table-tmp-hum"
+    YEARLY_CHART = "yearly-chart"
+
+
+class IdButtons:
+    DAILY_CHART_LABEL = "daily-chart-label"
+
+
+class ComponentProperty:
+    CHILDREN = "children"
+    DATA = "data"
+    MODIFIED_TIMESTAMP = "modified_timestamp"
+    VALUE = "value"
+
+
+class Text:
+    DAILY_CHART = "Daily chart"
+    YEARLY_CHART = "Yearly_chart"
+    HEATMAP_CHART = "Heatmap chart"
+    DESCRIPTIVE_STATISTICS = "Descriptive statistics"
+
+
+class Type:
+    CIRCLE = "circle"
+```
+`fixed t_rh.py(extract)`
+```python
+from components import ElementIds, ClassNames, Text, IdButtons, Type, ComponentProperty
+@callback(
+    Output(ElementIds.YEARLY_CHART, ComponentProperty.CHILDREN),
+    [
+        Input(ElementIds.DF_STORE, ComponentProperty.MODIFIED_TIMESTAMP),
+        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, ComponentProperty.VALUE),
+        Input(ElementIds.DROPDOWN, ComponentProperty.VALUE),
+    ],
+    [
+        State(ElementIds.DF_STORE, ComponentProperty.DATA),
+        State(ElementIds.META_STORE, ComponentProperty.DATA),
+        State(ElementIds.SI_IP_UNIT_STORE, ComponentProperty.DATA),
+    ],
+)
+```
+- `Time field/timestamp harmonisation`: Unify time periods (such as hour, month) to `Colnames.hour` or `Colnames.month`. Added the `column_names.py` helper function and replaced the temporary parsing logic. Backward compatibility with old strings through a fault-tolerant parser; added round-trip testing in a multi-time zone environment. Below are three examples.
+
+`Create a new class to fix the time field`
+```python
+from enum import Enum
+
+class ColNames(str, Enum):
+    """
+	    DataFrame column name enumeration class, 
+	    avoiding hard-coded strings
+    """
+    # Time-related columns
+    YEAR = "year"
+    MONTH = "month" 
+    DAY = "day"
+    HOUR = "hour"
+    MINUTE = "minute"
+    
+    # Weather data column
+    DBT = "DBT"      # dry bulb temperature
+    DPT = "DPT"      # dew point temperature
+    RH = "RH"        # relative humidity
+    P_ATM = "p_atm"  # atmospheric pressure
+    
+    # Radiation-related column
+    EXTR_HOR_RAD = "extr_hor_rad"      # Extraterrestrial Horizontal Radiation
+    HOR_IR_RAD = "hor_ir_rad"          # Horizontal Infrared Radiation
+    GLOB_HOR_RAD = "glob_hor_rad"      # Global Horizontal Radiation
+    DIR_NOR_RAD = "dir_nor_rad"        # Direct Normal Radiation
+    DIF_HOR_RAD = "dif_hor_rad"        # Diffuse Horizontal Radiation
+    
+    # Lighting-related columns
+    GLOB_HOR_ILL = "glob_hor_ill"      # Global Horizontal Illuminance
+    DIR_NOR_ILL = "dir_nor_ill"        # Direct Normal Illuminance
+    DIF_HOR_ILL = "dif_hor_ill"        # Diffuse Horizontal Illuminance
+    
+    # Others
+    ZLUMI = "Zlumi"                    # Luminance
+    WIND_DIR = "wind_dir"              # Wind Direction
+    WIND_SPEED = "wind_speed"          # Wind Speed
+    TOT_SKY_COVER = "tot_sky_cover"    # Total Sky Cover
+    OSKYCOVER = "Oskycover"            # Opaque Sky Cover
+    VIS = "Vis"                        # Visibility
+    CHEIGHT = "Cheight"                # Cloud Height
+    PWobs = "PWobs"                    # Precipitation Observation
+    PWcodes = "PWcodes"                # Precipitation Codes
+    Pwater = "Pwater"                  # Precipitation Water
+    AsolOptD = "AsolOptD"              # Aerosol Optical Depth
+    SnowD = "SnowD"                    # Snow Depth
+    DaySSnow = "DaySSnow"              # Daily Snow
+    
+    # Calculation column
+    FAKE_YEAR = "fake_year"
+    MONTH_NAMES = "month_names"
+    UTC_TIME = "UTC_time"
+    DOY = "DOY"
+ ```
+`Example1`
+```python
+# Time filtering
+# Before reconstruction
+def violin(df, var, global_local, si_ip):
+    """Return day night violin based on the 'var' col"""
+    mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
+    mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
+ 
+# After reconstruction   
+from .column_names import ColNames
+
+def violin(df, var, global_local, si_ip):
+    """Return day night violin based on the 'var' col"""
+    mask_day = (df[ColNames.HOUR] >= 8) & (df[ColNames.HOUR] < 20)
+    mask_night = (df[ColNames.HOUR] < 8) | (df[ColNames.HOUR] >= 20)
+```
+`Example2`
+```python
+# DataFrame grouping operations
+# Before reconstruction
+def daily_profile(df, var, global_local, si_ip):
+    var_month_ave = df.groupby(["month", "hour"])[var].median().reset_index()
+    
+    for i in range(12):
+        fig.add_trace(
+            go.Scatter(
+                x=df.loc[df["month"] == i + 1, "hour"],
+                y=df.loc[df["month"] == i + 1, var],
+                # ... other props
+            )
+        )
+
+# After reconstruction 
+from .column_names import ColNames
+
+def daily_profile(df, var, global_local, si_ip):
+    var_month_ave = df.groupby([ColNames.MONTH, ColNames.HOUR])[var]
+									    .median()
+									    .reset_index()
+    
+    for i in range(12):
+        fig.add_trace(
+            go.Scatter(
+                x=df.loc[df[ColNames.MONTH] == i + 1, ColNames.HOUR],
+                y=df.loc[df[ColNames.MONTH] == i + 1, var],
+                # ... other props
+            )
+        )
+```
+
+- `Progressive replacement/grey scale release`: Phase 1: Add constants; Phase 2: Batch replace references; Phase 3: Remove legacy code. The `FEATURE_USE_CONSTANT_IDS` feature switch allows for instant rollback.
+
 
 ## Code of Conduct
 
