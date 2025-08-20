@@ -7,6 +7,8 @@ description: Guide on how to contribute to this project
 First off, thanks for taking the time to contribute!
 We use GitHub as our main collaboration platform. Please work from the `development` branch, create small feature branches, and open focused pull requests. Follow Conventional Commit messages (e.g., `feat:`, `fix:`, `docs:`), format Python code with Black, and add tests where needed. Never merge your own PR—wait for review and address all comments (including AI reviewer suggestions). Use Issues and Projects to track tasks and discussions.
 
+> This project requires Python 3.11. Do not use Python 3.12 or newer, as it may cause dependency incompatibilities, build failure or runtime errors
+
 
 ## General Feedback
 
@@ -146,9 +148,6 @@ $ git commit -m "A brief summary of the commit
 > 
 > A paragraph describing what changed and its impact."
 ```
-
-## Hint
-This project requires Python 3.11. Do not use Python 3.12 or newer, as it may cause dependency incompatibilities, build failure or runtime errors
 
 
 ## Thanks
