@@ -12,4 +12,4 @@ steps:
          '--image', '$_GCR/$_PROJ_NAME/$_REPO_NAME/$_IMG_NAME',
          '--region', '$_REGION',
          '--memory', '$_MEMORY',
-         '--cpu', '$_CPU',]
+         '--cpu', '$_CPU']
