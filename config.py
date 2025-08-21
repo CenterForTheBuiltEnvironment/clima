@@ -61,21 +61,21 @@ class PageInfo:
     TEMP_RH_NAME = "Temperature and Humidity"
     TEMP_RH_ORDER = 2
     SOLAR_RADIATION_NAME = "Solar Radiation"
-    SOLAR_RADIATION_ORDER = 2
+    SOLAR_RADIATION_ORDER = 3
     SUN_NAME = "Sun and Clouds"
-    SUN_ORDER = 3
+    SUN_ORDER = 4
     WIND_NAME = "Wind"
-    WIND_ORDER = 4
+    WIND_ORDER = 5
     PSYCHROMETRIC_NAME = "Psychrometric Chart"
-    PSYCHROMETRIC_ORDER = 5
+    PSYCHROMETRIC_ORDER = 6
     NATURAL_VENTILATION_NAME = "Natural Ventilation"
-    NATURAL_VENTILATION_ORDER = 6
+    NATURAL_VENTILATION_ORDER = 7
     UTCI_NAME = "Outdoor Comfort"
-    UTCI_ORDER = 7
+    UTCI_ORDER = 8
     EXPLORER_NAME = "Data Explorer"
-    EXPLORER_ORDER = 8
+    EXPLORER_ORDER = 9
     CHANGELOG_NAME = "Changelog"
-    CHANGELOG_ORDER = 9
+    CHANGELOG_ORDER = 10
     NOT_FOUND_NAME = "404"
 
 
