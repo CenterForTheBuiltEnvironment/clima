@@ -1,5 +1,11 @@
-name: Cypress 🌲 
-on: [push, pull_request]
+name: Cypress Testing 🌲
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+    branches:
+      - development
 jobs:
   cypress:
     runs-on: ubuntu-latest
