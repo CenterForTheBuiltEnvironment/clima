@@ -327,7 +327,7 @@ def layout():
         children=[
             html.Div(
                 children=title_with_link(
-                    text="Wind Rose",
+                    text="Annual Wind Rose",
                     id_button="wind-rose-label",
                     doc_link=DocLinks.WIND_ROSE,
                 ),
