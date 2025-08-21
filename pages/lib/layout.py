@@ -14,7 +14,7 @@ def alert():
         children=[
             dbc.Toast(
                 [
-                    "If you have a moment, help us improving Clima and take a ",
+                    "If you have a moment, help us improve Clima and take a ",
                     html.A(
                         "quick user survey",
                         href="https://forms.gle/k289zP3R92jdu14M7",
