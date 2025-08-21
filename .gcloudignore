@@ -7,13 +7,16 @@
 
 README.md
 LICENSE
-Procfile
-Procfile.windows
 *.pyo
 *.pyd
 __pycache__
 .pytest_cache
+.gitbook
+docs
+file_system_backend
+tests
+.gitbook.yaml
+assets/data/OneBuilding*.zip
 
 assets/data/Region*.kml
 file_system_store
-test

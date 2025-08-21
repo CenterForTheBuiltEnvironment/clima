@@ -1,9 +1,13 @@
+import os
+
+import pandas as pd
+
+from config import UnitSystem
+
 import requests
 
-from my_project.utils import summary_table_tmp_rh_tab
-from my_project.extract_df import get_data, create_df
-import pandas as pd
-import os
+from pages.lib.utils import summary_table_tmp_rh_tab
+from pages.lib.extract_df import get_data, create_df
 
 
 def save_epw_test(path_file):
@@ -29,7 +33,7 @@ def test_summary_table_tmp_rh_tab():
         # check tha the climate.onebuilding website is on
         print(requests.get("https://climate.onebuilding.org", timeout=2))
         df = import_epw_test()
-        data_table = summary_table_tmp_rh_tab(df, "RH", "si")
+        data_table = summary_table_tmp_rh_tab(df, "RH", UnitSystem.SI)
 
         assert data_table.data[0]["month"] == "Jan"
     except requests.exceptions.ConnectionError:

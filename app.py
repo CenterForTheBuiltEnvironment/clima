@@ -3,6 +3,7 @@ from dash_extensions.enrich import DashProxy, ServersideOutputTransform
 
 app = DashProxy(
     __name__,
+    use_pages=True,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     transforms=[ServersideOutputTransform()],
     suppress_callback_exceptions=True,
@@ -21,6 +22,7 @@ app.index_string = """<!DOCTYPE html>
     
       gtag('config', 'G-JDQTBEPS4B');
     </script>
+    
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -28,6 +30,10 @@ app.index_string = """<!DOCTYPE html>
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-WTDGD6Q');</script>
     <!-- End Google Tag Manager -->
+
+    <!-- Siteimprove Analytics -->
+    <script async src="https://siteimproveanalytics.com/js/siteanalyze_6294756.js"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="co-authored by Giovanni Betti, Federico Tartarini, Christine Nguyen, Yunzhu Ji">

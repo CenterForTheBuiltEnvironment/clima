@@ -4,7 +4,7 @@ you might want to start understanding what degree days are here:
 
 {% embed url="https://en.wikipedia.org/wiki/Heating_degree_day" %}
 
-**Degree days** are calculated as the _integral of the difference between the outside air temperature and a base temperature over time_.&#x20;
+**Degree days** are calculated as the _integral of the difference between the outside air temperature and a base temperature over time_.
 
 If you can define a **base temperature** (the outside temperature above which a building needs no heating or cooling) then you can use this to estimate degree days.  The building requires heating if the outside air temperature falls below the heating base temperature, and the heating degree days accrue; if the outside air temperature rises above the cooling base temperature, the structure requires cooling, and the cooling degree days accumulate.
 

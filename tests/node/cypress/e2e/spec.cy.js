@@ -1,6 +1,5 @@
 function click_tab(name) {
-  cy.get('.custom-tab')
-    .not('.tab--disabled')
+  cy.get('.nav-item')
     .contains(name)
     .click();
 }

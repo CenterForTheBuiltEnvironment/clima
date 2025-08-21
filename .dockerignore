@@ -2,16 +2,24 @@ README.md
 LICENSE
 Procfile
 Procfile.windows
+Pipfile.lock
+Pipfile
 *.pyo
 *.pyd
 __pycache__
 .pytest_cache
 file_system_store
 .git
+.gitbook
+.gitbook.yaml
 docs
-test
+tests
+node_modules
+.my_cache
 
 assets/data/Region*.kml
+assets/data/OneBuilding*.zip
+file_system_backend
 
 venv
 .idea
@@ -162,10 +170,6 @@ typings/
 .serverless
 ### Python template
 # Byte-compiled / optimized / DLL files
-__pycache__/
-*/__pycache__/*
-*.pyc
-*.py[cod]
 *$py.class
 
 # C extensions
@@ -173,9 +177,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/

@@ -16,7 +16,24 @@ Available [here](code_of_conduct.md)
 
 ## Code style
 
-We use Black.exe to format the code.
+We use ruff to enforce the code style and code formatting. You can run it with:
+
+```bash
+pipenv run ruff check .
+pipenv run ruff format .
+```
+
+To ensure that the code is formatted correctly, we use a pre-commit hook that runs Ruff before every commit.
+Run the following once to enable hooks in your local repo:
+
+```bash
+pipenv run pre-commit install
+# optional: run on all files
+pipenv run pre-commit run --all-files
+```
+
+Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
+More information about pre-commit hooks can be found [here](https://pre-commit.com/).
 
 ## Submitting changes
 
