@@ -27,7 +27,7 @@ This guide is for Mac OSX, Linux, or Windows.
 2. **Create a virtual environment using pipenv and install dependencies:**
 
    ```text
-    pipenv install <name-of-the-package>
+    pipenv install --dev
    ```
 
 3.  **Run tool locally**

@@ -10,13 +10,15 @@ The CBE Clima Tool is a web-based application built to support climate analysis 
 
 The CBE Clima Tool is open source. We have released the source code on a [public repository](https://github.com/CenterForTheBuiltEnvironment/clima). We welcome contributions from the community ([more info here](contributing/contributing.md)).
 
-### Video Tutorial
+## Video Tutorial
 
 Learn more about the CBE Clima Tool by watching the following video.
 
 {% embed url="https://www.youtube.com/watch?v=VJ_wOHadVdw" %}
 CBE Clima tool tutorial and overview
 {% endembed %}
+
+[Watch on YouTube](https://www.youtube.com/watch?v=VJ_wOHadVdw)
 
 ## Contributions
 

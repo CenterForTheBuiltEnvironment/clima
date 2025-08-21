@@ -1,12 +1,12 @@
 # Psychrometric Chart
 
-**Clima** allows the user to visualize all annual weather conditions on a [psychometric diagram.](psychrometric-chart-explained.md)
+**Clima** allows the user to visualize all annual weather conditions on a [psychrometric diagram.](psychrometric-chart-explained.md)
 
 The default diagram allows the users to overlay the frequency with which weather conditions recur throughout the year.
 
 <figure><img src="../../../.gitbook/assets/CBEClima_New.York-Downtown.Manhattan.Heli_USA_psy_tab (1).svg" alt=""><figcaption><p>Example: Frequency of climatic condition in the Psychrometric chart of <strong>New York, USA</strong></p></figcaption></figure>
 
-With the first choice in the drop-down list, "None", it is possible to view temperature conditions in the psychometric diagram over the entire year. The visualized dots have the same gradient with a transparency rate, they are not colored according to a legend. Multiplying them when overlaid provides a visualization of their frequency, so the most common conditions.
+With the first choice in the drop-down list, "None", it is possible to view temperature conditions in the psychrometric diagram over the entire year. The visualized dots have the same gradient with a transparency rate, they are not colored according to a legend. Multiplying them when overlaid provides a visualization of their frequency, so the most common conditions.
 
 <figure><img src="../../../.gitbook/assets/CBEClima_New.York-Downtown.Manhattan.Heli_USA_psy_tab.svg" alt=""><figcaption><p>Example: Psychrometric chart with climatic conditions of <strong>New York, USA</strong></p></figcaption></figure>
 
