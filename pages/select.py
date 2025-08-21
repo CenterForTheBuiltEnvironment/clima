@@ -190,8 +190,8 @@ def submitted_data(
                     messages_alert["invalid_format"],
                     "warning",
                 )
-        except Exception:
-            # print(e)
+        except (ValueError, IndexError, KeyError) as e:
+            print(f"Error parsing EPW file: {e}")
             return (
                 None,
                 None,
@@ -330,8 +330,7 @@ def plot_location_epw_files(pathname):
 
     df = json_normalize(data["features"])
     df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
-    df["lat"] += 0.005
-    df["lat"] += 0.005
+    df["lat"] += 0.010
     df = df.rename(columns={"properties.epw": "Source"})
 
     fig = px.scatter_mapbox(
