@@ -1,46 +1,31 @@
 # .github/workflows/deploy.yml
 name: Deploy 🚀 Clima to Google Cloud Run (☁🏃)
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
     name: Deploying 🚀 Clima
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, 'bump version')"
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Setup python
-        uses: actions/setup-python@v4
+      - id: auth
+        uses: google-github-actions/auth@v1
         with:
-          python-version: '3.11'
+          credentials_json: ${{ secrets.GCP_SA_KEY_JSON }}
 
-      - name: Export gcloud related env variable
-        run: export CLOUDSDK_PYTHON="/usr/bin/python3"
-
-      # Build and push image to Google Container Registry
-      - name: Setting up
-        uses: google-github-actions/setup-gcloud@v0
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
         with:
-          version: '318.0.0'
-          service_account_key: ${{ secrets.GCP_SA_KEY_JSON }}
-          service_account_email: "federico.tartarini@bears-berkeley.sg"
-          project_id: clima-316917
+          project_id: heat-stress-scale
 
-      - name: Building (🏗️)
-        run: |-
+      - name: Building (🏗️) and Deploying (🚀)
+        run: |
           gcloud builds submit \
-            --tag us-docker.pkg.dev/clima-316917/gcr.io/clima
-
-      # Setup gcloud CLI
-      - name: Deploy (🚀)
-        uses: google-github-actions/deploy-cloudrun@v1
-        with:
-          service: clima
-          image: us-docker.pkg.dev/clima-316917/gcr.io/clima
-          region: us-central1
-          credentials: ${{ secrets.GCP_SA_KEY_JSON }}
-          project_id: clima-316917
+            --project=clima-316917 \
+            --substitutions=_REPO_NAME="clima",_PROJ_NAME="clima-316917",_IMG_NAME="main",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"
