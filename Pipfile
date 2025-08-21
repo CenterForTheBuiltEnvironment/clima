@@ -23,6 +23,7 @@ pytest = "*"
 bump2version = "*"
 black = "*"
 ruff = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.11"
