@@ -1,4 +1,3 @@
-import sys
 import os
 
 import pandas as pd
@@ -9,11 +8,6 @@ import requests
 
 from pages.lib.utils import summary_table_tmp_rh_tab
 from pages.lib.extract_df import get_data, create_df
-
-
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-if root_dir not in sys.path:
-    sys.path.append(root_dir)
 
 
 def save_epw_test(path_file):
