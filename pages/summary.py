@@ -11,6 +11,7 @@ from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
 from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
 from pages.lib.template_graphs import violin
+from pages.lib.global_column_names import ColNames
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -262,7 +263,7 @@ def update_location_info(ts, df, meta, si_ip):
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
     total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum() / df['glob_hor_rad'].sum() * 100, 1)} %"
-    tmp_unit = mapping_dictionary["DBT"][si_ip]["unit"]
+    tmp_unit = mapping_dictionary[ColNames.DBT][si_ip]["unit"]
     average_yearly_tmp = (
         f"Average yearly temperature: {df['DBT'].mean().round(1)} " + tmp_unit
     )
@@ -339,14 +340,14 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 
         hdd_array = []
         cdd_array = []
-        months = df["month_names"].unique()
+        months = df[ColNames.MONTH_NAMES].unique()
 
         for i in range(1, 13):
             query_month = "month=="
 
             # calculates HDD per month
             query = query_month + str(i) + " and DBT<=" + str(hdd_setpoint)
-            a = df.query(query)["DBT"].sub(hdd_setpoint)
+            a = df.query(query)[ColNames.DBT].sub(hdd_setpoint)
             hdd = a.sum(axis=0, skipna=True)
             hdd = hdd / 24
             hdd = int(hdd)
@@ -354,7 +355,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 
             # calculates CDD per month
             query = query_month + str(i) + " and DBT>=" + str(cdd_setpoint)
-            a = df.query(query)["DBT"].sub(cdd_setpoint)
+            a = df.query(query)[ColNames.DBT].sub(cdd_setpoint)
             cdd = a.sum(axis=0, skipna=True)
             cdd = cdd / 24
             cdd = int(cdd)
@@ -429,7 +430,7 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
         id="tdb-profile-graph",
         className="violin-container",
         config=generate_chart_name("DryBulbTemperature", meta, units),
-        figure=violin(df, "DBT", global_local, si_ip),
+        figure=violin(df, ColNames.DBT, global_local, si_ip),
     )
 
 
@@ -452,7 +453,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
         id="wind-profile-graph",
         className="violin-container",
         config=generate_chart_name("WindSpeed", meta, units),
-        figure=violin(df, "wind_speed", global_local, si_ip),
+        figure=violin(df, ColNames.WIND_SPEED, global_local, si_ip),
     )
 
 
@@ -475,7 +476,7 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
         id="rh-profile-graph",
         className="violin-container",
         config=generate_chart_name("RelativeHumidity", meta, units),
-        figure=violin(df, "RH", global_local, si_ip),
+        figure=violin(df, ColNames.RH, global_local, si_ip),
     )
 
 
@@ -498,7 +499,7 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
         id="gh_rad-profile-graph",
         className="violin-container",
         config=generate_chart_name("GlobalHorizontalRadiation", meta, units),
-        figure=violin(df, "glob_hor_rad", global_local, si_ip),
+        figure=violin(df, ColNames.GLOB_HOR_RAD, global_local, si_ip),
     )
 
 

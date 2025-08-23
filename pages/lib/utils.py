@@ -8,6 +8,7 @@ from dash import html, dash_table, dcc
 
 from config import UnitSystem
 from pages.lib.global_scheme import fig_config, mapping_dictionary, month_lst
+from pages.lib.global_column_names import ColNames
 
 
 def code_timer(func):
@@ -215,13 +216,13 @@ def title_with_link(
 
 def summary_table_tmp_rh_tab(df, value, si_ip):
     df_summary = (
-        df.groupby(["month_names", "month"])[value]
+        df.groupby([ColNames.MONTH_NAMES, ColNames.MONTH])[value]
         .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
         .round(2)
     )
-    df_summary = df_summary.reset_index(level="month_names").sort_index()
+    df_summary = df_summary.reset_index(level=ColNames.MONTH_NAMES).sort_index()
     df_summary = df_summary.drop(["count"], axis=1)
-    df_summary = df_summary.rename(columns={"month_names": "month"})
+    df_summary = df_summary.rename(columns={ColNames.MONTH_NAMES: ColNames.MONTH})
 
     df_sum = (
         df[value]
@@ -229,7 +230,7 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
         .round(2)
         .to_frame()
     )
-    df_sum = df_sum.T.assign(count="Year").rename(columns={"count": "month"})
+    df_sum = df_sum.T.assign(count="Year").rename(columns={"count": ColNames.MONTH})
 
     df_summary = pd.concat([df_summary, df_sum])
 
@@ -240,7 +241,7 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     )
     return dash_table.DataTable(
         columns=[
-            {"name": i, "id": i} if i == "month" else {"name": f"{i} ({unit})", "id": i}
+            {"name": i, "id": i} if i == ColNames.MONTH else {"name": f"{i} ({unit})", "id": i}
             for i in df_summary.columns
         ],
         style_table={"overflowX": "auto"},
