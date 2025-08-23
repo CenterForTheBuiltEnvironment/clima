@@ -632,8 +632,8 @@ def layout():
     ],
     [
         State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.META_STORE, "data"),
-        State(ElementIds.SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_yearly(_, var, global_local, df, meta, si_ip):
@@ -660,12 +660,12 @@ def update_tab_yearly(_, var, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State(ElementIds.DF_STORE, "data"),
-        State(ElementIds.META_STORE, "data"),
-        State(ElementIds.SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_daily(_, var, global_local, df, meta, si_ip):
@@ -685,12 +685,12 @@ def update_tab_daily(_, var, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_NATURAL_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
         State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.META_STORE, "data"),
-        State(ElementIds.SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
@@ -718,7 +718,7 @@ def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
         Input(ElementIds.SEC2_TIME_FILTER_INPUT, "n_clicks"),
         Input(ElementIds.SEC2_DATA_FILTER_INPUT, "n_clicks"),
         Input(ElementIds.NORMALIZE, "value"),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     # General
     [
@@ -728,10 +728,10 @@ def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
         State(ElementIds.SEC2_DATA_FILTER_VAR, "value"),
         State(ElementIds.SEC2_MIN_VAL, "value"),
         State(ElementIds.SEC2_MAX_VAL, "value"),
-        State(ElementIds.META_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
         State(ElementIds.INVERT_MONTH_EXPLORE_HEATMAP, "value"),
         State(ElementIds.INVERT_HOUR_EXPLORE_HEATMAP, "value"),
-        State(ElementIds.SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_heatmap(
@@ -831,7 +831,7 @@ def update_heatmap(
         Input(ElementIds.TAB6_SEC3_COLORBY_DROPDOWN, "value"),
         Input(ElementIds.TAB6_SEC3_TIME_FILTER_INPUT, "n_clicks"),
         Input(ElementIds.TAB6_SEC3_DATA_FILTER_INPUT, "n_clicks"),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
         State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
@@ -840,10 +840,10 @@ def update_heatmap(
         State(ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN, "value"),
         State(ElementIds.TAB6_SEC3_MIN_VAL, "value"),
         State(ElementIds.TAB6_SEC3_MAX_VAL, "value"),
-        State(ElementIds.META_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
         State(ElementIds.INVERT_MONTH_EXPLORE_MORE_CHARTS, "value"),
         State(ElementIds.INVERT_HOUR_EXPLORE_MORE_CHARTS, "value"),
-        State(ElementIds.SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_more_charts(
@@ -923,7 +923,7 @@ def update_more_charts(
     ],
     [
         State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
         State(ElementIds.SEC1_MONTH_SLIDER, "value"),
         State(ElementIds.SEC1_HOUR_SLIDER, "value"),
         State(ElementIds.INVERT_MONTH_EXPLORE_DESCRIPTIVE, "value"),
