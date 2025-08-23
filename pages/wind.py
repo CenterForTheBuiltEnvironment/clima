@@ -5,6 +5,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
+from pages.lib.global_column_names import ColNames
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -376,7 +377,7 @@ def update_annual_wind_rose(_, df, meta, si_ip):
 
 # wind speed
 @callback(
-    Output("wind-speed", "children"),
+    Output(ColNames.WIND_SPEED, "children"),
     # General
     [
         Input("df-store", "modified_timestamp"),
@@ -391,10 +392,10 @@ def update_annual_wind_rose(_, df, meta, si_ip):
 def update_tab_wind_speed(_, global_local, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
-    speed = heatmap(df, "wind_speed", global_local, si_ip)
+    speed = heatmap(df, ColNames.WIND_SPEED, global_local, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("wind_speed", meta, units),
+        config=generate_chart_name(ColNames.WIND_SPEED, meta, units),
         figure=speed,
     )
 
@@ -415,7 +416,7 @@ def update_tab_wind_speed(_, global_local, df, meta, si_ip):
 def update_tab_wind_direction(global_local, df, meta, si_ip):
     """Update the contents of tab five. Passing in the info from the sliders and the general info (df, meta)."""
 
-    direction = heatmap(df, "wind_dir", global_local, si_ip)
+    direction = heatmap(df, ColNames.WIND_DIR, global_local, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name("wind_direction", meta, units),
@@ -452,13 +453,13 @@ def update_custom_wind_rose(
 
     # Wind Rose Graphs
     if start_month <= end_month:
-        df = df.loc[(df["month"] >= start_month) & (df["month"] <= end_month)]
+        df = df.loc[(df[ColNames.MONTH] >= start_month) & (df[ColNames.MONTH] <= end_month)]
     else:
-        df = df.loc[(df["month"] <= end_month) | (df["month"] >= start_month)]
+        df = df.loc[(df[ColNames.MONTH] <= end_month) | (df[ColNames.MONTH] >= start_month)]
     if start_hour <= end_hour:
-        df = df.loc[(df["hour"] >= start_hour) & (df["hour"] <= end_hour)]
+        df = df.loc[(df[ColNames.HOUR] >= start_hour) & (df[ColNames.HOUR] <= end_hour)]
     else:
-        df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
+        df = df.loc[(df[ColNames.HOUR] <= end_hour) | (df[ColNames.HOUR] >= start_hour)]
     custom = wind_rose(
         df, "", [start_month, end_month], [start_hour, end_hour], True, si_ip
     )
@@ -507,25 +508,25 @@ def update_seasonal_graphs(_, df, meta, si_ip):
 
     # Text
     winter_df = df.loc[
-        (df["month"] <= winter_months[1]) | (df["month"] >= winter_months[0])
+        (df[ColNames.MONTH] <= winter_months[1]) | (df[ColNames.MONTH] >= winter_months[0])
     ]
     query_calm_wind = "wind_speed == 0"
     winter_total_count = winter_df.shape[0]
     winter_calm_count = winter_df.query(query_calm_wind).shape[0]
 
     spring_df = df.loc[
-        (df["month"] >= spring_months[0]) & (df["month"] <= spring_months[1])
+        (df[ColNames.MONTH] >= spring_months[0]) & (df[ColNames.MONTH] <= spring_months[1])
     ]
     spring_total_count = spring_df.shape[0]
     spring_calm_count = spring_df.query(query_calm_wind).shape[0]
 
     summer_df = df.loc[
-        (df["month"] >= summer_months[0]) & (df["month"] <= summer_months[1])
+        (df[ColNames.MONTH] >= summer_months[0]) & (df[ColNames.MONTH] <= summer_months[1])
     ]
     summer_total_count = summer_df.shape[0]
     summer_calm_count = summer_df.query(query_calm_wind).shape[0]
 
-    fall_df = df.loc[(df["month"] >= fall_months[0]) & (df["month"] <= fall_months[1])]
+    fall_df = df.loc[(df[ColNames.MONTH] >= fall_months[0]) & (df[ColNames.MONTH] <= fall_months[1])]
     fall_total_count = fall_df.shape[0]
     fall_calm_count = fall_df.query(query_calm_wind).shape[0]
 
@@ -621,18 +622,18 @@ def update_daily_graphs(_, df, meta, si_ip):
     # Text
     query_calm_wind = "wind_speed == 0"
     morning_df = df.loc[
-        (df["hour"] >= morning_times[0]) & (df["hour"] <= morning_times[1])
+        (df[ColNames.HOUR] >= morning_times[0]) & (df[ColNames.HOUR] <= morning_times[1])
     ]
     morning_total_count = morning_df.shape[0]
     morning_calm_count = morning_df.query(query_calm_wind).shape[0]
 
     noon_df = df.loc[
-        (df["hour"] >= morning_times[0]) & (df["hour"] <= morning_times[1])
+        (df[ColNames.HOUR] >= morning_times[0]) & (df[ColNames.HOUR] <= morning_times[1])
     ]
     noon_total_count = noon_df.shape[0]
     noon_calm_count = noon_df.query(query_calm_wind).shape[0]
 
-    night_df = df.loc[(df["hour"] <= night_times[1]) | (df["hour"] >= night_times[0])]
+    night_df = df.loc[(df[ColNames.HOUR] <= night_times[1]) | (df[ColNames.HOUR] >= night_times[0])]
     night_total_count = night_df.shape[0]
     night_calm_count = night_df.query(query_calm_wind).shape[0]
 

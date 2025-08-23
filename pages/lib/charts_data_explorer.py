@@ -5,6 +5,7 @@ import math
 import plotly.express as px
 import plotly.graph_objects as go
 from pages.lib.global_scheme import template, mapping_dictionary, month_lst
+from pages.lib.global_column_names import ColNames
 
 
 def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si_ip):
@@ -60,15 +61,15 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
 
     fig = go.Figure(
         data=go.Heatmap(
-            y=df["hour"],
-            x=df["DOY"],
+            y=df[ColNames.HOUR],
+            x=df[ColNames.DOY],
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
             zmax=range_z[1],
             connectgaps=False,
             hoverongaps=False,
-            customdata=np.stack((df["month_names"], df["day"]), axis=-1),
+            customdata=np.stack((df[ColNames.MONTH_NAMES], df[ColNames.DAY]), axis=-1),
             hovertemplate=(
                 "<b>"
                 + var
@@ -132,7 +133,7 @@ def three_var_graph(
         else:
             df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] = None
 
-    if df.dropna(subset=["month"]).shape[0] == 0:
+    if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
         return None
 
     title = (
