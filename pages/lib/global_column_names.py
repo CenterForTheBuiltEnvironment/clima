@@ -80,6 +80,7 @@ class ElementIds:
     MONTH_SLIDER = "outdoor-comfort-month-slider"
     NORMALIZE_SWITCH = "outdoor-comfort-switches-input"
     PSYCH_CHART = "psych-chart"
+    PSY_CHART_BTN = "psy-chart-btn"
     PSY_COLOR_BY_DROPDOWN = "psy-color-by-dropdown"
     PSY_DATA_FILTER_BTN = "data-filter"
     PSY_FILTER_VAR_DROPDOWN = "psy-var-dropdown"
@@ -90,6 +91,7 @@ class ElementIds:
     PSY_MIN_VAL_INPUT = "psy-min-val"
     PSY_MONTH_SLIDER = "psy-month-slider"
     PSY_TIME_FILTER_BTN = "month-hour-filter"
+
     SEC1_HOUR_SLIDER = "sec1-hour-slider"
     SEC1_MONTH_SLIDER = "sec1-month-slider"
     SEC1_TIME_FILTER_INPUT = "sec1-time-filter-input"
