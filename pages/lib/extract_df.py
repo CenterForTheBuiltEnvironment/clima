@@ -18,6 +18,7 @@ from pythermalcomfort.utilities import running_mean_outdoor_temperature
 
 from pages.lib.global_scheme import month_lst
 from pages.lib.utils import code_timer
+from pages.lib.global_column_names import ColNames
 
 
 @code_timer
@@ -148,7 +149,7 @@ def create_df(lst, file_name):
 
     # from EnergyPlus files extract info about reference years
     if not location_info["period"]:
-        years = epw_df["year"].astype("int").unique()
+        years = epw_df[ColNames.YEAR].astype("int").unique()
         if len(years) == 1:
             year_rounded_up = int(math.ceil(years[0] / 10.0)) * 10
             location_info["period"] = f"{year_rounded_up - 10}-{year_rounded_up}"
@@ -158,22 +159,22 @@ def create_df(lst, file_name):
             location_info["period"] = f"{min_year}-{max_year}"
 
     # Add fake_year
-    epw_df["fake_year"] = "year"
+    epw_df[ColNames.FAKE_YEAR] = ColNames.YEAR
 
     # Add in month names
     month_look_up = {ix + 1: month for ix, month in enumerate(month_lst)}
-    epw_df["month_names"] = epw_df["month"].astype("int").map(month_look_up)
+    epw_df[ColNames.MONTH_NAMES] = epw_df[ColNames.MONTH].astype("int").map(month_look_up)
 
     # Change to int type
-    epw_df[["year", "day", "month", "hour"]] = epw_df[
-        ["year", "day", "month", "hour"]
+    epw_df[[ColNames.YEAR, ColNames.DAY, ColNames.MONTH, ColNames.HOUR]] = epw_df[
+        [ColNames.YEAR, ColNames.DAY, ColNames.MONTH, ColNames.HOUR]
     ].astype(int)
 
     # Add in DOY
-    df_doy = epw_df.groupby(["month", "day"])["hour"].count().reset_index()
-    df_doy["DOY"] = df_doy.index + 1
+    df_doy = epw_df.groupby([ColNames.MONTH, ColNames.DAY])[ColNames.HOUR].count().reset_index()
+    df_doy[ColNames.DOY] = df_doy.index + 1
     epw_df = pd.merge(
-        epw_df, df_doy[["month", "day", "DOY"]], on=["month", "day"], how="left"
+        epw_df, df_doy[[ColNames.MONTH, ColNames.DAY, ColNames.DOY]], on=[ColNames.MONTH, ColNames.DAY], how="left"
     )
 
     change_to_float = [
@@ -209,7 +210,7 @@ def create_df(lst, file_name):
     times = pd.date_range(
         "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="h", tz="UTC"
     )
-    epw_df["UTC_time"] = pd.to_datetime(times)
+    epw_df[ColNames.UTC_TIME] = pd.to_datetime(times)
     delta = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
     times = times - delta
     epw_df["times"] = times
@@ -251,8 +252,8 @@ def create_df(lst, file_name):
 
     epw_df = epw_df.join(mrt_df)
 
-    epw_df["MRT"] = epw_df["delta_mrt"] + epw_df["DBT"]
-    epw_df["wind_speed_utci"] = epw_df["wind_speed"]
+    epw_df["MRT"] = epw_df["delta_mrt"] + epw_df[ColNames.DBT]
+    epw_df["wind_speed_utci"] = epw_df[ColNames.WIND_SPEED]
     epw_df["wind_speed_utci"] = epw_df["wind_speed_utci"].mask(
         epw_df["wind_speed_utci"] >= 17, 16.9
     )
@@ -263,16 +264,16 @@ def create_df(lst, file_name):
         epw_df["wind_speed_utci"] >= 0, 0.5
     )
     epw_df["utci_noSun_Wind"] = utci(
-        epw_df["DBT"], epw_df["DBT"], epw_df["wind_speed_utci"], epw_df["RH"]
+        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df["wind_speed_utci"], epw_df[ColNames.RH]
     )
     epw_df["utci_noSun_noWind"] = utci(
-        epw_df["DBT"], epw_df["DBT"], epw_df["wind_speed_utci_0"], epw_df["RH"]
+        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df["wind_speed_utci_0"], epw_df[ColNames.RH]
     )
     epw_df["utci_Sun_Wind"] = utci(
-        epw_df["DBT"], epw_df["MRT"], epw_df["wind_speed_utci"], epw_df["RH"]
+        epw_df[ColNames.DBT], epw_df["MRT"], epw_df["wind_speed_utci"], epw_df[ColNames.RH]
     )
     epw_df["utci_Sun_noWind"] = utci(
-        epw_df["DBT"], epw_df["MRT"], epw_df["wind_speed_utci_0"], epw_df["RH"]
+        epw_df[ColNames.DBT], epw_df["MRT"], epw_df["wind_speed_utci_0"], epw_df[ColNames.RH]
     )
 
     utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
@@ -291,13 +292,13 @@ def create_df(lst, file_name):
     )
 
     # Add psy values
-    ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df["DBT"], epw_df["RH"])
+    ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df[ColNames.DBT], epw_df[ColNames.RH])
     psy_df = pd.DataFrame.from_records(ta_rh)
     psy_df = psy_df.set_index(epw_df.times)
     epw_df = epw_df.join(psy_df)
 
     # calculate adaptive data
-    dbt_day_ave = epw_df.groupby(["DOY"])["DBT"].mean().to_list()
+    dbt_day_ave = epw_df.groupby([ColNames.DOY])[ColNames.DBT].mean().to_list()
     n = 7
     epw_df["adaptive_comfort"] = np.nan
     epw_df["adaptive_cmf_80_low"] = np.nan
