@@ -15,14 +15,15 @@ from pages.lib.global_scheme import (
 )
 from plotly.subplots import make_subplots
 from pvlib import solarposition
+from pages.lib.global_column_names import ColNames
 
 
 def monthly_solar(epw_df, si_ip):
     g_h_rad_month_ave = (
-        epw_df.groupby(["month", "hour"])["glob_hor_rad"].median().reset_index()
+        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.GLOB_HOR_RAD].median().reset_index()
     )
     dif_h_rad_month_ave = (
-        epw_df.groupby(["month", "hour"])["dif_hor_rad"].median().reset_index()
+        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.DIF_HOR_RAD].median().reset_index()
     )
     fig = make_subplots(
         rows=1,
@@ -37,9 +38,9 @@ def monthly_solar(epw_df, si_ip):
 
         fig.add_trace(
             go.Scatter(
-                x=g_h_rad_month_ave.loc[g_h_rad_month_ave["month"] == i + 1, "hour"],
+                x=g_h_rad_month_ave.loc[g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR],
                 y=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave["month"] == i + 1, "glob_hor_rad"
+                    g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.GLOB_HOR_RAD
                 ],
                 fill="tozeroy",
                 mode="lines",
@@ -47,12 +48,12 @@ def monthly_solar(epw_df, si_ip):
                 line_width=2,
                 name="Global",
                 showlegend=is_first,
-                customdata=epw_df.loc[epw_df["month"] == i + 1, "month_names"],
+                customdata=epw_df.loc[epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES],
                 hovertemplate=(
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
+                    + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -66,10 +67,10 @@ def monthly_solar(epw_df, si_ip):
         fig.add_trace(
             go.Scatter(
                 x=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave["month"] == i + 1, "hour"
+                    dif_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR
                 ],
                 y=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave["month"] == i + 1, "dif_hor_rad"
+                    dif_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.DIF_HOR_RAD
                 ],
                 fill="tozeroy",
                 mode="lines",
@@ -77,12 +78,12 @@ def monthly_solar(epw_df, si_ip):
                 line_width=2,
                 name="Diffuse",
                 showlegend=is_first,
-                customdata=epw_df.loc[epw_df["month"] == i + 1, "month_names"],
+                customdata=epw_df.loc[epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES],
                 hovertemplate=(
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary["dif_hor_rad"][si_ip]["unit"]
+                    + mapping_dictionary[ColNames.DIF_HOR_RAD][si_ip]["unit"]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -173,9 +174,9 @@ def polar_graph(df, meta, global_local, var, si_ip):
                 marker_line_width=0,
                 customdata=np.stack(
                     (
-                        solpos["day"],
-                        solpos["month_names"],
-                        solpos["hour"],
+                        solpos[ColNames.DAY],
+                        solpos[ColNames.MONTH_NAMES],
+                        solpos[ColNames.HOUR],
                         solpos["elevation"],
                         solpos["azimuth"],
                     ),
@@ -209,9 +210,9 @@ def polar_graph(df, meta, global_local, var, si_ip):
                 ),
                 customdata=np.stack(
                     (
-                        solpos["day"],
-                        solpos["month_names"],
-                        solpos["hour"],
+                        solpos[ColNames.DAY],
+                        solpos[ColNames.MONTH_NAMES],
+                        solpos[ColNames.HOUR],
                         solpos["elevation"],
                         solpos["azimuth"],
                         solpos[var],
@@ -352,9 +353,9 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
                 marker_line_width=0,
                 customdata=np.stack(
                     (
-                        df["day"],
-                        df["month_names"],
-                        df["hour"],
+                        df[ColNames.DAY],
+                        df[ColNames.MONTH_NAMES],
+                        df[ColNames.HOUR],
                         df["elevation"],
                         df["azimuth"],
                     ),
@@ -388,9 +389,9 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
                 ),
                 customdata=np.stack(
                     (
-                        df["day"],
-                        df["month_names"],
-                        df["hour"],
+                        df[ColNames.DAY],
+                        df[ColNames.MONTH_NAMES],
+                        df[ColNames.HOUR],
                         df["elevation"],
                         df["azimuth"],
                         df[var],
