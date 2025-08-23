@@ -1,6 +1,6 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
-from pages.components import ElementIds, Text, IdButtons, Type, ComponentProperty
+from lib.global_column_names import ElementIds, Type, ComponentProperty
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
@@ -49,7 +49,7 @@ def layout():
                 children=[
                     html.Div(
                         children=title_with_link(
-                            text=Text.YEARLY_CHART,
+                            text="Yearly_chart",
                             id_button="yearly-chart-label",
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
@@ -60,8 +60,8 @@ def layout():
                     ),
                     html.Div(
                         children=title_with_link(
-                            text=Text.DAILY_CHART,
-                            id_button=IdButtons.DAILY_CHART_LABEL,
+                            text="Daily chart",
+                            id_button="daily-chart-label",
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
@@ -71,7 +71,7 @@ def layout():
                     ),
                     html.Div(
                         children=title_with_link(
-                            text=Text.HEATMAP_CHART,
+                            text="Heatmap chart",
                             id_button="heatmap-chart-label",
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
@@ -82,7 +82,7 @@ def layout():
                     ),
                     html.Div(
                         children=title_with_tooltip(
-                            text=Text.DESCRIPTIVE_STATISTICS,
+                            text="Descriptive statistics",
                             tooltip_text="count, mean, std, min, max, and percentiles",
                             id_button="table-tmp-rh",
                         ),
