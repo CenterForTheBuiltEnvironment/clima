@@ -1,9 +1,9 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
-from lib.global_column_names import ElementIds, Type, ComponentProperty
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
+from pages.lib.global_column_names import ElementIds, Type, ComponentProperty, ColNames
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -111,7 +111,7 @@ def layout():
 )
 def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
-        dbt_yearly = yearly_profile(df, "DBT", global_local, si_ip)
+        dbt_yearly = yearly_profile(df, ColNames.DBT, global_local, si_ip)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units_degree(si_ip)
         return dcc.Graph(
@@ -119,7 +119,7 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
             figure=dbt_yearly,
         )
     else:
-        rh_yearly = yearly_profile(df, "RH", global_local, si_ip)
+        rh_yearly = yearly_profile(df, ColNames.RH, global_local, si_ip)
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units(si_ip)
         return dcc.Graph(
@@ -147,8 +147,8 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("DryBulbTemperature_daily", meta, units),
             figure=daily_profile(
-                df[["DBT", "hour", "UTC_time", "month_names", "day", "month"]],
-                "DBT",
+                df[[ColNames.DBT, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY, ColNames.MONTH]],
+                ColNames.DBT,
                 global_local,
                 si_ip,
             ),
@@ -158,8 +158,8 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("RelativeHumidity_daily", meta, units),
             figure=daily_profile(
-                df[["RH", "hour", "UTC_time", "month_names", "day", "month"]],
-                "RH",
+                df[[ColNames.RH, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY, ColNames.MONTH]],
+                ColNames.RH,
                 global_local,
                 si_ip,
             ),
@@ -186,8 +186,8 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("DryBulbTemperature_heatmap", meta, units),
             figure=heatmap(
-                df[["DBT", "hour", "UTC_time", "month_names", "day"]],
-                "DBT",
+                df[[ColNames.DBT, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY]],
+                ColNames.DBT,
                 global_local,
                 si_ip,
             ),
@@ -197,8 +197,8 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("RelativeHumidity_heatmap", meta, units),
             figure=heatmap(
-                df[["RH", "hour", "UTC_time", "month_names", "day"]],
-                "RH",
+                df[[ColNames.RH, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY]],
+                ColNames.RH,
                 global_local,
                 si_ip,
             ),
@@ -216,5 +216,5 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
 def update_table(_, dd_value, df, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     return summary_table_tmp_rh_tab(
-        df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
+        df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]], dd_value, si_ip
     )
