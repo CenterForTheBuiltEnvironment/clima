@@ -18,6 +18,7 @@ from pages.lib.global_scheme import (
     container_col_center_one_of_three,
 )
 from pages.lib.template_graphs import filter_df_by_month_and_hour
+from pages.lib.global_column_names import ColNames
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -326,8 +327,8 @@ def nv_heatmap(
         month, hour, invert_month, invert_hour
     )
 
-    var = "DBT"
-    filter_var = "DPT"
+    var = ColNames.DBT
+    filter_var = ColNames.DPT
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
         df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), var] = None
@@ -335,7 +336,7 @@ def nv_heatmap(
     if dpt_data_filter:
         df.loc[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val), var] = None
 
-        if df.dropna(subset=["month"]).shape[0] == 0:
+        if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
             return (
                 dbc.Alert(
                     "Natural ventilation is not available in this location under these"
@@ -386,15 +387,15 @@ def nv_heatmap(
 
     fig = go.Figure(
         data=go.Heatmap(
-            y=df["hour"] - 0.5,  # Offset by 0.5 to center the hour labels
-            x=df["UTC_time"].dt.date,
+            y=df[ColNames.HOUR] - 0.5,  # Offset by 0.5 to center the hour labels
+            x=df[ColNames.UTC_TIME].dt.date,
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
             zmax=range_z[1],
             connectgaps=False,
             hoverongaps=False,
-            customdata=np.stack((df["month_names"], df["day"]), axis=-1),
+            customdata=np.stack((df[ColNames.MONTH_NAMES], df[ColNames.DAY]), axis=-1),
             hovertemplate=(
                 "<b>"
                 + var
@@ -512,7 +513,7 @@ def nv_bar_chart(
     )
 
     # this should be the total after filtering by time
-    tot_month_hours = df.groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
+    tot_month_hours = df.groupby(df[ColNames.UTC_TIME].dt.month)["nv_allowed"].sum().values
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
         df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), "nv_allowed"] = 0
@@ -522,7 +523,7 @@ def nv_bar_chart(
 
     n_hours_nv_allowed = (
         df.dropna(subset="nv_allowed")
-        .groupby(df["UTC_time"].dt.month)["nv_allowed"]
+        .groupby(df[ColNames.UTC_TIME].dt.month)["nv_allowed"]
         .sum()
         .values
     )
@@ -532,7 +533,7 @@ def nv_bar_chart(
     if len(normalize) == 0:
         fig = go.Figure(
             go.Bar(
-                x=df["month_names"].unique(),
+                x=df[ColNames.MONTH_NAMES].unique(),
                 y=n_hours_nv_allowed,
                 name="",
                 marker_color=color_in,
@@ -554,7 +555,7 @@ def nv_bar_chart(
 
     else:
         trace1 = go.Bar(
-            x=df["month_names"].unique(),
+            x=df[ColNames.MONTH_NAMES].unique(),
             y=per_time_nv_allowed,
             name="",
             marker_color=color_in,
