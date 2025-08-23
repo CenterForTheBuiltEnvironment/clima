@@ -75,6 +75,7 @@ class ElementIds:
     PSY_MIN_VAL_INPUT = "psy-min-val"
     PSY_MONTH_SLIDER = "psy-month-slider"
     PSY_TIME_FILTER_BTN = "month-hour-filter"
+    PSY_CHART_BTN = "psy-chart-btn"
     SCENARIO_DROPDOWN = "tab7-dropdown"
     SI_IP_UNIT_STORE = "si-ip-unit-store"
     TABLE_TMP_HUM = "table-tmp-hum"
@@ -83,8 +84,7 @@ class ElementIds:
     UTCI_HEATMAP = "utci-heatmap"
     UTCI_SUMMARY_CHART = "utci-summary-chart"
     YEARLY_CHART = "yearly-chart"
-
-
+    
 
 class ComponentProperty:
     # ==================== Define common attribute name constants for components ====================
