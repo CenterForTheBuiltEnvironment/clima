@@ -26,7 +26,7 @@ class ColNames(str, Enum):
     DIR_NOR_ILL = "dir_nor_ill"        # Direct Normal Illuminance
     DIF_HOR_ILL = "dif_hor_ill"        # Diffuse Horizontal Illuminance
     
-    # ==================== Other ====================
+    # ==================== Other columns ====================
     ZLUMI = "Zlumi"                    # Luminance
     WIND_DIR = "wind_dir"              # Wind Direction
     WIND_SPEED = "wind_speed"          # Wind Speed
