@@ -35,7 +35,7 @@ def layout():
 
     return html.Div(
         className="container-col",
-        id="tab-two-container",
+        id=ElementIds.TAB_TWO_CONTAINER,
         children=[
             #
         ],
@@ -43,7 +43,7 @@ def layout():
 
 
 @callback(
-    Output(ElementIds.TABLE_TWO_CONTAINER, "children"), [Input(ElementIds.ID_SUMMARY_SI_IP_RADIO_INPUT, "value")]
+    Output(ElementIds.TAB_TWO_CONTAINER, "children"), [Input(ElementIds.ID_SUMMARY_SI_IP_RADIO_INPUT, "value")]
 )
 def update_layout(si_ip):
     if si_ip == UnitSystem.SI:
@@ -259,28 +259,21 @@ def update_location_info(ts, df, meta, si_ip):
 
     # global horizontal irradiance
     # Note that the value is divided by 1000, so a corresponding change is made in the unit:
-    total_solar_rad_value = round(df[ColNames.GLOB_HOR_RAD].sum() / 1000, 2)
-    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip]["unit"]
+    total_solar_rad_value = round(df["glob_hor_rad"].sum() / 1000, 2)
+    total_solar_rad_unit = "k" + mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
-    glob_sum = df[ColNames.GLOB_HOR_RAD].sum()
-    if glob_sum > 0:
-        diffuse_percentage = round(df[ColNames.DIF_HOR_RAD].sum() / glob_sum * 100, 1)
-    else:
-        diffuse_percentage = 0
-    total_diffuse_rad = (
-        f"Percentage of diffuse horizontal solar radiation: {diffuse_percentage} %"
-    )
+    total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum() / df['glob_hor_rad'].sum() * 100, 1)} %"
     tmp_unit = mapping_dictionary[ColNames.DBT][si_ip]["unit"]
     average_yearly_tmp = (
-        f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} " + tmp_unit
+        f"Average yearly temperature: {df['DBT'].mean().round(1)} " + tmp_unit
     )
     hottest_yearly_tmp = (
-        f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} "
+        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} "
         + tmp_unit
     )
     coldest_yearly_tmp = (
-        f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} "
+        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} "
         + tmp_unit
     )
 
@@ -412,7 +405,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
         units = generate_units_degree(si_ip)
 
         chart = dcc.Graph(
-            id="degree-days-chart",
+            id=ElementIds.DEGREE_DAYS_CHART,
             config=generate_chart_name("hdd_cdd", meta, custom_inputs, units),
             figure=fig,
         )
@@ -458,7 +451,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     units = generate_units(si_ip)
     return dcc.Graph(
-        id="wind-profile-graph",
+        id=ElementIds.WIND_PROFILE_GRAPH,
         className="violin-container",
         config=generate_chart_name("WindSpeed", meta, units),
         figure=violin(df, ColNames.WIND_SPEED, global_local, si_ip),
