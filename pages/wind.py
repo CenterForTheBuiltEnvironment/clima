@@ -1,7 +1,7 @@
 import dash
 from dash import dcc, html
 from dash_extensions.enrich import Output, Input, State, callback
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import month_lst, container_row_center_full

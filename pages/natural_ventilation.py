@@ -20,7 +20,7 @@ from pages.lib.global_scheme import (
 )
 from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_column_names import ColNames
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,

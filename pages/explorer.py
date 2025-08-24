@@ -12,7 +12,7 @@ from pages.lib.charts_data_explorer import (
     two_var_graph,
     three_var_graph,
 )
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_scheme import (
     fig_config,

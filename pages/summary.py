@@ -12,7 +12,7 @@ from pages.lib.extract_df import get_data
 from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
 from pages.lib.template_graphs import violin
 from pages.lib.global_column_names import ColNames
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,

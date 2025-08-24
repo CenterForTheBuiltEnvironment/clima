@@ -13,7 +13,7 @@ from pandas import json_normalize
 
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_scheme import mapping_dictionary
 from config import PageUrls, PageInfo, UnitSystem
 from pages.lib.utils import generate_chart_name

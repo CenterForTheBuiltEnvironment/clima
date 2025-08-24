@@ -6,7 +6,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 import numpy as np
 
 from config import PageUrls, DocLinks, PageInfo
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )

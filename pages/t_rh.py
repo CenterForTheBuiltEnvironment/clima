@@ -4,7 +4,7 @@ from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
 from pages.lib.global_column_names import ColNames
-from pages.lib.global_elementids import ElementIds
+from pages.lib.global_element_ids import ElementIds
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
