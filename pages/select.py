@@ -13,6 +13,7 @@ from pandas import json_normalize
 
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
+from pages.lib.global_elementids import ElementIds
 from pages.lib.global_scheme import mapping_dictionary
 from config import PageUrls, PageInfo, UnitSystem
 from pages.lib.utils import generate_chart_name
@@ -40,19 +41,19 @@ def layout():
         className="container-col tab-container",
         children=[
             dcc.Loading(
-                id="loading-1",
+                id=ElementIds.LOADING_ONE,
                 type="circle",
                 fullscreen=True,
                 children=alert(),
             ),
             dcc.Upload(
-                id="upload-data",
+                id=ElementIds.UPLOAD_DATA,
                 children=dbc.Button(
                     [
                         "Drag and Drop or ",
                         html.A("Select an EPW file from your computer"),
                     ],
-                    id="upload-data-button",
+                    id=ElementIds.UPLOAD_DATA_BUTTON,
                     outline=True,
                     color="secondary",
                     className="mt-2",
@@ -64,31 +65,31 @@ def layout():
             ),
             dmc.Skeleton(
                 visible=False,
-                id="skeleton-graph-container",
+                id=ElementIds.SKELETON_GRAPH_CONTAINER,
                 height=500,
-                children=html.Div(id="tab-one-map"),
+                children=html.Div(id=ElementIds.TAB_ONE_MAP),
             ),
             dbc.Modal(
                 [
-                    dbc.ModalHeader(id="modal-header"),
+                    dbc.ModalHeader(id=ElementIds.MODAL_HEADER),
                     dbc.ModalFooter(
                         children=[
                             dbc.Button(
                                 "Close",
-                                id="modal-close-button",
+                                id=ElementIds.MODAL_CLOSE_BUTTON,
                                 className="ml-2",
                                 color="light",
                             ),
                             dbc.Button(
                                 "Yes",
-                                id="modal-yes-button",
+                                id=ElementIds.MODAL_YES_BUTTON,
                                 className="ml-2",
                                 color="primary",
                             ),
                         ]
                     ),
                 ],
-                id="modal",
+                id=ElementIds.MODAL,
                 is_open=False,
             ),
         ],
@@ -100,7 +101,7 @@ def alert():
     return dbc.Alert(
         messages_alert["start"],
         color="primary",
-        id="alert",
+        id=ElementIds.ALERT,
         dismissable=False,
         is_open=True,
         style={"maxHeight": "66px"},
@@ -110,20 +111,20 @@ def alert():
 # add si-ip and map dictionary in the output
 @callback(
     [
-        Output("meta-store", "data"),
-        Output("lines-store", "data"),
-        Output("alert", "is_open"),
-        Output("alert", "children"),
-        Output("alert", "color"),
+        Output(ElementIds.ID_SELECT_META_STORE, "data"),
+        Output(ElementIds.LINES_STORE, "data"),
+        Output(ElementIds.ALERT, "is_open"),
+        Output(ElementIds.ALERT, "children"),
+        Output(ElementIds.ALERT, "color"),
     ],
     [
-        Input("modal-yes-button", "n_clicks"),
-        Input("upload-data-button", "n_clicks"),
-        Input("upload-data", "contents"),
+        Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),
+        Input(ElementIds.UPLOAD_DATA_BUTTON, "n_clicks"),
+        Input(ElementIds.UPLOAD_DATA, "contents"),
     ],
     [
-        State("upload-data", "filename"),
-        State("url-store", "data"),
+        State(ElementIds.UPLOAD_DATA, "filename"),
+        State(ElementIds.ID_SELECT_URL_STORE, "data"),
     ],
     prevent_initial_call=True,
 )
@@ -205,14 +206,14 @@ def submitted_data(
 # add switch_si_ip function and convert the data-store
 @callback(
     [
-        Output("df-store", "data"),
-        Output("si-ip-unit-store", "data"),
+        Output(ElementIds.ID_SELECT_DF_STORE, "data"),
+        Output(ElementIds.ID_SELECT_SI_IP_UNIT_STORE, "data"),
     ],
     [
-        Input("lines-store", "modified_timestamp"),
-        Input("si-ip-radio-input", "value"),
+        Input(ElementIds.LINES_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_SELECT_SI_IP_RADIO_INPUT, "value"),
     ],
-    [State("url-store", "data"), State("lines-store", "data")],
+    [State(ElementIds.ID_SELECT_URL_STORE, "data"), State("lines-store", "data")],
 )
 def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
@@ -239,11 +240,11 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
         Output("/explorer", "disabled"),
         Output("/outdoor", "disabled"),
         Output("/natural-ventilation", "disabled"),
-        Output("banner-subtitle", "children"),
+        Output(ElementIds.BANNER_SUBTITLE, "children"),
     ],
     [
-        Input("meta-store", "data"),
-        Input("df-store", "data"),
+        Input(ElementIds.ID_SELECT_META_STORE, "data"),
+        Input(ElementIds.ID_SELECT_DF_STORE, "data"),
     ],
 )
 def enable_tabs_when_data_is_loaded(meta, data):
@@ -279,15 +280,15 @@ def enable_tabs_when_data_is_loaded(meta, data):
 
 @callback(
     [
-        Output("modal", "is_open"),
-        Output("url-store", "data"),
+        Output(ElementIds.MODAL, "is_open"),
+        Output(ElementIds.ID_SELECT_URL_STORE, "data"),
     ],
     [
-        Input("modal-yes-button", "n_clicks"),
-        Input("tab-one-map", "clickData"),
-        Input("modal-close-button", "n_clicks"),
+        Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),
+        Input(ElementIds.TAB_ONE_MAP, "clickData"),
+        Input(ElementIds.MODAL_CLOSE_BUTTON, "n_clicks"),
     ],
-    [State("modal", "is_open")],
+    [State(ElementIds.MODAL, "is_open")],
     prevent_initial_call=True,
 )
 def display_modal_when_data_clicked(_, click_map, __, is_open):
@@ -302,10 +303,10 @@ def display_modal_when_data_clicked(_, click_map, __, is_open):
 
 @callback(
     [
-        Output("modal-header", "children"),
+        Output(ElementIds.MODAL_HEADER, "children"),
     ],
     [
-        Input("tab-one-map", "clickData"),
+        Input(ElementIds.TAB_ONE_MAP, "clickData"),
     ],
     prevent_initial_call=True,
 )
@@ -317,7 +318,7 @@ def change_text_modal(click_map):
 
 
 @callback(
-    Output("skeleton-graph-container", "children"),
+    Output(ElementIds.SKELETON_GRAPH_CONTAINER, "children"),
     Input("url", "pathname"),
 )
 def plot_location_epw_files(pathname):
@@ -369,7 +370,7 @@ def plot_location_epw_files(pathname):
 
     return (
         dcc.Graph(
-            id="tab-one-map",
+            id=ElementIds.TAB_ONE_MAP,
             figure=fig,
             config=generate_chart_name("epw_location_select"),
         ),

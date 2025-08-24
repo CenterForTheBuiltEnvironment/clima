@@ -3,7 +3,8 @@ from dash_extensions.enrich import Output, Input, State, dcc, html, callback
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
-from pages.lib.global_column_names import ElementIds, Type, ComponentProperty, ColNames
+from pages.lib.global_column_names import ColNames
+from pages.lib.global_elementids import ElementIds
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -37,7 +38,7 @@ def layout():
                         className="text-next-to-input", children=["Select a variable: "]
                     ),
                     dropdown(
-                        id=ElementIds.DROPDOWN,
+                        id=ElementIds.ID_T_RH_DROPDOWN,
                         className="dropdown-t-rh",
                         options={var: dropdown_names[var] for var in var_to_plot},
                         value=dropdown_names[var_to_plot[0]],
@@ -55,7 +56,7 @@ def layout():
                         ),
                     ),
                     dcc.Loading(
-                        type=Type.CIRCLE,
+                        type="circle",
                         children=html.Div(id=ElementIds.YEARLY_CHART),
                     ),
                     html.Div(
@@ -66,7 +67,7 @@ def layout():
                         ),
                     ),
                     dcc.Loading(
-                        type=Type.CIRCLE,
+                        type="circle",
                         children=html.Div(id=ElementIds.DAILY),
                     ),
                     html.Div(
@@ -77,7 +78,7 @@ def layout():
                         ),
                     ),
                     dcc.Loading(
-                        type=Type.CIRCLE,
+                        type="circle",
                         children=html.Div(id=ElementIds.HEATMAP),
                     ),
                     html.Div(
@@ -97,16 +98,16 @@ def layout():
 
 
 @callback(
-    Output(ElementIds.YEARLY_CHART, ComponentProperty.CHILDREN),
+    Output(ElementIds.YEARLY_CHART, "children"),
     [
-        Input(ElementIds.DF_STORE, ComponentProperty.MODIFIED_TIMESTAMP),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, ComponentProperty.VALUE),
-        Input(ElementIds.DROPDOWN, ComponentProperty.VALUE),
+        Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
     ],
     [
-        State(ElementIds.DF_STORE, ComponentProperty.DATA),
-        State(ElementIds.META_STORE, ComponentProperty.DATA),
-        State(ElementIds.SI_IP_UNIT_STORE, ComponentProperty.DATA),
+        State(ElementIds.ID_T_RH_DF_STORE, "data"),
+        State(ElementIds.ID_T_RH_META_STORE, "data"),
+        State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
@@ -129,16 +130,16 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
 
 
 @callback(
-    Output(ElementIds.DAILY, ComponentProperty.CHILDREN),
+    Output(ElementIds.DAILY, "children"),
     [
-        Input(ElementIds.DF_STORE, ComponentProperty.MODIFIED_TIMESTAMP),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, ComponentProperty.VALUE),
-        Input(ElementIds.DROPDOWN, ComponentProperty.VALUE),
+        Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
     ],
     [
-        State(ElementIds.DF_STORE, ComponentProperty.DATA),
-        State(ElementIds.META_STORE, ComponentProperty.DATA),
-        State(ElementIds.SI_IP_UNIT_STORE, ComponentProperty.DATA),
+        State(ElementIds.ID_T_RH_DF_STORE, "data"),
+        State(ElementIds.ID_T_RH_META_STORE, "data"),
+        State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_daily(_, global_local, dd_value, df, meta, si_ip):
@@ -167,16 +168,16 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
 
 
 @callback(
-    [Output(ElementIds.HEATMAP, ComponentProperty.CHILDREN)],
+    [Output(ElementIds.HEATMAP, "children")],
     [
-        Input(ElementIds.DF_STORE, ComponentProperty.MODIFIED_TIMESTAMP),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, ComponentProperty.VALUE),
-        Input(ElementIds.DROPDOWN, ComponentProperty.VALUE),
+        Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
     ],
     [
-        State(ElementIds.DF_STORE, ComponentProperty.DATA),
-        State(ElementIds.META_STORE, ComponentProperty.DATA),
-        State(ElementIds.SI_IP_UNIT_STORE, ComponentProperty.DATA),
+        State(ElementIds.ID_T_RH_DF_STORE, "data"),
+        State(ElementIds.ID_T_RH_META_STORE, "data"),
+        State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
@@ -206,12 +207,12 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
 
 
 @callback(
-    Output(ElementIds.TABLE_TMP_HUM, ComponentProperty.CHILDREN),
+    Output(ElementIds.TABLE_TMP_HUM, "children"),
     [
-        Input(ElementIds.DF_STORE, ComponentProperty.MODIFIED_TIMESTAMP),
-        Input(ElementIds.DROPDOWN, ComponentProperty.VALUE),
+        Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
     ],
-    [State(ElementIds.DF_STORE, ComponentProperty.DATA), State(ElementIds.SI_IP_UNIT_STORE, ComponentProperty.DATA)],
+    [State(ElementIds.ID_T_RH_DF_STORE, "data"), State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data")],
 )
 def update_table(_, dd_value, df, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""

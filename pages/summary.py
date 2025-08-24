@@ -12,6 +12,7 @@ from pages.lib.extract_df import get_data
 from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
 from pages.lib.template_graphs import violin
 from pages.lib.global_column_names import ColNames
+from pages.lib.global_elementids import ElementIds
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -42,7 +43,7 @@ def layout():
 
 
 @callback(
-    Output("tab-two-container", "children"), [Input("si-ip-radio-input", "value")]
+    Output(ElementIds.TABLE_TWO_CONTAINER, "children"), [Input(ElementIds.ID_SUMMARY_SI_IP_RADIO_INPUT, "value")]
 )
 def update_layout(si_ip):
     if si_ip == UnitSystem.SI:
@@ -54,19 +55,19 @@ def update_layout(si_ip):
 
     return html.Div(
         className="container-col",
-        id="tab2-sec1-container",
+        id=ElementIds.TAB2_SCE1_CONTAINER,
         children=[
             dcc.Loading(
                 type="circle",
                 children=html.Div(
                     className="container-col",
-                    id="location-info",
+                    id=ElementIds.LOCATION_INFO,
                     style={"padding": "12px"},
                 ),
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(className="tab-two-section", id="world-map"),
+                children=html.Div(className="tab-two-section", id=ElementIds.WORLD_MAP),
             ),
             html.Div(
                 children=title_with_tooltip(
@@ -83,7 +84,7 @@ def update_layout(si_ip):
                             dbc.Button(
                                 "Download EPW",
                                 color="primary",
-                                id="download-epw-button",
+                                id=ElementIds.DOWN_EPW_BUTTON,
                             ),
                             width="auto",
                         ),
@@ -91,14 +92,14 @@ def update_layout(si_ip):
                             dbc.Button(
                                 "Download Clima dataframe",
                                 color="primary",
-                                id="download-button",
+                                id=ElementIds.DOWNLOAD_BUTTON,
                             ),
                             width="auto",
                         ),
                         dbc.Col(
                             [
-                                dcc.Download(id="download-dataframe-csv"),
-                                dcc.Download(id="download-epw"),
+                                dcc.Download(id=ElementIds.DOWNLOAD_DATAFRAME_CSV),
+                                dcc.Download(id=ElementIds.DOWNLOAD_EPW),
                             ],
                             width=1,
                         ),
@@ -116,7 +117,7 @@ def update_layout(si_ip):
                 "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
                 color="warning",
                 is_open=False,
-                id="warning-cdd-higher-hdd",
+                id=ElementIds.WARNING_CDD_HIGHER_HDD,
             ),
             dbc.Row(
                 [
@@ -128,7 +129,7 @@ def update_layout(si_ip):
                     ),
                     dbc.Col(
                         dbc.Input(
-                            id="input-hdd-set-point",
+                            id=ElementIds.INPUT_HDD_SET_POINT,
                             type="number",
                             value=heating_setpoint,
                             style={"width": "4rem"},
@@ -143,7 +144,7 @@ def update_layout(si_ip):
                     ),
                     dbc.Col(
                         dbc.Input(
-                            id="input-cdd-set-point",
+                            id=ElementIds.INPUT_CDD_SET_POINT,
                             type="number",
                             value=cooling_setpoint,
                             style={"width": "4rem"},
@@ -152,7 +153,7 @@ def update_layout(si_ip):
                     ),
                     dbc.Col(
                         dbc.Button(
-                            id="submit-set-points",
+                            id=ElementIds.SUBMIT_SET_POINTS,
                             children="Submit",
                             color="primary",
                         ),
@@ -164,7 +165,7 @@ def update_layout(si_ip):
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id="degree-days-chart-wrapper"),
+                children=html.Div(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
             ),
             html.Div(
                 children=title_with_link(
@@ -174,12 +175,12 @@ def update_layout(si_ip):
                 ),
             ),
             dbc.Row(
-                id="graph-container",
+                id=ElementIds.GRAPH_CONTAINER,
                 children=[
-                    dbc.Col(id="temp-profile-graph", width=12, md=6, lg=3),
-                    dbc.Col(id="humidity-profile-graph", width=12, md=6, lg=3),
-                    dbc.Col(id="solar-radiation-graph", width=12, md=6, lg=3),
-                    dbc.Col(id="wind-speed-graph", width=12, md=6, lg=3),
+                    dbc.Col(id=ElementIds.TEMP_PROFILE_GRAPH, width=12, md=6, lg=3),
+                    dbc.Col(id=ElementIds.HUMIDITY_PROFILE_GRAPH, width=12, md=6, lg=3),
+                    dbc.Col(id=ElementIds.SOLAR_RADIATION_GRAPH, width=12, md=6, lg=3),
+                    dbc.Col(id=ElementIds.WIND_SPEED_GRAPH, width=12, md=6, lg=3),
                 ],
             ),
         ],
@@ -198,13 +199,13 @@ def update_layout(si_ip):
 
 
 @callback(
-    Output("world-map", "children"),
-    Input("meta-store", "data"),
+    Output(ElementIds.WORLD_MAP, "children"),
+    Input(ElementIds.ID_SUMMARY_META_STORE, "data"),
 )
 def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     map_world = dcc.Graph(
-        id="gh_rad-profile-graph",
+        id=ElementIds.GH_RAD_PROFILE_GRAPH,
         config=generate_chart_name("map", meta),
         figure=world_map(meta),
     )
@@ -213,12 +214,12 @@ def update_map(meta):
 
 
 @callback(
-    Output("location-info", "children"),
-    Input("df-store", "modified_timestamp"),
+    Output(ElementIds.LOCATION_INFO, "children"),
+    Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_location_info(ts, df, meta, si_ip):
@@ -303,20 +304,20 @@ def update_location_info(ts, df, meta, si_ip):
 
 @callback(
     [
-        Output("degree-days-chart-wrapper", "children"),
-        Output("warning-cdd-higher-hdd", "is_open"),
+        Output(ElementIds.DEGREE_DAYS_CHART_WRAPPER, "children"),
+        Output(ElementIds.WARNING_CDD_HIGHER_HDD, "is_open"),
     ],
     [
-        Input("df-store", "modified_timestamp"),
-        Input("submit-set-points", "n_clicks_timestamp"),
+        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SUBMIT_SET_POINTS, "n_clicks_timestamp"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("input-hdd-set-point", "value"),
-        State("input-cdd-set-point", "value"),
-        State("submit-set-points", "n_clicks"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.INPUT_HDD_SET_POINT, "value"),
+        State(ElementIds.INPUT_CDD_SET_POINT, "value"),
+        State(ElementIds.SUBMIT_SET_POINTS, "n_clicks"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_ip):
@@ -413,21 +414,21 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 
 
 @callback(
-    Output("temp-profile-graph", "children"),
+    Output(ElementIds.TEMP_PROFILE_GRAPH, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_violin_tdb(ts, global_local, df, meta, si_ip):
     units = generate_units_degree(si_ip)
     return dcc.Graph(
-        id="tdb-profile-graph",
+        id=ElementIds.TDB_PROFILE_GRAPH,
         className="violin-container",
         config=generate_chart_name("DryBulbTemperature", meta, units),
         figure=violin(df, ColNames.DBT, global_local, si_ip),
@@ -435,15 +436,15 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
 
 
 @callback(
-    Output("wind-speed-graph", "children"),
+    Output(ElementIds.WIND_SPEED_GRAPH, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_wind(ts, global_local, df, meta, si_ip):
@@ -458,22 +459,22 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
 
 
 @callback(
-    Output("humidity-profile-graph", "children"),
+    Output(ElementIds.HUMIDITY_PROFILE_GRAPH, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_rh(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     units = generate_units(si_ip)
     return dcc.Graph(
-        id="rh-profile-graph",
+        id=ElementIds.RH_PROFILE_GRAPH,
         className="violin-container",
         config=generate_chart_name("RelativeHumidity", meta, units),
         figure=violin(df, ColNames.RH, global_local, si_ip),
@@ -481,22 +482,22 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
 
 
 @callback(
-    Output("solar-radiation-graph", "children"),
+    Output(ElementIds.SOLAR_RADIATION_GRAPH, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     units = generate_units(si_ip)
     return dcc.Graph(
-        id="gh_rad-profile-graph",
+        id=ElementIds.GH_RAD_PROFILE_GRAPH,
         className="violin-container",
         config=generate_chart_name("GlobalHorizontalRadiation", meta, units),
         figure=violin(df, ColNames.GLOB_HOR_RAD, global_local, si_ip),
@@ -504,12 +505,12 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
 
 
 @callback(
-    Output("download-dataframe-csv", "data"),
-    [Input("download-button", "n_clicks")],
+    Output(ElementIds.DOWNLOAD_DATAFRAME_CSV, "data"),
+    [Input(ElementIds.DOWNLOAD_BUTTON, "n_clicks")],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
     prevent_initial_call=True,
 )
@@ -530,9 +531,9 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
 
 
 @callback(
-    Output("download-epw", "data"),
-    [Input("download-epw-button", "n_clicks")],
-    [State("meta-store", "data")],
+    Output(ElementIds.DOWNLOAD_EPW, "data"),
+    [Input(ElementIds.DOWN_EPW_BUTTON, "n_clicks")],
+    [State(ElementIds.ID_SUMMARY_META_STORE, "data")],
     prevent_initial_call=True,
 )
 def download_epw(n_clicks, meta):

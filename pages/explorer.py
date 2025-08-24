@@ -12,7 +12,7 @@ from pages.lib.charts_data_explorer import (
     two_var_graph,
     three_var_graph,
 )
-from pages.lib.global_column_names import ElementIds
+from pages.lib.global_elementids import ElementIds
 from pages.lib.global_scheme import (
     fig_config,
     dropdown_names,
@@ -626,9 +626,9 @@ def layout():
     Output(ElementIds.YEARLY_EXPLORE, "children"),
     # Section One
     [
-        Input("df-store", "modified_timestamp"),
+        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
         State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
@@ -685,7 +685,7 @@ def update_tab_daily(_, var, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.ID_NATURAL_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
         State(ElementIds.ID_EXPLORER_DF_STORE, "data"),

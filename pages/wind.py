@@ -1,7 +1,7 @@
 import dash
 from dash import dcc, html
 from dash_extensions.enrich import Output, Input, State, callback
-from pages.lib.global_column_names import ElementIds
+from pages.lib.global_elementids import ElementIds
 
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import month_lst, container_row_center_full
@@ -382,7 +382,7 @@ def update_annual_wind_rose(_, df, meta, si_ip):
     # General
     [
         Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_WINDGLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
         State(ElementIds.ID_WIND_DF_STORE, "data"),
@@ -406,7 +406,7 @@ def update_tab_wind_speed(_, global_local, df, meta, si_ip):
     Output(ElementIds.WIND_DIRECTION, "children"),
     # General
     [
-        Input(ElementIds.ID_WINDGLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
         State(ElementIds.ID_WIND_DF_STORE, "data"),

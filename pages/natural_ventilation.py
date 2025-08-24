@@ -19,7 +19,8 @@ from pages.lib.global_scheme import (
     container_col_center_one_of_three,
 )
 from pages.lib.template_graphs import filter_df_by_month_and_hour
-from pages.lib.global_column_names import ColNames, ElementIds
+from pages.lib.global_column_names import ColNames
+from pages.lib.global_elementids import ElementIds
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -51,7 +52,7 @@ def layout():
 
 @callback(
     Output(ElementIds.MAIN_NV_SECTION, "children"),
-    [Input(ElementIds.SI_IP_RADIO_INPUT, "value")],
+    [Input(ElementIds.ID_NATURAL_VENTILATION_SI_IP_RADIO_INPUT, "value")],
 )
 def update_layout(si_ip):
     if si_ip == UnitSystem.IP:
@@ -286,24 +287,24 @@ def inputs_tab(t_min, t_max, d_set):
 @callback(
     Output(ElementIds.NV_HEATMAP_CHART, "children"),
     [
-        Input(ElementIds.ID_NATURAL_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "modified_timestamp"),
         Input(ElementIds.NV_MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
         Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
-        Input(ElementIds.ID_NATURAL_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_NATURAL_VENTILATION_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.ENABLE_CONDENSATION, "value"),
     ],
     [
-        State(ElementIds.ID_NATURAL_DF_STORE, "data"),
+        State(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "data"),
         State(ElementIds.NV_MONTH_SLIDER, "value"),
         State(ElementIds.NV_HOUR_SLIDER, "value"),
         State(ElementIds.NV_TDB_MIN_VAL, "value"),
         State(ElementIds.NV_TDB_MAX_VAL, "value"),
         State(ElementIds.NV_DPT_MAX_VAL, "value"),
-        State(ElementIds.ID_NATURAL_META_STORE, "data"),
+        State(ElementIds.ID_NATURAL_VENTILATION_META_STORE, "data"),
         State(ElementIds.INVERT_MONTH_NV, "value"),
         State(ElementIds.INVERT_HOUR_NV, "value"),
-        State(ElementIds.ID_NATURAL_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_NATURAL_VENTILATION_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def nv_heatmap(
@@ -453,7 +454,7 @@ def nv_heatmap(
 @callback(
     Output(ElementIds.NV_BAR_CHART, "children"),
     [
-        Input(ElementIds.ID_NATURAL_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "modified_timestamp"),
         Input(ElementIds.NV_MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
         Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
@@ -461,16 +462,16 @@ def nv_heatmap(
         Input(ElementIds.ENABLE_CONDENSATION, "value"),
     ],
     [
-        State(ElementIds.ID_NATURAL_DF_STORE, "data"),
+        State(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "data"),
         State(ElementIds.NV_MONTH_SLIDER, "value"),
         State(ElementIds.NV_HOUR_SLIDER, "value"),
         State(ElementIds.NV_TDB_MIN_VAL, "value"),
         State(ElementIds.NV_TDB_MAX_VAL, "value"),
         State(ElementIds.NV_DPT_MAX_VAL, "value"),
-        State(ElementIds.ID_NATURAL_META_STORE, "data"),
+        State(ElementIds.ID_NATURAL_VENTILATION_META_STORE, "data"),
         State(ElementIds.INVERT_MONTH_NV, "value"),
         State(ElementIds.INVERT_HOUR_NV, "value"),
-        State(ElementIds.ID_NATURAL_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.ID_NATURAL_VENTILATION_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def nv_bar_chart(

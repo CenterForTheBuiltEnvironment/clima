@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
-from pages.lib.global_column_names import ElementIds, ComponentProperty, Type
+from pages.lib.global_elementids import ElementIds
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,

@@ -6,7 +6,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 import numpy as np
 
 from config import PageUrls, DocLinks, PageInfo
-from pages.lib.global_column_names import ElementIds, ComponentProperty, Type
+from pages.lib.global_elementids import ElementIds
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )
@@ -316,7 +316,7 @@ def change_image_based_on_selection(value):
     [
         Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
         Input(ElementIds.TAB7_DROPDOWN, "value"),
-        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ID_OUTDOOR_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
     ],
     [

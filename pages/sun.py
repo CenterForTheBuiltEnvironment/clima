@@ -1,5 +1,5 @@
 from copy import deepcopy
-from pages.lib.global_column_names import ElementIds
+from pages.lib.global_elementids import ElementIds
 
 import dash
 import dash_bootstrap_components as dbc
