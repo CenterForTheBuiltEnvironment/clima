@@ -27,5 +27,5 @@ jobs:
       - name: Building (🏗️) and Deploying (🚀)
         run: |
           gcloud builds submit \
-          --project=clima-316917 \
-          --substitutions=_REPO_NAME="clima",_PROJ_NAME="clima-316917",_IMG_NAME="main",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"
+            --project=clima-316917 \
+            --substitutions=_REPO_NAME="clima",_PROJ_NAME="clima-316917",_IMG_NAME="main",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"

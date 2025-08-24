@@ -947,7 +947,7 @@
             ],
             "index": "pypi",
             "markers": "python_version >= '3.7'",
-            "version": "==0.12.10"
+            "version": "==0.12.9"
         },
         "virtualenv": {
             "hashes": [

@@ -273,14 +273,14 @@ def update_location_info(ts, df, meta, si_ip):
     )
     tmp_unit = mapping_dictionary[ColNames.DBT][si_ip]["unit"]
     average_yearly_tmp = (
-        f"Average yearly temperature: {df['DBT'].mean().round(1)} " + tmp_unit
+        f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} " + tmp_unit
     )
     hottest_yearly_tmp = (
-        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} "
+        f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} "
         + tmp_unit
     )
     coldest_yearly_tmp = (
-        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} "
+        f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} "
         + tmp_unit
     )
 
