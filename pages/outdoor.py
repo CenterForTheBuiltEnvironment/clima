@@ -222,6 +222,18 @@ def layout():
     ],
 )
 def update_outdoor_comfort_output(_, df):
+    """
+       Find the column(s) with the highest number of zero values.
+
+       Args:
+           _: Unused callback input.
+           df: DataFrame-like object containing UTCI category columns.
+
+       Returns
+       -------
+       str
+           Description of the best weather condition(s).
+       """
     cols = [
         "utci_noSun_Wind_categories",
         "utci_noSun_noWind_categories",

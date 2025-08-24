@@ -1,5 +1,11 @@
-name: Python 🐍 
-on: [push, pull_request]
+name: Python Testing 🐍
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+    branches:
+      - development
 jobs:
   pytest:
     runs-on: ubuntu-latest
@@ -17,13 +23,14 @@ jobs:
           pip install pipenv
           pipenv install --dev
 
+      - name: Ruff Check
+        run: |-
+          pipenv run ruff check .
+
+      - name: Ruff Format
+        run: |-
+          pipenv run ruff format
+
       - name: Test Clima
         run: |-
           pipenv run python -m pytest
-
-      - name: Run Black
-        # TODO: Add to dev dependencies: Adding it right now
-        # bumps other dependencies and the application won't run.
-        run: |-
-          pip install black
-          black . --check

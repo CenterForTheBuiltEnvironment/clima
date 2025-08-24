@@ -6,6 +6,7 @@ import zipfile
 from datetime import timedelta
 from urllib.request import Request, urlopen
 
+import logging
 import numpy as np
 import pandas as pd
 import requests
@@ -43,7 +44,8 @@ def get_data(source_url):
             req = Request(source_url, headers=headers)
             epw = urlopen(req).read().decode()
             return epw.split("\n")
-        except:
+        except Exception as e:
+            logging.error(f"Failed to fetch EPW data: {e}")
             return None
 
 

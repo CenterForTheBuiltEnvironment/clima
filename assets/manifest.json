@@ -467,7 +467,7 @@
   "orientation": "portrait",
   "background_color": "#ffffff",
   "display": "standalone",
-  "id": "0.8.18",
+  "id": "0.9.0",
   "description": "CBE Clima Tool: a free and open-source web application for climate analysis tailored to sustainable building design",
   "start_url": "/",
   "scope": "/",
