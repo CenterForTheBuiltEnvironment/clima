@@ -13,6 +13,9 @@ class ColNames(str, Enum):
     DBT = "DBT"  # Dry Bulb Temperature
     DPT = "DPT"  # Dew Point Temperature
     RH = "RH"  # Relative Humidity
+    HI_RH = "hiRH" # High Relative Humidity
+    LO_RH = "loRH" # Low Relative Humidity
+    HR = "hr"
     P_ATM = "p_atm"  # Atmospheric Pressure
 
     # ==================== Radiation-related column ====================
@@ -31,6 +34,8 @@ class ColNames(str, Enum):
     ZLUMI = "Zlumi"  # Luminance
     WIND_DIR = "wind_dir"  # Wind Direction
     WIND_SPEED = "wind_speed"  # Wind Speed
+    WIND_SPEED_UTCI = "wind_speed_utci" # Wind Speed Utci
+    WIND_SPEED_UTCI_0 = "wind_speed_utci_0" # Wind Speed Utci 0
     TOT_SKY_COVER = "tot_sky_cover"  # Total Sky Cover
     OSKYCOVER = "Oskycover"  # Opaque Sky Cover
     VIS = "Vis"  # Visibility
@@ -41,6 +46,22 @@ class ColNames(str, Enum):
     AsolOptD = "AsolOptD"  # Aerosol Optical Depth
     SnowD = "SnowD"  # Snow Depth
     DaySSnow = "DaySSnow"  # Daily Snow
+    ELEVATION = "elevation" # Elevation
+    APPARENT_ELEVATION = "apparent_elevation" # Apparent Elevation
+    AZIMUTH = "azimuth"  # Azimuth
+    MRT = "MRT"
+    DELTA_MRT = "delta_mrt"
+    UTCI_SUN_WIND = "utci_Sun_Wind" # Utci Sun Wind
+    UTCI_SUN_NO_WIND = "utci_Sun_noWind" # Utci Sun no Wind
+    UTCI_NO_SUN_WIND = "utci_noSun_Wind" # Utci no Sun Wind
+    UTCI_NO_SUN_NO_WIND = "utci_noSun_noWind" # Utci no Sun no Wind
+    ADAPTIVE_COMFORT = "adaptive_comfort" # Adaptive comfort
+    ADAPTIVE_CMF_80_LOW = "adaptive_cmf_80_low" # Adaptive comfort 80 low
+    ADAPTIVE_CMF_80_UP = "adaptive_cmf_80_up" # Adaptive comfort 80 up
+    ADAPTIVE_CMF_90_LOW = "adaptive_cmf_90_low" # Adaptive comfort 90 low
+    ADAPTIVE_CMF_90_UP = "adaptive_cmf_90_up" # Adaptive comfort 90 up
+    ADAPTIVE_CMF_RMT = "adaptive_cmf_rmt" # Adaptive comfort rmt
+    NV_ALLOWED = "nv_allowed"
 
     # ==================== Calculation column ====================
     FAKE_YEAR = "fake_year"  # Fake Year
