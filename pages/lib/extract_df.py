@@ -227,9 +227,9 @@ def create_df(lst, file_name):
     epw_df = pd.concat([epw_df, solar_position], axis=1)
 
     # Add in UTCI
-    sol_altitude = epw_df["elevation"].mask(epw_df["elevation"] <= 0, 0)
+    sol_altitude = epw_df[ColNames.ELEVATION].mask(epw_df[ColNames.ELEVATION] <= 0, 0)
     sharp = [45] * 8760
-    sol_radiation_dir = epw_df["dir_nor_rad"]
+    sol_radiation_dir = epw_df[ColNames.DIR_NOR_RAD]
     sol_transmittance = [1] * 8760  # CHECK VALUE
     f_svv = [1] * 8760  # CHECK VALUE
     f_bes = [1] * 8760  # CHECK VALUE
@@ -249,48 +249,48 @@ def create_df(lst, file_name):
         floor_reflectance,
     )
     mrt_df = pd.DataFrame.from_records(mrt)
-    mrt_df["delta_mrt"] = mrt_df["delta_mrt"].mask(mrt_df["delta_mrt"] >= 70, 70)
+    mrt_df[ColNames.DELTA_MRT] = mrt_df[ColNames.DELTA_MRT].mask(mrt_df[ColNames.DELTA_MRT] >= 70, 70)
     mrt_df = mrt_df.set_index(epw_df.times)
 
     epw_df = epw_df.join(mrt_df)
 
-    epw_df["MRT"] = epw_df["delta_mrt"] + epw_df[ColNames.DBT]
-    epw_df["wind_speed_utci"] = epw_df[ColNames.WIND_SPEED]
-    epw_df["wind_speed_utci"] = epw_df["wind_speed_utci"].mask(
-        epw_df["wind_speed_utci"] >= 17, 16.9
+    epw_df[ColNames.MRT] = epw_df[ColNames.DELTA_MRT] + epw_df[ColNames.DBT]
+    epw_df[ColNames.WIND_SPEED_UTCI] = epw_df[ColNames.WIND_SPEED]
+    epw_df[ColNames.WIND_SPEED_UTCI] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
+        epw_df[ColNames.WIND_SPEED_UTCI] >= 17, 16.9
     )
-    epw_df["wind_speed_utci"] = epw_df["wind_speed_utci"].mask(
-        epw_df["wind_speed_utci"] <= 0.5, 0.6
+    epw_df[ColNames.WIND_SPEED_UTCI] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
+        epw_df[ColNames.WIND_SPEED_UTCI] <= 0.5, 0.6
     )
-    epw_df["wind_speed_utci_0"] = epw_df["wind_speed_utci"].mask(
-        epw_df["wind_speed_utci"] >= 0, 0.5
+    epw_df[ColNames.WIND_SPEED_UTCI_0] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
+        epw_df[ColNames.WIND_SPEED_UTCI] >= 0, 0.5
     )
-    epw_df["utci_noSun_Wind"] = utci(
-        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df["wind_speed_utci"], epw_df[ColNames.RH]
+    epw_df[ColNames.UTCI_NO_SUN_WIND] = utci(
+        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df[ColNames.WIND_SPEED_UTCI], epw_df[ColNames.RH]
     )
-    epw_df["utci_noSun_noWind"] = utci(
-        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df["wind_speed_utci_0"], epw_df[ColNames.RH]
+    epw_df[ColNames.UTCI_NO_SUN_NO_WIND] = utci(
+        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df[ColNames.WIND_SPEED_UTCI_0], epw_df[ColNames.RH]
     )
-    epw_df["utci_Sun_Wind"] = utci(
-        epw_df[ColNames.DBT], epw_df["MRT"], epw_df["wind_speed_utci"], epw_df[ColNames.RH]
+    epw_df[ColNames.UTCI_SUN_WIND] = utci(
+        epw_df[ColNames.DBT], epw_df[ColNames.MRT], epw_df[ColNames.WIND_SPEED_UTCI], epw_df[ColNames.RH]
     )
-    epw_df["utci_Sun_noWind"] = utci(
-        epw_df[ColNames.DBT], epw_df["MRT"], epw_df["wind_speed_utci_0"], epw_df[ColNames.RH]
+    epw_df[ColNames.UTCI_SUN_NO_WIND] = utci(
+        epw_df[ColNames.DBT], epw_df[ColNames.MRT], epw_df[ColNames.WIND_SPEED_UTCI_0], epw_df[ColNames.RH]
     )
 
     utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
     utci_labels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
     epw_df["utci_noSun_Wind_categories"] = pd.cut(
-        x=epw_df["utci_noSun_Wind"], bins=utci_bins, labels=utci_labels
+        x=epw_df[ColNames.UTCI_NO_SUN_WIND], bins=utci_bins, labels=utci_labels
     )
     epw_df["utci_noSun_noWind_categories"] = pd.cut(
-        x=epw_df["utci_noSun_noWind"], bins=utci_bins, labels=utci_labels
+        x=epw_df[ColNames.UTCI_NO_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
     )
     epw_df["utci_Sun_Wind_categories"] = pd.cut(
-        x=epw_df["utci_Sun_Wind"], bins=utci_bins, labels=utci_labels
+        x=epw_df[ColNames.UTCI_SUN_WIND], bins=utci_bins, labels=utci_labels
     )
     epw_df["utci_Sun_noWind_categories"] = pd.cut(
-        x=epw_df["utci_Sun_noWind"], bins=utci_bins, labels=utci_labels
+        x=epw_df[ColNames.UTCI_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
     )
 
     # Add psy values
@@ -302,12 +302,12 @@ def create_df(lst, file_name):
     # calculate adaptive data
     dbt_day_ave = epw_df.groupby([ColNames.DOY])[ColNames.DBT].mean().to_list()
     n = 7
-    epw_df["adaptive_comfort"] = np.nan
-    epw_df["adaptive_cmf_80_low"] = np.nan
-    epw_df["adaptive_cmf_80_up"] = np.nan
-    epw_df["adaptive_cmf_90_low"] = np.nan
-    epw_df["adaptive_cmf_90_up"] = np.nan
-    epw_df["adaptive_cmf_rmt"] = np.nan
+    epw_df[ColNames.ADAPTIVE_COMFORT] = np.nan
+    epw_df[ColNames.ADAPTIVE_CMF_80_LOW] = np.nan
+    epw_df[ColNames.ADAPTIVE_CMF_80_UP] = np.nan
+    epw_df[ColNames.ADAPTIVE_CMF_90_LOW] = np.nan
+    epw_df[ColNames.ADAPTIVE_CMF_90_UP] = np.nan
+    epw_df[ColNames.ADAPTIVE_CMF_RMT] = np.nan
     for day in epw_df.DOY.unique():
         i = day - 1
         if i < n:
@@ -328,12 +328,12 @@ def create_df(lst, file_name):
             v=0.5,
             limit_inputs=False,
         )
-        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_rmt"] = rmt
-        epw_df.loc[epw_df.DOY == day, "adaptive_comfort"] = r["tmp_cmf"]
-        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_80_low"] = r["tmp_cmf_80_low"]
-        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_80_up"] = r["tmp_cmf_80_up"]
-        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_90_low"] = r["tmp_cmf_90_low"]
-        epw_df.loc[epw_df.DOY == day, "adaptive_cmf_90_up"] = r["tmp_cmf_90_up"]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_RMT] = rmt
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_COMFORT] = r["tmp_cmf"]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_LOW] = r["tmp_cmf_80_low"]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_UP] = r["tmp_cmf_80_up"]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_LOW] = r["tmp_cmf_90_low"]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_UP] = r["tmp_cmf_90_up"]
 
     return epw_df, location_info
 
@@ -372,11 +372,11 @@ def enthalpy(df, name):
 
 
 def convert_data(df, mapping_json):
-    df["adaptive_comfort"] = df["adaptive_comfort"] * 1.8 + 32
-    df["adaptive_cmf_80_low"] = df["adaptive_cmf_80_low"] * 1.8 + 32
-    df["adaptive_cmf_80_up"] = df["adaptive_cmf_80_up"] * 1.8 + 32
-    df["adaptive_cmf_90_low"] = df["adaptive_cmf_90_low"] * 1.8 + 32
-    df["adaptive_cmf_90_up"] = df["adaptive_cmf_90_up"] * 1.8 + 32
+    df[ColNames.ADAPTIVE_COMFORT] = df[ColNames.ADAPTIVE_COMFORT] * 1.8 + 32
+    df[ColNames.ADAPTIVE_CMF_80_LOW] = df[ColNames.ADAPTIVE_CMF_80_LOW] * 1.8 + 32
+    df[ColNames.ADAPTIVE_CMF_80_UP] = df[ColNames.ADAPTIVE_CMF_80_UP] * 1.8 + 32
+    df[ColNames.ADAPTIVE_CMF_90_LOW] = df[ColNames.ADAPTIVE_CMF_90_LOW] * 1.8 + 32
+    df[ColNames.ADAPTIVE_CMF_90_UP] = df[ColNames.ADAPTIVE_CMF_90_UP] * 1.8 + 32
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):

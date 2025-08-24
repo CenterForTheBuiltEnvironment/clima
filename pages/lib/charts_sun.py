@@ -113,7 +113,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
     latitude = float(meta["lat"])
     longitude = float(meta["lon"])
     time_zone = float(meta["time_zone"])
-    solpos = df.loc[df["apparent_elevation"] > 0, :]
+    solpos = df.loc[df[ColNames.APPARENT_ELEVATION] > 0, :]
 
     if var != "None":
         var_unit = mapping_dictionary[var][si_ip]["unit"]
@@ -135,7 +135,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
     )
     delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
     times = times - delta
-    solpos = df.loc[df["apparent_elevation"] > 0, :]
+    solpos = df.loc[df[ColNames.APPARENT_ELEVATION] > 0, :]
 
     if var == "None":
         var_color = "orange"
@@ -167,7 +167,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
         fig.add_trace(
             go.Scatterpolar(
                 r=90 * np.cos(np.radians(90 - solpos["apparent_zenith"])),
-                theta=solpos["azimuth"],
+                theta=solpos[ColNames.AZIMUTH],
                 mode="markers",
                 marker_color="orange",
                 marker_size=marker_size,
@@ -177,8 +177,8 @@ def polar_graph(df, meta, global_local, var, si_ip):
                         solpos[ColNames.DAY],
                         solpos[ColNames.MONTH_NAMES],
                         solpos[ColNames.HOUR],
-                        solpos["elevation"],
-                        solpos["azimuth"],
+                        solpos[ColNames.ELEVATION],
+                        solpos[ColNames.AZIMUTH],
                     ),
                     axis=-1,
                 ),
@@ -197,7 +197,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
         fig.add_trace(
             go.Scatterpolar(
                 r=90 * np.cos(np.radians(90 - solpos["apparent_zenith"])),
-                theta=solpos["azimuth"],
+                theta=solpos[ColNames.AZIMUTH],
                 mode="markers",
                 marker=dict(
                     color=solpos[var],
@@ -213,8 +213,8 @@ def polar_graph(df, meta, global_local, var, si_ip):
                         solpos[ColNames.DAY],
                         solpos[ColNames.MONTH_NAMES],
                         solpos[ColNames.HOUR],
-                        solpos["elevation"],
-                        solpos["azimuth"],
+                        solpos[ColNames.ELEVATION],
+                        solpos[ColNames.AZIMUTH],
                         solpos[var],
                     ),
                     axis=-1,
@@ -241,7 +241,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
         times = pd.date_range(date, date + pd.Timedelta("24h"), freq="5min", tz=tz)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos["apparent_elevation"] > 0, :]
+        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
 
         fig.add_trace(
             go.Scatterpolar(
@@ -265,7 +265,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
         times = pd.date_range(date, date + pd.Timedelta("24h"), freq="5min", tz=tz)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos["apparent_elevation"] > 0, :]
+        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
 
         fig.add_trace(
             go.Scatterpolar(
@@ -345,8 +345,8 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     if var == "None":
         fig.add_trace(
             go.Scatter(
-                y=df["elevation"],
-                x=df["azimuth"],
+                y=df[ColNames.ELEVATION],
+                x=df[ColNames.AZIMUTH],
                 mode="markers",
                 marker_color="orange",
                 marker_size=marker_size,
@@ -356,8 +356,8 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
                         df[ColNames.DAY],
                         df[ColNames.MONTH_NAMES],
                         df[ColNames.HOUR],
-                        df["elevation"],
-                        df["azimuth"],
+                        df[ColNames.ELEVATION],
+                        df[ColNames.AZIMUTH],
                     ),
                     axis=-1,
                 ),
@@ -375,8 +375,8 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     else:
         fig.add_trace(
             go.Scatter(
-                y=df["elevation"],
-                x=df["azimuth"],
+                y=df[ColNames.ELEVATION],
+                x=df[ColNames.AZIMUTH],
                 mode="markers",
                 marker=dict(
                     color=df[var],
@@ -392,8 +392,8 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
                         df[ColNames.DAY],
                         df[ColNames.MONTH_NAMES],
                         df[ColNames.HOUR],
-                        df["elevation"],
-                        df["azimuth"],
+                        df[ColNames.ELEVATION],
+                        df[ColNames.AZIMUTH],
                         df[var],
                     ),
                     axis=-1,
@@ -421,7 +421,7 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
         delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos["apparent_elevation"] > 0, :]
+        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
 
         fig.add_trace(
             go.Scatter(
@@ -445,7 +445,7 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
         delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos["apparent_elevation"] > 0, :]
+        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
 
         fig.add_trace(
             go.Scatter(

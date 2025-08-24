@@ -511,7 +511,7 @@ def nv_bar_chart(
 
     color_in = "dodgerblue"
 
-    df["nv_allowed"] = 1
+    df[ColNames.NV_ALLOWED] = 1
 
     df = filter_df_by_month_and_hour(
         df, time_filter, month, hour, invert_month, invert_hour, "nv_allowed"
@@ -519,18 +519,18 @@ def nv_bar_chart(
 
     # this should be the total after filtering by time
     tot_month_hours = (
-        df.groupby(df[ColNames.UTC_TIME].dt.month)["nv_allowed"].sum().values
+        df.groupby(df[ColNames.UTC_TIME].dt.month)[ColNames.NV_ALLOWED].sum().values
     )
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
-        df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), "nv_allowed"] = 0
+        df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), ColNames.NV_ALLOWED] = 0
 
     if dpt_data_filter:
-        df.loc[(df[filter_var] > max_dpt_val), "nv_allowed"] = 0
+        df.loc[(df[filter_var] > max_dpt_val), ColNames.NV_ALLOWED] = 0
 
     n_hours_nv_allowed = (
-        df.dropna(subset="nv_allowed")
-        .groupby(df[ColNames.UTC_TIME].dt.month)["nv_allowed"]
+        df.dropna(subset=ColNames.NV_ALLOWED)
+        .groupby(df[ColNames.UTC_TIME].dt.month)[ColNames.NV_ALLOWED]
         .sum()
         .values
     )

@@ -13,6 +13,7 @@ from pages.lib.charts_data_explorer import (
     three_var_graph,
 )
 from pages.lib.global_elementids import ElementIds
+from pages.lib.global_column_names import ColNames
 from pages.lib.global_scheme import (
     fig_config,
     dropdown_names,
@@ -233,7 +234,7 @@ def section_two_inputs():
                                     dropdown(
                                         id=ElementIds.SEC2_VAR_DROPDOWN,
                                         options=explore_dropdown_names,
-                                        value="RH",
+                                        value=ColNames.RH,
                                         style={"flex": "70%"},
                                     ),
                                 ],
@@ -334,7 +335,7 @@ def section_two_inputs():
                                     dropdown(
                                         id=ElementIds.SEC2_DATA_FILTER_VAR,
                                         options=explore_dropdown_names,
-                                        value="RH",
+                                        value=ColNames.RH,
                                         style={"flex": "70%"},
                                     ),
                                 ],
@@ -438,7 +439,7 @@ def section_three_inputs():
                             dropdown(
                                 id=ElementIds.TAB6_SEC3_VAR_Y_DROPDOWN,
                                 options=explore_dropdown_names,
-                                value="RH",
+                                value=ColNames.RH,
                                 style={"flex": "70%"},
                             ),
                         ],
@@ -548,7 +549,7 @@ def section_three_inputs():
                             dropdown(
                                 id=ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN,
                                 options=explore_dropdown_names,
-                                value="RH",
+                                value=ColNames.RH,
                                 style={"flex": "70%"},
                             ),
                         ],
@@ -946,11 +947,11 @@ def update_table(
     )
 
     filtered_df = df[
-        (df["month"] >= start_month)
-        & (df["month"] <= end_month)
-        & (df["hour"] >= start_hour)
-        & (df["hour"] <= end_hour)
+        (df[ColNames.MONTH] >= start_month)
+        & (df[ColNames.MONTH] <= end_month)
+        & (df[ColNames.HOUR] >= start_hour)
+        & (df[ColNames.HOUR] <= end_hour)
     ]
     return summary_table_tmp_rh_tab(
-        filtered_df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
+        filtered_df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]], dd_value, si_ip
     )

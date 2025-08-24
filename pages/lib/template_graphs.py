@@ -187,13 +187,13 @@ def yearly_profile(df, var, global_local, si_ip):
         # plot relative Humidity limits (30-70%)
         lo_rh = [30] * 365
         hi_rh = [70] * 365
-        lo_rh_df = pd.DataFrame({"loRH": lo_rh})
-        hi_rh_df = pd.DataFrame({"hiRH": hi_rh})
+        lo_rh_df = pd.DataFrame({ColNames.LO_RH: lo_rh})
+        hi_rh_df = pd.DataFrame({ColNames.HI_RH: hi_rh})
 
         trace3 = go.Bar(
             x=df[ColNames.UTC_TIME].dt.date.unique(),
-            y=hi_rh_df["hiRH"] - lo_rh_df["loRH"],
-            base=lo_rh_df["loRH"],
+            y=hi_rh_df[ColNames.HI_RH] - lo_rh_df[ColNames.LO_RH],
+            base=lo_rh_df[ColNames.LO_RH],
             name="humidity comfort band",
             marker_opacity=0.3,
             marker_color="silver",

@@ -13,6 +13,7 @@ from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_elementids import ElementIds
+from pages.lib.global_column_names import ColNames
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -174,7 +175,7 @@ def inputs():
                             dropdown(
                                 id=ElementIds.PSY_VAR_DROPDOWN ,
                                 options=dropdown_names,
-                                value="RH",
+                                value=ColNames.RH,
                                 style={"flex": "70%"},
                             ),
                         ],
@@ -313,17 +314,17 @@ def update_psych_chart(
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = mapping_dictionary["DBT"][si_ip]["range"]
-        var_range_y = mapping_dictionary["hr"][si_ip]["range"]
+        var_range_x = mapping_dictionary[ColNames.DBT][si_ip]["range"]
+        var_range_y = mapping_dictionary[ColNames.HR][si_ip]["range"]
 
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df["DBT"].max() / 5)
-        data_min = 5 * floor(df["DBT"].min() / 5)
+        data_max = 5 * ceil(df[ColNames.DBT].max() / 5)
+        data_min = 5 * floor(df[ColNames.DBT].min() / 5)
         var_range_x = [data_min, data_max]
 
-        data_max = round(df["hr"].max(), 4)
-        data_min = round(df["hr"].min(), 4)
+        data_max = round(df[ColNames.HR].max(), 4)
+        data_min = round(df[ColNames.HR].min(), 4)
         var_range_y = [data_min * 1000, data_max * 1000]
 
     title = "Psychrometric Chart"
@@ -339,7 +340,7 @@ def update_psych_chart(
         hr_list = np.vectorize(psy.psy_ta_rh)(dbt_list, rh)
         hr_df = pd.DataFrame.from_records(hr_list)
         name = "rh" + str(rh)
-        rh_df[name] = hr_df["hr"]
+        rh_df[name] = hr_df[ColNames.HR]
 
     fig = go.Figure()
 
@@ -369,13 +370,13 @@ def update_psych_chart(
             )
         )
 
-    df_hr_multiply = list(df["hr"])
+    df_hr_multiply = list(df[ColNames.HR])
     for k in range(len(df_hr_multiply)):
         df_hr_multiply[k] = df_hr_multiply[k] * 1000
     if var == "None":
         fig.add_trace(
             go.Scatter(
-                x=df["DBT"],
+                x=df[ColNames.DBT],
                 y=df_hr_multiply,
                 showlegend=False,
                 mode="markers",
@@ -385,16 +386,16 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
+                hovertemplate=mapping_dictionary[ColNames.DBT]["name"]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"]["name"],
+                + mapping_dictionary[ColNames.DBT]["name"],
                 name="",
             )
         )
     elif var == "Frequency":
         fig.add_trace(
             go.Histogram2d(
-                x=df["DBT"],
+                x=df[ColNames.DBT],
                 y=df_hr_multiply,
                 name="",
                 colorscale=var_color,
@@ -438,7 +439,7 @@ def update_psych_chart(
 
         fig.add_trace(
             go.Scatter(
-                x=df["DBT"],
+                x=df[ColNames.DBT],
                 y=df_hr_multiply,
                 showlegend=False,
                 mode="markers",
@@ -450,14 +451,14 @@ def update_psych_chart(
                     colorscale=var_color,
                     colorbar=var_colorbar,
                 ),
-                customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
+                customdata=np.stack((df[ColNames.RH], df["h"], df[var], df["t_dp"]), axis=-1),
+                hovertemplate=mapping_dictionary[ColNames.DBT]["name"]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"][si_ip]["unit"]
+                + mapping_dictionary[ColNames.DBT][si_ip]["unit"]
                 + "<br>"
-                + mapping_dictionary["RH"]["name"]
+                + mapping_dictionary[ColNames.RH]["name"]
                 + ": %{customdata[0]:.2f}"
-                + mapping_dictionary["RH"][si_ip]["unit"]
+                + mapping_dictionary[ColNames.RH][si_ip]["unit"]
                 + "<br>"
                 + mapping_dictionary["h"]["name"]
                 + ": %{customdata[1]:.2f}"
@@ -475,8 +476,8 @@ def update_psych_chart(
             )
         )
 
-    xtitle_name = "Temperature" + "  " + mapping_dictionary["DBT"][si_ip]["unit"]
-    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary["hr"][si_ip]["unit"]
+    xtitle_name = "Temperature" + "  " + mapping_dictionary[ColNames.DBT][si_ip]["unit"]
+    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary[ColNames.HR][si_ip]["unit"]
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
         title_text=xtitle_name,
