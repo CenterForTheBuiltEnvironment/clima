@@ -88,8 +88,16 @@ pipenv run ruff check .
 pipenv run ruff format .
 ```
 
-To ensure that your code is formatted correctly, we have a pre-commit hook that will run ruff before every commit.
-Hence, you will need to make that the code is formatted correctly before committing your changes otherwise the commit will fail.
+To ensure that the code is formatted correctly, we use a pre-commit hook that runs Ruff before every commit.
+Run the following once to enable hooks in your local repo:
+
+```bash
+pipenv run pre-commit install
+# optional: run on all files
+pipenv run pre-commit run --all-files
+```
+
+Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
 More information about pre-commit hooks can be found [here](https://pre-commit.com/).
 
 ```bash

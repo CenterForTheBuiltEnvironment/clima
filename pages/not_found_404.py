@@ -13,9 +13,7 @@ dash.register_page(
 
 layout = [
     dmc.Title("I could not find the page you are currently looking for", order=4),
-    dmc.Text(
-        "Please navigate the the home page by using the button below", className="mb-2"
-    ),
+    dmc.Text("Use the button below to return to the home page.", className="mb-2"),
     Lottie(
         options=dict(
             loop=True,

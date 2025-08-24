@@ -2,7 +2,7 @@
 
 A [psychrometric diagram](https://en.wikipedia.org/wiki/Psychrometrics) is a psychrometry tool used to understand the relationship between humidity and air temperature conditions. Through the use of the psychrometric diagram and appropriate calculations, it is possible to know the amount of heat or cooling needed to achieve the desired temperature and humidity.
 
-The **Clima** psychometric diagram shows dry bulb temperature on the abscissae, specific humidity on the ordinates, and relative humidity as parametric curves inside the graph.
+The **Clima** psychrometric diagram shows dry bulb temperature on the abscissae, specific humidity on the ordinates, and relative humidity as parametric curves inside the graph.
 
 <figure><img src="../../../.gitbook/assets/T on Psycho (1).png" alt=""><figcaption><p>Temperature line in the Psychrometric diagram</p></figcaption></figure>
 
@@ -14,7 +14,7 @@ All air conditions cannot go beyond the 100% saturation curve, which means that 
 
 <figure><img src="../../../.gitbook/assets/Relative humidity on Psycho.png" alt=""><figcaption><p>Relative humidity curves in the Psychrometric diagram</p></figcaption></figure>
 
-The simplest transformation to be analyzed on the psychometric diagram is the heating and cooling processes. The transition from the starting condition (1) to the final one (2) occurs horizontally, at constant humidity ratio values. The final condition (2) can be inspected as a function of the starting one.
+The simplest transformation to be analyzed on the psychrometric diagram is the heating and cooling processes. The transition from the starting condition (1) to the final one (2) occurs horizontally, at constant humidity ratio values. The final condition (2) can be inspected as a function of the starting one.
 
 <figure><img src="../../../.gitbook/assets/heating cooling (1).png" alt=""><figcaption><p>Cooling and heating process</p></figcaption></figure>
 

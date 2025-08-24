@@ -14,7 +14,7 @@ The length of each radius around the circle shows how often the wind blew from t
 
 <figure><img src="../../../.gitbook/assets/Frequency.png" alt=""><figcaption><p>Frequency of wind intensity recurrence in the wind rose</p></figcaption></figure>
 
-As most graphs in **Clima Tool**, the wind rose is strongly interactive. Clicking on the legend will hide or highlight the selected category. As such, it is easy to go from a wind rose showing all the wind directions and frequency to one that highlights only the selected speed range. This can be particularly useful to identify low-frequency, high-speed wind patterns.&#x20;
+As most graphs in **Clima Tool**, the wind rose is strongly interactive. Clicking on the legend will hide or highlight the selected category. As such, it is easy to go from a wind rose showing all the wind directions and frequency to one that highlights only the selected speed range. This can be particularly useful to identify low-frequency, high-speed wind patterns.
 
 <figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Left: wind rose showing all velocity ranges<br>Right: the same data can be easily filtered (by clicking on the legend) to show only direction and frequency of wind speeds above 10.7m/s</p></figcaption></figure>
 

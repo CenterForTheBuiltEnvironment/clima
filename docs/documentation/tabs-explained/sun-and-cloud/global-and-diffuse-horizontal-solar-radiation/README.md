@@ -11,4 +11,4 @@ Typical daily graphs showing the amount of energy gained from the sun have many 
 * manage the **indirect solar gain** transfer into the building with a time shift, exploiting the thermal mass, heating thick walls or concrete floors, or designing special rooms adjacent to the main spaces that rely on convection to transfer the heat, such as sunroom or [Trombe wall](https://en.wikipedia.org/wiki/Trombe\_wall);
 * evaluating sustainable **renewable energy solutions** such as solar thermal or photovoltaic panels.
 
-&#x20;The integral of the curves in the graphs is the total energy (in Wh/m²), supplied by the sun. Be careful in considering the [different types of solar radiation.](global-diffuse-and-normal-solar-radiation-explained.md)
+The integral of the curves in the graphs is the total energy (in Wh/m²), supplied by the sun. Be careful in considering the [different types of solar radiation.](global-diffuse-and-normal-solar-radiation-explained.md)

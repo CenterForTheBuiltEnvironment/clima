@@ -25,11 +25,11 @@ jobs:
 
       - name: Ruff Check
         run: |-
-          pipenv run ruff check .
+          pipenv run ruff check . --output-format=github
 
-      - name: Ruff Format
+      - name: Ruff Format (verify)
         run: |-
-          pipenv run ruff format
+          pipenv run ruff format --check .
 
       - name: Test Clima
         run: |-
