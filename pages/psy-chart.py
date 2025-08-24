@@ -226,7 +226,7 @@ def layout():
             type="circle",
             children=html.Div(
                 className="container-col",
-                children=[inputs(), html.Div(id="ElementIds.PSYCH_CHART")],
+                children=[inputs(), html.Div(id=ElementIds.PSYCH_CHART)],
             ),
         ),
     )
