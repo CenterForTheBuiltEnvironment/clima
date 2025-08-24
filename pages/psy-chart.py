@@ -72,7 +72,7 @@ def inputs():
                                 style={"flex": "30%"},
                             ),
                             dropdown(
-                                id="psy-color-by-dropdown",
+                                id=ElementIds.PSY_COLOR_BY_DROPDOWN,
                                 options=psy_dropdown_names,
                                 value="Frequency",
                                 style={"flex": "70%"},
@@ -89,7 +89,7 @@ def inputs():
                     dbc.Button(
                         "Apply month and hour filter",
                         color="primary",
-                        id="month-hour-filter",
+                        id=ElementIds.MONTH_HOUR_FILTER,
                         className="mb-2",
                         n_clicks=0,
                     ),
@@ -99,7 +99,7 @@ def inputs():
                             html.H6("Month Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
-                                    id="psy-month-slider",
+                                    id=ElementIds.PSY_MONTH_SLIDER,
                                     min=1,
                                     max=12,
                                     step=1,
@@ -118,7 +118,7 @@ def inputs():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-month-psy",
+                                id=ElementIds.INVERT_MONTH_PSY,
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -129,7 +129,7 @@ def inputs():
                             html.H6("Hour Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
-                                    id="psy-hour-slider",
+                                    id=ElementIds.PSY_HOUR_SLIDER,
                                     min=0,
                                     max=24,
                                     step=1,
@@ -148,7 +148,7 @@ def inputs():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-hour-psy",
+                                id=ElementIds.INVERT_HOUR_PSY,
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -161,7 +161,7 @@ def inputs():
                     dbc.Button(
                         "Apply filter",
                         color="primary",
-                        id="data-filter",
+                        id=ElementIds.DATA_FILTER,
                         className="mb-2",
                         n_clicks=0,
                     ),
@@ -172,7 +172,7 @@ def inputs():
                                 children=["Filter Variable:"], style={"flex": "30%"}
                             ),
                             dropdown(
-                                id="psy-var-dropdown",
+                                id=ElementIds.PSY_VAR_DROPDOWN ,
                                 options=dropdown_names,
                                 value="RH",
                                 style={"flex": "70%"},
@@ -184,7 +184,7 @@ def inputs():
                         children=[
                             html.H6(children=["Min Value:"], style={"flex": "30%"}),
                             dbc.Input(
-                                id="psy-min-val",
+                                id=ElementIds.PSY_MIN_VAL,
                                 placeholder="Enter a number for the min val",
                                 type="number",
                                 step=1,
@@ -198,7 +198,7 @@ def inputs():
                         children=[
                             html.H6(children=["Max Value:"], style={"flex": "30%"}),
                             dbc.Input(
-                                id="psy-max-val",
+                                id=ElementIds.PSY_MAX_VAL,
                                 placeholder="Enter a number for the max val",
                                 type="number",
                                 value=100,
@@ -226,7 +226,7 @@ def layout():
             type="circle",
             children=html.Div(
                 className="container-col",
-                children=[inputs(), html.Div(id="psych-chart")],
+                children=[inputs(), html.Div(id="ElementIds.PSYCH_CHART")],
             ),
         ),
     )
@@ -234,25 +234,25 @@ def layout():
 
 # psychrometric chart
 @callback(
-    Output("psych-chart", "children"),
+    Output(ElementIds.PSYCH_CHART, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("psy-color-by-dropdown", "value"),
-        Input("month-hour-filter", "n_clicks"),
-        Input("data-filter", "n_clicks"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_PSY_CHART_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.PSY_COLOR_BY_DROPDOWN, "value"),
+        Input(ElementIds.MONTH_HOUR_FILTER, "n_clicks"),
+        Input(ElementIds.DATA_FILTER, "n_clicks"),
+        Input(ElementIds.ID_PSY_CHART_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("psy-month-slider", "value"),
-        State("psy-hour-slider", "value"),
-        State("psy-min-val", "value"),
-        State("psy-max-val", "value"),
-        State("psy-var-dropdown", "value"),
-        State("meta-store", "data"),
-        State("invert-month-psy", "value"),
-        State("invert-hour-psy", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_PSY_CHART_DF_STORE, "data"),
+        State(ElementIds.PSY_MONTH_SLIDER, "value"),
+        State(ElementIds.PSY_HOUR_SLIDER, "value"),
+        State(ElementIds.PSY_MIN_VAL, "value"),
+        State(ElementIds.PSY_MAX_VAL, "value"),
+        State(ElementIds.PSY_VAR_DROPDOWN , "value"),
+        State(ElementIds.ID_PSY_CHART_META_STORE, "data"),
+        State(ElementIds.INVERT_MONTH_PSY, "value"),
+        State(ElementIds.INVERT_HOUR_PSY, "value"),
+        State(ElementIds.ID_PSY_CHART_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_psych_chart(

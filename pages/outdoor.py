@@ -48,12 +48,12 @@ def inputs_outdoor_comfort():
                                 style={"flex": "30%"},
                             ),
                             dropdown(
-                                id="tab7-dropdown",
+                                id=ElementIds.TAB7_DROPDOWN,
                                 style={"flex": "60%"},
                                 options=outdoor_dropdown_names,
                                 value="utci_Sun_Wind",
                             ),
-                            html.Div(id="image-selection", style={"flex": "10%"}),
+                            html.Div(id=ElementIds.IMAGE_SELECTION, style={"flex": "10%"}),
                         ],
                     ),
                 ],
@@ -68,7 +68,7 @@ def inputs_outdoor_comfort():
                         style={
                             "width": "100%",
                         },
-                        id="month-hour-filter-outdoor-comfort",
+                        id=ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT,
                         className="mb-2",
                         n_clicks=0,
                     ),
@@ -78,7 +78,7 @@ def inputs_outdoor_comfort():
                             html.H6("Month Range", style={"flex": "5%"}),
                             html.Div(
                                 dcc.RangeSlider(
-                                    id="outdoor-comfort-month-slider",
+                                    id=ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER,
                                     min=1,
                                     max=12,
                                     step=1,
@@ -97,7 +97,7 @@ def inputs_outdoor_comfort():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-month-outdoor-comfort",
+                                id=ElementIds.INVERT_MONTH_OUTDOOR_COMFORT,
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -108,7 +108,7 @@ def inputs_outdoor_comfort():
                             html.H6("Hour Range", style={"flex": "5%"}),
                             html.Div(
                                 dcc.RangeSlider(
-                                    id="outdoor-comfort-hour-slider",
+                                    id=ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER,
                                     min=0,
                                     max=24,
                                     step=1,
@@ -127,7 +127,7 @@ def inputs_outdoor_comfort():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-hour-outdoor-comfort",
+                                id=ElementIds.INVERT_HOUR_OUTDOOR_COMFORT,
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -141,7 +141,7 @@ def inputs_outdoor_comfort():
 def outdoor_comfort_chart():
     return html.Div(
         children=[
-            html.Div(id="outdoor-comfort-output"),
+            html.Div(id=ElementIds.OUTDOOR_COMFORT_OUTPUT),
             html.Div(
                 children=title_with_link(
                     text="UTCI heatmap chart",
@@ -150,7 +150,7 @@ def outdoor_comfort_chart():
                 )
             ),
             dcc.Loading(
-                html.Div(id="utci-heatmap"),
+                html.Div(id=ElementIds.UTCI_HEATMAP),
                 type="circle",
             ),
             html.Div(
@@ -161,7 +161,7 @@ def outdoor_comfort_chart():
                 )
             ),
             dcc.Loading(
-                html.Div(id="utci-category-heatmap"),
+                html.Div(id=ElementIds.UTCI_CATEGORY_HEATMAP),
                 type="circle",
             ),
             html.Div(
@@ -172,7 +172,7 @@ def outdoor_comfort_chart():
                             {"label": "", "value": 1},
                         ],
                         value=[1],
-                        id="outdoor-comfort-switches-input",
+                        id=ElementIds.OUTDOOR_COMFORT_SWITCHES_INPUT,
                         switch=True,
                         style={
                             "padding": "1rem",
@@ -193,7 +193,7 @@ def outdoor_comfort_chart():
                 ],
             ),
             dcc.Loading(
-                html.Div(id="utci-summary-chart"),
+                html.Div(id=ElementIds.UTCI_SUMMARY_CHART),
                 type="circle",
             ),
         ],
@@ -213,12 +213,12 @@ def layout():
 
 
 @callback(
-    Output("outdoor-comfort-output", "children"),
+    Output(ElementIds.OUTDOOR_COMFORT_OUTPUT, "children"),
     [
-        Input("df-store", "modified_timestamp"),
+        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
     ],
     [
-        State("df-store", "data"),
+        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
     ],
 )
 def update_outdoor_comfort_output(_, df):
@@ -245,21 +245,21 @@ def update_outdoor_comfort_output(_, df):
 
 
 @callback(
-    Output("utci-heatmap", "children"),
+    Output(ElementIds.UTCI_HEATMAP, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("tab7-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
-        Input("month-hour-filter-outdoor-comfort", "n_clicks"),
+        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TAB7_DROPDOWN, "value"),
+        Input(ElementIds.ID_OUTDOOR_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
-        State("outdoor-comfort-month-slider", "value"),
-        State("outdoor-comfort-hour-slider", "value"),
-        State("invert-month-outdoor-comfort", "value"),
-        State("invert-hour-outdoor-comfort", "value"),
+        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
+        State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
+        State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER, "value"),
+        State(ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER, "value"),
+        State(ElementIds.INVERT_MONTH_OUTDOOR_COMFORT, "value"),
+        State(ElementIds.INVERT_HOUR_OUTDOOR_COMFORT, "value"),
     ],
 )
 def update_tab_utci_value(
@@ -295,8 +295,8 @@ def update_tab_utci_value(
 
 
 @callback(
-    Output("image-selection", "children"),
-    Input("tab7-dropdown", "value"),
+    Output(ElementIds.IMAGE_SELECTION, "children"),
+    Input(ElementIds.TAB7_DROPDOWN, "value"),
 )
 def change_image_based_on_selection(value):
     if value == "utci_Sun_Wind":
@@ -312,21 +312,21 @@ def change_image_based_on_selection(value):
 
 
 @callback(
-    Output("utci-category-heatmap", "children"),
+    Output(ElementIds.UTCI_CATEGORY_HEATMAP, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("tab7-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
-        Input("month-hour-filter-outdoor-comfort", "n_clicks"),
+        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TAB7_DROPDOWN, "value"),
+        Input(ElementIds.GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
-        State("outdoor-comfort-month-slider", "value"),
-        State("outdoor-comfort-hour-slider", "value"),
-        State("invert-month-outdoor-comfort", "value"),
-        State("invert-hour-outdoor-comfort", "value"),
+        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
+        State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
+        State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER, "value"),
+        State(ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER, "value"),
+        State(ElementIds.INVERT_MONTH_OUTDOOR_COMFORT, "value"),
+        State(ElementIds.INVERT_HOUR_OUTDOOR_COMFORT, "value"),
     ],
 )
 def update_tab_utci_category(
@@ -382,20 +382,20 @@ def update_tab_utci_category(
 
 
 @callback(
-    Output("utci-summary-chart", "children"),
+    Output(ElementIds.UTCI_SUMMARY_CHART, "children"),
     [
-        Input("tab7-dropdown", "value"),
-        Input("month-hour-filter-outdoor-comfort", "n_clicks"),
-        Input("outdoor-comfort-switches-input", "value"),
+        Input(ElementIds.TAB7_DROPDOWN, "value"),
+        Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
+        Input(ElementIds.OUTDOOR_COMFORT_SWITCHES_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("outdoor-comfort-month-slider", "value"),
-        State("outdoor-comfort-hour-slider", "value"),
-        State("meta-store", "data"),
-        State("invert-month-outdoor-comfort", "value"),
-        State("invert-hour-outdoor-comfort", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
+        State(ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER, "value"),
+        State(ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER, "value"),
+        State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
+        State(ElementIds.INVERT_MONTH_OUTDOOR_COMFORT, "value"),
+        State(ElementIds.INVERT_HOUR_OUTDOOR_COMFORT, "value"),
+        State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_utci_summary_chart(

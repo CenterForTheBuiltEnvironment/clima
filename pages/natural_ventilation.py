@@ -51,7 +51,7 @@ def layout():
 
 @callback(
     Output(ElementIds.MAIN_NV_SECTION, "children"),
-    [Input(ElementIds.ID_NATURAL_SI_IP_UNIT_STORE, "value")],
+    [Input(ElementIds.SI_IP_RADIO_INPUT, "value")],
 )
 def update_layout(si_ip):
     if si_ip == UnitSystem.IP:
