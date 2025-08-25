@@ -259,21 +259,21 @@ def update_location_info(ts, df, meta, si_ip):
 
     # global horizontal irradiance
     # Note that the value is divided by 1000, so a corresponding change is made in the unit:
-    total_solar_rad_value = round(df["glob_hor_rad"].sum() / 1000, 2)
-    total_solar_rad_unit = "k" + mapping_dictionary["glob_hor_rad"][si_ip]["unit"]
+    total_solar_rad_value = round(df[ColNames.GLOB_HOR_RAD].sum() / 1000, 2)
+    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip]["unit"]
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
-    total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df['dif_hor_rad'].sum() / df['glob_hor_rad'].sum() * 100, 1)} %"
+    total_diffuse_rad = f"Percentage of diffuse horizontal solar radiation: {round(df[ColNames.DIF_HOR_RAD].sum() / df[ColNames.GLOB_HOR_RAD].sum() * 100, 1)} %"
     tmp_unit = mapping_dictionary[ColNames.DBT][si_ip]["unit"]
     average_yearly_tmp = (
-        f"Average yearly temperature: {df['DBT'].mean().round(1)} " + tmp_unit
+        f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} " + tmp_unit
     )
     hottest_yearly_tmp = (
-        f"Hottest yearly temperature (99%): {df['DBT'].quantile(0.99).round(1)} "
+        f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} "
         + tmp_unit
     )
     coldest_yearly_tmp = (
-        f"Coldest yearly temperature (1%): {df['DBT'].quantile(0.01).round(1)} "
+        f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} "
         + tmp_unit
     )
 
