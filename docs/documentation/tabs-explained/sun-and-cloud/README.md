@@ -1,28 +1,18 @@
-# Sun and Clouds
+# Sun and Cloud
 
-The **Sun and Clouds** tab presents an overview of various climatic factors that relate to sun, solar position, intensity, and cloud cover, in particular:
+### Sun and Cloud
 
-* [Apparent sunpath for the location (spherical and cartesian projection)](broken-reference/)
+The Sun and Clouds tab presents an overview of various climatic factors that relate to sun, solar position, intensity nad cloud cover, in particular: 
+
+* [Apparent sunpath for the location \(spherical and cartesian projection\)](apparent-sunpath-for-the-location/)
 * [Global and Diffuse Horizontal Solar Radiation](global-and-diffuse-horizontal-solar-radiation/)
 * [Cloud coverage](cloud-coverage.md)
 * [Customizable daily and hourly maps](customizable-daily-and-hourly-maps.md)
 
-### Apparent sun path for the location
+### Apparent sunpath for the location
 
-**Clima** allows the user to visualize the sun path for the chosen location in spherical and cartesian projection
+**Clima** allows the user to visualize the sunpath for the chosen location in spherical and cartesian projection
 
-![Example: spherical sun path for Berlin, DEU](../../../.gitbook/assets/cbeclima\_berlin\_deu\_spherical\_sun\_path\_sun\_tab.svg)
+![Example: spherical sun path for Berlin, DEU ](../../.gitbook/assets/cbeclima_berlin_deu_spherical_sun_path_sun_tab.svg)
 
-![Example: cartesian sun path for Berlin, DEU](../../../.gitbook/assets/cbeclima\_berlin\_deu\_cartesian\_sun\_path\_sun\_tab.svg)
-
-Clima optionally allows a variety of variables to be overlayed on either sun path type.
-
-This allows the user to identify climatic patterns in relation to the apparent solar position. Data are plotted on the analemma.
-
-![Spherical and carthesian sun paths for Berlin, DEU with various data overlays](../../../.gitbook/assets/sunpath+variables.png)
-
-### Video Tutorial
-
-Learn more about the Sun and Clouds tab by watching the following video.
-
-{% embed url="https://youtu.be/VJ_wOHadVdw?si=mB2xNH57MWW_4CRR&t=447" %}
+![Example: cartesiansun path for Berlin, DEU ](../../.gitbook/assets/cbeclima_berlin_deu_cartesian_sun_path_sun_tab.svg)
