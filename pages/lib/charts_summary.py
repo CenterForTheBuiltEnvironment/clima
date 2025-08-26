@@ -1,14 +1,14 @@
 import pandas as pd
 import plotly.express as px
-
+from pages.lib.global_column_names import ColNames
 
 def world_map(meta):
     """Return the world map showing the current location."""
-    latitude = float(meta["lat"])
-    longitude = float(meta["lon"])
-    city = meta["city"]
-    country = meta["country"]
-    time_zone = float(meta["time_zone"])
+    latitude = float(meta[ColNames.LAT])
+    longitude = float(meta[ColNames.LON])
+    city = meta[ColNames.CITY]
+    country = meta[ColNames.COUNTRY]
+    time_zone = float(meta[ColNames.TIME_ZONE])
     lat_long_df = pd.DataFrame(
         data={
             "Lat": [latitude],

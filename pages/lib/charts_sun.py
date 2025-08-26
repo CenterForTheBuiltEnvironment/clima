@@ -110,9 +110,9 @@ def monthly_solar(epw_df, si_ip):
 
 def polar_graph(df, meta, global_local, var, si_ip):
     """Return the figure for the custom sun path."""
-    latitude = float(meta["lat"])
-    longitude = float(meta["lon"])
-    time_zone = float(meta["time_zone"])
+    latitude = float(meta[ColNames.LAT])
+    longitude = float(meta[ColNames.LON])
+    time_zone = float(meta[ColNames.TIME_ZONE])
     solpos = df.loc[df[ColNames.APPARENT_ELEVATION] > 0, :]
 
     if var != "None":
@@ -166,7 +166,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
     if var == "None":
         fig.add_trace(
             go.Scatterpolar(
-                r=90 * np.cos(np.radians(90 - solpos["apparent_zenith"])),
+                r=90 * np.cos(np.radians(90 - solpos[ColNames.APPARENT_ZENITH])),
                 theta=solpos[ColNames.AZIMUTH],
                 mode="markers",
                 marker_color="orange",
@@ -196,7 +196,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
     else:
         fig.add_trace(
             go.Scatterpolar(
-                r=90 * np.cos(np.radians(90 - solpos["apparent_zenith"])),
+                r=90 * np.cos(np.radians(90 - solpos[ColNames.APPARENT_ZENITH])),
                 theta=solpos[ColNames.AZIMUTH],
                 mode="markers",
                 marker=dict(
@@ -313,9 +313,9 @@ def polar_graph(df, meta, global_local, var, si_ip):
 
 def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     """Return a graph of a latitude and longitude solar diagram."""
-    latitude = float(meta["lat"])
-    longitude = float(meta["lon"])
-    time_zone = float(meta["time_zone"])
+    latitude = float(meta[ColNames.LAT])
+    longitude = float(meta[ColNames.LON])
+    time_zone = float(meta[ColNames.TIME_ZONE])
     tz = "UTC"
 
     if var != "None":
