@@ -329,11 +329,11 @@ def create_df(lst, file_name):
             limit_inputs=False,
         )
         epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_RMT] = rmt
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_COMFORT] = r["tmp_cmf"]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_LOW] = r["tmp_cmf_80_low"]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_UP] = r["tmp_cmf_80_up"]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_LOW] = r["tmp_cmf_90_low"]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_UP] = r["tmp_cmf_90_up"]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_COMFORT] = r[ColNames.TMP_CMF]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_LOW] = r[ColNames.TMP_CMF_80_LOW]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_UP] = r[ColNames.TMP_CMF_80_UP]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_LOW] = r[ColNames.TMP_CMF_90_LOW]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_UP] = r[ColNames.TMP_CMF_90_UP]
 
     return epw_df, location_info
 

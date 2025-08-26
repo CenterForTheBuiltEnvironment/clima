@@ -70,6 +70,12 @@ class ColNames(str, Enum):
     ADAPTIVE_CMF_90_UP = "adaptive_cmf_90_up"  # Adaptive comfort 90 up
     ADAPTIVE_CMF_RMT = "adaptive_cmf_rmt"  # Adaptive comfort rmt
     NV_ALLOWED = "nv_allowed"
+    TMP_CMF = "tmp_cmf"
+    TMP_CMF_80_LOW = "tmp_cmf_80_low"
+    TMP_CMF_80_UP = "tmp_cmf_80_up"
+    TMP_CMF_90_LOW = "tmp_cmf_90_low"
+    TMP_CMF_90_UP = "tmp_cmf_90_up"
+
 
     # ==================== Calculation column ====================
     FAKE_YEAR = "fake_year"  # Fake Year
