@@ -378,7 +378,7 @@ def update_annual_wind_rose(_, df, meta, si_ip):
 
 # wind speed
 @callback(
-    Output(ColNames.WIND_SPEED, "children"),
+    Output(ElementIds.WIND_SPEED, "children"),
     # General
     [
         Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
