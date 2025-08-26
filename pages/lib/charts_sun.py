@@ -20,10 +20,14 @@ from pages.lib.global_column_names import ColNames
 
 def monthly_solar(epw_df, si_ip):
     g_h_rad_month_ave = (
-        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.GLOB_HOR_RAD].median().reset_index()
+        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.GLOB_HOR_RAD]
+        .median()
+        .reset_index()
     )
     dif_h_rad_month_ave = (
-        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.DIF_HOR_RAD].median().reset_index()
+        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.DIF_HOR_RAD]
+        .median()
+        .reset_index()
     )
     fig = make_subplots(
         rows=1,
@@ -38,7 +42,9 @@ def monthly_solar(epw_df, si_ip):
 
         fig.add_trace(
             go.Scatter(
-                x=g_h_rad_month_ave.loc[g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR],
+                x=g_h_rad_month_ave.loc[
+                    g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR
+                ],
                 y=g_h_rad_month_ave.loc[
                     g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.GLOB_HOR_RAD
                 ],
@@ -48,12 +54,14 @@ def monthly_solar(epw_df, si_ip):
                 line_width=2,
                 name="Global",
                 showlegend=is_first,
-                customdata=epw_df.loc[epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES],
+                customdata=epw_df.loc[
+                    epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES
+                ],
                 hovertemplate=(
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip]["unit"]
+                    + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][ColNames.UNIT]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -78,12 +86,14 @@ def monthly_solar(epw_df, si_ip):
                 line_width=2,
                 name="Diffuse",
                 showlegend=is_first,
-                customdata=epw_df.loc[epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES],
+                customdata=epw_df.loc[
+                    epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES
+                ],
                 hovertemplate=(
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary[ColNames.DIF_HOR_RAD][si_ip]["unit"]
+                    + mapping_dictionary[ColNames.DIF_HOR_RAD][si_ip][ColNames.UNIT]
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -116,10 +126,10 @@ def polar_graph(df, meta, global_local, var, si_ip):
     solpos = df.loc[df[ColNames.APPARENT_ELEVATION] > 0, :]
 
     if var != "None":
-        var_unit = mapping_dictionary[var][si_ip]["unit"]
-        var_range = mapping_dictionary[var][si_ip]["range"]
-        var_name = mapping_dictionary[var]["name"]
-        var_color = mapping_dictionary[var]["color"]
+        var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+        var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+        var_name = mapping_dictionary[var][ColNames.NAME]
+        var_color = mapping_dictionary[var][ColNames.COLOR]
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -319,10 +329,10 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     tz = "UTC"
 
     if var != "None":
-        var_unit = mapping_dictionary[var][si_ip]["unit"]
-        var_range = mapping_dictionary[var][si_ip]["range"]
-        var_name = mapping_dictionary[var]["name"]
-        var_color = mapping_dictionary[var]["color"]
+        var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+        var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+        var_name = mapping_dictionary[var][ColNames.NAME]
+        var_color = mapping_dictionary[var][ColNames.COLOR]
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range

@@ -10,11 +10,11 @@ class ColNames(str, Enum):
     MINUTE = "minute"  # minute
 
     # ==================== Location related column ====================
-    LAT = "lat" # Latitude
-    LON = "lon" # Longitude
-    CITY = "city" # City
-    COUNTRY = "country" # Country
-    TIME_ZONE = "time_zone" # Time Zone
+    LAT = "lat"  # Latitude
+    LON = "lon"  # Longitude
+    CITY = "city"  # City
+    COUNTRY = "country"  # Country
+    TIME_ZONE = "time_zone"  # Time Zone
 
     # ==================== Meteorological data column ====================
     DBT = "DBT"  # Dry Bulb Temperature
@@ -47,12 +47,12 @@ class ColNames(str, Enum):
     OSKYCOVER = "Oskycover"  # Opaque Sky Cover
     VIS = "Vis"  # Visibility
     CHEIGHT = "Cheight"  # Cloud Height
-#     PWobs = "PWobs"  # Precipitation Observation
-#     PWcodes = "PWcodes"  # Precipitation Codes
-#     Pwater = "Pwater"  # Precipitation Water
-#     AsolOptD = "AsolOptD"  # Aerosol Optical Depth
-#     SnowD = "SnowD"  # Snow Depth
-#     DaySSnow = "DaySSnow"  # Daily Snow
+    #     PWobs = "PWobs"  # Precipitation Observation
+    #     PWcodes = "PWcodes"  # Precipitation Codes
+    #     Pwater = "Pwater"  # Precipitation Water
+    #     AsolOptD = "AsolOptD"  # Aerosol Optical Depth
+    #     SnowD = "SnowD"  # Snow Depth
+    #     DaySSnow = "DaySSnow"  # Daily Snow
     ELEVATION = "elevation"  # Elevation
     APPARENT_ELEVATION = "apparent_elevation"  # Apparent Elevation
     APPARENT_ZENITH = "apparent_zenith"  # Apparent Zenith
@@ -76,3 +76,9 @@ class ColNames(str, Enum):
     MONTH_NAMES = "month_names"  # Month names
     UTC_TIME = "UTC_time"  # UTC Time
     DOY = "DOY"  # Day of Year
+
+    COLOR = "color"
+    NAME = "name"
+    RANGE = "range"
+    UNIT = "unit"
+    TWENTY_FOUR_HOUR = "24h"
