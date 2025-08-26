@@ -306,16 +306,16 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = mapping_dictionary[var][si_ip]["unit"]
+        var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
 
-        var_name = mapping_dictionary[var]["name"]
+        var_name = mapping_dictionary[var][ColNames.NAME]
 
-        var_color = mapping_dictionary[var]["color"]
+        var_color = mapping_dictionary[var][ColNames.COLOR]
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = mapping_dictionary[ColNames.DBT][si_ip]["range"]
-        var_range_y = mapping_dictionary[ColNames.HR][si_ip]["range"]
+        var_range_x = mapping_dictionary[ColNames.DBT][si_ip][ColNames.RANGE]
+        var_range_y = mapping_dictionary[ColNames.HR][si_ip][ColNames.RANGE]
 
     else:
         # Set maximum and minimum according to data
@@ -386,9 +386,9 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=mapping_dictionary[ColNames.DBT]["name"]
+                hovertemplate=mapping_dictionary[ColNames.DBT][ColNames.NAME]
                 + ": %{x:.2f}"
-                + mapping_dictionary[ColNames.DBT]["name"],
+                + mapping_dictionary[ColNames.DBT][ColNames.NAME],
                 name="",
             )
         )
@@ -452,21 +452,21 @@ def update_psych_chart(
                     colorbar=var_colorbar,
                 ),
                 customdata=np.stack((df[ColNames.RH], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=mapping_dictionary[ColNames.DBT]["name"]
+                hovertemplate=mapping_dictionary[ColNames.DBT][ColNames.NAME]
                 + ": %{x:.2f}"
-                + mapping_dictionary[ColNames.DBT][si_ip]["unit"]
+                + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
                 + "<br>"
-                + mapping_dictionary[ColNames.RH]["name"]
+                + mapping_dictionary[ColNames.RH][ColNames.NAME]
                 + ": %{customdata[0]:.2f}"
-                + mapping_dictionary[ColNames.RH][si_ip]["unit"]
+                + mapping_dictionary[ColNames.RH][si_ip][ColNames.UNIT]
                 + "<br>"
-                + mapping_dictionary["h"]["name"]
+                + mapping_dictionary["h"][ColNames.NAME]
                 + ": %{customdata[1]:.2f}"
-                + mapping_dictionary["h"][si_ip]["unit"]
+                + mapping_dictionary["h"][si_ip][ColNames.UNIT]
                 + "<br>"
-                + mapping_dictionary["t_dp"]["name"]
+                + mapping_dictionary["t_dp"][ColNames.NAME]
                 + ": %{customdata[3]:.2f}"
-                + mapping_dictionary["t_dp"][si_ip]["unit"]
+                + mapping_dictionary["t_dp"][si_ip][ColNames.UNIT]
                 + "<br>"
                 + "<br>"
                 + var_name
@@ -476,8 +476,8 @@ def update_psych_chart(
             )
         )
 
-    xtitle_name = "Temperature" + "  " + mapping_dictionary[ColNames.DBT][si_ip]["unit"]
-    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary[ColNames.HR][si_ip]["unit"]
+    xtitle_name = "Temperature" + "  " + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
+    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary[ColNames.HR][si_ip][ColNames.UNIT]
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
         title_text=xtitle_name,
