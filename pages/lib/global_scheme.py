@@ -1,5 +1,5 @@
 import plotly.io as pio
-from global_column_names import ColNames
+from pages.lib.global_column_names import ColNames
 
 from config import UnitSystem
 

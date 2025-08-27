@@ -1,4 +1,3 @@
-
 import math
 
 import dash
@@ -357,17 +356,17 @@ def nv_heatmap(
         df, time_filter, month, hour, invert_month, invert_hour, var
     )
 
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
 
-    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
+    filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]
 
-    var_range = mapping_dictionary[var][si_ip]["range"]
+    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
 
-    var_name = mapping_dictionary[var]["name"]
+    var_name = mapping_dictionary[var][ColNames.NAME]
 
-    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_name = mapping_dictionary[filter_var][ColNames.NAME]
 
-    var_color = mapping_dictionary[var]["color"]
+    var_color = mapping_dictionary[var][ColNames.COLOR]
 
     if global_local == "global":
         range_z = var_range
@@ -502,12 +501,12 @@ def nv_bar_chart(
     var = "DBT"
     filter_var = "DPT"
 
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]
 
-    var_name = mapping_dictionary[var]["name"]
+    var_name = mapping_dictionary[var][ColNames.NAME]
 
-    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_name = mapping_dictionary[filter_var][ColNames.NAME]
 
     color_in = "dodgerblue"
 
@@ -523,7 +522,9 @@ def nv_bar_chart(
     )
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
-        df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), ColNames.NV_ALLOWED] = 0
+        df.loc[
+            (df[var] < min_dbt_val) | (df[var] > max_dbt_val), ColNames.NV_ALLOWED
+        ] = 0
 
     if dpt_data_filter:
         df.loc[(df[filter_var] > max_dpt_val), ColNames.NV_ALLOWED] = 0
