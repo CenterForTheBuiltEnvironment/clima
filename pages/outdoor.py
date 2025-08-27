@@ -244,15 +244,16 @@ def update_outdoor_comfort_output(_, df):
     highest_count = 0
     for col in cols:
         try:
-            count = df[col].value_counts()[0]  # this can cause error if there is no 0
-            if count > highest_count:
-                highest_count = count
-                cols_with_the_highest_number_of_zero.clear()
-                cols_with_the_highest_number_of_zero.append(col)
-            elif count == highest_count:
-                cols_with_the_highest_number_of_zero.append(col)
-        except:
+            count = df[col].value_counts()[0]
+        except (KeyError, TypeError):
+            # KeyError: 0 not in value_counts; TypeError: df[col] is not valid
             continue
+        if count > highest_count:
+            highest_count = count
+            cols_with_the_highest_number_of_zero.clear()
+            cols_with_the_highest_number_of_zero.append(col)
+        elif count == highest_count:
+            cols_with_the_highest_number_of_zero.append(col)
     return f"The Best Weather Condition is: {', '.join(cols_with_the_highest_number_of_zero)}"
 
 
