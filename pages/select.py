@@ -13,6 +13,7 @@ from pandas import json_normalize
 
 from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
+from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_scheme import mapping_dictionary
 from config import PageUrls, PageInfo, UnitSystem
@@ -350,7 +351,7 @@ def plot_location_epw_files(pathname):
         df_one_building,
         lat="lat",
         lon="lon",
-        hover_name=df_one_building["name"],
+        hover_name=df_one_building[ColNames.NAME],
         color_discrete_sequence=["#4895ef"],
         hover_data=[
             "period",
