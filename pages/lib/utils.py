@@ -55,7 +55,7 @@ def generate_units_degree(si_ip):
 
 def generate_custom_inputs(var):
     if var in mapping_dictionary:
-        var_fullname = mapping_dictionary[var]["name"]
+        var_fullname = mapping_dictionary[var][ColNames.NAME]
         custom_inputs = "".join(word.capitalize() for word in var_fullname.split(" "))
         return custom_inputs
     else:
@@ -90,14 +90,14 @@ def generate_custom_inputs_explorer(
     end_month_abbr = month_names[int(end_month)]
     if var in mapping_dictionary:
         var_fullname = "".join(
-            word.capitalize() for word in mapping_dictionary[var]["name"].split(" ")
+            word.capitalize() for word in mapping_dictionary[var][ColNames.NAME].split(" ")
         )
     else:
         var_fullname = var
     if filter_var in mapping_dictionary:
         filter_fullname = "".join(
             word.capitalize()
-            for word in mapping_dictionary[filter_var]["name"].split(" ")
+            for word in mapping_dictionary[filter_var][ColNames.NAME].split(" ")
         )
     else:
         filter_fullname = filter_var
@@ -121,14 +121,14 @@ def generate_custom_inputs_psy(
     if colorby_var in mapping_dictionary:
         colorby_fullname = "".join(
             word.capitalize()
-            for word in mapping_dictionary[colorby_var]["name"].split(" ")
+            for word in mapping_dictionary[colorby_var][ColNames.NAME].split(" ")
         )
     else:
         colorby_fullname = colorby_var
     if data_filter_var in mapping_dictionary:
         data_filter_fullname = "".join(
             word.capitalize()
-            for word in mapping_dictionary[data_filter_var]["name"].split(" ")
+            for word in mapping_dictionary[data_filter_var][ColNames.NAME].split(" ")
         )
     else:
         data_filter_fullname = data_filter_var
@@ -235,7 +235,7 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     df_summary = pd.concat([df_summary, df_sum])
 
     unit = (
-        mapping_dictionary[value][si_ip]["unit"]
+        mapping_dictionary[value][si_ip][ColNames.UNIT]
         .replace("<sup>", "")
         .replace("</sup>", "")
     )
