@@ -97,5 +97,13 @@ class ColNames(str, Enum):
     TIMES = "times"
 
     PATH = "path"
+    FILE_NAME = "filename"
     WIND_DIR_BINS = "WindDir_bins"
     WIND_SPD_BINS = "WindSpd_bins"
+
+    TO_IMAGE_BUTTON_OPTIONS = "toImageButtonOptions"
+    INVERT = "invert"
+    FEATURES = "features"
+    GEOMETRY_COORDINATES = "geometry.coordinates"
+    PROP_ID = "prop_id"
+    SITE_ELEVATION = "site_elevation"

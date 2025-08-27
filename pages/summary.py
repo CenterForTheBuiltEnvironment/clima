@@ -228,14 +228,14 @@ def update_location_info(ts, df, meta, si_ip):
     lon = f"Longitude: {meta[ColNames.LON]}"
     lat = f"Latitude: {meta[ColNames.LAT]}"
 
-    site_elevation = float(meta["site_elevation"])
+    site_elevation = float(meta[ColNames.SITE_ELEVATION.SITE_ELEVATION])
     site_elevation = round(site_elevation, 2)
     if si_ip != UnitSystem.SI:
         site_elevation = site_elevation * 3.281
         site_elevation = round(site_elevation, 2)
         elevation = f"Elevation above sea level: {str(site_elevation)} ft"
     else:
-        elevation = f"Elevation above sea level: {meta['site_elevation']} m"
+        elevation = f"Elevation above sea level: {meta[ColNames.SITE_ELEVATION]} m"
     period = ""
     if meta[ColNames.PERIOD]:
         start, stop = meta[ColNames.PERIOD].split("-")
@@ -333,7 +333,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
     ctx = dash.callback_context
 
     if (
-        ctx.triggered[0]["prop_id"] == "submit-set-points.n_clicks_timestamp"
+        ctx.triggered[0][ColNames.PROP_ID] == "submit-set-points.n_clicks_timestamp"
         or n_clicks is None
     ):
         hdd_setpoint = hdd_value
