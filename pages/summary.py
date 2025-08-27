@@ -260,7 +260,7 @@ def update_location_info(ts, df, meta, si_ip):
     # global horizontal irradiance
     # Note that the value is divided by 1000, so a corresponding change is made in the unit:
     total_solar_rad_value = round(df[ColNames.GLOB_HOR_RAD].sum() / 1000, 2)
-    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip]["unit"]
+    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][ColNames.UNIT]
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
     glob_sum = df[ColNames.GLOB_HOR_RAD].sum()
@@ -271,7 +271,7 @@ def update_location_info(ts, df, meta, si_ip):
     total_diffuse_rad = (
         f"Percentage of diffuse horizontal solar radiation: {diffuse_percentage} %"
     )
-    tmp_unit = mapping_dictionary[ColNames.DBT][si_ip]["unit"]
+    tmp_unit = mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
     average_yearly_tmp = (
         f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} " + tmp_unit
     )
