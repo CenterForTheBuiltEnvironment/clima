@@ -224,9 +224,9 @@ def update_map(meta):
 )
 def update_location_info(ts, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    location = f"Location: {meta['city']}, {meta['country']}"
-    lon = f"Longitude: {meta['lon']}"
-    lat = f"Latitude: {meta['lat']}"
+    location = f"Location: {meta[ColNames.CITY]}, {meta[ColNames.COUNTRY]}"
+    lon = f"Longitude: {meta[ColNames.LON]}"
+    lat = f"Latitude: {meta[ColNames.LAT]}"
 
     site_elevation = float(meta["site_elevation"])
     site_elevation = round(site_elevation, 2)
@@ -237,12 +237,12 @@ def update_location_info(ts, df, meta, si_ip):
     else:
         elevation = f"Elevation above sea level: {meta['site_elevation']} m"
     period = ""
-    if meta["period"]:
-        start, stop = meta["period"].split("-")
+    if meta[ColNames.PERIOD]:
+        start, stop = meta[ColNames.PERIOD].split("-")
         period = f"This file is based on data collected between {start} and {stop}"
 
     r = requests.get(
-        f"http://climateapi.scottpinkelman.com/api/v1/location/{meta['lat']}/{meta['lon']}"
+        f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[ColNames.LAT]}/{meta[ColNames.LON]}"
     )
 
     climate_text = ""
@@ -527,11 +527,11 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
     elif df is not None:
         if si_ip == UnitSystem.SI:
             return dcc.send_data_frame(
-                df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_SIunit.csv"
+                df.to_csv, f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_SIunit.csv"
             )
         else:
             return dcc.send_data_frame(
-                df.to_csv, f"df_{meta['city']}_{meta['country']}_Clima_IPunit.csv"
+                df.to_csv, f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_IPunit.csv"
             )
     else:
         print("df not loaded yet")
@@ -552,7 +552,7 @@ def download_epw(n_clicks, meta):
         lines[0] = lines[0].replace("b'", "")
         return dict(
             content="\n".join(lines),
-            filename=f"{meta['city']}_{meta['country']}.epw",
+            filename=f"{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}.epw",
         )
     else:
         raise PreventUpdate

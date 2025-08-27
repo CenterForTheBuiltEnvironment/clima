@@ -68,7 +68,7 @@ def get_location_info(lst, file_name):
 
     # from OneClimaBuilding files extract info about reference years
     try:
-        location_info["period"] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
+        location_info[ColNames.PERIOD] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
     except AttributeError:
         pass
 
@@ -94,7 +94,7 @@ def create_df(lst, file_name):
 
     # from OneClimaBuilding files extract info about reference years
     try:
-        location_info["period"] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
+        location_info[ColNames.PERIOD] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
     except AttributeError:
         pass
 
@@ -150,15 +150,15 @@ def create_df(lst, file_name):
         epw_df = pd.DataFrame(columns=col_names, data=lst)
 
     # from EnergyPlus files extract info about reference years
-    if not location_info["period"]:
+    if not location_info[ColNames.PERIOD]:
         years = epw_df[ColNames.YEAR].astype("int").unique()
         if len(years) == 1:
             year_rounded_up = int(math.ceil(years[0] / 10.0)) * 10
-            location_info["period"] = f"{year_rounded_up - 10}-{year_rounded_up}"
+            location_info[ColNames.PERIOD] = f"{year_rounded_up - 10}-{year_rounded_up}"
         else:
             min_year = int(math.floor(min(years) / 10.0)) * 10
             max_year = int(math.ceil(max(years) / 10.0)) * 10
-            location_info["period"] = f"{min_year}-{max_year}"
+            location_info[ColNames.PERIOD] = f"{min_year}-{max_year}"
 
     # Add fake_year
     epw_df[ColNames.FAKE_YEAR] = ColNames.YEAR
@@ -213,16 +213,16 @@ def create_df(lst, file_name):
         "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="h", tz="UTC"
     )
     epw_df[ColNames.UTC_TIME] = pd.to_datetime(times)
-    delta = timedelta(days=0, hours=location_info["time_zone"] - 1, minutes=0)
+    delta = timedelta(days=0, hours=location_info[ColNames.TIME_ZONE] - 1, minutes=0)
     times = times - delta
-    epw_df["times"] = times
+    epw_df[ColNames.TIMES] = times
     epw_df.set_index(
-        "times", drop=False, append=False, inplace=True, verify_integrity=False
+        ColNames.TIMES, drop=False, append=False, inplace=True, verify_integrity=False
     )
 
     # Add in solar position df
     solar_position = solarposition.get_solarposition(
-        times, location_info["lat"], location_info["lon"]
+        times, location_info[ColNames.LAT], location_info[ColNames.LON]
     )
     epw_df = pd.concat([epw_df, solar_position], axis=1)
 
@@ -280,16 +280,16 @@ def create_df(lst, file_name):
 
     utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
     utci_labels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
-    epw_df["utci_noSun_Wind_categories"] = pd.cut(
+    epw_df[ColNames.UTCI_NOSUN_WIND_CATEGORIES] = pd.cut(
         x=epw_df[ColNames.UTCI_NO_SUN_WIND], bins=utci_bins, labels=utci_labels
     )
-    epw_df["utci_noSun_noWind_categories"] = pd.cut(
+    epw_df[ColNames.UTCI_NOSUN_NOWIND_CATEGORIES] = pd.cut(
         x=epw_df[ColNames.UTCI_NO_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
     )
-    epw_df["utci_Sun_Wind_categories"] = pd.cut(
+    epw_df[ColNames.UTCI_SUN_WIND_CATEGORIES] = pd.cut(
         x=epw_df[ColNames.UTCI_SUN_WIND], bins=utci_bins, labels=utci_labels
     )
-    epw_df["utci_Sun_noWind_categories"] = pd.cut(
+    epw_df[ColNames.UTCI_SUN_NOWIND_CATEGORIES] = pd.cut(
         x=epw_df[ColNames.UTCI_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
     )
 
@@ -380,8 +380,8 @@ def convert_data(df, mapping_json):
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):
-        if "conversion_function" in mapping_dict[key]:
-            conversion_function_name = mapping_dict[key]["conversion_function"]
+        if ColNames.CONVERSION_FUNCTION in mapping_dict[key]:
+            conversion_function_name = mapping_dict[key][ColNames.CONVERSION_FUNCTION]
             if conversion_function_name is not None:
                 conversion_function = globals()[conversion_function_name]
                 conversion_function(df, key)
