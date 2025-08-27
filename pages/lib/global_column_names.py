@@ -95,3 +95,7 @@ class ColNames(str, Enum):
     UNIT = "unit"
     TWENTY_FOUR_HOUR = "24h"
     TIMES = "times"
+
+    PATH = "path"
+    WIND_DIR_BINS = "WindDir_bins"
+    WIND_SPD_BINS = "WindSpd_bins"

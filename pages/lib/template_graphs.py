@@ -156,9 +156,9 @@ def yearly_profile(df, var, global_local, si_ip):
 
     if var == ColNames.DBT:
         # plot ashrae adaptive comfort limits (80%)
-        lo80 = df.groupby(ColNames.DOY)["adaptive_cmf_80_low"].mean().values
-        hi80 = df.groupby(ColNames.DOY)["adaptive_cmf_80_up"].mean().values
-        rmt = df.groupby(ColNames.DOY)["adaptive_cmf_rmt"].mean().values
+        lo80 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_80_LOW].mean().values
+        hi80 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_80_UP].mean().values
+        rmt = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_RMT].mean().values
         # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implementation
         var_bar_colors = np.where((rmt > 40) | (rmt < 10), "lightgray", "darkgray")
 
@@ -175,8 +175,8 @@ def yearly_profile(df, var, global_local, si_ip):
         )
 
         # plot ashrae adaptive comfort limits (90%)
-        lo90 = df.groupby(ColNames.DOY)["adaptive_cmf_90_low"].mean().values
-        hi90 = df.groupby(ColNames.DOY)["adaptive_cmf_90_up"].mean().values
+        lo90 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_90_LOW].mean().values
+        hi90 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_90_UP].mean().values
 
         trace4 = go.Bar(
             x=df[ColNames.UTC_TIME].dt.date.unique(),
@@ -525,12 +525,12 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     )
 
     # Rename the category in the 'WindDir_bins' column
-    df_binned["WindDir_bins"] = df_binned["WindDir_bins"].rename({360.0: 0.0})
+    df_binned[ColNames.WIND_DIR_BINS] = df_binned[ColNames.WIND_DIR_BINS].rename({360.0: 0.0})
 
     rose = (
-        df_binned.groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
+        df_binned.groupby(by=[ColNames.WIND_SPD_BINS, ColNames.WIND_DIR_BINS], observed=False)
         .size()
-        .unstack(level="WindSpd_bins")
+        .unstack(level=ColNames.WIND_SPD_BINS)
         .fillna(0)
         .assign(calm=lambda d: calm_count / d.shape[0])
         .sort_index(axis=1)

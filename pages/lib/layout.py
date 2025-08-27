@@ -3,7 +3,7 @@ import dash
 from dash import dcc, html
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
-
+from pages.lib.global_column_names import ColNames
 from config import DocLinks, UnitSystem
 
 
@@ -242,9 +242,9 @@ def build_tabs():
                         [
                             dbc.NavItem(
                                 dbc.NavLink(
-                                    page["name"],
-                                    id=page["path"],
-                                    href=page["path"],
+                                    page[ColNames.NAME],
+                                    id=page[ColNames.PATH],
+                                    href=page[ColNames.PATH],
                                     active="exact",
                                     className="nav-link",
                                     disabled=True,
@@ -252,7 +252,7 @@ def build_tabs():
                                 className="custom-tab",
                             )
                             for page in dash.page_registry.values()
-                            if page["name"] not in ["404", "changelog"]
+                            if page[ColNames.NAME] not in ["404", "changelog"]
                         ],
                         id="tabs",
                         class_name="tab-container",
