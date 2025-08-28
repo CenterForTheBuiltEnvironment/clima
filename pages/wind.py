@@ -75,6 +75,7 @@ def seasonal_wind_rose():
             html.Div(
                 children=title_with_link(
                     text="Seasonal Wind Rose",
+                    id_button=ElementIds.SEASONAL_WIND_ROSE_DOC,
                     doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
