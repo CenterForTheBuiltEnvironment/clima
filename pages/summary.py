@@ -228,7 +228,7 @@ def update_location_info(ts, df, meta, si_ip):
     lon = f"Longitude: {meta[ColNames.LON]}"
     lat = f"Latitude: {meta[ColNames.LAT]}"
 
-    site_elevation = float(meta[ColNames.SITE_ELEVATION.SITE_ELEVATION])
+    site_elevation = float(meta[ColNames.SITE_ELEVATION])
     site_elevation = round(site_elevation, 2)
     if si_ip != UnitSystem.SI:
         site_elevation = site_elevation * 3.281
