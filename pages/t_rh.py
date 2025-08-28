@@ -50,7 +50,7 @@ def layout():
                 children=[
                     html.Div(
                         children=title_with_link(
-                            text="Yearly_chart",
+                            text="Yearly Chart",
                             id_button="yearly-chart-label",
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
