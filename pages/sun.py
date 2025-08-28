@@ -72,7 +72,7 @@ def sun_path():
                         style={"width": "10rem"},
                     ),
                     dropdown(
-                        id= ElementIds.CUSTOM_SUN_VIEW_DROPDOWN,
+                        id=ElementIds.CUSTOM_SUN_VIEW_DROPDOWN,
                         options={
                             "Spherical": "polar",
                             "Cartesian": "cartesian",
@@ -92,7 +92,7 @@ def sun_path():
                         style={"width": "10rem"},
                     ),
                     dropdown(
-                        id= ElementIds.CUSTOM_SUN_VAR_DROPDOWN,
+                        id=ElementIds.CUSTOM_SUN_VAR_DROPDOWN,
                         options=sc_dropdown_names,
                         value="None",
                         style={"width": "20rem"},
@@ -102,7 +102,7 @@ def sun_path():
             dcc.Loading(
                 type="circle",
                 children=html.Div(
-                    id= ElementIds.CUSTOM_SUNPATH,
+                    id=ElementIds.CUSTOM_SUNPATH,
                 ),
             ),
         ],
@@ -137,7 +137,7 @@ def explore_daily_heatmap():
                     ),
                 ],
             ),
-            dcc.Loading(type="circle", children=html.Div(id= ElementIds.TAB4_DAILY)),
+            dcc.Loading(type="circle", children=html.Div(id=ElementIds.TAB4_DAILY)),
             dcc.Loading(
                 type="circle",
                 children=html.Div(id=ElementIds.TAB4_HEATMAP),
@@ -148,7 +148,7 @@ def explore_daily_heatmap():
 
 def static_section():
     return html.Div(
-        id= ElementIds.STATIC_SECTION,
+        id=ElementIds.STATIC_SECTION,
         className="container-col full-width",
         children=[
             # ...
@@ -160,12 +160,15 @@ def layout():
     """Contents of tab four."""
     return html.Div(
         className="container-col",
-        id= ElementIds.TAB_FOUR_CONTAINER,
+        id=ElementIds.TAB_FOUR_CONTAINER,
         children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
 
 
-@callback(Output(ElementIds.STATIC_SECTION, "children"), [Input(ElementIds.ID_SUN_SI_IP_RADIO_INPUT, "value")])
+@callback(
+    Output(ElementIds.STATIC_SECTION, "children"),
+    [Input(ElementIds.ID_SUN_SI_IP_RADIO_INPUT, "value")],
+)
 def update_static_section(si_ip):
     hor_unit = "Wh/m²"
     if si_ip == UnitSystem.IP:
@@ -180,7 +183,7 @@ def update_static_section(si_ip):
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(id= ElementIds.MONTHLY_SOLAR),
+            children=html.Div(id=ElementIds.MONTHLY_SOLAR),
         ),
         html.Div(
             children=title_with_link(
@@ -191,7 +194,7 @@ def update_static_section(si_ip):
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(id= ElementIds.CLOUD_COVER),
+            children=html.Div(id=ElementIds.CLOUD_COVER),
         ),
     ]
 

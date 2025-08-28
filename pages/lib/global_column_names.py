@@ -65,9 +65,15 @@ class ColNames(str, Enum):
     UTCI_NO_SUN_WIND = "utci_noSun_Wind"  # Utci no Sun Wind
     UTCI_NO_SUN_NO_WIND = "utci_noSun_noWind"  # Utci no Sun no Wind
     UTCI_SUN_WIND_CATEGORIES = "utci_Sun_Wind_categories"  # Utci Sun Wind Categories
-    UTCI_SUN_NOWIND_CATEGORIES = "utci_Sun_noWind_categories"  # Utci Sun no Wind Categories
-    UTCI_NOSUN_WIND_CATEGORIES = "utci_noSun_Wind_categories"  # Utci no Sun Wind Categories
-    UTCI_NOSUN_NOWIND_CATEGORIES = "utci_noSun_noWind_categories"  # Utci no Sun no Wind Categories
+    UTCI_SUN_NOWIND_CATEGORIES = (
+        "utci_Sun_noWind_categories"  # Utci Sun no Wind Categories
+    )
+    UTCI_NOSUN_WIND_CATEGORIES = (
+        "utci_noSun_Wind_categories"  # Utci no Sun Wind Categories
+    )
+    UTCI_NOSUN_NOWIND_CATEGORIES = (
+        "utci_noSun_noWind_categories"  # Utci no Sun no Wind Categories
+    )
     ADAPTIVE_COMFORT = "adaptive_comfort"  # Adaptive comfort
     ADAPTIVE_CMF_80_LOW = "adaptive_cmf_80_low"  # Adaptive comfort 80 low
     ADAPTIVE_CMF_80_UP = "adaptive_cmf_80_up"  # Adaptive comfort 80 up
@@ -81,7 +87,6 @@ class ColNames(str, Enum):
     TMP_CMF_90_LOW = "tmp_cmf_90_low"
     TMP_CMF_90_UP = "tmp_cmf_90_up"
     CONVERSION_FUNCTION = "conversion_function"
-
 
     # ==================== Calculation column ====================
     FAKE_YEAR = "fake_year"  # Fake Year

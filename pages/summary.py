@@ -43,7 +43,8 @@ def layout():
 
 
 @callback(
-    Output(ElementIds.TAB_TWO_CONTAINER, "children"), [Input(ElementIds.ID_SUMMARY_SI_IP_RADIO_INPUT, "value")]
+    Output(ElementIds.TAB_TWO_CONTAINER, "children"),
+    [Input(ElementIds.ID_SUMMARY_SI_IP_RADIO_INPUT, "value")],
 )
 def update_layout(si_ip):
     if si_ip == UnitSystem.SI:
@@ -260,7 +261,9 @@ def update_location_info(ts, df, meta, si_ip):
     # global horizontal irradiance
     # Note that the value is divided by 1000, so a corresponding change is made in the unit:
     total_solar_rad_value = round(df[ColNames.GLOB_HOR_RAD].sum() / 1000, 2)
-    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][ColNames.UNIT]
+    total_solar_rad_unit = (
+        "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][ColNames.UNIT]
+    )
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
     glob_sum = df[ColNames.GLOB_HOR_RAD].sum()
@@ -527,11 +530,13 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
     elif df is not None:
         if si_ip == UnitSystem.SI:
             return dcc.send_data_frame(
-                df.to_csv, f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_SIunit.csv"
+                df.to_csv,
+                f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_SIunit.csv",
             )
         else:
             return dcc.send_data_frame(
-                df.to_csv, f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_IPunit.csv"
+                df.to_csv,
+                f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_IPunit.csv",
             )
     else:
         print("df not loaded yet")

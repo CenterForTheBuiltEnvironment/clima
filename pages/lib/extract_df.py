@@ -68,7 +68,9 @@ def get_location_info(lst, file_name):
 
     # from OneClimaBuilding files extract info about reference years
     try:
-        location_info[ColNames.PERIOD] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
+        location_info[ColNames.PERIOD] = re.search(
+            r'cord=[\'"]?([^\'" >]+);', lst[5]
+        ).group(1)
     except AttributeError:
         pass
 
@@ -94,7 +96,9 @@ def create_df(lst, file_name):
 
     # from OneClimaBuilding files extract info about reference years
     try:
-        location_info[ColNames.PERIOD] = re.search(r'cord=[\'"]?([^\'" >]+);', lst[5]).group(1)
+        location_info[ColNames.PERIOD] = re.search(
+            r'cord=[\'"]?([^\'" >]+);', lst[5]
+        ).group(1)
     except AttributeError:
         pass
 
@@ -165,7 +169,9 @@ def create_df(lst, file_name):
 
     # Add in month names
     month_look_up = {ix + 1: month for ix, month in enumerate(month_lst)}
-    epw_df[ColNames.MONTH_NAMES] = epw_df[ColNames.MONTH].astype("int").map(month_look_up)
+    epw_df[ColNames.MONTH_NAMES] = (
+        epw_df[ColNames.MONTH].astype("int").map(month_look_up)
+    )
 
     # Change to int type
     epw_df[[ColNames.YEAR, ColNames.DAY, ColNames.MONTH, ColNames.HOUR]] = epw_df[
@@ -173,10 +179,17 @@ def create_df(lst, file_name):
     ].astype(int)
 
     # Add in DOY
-    df_doy = epw_df.groupby([ColNames.MONTH, ColNames.DAY])[ColNames.HOUR].count().reset_index()
+    df_doy = (
+        epw_df.groupby([ColNames.MONTH, ColNames.DAY])[ColNames.HOUR]
+        .count()
+        .reset_index()
+    )
     df_doy[ColNames.DOY] = df_doy.index + 1
     epw_df = pd.merge(
-        epw_df, df_doy[[ColNames.MONTH, ColNames.DAY, ColNames.DOY]], on=[ColNames.MONTH, ColNames.DAY], how="left"
+        epw_df,
+        df_doy[[ColNames.MONTH, ColNames.DAY, ColNames.DOY]],
+        on=[ColNames.MONTH, ColNames.DAY],
+        how="left",
     )
 
     change_to_float = [
@@ -249,7 +262,9 @@ def create_df(lst, file_name):
         floor_reflectance,
     )
     mrt_df = pd.DataFrame.from_records(mrt)
-    mrt_df[ColNames.DELTA_MRT] = mrt_df[ColNames.DELTA_MRT].mask(mrt_df[ColNames.DELTA_MRT] >= 70, 70)
+    mrt_df[ColNames.DELTA_MRT] = mrt_df[ColNames.DELTA_MRT].mask(
+        mrt_df[ColNames.DELTA_MRT] >= 70, 70
+    )
     mrt_df = mrt_df.set_index(epw_df.times)
 
     epw_df = epw_df.join(mrt_df)
@@ -266,16 +281,28 @@ def create_df(lst, file_name):
         epw_df[ColNames.WIND_SPEED_UTCI] >= 0, 0.5
     )
     epw_df[ColNames.UTCI_NO_SUN_WIND] = utci(
-        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df[ColNames.WIND_SPEED_UTCI], epw_df[ColNames.RH]
+        epw_df[ColNames.DBT],
+        epw_df[ColNames.DBT],
+        epw_df[ColNames.WIND_SPEED_UTCI],
+        epw_df[ColNames.RH],
     )
     epw_df[ColNames.UTCI_NO_SUN_NO_WIND] = utci(
-        epw_df[ColNames.DBT], epw_df[ColNames.DBT], epw_df[ColNames.WIND_SPEED_UTCI_0], epw_df[ColNames.RH]
+        epw_df[ColNames.DBT],
+        epw_df[ColNames.DBT],
+        epw_df[ColNames.WIND_SPEED_UTCI_0],
+        epw_df[ColNames.RH],
     )
     epw_df[ColNames.UTCI_SUN_WIND] = utci(
-        epw_df[ColNames.DBT], epw_df[ColNames.MRT], epw_df[ColNames.WIND_SPEED_UTCI], epw_df[ColNames.RH]
+        epw_df[ColNames.DBT],
+        epw_df[ColNames.MRT],
+        epw_df[ColNames.WIND_SPEED_UTCI],
+        epw_df[ColNames.RH],
     )
     epw_df[ColNames.UTCI_SUN_NO_WIND] = utci(
-        epw_df[ColNames.DBT], epw_df[ColNames.MRT], epw_df[ColNames.WIND_SPEED_UTCI_0], epw_df[ColNames.RH]
+        epw_df[ColNames.DBT],
+        epw_df[ColNames.MRT],
+        epw_df[ColNames.WIND_SPEED_UTCI_0],
+        epw_df[ColNames.RH],
     )
 
     utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
@@ -330,10 +357,18 @@ def create_df(lst, file_name):
         )
         epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_RMT] = rmt
         epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_COMFORT] = r[ColNames.TMP_CMF]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_LOW] = r[ColNames.TMP_CMF_80_LOW]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_UP] = r[ColNames.TMP_CMF_80_UP]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_LOW] = r[ColNames.TMP_CMF_90_LOW]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_UP] = r[ColNames.TMP_CMF_90_UP]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_LOW] = r[
+            ColNames.TMP_CMF_80_LOW
+        ]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_UP] = r[
+            ColNames.TMP_CMF_80_UP
+        ]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_LOW] = r[
+            ColNames.TMP_CMF_90_LOW
+        ]
+        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_UP] = r[
+            ColNames.TMP_CMF_90_UP
+        ]
 
     return epw_df, location_info
 

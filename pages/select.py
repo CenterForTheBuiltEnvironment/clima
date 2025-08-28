@@ -331,7 +331,9 @@ def plot_location_epw_files(pathname):
         data = json.load(data_file)
 
     df = json_normalize(data[ColNames.FEATURES])
-    df[[ColNames.LON, ColNames.LAT]] = pd.DataFrame(df[ColNames.GEOMETRY_COORDINATES].tolist())
+    df[[ColNames.LON, ColNames.LAT]] = pd.DataFrame(
+        df[ColNames.GEOMETRY_COORDINATES].tolist()
+    )
     df[ColNames.LAT] += 0.010
     df = df.rename(columns={"properties.epw": "Source"})
 

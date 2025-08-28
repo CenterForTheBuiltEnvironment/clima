@@ -93,7 +93,8 @@ def seasonal_wind_rose():
                                 ),
                             ),
                             html.P(
-                                className="seasonal-text", id=ElementIds.WINTER_WIND_ROSE_TEXT
+                                className="seasonal-text",
+                                id=ElementIds.WINTER_WIND_ROSE_TEXT,
                             ),
                         ],
                     ),
@@ -108,7 +109,8 @@ def seasonal_wind_rose():
                                 ),
                             ),
                             html.P(
-                                className="seasonal-text", id=ElementIds.SPRING_WIND_ROSE_TEXT
+                                className="seasonal-text",
+                                id=ElementIds.SPRING_WIND_ROSE_TEXT,
                             ),
                         ],
                     ),
@@ -123,12 +125,13 @@ def seasonal_wind_rose():
                             dcc.Loading(
                                 type="circle",
                                 children=html.Div(
-                                    id= ElementIds.SUMMER_WIND_ROSE,
+                                    id=ElementIds.SUMMER_WIND_ROSE,
                                     className="daily-wind-graph",
                                 ),
                             ),
                             html.P(
-                                className="seasonal-text", id=ElementIds.SUMMER_WIND_ROSE_TEXT
+                                className="seasonal-text",
+                                id=ElementIds.SUMMER_WIND_ROSE_TEXT,
                             ),
                         ],
                     ),
@@ -142,7 +145,10 @@ def seasonal_wind_rose():
                                     className="daily-wind-graph",
                                 ),
                             ),
-                            html.P(className="seasonal-text", id=ElementIds.FALL_WIND_ROSE_TEXT),
+                            html.P(
+                                className="seasonal-text",
+                                id=ElementIds.FALL_WIND_ROSE_TEXT,
+                            ),
                         ],
                     ),
                 ],
@@ -180,7 +186,10 @@ def daily_wind_rose():
                                     ),
                                 ),
                             ),
-                            html.P(className="daily-text", id=ElementIds.MORNING_WIND_ROSE_TEXT),
+                            html.P(
+                                className="daily-text",
+                                id=ElementIds.MORNING_WIND_ROSE_TEXT,
+                            ),
                         ],
                     ),
                     html.Div(
@@ -195,7 +204,10 @@ def daily_wind_rose():
                                     ),
                                 ),
                             ),
-                            html.P(className="daily-text", id=ElementIds.NOON_WIND_ROSE_TEXT),
+                            html.P(
+                                className="daily-text",
+                                id=ElementIds.NOON_WIND_ROSE_TEXT,
+                            ),
                         ],
                     ),
                     html.Div(
@@ -210,7 +222,10 @@ def daily_wind_rose():
                                     ),
                                 ),
                             ),
-                            html.P(className="daily-text", id=ElementIds.NIGHT_WIND_ROSE_TEXT),
+                            html.P(
+                                className="daily-text",
+                                id=ElementIds.NIGHT_WIND_ROSE_TEXT,
+                            ),
                         ],
                     ),
                 ],
@@ -454,9 +469,13 @@ def update_custom_wind_rose(
 
     # Wind Rose Graphs
     if start_month <= end_month:
-        df = df.loc[(df[ColNames.MONTH] >= start_month) & (df[ColNames.MONTH] <= end_month)]
+        df = df.loc[
+            (df[ColNames.MONTH] >= start_month) & (df[ColNames.MONTH] <= end_month)
+        ]
     else:
-        df = df.loc[(df[ColNames.MONTH] <= end_month) | (df[ColNames.MONTH] >= start_month)]
+        df = df.loc[
+            (df[ColNames.MONTH] <= end_month) | (df[ColNames.MONTH] >= start_month)
+        ]
     if start_hour <= end_hour:
         df = df.loc[(df[ColNames.HOUR] >= start_hour) & (df[ColNames.HOUR] <= end_hour)]
     else:
@@ -509,25 +528,30 @@ def update_seasonal_graphs(_, df, meta, si_ip):
 
     # Text
     winter_df = df.loc[
-        (df[ColNames.MONTH] <= winter_months[1]) | (df[ColNames.MONTH] >= winter_months[0])
+        (df[ColNames.MONTH] <= winter_months[1])
+        | (df[ColNames.MONTH] >= winter_months[0])
     ]
     query_calm_wind = "wind_speed == 0"
     winter_total_count = winter_df.shape[0]
     winter_calm_count = winter_df.query(query_calm_wind).shape[0]
 
     spring_df = df.loc[
-        (df[ColNames.MONTH] >= spring_months[0]) & (df[ColNames.MONTH] <= spring_months[1])
+        (df[ColNames.MONTH] >= spring_months[0])
+        & (df[ColNames.MONTH] <= spring_months[1])
     ]
     spring_total_count = spring_df.shape[0]
     spring_calm_count = spring_df.query(query_calm_wind).shape[0]
 
     summer_df = df.loc[
-        (df[ColNames.MONTH] >= summer_months[0]) & (df[ColNames.MONTH] <= summer_months[1])
+        (df[ColNames.MONTH] >= summer_months[0])
+        & (df[ColNames.MONTH] <= summer_months[1])
     ]
     summer_total_count = summer_df.shape[0]
     summer_calm_count = summer_df.query(query_calm_wind).shape[0]
 
-    fall_df = df.loc[(df[ColNames.MONTH] >= fall_months[0]) & (df[ColNames.MONTH] <= fall_months[1])]
+    fall_df = df.loc[
+        (df[ColNames.MONTH] >= fall_months[0]) & (df[ColNames.MONTH] <= fall_months[1])
+    ]
     fall_total_count = fall_df.shape[0]
     fall_calm_count = fall_df.query(query_calm_wind).shape[0]
 
@@ -623,18 +647,22 @@ def update_daily_graphs(_, df, meta, si_ip):
     # Text
     query_calm_wind = "wind_speed == 0"
     morning_df = df.loc[
-        (df[ColNames.HOUR] >= morning_times[0]) & (df[ColNames.HOUR] <= morning_times[1])
+        (df[ColNames.HOUR] >= morning_times[0])
+        & (df[ColNames.HOUR] <= morning_times[1])
     ]
     morning_total_count = morning_df.shape[0]
     morning_calm_count = morning_df.query(query_calm_wind).shape[0]
 
     noon_df = df.loc[
-        (df[ColNames.HOUR] >= morning_times[0]) & (df[ColNames.HOUR] <= morning_times[1])
+        (df[ColNames.HOUR] >= morning_times[0])
+        & (df[ColNames.HOUR] <= morning_times[1])
     ]
     noon_total_count = noon_df.shape[0]
     noon_calm_count = noon_df.query(query_calm_wind).shape[0]
 
-    night_df = df.loc[(df[ColNames.HOUR] <= night_times[1]) | (df[ColNames.HOUR] >= night_times[0])]
+    night_df = df.loc[
+        (df[ColNames.HOUR] <= night_times[1]) | (df[ColNames.HOUR] >= night_times[0])
+    ]
     night_total_count = night_df.shape[0]
     night_calm_count = night_df.query(query_calm_wind).shape[0]
 
