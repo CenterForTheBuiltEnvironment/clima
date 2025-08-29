@@ -525,10 +525,14 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     )
 
     # Rename the category in the 'WindDir_bins' column
-    df_binned[ColNames.WIND_DIR_BINS] = df_binned[ColNames.WIND_DIR_BINS].rename({360.0: 0.0})
+    df_binned[ColNames.WIND_DIR_BINS] = df_binned[ColNames.WIND_DIR_BINS].rename(
+        {360.0: 0.0}
+    )
 
     rose = (
-        df_binned.groupby(by=[ColNames.WIND_SPD_BINS, ColNames.WIND_DIR_BINS], observed=False)
+        df_binned.groupby(
+            by=[ColNames.WIND_SPD_BINS, ColNames.WIND_DIR_BINS], observed=False
+        )
         .size()
         .unstack(level=ColNames.WIND_SPD_BINS)
         .fillna(0)

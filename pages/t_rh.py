@@ -50,7 +50,7 @@ def layout():
                 children=[
                     html.Div(
                         children=title_with_link(
-                            text="Yearly_chart",
+                            text="Yearly Chart",
                             id_button="yearly-chart-label",
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
@@ -148,7 +148,16 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("DryBulbTemperature_daily", meta, units),
             figure=daily_profile(
-                df[[ColNames.DBT, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY, ColNames.MONTH]],
+                df[
+                    [
+                        ColNames.DBT,
+                        ColNames.HOUR,
+                        ColNames.UTC_TIME,
+                        ColNames.MONTH_NAMES,
+                        ColNames.DAY,
+                        ColNames.MONTH,
+                    ]
+                ],
                 ColNames.DBT,
                 global_local,
                 si_ip,
@@ -159,7 +168,16 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("RelativeHumidity_daily", meta, units),
             figure=daily_profile(
-                df[[ColNames.RH, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY, ColNames.MONTH]],
+                df[
+                    [
+                        ColNames.RH,
+                        ColNames.HOUR,
+                        ColNames.UTC_TIME,
+                        ColNames.MONTH_NAMES,
+                        ColNames.DAY,
+                        ColNames.MONTH,
+                    ]
+                ],
                 ColNames.RH,
                 global_local,
                 si_ip,
@@ -187,7 +205,15 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("DryBulbTemperature_heatmap", meta, units),
             figure=heatmap(
-                df[[ColNames.DBT, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY]],
+                df[
+                    [
+                        ColNames.DBT,
+                        ColNames.HOUR,
+                        ColNames.UTC_TIME,
+                        ColNames.MONTH_NAMES,
+                        ColNames.DAY,
+                    ]
+                ],
                 ColNames.DBT,
                 global_local,
                 si_ip,
@@ -198,7 +224,15 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
         return dcc.Graph(
             config=generate_chart_name("RelativeHumidity_heatmap", meta, units),
             figure=heatmap(
-                df[[ColNames.RH, ColNames.HOUR, ColNames.UTC_TIME, ColNames.MONTH_NAMES, ColNames.DAY]],
+                df[
+                    [
+                        ColNames.RH,
+                        ColNames.HOUR,
+                        ColNames.UTC_TIME,
+                        ColNames.MONTH_NAMES,
+                        ColNames.DAY,
+                    ]
+                ],
                 ColNames.RH,
                 global_local,
                 si_ip,
@@ -212,10 +246,15 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
         Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
     ],
-    [State(ElementIds.ID_T_RH_DF_STORE, "data"), State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data")],
+    [
+        State(ElementIds.ID_T_RH_DF_STORE, "data"),
+        State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
+    ],
 )
 def update_table(_, dd_value, df, si_ip):
     """Update the contents of tab three. Passing in general info (df, meta)."""
     return summary_table_tmp_rh_tab(
-        df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]], dd_value, si_ip
+        df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]],
+        dd_value,
+        si_ip,
     )

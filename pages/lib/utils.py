@@ -34,10 +34,14 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
     if units:
         custom_str += f"_{units}"
     if meta:
-        file_name = f"{meta['city']}_{meta['country']}_{tab_name}{custom_str}"
-        figure_config["toImageButtonOptions"]["filename"] = file_name
+        file_name = (
+            f"{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_{tab_name}{custom_str}"
+        )
+        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = file_name
     else:
-        figure_config["toImageButtonOptions"]["filename"] = f"{tab_name}{custom_str}"
+        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = (
+            f"{tab_name}{custom_str}"
+        )
     return figure_config
 
 
@@ -90,7 +94,8 @@ def generate_custom_inputs_explorer(
     end_month_abbr = month_names[int(end_month)]
     if var in mapping_dictionary:
         var_fullname = "".join(
-            word.capitalize() for word in mapping_dictionary[var][ColNames.NAME].split(" ")
+            word.capitalize()
+            for word in mapping_dictionary[var][ColNames.NAME].split(" ")
         )
     else:
         var_fullname = var
@@ -241,7 +246,9 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     )
     return dash_table.DataTable(
         columns=[
-            {"name": i, "id": i} if i == ColNames.MONTH else {"name": f"{i} ({unit})", "id": i}
+            {"name": i, "id": i}
+            if i == ColNames.MONTH
+            else {"name": f"{i} ({unit})", "id": i}
             for i in df_summary.columns
         ],
         style_table={"overflowX": "auto"},
@@ -260,10 +267,10 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
 
 def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
     start_month, end_month = month
-    if invert_month == ["invert"] and (start_month != 1 or end_month != 12):
+    if invert_month == [ColNames.INVERT] and (start_month != 1 or end_month != 12):
         end_month, start_month = month
     start_hour, end_hour = hour
-    if invert_hour == ["invert"] and (start_hour != 0 or end_hour != 24):
+    if invert_hour == [ColNames.INVERT] and (start_hour != 0 or end_hour != 24):
         end_hour, start_hour = hour
 
     return start_month, end_month, start_hour, end_hour

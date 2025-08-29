@@ -155,6 +155,7 @@ class ElementIds(str, Enum):
     ID_WIND_META_STORE = "meta-store"
     ID_WIND_SI_IP_UNIT_STORE = "si-ip-unit-store"
     ID_WIND_GLOBAL_LOCAL_RADIO_INPUT = "global-local-radio-input"
+    SEASONAL_WIND_ROSE_DOC = "seasonal-wind-rose-doc"
     LOADING_ONE = "loading-1"
     UPLOAD_DATA = "upload-data"
     UPLOAD_DATA_BUTTON = "upload-data-button"

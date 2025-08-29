@@ -953,5 +953,7 @@ def update_table(
         & (df[ColNames.HOUR] <= end_hour)
     ]
     return summary_table_tmp_rh_tab(
-        filtered_df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]], dd_value, si_ip
+        filtered_df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]],
+        dd_value,
+        si_ip,
     )

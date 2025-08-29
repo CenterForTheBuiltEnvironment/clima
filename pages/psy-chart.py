@@ -173,7 +173,7 @@ def inputs():
                                 children=["Filter Variable:"], style={"flex": "30%"}
                             ),
                             dropdown(
-                                id=ElementIds.PSY_VAR_DROPDOWN ,
+                                id=ElementIds.PSY_VAR_DROPDOWN,
                                 options=dropdown_names,
                                 value=ColNames.RH,
                                 style={"flex": "70%"},
@@ -249,7 +249,7 @@ def layout():
         State(ElementIds.PSY_HOUR_SLIDER, "value"),
         State(ElementIds.PSY_MIN_VAL, "value"),
         State(ElementIds.PSY_MAX_VAL, "value"),
-        State(ElementIds.PSY_VAR_DROPDOWN , "value"),
+        State(ElementIds.PSY_VAR_DROPDOWN, "value"),
         State(ElementIds.ID_PSY_CHART_META_STORE, "data"),
         State(ElementIds.INVERT_MONTH_PSY, "value"),
         State(ElementIds.INVERT_HOUR_PSY, "value"),
@@ -451,7 +451,9 @@ def update_psych_chart(
                     colorscale=var_color,
                     colorbar=var_colorbar,
                 ),
-                customdata=np.stack((df[ColNames.RH], df["h"], df[var], df["t_dp"]), axis=-1),
+                customdata=np.stack(
+                    (df[ColNames.RH], df["h"], df[var], df["t_dp"]), axis=-1
+                ),
                 hovertemplate=mapping_dictionary[ColNames.DBT][ColNames.NAME]
                 + ": %{x:.2f}"
                 + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
@@ -476,8 +478,12 @@ def update_psych_chart(
             )
         )
 
-    xtitle_name = "Temperature" + "  " + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
-    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary[ColNames.HR][si_ip][ColNames.UNIT]
+    xtitle_name = (
+        "Temperature" + "  " + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
+    )
+    ytitle_name = (
+        "Humidity Ratio" + "  " + mapping_dictionary[ColNames.HR][si_ip][ColNames.UNIT]
+    )
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
         title_text=xtitle_name,

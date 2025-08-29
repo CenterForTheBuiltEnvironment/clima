@@ -7,6 +7,7 @@ import numpy as np
 
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_column_names import ColNames
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )
@@ -53,7 +54,9 @@ def inputs_outdoor_comfort():
                                 options=outdoor_dropdown_names,
                                 value="utci_Sun_Wind",
                             ),
-                            html.Div(id=ElementIds.IMAGE_SELECTION, style={"flex": "10%"}),
+                            html.Div(
+                                id=ElementIds.IMAGE_SELECTION, style={"flex": "10%"}
+                            ),
                         ],
                     ),
                 ],
@@ -235,24 +238,25 @@ def update_outdoor_comfort_output(_, df):
         Description of the best weather condition(s).
     """
     cols = [
-        "utci_noSun_Wind_categories",
-        "utci_noSun_noWind_categories",
-        "utci_Sun_Wind_categories",
-        "utci_Sun_noWind_categories",
+        ColNames.UTCI_NOSUN_WIND_CATEGORIES,
+        ColNames.UTCI_NOSUN_NOWIND_CATEGORIES,
+        ColNames.UTCI_SUN_WIND_CATEGORIES,
+        ColNames.UTCI_SUN_NOWIND_CATEGORIES,
     ]
     cols_with_the_highest_number_of_zero = []
     highest_count = 0
     for col in cols:
         try:
-            count = df[col].value_counts()[0]  # this can cause error if there is no 0
-            if count > highest_count:
-                highest_count = count
-                cols_with_the_highest_number_of_zero.clear()
-                cols_with_the_highest_number_of_zero.append(col)
-            elif count == highest_count:
-                cols_with_the_highest_number_of_zero.append(col)
-        except:
+            count = df[col].value_counts()[0]
+        except (KeyError, TypeError):
+            # KeyError: 0 not in value_counts; TypeError: df[col] is not valid
             continue
+        if count > highest_count:
+            highest_count = count
+            cols_with_the_highest_number_of_zero.clear()
+            cols_with_the_highest_number_of_zero.append(col)
+        elif count == highest_count:
+            cols_with_the_highest_number_of_zero.append(col)
     return f"The Best Weather Condition is: {', '.join(cols_with_the_highest_number_of_zero)}"
 
 

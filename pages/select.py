@@ -140,7 +140,7 @@ def submitted_data(
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
 
-    if ctx.triggered[0]["prop_id"] == "modal-yes-button.n_clicks":
+    if ctx.triggered[0][ColNames.PROP_ID] == "modal-yes-button.n_clicks":
         lines = get_data(url_store)
         if lines is None:
             return (
@@ -162,7 +162,7 @@ def submitted_data(
         )
 
     elif (
-        ctx.triggered[0]["prop_id"] == "upload-data.contents"
+        ctx.triggered[0][ColNames.PROP_ID] == "upload-data.contents"
         and list_of_contents is not None
     ):
         content_type, content_string = list_of_contents[0].split(",")
@@ -275,7 +275,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             False,
-            "Current Location: " + meta["city"] + ", " + meta["country"],
+            "Current Location: " + meta[ColNames.CITY] + ", " + meta[ColNames.COUNTRY],
         )
 
 
@@ -330,9 +330,11 @@ def plot_location_epw_files(pathname):
     with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
         data = json.load(data_file)
 
-    df = json_normalize(data["features"])
-    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
-    df["lat"] += 0.010
+    df = json_normalize(data[ColNames.FEATURES])
+    df[[ColNames.LON, ColNames.LAT]] = pd.DataFrame(
+        df[ColNames.GEOMETRY_COORDINATES].tolist()
+    )
+    df[ColNames.LAT] += 0.010
     df = df.rename(columns={"properties.epw": "Source"})
 
     fig = px.scatter_mapbox(
