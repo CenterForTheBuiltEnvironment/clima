@@ -5,6 +5,7 @@ from dash_extensions.enrich import Output, Input, callback
 from app import app
 from pages.lib.layout import banner, footer, build_tabs
 from config import AppConfig
+from pages.lib.global_element_ids import ElementIds
 
 server = app.server
 
@@ -22,7 +23,7 @@ app.layout = dbc.Container(
 
 
 # callback for survey alert (dbc.Toast)
-@callback(Output("alert-auto", "is_open"), Input("interval-component", "n_intervals"))
+@callback(Output(ElementIds.ID_MAIN_ALERT_AUTO, "is_open"), Input(ElementIds.ID_MAIN_INTERVAL_COMPONENT, "n_intervals"))
 def display_alert(n):
     return n == 1
 

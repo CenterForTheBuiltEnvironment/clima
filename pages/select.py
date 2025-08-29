@@ -113,7 +113,7 @@ def alert():
 @callback(
     [
         Output(ElementIds.ID_SELECT_META_STORE, "data"),
-        Output(ElementIds.LINES_STORE, "data"),
+        Output(ElementIds.ID_SELECT_LINES_STORE, "data"),
         Output(ElementIds.ALERT, "is_open"),
         Output(ElementIds.ALERT, "children"),
         Output(ElementIds.ALERT, "color"),
@@ -211,10 +211,10 @@ def submitted_data(
         Output(ElementIds.ID_SELECT_SI_IP_UNIT_STORE, "data"),
     ],
     [
-        Input(ElementIds.LINES_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_SELECT_LINES_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SELECT_SI_IP_RADIO_INPUT, "value"),
     ],
-    [State(ElementIds.ID_SELECT_URL_STORE, "data"), State("lines-store", "data")],
+    [State(ElementIds.ID_SELECT_URL_STORE, "data"), State(ElementIds.ID_SELECT_LINES_STORE, "data")],
 )
 def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
@@ -241,7 +241,7 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
         Output("/explorer", "disabled"),
         Output("/outdoor", "disabled"),
         Output("/natural-ventilation", "disabled"),
-        Output(ElementIds.BANNER_SUBTITLE, "children"),
+        Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
         Input(ElementIds.ID_SELECT_META_STORE, "data"),
