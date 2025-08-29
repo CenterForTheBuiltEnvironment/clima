@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ColNames(str, Enum):
+class ColNames:
     # ==================== Time related column ====================
     YEAR = "year"  # year
     PERIOD = "period"  # period
