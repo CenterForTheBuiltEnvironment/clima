@@ -5,6 +5,7 @@ from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -51,7 +52,7 @@ def layout():
                     html.Div(
                         children=title_with_link(
                             text="Yearly Chart",
-                            id_button="yearly-chart-label",
+                            id_button=IdButtons.YEARLY_CHART_LABEL,
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
@@ -62,7 +63,7 @@ def layout():
                     html.Div(
                         children=title_with_link(
                             text="Daily chart",
-                            id_button="daily-chart-label",
+                            id_button=IdButtons.DAILY_CHART_LABEL,
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
@@ -73,7 +74,7 @@ def layout():
                     html.Div(
                         children=title_with_link(
                             text="Heatmap chart",
-                            id_button="heatmap-chart-label",
+                            id_button=IdButtons.HEATMAP_CHART_LABEL,
                             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                         ),
                     ),
@@ -85,7 +86,7 @@ def layout():
                         children=title_with_tooltip(
                             text="Descriptive statistics",
                             tooltip_text="count, mean, std, min, max, and percentiles",
-                            id_button="table-tmp-rh",
+                            id_button=IdButtons.TABLE_TMP_RH,
                         ),
                     ),
                     html.Div(

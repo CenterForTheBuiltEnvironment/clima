@@ -7,6 +7,8 @@ import numpy as np
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
+from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_sun import (
     monthly_solar,
@@ -58,7 +60,7 @@ def sun_path():
             html.Div(
                 children=title_with_link(
                     text="Sun path chart",
-                    id_button="sun-path-chart-label",
+                    id_button=IdButtons.SUN_PATH_CHART_LABEL,
                     doc_link=DocLinks.SUN_PATH_DIAGRAM,
                 ),
             ),
@@ -117,7 +119,7 @@ def explore_daily_heatmap():
             html.Div(
                 children=title_with_link(
                     text="Daily charts",
-                    id_button="daily-chart-label",
+                    id_button=IdButtons.DAILY_CHART_LABEL,
                     doc_link=DocLinks.CUSTOM_HEATMAP,
                 ),
             ),
@@ -177,7 +179,7 @@ def update_static_section(si_ip):
         html.Div(
             children=title_with_link(
                 text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
-                id_button="monthly-chart-label",
+                id_button=IdButtons.MONTHLY_CHART_LABEL,
                 doc_link=DocLinks.SOLAR_RADIATION,
             ),
         ),
@@ -188,7 +190,7 @@ def update_static_section(si_ip):
         html.Div(
             children=title_with_link(
                 text="Cloud coverage",
-                id_button="cloud-chart-label",
+                id_button=IdButtons.CLOUD_CHART_LABEL,
                 doc_link=DocLinks.CLOUD_COVER,
             ),
         ),
@@ -221,7 +223,7 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
     monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, si_ip)
+    cover = barchart(df, ColNames.TOT_SKY_COVER, [False], [False, "", 3, 7], True, si_ip)
     cover = cover.update_layout(
         margin=tight_margins,
         title="",

@@ -14,6 +14,7 @@ from pythermalcomfort import psychrometrics as psy
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -219,7 +220,7 @@ def layout():
         html.Div(
             children=title_with_link(
                 text="Psychrometric Chart",
-                id_button="Psychrometric-Chart-chart",
+                id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
         ),

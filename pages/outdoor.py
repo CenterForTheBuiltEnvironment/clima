@@ -8,6 +8,7 @@ import numpy as np
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )
@@ -148,7 +149,7 @@ def outdoor_comfort_chart():
             html.Div(
                 children=title_with_link(
                     text="UTCI heatmap chart",
-                    id_button="utci-charts-label",
+                    id_button=IdButtons.UTCI_CHARTS_LABEL,
                     doc_link=DocLinks.UTCI_CHART,
                 )
             ),
@@ -159,7 +160,7 @@ def outdoor_comfort_chart():
             html.Div(
                 children=title_with_link(
                     text="UTCI thermal stress chart",
-                    id_button="utci-charts-label",
+                    id_button=IdButtons.UTCI_CHARTS_LABEL,
                     doc_link=DocLinks.UTCI_CHART,
                 )
             ),
@@ -190,7 +191,7 @@ def outdoor_comfort_chart():
                                 "If normalized is enabled it calculates the % "
                                 "time otherwise it calculates the total number of hours"
                             ),
-                            id_button="outdoor-comfort-normalize",
+                            id_button=IdButtons.OUTDOOR_COMFORT_NORMALIZE,
                         ),
                     ),
                 ],

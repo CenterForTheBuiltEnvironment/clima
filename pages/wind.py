@@ -7,6 +7,7 @@ from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -166,7 +167,7 @@ def daily_wind_rose():
             html.Div(
                 children=title_with_link(
                     text="Daily Wind Rose",
-                    id_button="daily-rose-chart",
+                    id_button=IdButtons.DAILY_ROSE_CHART,
                     doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
@@ -242,7 +243,7 @@ def custom_wind_rose():
                 children=title_with_tooltip(
                     text="Customizable Wind Rose",
                     tooltip_text=None,
-                    id_button="custom-rose-chart",
+                    id_button=IdButtons.CUSTOM_ROSE_CHART,
                 ),
             ),
             html.Div(
@@ -345,7 +346,7 @@ def layout():
             html.Div(
                 children=title_with_link(
                     text="Annual Wind Rose",
-                    id_button="wind-rose-label",
+                    id_button=IdButtons.WIND_ROSE_LABEL,
                     doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
