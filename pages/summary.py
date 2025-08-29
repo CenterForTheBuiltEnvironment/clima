@@ -13,6 +13,7 @@ from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
 from pages.lib.template_graphs import violin
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -73,7 +74,7 @@ def update_layout(si_ip):
             html.Div(
                 children=title_with_tooltip(
                     text="Download",
-                    id_button="download-button-label",
+                    id_button=IdButtons.DOWNLOAD_BUTTON_LABEL,
                     tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
                 ),
             ),
@@ -110,7 +111,7 @@ def update_layout(si_ip):
             html.Div(
                 children=title_with_link(
                     text="Heating and Cooling Degree Days",
-                    id_button="hdd-cdd-chart",
+                    id_button=IdButtons.HDD_CDD_CHART,
                     doc_link=DocLinks.DEGREE_DAYS,
                 ),
             ),
@@ -171,7 +172,7 @@ def update_layout(si_ip):
             html.Div(
                 children=title_with_link(
                     text="Climate Profiles",
-                    id_button="climate-profiles-chart",
+                    id_button=IdButtons.CLIMATE_PROFILES_CHART,
                     doc_link=DocLinks.CLIMATE_PROFILES,
                 ),
             ),

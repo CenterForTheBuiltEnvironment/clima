@@ -7,6 +7,8 @@ class IdButtons:
     DAILY_ROSE_CHART = "daily-rose-chart"
     CLIMATE_PROFILES_CHART = "climate-profiles-chart"
     PSYCHROMETRIC_CHART_CHART = "Psychrometric-Chart-chart"
+    CUSTOM_ROSE_CHART = "custom-rose-chart"
+    HDD_CDD_CHART = "hdd-cdd-chart"
 
     MORE_CHARTS_LABEL = "more-charts-label"
     DOWNLOAD_BUTTON_LABEL = "download-button-label"

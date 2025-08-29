@@ -20,6 +20,7 @@ from pages.lib.global_scheme import (
 from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -67,7 +68,7 @@ def update_layout(si_ip):
         html.Div(
             children=title_with_link(
                 text="Natural Ventilation Potential",
-                id_button="natural-ventilation-label",
+                id_button=IdButtons.NATURAL_VENTILATION_LABEL,
                 doc_link=DocLinks.NATURAL_VENTILATION,
             ),
         ),
@@ -102,7 +103,7 @@ def update_layout(si_ip):
                             "If normalized is enabled it calculates the % "
                             "time otherwise it calculates the total number of hours"
                         ),
-                        id_button="nv_normalize",
+                        id_button=IdButtons.NV_NORMALIZE,
                     ),
                 ),
             ],

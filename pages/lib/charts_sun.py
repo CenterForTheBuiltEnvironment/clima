@@ -248,7 +248,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
 
     # draw equinox and sostices
     for date in pd.to_datetime(["2019-03-21", "2019-06-21", "2019-12-21"]):
-        times = pd.date_range(date, date + pd.Timedelta("24h"), freq="5min", tz=tz)
+        times = pd.date_range(date, date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR), freq=ColNames.FIVE_MINUTE, tz=tz)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
         solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
@@ -272,7 +272,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
 
     # draw sunpath on the 21st of each other month
     for date in pd.to_datetime(["2019-01-21", "2019-02-21", "2019-4-21", "2019-5-21"]):
-        times = pd.date_range(date, date + pd.Timedelta("24h"), freq="5min", tz=tz)
+        times = pd.date_range(date, date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR), freq=ColNames.FIVE_MINUTE, tz=tz)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
         solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
@@ -427,7 +427,7 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
 
     # draw equinox and sostices
     for date in pd.to_datetime(["2019-03-21", "2019-06-21", "2019-12-21"]):
-        times = pd.date_range(date, date + pd.Timedelta("24h"), freq="5min", tz=tz)
+        times = pd.date_range(date, date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR), freq=ColNames.FIVE_MINUTE, tz=tz)
         delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
@@ -451,7 +451,7 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
 
     # draw sunpath on the 21st of each other month
     for date in pd.to_datetime(["2019-01-21", "2019-02-21", "2019-4-21", "2019-5-21"]):
-        times = pd.date_range(date, date + pd.Timedelta("24h"), freq="5min", tz=tz)
+        times = pd.date_range(date, date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR), freq=ColNames.FIVE_MINUTE, tz=tz)
         delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)

@@ -99,6 +99,7 @@ class ColNames:
     RANGE = "range"
     UNIT = "unit"
     TWENTY_FOUR_HOUR = "24h"
+    FIVE_MINUTE = "5min"
     TIMES = "times"
 
     PATH = "path"

@@ -14,6 +14,7 @@ from pages.lib.charts_data_explorer import (
 )
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_scheme import (
     fig_config,
     dropdown_names,
@@ -84,7 +85,7 @@ def section_one():
             html.Div(
                 children=title_with_link(
                     text="Yearly chart",
-                    id_button="explore-yearly-chart-label",
+                    id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
                     doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                 ),
             ),
@@ -95,7 +96,7 @@ def section_one():
             html.Div(
                 children=title_with_link(
                     text="Daily chart",
-                    id_button="explore-daily-chart-label",
+                    id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
                     doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                 ),
             ),
@@ -106,7 +107,7 @@ def section_one():
             html.Div(
                 children=title_with_link(
                     text="Heatmap chart",
-                    id_button="explore-heatmap-chart-label",
+                    id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
                     doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
                 ),
             ),
@@ -118,7 +119,7 @@ def section_one():
                 children=title_with_tooltip(
                     text="Descriptive statistics",
                     tooltip_text="count, mean, std, min, max, and percentiles",
-                    id_button="table-explore",
+                    id_button=IdButtons.TABLE_EXPLORE,
                 ),
             ),
             html.Div(
@@ -215,7 +216,7 @@ def section_two_inputs():
                 children=title_with_tooltip(
                     text="Customizable heatmap",
                     tooltip_text=None,
-                    id_button="custom-heatmap-chart-label",
+                    id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
                 ),
             ),
             html.Div(
@@ -599,7 +600,7 @@ def section_three():
                 children=title_with_tooltip(
                     text="More charts",
                     tooltip_text=None,
-                    id_button="more-charts-label",
+                    id_button=IdButtons.MORE_CHARTS_LABEL,
                 ),
             ),
             section_three_inputs(),
