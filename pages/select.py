@@ -15,6 +15,7 @@ from pages.lib.extract_df import convert_data
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import mapping_dictionary
 from config import PageUrls, PageInfo, UnitSystem
 from pages.lib.utils import generate_chart_name
@@ -214,7 +215,10 @@ def submitted_data(
         Input(ElementIds.ID_SELECT_LINES_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SELECT_SI_IP_RADIO_INPUT, "value"),
     ],
-    [State(ElementIds.ID_SELECT_URL_STORE, "data"), State(ElementIds.ID_SELECT_LINES_STORE, "data")],
+    [
+        State(ElementIds.ID_SELECT_URL_STORE, "data"),
+        State(ElementIds.ID_SELECT_LINES_STORE, "data"),
+    ],
 )
 def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
@@ -374,6 +378,6 @@ def plot_location_epw_files(pathname):
         dcc.Graph(
             id=ElementIds.TAB_ONE_MAP,
             figure=fig,
-            config=generate_chart_name("epw_location_select"),
+            config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
         ),
     )

@@ -21,6 +21,7 @@ from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -446,7 +447,7 @@ def nv_heatmap(
     )
     units = generate_units_degree(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
         figure=fig,
     )
 
@@ -614,7 +615,7 @@ def nv_bar_chart(
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("barchart", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.BARCHART, meta, custom_inputs, units),
         figure=fig,
     )
 

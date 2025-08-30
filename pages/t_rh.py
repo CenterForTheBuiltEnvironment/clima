@@ -6,6 +6,7 @@ from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -117,7 +118,9 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units_degree(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("DryBulbTemperature_yearly", meta, units),
+            config=generate_chart_name(
+                TabNames.DRY_BULB_TEMPERATURE_YEARLY, meta, units
+            ),
             figure=dbt_yearly,
         )
     else:
@@ -125,7 +128,7 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("RelativeHumidity_yearly", meta, units),
+            config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_YEARLY, meta, units),
             figure=rh_yearly,
         )
 
@@ -147,7 +150,9 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("DryBulbTemperature_daily", meta, units),
+            config=generate_chart_name(
+                TabNames.DRY_BULB_TEMPERATURE_DAILY, meta, units
+            ),
             figure=daily_profile(
                 df[
                     [
@@ -167,7 +172,7 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
     else:
         units = generate_units(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("RelativeHumidity_daily", meta, units),
+            config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_DAILY, meta, units),
             figure=daily_profile(
                 df[
                     [
@@ -204,7 +209,9 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("DryBulbTemperature_heatmap", meta, units),
+            config=generate_chart_name(
+                TabNames.DRY_BULB_TEMPERATURE_HEATMAP, meta, units
+            ),
             figure=heatmap(
                 df[
                     [
@@ -223,7 +230,7 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
     else:
         units = generate_units(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("RelativeHumidity_heatmap", meta, units),
+            config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_HEATMAP, meta, units),
             figure=heatmap(
                 df[
                     [

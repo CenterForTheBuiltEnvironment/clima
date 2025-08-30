@@ -1,6 +1,3 @@
-from enum import Enum
-
-
 class ColNames:
     # ==================== Time related column ====================
     YEAR = "year"  # year

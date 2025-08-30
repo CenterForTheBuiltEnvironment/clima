@@ -23,7 +23,10 @@ app.layout = dbc.Container(
 
 
 # callback for survey alert (dbc.Toast)
-@callback(Output(ElementIds.ID_MAIN_ALERT_AUTO, "is_open"), Input(ElementIds.ID_MAIN_INTERVAL_COMPONENT, "n_intervals"))
+@callback(
+    Output(ElementIds.ID_MAIN_ALERT_AUTO, "is_open"),
+    Input(ElementIds.ID_MAIN_INTERVAL_COMPONENT, "n_intervals"),
+)
 def display_alert(n):
     return n == 1
 

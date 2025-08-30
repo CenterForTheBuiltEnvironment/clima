@@ -14,6 +14,7 @@ from pages.lib.template_graphs import violin
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
     generate_chart_name,
     generate_units,
@@ -208,7 +209,7 @@ def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     map_world = dcc.Graph(
         id=ElementIds.GH_RAD_PROFILE_GRAPH,
-        config=generate_chart_name("map", meta),
+        config=generate_chart_name(TabNames.MAP, meta),
         figure=world_map(meta),
     )
 
@@ -417,7 +418,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
 
         chart = dcc.Graph(
             id=ElementIds.DEGREE_DAYS_CHART,
-            config=generate_chart_name("hdd_cdd", meta, custom_inputs, units),
+            config=generate_chart_name(TabNames.HDD_CDD, meta, custom_inputs, units),
             figure=fig,
         )
 
@@ -441,7 +442,7 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.TDB_PROFILE_GRAPH,
         className="violin-container",
-        config=generate_chart_name("DryBulbTemperature", meta, units),
+        config=generate_chart_name(TabNames.DRY_BULB_TEMPERATURE, meta, units),
         figure=violin(df, ColNames.DBT, global_local, si_ip),
     )
 
@@ -464,7 +465,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.WIND_PROFILE_GRAPH,
         className="violin-container",
-        config=generate_chart_name("WindSpeed", meta, units),
+        config=generate_chart_name(TabNames.WIND_SPEED, meta, units),
         figure=violin(df, ColNames.WIND_SPEED, global_local, si_ip),
     )
 
@@ -487,7 +488,7 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.RH_PROFILE_GRAPH,
         className="violin-container",
-        config=generate_chart_name("RelativeHumidity", meta, units),
+        config=generate_chart_name(TabNames.RELATIVE_HUMIDITY, meta, units),
         figure=violin(df, ColNames.RH, global_local, si_ip),
     )
 
@@ -510,7 +511,7 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.GH_RAD_PROFILE_GRAPH,
         className="violin-container",
-        config=generate_chart_name("GlobalHorizontalRadiation", meta, units),
+        config=generate_chart_name(TabNames.GLOBAL_HORIZONTAL_RADIATION, meta, units),
         figure=violin(df, ColNames.GLOB_HOR_RAD, global_local, si_ip),
     )
 

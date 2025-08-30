@@ -220,6 +220,6 @@ class ElementIds(str, Enum):
     ID_LAYOUT_LINES_STORE = "lines-store"
     TABS_CONTAINER = "tabs-container"
     TABS_PARENT = "tabs-parent"
-    TABS ="tabs"
+    TABS = "tabs"
     STORE_CONTAINER = "store-container"
     TABS_CONTENT = "tabs-content"

@@ -32,7 +32,11 @@ def alert():
                 className="survey-alert",
                 style={"position": "fixed", "top": 25, "right": 10, "width": 400},
             ),
-            dcc.Interval(id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT, interval=12 * 1000, n_intervals=0),
+            dcc.Interval(
+                id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
+                interval=12 * 1000,
+                n_intervals=0,
+            ),
         ],
     )
 

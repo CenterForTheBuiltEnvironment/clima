@@ -9,6 +9,7 @@ from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
     outdoor_dropdown_names,
 )
@@ -295,7 +296,7 @@ def update_tab_utci_value(
     custom_inputs = f"{var}"
     units = generate_units_degree(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
         figure=heatmap_with_filter(
             df,
             var,
@@ -393,7 +394,9 @@ def update_tab_utci_category(
     custom_inputs = f"{var}"
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap_category", meta, custom_inputs, units),
+        config=generate_chart_name(
+            TabNames.HEATMAP_CATEGORY, meta, custom_inputs, units
+        ),
         figure=utci_stress_cat,
     )
 
@@ -432,6 +435,6 @@ def update_tab_utci_summary_chart(
     custom_inputs = f"{var}"
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("summary", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.SUMMARY, meta, custom_inputs, units),
         figure=utci_summary_chart,
     )

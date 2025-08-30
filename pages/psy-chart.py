@@ -15,6 +15,7 @@ from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -514,5 +515,5 @@ def update_psych_chart(
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig
+        config=generate_chart_name(TabNames.PSY, meta, custom_inputs, units), figure=fig
     )

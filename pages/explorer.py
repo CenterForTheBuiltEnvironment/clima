@@ -15,6 +15,7 @@ from pages.lib.charts_data_explorer import (
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
     fig_config,
     dropdown_names,
@@ -652,7 +653,9 @@ def update_tab_yearly(_, var, global_local, df, meta, si_ip):
         custom_inputs = generate_custom_inputs(var)
         units = generate_units(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("yearly_explore", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.YEARLY_EXPLORE, meta, custom_inputs, units
+            ),
             figure=yearly_profile(df, var, global_local, si_ip),
         )
 
@@ -676,7 +679,9 @@ def update_tab_daily(_, var, global_local, df, meta, si_ip):
     units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("daily_explore", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.DAILY_EXPLORE, meta, custom_inputs, units
+            ),
             figure=daily_profile(df, var, global_local, si_ip),
         ),
     )
@@ -701,7 +706,9 @@ def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
     units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap_explore", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.HEATMAP_EXPLORE, meta, custom_inputs, units
+            ),
             figure=heatmap(df, var, global_local, si_ip),
         ),
     )
@@ -800,7 +807,9 @@ def update_heatmap(
         units = generate_units(si_ip)
         return (
             dcc.Graph(
-                config=generate_chart_name("heatmap", meta, custom_inputs, units),
+                config=generate_chart_name(
+                    TabNames.HEATMAP, meta, custom_inputs, units
+                ),
                 figure=heat_map,
             ),
             {},
@@ -815,7 +824,7 @@ def update_heatmap(
 
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap", meta, custom_inputs, units),
+            config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
             figure=heat_map,
         ),
         no_display,
@@ -900,7 +909,9 @@ def update_more_charts(
                 color="danger",
                 style={"text-align": "center", "marginTop": "2rem"},
             ), dcc.Graph(
-                config=generate_chart_name("scatter", meta, custom_inputs, units),
+                config=generate_chart_name(
+                    TabNames.SCATTER, meta, custom_inputs, units
+                ),
                 figure=two,
             )
         else:
@@ -908,10 +919,14 @@ def update_more_charts(
             custom_inputs_two = f"{var_x}-{var_y}"
             units = generate_units(si_ip)
             return dcc.Graph(
-                config=generate_chart_name("scatter", meta, custom_inputs_three, units),
+                config=generate_chart_name(
+                    TabNames.SCATTER, meta, custom_inputs_three, units
+                ),
                 figure=three,
             ), dcc.Graph(
-                config=generate_chart_name("scatter", meta, custom_inputs_two, units),
+                config=generate_chart_name(
+                    TabNames.SCATTER, meta, custom_inputs_two, units
+                ),
                 figure=two,
             )
 

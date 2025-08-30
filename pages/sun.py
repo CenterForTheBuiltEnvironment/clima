@@ -9,6 +9,7 @@ from dash_extensions.enrich import Output, Input, State, callback
 
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_sun import (
     monthly_solar,
@@ -223,7 +224,9 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
     monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, ColNames.TOT_SKY_COVER, [False], [False, "", 3, 7], True, si_ip)
+    cover = barchart(
+        df, ColNames.TOT_SKY_COVER, [False], [False, "", 3, 7], True, si_ip
+    )
     cover = cover.update_layout(
         margin=tight_margins,
         title="",
@@ -235,11 +238,11 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name(
-            "Global_and_Diffuse_Horizontal_Solar_Radiation", meta, units
+            TabNames.GLOBAL_AND_DIFFUSE_HORIZONTAL_SOLAR_RADIATION, meta, units
         ),
         figure=monthly,
     ), dcc.Graph(
-        config=generate_chart_name("cloud_cover", meta, units),
+        config=generate_chart_name(TabNames.CLOUD_COVER, meta, units),
         figure=cover,
     )
 
@@ -264,12 +267,16 @@ def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
     units = "" if var == "None" else generate_units(si_ip)
     if view == "polar":
         return dcc.Graph(
-            config=generate_chart_name("spherical_sunpath", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.SPHERICAL_SUNPATH, meta, custom_inputs, units
+            ),
             figure=polar_graph(df, meta, global_local, var, si_ip),
         )
     else:
         return dcc.Graph(
-            config=generate_chart_name("cartesian_sunpath", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.CARTESIAN_SUNPATH, meta, custom_inputs, units
+            ),
             figure=custom_cartesian_solar(df, meta, global_local, var, si_ip),
         )
 
@@ -292,7 +299,7 @@ def daily(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("daily", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.DAILY, meta, custom_inputs, units),
         figure=daily_profile(df, var, global_local, si_ip),
     )
 
@@ -314,6 +321,6 @@ def update_heatmap(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
         figure=heatmap(df, var, global_local, si_ip),
     )

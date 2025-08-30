@@ -8,6 +8,7 @@ from pages.lib.global_scheme import month_lst, container_row_center_full
 from pages.lib.template_graphs import heatmap, wind_rose
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -387,7 +388,7 @@ def update_annual_wind_rose(_, df, meta, si_ip):
     annual = wind_rose(df, "", [1, 12], [1, 24], True, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("annual_wind_rose", meta, units),
+        config=generate_chart_name(TabNames.ANNUAL_WIND_ROSE, meta, units),
         figure=annual,
     )
 
@@ -412,7 +413,7 @@ def update_tab_wind_speed(_, global_local, df, meta, si_ip):
     speed = heatmap(df, ColNames.WIND_SPEED, global_local, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name(ColNames.WIND_SPEED, meta, units),
+        config=generate_chart_name(TabNames.WIND_SPEED, meta, units),
         figure=speed,
     )
 
@@ -436,7 +437,7 @@ def update_tab_wind_direction(global_local, df, meta, si_ip):
     direction = heatmap(df, ColNames.WIND_DIR, global_local, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("wind_direction", meta, units),
+        config=generate_chart_name(TabNames.WIND_DIRECTION, meta, units),
         figure=direction,
     )
 
@@ -489,7 +490,9 @@ def update_custom_wind_rose(
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("custom_wind_rose", meta, custom_inputs, units),
+        config=generate_chart_name(
+            TabNames.CUSTOM_WIND_ROSE, meta, custom_inputs, units
+        ),
         figure=custom,
     )
 
@@ -592,19 +595,19 @@ def update_seasonal_graphs(_, df, meta, si_ip):
     units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("winter_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.WINTER_WIND_ROSE, meta, units),
             figure=winter,
         ),
         dcc.Graph(
-            config=generate_chart_name("spring_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.SPRING_WIND_ROSE, meta, units),
             figure=spring,
         ),
         dcc.Graph(
-            config=generate_chart_name("summer_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.SUMMER_WIND_ROSE, meta, units),
             figure=summer,
         ),
         dcc.Graph(
-            config=generate_chart_name("fall_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.FALL_WIND_ROSE, meta, units),
             figure=fall,
         ),
         winter_text,
@@ -690,15 +693,15 @@ def update_daily_graphs(_, df, meta, si_ip):
     units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("morning_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.MORNING_WIND_ROSE, meta, units),
             figure=morning,
         ),
         dcc.Graph(
-            config=generate_chart_name("noon_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.NOON_WIND_ROSE, meta, units),
             figure=noon,
         ),
         dcc.Graph(
-            config=generate_chart_name("night_wind_rose", meta, units),
+            config=generate_chart_name(TabNames.NIGHT_WIND_ROSE, meta, units),
             figure=night,
         ),
         morning_text,
