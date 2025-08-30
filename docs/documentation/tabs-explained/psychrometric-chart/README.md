@@ -23,4 +23,3 @@ Moreover, data can be filtered by date, time, or one of the [Clima dataframe](..
 Learn more about the Psychrometric tab by watching the following video.
 
 {% embed url="https://youtu.be/VJ_wOHadVdw?si=iAcBQpq3IgCNY-H6&t=582" %}
-

@@ -1,4 +1,5 @@
 from copy import deepcopy
+from pages.lib.global_element_ids import ElementIds
 
 import dash
 import dash_bootstrap_components as dbc
@@ -6,6 +7,9 @@ import numpy as np
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
+from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_sun import (
     monthly_solar,
@@ -57,7 +61,7 @@ def sun_path():
             html.Div(
                 children=title_with_link(
                     text="Sun path chart",
-                    id_button="sun-path-chart-label",
+                    id_button=IdButtons.SUN_PATH_CHART_LABEL,
                     doc_link=DocLinks.SUN_PATH_DIAGRAM,
                 ),
             ),
@@ -71,7 +75,7 @@ def sun_path():
                         style={"width": "10rem"},
                     ),
                     dropdown(
-                        id="custom-sun-view-dropdown",
+                        id=ElementIds.CUSTOM_SUN_VIEW_DROPDOWN,
                         options={
                             "Spherical": "polar",
                             "Cartesian": "cartesian",
@@ -91,7 +95,7 @@ def sun_path():
                         style={"width": "10rem"},
                     ),
                     dropdown(
-                        id="custom-sun-var-dropdown",
+                        id=ElementIds.CUSTOM_SUN_VAR_DROPDOWN,
                         options=sc_dropdown_names,
                         value="None",
                         style={"width": "20rem"},
@@ -101,7 +105,7 @@ def sun_path():
             dcc.Loading(
                 type="circle",
                 children=html.Div(
-                    id="custom-sunpath",
+                    id=ElementIds.CUSTOM_SUNPATH,
                 ),
             ),
         ],
@@ -116,7 +120,7 @@ def explore_daily_heatmap():
             html.Div(
                 children=title_with_link(
                     text="Daily charts",
-                    id_button="daily-chart-label",
+                    id_button=IdButtons.DAILY_CHART_LABEL,
                     doc_link=DocLinks.CUSTOM_HEATMAP,
                 ),
             ),
@@ -129,17 +133,17 @@ def explore_daily_heatmap():
                         style={"width": "10rem"},
                     ),
                     dropdown(
-                        id="tab4-explore-dropdown",
+                        id=ElementIds.TAB_EXPLORE_DROPDOWN,
                         options=sun_cloud_tab_explore_dropdown_names,
                         value="glob_hor_rad",
                         style={"width": "20rem"},
                     ),
                 ],
             ),
-            dcc.Loading(type="circle", children=html.Div(id="tab4-daily")),
+            dcc.Loading(type="circle", children=html.Div(id=ElementIds.TAB4_DAILY)),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id="tab4-heatmap"),
+                children=html.Div(id=ElementIds.TAB4_HEATMAP),
             ),
         ],
     )
@@ -147,7 +151,7 @@ def explore_daily_heatmap():
 
 def static_section():
     return html.Div(
-        id="static-section",
+        id=ElementIds.STATIC_SECTION,
         className="container-col full-width",
         children=[
             # ...
@@ -159,12 +163,15 @@ def layout():
     """Contents of tab four."""
     return html.Div(
         className="container-col",
-        id="tab-four-container",
+        id=ElementIds.TAB_FOUR_CONTAINER,
         children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
 
 
-@callback(Output("static-section", "children"), [Input("si-ip-radio-input", "value")])
+@callback(
+    Output(ElementIds.STATIC_SECTION, "children"),
+    [Input(ElementIds.ID_SUN_SI_IP_RADIO_INPUT, "value")],
+)
 def update_static_section(si_ip):
     hor_unit = "Wh/m²"
     if si_ip == UnitSystem.IP:
@@ -173,40 +180,40 @@ def update_static_section(si_ip):
         html.Div(
             children=title_with_link(
                 text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
-                id_button="monthly-chart-label",
+                id_button=IdButtons.MONTHLY_CHART_LABEL,
                 doc_link=DocLinks.SOLAR_RADIATION,
             ),
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(id="monthly-solar"),
+            children=html.Div(id=ElementIds.MONTHLY_SOLAR),
         ),
         html.Div(
             children=title_with_link(
                 text="Cloud coverage",
-                id_button="cloud-chart-label",
+                id_button=IdButtons.CLOUD_CHART_LABEL,
                 doc_link=DocLinks.CLOUD_COVER,
             ),
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(id="cloud-cover"),
+            children=html.Div(id=ElementIds.CLOUD_COVER),
         ),
     ]
 
 
 @callback(
     [
-        Output("monthly-solar", "children"),
-        Output("cloud-cover", "children"),
+        Output(ElementIds.MONTHLY_SOLAR, "children"),
+        Output(ElementIds.CLOUD_COVER, "children"),
     ],
     [
-        Input("df-store", "modified_timestamp"),
+        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUN_DF_STORE, "data"),
+        State(ElementIds.ID_SUN_META_STORE, "data"),
+        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def monthly_and_cloud_chart(_, df, meta, si_ip):
@@ -217,7 +224,9 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
     monthly = monthly.update_layout(margin=tight_margins)
 
     # Cloud Cover
-    cover = barchart(df, "tot_sky_cover", [False], [False, "", 3, 7], True, si_ip)
+    cover = barchart(
+        df, ColNames.TOT_SKY_COVER, [False], [False, "", 3, 7], True, si_ip
+    )
     cover = cover.update_layout(
         margin=tight_margins,
         title="",
@@ -229,27 +238,27 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name(
-            "Global_and_Diffuse_Horizontal_Solar_Radiation", meta, units
+            TabNames.GLOBAL_AND_DIFFUSE_HORIZONTAL_SOLAR_RADIATION, meta, units
         ),
         figure=monthly,
     ), dcc.Graph(
-        config=generate_chart_name("cloud_cover", meta, units),
+        config=generate_chart_name(TabNames.CLOUD_COVER, meta, units),
         figure=cover,
     )
 
 
 @callback(
-    Output("custom-sunpath", "children"),
+    Output(ElementIds.CUSTOM_SUNPATH, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("custom-sun-view-dropdown", "value"),
-        Input("custom-sun-var-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.CUSTOM_SUN_VIEW_DROPDOWN, "value"),
+        Input(ElementIds.CUSTOM_SUN_VAR_DROPDOWN, "value"),
+        Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUN_DF_STORE, "data"),
+        State(ElementIds.ID_SUN_META_STORE, "data"),
+        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
@@ -258,27 +267,31 @@ def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
     units = "" if var == "None" else generate_units(si_ip)
     if view == "polar":
         return dcc.Graph(
-            config=generate_chart_name("spherical_sunpath", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.SPHERICAL_SUNPATH, meta, custom_inputs, units
+            ),
             figure=polar_graph(df, meta, global_local, var, si_ip),
         )
     else:
         return dcc.Graph(
-            config=generate_chart_name("cartesian_sunpath", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.CARTESIAN_SUNPATH, meta, custom_inputs, units
+            ),
             figure=custom_cartesian_solar(df, meta, global_local, var, si_ip),
         )
 
 
 @callback(
-    Output("tab4-daily", "children"),
+    Output(ElementIds.TAB4_DAILY, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("tab4-explore-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TAB_EXPLORE_DROPDOWN, "value"),
+        Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUN_DF_STORE, "data"),
+        State(ElementIds.ID_SUN_META_STORE, "data"),
+        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def daily(_, var, global_local, df, meta, si_ip):
@@ -286,28 +299,28 @@ def daily(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("daily", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.DAILY, meta, custom_inputs, units),
         figure=daily_profile(df, var, global_local, si_ip),
     )
 
 
 @callback(
-    Output("tab4-heatmap", "children"),
+    Output(ElementIds.TAB4_HEATMAP, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("tab4-explore-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TAB_EXPLORE_DROPDOWN, "value"),
+        Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_SUN_DF_STORE, "data"),
+        State(ElementIds.ID_SUN_META_STORE, "data"),
+        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_heatmap(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
         figure=heatmap(df, var, global_local, si_ip),
     )

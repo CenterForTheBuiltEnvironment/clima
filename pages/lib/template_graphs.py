@@ -9,17 +9,17 @@ from config import UnitSystem
 from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
-
+from pages.lib.global_column_names import ColNames
 from .utils import code_timer, determine_month_and_hour_filter
 
 
 def violin(df, var, global_local, si_ip):
     """Return day night violin based on the 'var' col"""
-    mask_day = (df["hour"] >= 8) & (df["hour"] < 20)
-    mask_night = (df["hour"] < 8) | (df["hour"] >= 20)
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    var_range = mapping_dictionary[var][si_ip]["range"]
-    var_name = mapping_dictionary[var]["name"]
+    mask_day = (df[ColNames.HOUR] >= 8) & (df[ColNames.HOUR] < 20)
+    mask_night = (df[ColNames.HOUR] < 8) | (df[ColNames.HOUR] >= 20)
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+    var_name = mapping_dictionary[var][ColNames.NAME]
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
@@ -32,7 +32,7 @@ def violin(df, var, global_local, si_ip):
     fig = go.Figure()
     fig.add_trace(
         go.Violin(
-            x=df["fake_year"],
+            x=df[ColNames.FAKE_YEAR],
             y=data_day,
             line_color="#ffaa00",
             name="Day",
@@ -44,7 +44,7 @@ def violin(df, var, global_local, si_ip):
 
     fig.add_trace(
         go.Violin(
-            x=df["fake_year"],
+            x=df[ColNames.FAKE_YEAR],
             y=data_night,
             line_color="#00264d",
             name="Night",
@@ -85,10 +85,10 @@ def violin(df, var, global_local, si_ip):
 @code_timer
 def yearly_profile(df, var, global_local, si_ip):
     """Return yearly profile figure based on the 'var' col."""
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    var_range = mapping_dictionary[var][si_ip]["range"]
-    var_name = mapping_dictionary[var]["name"]
-    var_color = mapping_dictionary[var]["color"]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+    var_name = mapping_dictionary[var][ColNames.NAME]
+    var_color = mapping_dictionary[var][ColNames.COLOR]
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -107,14 +107,18 @@ def yearly_profile(df, var, global_local, si_ip):
     )
 
     trace1 = go.Bar(
-        x=df["UTC_time"].dt.date.unique(),
+        x=df[ColNames.UTC_TIME].dt.date.unique(),
         y=dbt_day["max"] - dbt_day["min"],
         base=dbt_day["min"],
         marker_color=var_single_color,
         marker_opacity=0.3,
         name=var_name + " Range",
         customdata=np.stack(
-            (dbt_day["mean"], df.iloc[::24, :]["month_names"], df.iloc[::24, :]["day"]),
+            (
+                dbt_day["mean"],
+                df.iloc[::24, :][ColNames.MONTH_NAMES],
+                df.iloc[::24, :][ColNames.DAY],
+            ),
             axis=-1,
         ),
         hovertemplate=(
@@ -129,14 +133,18 @@ def yearly_profile(df, var, global_local, si_ip):
     )
 
     trace2 = go.Scatter(
-        x=df["UTC_time"].dt.date.unique(),
+        x=df[ColNames.UTC_TIME].dt.date.unique(),
         y=dbt_day["mean"],
         name="Average " + var_name,
         mode="lines",
         marker_color=var_single_color,
         marker_opacity=1,
         customdata=np.stack(
-            (dbt_day["mean"], df.iloc[::24, :]["month_names"], df.iloc[::24, :]["day"]),
+            (
+                dbt_day["mean"],
+                df.iloc[::24, :][ColNames.MONTH_NAMES],
+                df.iloc[::24, :][ColNames.DAY],
+            ),
             axis=-1,
         ),
         hovertemplate=(
@@ -146,16 +154,16 @@ def yearly_profile(df, var, global_local, si_ip):
         ),
     )
 
-    if var == "DBT":
+    if var == ColNames.DBT:
         # plot ashrae adaptive comfort limits (80%)
-        lo80 = df.groupby("DOY")["adaptive_cmf_80_low"].mean().values
-        hi80 = df.groupby("DOY")["adaptive_cmf_80_up"].mean().values
-        rmt = df.groupby("DOY")["adaptive_cmf_rmt"].mean().values
+        lo80 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_80_LOW].mean().values
+        hi80 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_80_UP].mean().values
+        rmt = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_RMT].mean().values
         # set color https://github.com/CenterForTheBuiltEnvironment/clima/issues/113 implementation
         var_bar_colors = np.where((rmt > 40) | (rmt < 10), "lightgray", "darkgray")
 
         trace3 = go.Bar(
-            x=df["UTC_time"].dt.date.unique(),
+            x=df[ColNames.UTC_TIME].dt.date.unique(),
             y=hi80 - lo80,
             base=lo80,
             name="ASHRAE adaptive comfort (80%)",
@@ -167,11 +175,11 @@ def yearly_profile(df, var, global_local, si_ip):
         )
 
         # plot ashrae adaptive comfort limits (90%)
-        lo90 = df.groupby("DOY")["adaptive_cmf_90_low"].mean().values
-        hi90 = df.groupby("DOY")["adaptive_cmf_90_up"].mean().values
+        lo90 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_90_LOW].mean().values
+        hi90 = df.groupby(ColNames.DOY)[ColNames.ADAPTIVE_CMF_90_UP].mean().values
 
         trace4 = go.Bar(
-            x=df["UTC_time"].dt.date.unique(),
+            x=df[ColNames.UTC_TIME].dt.date.unique(),
             y=hi90 - lo90,
             base=lo90,
             name="ASHRAE adaptive comfort (90%)",
@@ -183,17 +191,17 @@ def yearly_profile(df, var, global_local, si_ip):
         )
         data = [trace3, trace4, trace1, trace2]
 
-    elif var == "RH":
+    elif var == ColNames.RH:
         # plot relative Humidity limits (30-70%)
         lo_rh = [30] * 365
         hi_rh = [70] * 365
-        lo_rh_df = pd.DataFrame({"loRH": lo_rh})
-        hi_rh_df = pd.DataFrame({"hiRH": hi_rh})
+        lo_rh_df = pd.DataFrame({ColNames.LO_RH: lo_rh})
+        hi_rh_df = pd.DataFrame({ColNames.HI_RH: hi_rh})
 
         trace3 = go.Bar(
-            x=df["UTC_time"].dt.date.unique(),
-            y=hi_rh_df["hiRH"] - lo_rh_df["loRH"],
-            base=lo_rh_df["loRH"],
+            x=df[ColNames.UTC_TIME].dt.date.unique(),
+            y=hi_rh_df[ColNames.HI_RH] - lo_rh_df[ColNames.LO_RH],
+            base=lo_rh_df[ColNames.LO_RH],
             name="humidity comfort band",
             marker_opacity=0.3,
             marker_color="silver",
@@ -238,10 +246,10 @@ def yearly_profile(df, var, global_local, si_ip):
 # @code_timer
 def daily_profile(df, var, global_local, si_ip):
     """Return the daily profile based on the 'var' col."""
-    var_name = mapping_dictionary[var]["name"]
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    var_range = mapping_dictionary[var][si_ip]["range"]
-    var_color = mapping_dictionary[var]["color"]
+    var_name = mapping_dictionary[var][ColNames.NAME]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+    var_color = mapping_dictionary[var][ColNames.COLOR]
     if global_local == "global":
         # Set Global values for Max and minimum
         range_y = var_range
@@ -252,7 +260,9 @@ def daily_profile(df, var, global_local, si_ip):
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
-    var_month_ave = df.groupby(["month", "hour"])[var].median().reset_index()
+    var_month_ave = (
+        df.groupby([ColNames.MONTH, ColNames.HOUR])[var].median().reset_index()
+    )
     fig = make_subplots(
         rows=1,
         cols=12,
@@ -263,15 +273,15 @@ def daily_profile(df, var, global_local, si_ip):
     for i in range(12):
         fig.add_trace(
             go.Scatter(
-                x=df.loc[df["month"] == i + 1, "hour"],
-                y=df.loc[df["month"] == i + 1, var],
+                x=df.loc[df[ColNames.MONTH] == i + 1, ColNames.HOUR],
+                y=df.loc[df[ColNames.MONTH] == i + 1, var],
                 mode="markers",
                 marker_color=var_single_color,
                 opacity=0.5,
                 marker_size=3,
                 name=month_lst[i],
                 showlegend=False,
-                customdata=df.loc[df["month"] == i + 1, "month_names"],
+                customdata=df.loc[df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES],
                 hovertemplate=(
                     "<b>"
                     + var
@@ -286,8 +296,10 @@ def daily_profile(df, var, global_local, si_ip):
 
         fig.add_trace(
             go.Scatter(
-                x=var_month_ave.loc[var_month_ave["month"] == i + 1, "hour"],
-                y=var_month_ave.loc[var_month_ave["month"] == i + 1, var],
+                x=var_month_ave.loc[
+                    var_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR
+                ],
+                y=var_month_ave.loc[var_month_ave[ColNames.MONTH] == i + 1, var],
                 mode="lines",
                 line_color=var_single_color,
                 line_width=3,
@@ -331,9 +343,9 @@ def heatmap_with_filter(
     title,
 ):
     """General function that returns a heatmap."""
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    var_range = mapping_dictionary[var][si_ip]["range"]
-    var_color = mapping_dictionary[var]["color"]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+    var_color = mapping_dictionary[var][ColNames.COLOR]
 
     df = filter_df_by_month_and_hour(
         df, time_filter, month, hour, invert_month, invert_hour, var
@@ -343,7 +355,7 @@ def heatmap_with_filter(
         month, hour, invert_month, invert_hour
     )
 
-    if df.dropna(subset=["month"]).shape[0] == 0:
+    if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
         return (
             dbc.Alert(
                 "No data is available in this location under these conditions. Please "
@@ -364,13 +376,13 @@ def heatmap_with_filter(
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
-            y=df["hour"] - 0.5,  # Offset by 0.5 to center the hour labels
-            x=df["UTC_time"].dt.date,
+            y=df[ColNames.HOUR] - 0.5,  # Offset by 0.5 to center the hour labels
+            x=df[ColNames.UTC_TIME].dt.date,
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
             zmax=range_z[1],
-            customdata=np.stack((df["month_names"], df["day"]), axis=-1),
+            customdata=np.stack((df[ColNames.MONTH_NAMES], df[ColNames.DAY]), axis=-1),
             hovertemplate=(
                 "<b>"
                 + var
@@ -409,9 +421,9 @@ def heatmap_with_filter(
 
 def heatmap(df, var, global_local, si_ip):
     """General function that returns a heatmap."""
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    var_range = mapping_dictionary[var][si_ip]["range"]
-    var_color = mapping_dictionary[var]["color"]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+    var_color = mapping_dictionary[var][ColNames.COLOR]
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -423,13 +435,13 @@ def heatmap(df, var, global_local, si_ip):
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
-            y=df["hour"],
-            x=df["UTC_time"].dt.date,
+            y=df[ColNames.HOUR],
+            x=df[ColNames.UTC_TIME].dt.date,
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
             zmax=range_z[1],
-            customdata=np.stack((df["month_names"], df["day"]), axis=-1),
+            customdata=np.stack((df[ColNames.MONTH_NAMES], df[ColNames.DAY]), axis=-1),
             hovertemplate=(
                 "<b>"
                 + var
@@ -478,16 +490,20 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     start_hour = hour[0]
     end_hour = hour[1]
     if start_month <= end_month:
-        df = df.loc[(df["month"] >= start_month) & (df["month"] <= end_month)]
+        df = df.loc[
+            (df[ColNames.MONTH] >= start_month) & (df[ColNames.MONTH] <= end_month)
+        ]
     else:
-        df = df.loc[(df["month"] <= end_month) | (df["month"] >= start_month)]
+        df = df.loc[
+            (df[ColNames.MONTH] <= end_month) | (df[ColNames.MONTH] >= start_month)
+        ]
     if start_hour <= end_hour:
-        df = df.loc[(df["hour"] > start_hour) & (df["hour"] <= end_hour)]
+        df = df.loc[(df[ColNames.HOUR] > start_hour) & (df[ColNames.HOUR] <= end_hour)]
     else:
-        df = df.loc[(df["hour"] <= end_hour) | (df["hour"] >= start_hour)]
+        df = df.loc[(df[ColNames.HOUR] <= end_hour) | (df[ColNames.HOUR] >= start_hour)]
 
-    spd_colors = mapping_dictionary["wind_speed"]["color"]
-    spd_unit = mapping_dictionary["wind_speed"][si_ip]["unit"]
+    spd_colors = mapping_dictionary[ColNames.WIND_SPEED][ColNames.COLOR]
+    spd_unit = mapping_dictionary[ColNames.WIND_SPEED][si_ip][ColNames.UNIT]
     spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
     if si_ip == UnitSystem.IP:
         spd_bins = convert_bins(spd_bins)
@@ -501,20 +517,24 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     # Create a temporary DataFrame with binned data
     df_binned = df.assign(
         WindSpd_bins=lambda d: pd.cut(
-            d["wind_speed"], bins=spd_bins, labels=spd_labels, right=True
+            d[ColNames.WIND_SPEED], bins=spd_bins, labels=spd_labels, right=True
         ),
         WindDir_bins=lambda d: pd.cut(
-            d["wind_dir"], bins=dir_bins, labels=dir_labels, right=False
+            d[ColNames.WIND_DIR], bins=dir_bins, labels=dir_labels, right=False
         ),
     )
 
     # Rename the category in the 'WindDir_bins' column
-    df_binned["WindDir_bins"] = df_binned["WindDir_bins"].rename({360.0: 0.0})
+    df_binned[ColNames.WIND_DIR_BINS] = df_binned[ColNames.WIND_DIR_BINS].rename(
+        {360.0: 0.0}
+    )
 
     rose = (
-        df_binned.groupby(by=["WindSpd_bins", "WindDir_bins"], observed=False)
+        df_binned.groupby(
+            by=[ColNames.WIND_SPD_BINS, ColNames.WIND_DIR_BINS], observed=False
+        )
         .size()
-        .unstack(level="WindSpd_bins")
+        .unstack(level=ColNames.WIND_SPD_BINS)
         .fillna(0)
         .assign(calm=lambda d: calm_count / d.shape[0])
         .sort_index(axis=1)
@@ -618,7 +638,7 @@ def thermal_stress_stacked_barchart(
         month, hour, invert_month, invert_hour
     )
 
-    if df.dropna(subset=["month"]).shape[0] == 0:
+    if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
         return (
             dbc.Alert(
                 "No data is available in this location under these conditions. Please "
@@ -631,12 +651,15 @@ def thermal_stress_stacked_barchart(
     isNormalized = True if len(normalize) != 0 else False
     if isNormalized:
         new_df = (
-            df.groupby("month")[var].value_counts(normalize=True).unstack(var).fillna(0)
+            df.groupby(ColNames.MONTH)[var]
+            .value_counts(normalize=True)
+            .unstack(var)
+            .fillna(0)
         )
         new_df = new_df.set_axis(categories, axis=1)
         new_df.reset_index(inplace=True)
     else:
-        new_df = df.groupby("month")[var].value_counts().unstack(var).fillna(0)
+        new_df = df.groupby(ColNames.MONTH)[var].value_counts().unstack(var).fillna(0)
         new_df = new_df.set_axis(categories, axis=1)
         new_df.reset_index(inplace=True)
 
@@ -714,12 +737,12 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
         end_hour = time_filter_info[2][1]
 
         filter_var = str(data_filter_info[1])
-        filter_name = mapping_dictionary[filter_var]["name"]
-        filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
+        filter_name = mapping_dictionary[filter_var][ColNames.NAME]
+        filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]
 
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    var_name = mapping_dictionary[var]["name"]
-    var_color = mapping_dictionary[var]["color"]
+    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    var_name = mapping_dictionary[var][ColNames.NAME]
+    var_color = mapping_dictionary[var][ColNames.COLOR]
 
     color_below = var_color[0]
     color_above = var_color[-1]
@@ -740,13 +763,13 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
         query = (
             f"month=={str(i)} and ({filter_var}>={min_val} and {filter_var}<={max_val})"
         )
-        a = new_df.query(query)["DOY"].count()
+        a = new_df.query(query)[ColNames.DOY].count()
         month_in.append(a)
         query = f"month=={str(i)} and ({filter_var}<{min_val})"
-        b = new_df.query(query)["DOY"].count()
+        b = new_df.query(query)[ColNames.DOY].count()
         month_below.append(b)
         query = f"month=={str(i)} and {filter_var}>{max_val}"
-        c = new_df.query(query)["DOY"].count()
+        c = new_df.query(query)[ColNames.DOY].count()
         month_above.append(c)
 
     go.Figure()
@@ -830,17 +853,19 @@ def filter_df_by_month_and_hour(
 
     if time_filter:
         if start_month <= end_month:
-            mask = (df["month"] < start_month) | (df["month"] > end_month)
+            mask = (df[ColNames.MONTH] < start_month) | (df[ColNames.MONTH] > end_month)
             df.loc[mask, var] = None
         else:
-            mask = (df["month"] >= end_month) & (df["month"] <= start_month)
+            mask = (df[ColNames.MONTH] >= end_month) & (
+                df[ColNames.MONTH] <= start_month
+            )
             df.loc[mask, var] = None
 
         if start_hour <= end_hour:
-            mask = (df["hour"] <= start_hour) | (df["hour"] > end_hour)
+            mask = (df[ColNames.HOUR] <= start_hour) | (df[ColNames.HOUR] > end_hour)
             df.loc[mask, var] = None
         else:
-            mask = (df["hour"] > end_hour) & (df["hour"] <= start_hour)
+            mask = (df[ColNames.HOUR] > end_hour) & (df[ColNames.HOUR] <= start_hour)
             df.loc[mask, var] = None
 
     return df

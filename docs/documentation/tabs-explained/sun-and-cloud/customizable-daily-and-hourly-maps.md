@@ -11,4 +11,3 @@ The chart above shows the [scatter plot](https://en.wikipedia.org/wiki/Scatter\_
 [Heat maps](https://en.wikipedia.org/wiki/Heat\_map) allow the intensity of values to be perceived through color palettes. These graphs are very helpful in seeing how magnitudes vary throughout the year.
 
 <figure><img src="../../../.gitbook/assets/Daily sun exa.png" alt=""><figcaption><p>Examples of daily graphs with different variables (from top left to bottom right): global horizontal radiation, global horizontal illuminance, zenith luminance, opaque sky cover</p></figcaption></figure>
-

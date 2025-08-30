@@ -26,4 +26,3 @@ This allows the user to identify climatic patterns in relation to the apparent s
 Learn more about the Sun and Clouds tab by watching the following video.
 
 {% embed url="https://youtu.be/VJ_wOHadVdw?si=mB2xNH57MWW_4CRR&t=447" %}
-

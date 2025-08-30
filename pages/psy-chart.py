@@ -12,6 +12,10 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
+from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_column_names import ColNames
+from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
@@ -71,7 +75,7 @@ def inputs():
                                 style={"flex": "30%"},
                             ),
                             dropdown(
-                                id="psy-color-by-dropdown",
+                                id=ElementIds.PSY_COLOR_BY_DROPDOWN,
                                 options=psy_dropdown_names,
                                 value="Frequency",
                                 style={"flex": "70%"},
@@ -88,7 +92,7 @@ def inputs():
                     dbc.Button(
                         "Apply month and hour filter",
                         color="primary",
-                        id="month-hour-filter",
+                        id=ElementIds.MONTH_HOUR_FILTER,
                         className="mb-2",
                         n_clicks=0,
                     ),
@@ -98,7 +102,7 @@ def inputs():
                             html.H6("Month Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
-                                    id="psy-month-slider",
+                                    id=ElementIds.PSY_MONTH_SLIDER,
                                     min=1,
                                     max=12,
                                     step=1,
@@ -117,7 +121,7 @@ def inputs():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-month-psy",
+                                id=ElementIds.INVERT_MONTH_PSY,
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -128,7 +132,7 @@ def inputs():
                             html.H6("Hour Range", style={"flex": "20%"}),
                             html.Div(
                                 dcc.RangeSlider(
-                                    id="psy-hour-slider",
+                                    id=ElementIds.PSY_HOUR_SLIDER,
                                     min=0,
                                     max=24,
                                     step=1,
@@ -147,7 +151,7 @@ def inputs():
                                     {"label": "Invert", "value": "invert"},
                                 ],
                                 value=[],
-                                id="invert-hour-psy",
+                                id=ElementIds.INVERT_HOUR_PSY,
                                 labelStyle={"flex": "30%"},
                             ),
                         ],
@@ -160,7 +164,7 @@ def inputs():
                     dbc.Button(
                         "Apply filter",
                         color="primary",
-                        id="data-filter",
+                        id=ElementIds.DATA_FILTER,
                         className="mb-2",
                         n_clicks=0,
                     ),
@@ -171,9 +175,9 @@ def inputs():
                                 children=["Filter Variable:"], style={"flex": "30%"}
                             ),
                             dropdown(
-                                id="psy-var-dropdown",
+                                id=ElementIds.PSY_VAR_DROPDOWN,
                                 options=dropdown_names,
-                                value="RH",
+                                value=ColNames.RH,
                                 style={"flex": "70%"},
                             ),
                         ],
@@ -183,7 +187,7 @@ def inputs():
                         children=[
                             html.H6(children=["Min Value:"], style={"flex": "30%"}),
                             dbc.Input(
-                                id="psy-min-val",
+                                id=ElementIds.PSY_MIN_VAL,
                                 placeholder="Enter a number for the min val",
                                 type="number",
                                 step=1,
@@ -197,7 +201,7 @@ def inputs():
                         children=[
                             html.H6(children=["Max Value:"], style={"flex": "30%"}),
                             dbc.Input(
-                                id="psy-max-val",
+                                id=ElementIds.PSY_MAX_VAL,
                                 placeholder="Enter a number for the max val",
                                 type="number",
                                 value=100,
@@ -217,7 +221,7 @@ def layout():
         html.Div(
             children=title_with_link(
                 text="Psychrometric Chart",
-                id_button="Psychrometric-Chart-chart",
+                id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
         ),
@@ -225,7 +229,7 @@ def layout():
             type="circle",
             children=html.Div(
                 className="container-col",
-                children=[inputs(), html.Div(id="psych-chart")],
+                children=[inputs(), html.Div(id=ElementIds.PSYCH_CHART)],
             ),
         ),
     )
@@ -233,25 +237,25 @@ def layout():
 
 # psychrometric chart
 @callback(
-    Output("psych-chart", "children"),
+    Output(ElementIds.PSYCH_CHART, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("psy-color-by-dropdown", "value"),
-        Input("month-hour-filter", "n_clicks"),
-        Input("data-filter", "n_clicks"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.ID_PSY_CHART_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.PSY_COLOR_BY_DROPDOWN, "value"),
+        Input(ElementIds.MONTH_HOUR_FILTER, "n_clicks"),
+        Input(ElementIds.DATA_FILTER, "n_clicks"),
+        Input(ElementIds.ID_PSY_CHART_GLOBAL_LOCAL_RADIO_INPUT, "value"),
     ],
     [
-        State("df-store", "data"),
-        State("psy-month-slider", "value"),
-        State("psy-hour-slider", "value"),
-        State("psy-min-val", "value"),
-        State("psy-max-val", "value"),
-        State("psy-var-dropdown", "value"),
-        State("meta-store", "data"),
-        State("invert-month-psy", "value"),
-        State("invert-hour-psy", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.ID_PSY_CHART_DF_STORE, "data"),
+        State(ElementIds.PSY_MONTH_SLIDER, "value"),
+        State(ElementIds.PSY_HOUR_SLIDER, "value"),
+        State(ElementIds.PSY_MIN_VAL, "value"),
+        State(ElementIds.PSY_MAX_VAL, "value"),
+        State(ElementIds.PSY_VAR_DROPDOWN, "value"),
+        State(ElementIds.ID_PSY_CHART_META_STORE, "data"),
+        State(ElementIds.INVERT_MONTH_PSY, "value"),
+        State(ElementIds.INVERT_HOUR_PSY, "value"),
+        State(ElementIds.ID_PSY_CHART_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_psych_chart(
@@ -287,7 +291,7 @@ def update_psych_chart(
             mask = (df[data_filter_var] >= max_val) & (df[data_filter_var] <= min_val)
             df[mask] = None
 
-    if df.dropna(subset=["month"]).shape[0] == 0:
+    if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
         return (
             dbc.Alert(
                 "No data is available in this location under these conditions. Please "
@@ -304,25 +308,25 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = mapping_dictionary[var][si_ip]["unit"]
+        var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
 
-        var_name = mapping_dictionary[var]["name"]
+        var_name = mapping_dictionary[var][ColNames.NAME]
 
-        var_color = mapping_dictionary[var]["color"]
+        var_color = mapping_dictionary[var][ColNames.COLOR]
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = mapping_dictionary["DBT"][si_ip]["range"]
-        var_range_y = mapping_dictionary["hr"][si_ip]["range"]
+        var_range_x = mapping_dictionary[ColNames.DBT][si_ip][ColNames.RANGE]
+        var_range_y = mapping_dictionary[ColNames.HR][si_ip][ColNames.RANGE]
 
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df["DBT"].max() / 5)
-        data_min = 5 * floor(df["DBT"].min() / 5)
+        data_max = 5 * ceil(df[ColNames.DBT].max() / 5)
+        data_min = 5 * floor(df[ColNames.DBT].min() / 5)
         var_range_x = [data_min, data_max]
 
-        data_max = round(df["hr"].max(), 4)
-        data_min = round(df["hr"].min(), 4)
+        data_max = round(df[ColNames.HR].max(), 4)
+        data_min = round(df[ColNames.HR].min(), 4)
         var_range_y = [data_min * 1000, data_max * 1000]
 
     title = "Psychrometric Chart"
@@ -338,7 +342,7 @@ def update_psych_chart(
         hr_list = np.vectorize(psy.psy_ta_rh)(dbt_list, rh)
         hr_df = pd.DataFrame.from_records(hr_list)
         name = "rh" + str(rh)
-        rh_df[name] = hr_df["hr"]
+        rh_df[name] = hr_df[ColNames.HR]
 
     fig = go.Figure()
 
@@ -368,13 +372,13 @@ def update_psych_chart(
             )
         )
 
-    df_hr_multiply = list(df["hr"])
+    df_hr_multiply = list(df[ColNames.HR])
     for k in range(len(df_hr_multiply)):
         df_hr_multiply[k] = df_hr_multiply[k] * 1000
     if var == "None":
         fig.add_trace(
             go.Scatter(
-                x=df["DBT"],
+                x=df[ColNames.DBT],
                 y=df_hr_multiply,
                 showlegend=False,
                 mode="markers",
@@ -384,16 +388,16 @@ def update_psych_chart(
                     showscale=False,
                     opacity=0.2,
                 ),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
+                hovertemplate=mapping_dictionary[ColNames.DBT][ColNames.NAME]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"]["name"],
+                + mapping_dictionary[ColNames.DBT][ColNames.NAME],
                 name="",
             )
         )
     elif var == "Frequency":
         fig.add_trace(
             go.Histogram2d(
-                x=df["DBT"],
+                x=df[ColNames.DBT],
                 y=df_hr_multiply,
                 name="",
                 colorscale=var_color,
@@ -437,7 +441,7 @@ def update_psych_chart(
 
         fig.add_trace(
             go.Scatter(
-                x=df["DBT"],
+                x=df[ColNames.DBT],
                 y=df_hr_multiply,
                 showlegend=False,
                 mode="markers",
@@ -449,22 +453,24 @@ def update_psych_chart(
                     colorscale=var_color,
                     colorbar=var_colorbar,
                 ),
-                customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
+                customdata=np.stack(
+                    (df[ColNames.RH], df["h"], df[var], df["t_dp"]), axis=-1
+                ),
+                hovertemplate=mapping_dictionary[ColNames.DBT][ColNames.NAME]
                 + ": %{x:.2f}"
-                + mapping_dictionary["DBT"][si_ip]["unit"]
+                + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
                 + "<br>"
-                + mapping_dictionary["RH"]["name"]
+                + mapping_dictionary[ColNames.RH][ColNames.NAME]
                 + ": %{customdata[0]:.2f}"
-                + mapping_dictionary["RH"][si_ip]["unit"]
+                + mapping_dictionary[ColNames.RH][si_ip][ColNames.UNIT]
                 + "<br>"
-                + mapping_dictionary["h"]["name"]
+                + mapping_dictionary["h"][ColNames.NAME]
                 + ": %{customdata[1]:.2f}"
-                + mapping_dictionary["h"][si_ip]["unit"]
+                + mapping_dictionary["h"][si_ip][ColNames.UNIT]
                 + "<br>"
-                + mapping_dictionary["t_dp"]["name"]
+                + mapping_dictionary["t_dp"][ColNames.NAME]
                 + ": %{customdata[3]:.2f}"
-                + mapping_dictionary["t_dp"][si_ip]["unit"]
+                + mapping_dictionary["t_dp"][si_ip][ColNames.UNIT]
                 + "<br>"
                 + "<br>"
                 + var_name
@@ -474,8 +480,12 @@ def update_psych_chart(
             )
         )
 
-    xtitle_name = "Temperature" + "  " + mapping_dictionary["DBT"][si_ip]["unit"]
-    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary["hr"][si_ip]["unit"]
+    xtitle_name = (
+        "Temperature" + "  " + mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
+    )
+    ytitle_name = (
+        "Humidity Ratio" + "  " + mapping_dictionary[ColNames.HR][si_ip][ColNames.UNIT]
+    )
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
         title_text=xtitle_name,
@@ -505,5 +515,5 @@ def update_psych_chart(
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig
+        config=generate_chart_name(TabNames.PSY, meta, custom_inputs, units), figure=fig
     )

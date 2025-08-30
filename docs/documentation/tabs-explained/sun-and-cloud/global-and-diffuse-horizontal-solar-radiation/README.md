@@ -12,3 +12,4 @@ Typical daily graphs showing the amount of energy gained from the sun have many 
 * evaluating sustainable **renewable energy solutions** such as solar thermal or photovoltaic panels.
 
 The integral of the curves in the graphs is the total energy (in Wh/m²), supplied by the sun. Be careful in considering the [different types of solar radiation.](global-diffuse-and-normal-solar-radiation-explained.md)
+

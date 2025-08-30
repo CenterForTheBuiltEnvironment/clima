@@ -1,4 +1,5 @@
 import plotly.io as pio
+from pages.lib.global_column_names import ColNames
 
 from config import UnitSystem
 
@@ -900,20 +901,24 @@ variables_outdoor_dropdown = [
 ]
 
 sun_cloud_tab_dropdown_names = {
-    mapping_dictionary[key]["name"]: key for key in variables_sun_cloud_tab_dropdown
+    mapping_dictionary[key][ColNames.NAME]: key
+    for key in variables_sun_cloud_tab_dropdown
 }
 
-dropdown_names = {mapping_dictionary[key]["name"]: key for key in variables_dropdown}
+dropdown_names = {
+    mapping_dictionary[key][ColNames.NAME]: key for key in variables_dropdown
+}
 
 more_variables_dropdown = {
-    mapping_dictionary[key]["name"]: key for key in variables_more_variables_dropdown
+    mapping_dictionary[key][ColNames.NAME]: key
+    for key in variables_more_variables_dropdown
 }
 
 sun_cloud_tab_explore_dropdown_names = {
-    mapping_dictionary[key]["name"]: key
+    mapping_dictionary[key][ColNames.NAME]: key
     for key in variables_sun_cloud_tab_explore_dropdown
 }
 
 outdoor_dropdown_names = {
-    mapping_dictionary[key]["name"]: key for key in variables_outdoor_dropdown
+    mapping_dictionary[key][ColNames.NAME]: key for key in variables_outdoor_dropdown
 }
