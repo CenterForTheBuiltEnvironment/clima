@@ -500,8 +500,8 @@ def nv_bar_chart(
         month, hour, invert_month, invert_hour
     )
 
-    var = "DBT"
-    filter_var = "DPT"
+    var = ColNames.DBT
+    filter_var = ColNames.DPT
 
     var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
     filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]

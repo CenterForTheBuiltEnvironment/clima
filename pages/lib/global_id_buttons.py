@@ -5,6 +5,7 @@ class IdButtons:
     TABLE_TMP_RH = "table-tmp-rh"
 
     DAILY_ROSE_CHART = "daily-rose-chart"
+    SEASONAL_WIND_ROSE_DOC = "seasonal-wind-rose-doc"
     CLIMATE_PROFILES_CHART = "climate-profiles-chart"
     PSYCHROMETRIC_CHART_CHART = "Psychrometric-Chart-chart"
     CUSTOM_ROSE_CHART = "custom-rose-chart"
