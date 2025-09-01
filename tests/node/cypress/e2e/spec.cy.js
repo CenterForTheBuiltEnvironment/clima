@@ -35,7 +35,7 @@ describe('Clima', () => {
 
     // Temperature and Humidity
     click_tab('Temperature and Humidity');
-    cy.contains('Yearly chart');
+    cy.contains('Yearly Chart');
     cy.contains('Dry bulb temperature (°C)');
     // TODO: simulate mouseover
     cy.contains('Daily chart');

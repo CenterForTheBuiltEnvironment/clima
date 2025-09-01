@@ -3,14 +3,15 @@ import dash
 from dash import dcc, html
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
-
+from pages.lib.global_column_names import ColNames
 from config import DocLinks, UnitSystem
+from pages.lib.global_element_ids import ElementIds
 
 
 def alert():
     """Alert for survey."""
     return html.Div(
-        id="alert-container",
+        id=ElementIds.ALERT_CONTAINER,
         children=[
             dbc.Toast(
                 [
@@ -23,7 +24,7 @@ def alert():
                     ),
                     "! ☀️",
                 ],
-                id="alert-auto",
+                id=ElementIds.ID_LAYOUT_ALERT_AUTO,
                 header="CBE Clima User Survey",
                 icon="info",
                 is_open=False,
@@ -31,7 +32,11 @@ def alert():
                 className="survey-alert",
                 style={"position": "fixed", "top": 25, "right": 10, "width": 400},
             ),
-            dcc.Interval(id="interval-component", interval=12 * 1000, n_intervals=0),
+            dcc.Interval(
+                id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
+                interval=12 * 1000,
+                n_intervals=0,
+            ),
         ],
     )
 
@@ -41,7 +46,7 @@ def footer():
     return dbc.Row(
         align="center",
         justify="between",
-        id="footer-container",
+        id=ElementIds.FOOTER_CONTAINER,
         children=[
             dbc.Col(
                 children=[
@@ -134,7 +139,7 @@ def footer():
 def banner():
     """Build the banner at the top of the page."""
     return html.Div(
-        id="banner",
+        id=ElementIds.BANNER,
         children=[
             dmc.Group(
                 position="apart",
@@ -159,12 +164,12 @@ def banner():
                                     dmc.Title(
                                         "CBE Clima Tool",
                                         order=1,
-                                        id="banner-title",
+                                        id=ElementIds.BANNER_TITLE,
                                         style={"fontSize": "2rem"},
                                     ),
                                     dmc.Text(
                                         "Current Location:",
-                                        id="banner-subtitle",
+                                        id=ElementIds.ID_LAYOUT_BANNER_SUBTITLE,
                                         size="sm",
                                     ),
                                 ],
@@ -186,7 +191,7 @@ def banner():
                                 style={"textDecoration": "none"},
                             ),
                             dmc.SegmentedControl(
-                                id="global-local-radio-input",
+                                id=ElementIds.ID_LAYOUT_GLOBAL_LOCAL_RADIO_INPUT,
                                 value="local",
                                 radius="md",
                                 data=[
@@ -195,7 +200,7 @@ def banner():
                                 ],
                             ),
                             dmc.SegmentedControl(
-                                id="si-ip-radio-input",
+                                id=ElementIds.ID_LAYOUT_SI_IP_RADIO_INPUT,
                                 value=UnitSystem.SI,
                                 radius="md",
                                 data=[
@@ -219,32 +224,32 @@ def banner():
 
 def store():
     return html.Div(
-        id="store",
+        id=ElementIds.STORE,
         children=[
-            dcc.Store(id="df-store", storage_type="session"),
-            dcc.Store(id="meta-store", storage_type="session"),
-            dcc.Store(id="url-store", storage_type="session"),
-            dcc.Store(id="si-ip-unit-store", storage_type="session"),
-            dcc.Store(id="lines-store", storage_type="session"),
+            dcc.Store(id=ElementIds.ID_LAYOUT_DF_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.ID_LAYOUT_META_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.ID_LAYOUT_URL_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.ID_LAYOUT_SI_IP_UNIT_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.ID_LAYOUT_LINES_STORE, storage_type="session"),
         ],
     )
 
 
 def build_tabs():
     return html.Div(
-        id="tabs-container",
+        id=ElementIds.TABS_CONTAINER,
         children=[
             html.Div(
-                id="tabs-parent",
+                id=ElementIds.TABS_PARENT,
                 className="custom-tabs",
                 children=[
                     dbc.Nav(
                         [
                             dbc.NavItem(
                                 dbc.NavLink(
-                                    page["name"],
-                                    id=page["path"],
-                                    href=page["path"],
+                                    page[ColNames.NAME],
+                                    id=page[ColNames.PATH],
+                                    href=page[ColNames.PATH],
                                     active="exact",
                                     className="nav-link",
                                     disabled=True,
@@ -252,9 +257,9 @@ def build_tabs():
                                 className="custom-tab",
                             )
                             for page in dash.page_registry.values()
-                            if page["name"] not in ["404", "changelog"]
+                            if page[ColNames.NAME] not in ["404", "changelog"]
                         ],
-                        id="tabs",
+                        id=ElementIds.TABS,
                         class_name="tab-container",
                         pills=True,
                         justified=True,
@@ -262,11 +267,11 @@ def build_tabs():
                 ],
             ),
             html.Div(
-                id="store-container",
+                id=ElementIds.STORE_CONTAINER,
                 children=[
                     store(),
                     html.Div(
-                        id="tabs-content",
+                        id=ElementIds.TABS_CONTENT,
                         children=[
                             alert(),  # alert can be removed after survey is done
                             dash.page_container,

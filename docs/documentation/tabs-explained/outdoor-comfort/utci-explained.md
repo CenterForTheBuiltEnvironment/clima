@@ -18,3 +18,4 @@ The values are then converted into a scale assessing thermal stress, either beca
 <figure><img src="../../../.gitbook/assets/UTCI Index copia.png" alt=""><figcaption><p>UTCI heat stress index heatmap in the four conditions for <strong>Rome, ITA</strong></p></figcaption></figure>
 
 The UTCI is a useful tool to design the outdoor space, to maximize the number of comfortable hours. The designer can influence two factors out of the four driving outdoor comfort: radiant temperature (i.e. exposure to the sun) and wind speed (i.e. exposure to the wind).
+

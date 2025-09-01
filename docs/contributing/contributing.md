@@ -5,10 +5,71 @@ description: Guide on how to contribute to this project
 # How to contribute
 
 First off, thanks for taking the time to contribute!
+We use GitHub as our main collaboration platform. Please work from the `development` branch, create small feature branches, and open focused pull requests. Follow Conventional Commit messages (e.g., `feat:`, `fix:`, `docs:`), format Python code with Black, and add tests where needed. Never merge your own PR—wait for review and address all comments (including AI reviewer suggestions). Use Issues and Projects to track tasks and discussions.
+
+> This project requires Python 3.11. Do not use Python 3.12 or newer, as it may cause dependency incompatibilities, build failure or runtime errors
+
 
 ## General Feedback
 
 If you have a general feedback about our project, please do not open an issue but instead please fill in this [form](https://forms.gle/LRUq3vsFnE1QCLiA6)
+
+## Fork & branch processing
+
+First fork the origin repository to your own github repository, then clone the repository to your local computer.
+
+```bash
+git clone https://github.com/Your Account name/clima.git
+cd clima
+```
+
+Set up the upstream repository and check the output repositories.
+
+```bash
+git remote add upstream https://github.com/CenterForTheBuiltEnvironment/clima.git
+
+git remote -v
+```
+
+The terminal should output a list:
+
+- `origin → your Fork repository`
+- `upstream → origin repository`
+
+Check all branches.
+
+```bash
+git branch -a
+```
+
+The terminal will show a list of branches:
+
+```bash
+> * main
+  	remotes/origin/HEAD -> origin/main
+  	remotes/origin/development
+  	remotes/origin/main
+```
+
+Pull the development branch first, and if the terminal does not notice you that you should try the second command.
+
+```bash
+git checktout development
+
+git checkout -b development origin/development
+```
+
+Create a new branch in the development branch.
+
+```bash
+git checkout -b (your branch name)
+```
+
+Finally update and push to your repository branch if you modify the files.
+
+```bash
+git push origin (your branch name)
+```
 
 ## Code of Conduct
 
@@ -35,6 +96,57 @@ pipenv run pre-commit run --all-files
 Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
 More information about pre-commit hooks can be found [here](https://pre-commit.com/).
 
+Install Black:
+
+We use ruff to enforce the code style and code formatting. You can run it with:
+
+```bash
+pipenv run ruff check .
+pipenv run ruff format .
+```
+
+To ensure that the code is formatted correctly, we use a pre-commit hook that runs Ruff before every commit.
+Run the following once to enable hooks in your local repo:
+
+```bash
+pipenv run pre-commit install
+# optional: run on all files
+pipenv run pre-commit run --all-files
+```
+
+Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
+More information about pre-commit hooks can be found [here](https://pre-commit.com/).
+
+```bash
+pipenv install black
+```
+
+Format your code before committing:
+
+```bash
+black .
+```
+
+## Testing
+
+Before submitting a Pull Request, please make sure:
+- All tests should pass.
+- You have installed project dependencies:
+
+```bash
+npm install
+
+pipenv install -r requirements.txt
+```
+
+From the root directory, run:
+
+```bash
+cd tests/node
+
+npx cypress run
+```
+
 ## Submitting changes
 
 Please send a Pull Request with a clear list of what you've done. Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
@@ -44,6 +156,43 @@ $ git commit -m "A brief summary of the commit
 > 
 > A paragraph describing what changed and its impact."
 ```
+
+> Detailed requirements for submitting a PR are described in the [Pull Request Regulation](#pull-request-regulation) section below
+
+Classification of Common Commit Types:
+
+- `Main (Master)`: Stable branch, merge code that passes review and CI; merge and release every time,
+- `Develop`: Continuous Integration branch for daily integration with multiple collaborators.
+- `Feature/*`: feature development branch, cut out from main or develop, send PR to merge in after completing the feature.
+- `Fix/*`: defect repair branch, the same process as feature
+- `Release/*`: release preparation branch for freezing versions, fixing documentation, doing regressions and tagging.
+- `docs/*`, `chore/*`, `refactor/*`, `test/*`: documentation, miscellaneous, refactor, test type branches.
+- `Style`: style modification (does not affect the function): code formatting, space adjustment, naming rules unity.
+- `Refactor`: Code Refactoring: Refactor existing code to improve maintainability.
+- `Test`: Add or modify tests: add unit tests, integration tests, or modify test logic.
+- `Chore`: Build Configuration, Dependency Management, CI/CD Configuration Updates.
+- `Perf`: Performance Optimisation: Optimising code execution efficiency or memory usage.
+- `Ci`: CI Configuration Related: Changing Continuous Integration Configurations for Github Actions, Travis, Jenkins, etc.
+- `Build`: build system related: modify build scripts, packaging configuration.
+- `Revert`: Rollback Commit: Undoing a Previous Commit
+- `Security`: Security fixes, fixing security vulnerabilities, updating dependencies to prevent attacks.
+- `Deps`: Dependency Management: Dependency Management/Adding, updating, and removing dependency libraries
+- `Infra`: Infrastructure related: changes to development environments, containers, server configurations, etc.
+
+## Pull Request Regulation
+**Time to submit PR:**
+
+- User requirements/issues have been addressed or discussed in Issue and consensus has been reached.
+- Changes have been minimised (small steps/phased submission) to avoid "mega PRs".
+
+**The pull request should include the following information:**
+
+- **Description:** Provide a brief summary of the changes, related issues, and motivation. List any required dependencies. **Fixes # (issue)**
+
+- **Type of Change:** Bug fix (non-breaking); New feature (non-breaking); Breaking change; Documentation update.
+
+- **Testing:** Describe how you tested your changes and how we can reproduce them. Include test details if necessary.
+
 
 ## Thanks
 
