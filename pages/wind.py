@@ -535,7 +535,7 @@ def update_seasonal_graphs(_, df, meta, si_ip):
         (df[ColNames.MONTH] <= winter_months[1])
         | (df[ColNames.MONTH] >= winter_months[0])
     ]
-    query_calm_wind = "wind_speed == 0"
+    query_calm_wind = f"{ColNames.WIND_SPEED} == 0"
     winter_total_count = winter_df.shape[0]
     winter_calm_count = winter_df.query(query_calm_wind).shape[0]
 
@@ -649,7 +649,7 @@ def update_daily_graphs(_, df, meta, si_ip):
     night = wind_rose(df, "", months, night_times, True, si_ip)
 
     # Text
-    query_calm_wind = "wind_speed == 0"
+    query_calm_wind = f"{ColNames.WIND_SPEED} == 0"
     morning_df = df.loc[
         (df[ColNames.HOUR] >= morning_times[0])
         & (df[ColNames.HOUR] <= morning_times[1])

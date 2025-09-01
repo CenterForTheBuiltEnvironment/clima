@@ -512,7 +512,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
     dir_bins = np.arange(-22.5 / 2, 360 + 22.5, 22.5)
     dir_labels = (dir_bins[:-1] + dir_bins[1:]) / 2
     total_count = df.shape[0]
-    calm_count = df.query("wind_speed == 0").shape[0]
+    calm_count = df.query(f"{ColNames.WIND_SPEED} == 0").shape[0]
 
     # Create a temporary DataFrame with binned data
     df_binned = df.assign(

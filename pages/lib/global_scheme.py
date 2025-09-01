@@ -365,7 +365,7 @@ mapping_dictionary = {
         },
         "conversion_function": None,
     },
-    "wind_speed": {
+    ColNames.WIND_SPEED: {
         "name": "Wind speed",
         "color": [
             "#D3D3D3",
@@ -840,7 +840,7 @@ variables_sun_cloud_tab_dropdown = [
     "dif_hor_ill",
     "Zlumi",
     "wind_dir",
-    "wind_speed",
+    ColNames.WIND_SPEED,
     "tot_sky_cover",
     "Oskycover",
     "Vis",
@@ -862,7 +862,7 @@ variables_dropdown = [
     "dif_hor_ill",
     "Zlumi",
     "wind_dir",
-    "wind_speed",
+    ColNames.WIND_SPEED,
     "tot_sky_cover",
     "Oskycover",
     "Vis",

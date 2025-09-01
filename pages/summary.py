@@ -233,12 +233,13 @@ def update_location_info(ts, df, meta, si_ip):
 
     site_elevation = float(meta[ColNames.SITE_ELEVATION])
     site_elevation = round(site_elevation, 2)
+
+    elevation = f"Elevation above sea level: {str(site_elevation)} m"
     if si_ip != UnitSystem.SI:
         site_elevation = site_elevation * 3.281
         site_elevation = round(site_elevation, 2)
         elevation = f"Elevation above sea level: {str(site_elevation)} ft"
-    else:
-        elevation = f"Elevation above sea level: {meta[ColNames.SITE_ELEVATION]} m"
+
     period = ""
     if meta[ColNames.PERIOD]:
         start, stop = meta[ColNames.PERIOD].split("-")
