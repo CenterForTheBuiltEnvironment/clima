@@ -1,6 +1,7 @@
 import copy
 import functools
 import time
+import math
 
 import dash_bootstrap_components as dbc
 import pandas as pd
@@ -289,3 +290,9 @@ def dropdown(options=None, **kwargs):
         clearable=False,
         **kwargs,
     )
+
+def get_data_max(series, base=5):
+    return base * math.ceil(series.max() / base)
+
+def get_data_min(series, base=5):
+    return base * math.floor(series.min() / base)

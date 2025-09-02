@@ -1,11 +1,13 @@
-from math import ceil, floor
-
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from config import UnitSystem
+from pages.lib.utils import (
+    get_data_max,
+    get_data_min,
+)
 from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
@@ -25,8 +27,8 @@ def violin(df, var, global_local, si_ip):
     data_night = df.loc[mask_night, var]
 
     if global_local != "global":
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max = get_data_max(df[var])
+        data_min = get_data_min(df[var])
         var_range = [data_min, data_max]
 
     fig = go.Figure()
@@ -95,8 +97,8 @@ def yearly_profile(df, var, global_local, si_ip):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max = get_data_max(df[var])
+        data_min = get_data_min(df[var])
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
@@ -255,8 +257,8 @@ def daily_profile(df, var, global_local, si_ip):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max = get_data_max(df[var])
+        data_min = get_data_min(df[var])
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
@@ -371,8 +373,8 @@ def heatmap_with_filter(
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max = get_data_max(df[var])
+        data_min = get_data_min(df[var])
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
@@ -430,8 +432,8 @@ def heatmap(df, var, global_local, si_ip):
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max = get_data_max(df[var])
+        data_min = get_data_min(df[var])
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(

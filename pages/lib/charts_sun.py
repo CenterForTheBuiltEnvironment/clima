@@ -1,11 +1,15 @@
 from datetime import timedelta
-from math import ceil, cos, floor, radians
+from math import cos, radians
 
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 
 from config import UnitSystem
+from pages.lib.utils import (
+    get_data_max,
+    get_data_min,
+)
 from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
@@ -135,8 +139,8 @@ def polar_graph(df, meta, global_local, var, si_ip):
             range_z = var_range
         else:
             # Set maximum and minimum according to data
-            data_max = 5 * ceil(solpos[var].max() / 5)
-            data_min = 5 * floor(solpos[var].min() / 5)
+            data_max = get_data_max(solpos[var])
+            data_min = get_data_min(solpos[var])
             range_z = [data_min, data_max]
 
     tz = "UTC"
@@ -348,8 +352,8 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
             range_z = var_range
         else:
             # Set maximum and minimum according to data
-            data_max = 5 * ceil(df[var].max() / 5)
-            data_min = 5 * floor(df[var].min() / 5)
+            data_max = get_data_max(df[var])
+            data_min = get_data_min(df[var])
             range_z = [data_min, data_max]
 
     if var == "None":

@@ -17,6 +17,10 @@ from pages.lib.global_scheme import (
     container_row_center_full,
     container_col_center_one_of_three,
 )
+from pages.lib.utils import (
+    get_data_max,
+    get_data_min,
+)
 from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_element_ids import ElementIds
@@ -373,8 +377,8 @@ def nv_heatmap(
     if global_local == "global":
         range_z = var_range
     else:
-        data_max = 5 * math.ceil(df[var].max() / 5)
-        data_min = 5 * math.floor(df[var].min() / 5)
+        data_max = get_data_max(df[var])
+        data_min = get_data_min(df[var])
         range_z = [data_min, data_max]
 
     title = (

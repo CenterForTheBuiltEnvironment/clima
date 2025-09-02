@@ -279,14 +279,14 @@ def create_df(lst, file_name):
 
     # Add in UTCI
     sol_altitude = epw_df[ColNames.ELEVATION].mask(epw_df[ColNames.ELEVATION] <= 0, 0)
-    sharp = [45] * 8760
+    sharp = check_value(45)
     sol_radiation_dir = epw_df[ColNames.DIR_NOR_RAD]
-    sol_transmittance = [1] * 8760  # CHECK VALUE
-    f_svv = [1] * 8760  # CHECK VALUE
-    f_bes = [1] * 8760  # CHECK VALUE
-    asw = [0.7] * 8760  # CHECK VALUE
-    posture = ["standing"] * 8760
-    floor_reflectance = [0.6] * 8760  # EXPOSE AS A VARIABLE?
+    sol_transmittance = check_value(1)  # CHECK VALUE
+    f_svv = check_value(1)  # CHECK VALUE
+    f_bes = check_value(1)  # CHECK VALUE
+    asw = check_value(0.7)  # CHECK VALUE
+    posture = check_value("standing")
+    floor_reflectance = check_value(0.6)  # EXPOSE AS A VARIABLE?
 
     mrt = np.vectorize(solar_gain)(
         sol_altitude,
@@ -411,11 +411,11 @@ def enthalpy(df, name):
 
 
 def convert_data(df, mapping_json):
-    df[ColNames.ADAPTIVE_COMFORT] = df[ColNames.ADAPTIVE_COMFORT] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_80_LOW] = df[ColNames.ADAPTIVE_CMF_80_LOW] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_80_UP] = df[ColNames.ADAPTIVE_CMF_80_UP] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_90_LOW] = df[ColNames.ADAPTIVE_CMF_90_LOW] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_90_UP] = df[ColNames.ADAPTIVE_CMF_90_UP] * 1.8 + 32
+    temperature(df, ColNames.ADAPTIVE_COMFORT)
+    temperature(df, ColNames.ADAPTIVE_CMF_80_LOW)
+    temperature(df, ColNames.ADAPTIVE_CMF_80_UP)
+    temperature(df, ColNames.ADAPTIVE_CMF_90_LOW)
+    temperature(df, ColNames.ADAPTIVE_CMF_90_UP)
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):
@@ -426,6 +426,8 @@ def convert_data(df, mapping_json):
                 conversion_function(df, key)
     return json.dumps(mapping_dict)
 
+def check_value(value, hours=8760):
+		return [value] * hours
 
 if __name__ == "__main__":
     # fmt: off
