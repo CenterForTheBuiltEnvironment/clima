@@ -291,8 +291,10 @@ def dropdown(options=None, **kwargs):
         **kwargs,
     )
 
+
 def get_data_max(series, base=5):
     return base * math.ceil(series.max() / base)
+
 
 def get_data_min(series, base=5):
     return base * math.floor(series.min() / base)

@@ -845,14 +845,15 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
         )
     return fig
 
-def time_filtering(df, start_time, end_time, time_col, target_col):
 
+def time_filtering(df, start_time, end_time, time_col, target_col):
     if start_time <= end_time:
         mask = (df[time_col] < start_time) | (df[time_col] > end_time)
     else:
         mask = (df[time_col] >= end_time) & (df[time_col] <= start_time)
     df.loc[mask, target_col] = None
     return df
+
 
 def filter_df_by_month_and_hour(
     df, time_filter, month, hour, invert_month, invert_hour, var
