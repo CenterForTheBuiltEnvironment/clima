@@ -76,6 +76,44 @@ def get_location_info(lst, file_name):
 
     return location_info
 
+# ==== Unified UTCI computation and binning ====
+UTCI_BINS   = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
+UTCI_LABELS = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
+
+def utci_calc(df: pd.DataFrame, t_air_col, t_rad_col, wind_col, rh_col=ColNames.RH):
+    """Call utci() using values from df columns."""
+    return utci(df[t_air_col], df[t_rad_col], df[wind_col], df[rh_col])
+
+def add_utci_variants(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generate the four UTCI variants:
+      - noSun_Wind   : DBT + DBT + wind_speed_utci
+      - noSun_noWind : DBT + DBT + wind_speed_utci_0
+      - Sun_Wind     : DBT + MRT + wind_speed_utci
+      - Sun_noWind   : DBT + MRT + wind_speed_utci_0
+    """
+    recipes = {
+        ColNames.UTCI_NO_SUN_WIND:    (ColNames.DBT, ColNames.DBT, ColNames.WIND_SPEED_UTCI),
+        ColNames.UTCI_NO_SUN_NO_WIND: (ColNames.DBT, ColNames.DBT, ColNames.WIND_SPEED_UTCI_0),
+        ColNames.UTCI_SUN_WIND:       (ColNames.DBT, ColNames.MRT, ColNames.WIND_SPEED_UTCI),
+        ColNames.UTCI_SUN_NO_WIND:    (ColNames.DBT, ColNames.MRT, ColNames.WIND_SPEED_UTCI_0),
+    }
+    for out_col, (t_air, t_rad, wind) in recipes.items():
+        df[out_col] = utci_calc(df, t_air, t_rad, wind)
+    return df
+
+def add_utci_categories(df: pd.DataFrame) -> pd.DataFrame:
+    """Bin the four UTCI columns into categories."""
+    mapping = {
+        ColNames.UTCI_NO_SUN_WIND:    ColNames.UTCI_NOSUN_WIND_CATEGORIES,
+        ColNames.UTCI_NO_SUN_NO_WIND: ColNames.UTCI_NOSUN_NOWIND_CATEGORIES,
+        ColNames.UTCI_SUN_WIND:       ColNames.UTCI_SUN_WIND_CATEGORIES,
+        ColNames.UTCI_SUN_NO_WIND:    ColNames.UTCI_SUN_NOWIND_CATEGORIES,
+    }
+    for src_col, dst_col in mapping.items():
+        df[dst_col] = pd.cut(x=df[src_col], bins=UTCI_BINS, labels=UTCI_LABELS)
+    return df
+
 
 @code_timer
 def create_df(lst, file_name):
@@ -280,45 +318,11 @@ def create_df(lst, file_name):
     epw_df[ColNames.WIND_SPEED_UTCI_0] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
         epw_df[ColNames.WIND_SPEED_UTCI] >= 0, 0.5
     )
-    epw_df[ColNames.UTCI_NO_SUN_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.WIND_SPEED_UTCI],
-        epw_df[ColNames.RH],
-    )
-    epw_df[ColNames.UTCI_NO_SUN_NO_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.WIND_SPEED_UTCI_0],
-        epw_df[ColNames.RH],
-    )
-    epw_df[ColNames.UTCI_SUN_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.MRT],
-        epw_df[ColNames.WIND_SPEED_UTCI],
-        epw_df[ColNames.RH],
-    )
-    epw_df[ColNames.UTCI_SUN_NO_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.MRT],
-        epw_df[ColNames.WIND_SPEED_UTCI_0],
-        epw_df[ColNames.RH],
-    )
+    
+    epw_df = add_utci_variants(epw_df)
 
-    utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
-    utci_labels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
-    epw_df[ColNames.UTCI_NOSUN_WIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_NO_SUN_WIND], bins=utci_bins, labels=utci_labels
-    )
-    epw_df[ColNames.UTCI_NOSUN_NOWIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_NO_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
-    )
-    epw_df[ColNames.UTCI_SUN_WIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_SUN_WIND], bins=utci_bins, labels=utci_labels
-    )
-    epw_df[ColNames.UTCI_SUN_NOWIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
-    )
+    epw_df = add_utci_categories(epw_df)
+
 
     # Add psy values
     ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df[ColNames.DBT], epw_df[ColNames.RH])
