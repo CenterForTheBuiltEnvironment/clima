@@ -1,10 +1,7 @@
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from pages.lib.utils import (
-    get_data_max,
-    get_data_min,
-)
+from pages.lib.utils import get_max_min_value
 from pages.lib.global_scheme import template, mapping_dictionary, month_lst
 from pages.lib.global_column_names import ColNames
 
@@ -44,8 +41,7 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         range_z = [data_min, data_max]
 
     title = var_name + " (" + var_unit + ")"
@@ -122,8 +118,7 @@ def three_var_graph(
 
     if global_local != "global":
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         var_range = [data_min, data_max]
 
     color_scale = var_color

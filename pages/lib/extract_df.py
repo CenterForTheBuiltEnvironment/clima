@@ -295,14 +295,14 @@ def create_df(lst, file_name):
 
     # Add in UTCI
     sol_altitude = epw_df[ColNames.ELEVATION].mask(epw_df[ColNames.ELEVATION] <= 0, 0)
-    sharp = check_value(45)
+    sharp = expand_to_hours(45)
     sol_radiation_dir = epw_df[ColNames.DIR_NOR_RAD]
-    sol_transmittance = check_value(1)  # CHECK VALUE
-    f_svv = check_value(1)  # CHECK VALUE
-    f_bes = check_value(1)  # CHECK VALUE
-    asw = check_value(0.7)  # CHECK VALUE
-    posture = check_value("standing")
-    floor_reflectance = check_value(0.6)  # EXPOSE AS A VARIABLE?
+    sol_transmittance = expand_to_hours(1)  # CHECK VALUE
+    f_svv = expand_to_hours(1)  # CHECK VALUE
+    f_bes = expand_to_hours(1)  # CHECK VALUE
+    asw = expand_to_hours(0.7)  # CHECK VALUE
+    posture = expand_to_hours("standing")
+    floor_reflectance = expand_to_hours(0.6)  # EXPOSE AS A VARIABLE?
 
     mrt = np.vectorize(solar_gain)(
         sol_altitude,
@@ -442,7 +442,16 @@ def convert_data(df, mapping_json):
     return json.dumps(mapping_dict)
 
 
-def check_value(value, hours=8760):
+def expand_to_hours(value, hours=8760):
+    """Return a list with the input value repeated for a given number of hours.
+
+    Args:
+        value: The value to repeat.
+        hours: Number of repetitions. Defaults to 8760 (hours in a year).
+
+    Returns:
+        A list containing the value repeated `hours` times.
+    """
     return [value] * hours
 
 

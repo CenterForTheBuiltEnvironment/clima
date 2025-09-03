@@ -10,10 +10,7 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
-from pages.lib.utils import (
-    get_data_max,
-    get_data_min,
-)
+from pages.lib.utils import get_max_min_value
 from pages.lib.extract_df import temperature
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
@@ -324,8 +321,7 @@ def update_psych_chart(
 
     else:
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[ColNames.DBT])
-        data_min = get_data_min(df[ColNames.DBT])
+        data_max, data_min = get_max_min_value(df[ColNames.DBT])
         var_range_x = [data_min, data_max]
 
         data_max = round(df[ColNames.HR].max(), 4)

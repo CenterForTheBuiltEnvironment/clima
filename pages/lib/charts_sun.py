@@ -6,10 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from config import UnitSystem
-from pages.lib.utils import (
-    get_data_max,
-    get_data_min,
-)
+from pages.lib.utils import get_max_min_value
 from pages.lib.global_scheme import (
     template,
     mapping_dictionary,
@@ -139,8 +136,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
             range_z = var_range
         else:
             # Set maximum and minimum according to data
-            data_max = get_data_max(solpos[var])
-            data_min = get_data_min(solpos[var])
+            data_max, data_min = get_max_min_value(solpos[var])
             range_z = [data_min, data_max]
 
     tz = "UTC"
@@ -352,8 +348,7 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
             range_z = var_range
         else:
             # Set maximum and minimum according to data
-            data_max = get_data_max(df[var])
-            data_min = get_data_min(df[var])
+            data_max, data_min = get_max_min_value(df[var])
             range_z = [data_min, data_max]
 
     if var == "None":

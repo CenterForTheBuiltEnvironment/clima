@@ -4,10 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from config import UnitSystem
-from pages.lib.utils import (
-    get_data_max,
-    get_data_min,
-)
+from pages.lib.utils import get_max_min_value
 from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
@@ -27,8 +24,7 @@ def violin(df, var, global_local, si_ip):
     data_night = df.loc[mask_night, var]
 
     if global_local != "global":
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         var_range = [data_min, data_max]
 
     fig = go.Figure()
@@ -97,8 +93,7 @@ def yearly_profile(df, var, global_local, si_ip):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
@@ -257,8 +252,7 @@ def daily_profile(df, var, global_local, si_ip):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
@@ -373,8 +367,7 @@ def heatmap_with_filter(
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
@@ -432,8 +425,7 @@ def heatmap(df, var, global_local, si_ip):
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = get_data_max(df[var])
-        data_min = get_data_min(df[var])
+        data_max, data_min = get_max_min_value(df[var])
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
@@ -847,6 +839,18 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
 
 
 def time_filtering(df, start_time, end_time, time_col, target_col):
+    """Mask values in the target column based on the given time range.
+
+    Args:
+        df: Input dataframe.
+        start_time: Start of the time range.
+        end_time: End of the time range.
+        time_col: Column name representing time (e.g., hour or month).
+        target_col: Column name to apply the mask on.
+
+    Returns:
+        A modified DataFrame with masked values outside the given time range.
+    """
     if start_time <= end_time:
         mask = (df[time_col] < start_time) | (df[time_col] > end_time)
     else:
@@ -858,6 +862,20 @@ def time_filtering(df, start_time, end_time, time_col, target_col):
 def filter_df_by_month_and_hour(
     df, time_filter, month, hour, invert_month, invert_hour, var
 ):
+    """Apply month and hour filtering to the DataFrame based on user selections.
+
+    Args:
+        df: Input DataFrame.
+        time_filter: Whether to apply the time filter.
+        month: Selected month range.
+        hour: Selected hour range.
+        invert_month: Whether to invert the month range.
+        invert_hour: Whether to invert the hour range.
+        var: Target variable column name.
+
+    Returns:
+        Filtered DataFrame with appropriate masking applied.
+    """
     start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
         month, hour, invert_month, invert_hour
     )

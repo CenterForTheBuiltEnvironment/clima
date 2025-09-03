@@ -292,9 +292,16 @@ def dropdown(options=None, **kwargs):
     )
 
 
-def get_data_max(series, base=5):
-    return base * math.ceil(series.max() / base)
+def get_max_min_value(series, base=5):
+    """Calculate rounded-up max and rounded-down min values based on a base step.
 
+    Args:
+        series: Pandas Series of numeric values.
+        base: The rounding base. Default is 5.
 
-def get_data_min(series, base=5):
-    return base * math.floor(series.min() / base)
+    Returns:
+        Tuple of (max_value, min_value) adjusted to nearest base step.
+    """
+    data_max = base * math.ceil(series.max() / base)
+    data_min = base * math.floor(series.min() / base)
+    return data_max, data_min
