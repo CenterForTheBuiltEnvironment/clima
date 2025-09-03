@@ -426,11 +426,11 @@ def enthalpy(df, name):
 
 
 def convert_data(df, mapping_json):
-    temperature(df, ColNames.ADAPTIVE_COMFORT)
-    temperature(df, ColNames.ADAPTIVE_CMF_80_LOW)
-    temperature(df, ColNames.ADAPTIVE_CMF_80_UP)
-    temperature(df, ColNames.ADAPTIVE_CMF_90_LOW)
-    temperature(df, ColNames.ADAPTIVE_CMF_90_UP)
+    convert_t_to_f(df, ColNames.ADAPTIVE_COMFORT)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_80_LOW)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_80_UP)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_90_LOW)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_90_UP)
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):
@@ -440,6 +440,19 @@ def convert_data(df, mapping_json):
                 conversion_function = globals()[conversion_function_name]
                 conversion_function(df, key)
     return json.dumps(mapping_dict)
+
+
+def convert_t_to_f(df, name):
+    """Convert temperature from Celsius to Fahrenheit in-place for a given column.
+
+    Args:
+        df: The DataFrame containing the temperature column.
+        name: Column name to convert.
+
+    Returns:
+        None. The DataFrame is modified in-place.
+    """
+    df[name] = df[name] * 1.8 + 32
 
 
 def expand_to_hours(value, hours=8760):
