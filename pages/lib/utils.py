@@ -292,7 +292,7 @@ def dropdown(options=None, **kwargs):
     )
 
 
-def get_max_min_value(series, base=5):
+def get_max_min_value(series: pd.Series, base: int = 5) -> tuple[int, int]:
     """Calculate rounded-up max and rounded-down min values based on a base step.
 
     Args:

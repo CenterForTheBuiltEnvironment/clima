@@ -82,7 +82,13 @@ UTCI_BINS = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
 UTCI_LABELS = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
 
 
-def utci_calc(df: pd.DataFrame, t_air_col, t_rad_col, wind_col, rh_col=ColNames.RH):
+def utci_calc(
+    df: pd.DataFrame,
+    t_air_col: str,
+    t_rad_col: str,
+    wind_col: str,
+    rh_col: str = ColNames.RH,
+) -> pd.Series:
     """Call utci() using values from df columns."""
     return utci(df[t_air_col], df[t_rad_col], df[wind_col], df[rh_col])
 
@@ -442,7 +448,7 @@ def convert_data(df, mapping_json):
     return json.dumps(mapping_dict)
 
 
-def convert_t_to_f(df, name):
+def convert_t_to_f(df: pd.DataFrame, name: str):
     """Convert temperature from Celsius to Fahrenheit in-place for a given column.
 
     Args:
@@ -455,7 +461,7 @@ def convert_t_to_f(df, name):
     df[name] = df[name] * 1.8 + 32
 
 
-def expand_to_hours(value, hours=8760):
+def expand_to_hours(value: any, hours: int = 8760) -> list[any]:
     """Return a list with the input value repeated for a given number of hours.
 
     Args:

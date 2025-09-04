@@ -838,7 +838,9 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     return fig
 
 
-def time_filtering(df, start_time, end_time, time_col, target_col):
+def time_filtering(
+    df: pd.DataFrame, start_time: int, end_time: int, time_col: str, target_col: str
+) -> pd.DataFrame:
     """Mask values in the target column based on the given time range.
 
     Args:
