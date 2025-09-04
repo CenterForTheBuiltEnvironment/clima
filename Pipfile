@@ -18,6 +18,11 @@ dash-iconify = "*"
 scipy = "==1.12.0"
 
 [dev-packages]
+cleanpy = "*"
+pytest = "*"
+bump2version = "*"
+black = "*"
+ruff = "*"
 pre-commit = "*"
 
 [requires]
