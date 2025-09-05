@@ -1,6 +1,7 @@
 import copy
 import functools
 import time
+import math
 
 import dash_bootstrap_components as dbc
 import pandas as pd
@@ -289,3 +290,18 @@ def dropdown(options=None, **kwargs):
         clearable=False,
         **kwargs,
     )
+
+
+def get_max_min_value(series: pd.Series, base: int = 5) -> tuple[int, int]:
+    """Calculate rounded-up max and rounded-down min values based on a base step.
+
+    Args:
+        series: Pandas Series of numeric values.
+        base: The rounding base. Default is 5.
+
+    Returns:
+        Tuple of (max_value, min_value) adjusted to nearest base step.
+    """
+    data_max = base * math.ceil(series.max() / base)
+    data_min = base * math.floor(series.min() / base)
+    return data_max, data_min

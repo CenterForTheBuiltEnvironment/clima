@@ -1,11 +1,10 @@
-from math import ceil, floor
-
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from config import UnitSystem
+from pages.lib.utils import get_max_min_value
 from pages.lib.global_scheme import mapping_dictionary
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins
@@ -25,8 +24,7 @@ def violin(df, var, global_local, si_ip):
     data_night = df.loc[mask_night, var]
 
     if global_local != "global":
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max, data_min = get_max_min_value(df[var])
         var_range = [data_min, data_max]
 
     fig = go.Figure()
@@ -95,8 +93,7 @@ def yearly_profile(df, var, global_local, si_ip):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max, data_min = get_max_min_value(df[var])
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
@@ -255,8 +252,7 @@ def daily_profile(df, var, global_local, si_ip):
         range_y = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max, data_min = get_max_min_value(df[var])
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
@@ -371,8 +367,7 @@ def heatmap_with_filter(
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max, data_min = get_max_min_value(df[var])
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
@@ -430,8 +425,7 @@ def heatmap(df, var, global_local, si_ip):
         range_z = var_range
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[var].max() / 5)
-        data_min = 5 * floor(df[var].min() / 5)
+        data_max, data_min = get_max_min_value(df[var])
         range_z = [data_min, data_max]
     fig = go.Figure(
         data=go.Heatmap(
@@ -844,29 +838,55 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     return fig
 
 
+def time_filtering(
+    df: pd.DataFrame, start_time: int, end_time: int, time_col: str, target_col: str
+) -> pd.DataFrame:
+    """Mask values in the target column based on the given time range.
+
+    Args:
+        df: Input dataframe.
+        start_time: Start of the time range.
+        end_time: End of the time range.
+        time_col: Column name representing time (e.g., hour or month).
+        target_col: Column name to apply the mask on.
+
+    Returns:
+        A modified DataFrame with masked values outside the given time range.
+    """
+    if start_time <= end_time:
+        mask = (df[time_col] < start_time) | (df[time_col] > end_time)
+    else:
+        mask = (df[time_col] >= end_time) & (df[time_col] <= start_time)
+    df.loc[mask, target_col] = None
+    return df
+
+
 def filter_df_by_month_and_hour(
     df, time_filter, month, hour, invert_month, invert_hour, var
 ):
+    """Apply month and hour filtering to the DataFrame based on user selections.
+
+    Args:
+        df: Input DataFrame.
+        time_filter: Whether to apply the time filter.
+        month: Selected month range.
+        hour: Selected hour range.
+        invert_month: Whether to invert the month range.
+        invert_hour: Whether to invert the hour range.
+        var: Target variable column name.
+
+    Returns:
+        Filtered DataFrame with appropriate masking applied.
+    """
     start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
         month, hour, invert_month, invert_hour
     )
 
     if time_filter:
-        if start_month <= end_month:
-            mask = (df[ColNames.MONTH] < start_month) | (df[ColNames.MONTH] > end_month)
-            df.loc[mask, var] = None
-        else:
-            mask = (df[ColNames.MONTH] >= end_month) & (
-                df[ColNames.MONTH] <= start_month
-            )
-            df.loc[mask, var] = None
-
-        if start_hour <= end_hour:
-            mask = (df[ColNames.HOUR] <= start_hour) | (df[ColNames.HOUR] > end_hour)
-            df.loc[mask, var] = None
-        else:
-            mask = (df[ColNames.HOUR] > end_hour) & (df[ColNames.HOUR] <= start_hour)
-            df.loc[mask, var] = None
+        # Month filter
+        time_filtering(df, start_month, end_month, ColNames.MONTH, var)
+        # Hour filter
+        time_filtering(df, start_hour, end_hour, ColNames.HOUR, var)
 
     return df
 

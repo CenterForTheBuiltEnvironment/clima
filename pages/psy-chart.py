@@ -1,5 +1,3 @@
-from math import ceil, floor
-
 import dash
 from dash import dcc, html
 import dash_bootstrap_components as dbc
@@ -12,6 +10,8 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
+from pages.lib.utils import get_max_min_value
+from pages.lib.extract_df import convert_t_to_f
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
@@ -321,8 +321,7 @@ def update_psych_chart(
 
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df[ColNames.DBT].max() / 5)
-        data_min = 5 * floor(df[ColNames.DBT].min() / 5)
+        data_max, data_min = get_max_min_value(df[ColNames.DBT])
         var_range_x = [data_min, data_max]
 
         data_max = round(df[ColNames.HR].max(), 4)
@@ -358,7 +357,7 @@ def update_psych_chart(
 
         if si_ip == UnitSystem.IP:
             for j in range(len(dbt_list)):
-                dbt_list_convert[j] = dbt_list_convert[j] * 1.8 + 32
+                convert_t_to_f(dbt_list_convert, j)
 
         fig.add_trace(
             go.Scatter(

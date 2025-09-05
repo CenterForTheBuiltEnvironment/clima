@@ -77,6 +77,66 @@ def get_location_info(lst, file_name):
     return location_info
 
 
+# ==== Unified UTCI computation and binning ====
+UTCI_BINS = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
+UTCI_LABELS = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
+
+
+def utci_calc(
+    df: pd.DataFrame,
+    t_air_col: str,
+    t_rad_col: str,
+    wind_col: str,
+    rh_col: str = ColNames.RH,
+) -> pd.Series:
+    """Call utci() using values from df columns."""
+    return utci(df[t_air_col], df[t_rad_col], df[wind_col], df[rh_col])
+
+
+def add_utci_variants(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generate the four UTCI variants:
+      - noSun_Wind   : DBT + DBT + wind_speed_utci
+      - noSun_noWind : DBT + DBT + wind_speed_utci_0
+      - Sun_Wind     : DBT + MRT + wind_speed_utci
+      - Sun_noWind   : DBT + MRT + wind_speed_utci_0
+    """
+    recipes = {
+        ColNames.UTCI_NO_SUN_WIND: (
+            ColNames.DBT,
+            ColNames.DBT,
+            ColNames.WIND_SPEED_UTCI,
+        ),
+        ColNames.UTCI_NO_SUN_NO_WIND: (
+            ColNames.DBT,
+            ColNames.DBT,
+            ColNames.WIND_SPEED_UTCI_0,
+        ),
+        ColNames.UTCI_SUN_WIND: (ColNames.DBT, ColNames.MRT, ColNames.WIND_SPEED_UTCI),
+        ColNames.UTCI_SUN_NO_WIND: (
+            ColNames.DBT,
+            ColNames.MRT,
+            ColNames.WIND_SPEED_UTCI_0,
+        ),
+    }
+    for out_col, (t_air, t_rad, wind) in recipes.items():
+        df[out_col] = utci_calc(df, t_air, t_rad, wind)
+    return df
+
+
+def add_utci_categories(df: pd.DataFrame) -> pd.DataFrame:
+    """Bin the four UTCI columns into categories."""
+    mapping = {
+        ColNames.UTCI_NO_SUN_WIND: ColNames.UTCI_NOSUN_WIND_CATEGORIES,
+        ColNames.UTCI_NO_SUN_NO_WIND: ColNames.UTCI_NOSUN_NOWIND_CATEGORIES,
+        ColNames.UTCI_SUN_WIND: ColNames.UTCI_SUN_WIND_CATEGORIES,
+        ColNames.UTCI_SUN_NO_WIND: ColNames.UTCI_SUN_NOWIND_CATEGORIES,
+    }
+    for src_col, dst_col in mapping.items():
+        df[dst_col] = pd.cut(x=df[src_col], bins=UTCI_BINS, labels=UTCI_LABELS)
+    return df
+
+
 @code_timer
 def create_df(lst, file_name):
     """Extract and clean the data. Return a pandas data from a url."""
@@ -241,14 +301,14 @@ def create_df(lst, file_name):
 
     # Add in UTCI
     sol_altitude = epw_df[ColNames.ELEVATION].mask(epw_df[ColNames.ELEVATION] <= 0, 0)
-    sharp = [45] * 8760
+    sharp = expand_to_hours(45)
     sol_radiation_dir = epw_df[ColNames.DIR_NOR_RAD]
-    sol_transmittance = [1] * 8760  # CHECK VALUE
-    f_svv = [1] * 8760  # CHECK VALUE
-    f_bes = [1] * 8760  # CHECK VALUE
-    asw = [0.7] * 8760  # CHECK VALUE
-    posture = ["standing"] * 8760
-    floor_reflectance = [0.6] * 8760  # EXPOSE AS A VARIABLE?
+    sol_transmittance = expand_to_hours(1)  # CHECK VALUE
+    f_svv = expand_to_hours(1)  # CHECK VALUE
+    f_bes = expand_to_hours(1)  # CHECK VALUE
+    asw = expand_to_hours(0.7)  # CHECK VALUE
+    posture = expand_to_hours("standing")
+    floor_reflectance = expand_to_hours(0.6)  # EXPOSE AS A VARIABLE?
 
     mrt = np.vectorize(solar_gain)(
         sol_altitude,
@@ -280,45 +340,10 @@ def create_df(lst, file_name):
     epw_df[ColNames.WIND_SPEED_UTCI_0] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
         epw_df[ColNames.WIND_SPEED_UTCI] >= 0, 0.5
     )
-    epw_df[ColNames.UTCI_NO_SUN_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.WIND_SPEED_UTCI],
-        epw_df[ColNames.RH],
-    )
-    epw_df[ColNames.UTCI_NO_SUN_NO_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.WIND_SPEED_UTCI_0],
-        epw_df[ColNames.RH],
-    )
-    epw_df[ColNames.UTCI_SUN_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.MRT],
-        epw_df[ColNames.WIND_SPEED_UTCI],
-        epw_df[ColNames.RH],
-    )
-    epw_df[ColNames.UTCI_SUN_NO_WIND] = utci(
-        epw_df[ColNames.DBT],
-        epw_df[ColNames.MRT],
-        epw_df[ColNames.WIND_SPEED_UTCI_0],
-        epw_df[ColNames.RH],
-    )
 
-    utci_bins = [-999, -40, -27, -13, 0, 9, 26, 32, 38, 46, 999]
-    utci_labels = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]
-    epw_df[ColNames.UTCI_NOSUN_WIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_NO_SUN_WIND], bins=utci_bins, labels=utci_labels
-    )
-    epw_df[ColNames.UTCI_NOSUN_NOWIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_NO_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
-    )
-    epw_df[ColNames.UTCI_SUN_WIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_SUN_WIND], bins=utci_bins, labels=utci_labels
-    )
-    epw_df[ColNames.UTCI_SUN_NOWIND_CATEGORIES] = pd.cut(
-        x=epw_df[ColNames.UTCI_SUN_NO_WIND], bins=utci_bins, labels=utci_labels
-    )
+    epw_df = add_utci_variants(epw_df)
+
+    epw_df = add_utci_categories(epw_df)
 
     # Add psy values
     ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df[ColNames.DBT], epw_df[ColNames.RH])
@@ -407,11 +432,11 @@ def enthalpy(df, name):
 
 
 def convert_data(df, mapping_json):
-    df[ColNames.ADAPTIVE_COMFORT] = df[ColNames.ADAPTIVE_COMFORT] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_80_LOW] = df[ColNames.ADAPTIVE_CMF_80_LOW] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_80_UP] = df[ColNames.ADAPTIVE_CMF_80_UP] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_90_LOW] = df[ColNames.ADAPTIVE_CMF_90_LOW] * 1.8 + 32
-    df[ColNames.ADAPTIVE_CMF_90_UP] = df[ColNames.ADAPTIVE_CMF_90_UP] * 1.8 + 32
+    convert_t_to_f(df, ColNames.ADAPTIVE_COMFORT)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_80_LOW)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_80_UP)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_90_LOW)
+    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_90_UP)
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):
@@ -421,6 +446,32 @@ def convert_data(df, mapping_json):
                 conversion_function = globals()[conversion_function_name]
                 conversion_function(df, key)
     return json.dumps(mapping_dict)
+
+
+def convert_t_to_f(df: pd.DataFrame, name: str):
+    """Convert temperature from Celsius to Fahrenheit in-place for a given column.
+
+    Args:
+        df: The DataFrame containing the temperature column.
+        name: Column name to convert.
+
+    Returns:
+        None. The DataFrame is modified in-place.
+    """
+    df[name] = df[name] * 1.8 + 32
+
+
+def expand_to_hours(value: any, hours: int = 8760) -> list[any]:
+    """Return a list with the input value repeated for a given number of hours.
+
+    Args:
+        value: The value to repeat.
+        hours: Number of repetitions. Defaults to 8760 (hours in a year).
+
+    Returns:
+        A list containing the value repeated `hours` times.
+    """
+    return [value] * hours
 
 
 if __name__ == "__main__":
