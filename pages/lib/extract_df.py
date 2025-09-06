@@ -399,66 +399,63 @@ def create_df(lst, file_name):
 
 
 # convert function
-def temperature(df, name):
-    df[name] = df[name] * 1.8 + 32
+def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
+    """Convert SI to IP based on column name."""
+    match name:
+        case (
+            ColNames.DBT
+            | ColNames.DPT
+            | ColNames.T_WB
+            | ColNames.T_DP
+            | ColNames.UTCI_SUN_WIND
+            | ColNames.UTCI_NO_SUN_WIND
+            | ColNames.UTCI_SUN_NO_WIND
+            | ColNames.UTCI_NO_SUN_NO_WIND
+        ):
+            df[name] = df[name] * 1.8 + 32
 
+        case ColNames.P_ATM | ColNames.P_VAP | ColNames.P_SAT:
+            df[name] = df[name] * 0.000145038
 
-def pressure(df, name):
-    df[name] = df[name] * 0.000145038
+        case (
+            ColNames.EXTR_HOR_RAD
+            | ColNames.HOR_IR_RAD
+            | ColNames.GLOB_HOR_RAD
+            | ColNames.DIR_NOR_RAD
+            | ColNames.DIF_HOR_RAD
+        ):
+            df[name] = df[name] * 0.3169983306
 
+        case ColNames.GLOB_HOR_ILL | ColNames.DIR_NOR_ILL | ColNames.DIF_HOR_ILL:
+            df[name] = df[name] * 0.0929
 
-def irradiation(df, name):
-    df[name] = df[name] * 0.3169983306
+        case ColNames.ZLUMI:
+            df[name] = df[name] * 0.0929
 
+        case ColNames.WIND_SPEED:
+            df[name] = df[name] * 196.85039370078738
 
-def illuminance(df, name):
-    df[name] = df[name] * 0.0929
+        case ColNames.VIS:
+            df[name] = df[name] * 0.6215
 
-
-def zenith_illuminance(df, name):
-    df[name] = df[name] * 0.0929
-
-
-def speed(df, name):
-    df[name] = df[name] * 196.85039370078738
-
-
-def visibility(df, name):
-    df[name] = df[name] * 0.6215
-
-
-def enthalpy(df, name):
-    df[name] = df[name] * 0.0004
+        case ColNames.EH:
+            df[name] = df[name] * 0.000429923
 
 
 def convert_data(df, mapping_json):
-    convert_t_to_f(df, ColNames.ADAPTIVE_COMFORT)
-    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_80_LOW)
-    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_80_UP)
-    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_90_LOW)
-    convert_t_to_f(df, ColNames.ADAPTIVE_CMF_90_UP)
+    convert_SI_to_IP(df, ColNames.ADAPTIVE_COMFORT)
+    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_80_LOW)
+    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_80_UP)
+    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_90_LOW)
+    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_90_UP)
 
     mapping_dict = json.loads(mapping_json)
     for key in json.loads(mapping_json):
         if ColNames.CONVERSION_FUNCTION in mapping_dict[key]:
             conversion_function_name = mapping_dict[key][ColNames.CONVERSION_FUNCTION]
             if conversion_function_name is not None:
-                conversion_function = globals()[conversion_function_name]
-                conversion_function(df, key)
+                convert_SI_to_IP(df, key)
     return json.dumps(mapping_dict)
-
-
-def convert_t_to_f(df: pd.DataFrame, name: str):
-    """Convert temperature from Celsius to Fahrenheit in-place for a given column.
-
-    Args:
-        df: The DataFrame containing the temperature column.
-        name: Column name to convert.
-
-    Returns:
-        None. The DataFrame is modified in-place.
-    """
-    df[name] = df[name] * 1.8 + 32
 
 
 def expand_to_hours(value: any, hours: int = 8760) -> list[any]:

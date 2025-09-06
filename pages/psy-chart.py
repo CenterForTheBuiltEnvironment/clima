@@ -11,7 +11,7 @@ from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.utils import get_max_min_value
-from pages.lib.extract_df import convert_t_to_f
+from pages.lib.extract_df import convert_SI_to_IP
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
@@ -357,7 +357,7 @@ def update_psych_chart(
 
         if si_ip == UnitSystem.IP:
             for j in range(len(dbt_list)):
-                convert_t_to_f(dbt_list_convert, j)
+                convert_SI_to_IP(dbt_list_convert, j)
 
         fig.add_trace(
             go.Scatter(
