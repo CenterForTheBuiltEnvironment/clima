@@ -20,8 +20,13 @@ class ColNames:
     RH = "RH"  # Relative Humidity
     HI_RH = "hiRH"  # High Relative Humidity
     LO_RH = "loRH"  # Low Relative Humidity
-    HR = "hr"
+    HR = "hr"  # Absolute Humidity
+    EH = "h"  # Enthalpy
     P_ATM = "p_atm"  # Atmospheric Pressure
+    P_VAP = "p_vap"  # Vapor partial Pressure
+    P_SAT = "p_sat"  # Saturation Pressure
+    T_WB = "t_wb"  # Wet Bulb Temperature
+    T_DP = "t_dp"  # Dew Point Temperature
 
     # ==================== Radiation-related column ====================
     EXTR_HOR_RAD = "extr_hor_rad"  # Extraterrestrial Horizontal Radiation
@@ -52,9 +57,11 @@ class ColNames:
     #     SnowD = "SnowD"  # Snow Depth
     #     DaySSnow = "DaySSnow"  # Daily Snow
     ELEVATION = "elevation"  # Elevation
+    EQUATION_OF_TIME = "equation_of_time"  # Equation of time
     APPARENT_ELEVATION = "apparent_elevation"  # Apparent Elevation
     APPARENT_ZENITH = "apparent_zenith"  # Apparent Zenith
     AZIMUTH = "azimuth"  # Azimuth
+    ZENITH = "zenith"  # Zenith
     MRT = "MRT"
     DELTA_MRT = "delta_mrt"
     UTCI_SUN_WIND = "utci_Sun_Wind"  # Utci Sun Wind
@@ -110,3 +117,4 @@ class ColNames:
     GEOMETRY_COORDINATES = "geometry.coordinates"
     PROP_ID = "prop_id"
     SITE_ELEVATION = "site_elevation"
+    NONE = "None"
