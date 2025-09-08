@@ -401,6 +401,8 @@ def create_df(lst, file_name):
 # convert function
 def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
     """Convert SI to IP based on column name."""
+    if name not in df.columns:
+        return
     match name:
         case (
             ColNames.DBT
@@ -411,6 +413,11 @@ def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
             | ColNames.UTCI_NO_SUN_WIND
             | ColNames.UTCI_SUN_NO_WIND
             | ColNames.UTCI_NO_SUN_NO_WIND
+            | ColNames.ADAPTIVE_COMFORT
+            | ColNames.ADAPTIVE_CMF_80_LOW
+            | ColNames.ADAPTIVE_CMF_80_UP
+            | ColNames.ADAPTIVE_CMF_90_LOW
+            | ColNames.ADAPTIVE_CMF_90_UP
         ):
             df[name] = df[name] * 1.8 + 32
 
@@ -443,19 +450,12 @@ def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
 
 
 def convert_data(df, mapping_json):
-    convert_SI_to_IP(df, ColNames.ADAPTIVE_COMFORT)
-    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_80_LOW)
-    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_80_UP)
-    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_90_LOW)
-    convert_SI_to_IP(df, ColNames.ADAPTIVE_CMF_90_UP)
-
     mapping_dict = json.loads(mapping_json)
-    for key in json.loads(mapping_json):
-        if ColNames.CONVERSION_FUNCTION in mapping_dict[key]:
-            conversion_function_name = mapping_dict[key][ColNames.CONVERSION_FUNCTION]
-            if conversion_function_name is not None:
+    for key, meta in mapping_dict.items():
+        if meta.get(ColNames.CONVERSION_FUNCTION):
+            if key in df.columns:
                 convert_SI_to_IP(df, key)
-    return json.dumps(mapping_dict)
+    return mapping_json
 
 
 def expand_to_hours(value: any, hours: int = 8760) -> list[any]:
