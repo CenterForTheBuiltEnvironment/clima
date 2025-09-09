@@ -112,13 +112,21 @@ temperature_unit = "\u00b0C"
 thermal_stress_label = "Thermal stress"
 
 mapping_dictionary = {
-    "None": {"name": "None"},
-    "DOY": {"name": "Day of the year", "unit": "days", "range": [0, 365]},
-    "day": {"name": "day", "range": [1, 31]},
-    "month": {"name": "months", "unit": "months", "range": [1, 12]},
-    "hour": {
-        "name": "Hour",
-        "color": [
+    ColNames.NONE: {ColNames.NAME: "None"},
+    ColNames.DOY: {
+        ColNames.NAME: "Day of the year",
+        ColNames.UNIT: "days",
+        ColNames.RANGE: [0, 365],
+    },
+    ColNames.DAY: {ColNames.NAME: "day", ColNames.RANGE: [1, 31]},
+    ColNames.MONTH: {
+        ColNames.NAME: "months",
+        ColNames.UNIT: "months",
+        ColNames.RANGE: [1, 12],
+    },
+    ColNames.HOUR: {
+        ColNames.NAME: "Hour",
+        ColNames.COLOR: [
             "#000000",
             "#355e7e",
             "#6b5c7b",
@@ -129,51 +137,48 @@ mapping_dictionary = {
             "#c92a42",
             "#000000",
         ],
-        "unit": "h",
-        "range": [1, 24],
+        ColNames.UNIT: "h",
+        ColNames.RANGE: [1, 24],
     },
-    "DBT": {
-        "name": "Dry bulb temperature",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.DBT: {
+        ColNames.NAME: "Dry bulb temperature",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-40, 50],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-40, 50],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-40, 122],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-40, 122],
         },
-        "conversion_function": "temperature",
     },
-    "DPT": {
-        "name": "Dew point temperature",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.DPT: {
+        ColNames.NAME: "Dew point temperature",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-50, 35],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-50, 35],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-58, 95],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-58, 95],
         },
-        "conversion_function": "temperature",
     },
-    "RH": {
-        "name": "Relative humidity",
-        "color": ["#ffe600", "#00c8ff", "#0000ff"],
+    ColNames.RH: {
+        ColNames.NAME: "Relative humidity",
+        ColNames.COLOR: ["#ffe600", "#00c8ff", "#0000ff"],
         UnitSystem.SI: {
-            "unit": "%",
-            "range": [0, 100],
+            ColNames.UNIT: "%",
+            ColNames.RANGE: [0, 100],
         },
         UnitSystem.IP: {
-            "unit": "%",
-            "range": [0, 100],
+            ColNames.UNIT: "%",
+            ColNames.RANGE: [0, 100],
         },
-        "conversion_function": None,
     },
-    "p_atm": {
-        "name": "Atmospheric pressure",
-        "color": [
+    ColNames.P_ATM: {
+        ColNames.NAME: "Atmospheric pressure",
+        ColNames.COLOR: [
             "#ffffff",
             "#b2f2ff",
             "#33ddff",
@@ -186,18 +191,17 @@ mapping_dictionary = {
             "#ffaa00",
         ],
         UnitSystem.SI: {
-            "unit": "Pa",
-            "range": [95000, 105000],
+            ColNames.UNIT: "Pa",
+            ColNames.RANGE: [95000, 105000],
         },
         UnitSystem.IP: {
-            "unit": "Psi",
-            "range": [95000 * 0.000145038, 1050000.000145038],
+            ColNames.UNIT: "Psi",
+            ColNames.RANGE: [95000 * 0.000145038, 1050000.000145038],
         },
-        "conversion_function": "pressure",
     },
-    "extr_hor_rad": {
-        "name": "Extraterrestrial horizontal irradiation",
-        "color": [
+    ColNames.EXTR_HOR_RAD: {
+        ColNames.NAME: "Extraterrestrial horizontal irradiation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -207,18 +211,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "Wh/m<sup>2</sup>",
-            "range": [0, 1200],
+            ColNames.UNIT: "Wh/m<sup>2</sup>",
+            ColNames.RANGE: [0, 1200],
         },
         UnitSystem.IP: {
-            "unit": "Btu/ft<sup>2</sup>",
-            "range": [0, 1200 * 0.3169983306],
+            ColNames.UNIT: "Btu/ft<sup>2</sup>",
+            ColNames.RANGE: [0, 1200 * 0.3169983306],
         },
-        "conversion_function": "irradiation",
     },
-    "hor_ir_rad": {
-        "name": "Horizontal infrared radiation",
-        "color": [
+    ColNames.HOR_IR_RAD: {
+        ColNames.NAME: "Horizontal infrared radiation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -228,18 +231,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "Wh/m<sup>2</sup>",
-            "range": [0, 500],
+            ColNames.UNIT: "Wh/m<sup>2</sup>",
+            ColNames.RANGE: [0, 500],
         },
         UnitSystem.IP: {
-            "unit": "Btu/ft<sup>2</sup>",
-            "range": [0, 500 * 0.3169983306],
+            ColNames.UNIT: "Btu/ft<sup>2</sup>",
+            ColNames.RANGE: [0, 500 * 0.3169983306],
         },
-        "conversion_function": "irradiation",
     },
-    "glob_hor_rad": {
-        "name": "Global horizontal radiation",
-        "color": [
+    ColNames.GLOB_HOR_RAD: {
+        ColNames.NAME: "Global horizontal radiation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -249,18 +251,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "Wh/m<sup>2</sup>",
-            "range": [0, 1200],
+            ColNames.UNIT: "Wh/m<sup>2</sup>",
+            ColNames.RANGE: [0, 1200],
         },
         UnitSystem.IP: {
-            "unit": "Btu/ft<sup>2</sup>",
-            "range": [0, 1200 * 0.3169983306],
+            ColNames.UNIT: "Btu/ft<sup>2</sup>",
+            ColNames.RANGE: [0, 1200 * 0.3169983306],
         },
-        "conversion_function": "irradiation",
     },
-    "dir_nor_rad": {
-        "name": "Direct normal radiation",
-        "color": [
+    ColNames.DIR_NOR_RAD: {
+        ColNames.NAME: "Direct normal radiation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -270,18 +271,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "Wh/m<sup>2</sup>",
-            "range": [0, 1200],
+            ColNames.UNIT: "Wh/m<sup>2</sup>",
+            ColNames.RANGE: [0, 1200],
         },
         UnitSystem.IP: {
-            "unit": "Btu/ft<sup>2</sup>",
-            "range": [0, 1200 * 0.3169983306],
+            ColNames.UNIT: "Btu/ft<sup>2</sup>",
+            ColNames.RANGE: [0, 1200 * 0.3169983306],
         },
-        "conversion_function": "irradiation",
     },
-    "dif_hor_rad": {
-        "name": "Diffuse horizontal radiation",
-        "color": [
+    ColNames.DIF_HOR_RAD: {
+        ColNames.NAME: "Diffuse horizontal radiation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -291,83 +291,84 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "Wh/m<sup>2</sup>",
-            "range": [0, 1200],
+            ColNames.UNIT: "Wh/m<sup>2</sup>",
+            ColNames.RANGE: [0, 1200],
         },
         UnitSystem.IP: {
-            "unit": "Btu/ft<sup>2</sup>",
-            "range": [0, 1200 * 0.3169983306],
+            ColNames.UNIT: "Btu/ft<sup>2</sup>",
+            ColNames.RANGE: [0, 1200 * 0.3169983306],
         },
-        "conversion_function": "irradiation",
     },
-    "glob_hor_ill": {
-        "name": "Global horizontal illuminance",
-        "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
+    ColNames.GLOB_HOR_ILL: {
+        ColNames.NAME: "Global horizontal illuminance",
+        ColNames.COLOR: ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
         UnitSystem.SI: {
-            "unit": "lux",
-            "range": [0, 120000],
+            ColNames.UNIT: "lux",
+            ColNames.RANGE: [0, 120000],
         },
         UnitSystem.IP: {
-            "unit": "fc",
-            "range": [0, 120000 * 0.0929],
+            ColNames.UNIT: "fc",
+            ColNames.RANGE: [0, 120000 * 0.0929],
         },
-        "conversion_function": "illuminance",
     },
-    "dir_nor_ill": {
-        "name": "Direct normal illuminance",
-        "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
+    ColNames.DIR_NOR_ILL: {
+        ColNames.NAME: "Direct normal illuminance",
+        ColNames.COLOR: ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
         UnitSystem.SI: {
-            "unit": "lux",
-            "range": [0, 120000],
+            ColNames.UNIT: "lux",
+            ColNames.RANGE: [0, 120000],
         },
         UnitSystem.IP: {
-            "unit": "fc",
-            "range": [0, 120000 * 0.0929],
+            ColNames.UNIT: "fc",
+            ColNames.RANGE: [0, 120000 * 0.0929],
         },
-        "conversion_function": "illuminance",
     },
-    "dif_hor_ill": {
-        "name": "Diffuse horizontal illuminance",
-        "color": ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
+    ColNames.DIF_HOR_ILL: {
+        ColNames.NAME: "Diffuse horizontal illuminance",
+        ColNames.COLOR: ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"],
         UnitSystem.SI: {
-            "unit": "lux",
-            "range": [0, 120000],
+            ColNames.UNIT: "lux",
+            ColNames.RANGE: [0, 120000],
         },
         UnitSystem.IP: {
-            "unit": "fc",
-            "range": [0, 120000 * 0.0929],
+            ColNames.UNIT: "fc",
+            ColNames.RANGE: [0, 120000 * 0.0929],
         },
-        "conversion_function": "illuminance",
     },
-    "Zlumi": {
-        "name": "Zenith luminance",
-        "color": ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"],
+    ColNames.ZLUMI: {
+        ColNames.NAME: "Zenith luminance",
+        ColNames.COLOR: [
+            "#730a8c",
+            "#0d0db3",
+            "#0f85be",
+            "#0f85be",
+            "#b11421",
+            "#fdf130",
+        ],
         UnitSystem.SI: {
-            "unit": "cd/m<sup>2</sup>",
-            "range": [0, 60000],
+            ColNames.UNIT: "cd/m<sup>2</sup>",
+            ColNames.RANGE: [0, 60000],
         },
         UnitSystem.IP: {
-            "unit": "cd/ft<sup>2</sup>",
-            "range": [0, 60000 * 0.0929],
+            ColNames.UNIT: "cd/ft<sup>2</sup>",
+            ColNames.RANGE: [0, 60000 * 0.0929],
         },
-        "conversion_function": "zenith_illuminance",
     },
-    "wind_dir": {
-        "name": "Wind direction",
-        "color": ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
+    ColNames.WIND_DIR: {
+        ColNames.NAME: "Wind direction",
+        ColNames.COLOR: ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [0, 360],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 360],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [0, 360],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 360],
         },
-        "conversion_function": None,
     },
     ColNames.WIND_SPEED: {
-        "name": "Wind speed",
-        "color": [
+        ColNames.NAME: "Wind speed",
+        ColNames.COLOR: [
             "#D3D3D3",
             "#b2f2ff",
             "#33ddff",
@@ -380,57 +381,53 @@ mapping_dictionary = {
             "#ffaa00",
         ],
         UnitSystem.SI: {
-            "unit": "m/s",
-            "range": [0, 20],
+            ColNames.UNIT: "m/s",
+            ColNames.RANGE: [0, 20],
         },
         UnitSystem.IP: {
-            "unit": "fpm",
-            "range": [0, 20 * 196.85039370078738],
+            ColNames.UNIT: "fpm",
+            ColNames.RANGE: [0, 20 * 196.85039370078738],
         },
-        "conversion_function": "speed",
     },
-    "tot_sky_cover": {
-        "name": "Total sky cover",
-        "color": cloud_colors,
+    ColNames.TOT_SKY_COVER: {
+        ColNames.NAME: "Total sky cover",
+        ColNames.COLOR: cloud_colors,
         UnitSystem.SI: {
-            "unit": "tenths",
-            "range": [0, 10],
+            ColNames.UNIT: "tenths",
+            ColNames.RANGE: [0, 10],
         },
         UnitSystem.IP: {
-            "unit": "tenths",
-            "range": [0, 10],
+            ColNames.UNIT: "tenths",
+            ColNames.RANGE: [0, 10],
         },
-        "conversion_function": None,
     },
-    "Oskycover": {
-        "name": "Opaque sky cover",
-        "color": cloud_colors,
+    ColNames.OSKYCOVER: {
+        ColNames.NAME: "Opaque sky cover",
+        ColNames.COLOR: cloud_colors,
         UnitSystem.SI: {
-            "unit": "tenths",
-            "range": [0, 10],
+            ColNames.UNIT: "tenths",
+            ColNames.RANGE: [0, 10],
         },
         UnitSystem.IP: {
-            "unit": "tenths",
-            "range": [0, 10],
+            ColNames.UNIT: "tenths",
+            ColNames.RANGE: [0, 10],
         },
-        "conversion_function": None,
     },
-    "Vis": {
-        "name": "Visibility",
-        "color": cloud_colors,
+    ColNames.VIS: {
+        ColNames.NAME: "Visibility",
+        ColNames.COLOR: cloud_colors,
         UnitSystem.SI: {
-            "unit": "km",
-            "range": [0, 100],
+            ColNames.UNIT: "km",
+            ColNames.RANGE: [0, 100],
         },
         UnitSystem.IP: {
-            "unit": "miles",
-            "range": [0, 100 * 0.6215],
+            ColNames.UNIT: "miles",
+            ColNames.RANGE: [0, 100 * 0.6215],
         },
-        "conversion_function": "visibility",
     },
-    "apparent_zenith": {
-        "name": "Apparent zenith",
-        "color": [
+    ColNames.APPARENT_ZENITH: {
+        ColNames.NAME: "Apparent zenith",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -440,18 +437,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [0, 180],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 180],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [0, 180],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 180],
         },
-        "conversion_function": None,
     },
-    "zenith": {
-        "name": "Zenith",
-        "color": [
+    ColNames.ZENITH: {
+        ColNames.NAME: "Zenith",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -461,18 +457,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [0, 180],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 180],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [0, 180],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 180],
         },
-        "conversion_function": None,
     },
-    "apparent_elevation": {
-        "name": "Apparent elevation",
-        "color": [
+    ColNames.APPARENT_ELEVATION: {
+        ColNames.NAME: "Apparent elevation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -482,18 +477,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [-90, 90],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [-90, 90],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [-90, 90],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [-90, 90],
         },
-        "conversion_function": None,
     },
-    "elevation": {
-        "name": "Elevation",
-        "color": [
+    ColNames.ELEVATION: {
+        ColNames.NAME: "Elevation",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -503,18 +497,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [-90, 90],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [-90, 90],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [-90, 90],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [-90, 90],
         },
-        "conversion_function": None,
     },
-    "azimuth": {
-        "name": "Azimuth",
-        "color": [
+    ColNames.AZIMUTH: {
+        ColNames.NAME: "Azimuth",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -524,18 +517,17 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [0, 360],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 360],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [0, 360],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [0, 360],
         },
-        "conversion_function": None,
     },
-    "equation_of_time": {
-        "name": "Equation of time",
-        "color": [
+    ColNames.EQUATION_OF_TIME: {
+        ColNames.NAME: "Equation of time",
+        ColNames.COLOR: [
             "#293a59",
             "#960c2c",
             "#ff0000",
@@ -545,70 +537,65 @@ mapping_dictionary = {
             "#ffffff",
         ],
         UnitSystem.SI: {
-            "unit": "°deg",
-            "range": [-20, 20],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [-20, 20],
         },
         UnitSystem.IP: {
-            "unit": "°deg",
-            "range": [-20, 20],
+            ColNames.UNIT: "°deg",
+            ColNames.RANGE: [-20, 20],
         },
-        "conversion_function": None,
     },
-    "utci_Sun_Wind": {
-        "name": "UTCI: Sun & Wind",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.UTCI_SUN_WIND: {
+        ColNames.NAME: "UTCI: Sun & Wind",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-70, 70],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-70, 70],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-94, 158],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-94, 158],
         },
-        "conversion_function": "temperature",
     },
-    "utci_noSun_Wind": {
-        "name": "UTCI: no Sun & Wind",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.UTCI_NO_SUN_WIND: {
+        ColNames.NAME: "UTCI: no Sun & Wind",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-70, 70],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-70, 70],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-94, 158],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-94, 158],
         },
-        "conversion_function": "temperature",
     },
-    "utci_Sun_noWind": {
-        "name": "UTCI: Sun & no Wind",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.UTCI_SUN_NO_WIND: {
+        ColNames.NAME: "UTCI: Sun & no Wind",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-70, 70],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-70, 70],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-94, 158],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-94, 158],
         },
-        "conversion_function": "temperature",
     },
-    "utci_noSun_noWind": {
-        "name": "UTCI: no Sun & no Wind",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.UTCI_NO_SUN_NO_WIND: {
+        ColNames.NAME: "UTCI: no Sun & no Wind",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-70, 70],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-70, 70],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-94, 158],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-94, 158],
         },
-        "conversion_function": "temperature",
     },
-    "utci_Sun_Wind_categories": {
-        "name": "UTCI: Sun & Wind : categories",
-        "color": [
+    ColNames.UTCI_SUN_WIND_CATEGORIES: {
+        ColNames.NAME: "UTCI: Sun & Wind : categories",
+        ColNames.COLOR: [
             [0, "#2B2977"],
             [0.0555, "#2B2977"],
             [0.0555, "#38429B"],
@@ -631,18 +618,17 @@ mapping_dictionary = {
             [1.0, "#751613"],
         ],
         UnitSystem.SI: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
         UnitSystem.IP: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
-        "conversion_function": None,
     },
-    "utci_noSun_Wind_categories": {
-        "name": "UTCI: no Sun & Wind : categories",
-        "color": [
+    ColNames.UTCI_NOSUN_WIND_CATEGORIES: {
+        ColNames.NAME: "UTCI: no Sun & Wind : categories",
+        ColNames.COLOR: [
             [0, "#2B2977"],
             [0.0555, "#2B2977"],
             [0.0555, "#38429B"],
@@ -665,18 +651,17 @@ mapping_dictionary = {
             [1.0, "#751613"],
         ],
         UnitSystem.SI: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
         UnitSystem.IP: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
-        "conversion_function": None,
     },
-    "utci_Sun_noWind_categories": {
-        "name": "UTCI: Sun & no Wind : categories",
-        "color": [
+    ColNames.UTCI_SUN_NOWIND_CATEGORIES: {
+        ColNames.NAME: "UTCI: Sun & no Wind : categories",
+        ColNames.COLOR: [
             [0, "#2B2977"],
             [0.0555, "#2B2977"],
             [0.0555, "#38429B"],
@@ -699,18 +684,17 @@ mapping_dictionary = {
             [1.0, "#751613"],
         ],
         UnitSystem.SI: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
         UnitSystem.IP: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
-        "conversion_function": None,
     },
-    "utci_noSun_noWind_categories": {
-        "name": "UTCI: no Sun & no Wind : categories",
-        "color": [
+    ColNames.UTCI_NOSUN_NOWIND_CATEGORIES: {
+        ColNames.NAME: "UTCI: no Sun & no Wind : categories",
+        ColNames.COLOR: [
             [0, "#2B2977"],
             [0.0555, "#2B2977"],
             [0.0555, "#38429B"],
@@ -733,171 +717,164 @@ mapping_dictionary = {
             [1.0, "#751613"],
         ],
         UnitSystem.SI: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
         UnitSystem.IP: {
-            "unit": thermal_stress_label,
-            "range": [-5, 4],
+            ColNames.UNIT: thermal_stress_label,
+            ColNames.RANGE: [-5, 4],
         },
-        "conversion_function": None,
     },
-    "p_vap": {
-        "name": "Vapor partial pressure",
-        "color": ["#ffe600", "#00c8ff", "#0000ff"],
+    ColNames.P_VAP: {
+        ColNames.NAME: "Vapor partial pressure",
+        ColNames.COLOR: ["#ffe600", "#00c8ff", "#0000ff"],
         UnitSystem.SI: {
-            "unit": "Pa",
-            "range": [0, 5000],
+            ColNames.UNIT: "Pa",
+            ColNames.RANGE: [0, 5000],
         },
         UnitSystem.IP: {
-            "unit": "Psi",
-            "range": [0, 5000 * 0.000145038],
+            ColNames.UNIT: "Psi",
+            ColNames.RANGE: [0, 5000 * 0.000145038],
         },
-        "conversion_function": "pressure",
     },
-    "p_sat": {
-        "name": "Saturation pressure",
+    ColNames.P_SAT: {
+        ColNames.NAME: "Saturation pressure",
         UnitSystem.SI: {
-            "unit": "Pa",
-            "range": [0, 5000],
+            ColNames.UNIT: "Pa",
+            ColNames.RANGE: [0, 5000],
         },
         UnitSystem.IP: {
-            "unit": "Psi",
-            "range": [0, 5000 * 0.000145038],
+            ColNames.UNIT: "Psi",
+            ColNames.RANGE: [0, 5000 * 0.000145038],
         },
-        "conversion_function": "pressure",
     },
-    "hr": {
-        "name": "Absolute humidity",
-        "color": ["#ffe600", "#00c8ff", "#0000ff"],
+    ColNames.HR: {
+        ColNames.NAME: "Absolute humidity",
+        ColNames.COLOR: ["#ffe600", "#00c8ff", "#0000ff"],
         UnitSystem.SI: {
-            "unit": "g water/kg dry air",
-            "range": [0, 0.03 * 1000],
+            ColNames.UNIT: "g water/kg dry air",
+            ColNames.RANGE: [0, 0.03 * 1000],
         },
         UnitSystem.IP: {
-            "unit": "lb water/klb dry air",
-            "range": [0, 0.03 * 1000],
+            ColNames.UNIT: "lb water/klb dry air",
+            ColNames.RANGE: [0, 0.03 * 1000],
         },
-        "conversion_function": None,
     },
-    "t_wb": {
-        "name": "Wet bulb temperature",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.T_WB: {
+        ColNames.NAME: "Wet bulb temperature",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-40, 50],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-40, 50],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-40, 122],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-40, 122],
         },
-        "conversion_function": "temperature",
     },
-    "t_dp": {
-        "name": "Dew point temperature",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.T_DP: {
+        ColNames.NAME: "Dew point temperature",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "°C",
-            "range": [-40, 50],
+            ColNames.UNIT: "°C",
+            ColNames.RANGE: [-40, 50],
         },
         UnitSystem.IP: {
-            "unit": "°F",
-            "range": [-40, 122],
+            ColNames.UNIT: "°F",
+            ColNames.RANGE: [-40, 122],
         },
-        "conversion_function": "temperature",
     },
-    "h": {
-        "name": "Enthalpy",
-        "color": ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
+    ColNames.EH: {
+        ColNames.NAME: "Enthalpy",
+        ColNames.COLOR: ["#00b3ff", "#000082", "#ff0000", "#ffff00"],
         UnitSystem.SI: {
-            "unit": "J/kg dry air",
-            "range": [0, 110000],
+            ColNames.UNIT: "J/kg dry air",
+            ColNames.RANGE: [0, 110000],
         },
         UnitSystem.IP: {
-            "unit": "Btu/lb dry air",
-            "range": [0, 110000 * 0.000429923],
+            ColNames.UNIT: "Btu/lb dry air",
+            ColNames.RANGE: [0, 110000 * 0.000429923],
         },
-        "conversion_function": "enthalpy",
     },
 }
 
 # Dropdown Names
 variables_sun_cloud_tab_dropdown = [
-    "None",
-    "t_wb",
-    "DPT",
-    "DBT",
-    "RH",
-    "p_vap",
-    "hr",
-    "extr_hor_rad",
-    "hor_ir_rad",
-    "glob_hor_rad",
-    "dir_nor_rad",
-    "dif_hor_rad",
-    "glob_hor_ill",
-    "dir_nor_ill",
-    "dif_hor_ill",
-    "Zlumi",
-    "wind_dir",
+    ColNames.NONE,
+    ColNames.T_WB,
+    ColNames.DPT,
+    ColNames.DBT,
+    ColNames.RH,
+    ColNames.P_VAP,
+    ColNames.HR,
+    ColNames.EXTR_HOR_RAD,
+    ColNames.HOR_IR_RAD,
+    ColNames.GLOB_HOR_RAD,
+    ColNames.DIR_NOR_RAD,
+    ColNames.DIF_HOR_RAD,
+    ColNames.GLOB_HOR_ILL,
+    ColNames.DIR_NOR_ILL,
+    ColNames.DIF_HOR_ILL,
+    ColNames.ZLUMI,
+    ColNames.WIND_DIR,
     ColNames.WIND_SPEED,
-    "tot_sky_cover",
-    "Oskycover",
-    "Vis",
+    ColNames.TOT_SKY_COVER,
+    ColNames.OSKYCOVER,
+    ColNames.VIS,
 ]
 variables_dropdown = [
-    "t_wb",
-    "DPT",
-    "DBT",
-    "RH",
-    "p_vap",
-    "hr",
-    "extr_hor_rad",
-    "hor_ir_rad",
-    "glob_hor_rad",
-    "dir_nor_rad",
-    "dif_hor_rad",
-    "glob_hor_ill",
-    "dir_nor_ill",
-    "dif_hor_ill",
-    "Zlumi",
-    "wind_dir",
+    ColNames.T_WB,
+    ColNames.DPT,
+    ColNames.DBT,
+    ColNames.RH,
+    ColNames.P_VAP,
+    ColNames.HR,
+    ColNames.EXTR_HOR_RAD,
+    ColNames.HOR_IR_RAD,
+    ColNames.GLOB_HOR_RAD,
+    ColNames.DIR_NOR_RAD,
+    ColNames.DIF_HOR_RAD,
+    ColNames.GLOB_HOR_ILL,
+    ColNames.DIR_NOR_ILL,
+    ColNames.DIF_HOR_ILL,
+    ColNames.ZLUMI,
+    ColNames.WIND_DIR,
     ColNames.WIND_SPEED,
-    "tot_sky_cover",
-    "Oskycover",
-    "Vis",
+    ColNames.TOT_SKY_COVER,
+    ColNames.OSKYCOVER,
+    ColNames.VIS,
 ]
 variables_more_variables_dropdown = [
-    "utci_Sun_Wind",
-    "utci_noSun_Wind",
-    "utci_Sun_noWind",
-    "utci_noSun_noWind",
-    "utci_Sun_Wind_categories",
-    "utci_noSun_Wind_categories",
-    "utci_Sun_noWind_categories",
-    "utci_noSun_noWind_categories",
-    "t_dp",
-    "elevation",
-    "azimuth",
-    "p_sat",
+    ColNames.UTCI_SUN_WIND,
+    ColNames.UTCI_NO_SUN_WIND,
+    ColNames.UTCI_SUN_NO_WIND,
+    ColNames.UTCI_NO_SUN_NO_WIND,
+    ColNames.UTCI_SUN_WIND_CATEGORIES,
+    ColNames.UTCI_NOSUN_WIND_CATEGORIES,
+    ColNames.UTCI_SUN_NOWIND_CATEGORIES,
+    ColNames.UTCI_NOSUN_NOWIND_CATEGORIES,
+    ColNames.T_DP,
+    ColNames.ELEVATION,
+    ColNames.AZIMUTH,
+    ColNames.P_SAT,
 ]
 variables_sun_cloud_tab_explore_dropdown = [
-    "extr_hor_rad",
-    "hor_ir_rad",
-    "glob_hor_rad",
-    "dir_nor_rad",
-    "dif_hor_rad",
-    "glob_hor_ill",
-    "dir_nor_ill",
-    "dif_hor_ill",
-    "Zlumi",
-    "Oskycover",
+    ColNames.EXTR_HOR_RAD,
+    ColNames.HOR_IR_RAD,
+    ColNames.GLOB_HOR_RAD,
+    ColNames.DIR_NOR_RAD,
+    ColNames.DIF_HOR_RAD,
+    ColNames.GLOB_HOR_ILL,
+    ColNames.DIR_NOR_ILL,
+    ColNames.DIF_HOR_ILL,
+    ColNames.ZLUMI,
+    ColNames.OSKYCOVER,
 ]
 variables_outdoor_dropdown = [
-    "utci_Sun_Wind",
-    "utci_Sun_noWind",
-    "utci_noSun_Wind",
-    "utci_noSun_noWind",
+    ColNames.UTCI_SUN_WIND,
+    ColNames.UTCI_SUN_NO_WIND,
+    ColNames.UTCI_NO_SUN_WIND,
+    ColNames.UTCI_NO_SUN_NO_WIND,
 ]
 
 sun_cloud_tab_dropdown_names = {
