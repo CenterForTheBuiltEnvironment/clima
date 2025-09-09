@@ -402,6 +402,9 @@ def create_df(lst, file_name):
 def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
     """Convert SI to IP based on column name."""
     if name not in df.columns:
+        print(
+            f"[convert_SI_to_IP] Column '{name}' not found in DataFrame. Skipping conversion."
+        )
         return
     match name:
         case (
@@ -448,13 +451,15 @@ def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
         case ColNames.EH:
             df[name] = df[name] * 0.000429923
 
+        case _:
+            # No conversion needed for this column
+            pass
+
 
 def convert_data(df, mapping_json):
     mapping_dict = json.loads(mapping_json)
-    for key, meta in mapping_dict.items():
-        if meta.get(ColNames.CONVERSION_FUNCTION):
-            if key in df.columns:
-                convert_SI_to_IP(df, key)
+    for key in mapping_dict:
+        convert_SI_to_IP(df, key)
     return mapping_json
 
 
