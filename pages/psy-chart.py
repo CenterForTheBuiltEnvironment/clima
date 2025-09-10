@@ -12,7 +12,6 @@ from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.utils import get_max_min_value
-from pages.lib.extract_df import convert_SI_to_IP
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons

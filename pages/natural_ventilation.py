@@ -1,5 +1,3 @@
-import math
-
 import dash
 from dash import dcc, html
 import dash_mantine_components as dmc

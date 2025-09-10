@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 import dash
-from dash import dcc, html, Input, Output, State, callback
+from dash import dcc, Input, Output, State, callback
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 from pages.lib.global_column_names import ColNames
@@ -67,11 +67,11 @@ def footer():
                             alt="CBE Logo",
                             h=65,
                             w="auto",
-                            fit="contain"
-                        )
+                            fit="contain",
+                        ),
                     ),
                 ],
-                className="footer-logo-section"
+                className="footer-logo-section",
             ),
             dmc.Box(
                 children=[
@@ -85,7 +85,7 @@ def footer():
                                 A free and open-source web application for climate analysis tailored to sustainable building design.
                                 Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
                                 """,
-                                className="footer-markdown-text"
+                                className="footer-markdown-text",
                             ),
                             dmc.Group(
                                 [
@@ -95,7 +95,7 @@ def footer():
                                         underline=True,
                                         c="white",
                                         target="_blank",
-                                        className="footer-link"
+                                        className="footer-link",
                                     ),
                                     dmc.Anchor(
                                         "Contributors",
@@ -103,7 +103,7 @@ def footer():
                                         underline=True,
                                         c="white",
                                         target="_blank",
-                                        className="footer-link"
+                                        className="footer-link",
                                     ),
                                     dmc.Anchor(
                                         "Report issues on GitHub",
@@ -111,7 +111,7 @@ def footer():
                                         underline=True,
                                         c="white",
                                         target="_blank",
-                                        className="footer-link"
+                                        className="footer-link",
                                     ),
                                     dmc.Anchor(
                                         "Contact us",
@@ -119,7 +119,7 @@ def footer():
                                         underline=True,
                                         c="white",
                                         target="_blank",
-                                        className="footer-link"
+                                        className="footer-link",
                                     ),
                                     dmc.Anchor(
                                         "Documentation",
@@ -127,7 +127,7 @@ def footer():
                                         underline=True,
                                         c="white",
                                         target="_blank",
-                                        className="footer-link"
+                                        className="footer-link",
                                     ),
                                     dmc.Anchor(
                                         "License",
@@ -135,17 +135,17 @@ def footer():
                                         underline=True,
                                         c="white",
                                         target="_blank",
-                                        className="footer-link"
+                                        className="footer-link",
                                     ),
                                 ],
                                 gap="sm",
-                                className="footer-links-group"
+                                className="footer-links-group",
                             ),
                         ],
-                        className="footer-text-content"
+                        className="footer-text-content",
                     ),
                 ],
-                className="footer-content-section"
+                className="footer-content-section",
             ),
         ],
     )
@@ -166,7 +166,9 @@ def banner():
                         gap="md",
                         children=[
                             burger_button(),
-                            dmc.Image(src="assets/img/cbe-logo-small.png", h=40, w="auto"),
+                            dmc.Image(
+                                src="assets/img/cbe-logo-small.png", h=40, w="auto"
+                            ),
                             dmc.Stack(
                                 gap=2,
                                 children=[
@@ -192,13 +194,15 @@ def banner():
 
 
 def sidebar():
-    """ create side bar """
+    """create side bar"""
     return dmc.Drawer(
         id=ElementIds.SIDE_BAR,
-        title=dmc.Group([
-            dmc.Image(src="assets/img/cbe-logo-small.png", h=30, w="auto"),
-            dmc.Text("CBE Clima Tool", fw=600)
-        ]),
+        title=dmc.Group(
+            [
+                dmc.Image(src="assets/img/cbe-logo-small.png", h=30, w="auto"),
+                dmc.Text("CBE Clima Tool", fw=600),
+            ]
+        ),
         padding="md",
         size="300px",
         zIndex=999,
@@ -207,12 +211,7 @@ def sidebar():
         styles={
             "title": {"paddingRight": 30},
         },
-        children=[
-            dmc.Stack(
-                gap="sm",
-                children=build_sidebar_nav_items()
-            )
-        ],
+        children=[dmc.Stack(gap="sm", children=build_sidebar_nav_items())],
     )
 
 
@@ -227,8 +226,9 @@ PAGE_ICON_MAP = {
     "Natural Ventilation": "tabler:windmill",
     "Outdoor Comfort": "tabler:thermometer",
     "Data Explorer": "tabler:database",
-    "Changelog": "tabler:history"
+    "Changelog": "tabler:history",
 }
+
 
 def build_sidebar_nav_items():
     # === Secondary Menu ===
@@ -268,7 +268,7 @@ def build_sidebar_nav_items():
                 value="local",
                 data=[
                     {"label": "Global Value Ranges", "value": "global"},
-                    {"label": "Local Value Ranges",  "value": "local"},
+                    {"label": "Local Value Ranges", "value": "local"},
                 ],
                 radius="md",
                 size="sm",
@@ -341,6 +341,7 @@ def build_tabs():
         ],
     )
 
+
 @callback(
     Output(ElementIds.SIDE_BAR, "opened"),
     Input(ElementIds.BURGER_BUTTON, "n_clicks"),
@@ -356,7 +357,7 @@ def toggle_sidebar(n_clicks, opened):
 @callback(
     Output(ElementIds.SIDE_BAR, "opened", allow_duplicate=True),
     Input(ElementIds.LAYOUT_URL, "pathname"),
-    prevent_initial_call='initial_duplicate',
+    prevent_initial_call="initial_duplicate",
 )
 def close_sidebar_on_navigation(pathname):
     return False
@@ -364,22 +365,24 @@ def close_sidebar_on_navigation(pathname):
 
 # Callback to set active state for navigation links based on current URL
 @callback(
-    [Output(f"nav-{page[ColNames.PATH].replace('/', '')}", "active") 
-     for page in dash.page_registry.values() 
-     if page[ColNames.NAME] not in ["404"]],
+    [
+        Output(f"nav-{page[ColNames.PATH].replace('/', '')}", "active")
+        for page in dash.page_registry.values()
+        if page[ColNames.NAME] not in ["404"]
+    ],
     Input(ElementIds.LAYOUT_URL, "pathname"),
     prevent_initial_call=True,
 )
 def update_nav_active_state(pathname):
     """Update active state of navigation links based on current URL pathname"""
     active_states = []
-    
+
     for page in dash.page_registry.values():
         if page[ColNames.NAME] in ["404"]:
             continue
-            
+
         # Check if current pathname matches this page's path
         is_active = pathname == page[ColNames.PATH]
         active_states.append(is_active)
-    
+
     return active_states

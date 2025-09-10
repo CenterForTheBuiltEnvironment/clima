@@ -41,9 +41,9 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
         )
         figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = file_name
     else:
-        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = (
-            f"{tab_name}{custom_str}"
-        )
+        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][
+            ColNames.FILE_NAME
+        ] = f"{tab_name}{custom_str}"
     return figure_config
 
 
@@ -248,9 +248,11 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     )
     return dash_table.DataTable(
         columns=[
-            {"name": i, "id": i}
-            if i == ColNames.MONTH
-            else {"name": f"{i} ({unit})", "id": i}
+            (
+                {"name": i, "id": i}
+                if i == ColNames.MONTH
+                else {"name": f"{i} ({unit})", "id": i}
+            )
             for i in df_summary.columns
         ],
         style_table={"overflowX": "auto"},
