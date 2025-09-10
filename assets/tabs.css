@@ -293,7 +293,7 @@ p {
     border-right: 1px solid #e9ecef;
 }
 
-/* 强制SegmentedControl适应容器宽度 */
+/* SegmentedControl adapt to container width */
 #sidebar .mantine-SegmentedControl-root {
     width: 100% !important;
 }
