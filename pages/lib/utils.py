@@ -41,9 +41,9 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
         )
         figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = file_name
     else:
-        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][
-            ColNames.FILE_NAME
-        ] = f"{tab_name}{custom_str}"
+        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = (
+            f"{tab_name}{custom_str}"
+        )
     return figure_config
 
 
