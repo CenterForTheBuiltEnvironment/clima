@@ -1,5 +1,6 @@
 import dash
 from dash import dcc, html
+import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
@@ -61,13 +62,13 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 def inputs():
     """"""
-    return html.Div(
+    return dmc.Box(
         className="container-row full-width three-inputs-container",
         children=[
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(
@@ -86,7 +87,7 @@ def inputs():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -96,11 +97,11 @@ def inputs():
                         className="mb-2",
                         n_clicks=0,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row full-width justify-center mt-2",
                         children=[
                             html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.PSY_MONTH_SLIDER,
                                     min=1,
@@ -126,11 +127,11 @@ def inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row align-center justify-center",
                         children=[
                             html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.PSY_HOUR_SLIDER,
                                     min=0,
@@ -158,7 +159,7 @@ def inputs():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -168,7 +169,7 @@ def inputs():
                         className="mb-2",
                         n_clicks=0,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(
@@ -182,7 +183,7 @@ def inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(children=["Min Value:"], style={"flex": "30%"}),
@@ -196,7 +197,7 @@ def inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(children=["Max Value:"], style={"flex": "30%"}),
@@ -218,7 +219,7 @@ def inputs():
 
 def layout():
     return (
-        html.Div(
+        dmc.Box(
             children=title_with_link(
                 text="Psychrometric Chart",
                 id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
@@ -227,9 +228,9 @@ def layout():
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(
+            children=dmc.Box(
                 className="container-col",
-                children=[inputs(), html.Div(id=ElementIds.PSYCH_CHART)],
+                children=[inputs(), dmc.Box(id=ElementIds.PSYCH_CHART)],
             ),
         ),
     )
@@ -357,7 +358,7 @@ def update_psych_chart(
 
         if si_ip == UnitSystem.IP:
             for j in range(len(dbt_list)):
-                convert_SI_to_IP(dbt_list_convert, j)
+                dbt_list_convert[j] = dbt_list_convert[j] * 1.8 + 32
 
         fig.add_trace(
             go.Scatter(

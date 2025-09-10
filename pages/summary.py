@@ -2,6 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import dcc, html, Output, Input, State, callback
+import dash_mantine_components as dmc
 
 import plotly.graph_objects as go
 import requests
@@ -35,7 +36,7 @@ dash.register_page(
 def layout():
     """Contents in the second tab 'Climate Summary'."""
 
-    return html.Div(
+    return dmc.Box(
         className="container-col",
         id=ElementIds.TAB_TWO_CONTAINER,
         children=[
@@ -56,13 +57,13 @@ def update_layout(si_ip):
         heating_setpoint = 50
         cooling_setpoint = 64
 
-    return html.Div(
+    return dmc.Box(
         className="container-col",
         id=ElementIds.TAB2_SCE1_CONTAINER,
         children=[
             dcc.Loading(
                 type="circle",
-                children=html.Div(
+                children=dmc.Box(
                     className="container-col",
                     id=ElementIds.LOCATION_INFO,
                     style={"padding": "12px"},
@@ -70,9 +71,9 @@ def update_layout(si_ip):
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(className="tab-two-section", id=ElementIds.WORLD_MAP),
+                children=dmc.Box(className="tab-two-section", id=ElementIds.WORLD_MAP),
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_tooltip(
                     text="Download",
                     id_button=IdButtons.DOWNLOAD_BUTTON_LABEL,
@@ -109,7 +110,7 @@ def update_layout(si_ip):
                     ],
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Heating and Cooling Degree Days",
                     id_button=IdButtons.HDD_CDD_CHART,
@@ -168,9 +169,9 @@ def update_layout(si_ip):
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
+                children=dmc.Box(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Climate Profiles",
                     id_button=IdButtons.CLIMATE_PROFILES_CHART,

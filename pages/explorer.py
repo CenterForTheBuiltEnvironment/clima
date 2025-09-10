@@ -1,5 +1,6 @@
 import dash
 from dash import dcc, html
+import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 from dash.exceptions import PreventUpdate
@@ -64,7 +65,7 @@ explore_dropdown_names.pop("None", None)
 
 def section_one_inputs():
     """Return the inputs from section one."""
-    return html.Div(
+    return dmc.Box(
         className="container-row full-width row-center",
         children=[
             html.H4(className="text-next-to-input", children=["Select a variable: "]),
@@ -79,11 +80,11 @@ def section_one_inputs():
 
 def section_one():
     """Return the graphs for section one"""
-    return html.Div(
+    return dmc.Box(
         className="container-col full-width",
         children=[
             section_one_inputs(),
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Yearly chart",
                     id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
@@ -92,9 +93,9 @@ def section_one():
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id=ElementIds.YEARLY_EXPLORE, className="full-width"),
+                children=dmc.Box(id=ElementIds.YEARLY_EXPLORE, className="full-width"),
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Daily chart",
                     id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
@@ -102,10 +103,10 @@ def section_one():
                 ),
             ),
             dcc.Loading(
-                html.Div(className="full-width", id=ElementIds.QUERY_DAILY),
+                dmc.Box(className="full-width", id=ElementIds.QUERY_DAILY),
                 type="circle",
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Heatmap chart",
                     id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
@@ -113,20 +114,20 @@ def section_one():
                 ),
             ),
             dcc.Loading(
-                html.Div(className="full-width", id=ElementIds.QUERY_HEATMAP),
+                dmc.Box(className="full-width", id=ElementIds.QUERY_HEATMAP),
                 type="circle",
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_tooltip(
                     text="Descriptive statistics",
                     tooltip_text="count, mean, std, min, max, and percentiles",
                     id_button=IdButtons.TABLE_EXPLORE,
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 className="container-row justify-content-center",
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className=container_col_center_one_of_three,
                         children=[
                             dbc.Button(
@@ -136,13 +137,13 @@ def section_one():
                                 className="mb-2",
                                 n_clicks=0,
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=(
                                     "container-row full-width justify-center mt-2"
                                 ),
                                 children=[
                                     html.H6("Month Range", style={"flex": "20%"}),
-                                    html.Div(
+                                    dmc.Box(
                                         dcc.RangeSlider(
                                             id=ElementIds.SEC1_MONTH_SLIDER,
                                             min=1,
@@ -168,11 +169,11 @@ def section_one():
                                     ),
                                 ],
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className="container-row justify-center",
                                 children=[
                                     html.H6("Hour Range", style={"flex": "20%"}),
-                                    html.Div(
+                                    dmc.Box(
                                         dcc.RangeSlider(
                                             id=ElementIds.SEC1_HOUR_SLIDER,
                                             min=0,
@@ -202,7 +203,7 @@ def section_one():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 id=ElementIds.TABLE_DATA_EXPLORER,
             ),
         ],
@@ -211,22 +212,22 @@ def section_one():
 
 def section_two_inputs():
     """Return all the input forms from section two."""
-    return html.Div(
+    return dmc.Box(
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_tooltip(
                     text="Customizable heatmap",
                     tooltip_text=None,
                     id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 className="container-row full-width three-inputs-container",
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className=container_col_center_one_of_three,
                         children=[
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -243,7 +244,7 @@ def section_two_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_col_center_one_of_three,
                         children=[
                             dbc.Button(
@@ -253,13 +254,13 @@ def section_two_inputs():
                                 className="mb-2",
                                 n_clicks=0,
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=(
                                     "container-row full-width justify-center mt-2"
                                 ),
                                 children=[
                                     html.H6("Month Range", style={"flex": "20%"}),
-                                    html.Div(
+                                    dmc.Box(
                                         dcc.RangeSlider(
                                             id=ElementIds.SEC2_MONTH_SLIDER,
                                             min=1,
@@ -285,11 +286,11 @@ def section_two_inputs():
                                     ),
                                 ],
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className="container-row justify-center",
                                 children=[
                                     html.H6("Hour Range", style={"flex": "20%"}),
-                                    html.Div(
+                                    dmc.Box(
                                         dcc.RangeSlider(
                                             id=ElementIds.SEC2_HOUR_SLIDER,
                                             min=0,
@@ -317,7 +318,7 @@ def section_two_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_col_center_one_of_three,
                         children=[
                             dbc.Button(
@@ -327,7 +328,7 @@ def section_two_inputs():
                                 className="mb-2",
                                 n_clicks=0,
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -342,7 +343,7 @@ def section_two_inputs():
                                     ),
                                 ],
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -358,7 +359,7 @@ def section_two_inputs():
                                     ),
                                 ],
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -384,14 +385,14 @@ def section_two_inputs():
 
 def section_two():
     """Return the two graphs in section two."""
-    return html.Div(
+    return dmc.Box(
         id=ElementIds.TAB6_SEC2_CONTAINER,
         className="container-col justify-center full-width",
         children=[
             section_two_inputs(),
             dcc.Loading(
                 type="circle",
-                children=html.Div(className="full-width", id=ElementIds.CUSTOM_HEATMAP),
+                children=dmc.Box(className="full-width", id=ElementIds.CUSTOM_HEATMAP),
             ),
             dbc.Checklist(
                 options=[
@@ -416,13 +417,13 @@ def section_two():
 
 def section_three_inputs():
     """"""
-    return html.Div(
+    return dmc.Box(
         className="container-row full-width three-inputs-container",
         children=[
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(style={"flex": "30%"}, children=["X Variable:"]),
@@ -434,7 +435,7 @@ def section_three_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(style={"flex": "30%"}, children=["Y Variable:"]),
@@ -446,7 +447,7 @@ def section_three_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(style={"flex": "30%"}, children=["Color By:"]),
@@ -460,7 +461,7 @@ def section_three_inputs():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -470,11 +471,11 @@ def section_three_inputs():
                         className="mb-2",
                         n_clicks=0,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row full-width justify-center",
                         children=[
                             html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.TAB6_SEC3_QUERY_MONTH_SLIDER,
                                     min=1,
@@ -500,11 +501,11 @@ def section_three_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row full-width justify-center",
                         children=[
                             html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.TAB6_SEC3_QUERY_HOUR_SLIDER,
                                     min=0,
@@ -532,7 +533,7 @@ def section_three_inputs():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -542,7 +543,7 @@ def section_three_inputs():
                         className="mb-2",
                         n_clicks=0,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(
@@ -556,7 +557,7 @@ def section_three_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(children=["Min Value:"], style={"flex": "30%"}),
@@ -571,7 +572,7 @@ def section_three_inputs():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(children=["Max Value:"], style={"flex": "30%"}),
@@ -594,10 +595,10 @@ def section_three_inputs():
 
 def section_three():
     """Return the two graphs in section three."""
-    return html.Div(
+    return dmc.Box(
         className="container-col full-width",
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_tooltip(
                     text="More charts",
                     tooltip_text=None,
@@ -606,11 +607,11 @@ def section_three():
             ),
             section_three_inputs(),
             dcc.Loading(
-                html.Div(id=ElementIds.THREE_VAR),
+                dmc.Box(id=ElementIds.THREE_VAR),
                 type="circle",
             ),
             dcc.Loading(
-                html.Div(id=ElementIds.TWO_VAR),
+                dmc.Box(id=ElementIds.TWO_VAR),
                 type="circle",
             ),
         ],
@@ -619,7 +620,7 @@ def section_three():
 
 def layout():
     """Return the contents of tab six."""
-    return html.Div(
+    return dmc.Box(
         className="justify-center",
         children=[section_one(), section_two(), section_three()],
     )

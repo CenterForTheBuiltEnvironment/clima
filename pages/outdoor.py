@@ -1,5 +1,6 @@
 import dash
 from dash import dcc, html
+import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
@@ -43,7 +44,7 @@ def inputs_outdoor_comfort():
                 md=6,
                 sm=12,
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className="container-row center-block",
                         children=[
                             html.H4(
@@ -56,7 +57,7 @@ def inputs_outdoor_comfort():
                                 options=outdoor_dropdown_names,
                                 value="utci_Sun_Wind",
                             ),
-                            html.Div(
+                            dmc.Box(
                                 id=ElementIds.IMAGE_SELECTION, style={"flex": "10%"}
                             ),
                         ],
@@ -77,11 +78,11 @@ def inputs_outdoor_comfort():
                         className="mb-2",
                         n_clicks=0,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row full-width justify-center mt-2",
                         children=[
                             html.H6("Month Range", style={"flex": "5%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER,
                                     min=1,
@@ -107,11 +108,11 @@ def inputs_outdoor_comfort():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row align-center justify-center",
                         children=[
                             html.H6("Hour Range", style={"flex": "5%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER,
                                     min=0,
@@ -144,10 +145,10 @@ def inputs_outdoor_comfort():
 
 
 def outdoor_comfort_chart():
-    return html.Div(
+    return dmc.Box(
         children=[
-            html.Div(id=ElementIds.OUTDOOR_COMFORT_OUTPUT),
-            html.Div(
+            dmc.Box(id=ElementIds.OUTDOOR_COMFORT_OUTPUT),
+            dmc.Box(
                 children=title_with_link(
                     text="UTCI heatmap chart",
                     id_button=IdButtons.UTCI_CHARTS_LABEL,
@@ -155,10 +156,10 @@ def outdoor_comfort_chart():
                 )
             ),
             dcc.Loading(
-                html.Div(id=ElementIds.UTCI_HEATMAP),
+                dmc.Box(id=ElementIds.UTCI_HEATMAP),
                 type="circle",
             ),
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="UTCI thermal stress chart",
                     id_button=IdButtons.UTCI_CHARTS_LABEL,
@@ -166,10 +167,10 @@ def outdoor_comfort_chart():
                 )
             ),
             dcc.Loading(
-                html.Div(id=ElementIds.UTCI_CATEGORY_HEATMAP),
+                dmc.Box(id=ElementIds.UTCI_CATEGORY_HEATMAP),
                 type="circle",
             ),
-            html.Div(
+            dmc.Box(
                 className="container-row align-center justify-center",
                 children=[
                     dbc.Checklist(
@@ -185,7 +186,7 @@ def outdoor_comfort_chart():
                             "marginRight": "-2rem",
                         },
                     ),
-                    html.Div(
+                    dmc.Box(
                         children=title_with_tooltip(
                             text="Normalize data",
                             tooltip_text=(
@@ -198,7 +199,7 @@ def outdoor_comfort_chart():
                 ],
             ),
             dcc.Loading(
-                html.Div(id=ElementIds.UTCI_SUMMARY_CHART),
+                dmc.Box(id=ElementIds.UTCI_SUMMARY_CHART),
                 type="circle",
             ),
         ],
@@ -209,7 +210,7 @@ def layout():
     return (
         dcc.Loading(
             type="circle",
-            children=html.Div(
+            children=dmc.Box(
                 className="container-col",
                 children=[inputs_outdoor_comfort(), outdoor_comfort_chart()],
             ),

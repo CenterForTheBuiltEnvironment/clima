@@ -27,7 +27,7 @@ layout = [
         dmc.Button(
             "Home page",
             fullWidth=True,
-            leftIcon=DashIconify(icon="material-symbols:home-outline-rounded"),
+            leftSection=DashIconify(icon="material-symbols:home-outline-rounded"),
         ),
         href=PageUrls.SELECT.value,
     ),

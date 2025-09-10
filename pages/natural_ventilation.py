@@ -1,5 +1,8 @@
+import math
+
 import dash
 from dash import dcc, html
+import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
@@ -41,7 +44,7 @@ dash.register_page(
 
 
 def layout():
-    return html.Div(
+    return dmc.Box(
         className="container-col",
         id=ElementIds.MAIN_NV_SECTION,
         children=[
@@ -65,7 +68,7 @@ def update_layout(si_ip):
         dpt_set = 16
 
     return [
-        html.Div(
+        dmc.Box(
             children=title_with_link(
                 text="Natural Ventilation Potential",
                 id_button=IdButtons.NATURAL_VENTILATION_LABEL,
@@ -74,13 +77,13 @@ def update_layout(si_ip):
         ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
         dcc.Loading(
-            html.Div(
+            dmc.Box(
                 id=ElementIds.NV_HEATMAP_CHART,
                 style={"marginTop": "1rem"},
             ),
             type="circle",
         ),
-        html.Div(
+        dmc.Box(
             className="container-row align-center justify-center",
             children=[
                 dbc.Checklist(
@@ -96,7 +99,7 @@ def update_layout(si_ip):
                         "marginRight": "-2rem",
                     },
                 ),
-                html.Div(
+                dmc.Box(
                     children=title_with_tooltip(
                         text="Normalize data",
                         tooltip_text=(
@@ -109,7 +112,7 @@ def update_layout(si_ip):
             ],
         ),
         dcc.Loading(
-            html.Div(
+            dmc.Box(
                 id=ElementIds.NV_BAR_CHART,
                 style={"marginTop": "1rem"},
             ),
@@ -119,10 +122,10 @@ def update_layout(si_ip):
 
 
 def inputs_tab(t_min, t_max, d_set):
-    return html.Div(
+    return dmc.Box(
         className="container-row full-width three-inputs-container",
         children=[
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -133,7 +136,7 @@ def inputs_tab(t_min, t_max, d_set):
                         n_clicks=1,
                     ),
                     html.H6("Outdoor dry-bulb air temperature range"),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(children=["Min Value:"], style={"flex": "30%"}),
@@ -147,7 +150,7 @@ def inputs_tab(t_min, t_max, d_set):
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(children=["Max Value:"], style={"flex": "30%"}),
@@ -163,7 +166,7 @@ def inputs_tab(t_min, t_max, d_set):
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -173,11 +176,11 @@ def inputs_tab(t_min, t_max, d_set):
                         className="mb-2",
                         n_clicks=0,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row full-width justify-center mt-2",
                         children=[
                             html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.NV_MONTH_SLIDER,
                                     min=1,
@@ -203,11 +206,11 @@ def inputs_tab(t_min, t_max, d_set):
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-row align-center justify-center",
                         children=[
                             html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
+                            dmc.Box(
                                 dcc.RangeSlider(
                                     id=ElementIds.NV_HOUR_SLIDER,
                                     min=0,
@@ -235,7 +238,7 @@ def inputs_tab(t_min, t_max, d_set):
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_col_center_one_of_three,
                 children=[
                     dbc.Button(
@@ -261,7 +264,7 @@ def inputs_tab(t_min, t_max, d_set):
                         value=[],
                         id=ElementIds.ENABLE_CONDENSATION,
                     ),
-                    html.Div(
+                    dmc.Box(
                         className=container_row_center_full,
                         children=[
                             html.H6(

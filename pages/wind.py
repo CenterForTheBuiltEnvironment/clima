@@ -1,5 +1,6 @@
 import dash
 from dash import dcc, html
+import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 from pages.lib.global_element_ids import ElementIds
 
@@ -29,11 +30,11 @@ dash.register_page(
 
 def sliders():
     """Returns 2 sliders for the hour"""
-    return html.Div(
+    return dmc.Box(
         className="container-col justify-center",
         id=ElementIds.SLIDER_CONTAINER,
         children=[
-            html.Div(
+            dmc.Box(
                 className="container-row each-slider",
                 children=[
                     html.P("Month Range"),
@@ -49,7 +50,7 @@ def sliders():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className="container-row each-slider",
                 children=[
                     html.P("Hour Range"),
@@ -71,25 +72,25 @@ def sliders():
 
 def seasonal_wind_rose():
     """Return the section with the 4 seasonal wind rose graphs."""
-    return html.Div(
+    return dmc.Box(
         className="container-col",
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Seasonal Wind Rose",
                     id_button=IdButtons.SEASONAL_WIND_ROSE_DOC,
                     doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 className=container_row_center_full,
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=html.Div(
+                                children=dmc.Box(
                                     id=ElementIds.WINTER_WIND_ROSE,
                                     className="daily-wind-graph",
                                 ),
@@ -100,12 +101,12 @@ def seasonal_wind_rose():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=html.Div(
+                                children=dmc.Box(
                                     id=ElementIds.SPRING_WIND_ROSE,
                                     className="daily-wind-graph",
                                 ),
@@ -118,15 +119,15 @@ def seasonal_wind_rose():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className=container_row_center_full,
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=html.Div(
+                                children=dmc.Box(
                                     id=ElementIds.SUMMER_WIND_ROSE,
                                     className="daily-wind-graph",
                                 ),
@@ -137,12 +138,12 @@ def seasonal_wind_rose():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
                             dcc.Loading(
                                 type="circle",
-                                children=html.Div(
+                                children=dmc.Box(
                                     id=ElementIds.FALL_WIND_ROSE,
                                     className="daily-wind-graph",
                                 ),
@@ -161,28 +162,28 @@ def seasonal_wind_rose():
 
 def daily_wind_rose():
     """Return the section for the 3 daily wind rose graphs."""
-    return html.Div(
+    return dmc.Box(
         className="container-col full-width",
         id=ElementIds.TAB5_DAILY_CONTAINER,
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Daily Wind Rose",
                     id_button=IdButtons.DAILY_ROSE_CHART,
                     doc_link=DocLinks.WIND_ROSE,
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 id=ElementIds.DAILY_WIND_ROSE_OUTER_CONTAINER,
                 className="container-row full-width",
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
-                            html.Div(
+                            dmc.Box(
                                 dcc.Loading(
                                     type="circle",
-                                    children=html.Div(
+                                    children=dmc.Box(
                                         className="daily-wind-graph",
                                         id=ElementIds.MORNING_WIND_ROSE,
                                     ),
@@ -194,13 +195,13 @@ def daily_wind_rose():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
-                            html.Div(
+                            dmc.Box(
                                 dcc.Loading(
                                     type="circle",
-                                    children=html.Div(
+                                    children=dmc.Box(
                                         className="daily-wind-graph",
                                         id=ElementIds.NOON_WIND_ROSE,
                                     ),
@@ -212,13 +213,13 @@ def daily_wind_rose():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-col",
                         children=[
-                            html.Div(
+                            dmc.Box(
                                 dcc.Loading(
                                     type="circle",
-                                    children=html.Div(
+                                    children=dmc.Box(
                                         className="daily-wind-graph",
                                         id=ElementIds.NIGHT_WIND_ROSE,
                                     ),
@@ -237,24 +238,24 @@ def daily_wind_rose():
 
 
 def custom_wind_rose():
-    return html.Div(
+    return dmc.Box(
         className="container-col justify-center full-width",
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_tooltip(
                     text="Customizable Wind Rose",
                     tooltip_text=None,
                     id_button=IdButtons.CUSTOM_ROSE_CHART,
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 className="container-row full-width justify-center",
                 id=ElementIds.TAB5_CUSTOM_DROPDOWN_CONTAINER,
                 children=[
-                    html.Div(
+                    dmc.Box(
                         className="container-col justify-center p-2 mr-2",
                         children=[
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -271,7 +272,7 @@ def custom_wind_rose():
                                     ),
                                 ],
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -290,10 +291,10 @@ def custom_wind_rose():
                             ),
                         ],
                     ),
-                    html.Div(
+                    dmc.Box(
                         className="container-col justify-center p-2 ml-2",
                         children=[
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -310,7 +311,7 @@ def custom_wind_rose():
                                     ),
                                 ],
                             ),
-                            html.Div(
+                            dmc.Box(
                                 className=container_row_center_full,
                                 children=[
                                     html.H6(
@@ -333,7 +334,7 @@ def custom_wind_rose():
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id=ElementIds.CUSTOM_WIND_ROSE),
+                children=dmc.Box(id=ElementIds.CUSTOM_WIND_ROSE),
             ),
         ],
     )
@@ -341,10 +342,10 @@ def custom_wind_rose():
 
 def layout():
     """Contents in the fifth tab 'Wind'."""
-    return html.Div(
+    return dmc.Box(
         className="container-col justify-center",
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Annual Wind Rose",
                     id_button=IdButtons.WIND_ROSE_LABEL,
@@ -353,17 +354,17 @@ def layout():
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(
+                children=dmc.Box(
                     id=ElementIds.WIND_ROSE,
                 ),
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id=ElementIds.WIND_SPEED),
+                children=dmc.Box(id=ElementIds.WIND_SPEED),
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id=ElementIds.WIND_DIRECTION),
+                children=dmc.Box(id=ElementIds.WIND_DIRECTION),
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),

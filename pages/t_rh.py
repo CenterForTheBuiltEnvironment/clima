@@ -1,5 +1,6 @@
 import dash
 from dash_extensions.enrich import Output, Input, State, dcc, html, callback
+import dash_mantine_components as dmc
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
@@ -30,10 +31,10 @@ var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
 
 def layout():
-    return html.Div(
+    return dmc.Box(
         className="container-col full-width",
         children=[
-            html.Div(
+            dmc.Box(
                 className="container-row full-width align-center justify-center",
                 children=[
                     html.H4(
@@ -47,10 +48,10 @@ def layout():
                     ),
                 ],
             ),
-            html.Div(
+            dmc.Box(
                 className="container-col",
                 children=[
-                    html.Div(
+                    dmc.Box(
                         children=title_with_link(
                             text="Yearly Chart",
                             id_button=IdButtons.YEARLY_CHART_LABEL,
@@ -59,9 +60,9 @@ def layout():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=html.Div(id=ElementIds.YEARLY_CHART),
+                        children=dmc.Box(id=ElementIds.YEARLY_CHART),
                     ),
-                    html.Div(
+                    dmc.Box(
                         children=title_with_link(
                             text="Daily chart",
                             id_button=IdButtons.DAILY_CHART_LABEL,
@@ -70,9 +71,9 @@ def layout():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=html.Div(id=ElementIds.DAILY),
+                        children=dmc.Box(id=ElementIds.DAILY),
                     ),
-                    html.Div(
+                    dmc.Box(
                         children=title_with_link(
                             text="Heatmap chart",
                             id_button=IdButtons.HEATMAP_CHART_LABEL,
@@ -81,16 +82,16 @@ def layout():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=html.Div(id=ElementIds.HEATMAP),
+                        children=dmc.Box(id=ElementIds.HEATMAP),
                     ),
-                    html.Div(
+                    dmc.Box(
                         children=title_with_tooltip(
                             text="Descriptive statistics",
                             tooltip_text="count, mean, std, min, max, and percentiles",
                             id_button=IdButtons.TABLE_TMP_RH,
                         ),
                     ),
-                    html.Div(
+                    dmc.Box(
                         id=ElementIds.TABLE_TMP_HUM,
                     ),
                 ],

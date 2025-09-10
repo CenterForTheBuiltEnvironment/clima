@@ -39,7 +39,7 @@ messages_alert = {
 
 def layout():
     """Contents in the first tab 'Select Weather File'"""
-    return html.Div(
+    return dmc.Box(
         className="container-col tab-container",
         children=[
             dcc.Loading(
@@ -69,7 +69,7 @@ def layout():
                 visible=False,
                 id=ElementIds.SKELETON_GRAPH_CONTAINER,
                 height=500,
-                children=html.Div(id=ElementIds.TAB_ONE_MAP),
+                children=dmc.Box(id=ElementIds.TAB_ONE_MAP),
             ),
             dbc.Modal(
                 [
@@ -236,15 +236,16 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
 
 @callback(
     [
-        Output("/", "disabled"),
-        Output("/summary", "disabled"),
-        Output("/t-rh", "disabled"),
-        Output("/sun", "disabled"),
-        Output("/wind", "disabled"),
-        Output("/psy-chart", "disabled"),
-        Output("/explorer", "disabled"),
-        Output("/outdoor", "disabled"),
-        Output("/natural-ventilation", "disabled"),
+        Output(ElementIds.NAV, "disabled"),
+        Output(ElementIds.NAV_SUMMARY, "disabled"),
+        Output(ElementIds.NAV_T_RH, "disabled"),
+        Output(ElementIds.NAV_SUN, "disabled"),
+        Output(ElementIds.NAV_WIND, "disabled"),
+        Output(ElementIds.NAV_PSY_CHART, "disabled"),
+        Output(ElementIds.NAV_EXPLORER, "disabled"),
+        Output(ElementIds.NAV_OUTDOOR, "disabled"),
+        Output(ElementIds.NAV_NATURAL_VENTILATION, "disabled"),
+        Output(ElementIds.NAV_CHANGELOG, "disabled"),
         Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
@@ -266,6 +267,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
             True,
             True,
             True,
+            True,  # changelog always disabled
             default,
         )
     else:
@@ -279,6 +281,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             False,
+            True,  # changelog always disabled
             "Current Location: " + meta[ColNames.CITY] + ", " + meta[ColNames.COUNTRY],
         )
 
@@ -324,7 +327,7 @@ def change_text_modal(click_map):
 
 @callback(
     Output(ElementIds.SKELETON_GRAPH_CONTAINER, "children"),
-    Input("url", "pathname"),
+    Input(ElementIds.SELECT_URL, "pathname"),
 )
 def plot_location_epw_files(pathname):
     # print(pathname)

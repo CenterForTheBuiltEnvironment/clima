@@ -286,3 +286,133 @@ p {
     border: 0.5px solid lightgrey;
     z-index: 1000;
 }
+
+/* side bar */
+#sidebar {
+    background-color: #f8f9fa;
+    border-right: 1px solid #e9ecef;
+}
+
+/* 强制SegmentedControl适应容器宽度 */
+#sidebar .mantine-SegmentedControl-root {
+    width: 100% !important;
+}
+
+#sidebar .mantine-SegmentedControl-control {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+/* burger button */
+#burger-button {
+    transition: all 0.2s ease;
+}
+
+#burger-button:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: #e3f2fd;
+}
+
+/* Active navigation link styles */
+.nav-link[data-active="true"] {
+    background-color: #1976d2 !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+.nav-link[data-active="true"]:hover {
+    background-color: #1565c0 !important;
+    color: white !important;
+}
+
+/* response design */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 280px !important;
+    }
+}
+
+/* burger button style */
+#burger-button {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Alert style */
+.survey-alert {
+    position: fixed;
+    top: 25px;
+    right: 10px;
+    width: 400px;
+}
+
+/* Footer style */
+#footer-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    min-height: auto;
+    padding: 10px 0;
+}
+
+/* Footer Logo style */
+.footer-logo-section {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 10px 15px 10px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Footer style */
+.footer-content-section {
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Footer text style */
+.footer-text-content {
+    margin-top: 1rem;
+}
+
+/* Footer Markdown style */
+.footer-markdown-text {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+/* Footer link style */
+.footer-links-group {
+    margin-top: 1rem;
+}
+
+.footer-link {
+    text-decoration: underline;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Banner style */
+#banner-title {
+    line-height: 1.1;
+}
+
+/* Documentation style */
+#nav-doc-link {
+    margin-top: 5px;
+}

@@ -6,6 +6,7 @@ import math
 import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import html, dash_table, dcc
+import dash_mantine_components as dmc
 
 from config import UnitSystem
 from pages.lib.global_scheme import fig_config, mapping_dictionary, month_lst
@@ -151,12 +152,12 @@ def title_with_tooltip(text, tooltip_text, id_button):
     if tooltip_text:
         display_tooltip = "block"
 
-    return html.Div(
+    return dmc.Box(
         className="container-row",
         style={"padding": "1rem", "marginTop": "1rem"},
         children=[
             html.H5(text, style={"marginRight": "0.5rem"}),
-            html.Div(
+            dmc.Box(
                 [
                     html.Sup(
                         html.Img(
@@ -187,12 +188,12 @@ def title_with_link(
     id_button=None,
     doc_link: str = "",
 ):
-    return html.Div(
+    return dmc.Box(
         className="container-row",
         style={"padding": "1rem", "marginTop": "1rem"},
         children=[
             html.H5(text, style={"marginRight": "0.5rem"}),
-            html.Div(
+            dmc.Box(
                 [
                     html.Sup(
                         html.A(

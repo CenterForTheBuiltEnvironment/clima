@@ -1,22 +1,26 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 from dash_extensions.enrich import Output, Input, callback
+import dash_mantine_components as dmc
 
 from app import app
-from pages.lib.layout import banner, footer, build_tabs
+from pages.lib.layout import banner, footer, build_tabs, burger_button, sidebar
 from config import AppConfig
 from pages.lib.global_element_ids import ElementIds
 
 server = app.server
 
 app.title = AppConfig.TITLE
-app.layout = dbc.Container(
-    fluid=True,
-    style={"padding": "0"},
+app.layout = dmc.MantineProvider(
+    theme={
+        "colorScheme": "light",
+        "primaryColor": "blue"
+    },
     children=[
-        dcc.Location(id="url", refresh=False),  # connected to callback below
+        dcc.Location(id=ElementIds.MAIN_URL, refresh=False),
+        sidebar(),
         banner(),
-        html.Div(id="page-content", children=build_tabs()),
+        dmc.Box(id=ElementIds.PAGE_CONTENT, children=build_tabs()),
         footer(),
     ],
 )
@@ -32,7 +36,7 @@ def display_alert(n):
 
 
 if __name__ == "__main__":
-    app.run_server(
+    app.run(
         debug=AppConfig.DEBUG,
         host=AppConfig.HOST,
         port=AppConfig.PORT,

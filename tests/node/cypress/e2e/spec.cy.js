@@ -1,7 +1,26 @@
+/*
+  ⚠️ IMPORTANT: This code is only needed when running tests with Cypress's default browser (Electron)
+  If you run tests with other browsers (e.g., Chrome, Firefox), comment out this entire block
+  The URL.canParse() API is not available in Cypress's bundled Node.js 18.17.1 environment
+  but is available in newer Node.js versions used by other browsers
+*/
+/*Cypress.on('uncaught:exception', (err, runnable) => {
+  // Workaround for Cypress environment lacking support for `URL.canParse()` API
+  // This error does not happen in real browsers; it's safe to ignore during tests
+  if (err.message.includes('URL.canParse is not a function')) {
+    return false;
+  }
+});*/
+
 function click_tab(name) {
-  cy.get('.nav-item')
-    .contains(name)
-    .click();
+  // Open the sidebar (burger button is fixed on screen)
+  cy.get('#burger-button', { timeout: 10000 }).click({ force: true });
+  // Expand the main nav group if collapsed
+  cy.get('#nav-group-main').click({ force: true });
+  // Locate tab item by ID prefix, then find label by text
+  cy.get('[id^="nav-"]', { timeout: 10000 }).contains(name).click({ force: true });
+  // Wait for tab content container to appear
+  cy.get('#tabs-content', { timeout: 20000 }).should('exist');
 }
 
 function load_epw() {
@@ -101,9 +120,14 @@ describe('Clima', () => {
     load_epw()
     cy.contains('The EPW was successfully loaded!');
     click_tab('Temperature and Humidity')
-    cy.contains('Global Value Ranges').click();
+    // Expand the "Data Display Options" nav section to access controls
+    cy.get('#nav-group-controls', { timeout: 10000 }).should('exist').click({ force: true });
+    cy.contains('Global Value Ranges', { timeout: 10000 }).click({ force: true });
     cy.contains('-40'); // Global minimum: not something you see in Italy!
-    cy.contains('IP').click();
+    // Reopen sidebar
+    cy.get('#burger-button', { timeout: 10000 }).click();
+    cy.get('#nav-group-controls', { timeout: 10000 }).should('exist').click({ force: true });
+    cy.contains('IP').click({ force: true });
     cy.contains('100'); // Not a Celsius temperature!
     cy.contains('Dry bulb temperature (°F)');
   });

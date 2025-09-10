@@ -2,6 +2,7 @@ from copy import deepcopy
 from pages.lib.global_element_ids import ElementIds
 
 import dash
+import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 import numpy as np
 from dash import html, dcc
@@ -55,10 +56,10 @@ sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
 
 def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
-    return html.Div(
+    return dmc.Box(
         className="container-col justify-center",
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Sun path chart",
                     id_button=IdButtons.SUN_PATH_CHART_LABEL,
@@ -104,7 +105,7 @@ def sun_path():
             ),
             dcc.Loading(
                 type="circle",
-                children=html.Div(
+                children=dmc.Box(
                     id=ElementIds.CUSTOM_SUNPATH,
                 ),
             ),
@@ -114,17 +115,17 @@ def sun_path():
 
 def explore_daily_heatmap():
     """Contents of the bottom part of the tab"""
-    return html.Div(
+    return dmc.Box(
         className="container-col full-width",
         children=[
-            html.Div(
+            dmc.Box(
                 children=title_with_link(
                     text="Daily charts",
                     id_button=IdButtons.DAILY_CHART_LABEL,
                     doc_link=DocLinks.CUSTOM_HEATMAP,
                 ),
             ),
-            html.Div(
+            dmc.Box(
                 className="container-row justify-center align-center mb-2",
                 children=[
                     html.H6(
@@ -140,17 +141,17 @@ def explore_daily_heatmap():
                     ),
                 ],
             ),
-            dcc.Loading(type="circle", children=html.Div(id=ElementIds.TAB4_DAILY)),
+            dcc.Loading(type="circle", children=dmc.Box(id=ElementIds.TAB4_DAILY)),
             dcc.Loading(
                 type="circle",
-                children=html.Div(id=ElementIds.TAB4_HEATMAP),
+                children=dmc.Box(id=ElementIds.TAB4_HEATMAP),
             ),
         ],
     )
 
 
 def static_section():
-    return html.Div(
+    return dmc.Box(
         id=ElementIds.STATIC_SECTION,
         className="container-col full-width",
         children=[
@@ -161,7 +162,7 @@ def static_section():
 
 def layout():
     """Contents of tab four."""
-    return html.Div(
+    return dmc.Box(
         className="container-col",
         id=ElementIds.TAB_FOUR_CONTAINER,
         children=[sun_path(), static_section(), explore_daily_heatmap()],
@@ -177,7 +178,7 @@ def update_static_section(si_ip):
     if si_ip == UnitSystem.IP:
         hor_unit = "Btu/ft²"
     return [
-        html.Div(
+        dmc.Box(
             children=title_with_link(
                 text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
                 id_button=IdButtons.MONTHLY_CHART_LABEL,
@@ -186,9 +187,9 @@ def update_static_section(si_ip):
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(id=ElementIds.MONTHLY_SOLAR),
+            children=dmc.Box(id=ElementIds.MONTHLY_SOLAR),
         ),
-        html.Div(
+        dmc.Box(
             children=title_with_link(
                 text="Cloud coverage",
                 id_button=IdButtons.CLOUD_CHART_LABEL,
@@ -197,7 +198,7 @@ def update_static_section(si_ip):
         ),
         dcc.Loading(
             type="circle",
-            children=html.Div(id=ElementIds.CLOUD_COVER),
+            children=dmc.Box(id=ElementIds.CLOUD_COVER),
         ),
     ]
 
