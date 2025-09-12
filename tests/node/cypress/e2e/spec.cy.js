@@ -45,7 +45,7 @@ describe('Clima', () => {
     cy.contains('Latitude: 44.5308');
     cy.contains('Elevation above sea level: 37.0 m');
     cy.contains('This file is based on data collected between 2004 and 2018');
-    cy.contains('Köppen–Geiger climate zone: Cfa. Humid subtropical, no dry season.');
+    cy.contains('Köppen-Geiger climate zone: Cfa. Humid subtropical, no dry season.');
     cy.contains('Average yearly temperature: 14.5 °C');
     cy.contains('Hottest yearly temperature (99%): 34.0 °C');
     cy.contains('Coldest yearly temperature (1%): -2.0 °C');

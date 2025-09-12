@@ -1,4 +1,3 @@
-import dash_bootstrap_components as dbc
 import dash
 from dash import dcc, Input, Output, State, callback
 import dash_mantine_components as dmc
@@ -6,6 +5,7 @@ from dash_iconify import DashIconify
 from pages.lib.global_column_names import ColNames
 from config import DocLinks, UnitSystem
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.page_icon import PageIcon
 
 
 def burger_button():
@@ -24,30 +24,34 @@ def alert():
     return dmc.Stack(
         gap=0,
         children=[
-            dbc.Toast(
+            dmc.Alert(
                 [
                     "If you have a moment, help us improve Clima and take a ",
                     dmc.Anchor(
                         "quick user survey",
                         href="https://forms.gle/k289zP3R92jdu14M7",
                         target="_blank",
-                        className="alert-link",
+                        c="white",
+                        underline=True,
                     ),
                     "! ☀️",
                 ],
                 id=ElementIds.ID_LAYOUT_ALERT_AUTO,
-                header="CBE Clima User Survey",
-                icon="info",
-                is_open=False,
-                dismissable=True,
-                className="survey-alert",
+                title="CBE Clima User Survey",
+                icon="Info",
+                color="blue",
+                variant="filled",
+                withCloseButton=True,
+                pos="fixed",
+                top="25px",
+                right="10px",
+                w="400px",
+                style={"zIndex": 1002, "display": "none"},
             ),
-            dmc.Box(
-                children=dcc.Interval(
-                    id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
-                    interval=12 * 1000,
-                    n_intervals=0,
-                )
+            dcc.Interval(
+                id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
+                interval=12 * 500,
+                n_intervals=0,
             ),
         ],
     )
@@ -55,9 +59,50 @@ def alert():
 
 def footer():
     """Build the footer at the bottom of the page."""
+    white_anchor_style = {
+        "underline": True,
+        "c": "white",
+        "fz": "md",
+        "fw": 500,
+        "target": "_blank",
+    }
+
+    footer_links = [
+        (
+            "Version: 0.9.0",
+            "https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
+        ),
+        ("Contributors", "https://cbe-berkeley.gitbook.io/clima/#contributions"),
+        (
+            "Report issues on GitHub",
+            "https://github.com/CenterForTheBuiltEnvironment/clima/issues",
+        ),
+        (
+            "Contact us",
+            "https://github.com/CenterForTheBuiltEnvironment/clima/discussions",
+        ),
+        ("Documentation", "https://center-for-the-built-environment.gitbook.io/clima/"),
+        (
+            "License",
+            "https://center-for-the-built-environment.gitbook.io/clima/#license",
+        ),
+    ]
+
     return dmc.Box(
         id=ElementIds.FOOTER_CONTAINER,
+        p="md",
+        m=0,
+        c="white",
+        bg="#003262",
+        display="flex",
+        w="100%",
+        style={
+            "flexWrap": "nowrap",
+            "minHeight": "fit-content",
+            "alignItems": "flex-start",
+        },
         children=[
+            # Logo section
             dmc.Box(
                 children=[
                     dmc.Anchor(
@@ -71,8 +116,13 @@ def footer():
                         ),
                     ),
                 ],
-                className="footer-logo-section",
+                flex="0 0 33.333333%",
+                maw="33.333333%",
+                p="30px 15px 10px 25px",
+                display="flex",
+                style={"justifyContent": "flex-start", "alignItems": "flex-start"},
             ),
+            # Content section
             dmc.Box(
                 children=[
                     dmc.Stack(
@@ -85,67 +135,30 @@ def footer():
                                 A free and open-source web application for climate analysis tailored to sustainable building design.
                                 Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
                                 """,
-                                className="footer-markdown-text",
+                                style={
+                                    "fontSize": "16px",
+                                    "lineHeight": 1.5,
+                                    "fontWeight": 500,
+                                    "color": "white",
+                                },
                             ),
                             dmc.Group(
                                 [
-                                    dmc.Anchor(
-                                        "Version: 0.9.0",
-                                        href="https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
-                                        underline=True,
-                                        c="white",
-                                        target="_blank",
-                                        className="footer-link",
-                                    ),
-                                    dmc.Anchor(
-                                        "Contributors",
-                                        href="https://cbe-berkeley.gitbook.io/clima/#contributions",
-                                        underline=True,
-                                        c="white",
-                                        target="_blank",
-                                        className="footer-link",
-                                    ),
-                                    dmc.Anchor(
-                                        "Report issues on GitHub",
-                                        href="https://github.com/CenterForTheBuiltEnvironment/clima/issues",
-                                        underline=True,
-                                        c="white",
-                                        target="_blank",
-                                        className="footer-link",
-                                    ),
-                                    dmc.Anchor(
-                                        "Contact us",
-                                        href="https://github.com/CenterForTheBuiltEnvironment/clima/discussions",
-                                        underline=True,
-                                        c="white",
-                                        target="_blank",
-                                        className="footer-link",
-                                    ),
-                                    dmc.Anchor(
-                                        "Documentation",
-                                        href="https://center-for-the-built-environment.gitbook.io/clima/",
-                                        underline=True,
-                                        c="white",
-                                        target="_blank",
-                                        className="footer-link",
-                                    ),
-                                    dmc.Anchor(
-                                        "License",
-                                        href="https://center-for-the-built-environment.gitbook.io/clima/#license",
-                                        underline=True,
-                                        c="white",
-                                        target="_blank",
-                                        className="footer-link",
-                                    ),
+                                    dmc.Anchor(text, href=url, **white_anchor_style)
+                                    for text, url in footer_links
                                 ],
                                 gap="sm",
-                                className="footer-links-group",
+                                mt="md",
                             ),
                         ],
-                        className="footer-text-content",
+                        mt="md",
                     ),
                 ],
-                className="footer-content-section",
+                flex="0 0 66.666667%",
+                maw="66.666667%",
+                p="0px 15px 10px 15px",
+                display="flex",
+                style={"justifyContent": "flex-start", "alignItems": "flex-start"},
             ),
         ],
     )
@@ -155,6 +168,11 @@ def banner():
     """Top banner rewritten with dash-mantine-components only."""
     return dmc.Box(
         id=ElementIds.BANNER,
+        p="md",
+        bg="#003262",
+        c="white",
+        pos="relative",
+        style={"zIndex": 1},
         children=[
             dmc.Group(
                 justify="space-between",
@@ -176,12 +194,21 @@ def banner():
                                         "CBE Clima Tool",
                                         id=ElementIds.BANNER_TITLE,
                                         order=2,
+                                        fw=500,
+                                        ff="'Open Sans', sans-serif",
+                                        lh=1.1,
+                                        c="white",
                                     ),
                                     dmc.Text(
                                         "Current Location: N/A",
                                         id=ElementIds.ID_LAYOUT_BANNER_SUBTITLE,
                                         size="sm",
                                         opacity=0.85,
+                                        ff="'Poppins', sans-serif",
+                                        fw=400,
+                                        h=25,
+                                        style={"overflow": "hidden"},
+                                        c="white",
                                     ),
                                 ],
                             ),
@@ -194,7 +221,7 @@ def banner():
 
 
 def sidebar():
-    """create side bar"""
+    """create sidebar"""
     return dmc.Drawer(
         id=ElementIds.SIDE_BAR,
         title=dmc.Group(
@@ -203,50 +230,87 @@ def sidebar():
                 dmc.Text("CBE Clima Tool", fw=600),
             ]
         ),
-        padding="md",
         size="300px",
-        zIndex=999,
+        zIndex=1001,
         opened=False,
-        className="custom-sidebar",
         styles={
-            "title": {"paddingRight": 30},
+            "content": {
+                "top": "80px",
+                "left": 0,
+                "position": "fixed",
+                "borderRadius": "0 8px 8px 0",
+                "boxShadow": "2px 0 8px rgba(0,0,0,0.1)",
+                "backgroundColor": "#f8f9fa",
+                "padding": "16px",
+            },
+            "overlay": {
+                "top": "80px",
+                "left": 0,
+                "height": "calc(100vh - 80px)",
+                "position": "fixed",
+            },
+            "header": {
+                "borderBottom": "1px solid #e9ecef",
+                "paddingBottom": "12px",
+                "marginBottom": "16px",
+                "position": "sticky",
+                "top": 0,
+                "backgroundColor": "#f8f9fa",
+                "zIndex": 1002,
+            },
+            "title": {
+                "fontWeight": 600,
+                "fontSize": "18px",
+                "paddingRight": 30,
+                "position": "relative",
+                "zIndex": 1001,
+            },
+            "body": {
+                "padding": 0,
+                "overflowY": "auto",
+                "maxHeight": "calc(100vh - 80px)",
+                "position": "relative",
+                "zIndex": 1,
+            },
         },
-        children=[dmc.Stack(gap="sm", children=build_sidebar_nav_items())],
+        children=[dmc.Stack(gap=0, children=build_sidebar_nav_items())],
     )
 
 
-# Pages Icon
-PAGE_ICON_MAP = {
-    "Select Weather File": "tabler:upload",
-    "Climate Summary": "tabler:chart-bar",
-    "Temperature and Humidity": "tabler:temperature",
-    "Sun and Clouds": "tabler:sun",
-    "Wind": "tabler:wind",
-    "Psychrometric Chart": "tabler:chart-dots",
-    "Natural Ventilation": "tabler:windmill",
-    "Outdoor Comfort": "tabler:thermometer",
-    "Data Explorer": "tabler:database",
-    "Changelog": "tabler:history",
-}
-
-
 def build_sidebar_nav_items():
+    nav_link_styles = {
+        "root": {
+            "borderRadius": "6px",
+            "transition": "all 0.2s ease",
+            "&:hover": {"backgroundColor": "#e3f2fd"},
+            "&[data-active='true']": {
+                "backgroundColor": "#1976d2",
+                "color": "white",
+                "fontWeight": 600,
+            },
+            "&[data-active='true']:hover": {
+                "backgroundColor": "#1565c0",
+                "color": "white",
+            },
+        }
+    }
+
     # === Secondary Menu ===
-    sub_links = []
-    for page in dash.page_registry.values():
-        if page[ColNames.NAME] in ["404"]:
-            continue
-        icon = PAGE_ICON_MAP.get(page[ColNames.NAME], "tabler:circle")
-        sub_links.append(
-            dmc.NavLink(
-                label=page[ColNames.NAME],
-                leftSection=DashIconify(icon=icon, width=20),
-                href=page[ColNames.PATH],
-                id=f"nav-{page[ColNames.PATH].replace('/', '')}",
-                active=False,
-                style={"marginBottom": "4px"},
-            )
+    sub_links = [
+        dmc.NavLink(
+            label=page[ColNames.NAME],
+            leftSection=DashIconify(
+                icon=PageIcon.get_icon(page[ColNames.NAME]), width=20
+            ),
+            href=page[ColNames.PATH],
+            id=f"nav-{page[ColNames.PATH].replace('/', '')}",
+            active=False,
+            mb="xs",
+            styles=nav_link_styles,
         )
+        for page in dash.page_registry.values()
+        if page[ColNames.NAME] not in ["404"]
+    ]
 
     # Primary Menu
     parent_group = dmc.NavLink(
@@ -257,6 +321,11 @@ def build_sidebar_nav_items():
         variant="light",
         childrenOffset=18,
     )
+
+    segmented_control_styles = {
+        "root": {"width": "100%"},
+        "control": {"flex": 1, "minWidth": 0},
+    }
 
     controls_stack = dmc.Stack(
         gap="sm",
@@ -272,6 +341,8 @@ def build_sidebar_nav_items():
                 ],
                 radius="md",
                 size="sm",
+                w="100%",
+                styles=segmented_control_styles,
             ),
             dmc.SegmentedControl(
                 id=ElementIds.ID_LAYOUT_SI_IP_RADIO_INPUT,
@@ -282,6 +353,8 @@ def build_sidebar_nav_items():
                 ],
                 radius="md",
                 size="sm",
+                w="100%",
+                styles=segmented_control_styles,
             ),
         ],
     )
@@ -324,18 +397,16 @@ def store():
 def build_tabs():
     return dmc.Box(
         id=ElementIds.TABS_CONTAINER,
+        m=0,
+        mt=0,
         children=[
+            store(),
             dmc.Box(
-                id=ElementIds.STORE_CONTAINER,
+                id=ElementIds.TABS_CONTENT,
+                p="md",
                 children=[
-                    store(),
-                    dmc.Box(
-                        id=ElementIds.TABS_CONTENT,
-                        children=[
-                            alert(),
-                            dash.page_container,
-                        ],
-                    ),
+                    alert(),
+                    dash.page_container,
                 ],
             ),
         ],
@@ -349,9 +420,7 @@ def build_tabs():
     prevent_initial_call=True,
 )
 def toggle_sidebar(n_clicks, opened):
-    if n_clicks:
-        return not opened
-    return opened
+    return not opened if n_clicks else opened
 
 
 @callback(
@@ -375,14 +444,30 @@ def close_sidebar_on_navigation(pathname):
 )
 def update_nav_active_state(pathname):
     """Update active state of navigation links based on current URL pathname"""
-    active_states = []
+    return [
+        pathname == page[ColNames.PATH]
+        for page in dash.page_registry.values()
+        if page[ColNames.NAME] not in ["404"]
+    ]
 
-    for page in dash.page_registry.values():
-        if page[ColNames.NAME] in ["404"]:
-            continue
 
-        # Check if current pathname matches this page's path
-        is_active = pathname == page[ColNames.PATH]
-        active_states.append(is_active)
+@callback(
+    Output(ElementIds.ID_LAYOUT_ALERT_AUTO, "style"),
+    Input(ElementIds.ID_LAYOUT_INTERVAL_COMPONENT, "n_intervals"),
+    prevent_initial_call=True,
+)
+def show_alert_after_delay(n_intervals):
+    """Show alert after 6 seconds, then hide after 5 more seconds"""
+    base_style = {
+        "position": "fixed",
+        "top": "25px",
+        "right": "10px",
+        "width": "400px",
+        "zIndex": 1002,
+    }
 
-    return active_states
+    # Determine display status based on the number of intervals
+    if n_intervals == 1:
+        return {**base_style, "display": "block"}
+    else:
+        return {**base_style, "display": "none"}

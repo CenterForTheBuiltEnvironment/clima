@@ -1,7 +1,6 @@
 import dash
 from dash import dcc, html
 import dash_mantine_components as dmc
-import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
@@ -37,184 +36,220 @@ dash.register_page(
 
 
 def inputs_outdoor_comfort():
-    return dbc.Row(
-        className="container-row full-width three-inputs-container",
+    return dmc.Grid(
+        gutter="md",
         children=[
-            dbc.Col(
-                md=6,
-                sm=12,
-                children=[
-                    dmc.Box(
-                        className="container-row center-block",
-                        children=[
-                            html.H4(
-                                children=["Select a scenario:"],
-                                style={"flex": "30%"},
-                            ),
-                            dropdown(
+            dmc.GridCol(
+                span=6,
+                children=dmc.Grid(
+                    gutter="sm",
+                    align="center",
+                    children=[
+                        dmc.GridCol(span=3, children=dmc.Text("Select a scenario:")),
+                        dmc.GridCol(
+                            span=6,
+                            children=dropdown(
                                 id=ElementIds.TAB7_DROPDOWN,
-                                style={"flex": "60%"},
                                 options=outdoor_dropdown_names,
                                 value="utci_Sun_Wind",
+                                persistence=True,
+                                persistence_type="session",
                             ),
-                            dmc.Box(
-                                id=ElementIds.IMAGE_SELECTION, style={"flex": "10%"}
-                            ),
-                        ],
-                    ),
-                ],
+                        ),
+                        dmc.GridCol(
+                            span=3,
+                            children=dmc.Paper(id=ElementIds.IMAGE_SELECTION),
+                        ),
+                    ],
+                ),
             ),
-            dbc.Col(
-                md=6,
-                sm=12,
-                children=[
-                    dbc.Button(
-                        "Apply month and hour filter",
-                        color="primary",
-                        style={
-                            "width": "100%",
-                        },
-                        id=ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT,
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    dmc.Box(
-                        className="container-row full-width justify-center mt-2",
-                        children=[
-                            html.H6("Month Range", style={"flex": "5%"}),
-                            dmc.Box(
-                                dcc.RangeSlider(
-                                    id=ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER,
-                                    min=1,
-                                    max=12,
-                                    step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+            dmc.GridCol(
+                span=6,
+                children=dmc.Stack(
+                    gap="sm",
+                    children=[
+                        dmc.Button(
+                            "Apply month and hour filter",
+                            id=ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT,
+                            variant="filled",
+                            color="blue",
+                            size="md",
+                            radius="md",
+                            w="100%",
+                        ),
+                        # Month Range
+                        dmc.Grid(
+                            gutter="sm",
+                            align="center",
+                            children=[
+                                dmc.GridCol(span=2, children=dmc.Text("Month Range")),
+                                dmc.GridCol(
+                                    span=7,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER,
+                                        min=1,
+                                        max=12,
+                                        step=1,
+                                        value=[1, 12],
+                                        marks={1: "1", 12: "12"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "top",
+                                        },
+                                        allowCross=False,
+                                    ),
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id=ElementIds.INVERT_MONTH_OUTDOOR_COMFORT,
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                    dmc.Box(
-                        className="container-row align-center justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "5%"}),
-                            dmc.Box(
-                                dcc.RangeSlider(
-                                    id=ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER,
-                                    min=0,
-                                    max=24,
-                                    step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "topLeft",
-                                    },
-                                    allowCross=False,
+                                dmc.GridCol(
+                                    span=3,
+                                    children=dcc.Checklist(
+                                        id=ElementIds.INVERT_MONTH_OUTDOOR_COMFORT,
+                                        options=[
+                                            {"label": "Invert", "value": "invert"}
+                                        ],
+                                        value=[],
+                                    ),
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id=ElementIds.INVERT_HOUR_OUTDOOR_COMFORT,
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                        # Hour Range
+                        dmc.Grid(
+                            gutter="sm",
+                            align="center",
+                            children=[
+                                dmc.GridCol(span=2, children=dmc.Text("Hour Range")),
+                                dmc.GridCol(
+                                    span=7,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER,
+                                        min=0,
+                                        max=24,
+                                        step=1,
+                                        value=[0, 24],
+                                        marks={0: "0", 24: "24"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "topLeft",
+                                        },
+                                        allowCross=False,
+                                    ),
+                                ),
+                                dmc.GridCol(
+                                    span=3,
+                                    children=dcc.Checklist(
+                                        id=ElementIds.INVERT_HOUR_OUTDOOR_COMFORT,
+                                        options=[
+                                            {"label": "Invert", "value": "invert"}
+                                        ],
+                                        value=[],
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
             ),
         ],
     )
 
 
 def outdoor_comfort_chart():
-    return dmc.Box(
+    return dmc.Stack(
+        w="100%",
+        gap="md",
         children=[
-            dmc.Box(id=ElementIds.OUTDOOR_COMFORT_OUTPUT),
-            dmc.Box(
-                children=title_with_link(
-                    text="UTCI heatmap chart",
-                    id_button=IdButtons.UTCI_CHARTS_LABEL,
-                    doc_link=DocLinks.UTCI_CHART,
-                )
+            # 输出区域
+            dmc.Paper(
+                id=ElementIds.OUTDOOR_COMFORT_OUTPUT,
+                radius="md",
+                p="sm",
+                w="100%",
+            ),
+            # UTCI heatmap chart
+            title_with_link(
+                text="UTCI heatmap chart",
+                id_button=IdButtons.UTCI_CHARTS_LABEL,
+                doc_link=DocLinks.UTCI_CHART,
             ),
             dcc.Loading(
-                dmc.Box(id=ElementIds.UTCI_HEATMAP),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.UTCI_HEATMAP,
+                    radius="md",
+                    p="sm",
+                    w="100%",
+                    h=400,
+                ),
             ),
-            dmc.Box(
-                children=title_with_link(
-                    text="UTCI thermal stress chart",
-                    id_button=IdButtons.UTCI_CHARTS_LABEL,
-                    doc_link=DocLinks.UTCI_CHART,
-                )
+            # UTCI thermal stress chart
+            title_with_link(
+                text="UTCI thermal stress chart",
+                id_button=IdButtons.UTCI_CHARTS_LABEL,
+                doc_link=DocLinks.UTCI_CHART,
             ),
             dcc.Loading(
-                dmc.Box(id=ElementIds.UTCI_CATEGORY_HEATMAP),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.UTCI_CATEGORY_HEATMAP,
+                    radius="md",
+                    p="sm",
+                    w="100%",
+                    h=400,
+                ),
             ),
-            dmc.Box(
-                className="container-row align-center justify-center",
+            # Normalize data 开关 + Tooltip
+            dmc.Group(
+                align="center",
+                justify="center",
+                gap="sm",
                 children=[
-                    dbc.Checklist(
-                        options=[
-                            {"label": "", "value": 1},
-                        ],
-                        value=[1],
+                    dmc.Switch(
                         id=ElementIds.OUTDOOR_COMFORT_SWITCHES_INPUT,
-                        switch=True,
-                        style={
-                            "padding": "1rem",
-                            "marginTop": "1rem",
-                            "marginRight": "-2rem",
-                        },
+                        label="",
+                        checked=True,
+                        size="md",
+                        color="blue",
                     ),
-                    dmc.Box(
-                        children=title_with_tooltip(
-                            text="Normalize data",
-                            tooltip_text=(
-                                "If normalized is enabled it calculates the % "
-                                "time otherwise it calculates the total number of hours"
-                            ),
-                            id_button=IdButtons.OUTDOOR_COMFORT_NORMALIZE,
+                    title_with_tooltip(
+                        text="Normalize data",
+                        tooltip_text=(
+                            "If normalized is enabled it calculates the % time "
+                            "otherwise it calculates the total number of hours"
                         ),
+                        id_button=IdButtons.OUTDOOR_COMFORT_NORMALIZE,
                     ),
                 ],
             ),
+            # Summary chart
             dcc.Loading(
-                dmc.Box(id=ElementIds.UTCI_SUMMARY_CHART),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.UTCI_SUMMARY_CHART,
+                    radius="md",
+                    p="sm",
+                    w="100%",
+                ),
             ),
         ],
     )
 
 
 def layout():
-    return (
-        dcc.Loading(
-            type="circle",
-            children=dmc.Box(
-                className="container-col",
-                children=[inputs_outdoor_comfort(), outdoor_comfort_chart()],
+    return dmc.Stack(
+        w="100%",
+        gap="md",
+        children=[
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(
+                    w="100%",
+                    gap="md",
+                    children=[
+                        inputs_outdoor_comfort(),
+                        outdoor_comfort_chart(),
+                    ],
+                ),
             ),
-        ),
+        ],
     )
 
 

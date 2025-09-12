@@ -3,9 +3,8 @@ import functools
 import time
 import math
 
-import dash_bootstrap_components as dbc
 import pandas as pd
-from dash import html, dash_table, dcc
+from dash import dash_table, dcc
 import dash_mantine_components as dmc
 
 from config import UnitSystem
@@ -148,38 +147,44 @@ def generate_custom_inputs_psy(
 
 
 def title_with_tooltip(text, tooltip_text, id_button):
-    display_tooltip = "none"
     if tooltip_text:
-        display_tooltip = "block"
-
-    return dmc.Box(
-        className="container-row",
-        style={"padding": "1rem", "marginTop": "1rem"},
-        children=[
-            html.H5(text, style={"marginRight": "0.5rem"}),
-            dmc.Box(
-                [
-                    html.Sup(
-                        html.Img(
+        return dmc.Group(
+            gap="xs",
+            align="center",
+            mt="md",
+            px="md",
+            children=[
+                dmc.Title(text, order=3),
+                dmc.Tooltip(
+                    label=tooltip_text,
+                    position="right",
+                    withArrow=True,
+                    multiline=True,
+                    w=220,
+                    children=dmc.ActionIcon(
+                        dmc.Image(
                             id=id_button,
-                            src="../assets/icons/help.png",
+                            src="/assets/icons/help.png",
                             alt="help",
-                            style={
-                                "width": "1rem",
-                                "height": "1rem",
-                            },
+                            w=16,
+                            h=16,
                         ),
+                        variant="transparent",
+                        size="sm",
                     ),
-                    dbc.Tooltip(
-                        tooltip_text,
-                        target=id_button,
-                        placement="right",
-                    ),
-                ],
-                style={"display": display_tooltip},
-            ),
-        ],
-    )
+                ),
+            ],
+        )
+    else:
+        return dmc.Group(
+            gap="xs",
+            align="center",
+            mt="md",
+            px="md",
+            children=[
+                dmc.Title(text, order=3),
+            ],
+        )
 
 
 def title_with_link(
@@ -188,34 +193,34 @@ def title_with_link(
     id_button=None,
     doc_link: str = "",
 ):
-    return dmc.Box(
-        className="container-row",
-        style={"padding": "1rem", "marginTop": "1rem"},
+    return dmc.Group(
+        gap="xs",
+        align="center",
+        mt="md",
+        px="md",
         children=[
-            html.H5(text, style={"marginRight": "0.5rem"}),
-            dmc.Box(
-                [
-                    html.Sup(
-                        html.A(
-                            html.Img(
-                                id=id_button,
-                                src="../assets/icons/book.png",
-                                alt="book",
-                                style={
-                                    "width": "1rem",
-                                    "height": "1rem",
-                                },
-                            ),
-                            href=doc_link,
-                            target="_blank",
+            dmc.Title(text, order=3),
+            dmc.Tooltip(
+                label=tooltip_text,
+                position="right",
+                withArrow=True,
+                multiline=True,
+                w=220,
+                children=dmc.Anchor(
+                    dmc.ActionIcon(
+                        dmc.Image(
+                            id=id_button,
+                            src="/assets/icons/book.png",
+                            alt="book",
+                            w=16,
+                            h=16,
                         ),
+                        variant="transparent",
+                        size="sm",
                     ),
-                    dbc.Tooltip(
-                        tooltip_text,
-                        target=id_button,
-                        placement="right",
-                    ),
-                ],
+                    href=doc_link,
+                    target="_blank",
+                ),
             ),
         ],
     )

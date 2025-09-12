@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html
+from dash import dcc
 import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
@@ -13,8 +13,6 @@ from pages.lib.global_scheme import (
     mapping_dictionary,
     tight_margins,
     month_lst,
-    container_row_center_full,
-    container_col_center_one_of_three,
 )
 from pages.lib.utils import get_max_min_value
 from pages.lib.template_graphs import filter_df_by_month_and_hour
@@ -42,13 +40,7 @@ dash.register_page(
 
 
 def layout():
-    return dmc.Box(
-        className="container-col",
-        id=ElementIds.MAIN_NV_SECTION,
-        children=[
-            #
-        ],
-    )
+    return dmc.Stack(id=ElementIds.MAIN_NV_SECTION, gap="md")
 
 
 @callback(
@@ -66,220 +58,239 @@ def update_layout(si_ip):
         dpt_set = 16
 
     return [
-        dmc.Box(
-            children=title_with_link(
-                text="Natural Ventilation Potential",
-                id_button=IdButtons.NATURAL_VENTILATION_LABEL,
-                doc_link=DocLinks.NATURAL_VENTILATION,
-            ),
+        title_with_link(
+            text="Natural Ventilation Potential",
+            id_button=IdButtons.NATURAL_VENTILATION_LABEL,
+            doc_link=DocLinks.NATURAL_VENTILATION,
         ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
         dcc.Loading(
-            dmc.Box(
-                id=ElementIds.NV_HEATMAP_CHART,
-                style={"marginTop": "1rem"},
-            ),
             type="circle",
+            children=dmc.Paper(
+                id=ElementIds.NV_HEATMAP_CHART,
+                p="md",
+                mt="md",
+            ),
         ),
-        dmc.Box(
-            className="container-row align-center justify-center",
+        dmc.Group(
+            align="center",
+            justify="center",
+            gap="sm",
             children=[
-                dbc.Checklist(
-                    options=[
-                        {"label": "", "value": 1},
-                    ],
-                    value=[1],
+                dmc.Switch(
                     id=ElementIds.SWITCHES_INPUT,
-                    switch=True,
-                    style={
-                        "padding": "1rem",
-                        "marginTop": "1rem",
-                        "marginRight": "-2rem",
-                    },
+                    label="",
+                    checked=True,
+                    size="md",
+                    color="blue",
+                    style={"padding": "1rem", "marginRight": "-2rem"},
                 ),
-                dmc.Box(
-                    children=title_with_tooltip(
-                        text="Normalize data",
-                        tooltip_text=(
-                            "If normalized is enabled it calculates the % "
-                            "time otherwise it calculates the total number of hours"
-                        ),
-                        id_button=IdButtons.NV_NORMALIZE,
+                title_with_tooltip(
+                    text="Normalize data",
+                    tooltip_text=(
+                        "If normalized is enabled it calculates the % "
+                        "time otherwise it calculates the total number of hours"
                     ),
+                    id_button=IdButtons.NV_NORMALIZE,
                 ),
             ],
         ),
         dcc.Loading(
-            dmc.Box(
-                id=ElementIds.NV_BAR_CHART,
-                style={"marginTop": "1rem"},
-            ),
             type="circle",
+            children=dmc.Paper(
+                id=ElementIds.NV_BAR_CHART,
+                p="md",
+                mt="md",
+            ),
         ),
     ]
 
 
 def inputs_tab(t_min, t_max, d_set):
-    return dmc.Box(
-        className="container-row full-width three-inputs-container",
+    return dmc.Grid(
+        gutter="xl",
         children=[
-            dmc.Box(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply filter",
-                        color="primary",
-                        id=ElementIds.NV_DBT_FILTER,
-                        className="mb-2",
-                        n_clicks=1,
-                    ),
-                    html.H6("Outdoor dry-bulb air temperature range"),
-                    dmc.Box(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id=ElementIds.NV_TDB_MIN_VAL,
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                step=1,
-                                value=t_min,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    dmc.Box(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id=ElementIds.NV_TDB_MAX_VAL,
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=t_max,
-                                step=1,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            dmc.Box(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply month and hour filter",
-                        color="primary",
-                        id=ElementIds.NV_MONTH_HOUR_FILTER,
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    dmc.Box(
-                        className="container-row full-width justify-center mt-2",
-                        children=[
-                            html.H6("Month Range", style={"flex": "20%"}),
-                            dmc.Box(
-                                dcc.RangeSlider(
-                                    id=ElementIds.NV_MONTH_SLIDER,
-                                    min=1,
-                                    max=12,
+            dmc.GridCol(
+                span=4,
+                children=dmc.Stack(
+                    children=[
+                        dmc.Button(
+                            "Apply filter",
+                            color="primary",
+                            id=ElementIds.NV_DBT_FILTER,
+                            variant="link",
+                            size="md",
+                            fullWidth=True,
+                            n_clicks=1,
+                        ),
+                        dmc.Text(
+                            "Outdoor dry-bulb air temperature range",
+                            size="md",
+                        ),
+                        dmc.Group(
+                            gap="xl",
+                            grow=True,
+                            children=[
+                                dmc.Text("Min Value:", size="md"),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_TDB_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
                                     step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+                                    value=t_min,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id=ElementIds.INVERT_MONTH_NV,
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                    dmc.Box(
-                        className="container-row align-center justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "20%"}),
-                            dmc.Box(
-                                dcc.RangeSlider(
-                                    id=ElementIds.NV_HOUR_SLIDER,
-                                    min=0,
-                                    max=24,
+                            ],
+                        ),
+                        dmc.Group(
+                            gap="xl",
+                            grow=True,
+                            children=[
+                                dmc.Text("Max Value:", size="md"),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_TDB_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=t_max,
                                     step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "topLeft",
-                                    },
-                                    allowCross=False,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id=ElementIds.INVERT_HOUR_NV,
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                    ],
+                ),
             ),
-            dmc.Box(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply filter",
-                        color="primary",
-                        id=ElementIds.NV_DPT_FILTER,
-                        className="mb-2",
-                        n_clicks=0,
-                        disabled=True,
-                    ),
-                    dbc.Checklist(
-                        options=[
-                            {
-                                "label": (
-                                    "Avoid condensation with radiant systems: If the"
-                                    " outdoor dew point temperature is below the"
-                                    " radiant system surface temperature, the data"
-                                    " point is not plot."
+            dmc.GridCol(
+                span=4,
+                children=dmc.Stack(
+                    children=[
+                        dmc.Button(
+                            "Apply month and hour filter",
+                            color="primary",
+                            id=ElementIds.NV_MONTH_HOUR_FILTER,
+                            variant="link",
+                            size="md",
+                            fullWidth=True,
+                            radius="sm",
+                        ),
+                        dmc.Grid(
+                            align="center",
+                            gutter="sm",
+                            children=[
+                                dmc.GridCol(
+                                    span=3,
+                                    children=dmc.Text("Month Range", size="md"),
                                 ),
-                                "value": 1,
-                            },
-                        ],
-                        value=[],
-                        id=ElementIds.ENABLE_CONDENSATION,
-                    ),
-                    dmc.Box(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Surface temperature:"],
-                                style={"marginRight": "1rem"},
-                            ),
-                            dbc.Input(
-                                id=ElementIds.NV_DPT_MAX_VAL,
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=d_set,
-                                step=1,
-                                style={"flex": "1"},
-                            ),
-                        ],
-                    ),
-                ],
+                                dmc.GridCol(
+                                    span=6,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.NV_MONTH_SLIDER,
+                                        min=1,
+                                        max=12,
+                                        step=1,
+                                        value=[1, 12],
+                                        marks={1: "1", 12: "12"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "top",
+                                        },
+                                        allowCross=False,
+                                    ),
+                                ),
+                                dmc.GridCol(
+                                    span=3,
+                                    children=dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id=ElementIds.INVERT_MONTH_NV,
+                                    ),
+                                ),
+                            ],
+                        ),
+                        dmc.Grid(
+                            align="center",
+                            gutter="sm",
+                            children=[
+                                dmc.GridCol(
+                                    span=3,
+                                    children=dmc.Text("Hour Range", size="md"),
+                                ),
+                                dmc.GridCol(
+                                    span=6,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.NV_HOUR_SLIDER,
+                                        min=0,
+                                        max=24,
+                                        step=1,
+                                        value=[0, 24],
+                                        marks={0: "0", 24: "24"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "topLeft",
+                                        },
+                                        allowCross=False,
+                                    ),
+                                ),
+                                dmc.GridCol(
+                                    span=3,
+                                    children=dcc.Checklist(
+                                        options=[
+                                            {"label": "Invert", "value": "invert"},
+                                        ],
+                                        value=[],
+                                        id=ElementIds.INVERT_HOUR_NV,
+                                    ),
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ),
+            dmc.GridCol(
+                span=4,
+                children=dmc.Stack(
+                    children=[
+                        dmc.Button(
+                            "Apply filter",
+                            color="primary",
+                            id=ElementIds.NV_DPT_FILTER,
+                            mb="xs",
+                            variant="link",
+                            size="md",
+                            fullWidth=True,
+                            n_clicks=0,
+                            disabled=True,
+                        ),
+                        dcc.Checklist(
+                            options=[
+                                {
+                                    "label": (
+                                        "Avoid condensation with radiant systems: If the"
+                                        " outdoor dew point temperature is below the"
+                                        " radiant system surface temperature, the data"
+                                        " point is not plot."
+                                    ),
+                                    "value": 1,
+                                },
+                            ],
+                            value=[],
+                            id=ElementIds.ENABLE_CONDENSATION,
+                        ),
+                        dmc.Group(
+                            align="center",
+                            gap="sm",
+                            grow=True,
+                            children=[
+                                dmc.Text("Surface temperature:", size="md"),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_DPT_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=d_set,
+                                    step=1,
+                                    w="50%",
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
             ),
         ],
     )
@@ -458,7 +469,7 @@ def nv_heatmap(
         Input(ElementIds.NV_MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
         Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
-        Input(ElementIds.SWITCHES_INPUT, "value"),
+        Input(ElementIds.SWITCHES_INPUT, "checked"),
         Input(ElementIds.ENABLE_CONDENSATION, "value"),
     ],
     [
@@ -539,7 +550,7 @@ def nv_bar_chart(
 
     per_time_nv_allowed = np.round(100 * (n_hours_nv_allowed / tot_month_hours))
 
-    if len(normalize) == 0:
+    if not normalize:
         fig = go.Figure(
             go.Bar(
                 x=df[ColNames.MONTH_NAMES].unique(),

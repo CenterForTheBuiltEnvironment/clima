@@ -40,7 +40,6 @@ messages_alert = {
 def layout():
     """Contents in the first tab 'Select Weather File'"""
     return dmc.Box(
-        className="container-col tab-container",
         children=[
             dcc.Loading(
                 id=ElementIds.LOADING_ONE,
@@ -50,20 +49,21 @@ def layout():
             ),
             dcc.Upload(
                 id=ElementIds.UPLOAD_DATA,
-                children=dbc.Button(
+                children=dmc.Button(
                     [
                         "Drag and Drop or ",
                         html.A("Select an EPW file from your computer"),
                     ],
                     id=ElementIds.UPLOAD_DATA_BUTTON,
-                    outline=True,
-                    color="secondary",
-                    className="mt-2",
-                    style={"borderRadius": "5px", "borderStyle": "dashed"},
+                    variant="outline",
+                    color="gray",
+                    radius="sm",
+                    style={"borderStyle": "dashed", "borderRadius": "5px"},
+                    styles={"label": {"fontWeight": 400}},
                 ),
                 # Allow multiple files to be uploaded
                 multiple=True,
-                className="d-grid",
+                style={"display": "grid"},
             ),
             dmc.Skeleton(
                 visible=False,
@@ -71,30 +71,53 @@ def layout():
                 height=500,
                 children=dmc.Box(id=ElementIds.TAB_ONE_MAP),
             ),
-            dbc.Modal(
-                [
-                    dbc.ModalHeader(id=ElementIds.MODAL_HEADER),
-                    dbc.ModalFooter(
-                        children=[
-                            dbc.Button(
+            dmc.Modal(
+                id=ElementIds.MODAL,
+                title=dmc.Text(id=ElementIds.MODAL_HEADER),
+                opened=False,
+                centered=True,
+                children=[
+                    dmc.Divider(
+                        size="xs",
+                        color="gray",
+                        my="sm",
+                        style={
+                            "borderTop": "1px solid var(--mantine-color-gray-4)",
+                            "marginTop": "-6px",
+                        },
+                    ),
+                    dmc.Group(
+                        [
+                            dmc.Button(
                                 "Close",
                                 id=ElementIds.MODAL_CLOSE_BUTTON,
-                                className="ml-2",
-                                color="light",
+                                ml="sm",
+                                color="gray",
+                                variant="outline",
                             ),
-                            dbc.Button(
+                            dmc.Button(
                                 "Yes",
                                 id=ElementIds.MODAL_YES_BUTTON,
-                                className="ml-2",
-                                color="primary",
+                                ml="sm",
+                                color="blue",
                             ),
-                        ]
+                        ],
+                        justify="flex-end",
+                        gap="md",
+                        w="100%",
                     ),
                 ],
-                id=ElementIds.MODAL,
-                is_open=False,
             ),
         ],
+        w="100%",
+        mx=0,
+        px=0,
+        py="md",
+        style={
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": "var(--mantine-spacing-md)",
+        },
     )
 
 
@@ -288,7 +311,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
 
 @callback(
     [
-        Output(ElementIds.MODAL, "is_open"),
+        Output(ElementIds.MODAL, "opened"),
         Output(ElementIds.ID_SELECT_URL_STORE, "data"),
     ],
     [
@@ -296,30 +319,25 @@ def enable_tabs_when_data_is_loaded(meta, data):
         Input(ElementIds.TAB_ONE_MAP, "clickData"),
         Input(ElementIds.MODAL_CLOSE_BUTTON, "n_clicks"),
     ],
-    [State(ElementIds.MODAL, "is_open")],
+    [State(ElementIds.MODAL, "opened")],
     prevent_initial_call=True,
 )
-def display_modal_when_data_clicked(_, click_map, __, is_open):
+def display_modal_when_data_clicked(_, click_map, __, opened):
     """display the modal to the user and check if he wants to use that file"""
     if click_map:
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
         ).group(1)
-        return not is_open, url
-    return is_open, ""
+        return (not opened, url)  # 点到点 → 打开 Modal
+    return (opened, "")
 
 
 @callback(
-    [
-        Output(ElementIds.MODAL_HEADER, "children"),
-    ],
-    [
-        Input(ElementIds.TAB_ONE_MAP, "clickData"),
-    ],
+    [Output(ElementIds.MODAL_HEADER, "children")],
+    [Input(ElementIds.TAB_ONE_MAP, "clickData")],
     prevent_initial_call=True,
 )
 def change_text_modal(click_map):
-    """change the text of the modal header"""
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
     return ["Analyse data from this location?"]
@@ -377,10 +395,9 @@ def plot_location_epw_files(pathname):
     fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
-    return (
-        dcc.Graph(
-            id=ElementIds.TAB_ONE_MAP,
-            figure=fig,
-            config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
-        ),
+    return dcc.Graph(
+        id=ElementIds.TAB_ONE_MAP,
+        figure=fig,
+        config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
+        style={"position": "relative", "zIndex": 5},
     )

@@ -3,9 +3,9 @@ from pages.lib.global_element_ids import ElementIds
 
 import dash
 import dash_mantine_components as dmc
-import dash_bootstrap_components as dbc
+
 import numpy as np
-from dash import html, dcc
+from dash import dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
 from pages.lib.global_column_names import ColNames
@@ -56,25 +56,20 @@ sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
 
 def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
-    return dmc.Box(
-        className="container-col justify-center",
+    return dmc.Stack(
+        gap="md",
         children=[
-            dmc.Box(
-                children=title_with_link(
-                    text="Sun path chart",
-                    id_button=IdButtons.SUN_PATH_CHART_LABEL,
-                    doc_link=DocLinks.SUN_PATH_DIAGRAM,
-                ),
+            title_with_link(
+                text="Sun path chart",
+                id_button=IdButtons.SUN_PATH_CHART_LABEL,
+                doc_link=DocLinks.SUN_PATH_DIAGRAM,
             ),
-            dbc.Row(
+            dmc.Group(
                 align="center",
                 justify="center",
+                gap="md",
                 children=[
-                    html.H6(
-                        className="text-next-to-input",
-                        children=["View: "],
-                        style={"width": "10rem"},
-                    ),
+                    dmc.Title("View: ", order=6, w="10rem", fz="xl"),
                     dropdown(
                         id=ElementIds.CUSTOM_SUN_VIEW_DROPDOWN,
                         options={
@@ -86,15 +81,12 @@ def sun_path():
                     ),
                 ],
             ),
-            dbc.Row(
+            dmc.Group(
                 align="center",
                 justify="center",
+                gap="md",
                 children=[
-                    html.H6(
-                        className="text-next-to-input",
-                        children=["Select variable: "],
-                        style={"width": "10rem"},
-                    ),
+                    dmc.Title("Select Variable: ", order=6, w="10rem", fz="xl"),
                     dropdown(
                         id=ElementIds.CUSTOM_SUN_VAR_DROPDOWN,
                         options=sc_dropdown_names,
@@ -105,9 +97,7 @@ def sun_path():
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Box(
-                    id=ElementIds.CUSTOM_SUNPATH,
-                ),
+                children=dmc.Stack(id=ElementIds.CUSTOM_SUNPATH, w="100%"),
             ),
         ],
     )
@@ -115,24 +105,21 @@ def sun_path():
 
 def explore_daily_heatmap():
     """Contents of the bottom part of the tab"""
-    return dmc.Box(
-        className="container-col full-width",
+    return dmc.Stack(
+        gap="md",
+        w="100%",
         children=[
-            dmc.Box(
-                children=title_with_link(
-                    text="Daily charts",
-                    id_button=IdButtons.DAILY_CHART_LABEL,
-                    doc_link=DocLinks.CUSTOM_HEATMAP,
-                ),
+            title_with_link(
+                text="Daily charts",
+                id_button=IdButtons.DAILY_CHART_LABEL,
+                doc_link=DocLinks.CUSTOM_HEATMAP,
             ),
-            dmc.Box(
-                className="container-row justify-center align-center mb-2",
+            dmc.Group(
+                align="center",
+                justify="center",
+                gap="md",
                 children=[
-                    html.H6(
-                        className="text-next-to-input",
-                        children=["Select variable: "],
-                        style={"width": "10rem"},
-                    ),
+                    dmc.Title("Select variable: ", order=6, w="10rem"),
                     dropdown(
                         id=ElementIds.TAB_EXPLORE_DROPDOWN,
                         options=sun_cloud_tab_explore_dropdown_names,
@@ -141,19 +128,22 @@ def explore_daily_heatmap():
                     ),
                 ],
             ),
-            dcc.Loading(type="circle", children=dmc.Box(id=ElementIds.TAB4_DAILY)),
+            dcc.Loading(
+                type="circle", children=dmc.Stack(id=ElementIds.TAB4_DAILY, w="100%")
+            ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Box(id=ElementIds.TAB4_HEATMAP),
+                children=dmc.Stack(id=ElementIds.TAB4_HEATMAP, w="100%"),
             ),
         ],
     )
 
 
 def static_section():
-    return dmc.Box(
+    return dmc.Stack(
         id=ElementIds.STATIC_SECTION,
-        className="container-col full-width",
+        gap="md",
+        w="100%",
         children=[
             # ...
         ],
@@ -162,8 +152,9 @@ def static_section():
 
 def layout():
     """Contents of tab four."""
-    return dmc.Box(
-        className="container-col",
+    return dmc.Stack(
+        gap="md",
+        w="100%",
         id=ElementIds.TAB_FOUR_CONTAINER,
         children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
@@ -178,27 +169,23 @@ def update_static_section(si_ip):
     if si_ip == UnitSystem.IP:
         hor_unit = "Btu/ft²"
     return [
-        dmc.Box(
-            children=title_with_link(
-                text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
-                id_button=IdButtons.MONTHLY_CHART_LABEL,
-                doc_link=DocLinks.SOLAR_RADIATION,
-            ),
+        title_with_link(
+            text="Global and Diffuse Horizontal Solar Radiation (" + hor_unit + ")",
+            id_button=IdButtons.MONTHLY_CHART_LABEL,
+            doc_link=DocLinks.SOLAR_RADIATION,
         ),
         dcc.Loading(
             type="circle",
-            children=dmc.Box(id=ElementIds.MONTHLY_SOLAR),
+            children=dmc.Stack(id=ElementIds.MONTHLY_SOLAR, w="100%"),
         ),
-        dmc.Box(
-            children=title_with_link(
-                text="Cloud coverage",
-                id_button=IdButtons.CLOUD_CHART_LABEL,
-                doc_link=DocLinks.CLOUD_COVER,
-            ),
+        title_with_link(
+            text="Cloud coverage",
+            id_button=IdButtons.CLOUD_CHART_LABEL,
+            doc_link=DocLinks.CLOUD_COVER,
         ),
         dcc.Loading(
             type="circle",
-            children=dmc.Box(id=ElementIds.CLOUD_COVER),
+            children=dmc.Stack(id=ElementIds.CLOUD_COVER, w="100%"),
         ),
     ]
 
@@ -238,11 +225,13 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
     )
     units = generate_units(si_ip)
     return dcc.Graph(
+        style={"width": "100%", "height": "520px"},
         config=generate_chart_name(
             TabNames.GLOBAL_AND_DIFFUSE_HORIZONTAL_SOLAR_RADIATION, meta, units
         ),
         figure=monthly,
     ), dcc.Graph(
+        style={"width": "100%", "height": "520px"},
         config=generate_chart_name(TabNames.CLOUD_COVER, meta, units),
         figure=cover,
     )
@@ -268,6 +257,7 @@ def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
     units = "" if var == "None" else generate_units(si_ip)
     if view == "polar":
         return dcc.Graph(
+            style={"width": "100%", "height": "520px"},
             config=generate_chart_name(
                 TabNames.SPHERICAL_SUNPATH, meta, custom_inputs, units
             ),
@@ -275,6 +265,7 @@ def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
         )
     else:
         return dcc.Graph(
+            style={"width": "100%", "height": "520px"},
             config=generate_chart_name(
                 TabNames.CARTESIAN_SUNPATH, meta, custom_inputs, units
             ),
@@ -300,6 +291,7 @@ def daily(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
+        style={"width": "100%", "height": "520px"},
         config=generate_chart_name(TabNames.DAILY, meta, custom_inputs, units),
         figure=daily_profile(df, var, global_local, si_ip),
     )
@@ -322,6 +314,7 @@ def update_heatmap(_, var, global_local, df, meta, si_ip):
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
+        style={"width": "100%", "height": "520px"},
         config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
         figure=heatmap(df, var, global_local, si_ip),
     )

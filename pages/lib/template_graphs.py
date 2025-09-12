@@ -642,7 +642,7 @@ def thermal_stress_stacked_barchart(
                 style={"text-align": "center", "marginTop": "2rem"},
             ),
         )
-    isNormalized = True if len(normalize) != 0 else False
+    isNormalized = True if normalize else False
     if isNormalized:
         new_df = (
             df.groupby(ColNames.MONTH)[var]
@@ -674,7 +674,7 @@ def thermal_stress_stacked_barchart(
                     "</b><br>Month: %{x}<br>Category: "
                     + categories[i]
                     + "<br>Count: %{y}<br><extra></extra>"
-                    if len(normalize) == 0
+                    if not normalize
                     else "</b><br>Month: %{x}<br>Category: "
                     + categories[i]
                     + "<br>Proportion: %{y:.1f}%<br><extra></extra>"

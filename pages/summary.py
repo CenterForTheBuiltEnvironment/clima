@@ -1,9 +1,7 @@
 import dash
-import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import dcc, html, Output, Input, State, callback
+from dash_extensions.enrich import dcc, Output, Input, State, callback
 import dash_mantine_components as dmc
-
 import plotly.graph_objects as go
 import requests
 
@@ -36,11 +34,11 @@ dash.register_page(
 def layout():
     """Contents in the second tab 'Climate Summary'."""
 
-    return dmc.Box(
-        className="container-col",
-        id=ElementIds.TAB_TWO_CONTAINER,
+    return dmc.Container(
+        fluid=True,
+        px="md",
         children=[
-            #
+            dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER, gap="md"),
         ],
     )
 
@@ -57,134 +55,107 @@ def update_layout(si_ip):
         heating_setpoint = 50
         cooling_setpoint = 64
 
-    return dmc.Box(
-        className="container-col",
+    return dmc.Stack(
         id=ElementIds.TAB2_SCE1_CONTAINER,
+        gap="xl",
         children=[
             dcc.Loading(
                 type="circle",
-                children=dmc.Box(
-                    className="container-col",
+                children=dmc.Stack(
                     id=ElementIds.LOCATION_INFO,
-                    style={"padding": "12px"},
+                    gap="xs",
+                    p="md",
                 ),
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Box(className="tab-two-section", id=ElementIds.WORLD_MAP),
+                children=dmc.Stack(id=ElementIds.WORLD_MAP, gap=0),
             ),
-            dmc.Box(
-                children=title_with_tooltip(
-                    text="Download",
-                    id_button=IdButtons.DOWNLOAD_BUTTON_LABEL,
-                    tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
-                ),
+            title_with_tooltip(
+                text="Download",
+                id_button=IdButtons.DOWNLOAD_BUTTON_LABEL,
+                tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
             ),
             dcc.Loading(
                 type="circle",
-                children=dbc.Row(
-                    [
-                        dbc.Col(
-                            dbc.Button(
-                                "Download EPW",
-                                color="primary",
-                                id=ElementIds.DOWN_EPW_BUTTON,
-                            ),
-                            width="auto",
+                children=dmc.Group(
+                    align="center",
+                    justify="flex-start",
+                    gap="md",
+                    children=[
+                        dmc.Button(
+                            "Download EPW",
+                            id=ElementIds.DOWN_EPW_BUTTON,
+                            color="blue",
+                            variant="filled",
                         ),
-                        dbc.Col(
-                            dbc.Button(
-                                "Download Clima dataframe",
-                                color="primary",
-                                id=ElementIds.DOWNLOAD_BUTTON,
-                            ),
-                            width="auto",
+                        dmc.Button(
+                            "Download Clima dataframe",
+                            id=ElementIds.DOWNLOAD_BUTTON,
+                            color="blue",
+                            variant="filled",
                         ),
-                        dbc.Col(
-                            [
-                                dcc.Download(id=ElementIds.DOWNLOAD_DATAFRAME_CSV),
-                                dcc.Download(id=ElementIds.DOWNLOAD_EPW),
-                            ],
-                            width=1,
-                        ),
+                        dcc.Download(id=ElementIds.DOWNLOAD_DATAFRAME_CSV),
+                        dcc.Download(id=ElementIds.DOWNLOAD_EPW),
                     ],
                 ),
             ),
-            dmc.Box(
-                children=title_with_link(
-                    text="Heating and Cooling Degree Days",
-                    id_button=IdButtons.HDD_CDD_CHART,
-                    doc_link=DocLinks.DEGREE_DAYS,
-                ),
+            title_with_link(
+                text="Heating and Cooling Degree Days",
+                id_button=IdButtons.HDD_CDD_CHART,
+                doc_link=DocLinks.DEGREE_DAYS,
             ),
-            dbc.Alert(
-                "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
-                color="warning",
-                is_open=False,
-                id=ElementIds.WARNING_CDD_HIGHER_HDD,
-            ),
-            dbc.Row(
-                [
-                    dbc.Col(
-                        html.Label(
-                            "Heating degree day (HDD) setpoint",
-                        ),
-                        width="auto",
-                    ),
-                    dbc.Col(
-                        dbc.Input(
-                            id=ElementIds.INPUT_HDD_SET_POINT,
-                            type="number",
-                            value=heating_setpoint,
-                            style={"width": "4rem"},
-                        ),
-                        width="auto",
-                    ),
-                    dbc.Col(
-                        html.Label(
-                            "Cooling degree day (CDD) setpoint",
-                        ),
-                        width="auto",
-                    ),
-                    dbc.Col(
-                        dbc.Input(
-                            id=ElementIds.INPUT_CDD_SET_POINT,
-                            type="number",
-                            value=cooling_setpoint,
-                            style={"width": "4rem"},
-                        ),
-                        width="auto",
-                    ),
-                    dbc.Col(
-                        dbc.Button(
-                            id=ElementIds.SUBMIT_SET_POINTS,
-                            children="Submit",
-                            color="primary",
-                        ),
-                        width="auto",
-                    ),
-                ],
+            dmc.Stack(id=ElementIds.WARNING_CDD_HIGHER_HDD, gap=0),
+            dmc.Group(
                 align="center",
                 justify="center",
+                gap="md",
+                children=[
+                    dmc.Text("Heating degree day (HDD) setpoint"),
+                    dmc.NumberInput(
+                        id=ElementIds.INPUT_HDD_SET_POINT,
+                        value=heating_setpoint,
+                        step=1,
+                        min=-100,
+                        max=100,
+                        w=80,
+                        hideControls=False,
+                    ),
+                    dmc.Text("Cooling degree day (CDD) setpoint"),
+                    dmc.NumberInput(
+                        id=ElementIds.INPUT_CDD_SET_POINT,
+                        value=cooling_setpoint,
+                        step=1,
+                        min=-100,
+                        max=100,
+                        w=80,
+                        hideControls=False,
+                    ),
+                    dmc.Button(
+                        id=ElementIds.SUBMIT_SET_POINTS,
+                        children="Submit",
+                        color="blue",
+                        variant="filled",
+                    ),
+                ],
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Box(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
+                children=dmc.Stack(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER, gap=0),
             ),
-            dmc.Box(
-                children=title_with_link(
-                    text="Climate Profiles",
-                    id_button=IdButtons.CLIMATE_PROFILES_CHART,
-                    doc_link=DocLinks.CLIMATE_PROFILES,
-                ),
+            title_with_link(
+                text="Climate Profiles",
+                id_button=IdButtons.CLIMATE_PROFILES_CHART,
+                doc_link=DocLinks.CLIMATE_PROFILES,
             ),
-            dbc.Row(
+            dmc.Grid(
                 id=ElementIds.GRAPH_CONTAINER,
+                gutter="md",
                 children=[
-                    dbc.Col(id=ElementIds.TEMP_PROFILE_GRAPH, width=12, md=6, lg=3),
-                    dbc.Col(id=ElementIds.HUMIDITY_PROFILE_GRAPH, width=12, md=6, lg=3),
-                    dbc.Col(id=ElementIds.SOLAR_RADIATION_GRAPH, width=12, md=6, lg=3),
-                    dbc.Col(id=ElementIds.WIND_SPEED_GRAPH, width=12, md=6, lg=3),
+                    dmc.GridCol(id=ElementIds.TEMP_PROFILE_GRAPH, span=3),
+                    dmc.GridCol(id=ElementIds.HUMIDITY_PROFILE_GRAPH, span=3),
+                    dmc.GridCol(id=ElementIds.SOLAR_RADIATION_GRAPH, span=3),
+                    dmc.GridCol(id=ElementIds.WIND_SPEED_GRAPH, span=3),
                 ],
             ),
         ],
@@ -208,13 +179,10 @@ def update_layout(si_ip):
 )
 def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    map_world = dcc.Graph(
-        id=ElementIds.GH_RAD_PROFILE_GRAPH,
+    return dcc.Graph(
         config=generate_chart_name(TabNames.MAP, meta),
         figure=world_map(meta),
     )
-
-    return map_world
 
 
 @callback(
@@ -232,94 +200,76 @@ def update_location_info(ts, df, meta, si_ip):
     lon = f"Longitude: {meta[ColNames.LON]}"
     lat = f"Latitude: {meta[ColNames.LAT]}"
 
-    site_elevation = float(meta[ColNames.SITE_ELEVATION])
-    site_elevation = round(site_elevation, 2)
-
-    elevation = f"Elevation above sea level: {str(site_elevation)} m"
+    site_elevation = round(float(meta[ColNames.SITE_ELEVATION]), 2)
     if si_ip != UnitSystem.SI:
-        site_elevation = site_elevation * 3.281
-        site_elevation = round(site_elevation, 2)
-        elevation = f"Elevation above sea level: {str(site_elevation)} ft"
+        site_elevation = round(site_elevation * 3.281, 2)
+        elevation = f"Elevation above sea level: {site_elevation} ft"
+
+    else:
+        elevation = f"Elevation above sea level: {site_elevation} m"
 
     period = ""
     if meta[ColNames.PERIOD]:
         start, stop = meta[ColNames.PERIOD].split("-")
         period = f"This file is based on data collected between {start} and {stop}"
 
-    r = requests.get(
-        f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[ColNames.LAT]}/{meta[ColNames.LON]}"
-    )
-
     climate_text = ""
-    if r.status_code == 200:
-        try:
-            climate_zone = r.json()["return_values"][0]["koppen_geiger_zone"]
-            zone_description = r.json()["return_values"][0]["zone_description"]
-
-            climate_text = (
-                f"Köppen–Geiger climate zone: {climate_zone}. {zone_description}."
-            )
-        except KeyError:
-            pass
+    try:
+        r = requests.get(
+            f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[ColNames.LAT]}/{meta[ColNames.LON]}"
+        )
+        if r.status_code == 200:
+            j = r.json()["return_values"][0]
+            climate_text = f"Köppen-Geiger climate zone: {j['koppen_geiger_zone']}. {j['zone_description']}."
+    except Exception:
+        pass
 
     # global horizontal irradiance
     # Note that the value is divided by 1000, so a corresponding change is made in the unit:
     total_solar_rad_value = round(df[ColNames.GLOB_HOR_RAD].sum() / 1000, 2)
-    total_solar_rad_unit = (
-        "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][ColNames.UNIT]
-    )
+    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][
+        ColNames.UNIT
+    ].replace("<sup>", "").replace("</sup>", "")
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
     glob_sum = df[ColNames.GLOB_HOR_RAD].sum()
-    if glob_sum > 0:
-        diffuse_percentage = round(df[ColNames.DIF_HOR_RAD].sum() / glob_sum * 100, 1)
-    else:
-        diffuse_percentage = 0
+    diffuse_percentage = (
+        round(df[ColNames.DIF_HOR_RAD].sum() / glob_sum * 100, 1) if glob_sum > 0 else 0
+    )
     total_diffuse_rad = (
         f"Percentage of diffuse horizontal solar radiation: {diffuse_percentage} %"
     )
-    tmp_unit = mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
-    average_yearly_tmp = (
-        f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} " + tmp_unit
-    )
-    hottest_yearly_tmp = (
-        f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} "
-        + tmp_unit
-    )
-    coldest_yearly_tmp = (
-        f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} "
-        + tmp_unit
-    )
 
-    location_info = dbc.Col(
-        [
-            dbc.Row(location, style={"fontWeight": "bold"}),
-            dbc.Row(lon),
-            dbc.Row(lat),
-            dbc.Row(elevation),
-            dbc.Row(period),
-            dbc.Row(climate_text),
-            dbc.Row(average_yearly_tmp),
-            dbc.Row(hottest_yearly_tmp),
-            dbc.Row(coldest_yearly_tmp),
-            dbc.Row(
-                dcc.Markdown(
-                    dangerously_allow_html=True,
-                    children=[total_solar_rad],
-                    style={"padding": 0},
-                )
-            ),
-            dbc.Row(total_diffuse_rad),
+    tmp_unit = mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
+
+    average_yearly_tmp = (
+        f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} {tmp_unit}"
+    )
+    hottest_yearly_tmp = f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} {tmp_unit}"
+    coldest_yearly_tmp = f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} {tmp_unit}"
+
+    return dmc.Stack(
+        gap=4,
+        children=[
+            dmc.Text(location, fw=700),
+            dmc.Text(lon),
+            dmc.Text(lat),
+            dmc.Text(elevation),
+            dmc.Text(period) if period else None,
+            dmc.Text(climate_text) if climate_text else None,
+            dmc.Text(average_yearly_tmp),
+            dmc.Text(hottest_yearly_tmp),
+            dmc.Text(coldest_yearly_tmp),
+            dmc.Text(total_solar_rad),
+            dmc.Text(total_diffuse_rad),
         ],
     )
-
-    return location_info
 
 
 @callback(
     [
         Output(ElementIds.DEGREE_DAYS_CHART_WRAPPER, "children"),
-        Output(ElementIds.WARNING_CDD_HIGHER_HDD, "is_open"),
+        Output(ElementIds.WARNING_CDD_HIGHER_HDD, "children"),
     ],
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
@@ -346,9 +296,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
         hdd_setpoint = hdd_value
         cdd_setpoint = cdd_value
 
-        warning_setpoint = False
-        if cdd_setpoint < hdd_setpoint:
-            warning_setpoint = True
+        warning_setpoint = cdd_setpoint < hdd_setpoint
 
         color_hdd = "red"
         color_cdd = "dodgerblue"
@@ -363,18 +311,14 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
             # calculates HDD per month
             query = query_month + str(i) + " and DBT<=" + str(hdd_setpoint)
             a = df.query(query)[ColNames.DBT].sub(hdd_setpoint)
-            hdd = a.sum(axis=0, skipna=True)
-            hdd = hdd / 24
-            hdd = int(hdd)
-            hdd_array.append(hdd)
+            hdd = a.sum(axis=0, skipna=True) / 24
+            hdd_array.append(int(hdd))
 
             # calculates CDD per month
             query = query_month + str(i) + " and DBT>=" + str(cdd_setpoint)
             a = df.query(query)[ColNames.DBT].sub(cdd_setpoint)
-            cdd = a.sum(axis=0, skipna=True)
-            cdd = cdd / 24
-            cdd = int(cdd)
-            cdd_array.append(cdd)
+            cdd = a.sum(axis=0, skipna=True) / 24
+            cdd_array.append(int(cdd))
 
         trace1 = go.Bar(
             x=months,
@@ -397,11 +341,7 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
             ),
         )
 
-        data = [trace2, trace1]
-
-        fig = go.Figure(
-            data=data,
-        )
+        fig = go.Figure(data=[trace2, trace1])
         fig.update_layout(
             barmode="relative",
             margin=tight_margins,
@@ -424,7 +364,19 @@ def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_
             figure=fig,
         )
 
-        return chart, warning_setpoint
+        alert_children = (
+            dmc.Alert(
+                "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
+                color="yellow",
+                variant="filled",
+                title="Warning",
+                radius="md",
+                withCloseButton=True,
+            )
+            if warning_setpoint
+            else None
+        )
+        return chart, alert_children
 
 
 @callback(
@@ -443,7 +395,6 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
     units = generate_units_degree(si_ip)
     return dcc.Graph(
         id=ElementIds.TDB_PROFILE_GRAPH,
-        className="violin-container",
         config=generate_chart_name(TabNames.DRY_BULB_TEMPERATURE, meta, units),
         figure=violin(df, ColNames.DBT, global_local, si_ip),
     )
@@ -466,7 +417,6 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.WIND_PROFILE_GRAPH,
-        className="violin-container",
         config=generate_chart_name(TabNames.WIND_SPEED, meta, units),
         figure=violin(df, ColNames.WIND_SPEED, global_local, si_ip),
     )
@@ -489,7 +439,6 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.RH_PROFILE_GRAPH,
-        className="violin-container",
         config=generate_chart_name(TabNames.RELATIVE_HUMIDITY, meta, units),
         figure=violin(df, ColNames.RH, global_local, si_ip),
     )
@@ -512,7 +461,6 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.GH_RAD_PROFILE_GRAPH,
-        className="violin-container",
         config=generate_chart_name(TabNames.GLOBAL_HORIZONTAL_RADIATION, meta, units),
         figure=violin(df, ColNames.GLOB_HOR_RAD, global_local, si_ip),
     )
