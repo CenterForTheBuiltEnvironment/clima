@@ -77,7 +77,6 @@ def inputs_outdoor_comfort():
                             radius="md",
                             w="100%",
                         ),
-                        # Month Range
                         dmc.Grid(
                             gutter="sm",
                             align="center",
@@ -111,7 +110,6 @@ def inputs_outdoor_comfort():
                                 ),
                             ],
                         ),
-                        # Hour Range
                         dmc.Grid(
                             gutter="sm",
                             align="center",
@@ -157,7 +155,6 @@ def outdoor_comfort_chart():
         w="100%",
         gap="md",
         children=[
-            # 输出区域
             dmc.Paper(
                 id=ElementIds.OUTDOOR_COMFORT_OUTPUT,
                 radius="md",
@@ -196,7 +193,7 @@ def outdoor_comfort_chart():
                     h=400,
                 ),
             ),
-            # Normalize data 开关 + Tooltip
+            # Normalize data
             dmc.Group(
                 align="center",
                 justify="center",
@@ -442,7 +439,7 @@ def update_tab_utci_category(
     [
         Input(ElementIds.TAB7_DROPDOWN, "value"),
         Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
-        Input(ElementIds.OUTDOOR_COMFORT_SWITCHES_INPUT, "value"),
+        Input(ElementIds.OUTDOOR_COMFORT_SWITCHES_INPUT, "checked"),
     ],
     [
         State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),

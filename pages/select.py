@@ -3,7 +3,6 @@ import json
 import re
 
 import dash
-import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 import pandas as pd
 import plotly.express as px
@@ -123,12 +122,11 @@ def layout():
 
 def alert():
     """Alert layout for the submit button."""
-    return dbc.Alert(
+    return dmc.Alert(
         messages_alert["start"],
-        color="primary",
+        color="blue",
         id=ElementIds.ALERT,
-        dismissable=False,
-        is_open=True,
+        withCloseButton=False,
         style={"maxHeight": "66px"},
     )
 
@@ -138,7 +136,7 @@ def alert():
     [
         Output(ElementIds.ID_SELECT_META_STORE, "data"),
         Output(ElementIds.ID_SELECT_LINES_STORE, "data"),
-        Output(ElementIds.ALERT, "is_open"),
+        Output(ElementIds.ALERT, "visible"),
         Output(ElementIds.ALERT, "children"),
         Output(ElementIds.ALERT, "color"),
     ],
@@ -172,7 +170,7 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["not_available"],
-                "warning",
+                "orange",
             )
         location_info = get_location_info(
             lines, url_store
@@ -182,7 +180,7 @@ def submitted_data(
             lines,
             True,
             messages_alert["success"],
-            "success",
+            "green",
         )
 
     elif (
@@ -206,7 +204,7 @@ def submitted_data(
                     lines,
                     True,
                     messages_alert["success"],
-                    "success",
+                    "green",
                 )
             else:
                 return (
@@ -214,7 +212,7 @@ def submitted_data(
                     None,
                     True,
                     messages_alert["invalid_format"],
-                    "warning",
+                    "orange",
                 )
         except (ValueError, IndexError, KeyError) as e:
             print(f"Error parsing EPW file: {e}")
@@ -223,7 +221,7 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["wrong_extension"],
-                "warning",
+                "orange",
             )
     raise PreventUpdate
 
@@ -328,7 +326,7 @@ def display_modal_when_data_clicked(_, click_map, __, opened):
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
         ).group(1)
-        return (not opened, url)  # 点到点 → 打开 Modal
+        return (not opened, url)
     return (opened, "")
 
 

@@ -101,7 +101,6 @@ def section_one():
                     w="100%",
                 ),
             ),
-            # Daily chart
             title_with_link(
                 text="Daily chart",
                 id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
@@ -116,7 +115,6 @@ def section_one():
                     w="100%",
                 ),
             ),
-            # Heatmap chart
             title_with_link(
                 text="Heatmap chart",
                 id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
@@ -151,7 +149,6 @@ def section_one():
                             size="md",
                             radius="md",
                         ),
-                        # Month Range 行（3-6-3）
                         dmc.Grid(
                             gutter="sm",
                             align="center",
@@ -243,17 +240,14 @@ def section_two_inputs():
         w="100%",
         gap="md",
         children=[
-            # 标题（保留你已有的封装）
             title_with_tooltip(
                 text="Customizable heatmap",
                 tooltip_text=None,
                 id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
             ),
-            # 三列区域：①变量选择 ②时间过滤（月份/小时）③数据过滤（变量/最小/最大）
             dmc.Grid(
                 gutter="md",
                 children=[
-                    # ① 变量选择列
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -280,7 +274,6 @@ def section_two_inputs():
                             ],
                         ),
                     ),
-                    # ② 时间过滤列（按钮 + 月份范围 + 小时范围）
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -294,7 +287,6 @@ def section_two_inputs():
                                     size="md",
                                     radius="md",
                                 ),
-                                # Month Range：3/6/3
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -334,7 +326,6 @@ def section_two_inputs():
                                         ),
                                     ],
                                 ),
-                                # Hour Range：3/6/3
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -377,7 +368,6 @@ def section_two_inputs():
                             ],
                         ),
                     ),
-                    # ③ 数据过滤列（按钮 + 过滤变量 + 最小/最大值）
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -410,7 +400,6 @@ def section_two_inputs():
                                         ),
                                     ],
                                 ),
-                                # Min Value
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -431,7 +420,6 @@ def section_two_inputs():
                                         ),
                                     ],
                                 ),
-                                # Max Value
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -469,9 +457,7 @@ def section_two():
         gap="md",
         align="center",
         children=[
-            # 输入表单
             section_two_inputs(),
-            # 自定义热力图
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
@@ -481,7 +467,6 @@ def section_two():
                     w="100%",
                 ),
             ),
-            # Normalize 复选框
             dmc.Group(
                 gap="sm",
                 children=[
@@ -494,7 +479,6 @@ def section_two():
                     ),
                 ],
             ),
-            # Summary 图表
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
@@ -520,13 +504,11 @@ def section_three_inputs():
             dmc.Grid(
                 gutter="md",
                 children=[
-                    # ① X/Y/Color By 列
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
                             gap="sm",
                             children=[
-                                # X Variable
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -544,7 +526,6 @@ def section_three_inputs():
                                         ),
                                     ],
                                 ),
-                                # Y Variable
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -562,7 +543,6 @@ def section_three_inputs():
                                         ),
                                     ],
                                 ),
-                                # Color By
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -583,7 +563,6 @@ def section_three_inputs():
                             ],
                         ),
                     ),
-                    # ② 时间过滤（月/小时）
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -597,7 +576,6 @@ def section_three_inputs():
                                     size="md",
                                     radius="md",
                                 ),
-                                # Month Range：3/6/3
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -636,7 +614,6 @@ def section_three_inputs():
                                         ),
                                     ],
                                 ),
-                                # Hour Range：3/6/3
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -678,7 +655,6 @@ def section_three_inputs():
                             ],
                         ),
                     ),
-                    # ③ 数据过滤（变量/最小/最大）
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -692,7 +668,6 @@ def section_three_inputs():
                                     size="md",
                                     radius="md",
                                 ),
-                                # Filter Variable
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -711,7 +686,6 @@ def section_three_inputs():
                                         ),
                                     ],
                                 ),
-                                # Min Value
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -731,7 +705,6 @@ def section_three_inputs():
                                         ),
                                     ],
                                 ),
-                                # Max Value
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -766,15 +739,12 @@ def section_three():
         w="100%",
         gap="md",
         children=[
-            # 标题（保留你现有的封装）
             title_with_tooltip(
                 text="More charts",
                 tooltip_text=None,
                 id_button=IdButtons.MORE_CHARTS_LABEL,
             ),
-            # 输入区
             section_three_inputs(),
-            # 图 1：THREE_VAR
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
@@ -784,7 +754,6 @@ def section_three():
                     w="100%",
                 ),
             ),
-            # 图 2：TWO_VAR
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(

@@ -1,7 +1,6 @@
 import dash
 from dash import dcc
 import dash_mantine_components as dmc
-import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
@@ -355,12 +354,15 @@ def nv_heatmap(
 
         if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
             return (
-                dbc.Alert(
-                    "Natural ventilation is not available in this location under these"
-                    " conditions. Please either select a different outdoor dry-bulb air"
-                    " temperature range, change the month and hour filter, or increase"
-                    " thedew-point temperature.",
-                    color="danger",
+                dmc.Alert(
+                    title="Notice",
+                    color="red",
+                    children=(
+                        "Natural ventilation is not available in this location under these "
+                        "conditions. Please either select a different outdoor dry-bulb air "
+                        "temperature range, change the month and hour filter, or increase "
+                        "the dew-point temperature."
+                    ),
                     style={"text-align": "center", "marginTop": "2rem"},
                 ),
             )

@@ -65,7 +65,6 @@ def inputs():
             dmc.Grid(
                 gutter="md",
                 children=[
-                    # ① Color By
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -93,7 +92,6 @@ def inputs():
                             ],
                         ),
                     ),
-                    # ② 时间过滤（月/小时）
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -107,7 +105,6 @@ def inputs():
                                     size="md",
                                     radius="md",
                                 ),
-                                # Month Range：3/6/3
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -146,7 +143,6 @@ def inputs():
                                         ),
                                     ],
                                 ),
-                                # Hour Range：3/6/3
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -188,7 +184,6 @@ def inputs():
                             ],
                         ),
                     ),
-                    # ③ 数据过滤（变量/最小/最大）
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
@@ -202,7 +197,6 @@ def inputs():
                                     size="md",
                                     radius="md",
                                 ),
-                                # Filter Variable
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -221,7 +215,6 @@ def inputs():
                                         ),
                                     ],
                                 ),
-                                # Min Value
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -241,7 +234,6 @@ def inputs():
                                         ),
                                     ],
                                 ),
-                                # Max Value
                                 dmc.Grid(
                                     gutter="sm",
                                     align="center",
@@ -275,13 +267,11 @@ def layout():
         w="100%",
         gap="md",
         children=[
-            # 标题（保留封装）
             title_with_link(
                 text="Psychrometric Chart",
                 id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
-            # 内容区：输入区 + 图表
             dcc.Loading(
                 type="circle",
                 children=dmc.Stack(

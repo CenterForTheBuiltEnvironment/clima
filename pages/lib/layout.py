@@ -50,7 +50,7 @@ def alert():
             ),
             dcc.Interval(
                 id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
-                interval=12 * 500,
+                interval=12 * 1000,
                 n_intervals=0,
             ),
         ],
