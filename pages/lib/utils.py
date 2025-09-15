@@ -4,7 +4,7 @@ import time
 import math
 
 import pandas as pd
-from dash import dash_table, dcc
+from dash import html, dash_table, dcc
 import dash_mantine_components as dmc
 
 from config import UnitSystem
@@ -159,19 +159,15 @@ def title_with_tooltip(text, tooltip_text, id_button):
                     label=tooltip_text,
                     position="right",
                     withArrow=True,
-                    multiline=True,
-                    w=220,
-                    children=dmc.ActionIcon(
+                    children=[
                         dmc.Image(
                             id=id_button,
                             src="/assets/icons/help.png",
                             alt="help",
                             w=16,
                             h=16,
-                        ),
-                        variant="transparent",
-                        size="sm",
-                    ),
+                        )
+                    ],
                 ),
             ],
         )
@@ -204,10 +200,8 @@ def title_with_link(
                 label=tooltip_text,
                 position="right",
                 withArrow=True,
-                multiline=True,
-                w=220,
-                children=dmc.Anchor(
-                    dmc.ActionIcon(
+                children=[
+                    html.A(
                         dmc.Image(
                             id=id_button,
                             src="/assets/icons/book.png",
@@ -215,12 +209,10 @@ def title_with_link(
                             w=16,
                             h=16,
                         ),
-                        variant="transparent",
-                        size="sm",
-                    ),
-                    href=doc_link,
-                    target="_blank",
-                ),
+                        href=doc_link,
+                        target="_blank",
+                    )
+                ],
             ),
         ],
     )
