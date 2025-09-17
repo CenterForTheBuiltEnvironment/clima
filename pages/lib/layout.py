@@ -198,10 +198,13 @@ def create_header():
                 color="blue",
                 variant="filled",
                 withCloseButton=True,
-                style={"display": "none"},
+                w=400,
+                pos="fixed",
+                top="25px",
+                right="10px",
+                style={"zIndex": 1002, "display": "none"},
             ),
         ],
-        h="100%",
         px="md",
     )
 
@@ -412,15 +415,4 @@ def update_nav_active_state(pathname):
     prevent_initial_call=True,
 )
 def show_alert_after_delay(n_intervals):
-    base_style = {
-        "position": "fixed",
-        "top": "25px",
-        "right": "10px",
-        "width": "400px",
-        "zIndex": 1002,
-    }
-
-    if n_intervals == 1:
-        return {**base_style, "display": "block"}
-    else:
-        return {**base_style, "display": "none"}
+    return {"display": "block" if n_intervals == 1 else "none"}
