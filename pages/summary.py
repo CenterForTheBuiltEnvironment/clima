@@ -1,10 +1,11 @@
 import dash
-from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import dcc, Output, Input, State, callback
+import pandas as pd
 import dash_mantine_components as dmc
 import plotly.graph_objects as go
 import requests
 
+from dash.exceptions import PreventUpdate
+from dash_extensions.enrich import dcc, Output, Input, State, callback
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
@@ -38,7 +39,7 @@ def layout():
         fluid=True,
         px="md",
         children=[
-            dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER, gap="md"),
+            dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER),
         ],
     )
 
@@ -57,19 +58,17 @@ def update_layout(si_ip):
 
     return dmc.Stack(
         id=ElementIds.TAB2_SCE1_CONTAINER,
-        gap="xl",
         children=[
             dcc.Loading(
                 type="circle",
                 children=dmc.Stack(
                     id=ElementIds.LOCATION_INFO,
-                    gap="xs",
-                    p="md",
+                    p="sm",
                 ),
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(id=ElementIds.WORLD_MAP, gap=0),
+                children=dmc.Stack(id=ElementIds.WORLD_MAP),
             ),
             title_with_tooltip(
                 text="Download",
@@ -81,7 +80,6 @@ def update_layout(si_ip):
                 children=dmc.Group(
                     align="center",
                     justify="flex-start",
-                    gap="md",
                     children=[
                         dmc.Button(
                             "Download EPW",
@@ -105,11 +103,10 @@ def update_layout(si_ip):
                 id_button=IdButtons.HDD_CDD_CHART,
                 doc_link=DocLinks.DEGREE_DAYS,
             ),
-            dmc.Stack(id=ElementIds.WARNING_CDD_HIGHER_HDD, gap=0),
+            dmc.Stack(id=ElementIds.WARNING_CDD_HIGHER_HDD),
             dmc.Group(
                 align="center",
                 justify="center",
-                gap="md",
                 children=[
                     dmc.Text("Heating degree day (HDD) setpoint"),
                     dmc.NumberInput(
@@ -141,7 +138,7 @@ def update_layout(si_ip):
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER, gap=0),
+                children=dmc.Stack(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
             ),
             title_with_link(
                 text="Climate Profiles",
@@ -197,7 +194,7 @@ def update_map(meta):
 def update_location_info(ts, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
     location = f"Location: {meta[ColNames.CITY]}, {meta[ColNames.COUNTRY]}"
-    lon = f"Longitude: {meta[ColNames.LON]}"
+    lon = f"    Longitude: {meta[ColNames.LON]}"
     lat = f"Latitude: {meta[ColNames.LAT]}"
 
     site_elevation = round(float(meta[ColNames.SITE_ELEVATION]), 2)
@@ -249,7 +246,6 @@ def update_location_info(ts, df, meta, si_ip):
     coldest_yearly_tmp = f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} {tmp_unit}"
 
     return dmc.Stack(
-        gap=4,
         children=[
             dmc.Text(location, fw=700),
             dmc.Text(lon),
@@ -269,114 +265,105 @@ def update_location_info(ts, df, meta, si_ip):
 @callback(
     [
         Output(ElementIds.DEGREE_DAYS_CHART_WRAPPER, "children"),
-        Output(ElementIds.WARNING_CDD_HIGHER_HDD, "children"),
+        Output(ElementIds.WARNING_CDD_HIGHER_HDD, "is-open"),
     ],
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.SUBMIT_SET_POINTS, "n_clicks_timestamp"),
+        Input(ElementIds.SUBMIT_SET_POINTS, "n_clicks"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
         State(ElementIds.ID_SUMMARY_META_STORE, "data"),
         State(ElementIds.INPUT_HDD_SET_POINT, "value"),
         State(ElementIds.INPUT_CDD_SET_POINT, "value"),
-        State(ElementIds.SUBMIT_SET_POINTS, "n_clicks"),
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
+    prevent_initial_call=False,
 )
-def degree_day_chart(ts, ts_click, df, meta, hdd_value, cdd_value, n_clicks, si_ip):
-    """Update the contents of tab two. Passing in the general info (df, meta)."""
+def degree_day_chart(ts, n_clicks, df, meta, hdd_value, cdd_value, si_ip):
+    """Redraw HDD/CDD chart only when Submit is clicked."""
 
-    ctx = dash.callback_context
+    if df is None or meta is None:
+        raise PreventUpdate
 
-    if (
-        ctx.triggered[0][ColNames.PROP_ID] == "submit-set-points.n_clicks_timestamp"
-        or n_clicks is None
-    ):
-        hdd_setpoint = hdd_value
-        cdd_setpoint = cdd_value
+    if isinstance(df, (list, tuple, dict)):
+        df = pd.DataFrame(df)
 
-        warning_setpoint = cdd_setpoint < hdd_setpoint
+    hdd_setpoint = hdd_value
+    cdd_setpoint = cdd_value
+    warning_setpoint = cdd_setpoint < hdd_setpoint
 
-        color_hdd = "red"
-        color_cdd = "dodgerblue"
+    color_hdd = "red"
+    color_cdd = "dodgerblue"
 
-        hdd_array = []
-        cdd_array = []
-        months = df[ColNames.MONTH_NAMES].unique()
+    hdd_array, cdd_array = [], []
+    months = df[ColNames.MONTH_NAMES].unique()
 
-        for i in range(1, 13):
-            query_month = "month=="
+    for i in range(1, 13):
+        query_month = "month=="
 
-            # calculates HDD per month
-            query = query_month + str(i) + " and DBT<=" + str(hdd_setpoint)
-            a = df.query(query)[ColNames.DBT].sub(hdd_setpoint)
-            hdd = a.sum(axis=0, skipna=True) / 24
-            hdd_array.append(int(hdd))
+        a = df.query(query_month + str(i) + " and DBT<=" + str(hdd_setpoint))[
+            ColNames.DBT
+        ].sub(hdd_setpoint)
+        hdd_array.append(int(a.sum(skipna=True) / 24))
 
-            # calculates CDD per month
-            query = query_month + str(i) + " and DBT>=" + str(cdd_setpoint)
-            a = df.query(query)[ColNames.DBT].sub(cdd_setpoint)
-            cdd = a.sum(axis=0, skipna=True) / 24
-            cdd_array.append(int(cdd))
+        a = df.query(query_month + str(i) + " and DBT>=" + str(cdd_setpoint))[
+            ColNames.DBT
+        ].sub(cdd_setpoint)
+        cdd_array.append(int(a.sum(skipna=True) / 24))
 
-        trace1 = go.Bar(
-            x=months,
-            y=hdd_array,
-            name="Heating Degree Days",
-            marker_color=color_hdd,
-            customdata=[abs(ele) for ele in hdd_array],
-            hovertemplate=(
-                " Heating Degree Days: <br>%{customdata} per month<br><extra></extra>"
-            ),
+    trace1 = go.Bar(
+        x=months,
+        y=hdd_array,
+        name="Heating Degree Days",
+        marker_color=color_hdd,
+        customdata=[abs(x) for x in hdd_array],
+        hovertemplate=" Heating Degree Days: <br>%{customdata} per month<br><extra></extra>",
+    )
+
+    trace2 = go.Bar(
+        x=months,
+        y=cdd_array,
+        name="Cooling Degree Days",
+        marker_color=color_cdd,
+        customdata=cdd_array,
+        hovertemplate="Cooling Degree Days: <br>%{customdata} per month<br><extra></extra>",
+    )
+
+    fig = go.Figure(data=[trace2, trace1])
+    fig.update_layout(
+        barmode="relative",
+        margin=tight_margins,
+        template=template,
+        dragmode=False,
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
+        yaxis=dict(range=[-100, 400]),
+    )
+    fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+    fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
+
+    custom_inputs = f"{hdd_value}-{cdd_value}"
+    units = generate_units_degree(si_ip)
+
+    chart = dcc.Graph(
+        id=ElementIds.DEGREE_DAYS_CHART,
+        config=generate_chart_name(TabNames.HDD_CDD, meta, custom_inputs, units),
+        figure=fig,
+    )
+
+    alert_children = (
+        dmc.Alert(
+            "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
+            color="yellow",
+            variant="filled",
+            title="Warning",
+            withCloseButton=True,
         )
-        trace2 = go.Bar(
-            x=months,
-            y=cdd_array,
-            name="Cooling Degree Days",
-            marker_color=color_cdd,
-            customdata=cdd_array,
-            hovertemplate=(
-                "Cooling Degree Days: <br>%{customdata} per month<br><extra></extra>"
-            ),
-        )
+        if warning_setpoint
+        else None
+    )
 
-        fig = go.Figure(data=[trace2, trace1])
-        fig.update_layout(
-            barmode="relative",
-            margin=tight_margins,
-            template=template,
-            dragmode=False,
-            legend=dict(
-                orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1
-            ),
-        )
-
-        fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-        fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
-
-        custom_inputs = f"{hdd_value}-{cdd_value}"
-        units = generate_units_degree(si_ip)
-
-        chart = dcc.Graph(
-            id=ElementIds.DEGREE_DAYS_CHART,
-            config=generate_chart_name(TabNames.HDD_CDD, meta, custom_inputs, units),
-            figure=fig,
-        )
-
-        alert_children = (
-            dmc.Alert(
-                "WARNING: Invalid Results! The CDD setpoint should be higher than the HDD setpoint!",
-                color="yellow",
-                variant="filled",
-                title="Warning",
-                radius="md",
-                withCloseButton=True,
-            )
-            if warning_setpoint
-            else None
-        )
-        return chart, alert_children
+    return chart, alert_children
 
 
 @callback(

@@ -57,7 +57,7 @@ sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
 def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
     return dmc.Stack(
-        gap="md",
+        p="sm",
         children=[
             title_with_link(
                 text="Sun path chart",
@@ -67,9 +67,8 @@ def sun_path():
             dmc.Group(
                 align="center",
                 justify="center",
-                gap="md",
                 children=[
-                    dmc.Title("View: ", order=6, w="10rem", fz="xl"),
+                    dmc.Title("View: ", order=5),
                     dropdown(
                         id=ElementIds.CUSTOM_SUN_VIEW_DROPDOWN,
                         options={
@@ -84,9 +83,8 @@ def sun_path():
             dmc.Group(
                 align="center",
                 justify="center",
-                gap="md",
                 children=[
-                    dmc.Title("Select Variable: ", order=6, w="10rem", fz="xl"),
+                    dmc.Title("Select Variable: ", order=5),
                     dropdown(
                         id=ElementIds.CUSTOM_SUN_VAR_DROPDOWN,
                         options=sc_dropdown_names,
@@ -106,7 +104,7 @@ def sun_path():
 def explore_daily_heatmap():
     """Contents of the bottom part of the tab"""
     return dmc.Stack(
-        gap="md",
+        p="sm",
         w="100%",
         children=[
             title_with_link(
@@ -117,9 +115,8 @@ def explore_daily_heatmap():
             dmc.Group(
                 align="center",
                 justify="center",
-                gap="md",
                 children=[
-                    dmc.Title("Select variable: ", order=6, w="10rem"),
+                    dmc.Title("Select variable: ", order=5),
                     dropdown(
                         id=ElementIds.TAB_EXPLORE_DROPDOWN,
                         options=sun_cloud_tab_explore_dropdown_names,
@@ -142,7 +139,7 @@ def explore_daily_heatmap():
 def static_section():
     return dmc.Stack(
         id=ElementIds.STATIC_SECTION,
-        gap="md",
+        p="sm",
         w="100%",
         children=[
             # ...
@@ -153,7 +150,7 @@ def static_section():
 def layout():
     """Contents of tab four."""
     return dmc.Stack(
-        gap="md",
+        p="sm",
         w="100%",
         id=ElementIds.TAB_FOUR_CONTAINER,
         children=[sun_path(), static_section(), explore_daily_heatmap()],

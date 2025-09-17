@@ -32,12 +32,8 @@ def sliders():
     """Returns 2 sliders for the hour"""
     return dmc.Stack(
         id=ElementIds.SLIDER_CONTAINER,
-        gap="md",
-        align="center",
         children=[
             dmc.Group(
-                gap="sm",
-                align="center",
                 children=[
                     dmc.Text("Month Range"),
                     dcc.RangeSlider(
@@ -53,8 +49,6 @@ def sliders():
                 ],
             ),
             dmc.Group(
-                gap="sm",
-                align="center",
                 children=[
                     dmc.Text("Hour Range"),
                     dcc.RangeSlider(
@@ -76,7 +70,6 @@ def sliders():
 def seasonal_wind_rose():
     """Return the section with the 4 seasonal wind rose graphs."""
     return dmc.Stack(
-        gap="md",
         children=[
             title_with_link(
                 text="Seasonal Wind Rose",
@@ -89,12 +82,11 @@ def seasonal_wind_rose():
                     dmc.GridCol(
                         span=6,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.WINTER_WIND_ROSE, w="100%"
+                                        id=ElementIds.WINTER_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.WINTER_WIND_ROSE_TEXT),
@@ -104,12 +96,11 @@ def seasonal_wind_rose():
                     dmc.GridCol(
                         span=6,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.SPRING_WIND_ROSE, w="100%"
+                                        id=ElementIds.SPRING_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.SPRING_WIND_ROSE_TEXT),
@@ -119,12 +110,11 @@ def seasonal_wind_rose():
                     dmc.GridCol(
                         span=6,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.SUMMER_WIND_ROSE, w="100%"
+                                        id=ElementIds.SUMMER_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.SUMMER_WIND_ROSE_TEXT),
@@ -134,12 +124,11 @@ def seasonal_wind_rose():
                     dmc.GridCol(
                         span=6,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.FALL_WIND_ROSE, w="100%"
+                                        id=ElementIds.FALL_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.FALL_WIND_ROSE_TEXT),
@@ -155,7 +144,6 @@ def seasonal_wind_rose():
 def daily_wind_rose():
     """Return the section for the 3 daily wind rose graphs."""
     return dmc.Stack(
-        gap="md",
         id=ElementIds.TAB5_DAILY_CONTAINER,
         children=[
             title_with_link(
@@ -164,17 +152,15 @@ def daily_wind_rose():
                 doc_link=DocLinks.WIND_ROSE,
             ),
             dmc.Grid(
-                gutter="md",
                 children=[
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.MORNING_WIND_ROSE, w="100%"
+                                        id=ElementIds.MORNING_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.MORNING_WIND_ROSE_TEXT),
@@ -184,12 +170,11 @@ def daily_wind_rose():
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.NOON_WIND_ROSE, w="100%"
+                                        id=ElementIds.NOON_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.NOON_WIND_ROSE_TEXT),
@@ -199,12 +184,11 @@ def daily_wind_rose():
                     dmc.GridCol(
                         span=4,
                         children=dmc.Stack(
-                            gap="xs",
                             children=[
                                 dcc.Loading(
                                     type="circle",
                                     children=dmc.Stack(
-                                        id=ElementIds.NIGHT_WIND_ROSE, w="100%"
+                                        id=ElementIds.NIGHT_WIND_ROSE,
                                     ),
                                 ),
                                 dmc.Text(id=ElementIds.NIGHT_WIND_ROSE_TEXT),
@@ -219,32 +203,24 @@ def daily_wind_rose():
 
 def custom_wind_rose():
     return dmc.Stack(
-        gap="md",
-        align="stretch",  # stretch 让子项默认靠左
         children=[
-            # 标题靠左
             title_with_tooltip(
                 text="Customizable Wind Rose",
                 tooltip_text=None,
                 id_button=IdButtons.CUSTOM_ROSE_CHART,
             ),
-            # 参数区（保持居中排布）
             dmc.Grid(
                 gutter="md",
                 justify="center",
                 align="center",
                 maw=900,
                 mx="auto",
-                w="100%",
                 children=[
                     dmc.GridCol(
                         span=6,
                         children=dmc.Stack(
-                            gap="md",
-                            align="center",
                             children=[
                                 dmc.Group(
-                                    gap="md",
                                     children=[
                                         dmc.Title(
                                             "Start Month:",
@@ -264,7 +240,6 @@ def custom_wind_rose():
                                     ],
                                 ),
                                 dmc.Group(
-                                    gap="md",
                                     children=[
                                         dmc.Title(
                                             "Start Hour:", order=6, w="8rem", ta="right"
@@ -285,11 +260,8 @@ def custom_wind_rose():
                     dmc.GridCol(
                         span=6,
                         children=dmc.Stack(
-                            gap="md",
-                            align="center",
                             children=[
                                 dmc.Group(
-                                    gap="md",
                                     children=[
                                         dmc.Title(
                                             "End Month:", order=6, w="8rem", ta="right"
@@ -306,7 +278,6 @@ def custom_wind_rose():
                                     ],
                                 ),
                                 dmc.Group(
-                                    gap="md",
                                     children=[
                                         dmc.Title(
                                             "End Hour:", order=6, w="8rem", ta="right"
@@ -328,9 +299,7 @@ def custom_wind_rose():
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(
-                    id=ElementIds.CUSTOM_WIND_ROSE, w="100%", maw=900, mx="auto"
-                ),
+                children=dmc.Stack(id=ElementIds.CUSTOM_WIND_ROSE, maw=900, mx="auto"),
             ),
         ],
     )
@@ -339,8 +308,6 @@ def custom_wind_rose():
 def layout():
     """Contents in the fifth tab 'Wind'."""
     return dmc.Stack(
-        gap="md",
-        align="stretch",
         children=[
             title_with_link(
                 text="Annual Wind Rose",
@@ -349,15 +316,15 @@ def layout():
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(id=ElementIds.WIND_ROSE, w="100%"),
+                children=dmc.Stack(id=ElementIds.WIND_ROSE),
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(id=ElementIds.WIND_SPEED, w="100%"),
+                children=dmc.Stack(id=ElementIds.WIND_SPEED),
             ),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(id=ElementIds.WIND_DIRECTION, w="100%"),
+                children=dmc.Stack(id=ElementIds.WIND_DIRECTION),
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),

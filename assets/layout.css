@@ -29,15 +29,3 @@
     width: 100%; //or any percentage width you want
 }
 
-/* begin displaying banner below the banner */
-.custom-sidebar .mantine-Drawer-content {
-    top: 80px !important;
-    height: calc(100vh - 80px) !important;
-    position: fixed !important;
-}
-
-.custom-sidebar .mantine-Drawer-overlay {
-    top: 80px !important;
-    height: calc(100vh - 80px) !important;
-}
-

@@ -19,8 +19,7 @@ function click_tab(name) {
   cy.get('#nav-group-main').click({ force: true });
   // Locate tab item by ID prefix, then find label by text
   cy.get('[id^="nav-"]', { timeout: 10000 }).contains(name).click({ force: true });
-  // Wait for tab content container to appear
-  cy.get('#tabs-content', { timeout: 20000 }).should('exist');
+  cy.wait(500);
 }
 
 function load_epw() {
@@ -32,7 +31,7 @@ describe('Clima', () => {
     cy.visit('http://127.0.0.1:8080');
     cy.contains('CBE Clima Tool');
     cy.contains('Current Location: N/A');
-    
+
     // Upload
     load_epw()
     cy.contains('The EPW was successfully loaded!');
@@ -124,8 +123,6 @@ describe('Clima', () => {
     cy.get('#nav-group-controls', { timeout: 10000 }).should('exist').click({ force: true });
     cy.contains('Global Value Ranges', { timeout: 10000 }).click({ force: true });
     cy.contains('-40'); // Global minimum: not something you see in Italy!
-    // Reopen sidebar
-    cy.get('#burger-button', { timeout: 10000 }).click();
     cy.get('#nav-group-controls', { timeout: 10000 }).should('exist').click({ force: true });
     cy.contains('IP').click({ force: true });
     cy.contains('100'); // Not a Celsius temperature!

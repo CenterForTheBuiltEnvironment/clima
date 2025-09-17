@@ -63,13 +63,10 @@ explore_dropdown_names.pop("None", None)
 def section_one_inputs():
     """Return the inputs from section one."""
     return dmc.Group(
-        align="center",
+        mt="md",
         justify="center",
-        gap="sm",
-        wrap=False,
-        w="100%",
         children=[
-            dmc.Title("Select a variable:", order=4),
+            dmc.Title("Select a variable:", order=5),
             dropdown(
                 id=ElementIds.SEC1_VAR_DROPDOWN,
                 options=explore_dropdown_names,
@@ -82,8 +79,6 @@ def section_one_inputs():
 def section_one():
     """Return the graphs for section one"""
     return dmc.Stack(
-        w="100%",
-        gap="md",
         children=[
             section_one_inputs(),
             # Yearly chart
@@ -97,8 +92,6 @@ def section_one():
                 children=dmc.Paper(
                     id=ElementIds.YEARLY_EXPLORE,
                     p="sm",
-                    radius="md",
-                    w="100%",
                 ),
             ),
             title_with_link(
@@ -111,8 +104,6 @@ def section_one():
                 children=dmc.Paper(
                     id=ElementIds.QUERY_DAILY,
                     p="sm",
-                    radius="md",
-                    w="100%",
                 ),
             ),
             title_with_link(
@@ -125,8 +116,6 @@ def section_one():
                 children=dmc.Paper(
                     id=ElementIds.QUERY_HEATMAP,
                     p="sm",
-                    radius="md",
-                    w="100%",
                 ),
             ),
             title_with_tooltip(
@@ -134,102 +123,83 @@ def section_one():
                 tooltip_text="count, mean, std, min, max, and percentiles",
                 id_button=IdButtons.TABLE_EXPLORE,
             ),
-            dmc.Center(
-                w="100%",
-                children=dmc.Stack(
-                    gap="sm",
-                    w="100%",
-                    maw=600,
-                    children=[
-                        dmc.Button(
-                            "Apply month and hour filter",
-                            id=ElementIds.SEC1_TIME_FILTER_INPUT,
-                            variant="filled",
-                            color="blue",
-                            size="md",
-                            radius="md",
-                        ),
-                        dmc.Grid(
-                            gutter="sm",
-                            align="center",
-                            children=[
-                                dmc.GridCol(
-                                    span=3,
-                                    children=dmc.Text("Month Range"),
-                                ),
-                                dmc.GridCol(
-                                    span=6,
-                                    children=dcc.RangeSlider(
-                                        id=ElementIds.SEC1_MONTH_SLIDER,
-                                        min=1,
-                                        max=12,
-                                        step=1,
-                                        value=[1, 12],
-                                        marks={1: "1", 12: "12"},
-                                        tooltip={
-                                            "always_visible": False,
-                                            "placement": "top",
-                                        },
-                                        allowCross=False,
+            dmc.SimpleGrid(
+                cols={"base": 1, "md": 3},
+                children=[
+                    dmc.Stack(),
+                    dmc.Stack(
+                        children=[
+                            dmc.Button(
+                                "Apply month and hour filter",
+                                id=ElementIds.SEC1_TIME_FILTER_INPUT,
+                                variant="filled",
+                                color="blue",
+                                size="md",
+                                fullWidth=True,
+                            ),
+                            # Month
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Month Range", miw=110),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dcc.RangeSlider(
+                                            id=ElementIds.SEC1_MONTH_SLIDER,
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
+                                        ),
                                     ),
-                                ),
-                                dmc.GridCol(
-                                    span=3,
-                                    children=dcc.Checklist(
+                                    dcc.Checklist(
                                         id=ElementIds.INVERT_MONTH_EXPLORE_DESCRIPTIVE,
                                         options=[
                                             {"label": "Invert", "value": "invert"}
                                         ],
                                         value=[],
                                     ),
-                                ),
-                            ],
-                        ),
-                        dmc.Grid(
-                            gutter="sm",
-                            align="center",
-                            children=[
-                                dmc.GridCol(
-                                    span=3,
-                                    children=dmc.Text("Hour Range"),
-                                ),
-                                dmc.GridCol(
-                                    span=6,
-                                    children=dcc.RangeSlider(
-                                        id=ElementIds.SEC1_HOUR_SLIDER,
-                                        min=0,
-                                        max=24,
-                                        step=1,
-                                        value=[0, 24],
-                                        marks={0: "0", 24: "24"},
-                                        tooltip={
-                                            "always_visible": False,
-                                            "placement": "topLeft",
-                                        },
-                                        allowCross=False,
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Hour Range", miw=110),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dcc.RangeSlider(
+                                            id=ElementIds.SEC1_HOUR_SLIDER,
+                                            min=0,
+                                            max=24,
+                                            step=1,
+                                            value=[0, 24],
+                                            marks={0: "0", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "topLeft",
+                                            },
+                                            allowCross=False,
+                                        ),
                                     ),
-                                ),
-                                dmc.GridCol(
-                                    span=3,
-                                    children=dcc.Checklist(
+                                    dcc.Checklist(
                                         id=ElementIds.INVERT_HOUR_EXPLORE_DESCRIPTIVE,
                                         options=[
                                             {"label": "Invert", "value": "invert"}
                                         ],
                                         value=[],
                                     ),
-                                ),
-                            ],
-                        ),
-                    ],
-                ),
+                                ],
+                            ),
+                        ],
+                    ),
+                    dmc.Stack(),
+                ],
             ),
-            dmc.Paper(
-                id=ElementIds.TABLE_DATA_EXPLORER,
-                p="sm",
-                radius="md",
-                w="100%",
-            ),
+            dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
         ],
     )
 
@@ -237,211 +207,152 @@ def section_one():
 def section_two_inputs():
     """Return all the input forms from section two."""
     return dmc.Stack(
-        w="100%",
-        gap="md",
         children=[
             title_with_tooltip(
                 text="Customizable heatmap",
                 tooltip_text=None,
                 id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
             ),
-            dmc.Grid(
-                gutter="md",
+            dmc.SimpleGrid(
+                cols={"base": 1, "md": 3},
                 children=[
-                    dmc.GridCol(
-                        span=4,
-                        children=dmc.Stack(
-                            gap="sm",
-                            children=[
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4,
-                                            children=dmc.Text("Variable:"),
+                    dmc.Stack(
+                        children=[
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Variable:", miw=110, ml="md"),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dropdown(
+                                            id=ElementIds.SEC2_VAR_DROPDOWN,
+                                            options=explore_dropdown_names,
+                                            value=ColNames.RH,
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dropdown(
-                                                id=ElementIds.SEC2_VAR_DROPDOWN,
-                                                options=explore_dropdown_names,
-                                                value=ColNames.RH,
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
                     ),
-                    dmc.GridCol(
-                        span=4,
-                        children=dmc.Stack(
-                            gap="sm",
-                            children=[
-                                dmc.Button(
-                                    "Apply month and hour filter",
-                                    id=ElementIds.SEC2_TIME_FILTER_INPUT,
-                                    variant="filled",
-                                    color="blue",
-                                    size="md",
-                                    radius="md",
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=3,
-                                            children=dmc.Text("Month Range"),
+                    dmc.Stack(
+                        children=[
+                            dmc.Button(
+                                "Apply month and hour filter",
+                                id=ElementIds.SEC2_TIME_FILTER_INPUT,
+                                variant="filled",
+                                color="blue",
+                                size="md",
+                                fullWidth=True,
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Month Range", miw=110),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dcc.RangeSlider(
+                                            id=ElementIds.SEC2_MONTH_SLIDER,
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
                                         ),
-                                        dmc.GridCol(
-                                            span=6,
-                                            children=dcc.RangeSlider(
-                                                id=ElementIds.SEC2_MONTH_SLIDER,
-                                                min=1,
-                                                max=12,
-                                                step=1,
-                                                value=[1, 12],
-                                                marks={1: "1", 12: "12"},
-                                                tooltip={
-                                                    "always_visible": False,
-                                                    "placement": "top",
-                                                },
-                                                allowCross=False,
-                                            ),
+                                    ),
+                                    dcc.Checklist(
+                                        id=ElementIds.INVERT_MONTH_EXPLORE_HEATMAP,
+                                        options=[
+                                            {"label": "Invert", "value": "invert"}
+                                        ],
+                                        value=[],
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Hour Range", miw=110),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dcc.RangeSlider(
+                                            id=ElementIds.SEC2_HOUR_SLIDER,
+                                            min=0,
+                                            max=24,
+                                            step=1,
+                                            value=[0, 24],
+                                            marks={0: "0", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "topLeft",
+                                            },
+                                            allowCross=False,
                                         ),
-                                        dmc.GridCol(
-                                            span=3,
-                                            children=dcc.Checklist(
-                                                id=ElementIds.INVERT_MONTH_EXPLORE_HEATMAP,
-                                                options=[
-                                                    {
-                                                        "label": "Invert",
-                                                        "value": "invert",
-                                                    }
-                                                ],
-                                                value=[],
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=3,
-                                            children=dmc.Text("Hour Range"),
-                                        ),
-                                        dmc.GridCol(
-                                            span=6,
-                                            children=dcc.RangeSlider(
-                                                id=ElementIds.SEC2_HOUR_SLIDER,
-                                                min=0,
-                                                max=24,
-                                                step=1,
-                                                value=[0, 24],
-                                                marks={0: "0", 24: "24"},
-                                                tooltip={
-                                                    "always_visible": False,
-                                                    "placement": "topLeft",
-                                                },
-                                                allowCross=False,
-                                            ),
-                                        ),
-                                        dmc.GridCol(
-                                            span=3,
-                                            children=dcc.Checklist(
-                                                id=ElementIds.INVERT_HOUR_EXPLORE_HEATMAP,
-                                                options=[
-                                                    {
-                                                        "label": "Invert",
-                                                        "value": "invert",
-                                                    }
-                                                ],
-                                                value=[],
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
+                                    ),
+                                    dcc.Checklist(
+                                        id=ElementIds.INVERT_HOUR_EXPLORE_HEATMAP,
+                                        options=[
+                                            {"label": "Invert", "value": "invert"}
+                                        ],
+                                        value=[],
+                                    ),
+                                ],
+                            ),
+                        ],
                     ),
-                    dmc.GridCol(
-                        span=4,
-                        children=dmc.Stack(
-                            gap="sm",
-                            children=[
-                                dmc.Button(
-                                    "Apply filter",
-                                    id=ElementIds.SEC2_DATA_FILTER_INPUT,
-                                    variant="filled",
-                                    color="blue",
-                                    size="md",
-                                    radius="md",
-                                ),
-                                # Filter Variable
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4,
-                                            children=dmc.Text("Filter Variable:"),
+                    dmc.Stack(
+                        children=[
+                            dmc.Button(
+                                "Apply filter",
+                                id=ElementIds.SEC2_DATA_FILTER_INPUT,
+                                variant="filled",
+                                color="blue",
+                                size="md",
+                                fullWidth=True,
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Filter Variable:", miw=130),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dropdown(
+                                            id=ElementIds.SEC2_DATA_FILTER_VAR,
+                                            options=explore_dropdown_names,
+                                            value=ColNames.RH,
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dropdown(
-                                                id=ElementIds.SEC2_DATA_FILTER_VAR,
-                                                options=explore_dropdown_names,
-                                                value=ColNames.RH,
-                                            ),
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Min Value:", miw=130),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dmc.NumberInput(
+                                            id=ElementIds.SEC2_MIN_VAL,
+                                            placeholder="Enter a number for the min val",
+                                            value=0,
+                                            step=1,
                                         ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4,
-                                            children=dmc.Text("Min Value:"),
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Max Value:", miw=130),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dmc.NumberInput(
+                                            id=ElementIds.SEC2_MAX_VAL,
+                                            placeholder="Enter a number for the max val",
+                                            value=100,
+                                            step=1,
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dmc.NumberInput(
-                                                id=ElementIds.SEC2_MIN_VAL,
-                                                placeholder="Enter a number for the min val",
-                                                value=0,
-                                                step=1,
-                                                w="100%",
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4,
-                                            children=dmc.Text("Max Value:"),
-                                        ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dmc.NumberInput(
-                                                id=ElementIds.SEC2_MAX_VAL,
-                                                placeholder="Enter a number for the max val",
-                                                value=100,
-                                                step=1,
-                                                w="100%",
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
                     ),
                 ],
             ),
@@ -453,22 +364,16 @@ def section_two():
     """Return the two graphs in section two."""
     return dmc.Stack(
         id=ElementIds.TAB6_SEC2_CONTAINER,
-        w="100%",
-        gap="md",
-        align="center",
         children=[
             section_two_inputs(),
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
                     id=ElementIds.CUSTOM_HEATMAP,
-                    radius="md",
                     p="sm",
-                    w="100%",
                 ),
             ),
             dmc.Group(
-                gap="sm",
                 children=[
                     dmc.CheckboxGroup(
                         id=ElementIds.NORMALIZE,
@@ -482,9 +387,7 @@ def section_two():
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
-                    radius="md",
                     p="sm",
-                    w="100%",
                     children=dcc.Graph(
                         id=ElementIds.CUSTOM_SUMMARY,
                         config=fig_config,
@@ -498,234 +401,173 @@ def section_two():
 def section_three_inputs():
     """"""
     return dmc.Stack(
-        w="100%",
-        gap="md",
         children=[
-            dmc.Grid(
-                gutter="md",
+            dmc.SimpleGrid(
+                cols={"base": 1, "md": 3},
                 children=[
-                    dmc.GridCol(
-                        span=4,
-                        children=dmc.Stack(
-                            gap="sm",
-                            children=[
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4, children=dmc.Text("X Variable:")
+                    dmc.Stack(
+                        children=[
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("X Variable:", miw=110, ml="md"),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dropdown(
+                                            id=ElementIds.TAB6_SEC3_VAR_X_DROPDOWN,
+                                            options=explore_dropdown_names,
+                                            value="DBT",
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dropdown(
-                                                id=ElementIds.TAB6_SEC3_VAR_X_DROPDOWN,
-                                                options=explore_dropdown_names,
-                                                value="DBT",
-                                            ),
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Y Variable:", miw=110, ml="md"),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dropdown(
+                                            id=ElementIds.TAB6_SEC3_VAR_Y_DROPDOWN,
+                                            options=explore_dropdown_names,
+                                            value=ColNames.RH,
                                         ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4, children=dmc.Text("Y Variable:")
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Color By:", miw=110, ml="md"),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dropdown(
+                                            id=ElementIds.TAB6_SEC3_COLORBY_DROPDOWN,
+                                            options=explore_dropdown_names,
+                                            value="glob_hor_rad",
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dropdown(
-                                                id=ElementIds.TAB6_SEC3_VAR_Y_DROPDOWN,
-                                                options=explore_dropdown_names,
-                                                value=ColNames.RH,
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4, children=dmc.Text("Color By:")
-                                        ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dropdown(
-                                                id=ElementIds.TAB6_SEC3_COLORBY_DROPDOWN,
-                                                options=explore_dropdown_names,
-                                                value="glob_hor_rad",
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
                     ),
-                    dmc.GridCol(
-                        span=4,
-                        children=dmc.Stack(
-                            gap="sm",
-                            children=[
-                                dmc.Button(
-                                    "Apply month and hour filter",
-                                    id=ElementIds.TAB6_SEC3_TIME_FILTER_INPUT,
-                                    variant="filled",
-                                    color="blue",
-                                    size="md",
-                                    radius="md",
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=3, children=dmc.Text("Month Range")
+                    dmc.Stack(
+                        children=[
+                            dmc.Button(
+                                "Apply month and hour filter",
+                                id=ElementIds.TAB6_SEC3_TIME_FILTER_INPUT,
+                                variant="filled",
+                                color="blue",
+                                size="md",
+                                fullWidth=True,
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Month Range", miw=110),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dcc.RangeSlider(
+                                            id=ElementIds.TAB6_SEC3_QUERY_MONTH_SLIDER,
+                                            min=1,
+                                            max=12,
+                                            step=1,
+                                            value=[1, 12],
+                                            marks={1: "1", 12: "12"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
                                         ),
-                                        dmc.GridCol(
-                                            span=6,
-                                            children=dcc.RangeSlider(
-                                                id=ElementIds.TAB6_SEC3_QUERY_MONTH_SLIDER,
-                                                min=1,
-                                                max=12,
-                                                step=1,
-                                                value=[1, 12],
-                                                marks={1: "1", 12: "12"},
-                                                tooltip={
-                                                    "always_visible": False,
-                                                    "placement": "top",
-                                                },
-                                                allowCross=False,
-                                            ),
+                                    ),
+                                    dcc.Checklist(
+                                        id=ElementIds.INVERT_MONTH_EXPLORE_MORE_CHARTS,
+                                        options=[
+                                            {"label": "Invert", "value": "invert"}
+                                        ],
+                                        value=[],
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Hour Range", miw=110),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dcc.RangeSlider(
+                                            id=ElementIds.TAB6_SEC3_QUERY_HOUR_SLIDER,
+                                            min=0,
+                                            max=24,
+                                            step=1,
+                                            value=[0, 24],
+                                            marks={0: "0", 24: "24"},
+                                            tooltip={
+                                                "always_visible": False,
+                                                "placement": "top",
+                                            },
+                                            allowCross=False,
                                         ),
-                                        dmc.GridCol(
-                                            span=3,
-                                            children=dcc.Checklist(
-                                                id=ElementIds.INVERT_MONTH_EXPLORE_MORE_CHARTS,
-                                                options=[
-                                                    {
-                                                        "label": "Invert",
-                                                        "value": "invert",
-                                                    }
-                                                ],
-                                                value=[],
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=3, children=dmc.Text("Hour Range")
-                                        ),
-                                        dmc.GridCol(
-                                            span=6,
-                                            children=dcc.RangeSlider(
-                                                id=ElementIds.TAB6_SEC3_QUERY_HOUR_SLIDER,
-                                                min=0,
-                                                max=24,
-                                                step=1,
-                                                value=[0, 24],
-                                                marks={0: "0", 24: "24"},
-                                                tooltip={
-                                                    "always_visible": False,
-                                                    "placement": "top",
-                                                },
-                                                allowCross=False,
-                                            ),
-                                        ),
-                                        dmc.GridCol(
-                                            span=3,
-                                            children=dcc.Checklist(
-                                                id=ElementIds.INVERT_HOUR_EXPLORE_MORE_CHARTS,
-                                                options=[
-                                                    {
-                                                        "label": "Invert",
-                                                        "value": "invert",
-                                                    }
-                                                ],
-                                                value=[],
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
+                                    ),
+                                    dcc.Checklist(
+                                        id=ElementIds.INVERT_HOUR_EXPLORE_MORE_CHARTS,
+                                        options=[
+                                            {"label": "Invert", "value": "invert"}
+                                        ],
+                                        value=[],
+                                    ),
+                                ],
+                            ),
+                        ],
                     ),
-                    dmc.GridCol(
-                        span=4,
-                        children=dmc.Stack(
-                            gap="sm",
-                            children=[
-                                dmc.Button(
-                                    "Apply filter",
-                                    id=ElementIds.TAB6_SEC3_DATA_FILTER_INPUT,
-                                    variant="filled",
-                                    color="blue",
-                                    size="md",
-                                    radius="md",
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4,
-                                            children=dmc.Text("Filter Variable:"),
+                    dmc.Stack(
+                        children=[
+                            dmc.Button(
+                                "Apply filter",
+                                id=ElementIds.TAB6_SEC3_DATA_FILTER_INPUT,
+                                variant="filled",
+                                color="blue",
+                                size="md",
+                                fullWidth=True,
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Filter Variable:", miw=130),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dropdown(
+                                            id=ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN,
+                                            options=explore_dropdown_names,
+                                            value=ColNames.RH,
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dropdown(
-                                                id=ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN,
-                                                options=explore_dropdown_names,
-                                                value=ColNames.RH,
-                                            ),
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Min Value:", miw=130),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dmc.NumberInput(
+                                            id=ElementIds.TAB6_SEC3_MIN_VAL,
+                                            placeholder="Enter a number for the min val",
+                                            value=0,
+                                            step=1,
                                         ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4, children=dmc.Text("Min Value:")
+                                    ),
+                                ],
+                            ),
+                            dmc.Flex(
+                                children=[
+                                    dmc.Text("Max Value:", miw=130),
+                                    dmc.Stack(
+                                        flex=1,
+                                        children=dmc.NumberInput(
+                                            id=ElementIds.TAB6_SEC3_MAX_VAL,
+                                            placeholder="Enter a number for the max val",
+                                            value=100,
+                                            step=1,
                                         ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dmc.NumberInput(
-                                                id=ElementIds.TAB6_SEC3_MIN_VAL,
-                                                placeholder="Enter a number for the min val",
-                                                value=0,
-                                                step=1,
-                                                w="100%",
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                                dmc.Grid(
-                                    gutter="sm",
-                                    align="center",
-                                    children=[
-                                        dmc.GridCol(
-                                            span=4, children=dmc.Text("Max Value:")
-                                        ),
-                                        dmc.GridCol(
-                                            span=8,
-                                            children=dmc.NumberInput(
-                                                id=ElementIds.TAB6_SEC3_MAX_VAL,
-                                                placeholder="Enter a number for the max val",
-                                                value=100,
-                                                step=1,
-                                                w="100%",
-                                            ),
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
                     ),
                 ],
             ),
@@ -736,8 +578,6 @@ def section_three_inputs():
 def section_three():
     """Return the two graphs in section three."""
     return dmc.Stack(
-        w="100%",
-        gap="md",
         children=[
             title_with_tooltip(
                 text="More charts",
@@ -749,18 +589,14 @@ def section_three():
                 type="circle",
                 children=dmc.Paper(
                     id=ElementIds.THREE_VAR,
-                    radius="md",
                     p="sm",
-                    w="100%",
                 ),
             ),
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
                     id=ElementIds.TWO_VAR,
-                    radius="md",
                     p="sm",
-                    w="100%",
                 ),
             ),
         ],
@@ -770,7 +606,6 @@ def section_three():
 def layout():
     """Return the contents of tab six."""
     return dmc.Box(
-        className="justify-center",
         children=[section_one(), section_two(), section_three()],
     )
 

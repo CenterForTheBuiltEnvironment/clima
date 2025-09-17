@@ -39,7 +39,6 @@ def layout():
             dmc.Group(
                 justify="center",
                 align="center",
-                gap="sm",
                 wrap="nowrap",
                 children=[
                     dmc.Text("Select a variable:", fz="xl"),
@@ -52,7 +51,6 @@ def layout():
                 ],
             ),
             dmc.Stack(
-                gap="lg",
                 mt="md",
                 children=[
                     # Yearly Chart
@@ -63,7 +61,7 @@ def layout():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=dmc.Stack(id=ElementIds.YEARLY_CHART, gap=0),
+                        children=dmc.Stack(id=ElementIds.YEARLY_CHART),
                     ),
                     # Daily chart
                     title_with_link(
@@ -73,7 +71,7 @@ def layout():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=dmc.Stack(id=ElementIds.DAILY, gap=0),
+                        children=dmc.Stack(id=ElementIds.DAILY),
                     ),
                     # Heatmap chart
                     title_with_link(
@@ -83,7 +81,7 @@ def layout():
                     ),
                     dcc.Loading(
                         type="circle",
-                        children=dmc.Stack(id=ElementIds.HEATMAP, gap=0),
+                        children=dmc.Stack(id=ElementIds.HEATMAP),
                     ),
                     # Descriptive statistics
                     title_with_tooltip(
@@ -91,7 +89,7 @@ def layout():
                         tooltip_text="count, mean, std, min, max, and percentiles",
                         id_button=IdButtons.TABLE_TMP_RH,
                     ),
-                    dmc.Stack(id=ElementIds.TABLE_TMP_HUM, gap=0),
+                    dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
                 ],
             ),
         ],

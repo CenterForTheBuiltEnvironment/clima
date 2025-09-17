@@ -287,19 +287,3 @@ p {
     z-index: 1000;
 }
 
-/* SegmentedControl adapt to container width */
-#sidebar .mantine-SegmentedControl-root {
-    width: 100% !important;
-}
-
-#sidebar .mantine-SegmentedControl-control {
-    flex: 1 !important;
-    min-width: 0 !important;
-}
-
-/* Response design */
-@media (max-width: 768px) {
-    #sidebar {
-        width: 280px !important;
-    }
-}

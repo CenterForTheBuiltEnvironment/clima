@@ -149,7 +149,6 @@ def generate_custom_inputs_psy(
 def title_with_tooltip(text, tooltip_text, id_button):
     if tooltip_text:
         return dmc.Group(
-            gap="xs",
             align="center",
             mt="md",
             px="md",
@@ -172,15 +171,7 @@ def title_with_tooltip(text, tooltip_text, id_button):
             ],
         )
     else:
-        return dmc.Group(
-            gap="xs",
-            align="center",
-            mt="md",
-            px="md",
-            children=[
-                dmc.Title(text, order=3),
-            ],
-        )
+        return dmc.Title(text, order=3, mt="md", px="md")
 
 
 def title_with_link(
@@ -190,7 +181,6 @@ def title_with_link(
     doc_link: str = "",
 ):
     return dmc.Group(
-        gap="xs",
         align="center",
         mt="md",
         px="md",
