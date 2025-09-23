@@ -14,7 +14,6 @@
 
 function click_tab(name) {
   // Open the sidebar (burger button is fixed on screen)
-  cy.get('#burger-button', { timeout: 10000 }).click({ force: true });
   // Expand the main nav group if collapsed
   cy.get('#nav-group-main').click({ force: true });
   // Locate tab item by ID prefix, then find label by text
@@ -121,7 +120,7 @@ describe('Clima', () => {
     click_tab('Temperature and Humidity')
     // Expand the "Data Display Options" nav section to access controls
     cy.get('#nav-group-controls', { timeout: 10000 }).should('exist').click({ force: true });
-    cy.contains('Global Value Ranges', { timeout: 10000 }).click({ force: true });
+    cy.contains('Global', { timeout: 10000 }).click({ force: true });
     cy.contains('-40'); // Global minimum: not something you see in Italy!
     cy.get('#nav-group-controls', { timeout: 10000 }).should('exist').click({ force: true });
     cy.contains('IP').click({ force: true });

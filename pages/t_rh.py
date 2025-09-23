@@ -34,14 +34,14 @@ var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 def layout():
     return dmc.Container(
         fluid=True,
-        px="md",
+        p="md",
         children=[
             dmc.Group(
                 justify="center",
                 align="center",
                 wrap="nowrap",
                 children=[
-                    dmc.Text("Select a variable:", fz="xl"),
+                    dmc.Title("Select a variable:", order=5),
                     dropdown(
                         id=ElementIds.ID_T_RH_DROPDOWN,
                         options={var: dropdown_names[var] for var in var_to_plot},

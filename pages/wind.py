@@ -35,7 +35,7 @@ def sliders():
         children=[
             dmc.Group(
                 children=[
-                    dmc.Text("Month Range"),
+                    dmc.Title("Month Range", order=5),
                     dcc.RangeSlider(
                         id=ElementIds.MONTH_SLIDER,
                         min=1,
@@ -50,7 +50,7 @@ def sliders():
             ),
             dmc.Group(
                 children=[
-                    dmc.Text("Hour Range"),
+                    dmc.Title("Hour Range", order=5),
                     dcc.RangeSlider(
                         id=ElementIds.HOUR_SLIDER,
                         min=1,
@@ -211,8 +211,6 @@ def custom_wind_rose():
             ),
             dmc.Grid(
                 gutter="md",
-                justify="center",
-                align="center",
                 maw=900,
                 mx="auto",
                 children=[
@@ -242,7 +240,7 @@ def custom_wind_rose():
                                 dmc.Group(
                                     children=[
                                         dmc.Title(
-                                            "Start Hour:", order=6, w="8rem", ta="right"
+                                            "Start Hour:", order=5, w="8rem", ta="right"
                                         ),
                                         dropdown(
                                             id=ElementIds.TAB5_CUSTOM_START_HOUR,
@@ -264,7 +262,7 @@ def custom_wind_rose():
                                 dmc.Group(
                                     children=[
                                         dmc.Title(
-                                            "End Month:", order=6, w="8rem", ta="right"
+                                            "End Month:", order=5, w="8rem", ta="right"
                                         ),
                                         dropdown(
                                             id=ElementIds.TAB5_CUSTOM_END_MONTH,
@@ -280,7 +278,7 @@ def custom_wind_rose():
                                 dmc.Group(
                                     children=[
                                         dmc.Title(
-                                            "End Hour:", order=6, w="8rem", ta="right"
+                                            "End Hour:", order=5, w="8rem", ta="right"
                                         ),
                                         dropdown(
                                             id=ElementIds.TAB5_CUSTOM_END_HOUR,
@@ -308,6 +306,7 @@ def custom_wind_rose():
 def layout():
     """Contents in the fifth tab 'Wind'."""
     return dmc.Stack(
+        p="md",
         children=[
             title_with_link(
                 text="Annual Wind Rose",

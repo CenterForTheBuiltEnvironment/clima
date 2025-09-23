@@ -41,7 +41,7 @@ class NavBarIcons:
 def create_navbar():
     nav_link_styles = {
         "root": {
-            "borderRadius": "6px",
+            "borderRadius": "0.375rem",
             "transition": "all 0.2s ease",
             "&:hover": {"backgroundColor": "#e3f2fd"},
             "&[data-active='true']": {
@@ -66,7 +66,6 @@ def create_navbar():
             href=page[ColNames.PATH],
             id=f"nav-{page[ColNames.PATH].replace('/', '')}",
             active=False,
-            mb="2px",
             styles=nav_link_styles,
         )
         for page in dash.page_registry.values()
@@ -78,10 +77,11 @@ def create_navbar():
         children=sub_links,
         id=ElementIds.NAV_GROUP_MAIN,
         variant="light",
+        childrenOffset=0,
+        opened=True,
     )
 
     segmented_control_styles = {
-        "root": {"width": "100%"},
         "control": {"flex": 1, "minWidth": 0},
     }
 
@@ -89,29 +89,51 @@ def create_navbar():
         gap="xs",
         py="xs",
         children=[
-            dmc.SegmentedControl(
-                id=ElementIds.ID_LAYOUT_GLOBAL_LOCAL_RADIO_INPUT,
-                value="local",
-                color="blue",
-                data=[
-                    {"label": "Global Value Ranges", "value": "global"},
-                    {"label": "Local Value Ranges", "value": "local"},
-                ],
-                radius="md",
-                size="sm",
-                styles=segmented_control_styles,
+            dmc.Tooltip(
+                label=dmc.Stack(
+                    gap="xs",
+                    children=[
+                        dmc.Text(
+                            "You can choose value ranges between Global and Local"
+                        ),
+                    ],
+                ),
+                position="right",
+                withArrow=True,
+                children=dmc.SegmentedControl(
+                    id=ElementIds.ID_LAYOUT_GLOBAL_LOCAL_RADIO_INPUT,
+                    value="local",
+                    color="blue",
+                    data=[
+                        {"label": "Global", "value": "global"},
+                        {"label": "Local", "value": "local"},
+                    ],
+                    w=220,
+                    size="sm",
+                    styles=segmented_control_styles,
+                ),
             ),
-            dmc.SegmentedControl(
-                id=ElementIds.ID_LAYOUT_SI_IP_RADIO_INPUT,
-                value=UnitSystem.SI,
-                color="blue",
-                data=[
-                    {"label": UnitSystem.SI.upper(), "value": UnitSystem.SI},
-                    {"label": UnitSystem.IP.upper(), "value": UnitSystem.IP},
-                ],
-                radius="md",
-                size="sm",
-                styles=segmented_control_styles,
+            dmc.Tooltip(
+                label=dmc.Stack(
+                    gap="xs",
+                    children=[
+                        dmc.Text("You can choose units between SI and IP"),
+                    ],
+                ),
+                position="right",
+                withArrow=True,
+                children=dmc.SegmentedControl(
+                    id=ElementIds.ID_LAYOUT_SI_IP_RADIO_INPUT,
+                    value=UnitSystem.SI,
+                    color="blue",
+                    data=[
+                        {"label": "SI", "value": UnitSystem.SI},
+                        {"label": "IP", "value": UnitSystem.IP},
+                    ],
+                    w=220,
+                    size="sm",
+                    styles=segmented_control_styles,
+                ),
             ),
         ],
     )
@@ -122,7 +144,7 @@ def create_navbar():
         children=[controls_stack],
         id=ElementIds.NAV_GROUP_CONTROLS,
         variant="light",
-        childrenOffset=8,
+        childrenOffset=0,
     )
 
     # Documentation
@@ -136,7 +158,6 @@ def create_navbar():
 
     return dmc.ScrollArea(
         children=dmc.Stack(gap="xs", children=[parent_group, controls_group, doc_link]),
-        pr="xs",
     )
 
 
@@ -160,8 +181,6 @@ def create_header():
                         "CBE Clima Tool",
                         id=ElementIds.BANNER_TITLE,
                         order=2,
-                        fw=500,
-                        ff="'Open Sans', sans-serif",
                         lh=1.1,
                         c="white",
                     ),
@@ -170,13 +189,11 @@ def create_header():
                         id=ElementIds.ID_LAYOUT_BANNER_SUBTITLE,
                         size="sm",
                         opacity=0.85,
-                        ff="'Poppins', sans-serif",
-                        fw=400,
-                        h=25,
                         style={"overflow": "hidden"},
                         c="white",
                     ),
                 ],
+                p="xs",
             ),
             dmc.Alert(
                 [
@@ -186,7 +203,7 @@ def create_header():
                         href="https://forms.gle/k289zP3R92jdu14M7",
                         target="_blank",
                         c="white",
-                        underline=True,
+                        underline="always",
                     ),
                     "! ☀️",
                 ],
@@ -200,21 +217,19 @@ def create_header():
                 withCloseButton=True,
                 w=400,
                 pos="fixed",
-                top="25px",
-                right="10px",
+                top="1em",
+                right="1em",
                 style={"zIndex": 1002, "display": "none"},
             ),
         ],
-        px="md",
+        pl="md",
     )
 
 
 def create_footer():
     white_anchor_style = {
-        "underline": True,
+        "underline": "always",
         "c": "white",
-        "fz": "md",
-        "fw": 500,
         "target": "_blank",
     }
 
@@ -259,7 +274,7 @@ def create_footer():
                         Please cite us: Betti, G., Tartarini, F., Nguyen, C, Schiavon, S. CBE Clima Tool: A free and open-source web application for climate analysis tailored to sustainable building design. Build. Simul. (2023). [https://doi.org/10.1007/s12273-023-1090-5](https://doi.org/10.1007/s12273-023-1090-5).
                         """,
                         style={
-                            "fontSize": "16px",
+                            "fontSize": "1rem",
                             "lineHeight": 1.3,
                             "fontWeight": 400,
                             "color": "white",
@@ -285,7 +300,6 @@ def create_footer():
         p="sm",
         c="white",
         bg="#003262",
-        h="100%",
         gap="xl",
         justify="flex-start",
         align="center",
@@ -324,7 +338,6 @@ def create_collapsible_layout():
             dmc.AppShellNavbar(
                 id=ElementIds.NAVBAR,
                 children=create_navbar(),
-                p="md",
                 bg="#f8f9fa",
             ),
             # including main and footer
@@ -339,20 +352,19 @@ def create_collapsible_layout():
                 pos="relative",
                 style={
                     "zIndex": 1,
-                    "@media (max-width: 768px)": {
-                        "left": "0px",
+                    "@media (max-width: 48rem)": {
+                        "left": "0",
                     },
                 },
             ),
         ],
         header={"height": 80},
         navbar={
-            "width": 180,
+            "width": 230,
             "breakpoint": "sm",
             "collapsed": {"mobile": True, "desktop": False},
             "id": ElementIds.NAVBAR_CONTAINER,
         },
-        padding="md",
         id=ElementIds.APP_SHELL,
     )
 
@@ -377,7 +389,7 @@ def toggle_navbar_and_width(
 ):
     navbar["collapsed"] = {"mobile": not burger_opened, "desktop": not burger_opened}
 
-    WIDTHS = {"default": 180, "pages": 300, "tools": 400}
+    WIDTHS = {"default": 230, "pages": 230, "tools": 230}
 
     if tools_opened is not None:
         tools_expanded = tools_opened

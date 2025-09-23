@@ -56,7 +56,7 @@ def layout():
                     id=ElementIds.UPLOAD_DATA_BUTTON,
                     variant="outline",
                     color="gray",
-                    style={"borderStyle": "dashed", "borderRadius": "5px"},
+                    style={"borderStyle": "dashed"},
                     styles={"label": {"fontWeight": 400}},
                 ),
                 # Allow multiple files to be uploaded
@@ -89,14 +89,12 @@ def layout():
                             dmc.Button(
                                 "Close",
                                 id=ElementIds.MODAL_CLOSE_BUTTON,
-                                ml="sm",
                                 color="gray",
                                 variant="outline",
                             ),
                             dmc.Button(
                                 "Yes",
                                 id=ElementIds.MODAL_YES_BUTTON,
-                                ml="sm",
                                 color="blue",
                             ),
                         ],
@@ -105,9 +103,8 @@ def layout():
                 ],
             ),
         ],
-        mx=0,
-        px=0,
-        py="md",
+        p="md",
+        mb="xl",
         style={
             "display": "flex",
             "flexDirection": "column",
@@ -393,5 +390,5 @@ def plot_location_epw_files(pathname):
         id=ElementIds.TAB_ONE_MAP,
         figure=fig,
         config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
-        style={"position": "relative", "zIndex": 5},
+        # style={"position": "relative", "zIndex": 5},
     )

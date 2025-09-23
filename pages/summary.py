@@ -37,7 +37,7 @@ def layout():
 
     return dmc.Container(
         fluid=True,
-        px="md",
+        p="md",
         children=[
             dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER),
         ],
@@ -78,8 +78,6 @@ def update_layout(si_ip):
             dcc.Loading(
                 type="circle",
                 children=dmc.Group(
-                    align="center",
-                    justify="flex-start",
                     children=[
                         dmc.Button(
                             "Download EPW",
@@ -105,7 +103,6 @@ def update_layout(si_ip):
             ),
             dmc.Stack(id=ElementIds.WARNING_CDD_HIGHER_HDD),
             dmc.Group(
-                align="center",
                 justify="center",
                 children=[
                     dmc.Text("Heating degree day (HDD) setpoint"),

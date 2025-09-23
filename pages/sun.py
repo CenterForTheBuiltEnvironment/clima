@@ -57,7 +57,6 @@ sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
 def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
     return dmc.Stack(
-        p="sm",
         children=[
             title_with_link(
                 text="Sun path chart",
@@ -104,7 +103,6 @@ def sun_path():
 def explore_daily_heatmap():
     """Contents of the bottom part of the tab"""
     return dmc.Stack(
-        p="sm",
         w="100%",
         children=[
             title_with_link(
@@ -125,12 +123,10 @@ def explore_daily_heatmap():
                     ),
                 ],
             ),
-            dcc.Loading(
-                type="circle", children=dmc.Stack(id=ElementIds.TAB4_DAILY, w="100%")
-            ),
+            dcc.Loading(type="circle", children=dmc.Stack(id=ElementIds.TAB4_DAILY)),
             dcc.Loading(
                 type="circle",
-                children=dmc.Stack(id=ElementIds.TAB4_HEATMAP, w="100%"),
+                children=dmc.Stack(id=ElementIds.TAB4_HEATMAP),
             ),
         ],
     )
@@ -139,7 +135,6 @@ def explore_daily_heatmap():
 def static_section():
     return dmc.Stack(
         id=ElementIds.STATIC_SECTION,
-        p="sm",
         w="100%",
         children=[
             # ...
@@ -150,8 +145,7 @@ def static_section():
 def layout():
     """Contents of tab four."""
     return dmc.Stack(
-        p="sm",
-        w="100%",
+        p="md",
         id=ElementIds.TAB_FOUR_CONTAINER,
         children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
@@ -173,7 +167,7 @@ def update_static_section(si_ip):
         ),
         dcc.Loading(
             type="circle",
-            children=dmc.Stack(id=ElementIds.MONTHLY_SOLAR, w="100%"),
+            children=dmc.Stack(id=ElementIds.MONTHLY_SOLAR),
         ),
         title_with_link(
             text="Cloud coverage",
@@ -182,7 +176,7 @@ def update_static_section(si_ip):
         ),
         dcc.Loading(
             type="circle",
-            children=dmc.Stack(id=ElementIds.CLOUD_COVER, w="100%"),
+            children=dmc.Stack(id=ElementIds.CLOUD_COVER),
         ),
     ]
 

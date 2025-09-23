@@ -39,7 +39,7 @@ dash.register_page(
 
 
 def layout():
-    return dmc.Stack(id=ElementIds.MAIN_NV_SECTION)
+    return dmc.Stack(p="md", id=ElementIds.MAIN_NV_SECTION)
 
 
 @callback(
@@ -67,7 +67,6 @@ def update_layout(si_ip):
             type="circle",
             children=dmc.Paper(
                 id=ElementIds.NV_HEATMAP_CHART,
-                p="sm",
             ),
         ),
         dmc.Group(
@@ -77,7 +76,6 @@ def update_layout(si_ip):
                     id=ElementIds.SWITCHES_INPUT,
                     label="",
                     checked=True,
-                    size="md",
                     color="blue",
                     style={"padding": "1rem", "marginRight": "-2rem"},
                 ),
@@ -95,7 +93,6 @@ def update_layout(si_ip):
             type="circle",
             children=dmc.Paper(
                 id=ElementIds.NV_BAR_CHART,
-                p="sm",
             ),
         ),
     ]
@@ -103,77 +100,70 @@ def update_layout(si_ip):
 
 def inputs_tab(t_min, t_max, d_set):
     return dmc.SimpleGrid(
-        cols={"base": 1, "md": 3},
+        cols=3,
+        spacing="md",
         children=[
             dmc.Stack(
-                children=[
+                [
                     dmc.Button(
                         "Apply filter",
-                        color="primary",
+                        color="blue",
                         id=ElementIds.NV_DBT_FILTER,
                         variant="link",
-                        size="md",
-                        fullWidth=True,
                         n_clicks=1,
                     ),
-                    dmc.Text(
-                        "Outdoor dry-bulb air temperature range",
-                        size="md",
-                        ml="md",
-                    ),
-                    dmc.Flex(
-                        children=[
-                            dmc.Text("Min Value:", size="md", ml="md"),
-                            dmc.NumberInput(
-                                id=ElementIds.NV_TDB_MIN_VAL,
-                                placeholder="Enter a number for the min val",
-                                step=1,
-                                value=t_min,
+                    dmc.Title("Outdoor dry-bulb air temperature range", order=5),
+                    dmc.Group(
+                        [
+                            dmc.Title("Min Value:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_TDB_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
+                                    step=1,
+                                    value=t_min,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    # Max
-                    dmc.Flex(
-                        children=[
-                            dmc.Text("Max Value:", size="md", ml="md"),
-                            dmc.NumberInput(
-                                id=ElementIds.NV_TDB_MAX_VAL,
-                                placeholder="Enter a number for the max val",
-                                value=t_max,
-                                step=1,
+                    dmc.Group(
+                        [
+                            dmc.Title("Max Value:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_TDB_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=t_max,
+                                    step=1,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                ],
+                ]
             ),
             dmc.Stack(
-                children=[
+                [
                     dmc.Button(
                         "Apply month and hour filter",
-                        color="primary",
+                        color="blue",
                         id=ElementIds.NV_MONTH_HOUR_FILTER,
                         variant="link",
-                        size="md",
-                        fullWidth=True,
                     ),
-                    dmc.Flex(
-                        children=[
-                            dmc.Text("Month Range", size="md", miw=120),
+                    dmc.Group(
+                        [
+                            dmc.Title("Month Range", order=5),
                             dmc.Stack(
-                                flex=1,
-                                children=dcc.RangeSlider(
+                                dcc.RangeSlider(
                                     id=ElementIds.NV_MONTH_SLIDER,
                                     min=1,
                                     max=12,
                                     step=1,
                                     value=[1, 12],
                                     marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
                                 ),
+                                flex=1,
                             ),
                             dcc.Checklist(
                                 options=[{"label": "Invert", "value": "invert"}],
@@ -182,24 +172,19 @@ def inputs_tab(t_min, t_max, d_set):
                             ),
                         ],
                     ),
-                    dmc.Flex(
-                        children=[
-                            dmc.Text("Hour Range", size="md", miw=120),
+                    dmc.Group(
+                        [
+                            dmc.Title("Hour Range", order=5),
                             dmc.Stack(
-                                flex=1,
-                                children=dcc.RangeSlider(
+                                dcc.RangeSlider(
                                     id=ElementIds.NV_HOUR_SLIDER,
                                     min=0,
                                     max=24,
                                     step=1,
                                     value=[0, 24],
                                     marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "topLeft",
-                                    },
-                                    allowCross=False,
                                 ),
+                                flex=1,
                             ),
                             dcc.Checklist(
                                 options=[{"label": "Invert", "value": "invert"}],
@@ -208,19 +193,15 @@ def inputs_tab(t_min, t_max, d_set):
                             ),
                         ],
                     ),
-                ],
+                ]
             ),
             dmc.Stack(
-                children=[
+                [
                     dmc.Button(
                         "Apply filter",
-                        color="primary",
+                        color="blue",
                         id=ElementIds.NV_DPT_FILTER,
-                        mb="xs",
                         variant="link",
-                        size="md",
-                        fullWidth=True,
-                        n_clicks=0,
                         disabled=True,
                     ),
                     dcc.Checklist(
@@ -232,24 +213,26 @@ def inputs_tab(t_min, t_max, d_set):
                                     "system surface temperature, the data point is not plot."
                                 ),
                                 "value": 1,
-                            },
+                            }
                         ],
                         value=[],
                         id=ElementIds.ENABLE_CONDENSATION,
                     ),
-                    dmc.Flex(
-                        children=[
-                            dmc.Text("Surface temperature:", size="md"),
-                            dmc.NumberInput(
-                                id=ElementIds.NV_DPT_MAX_VAL,
-                                placeholder="Enter a number for the max val",
-                                value=d_set,
-                                step=1,
-                                w="50%",
+                    dmc.Group(
+                        [
+                            dmc.Title("Surface temperature:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_DPT_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=d_set,
+                                    step=1,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                ],
+                ]
             ),
         ],
     )
