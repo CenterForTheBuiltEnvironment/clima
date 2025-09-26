@@ -60,6 +60,14 @@ explore_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
 explore_dropdown_names.pop("None", None)
 
 
+def layout():
+    """Return the contents of tab six."""
+    return dmc.Stack(
+        p="md",
+        children=[*section_one(), section_two(), section_three()],
+    )
+
+
 def section_one_inputs():
     """Return the inputs from section one."""
     return dmc.Group(
@@ -78,8 +86,7 @@ def section_one_inputs():
 
 def section_one():
     """Return the graphs for section one"""
-    return dmc.Stack(
-        children=[
+    return [
             section_one_inputs(),
             title_with_link(
                 text="Yearly chart",
@@ -182,8 +189,7 @@ def section_one():
             ),
             # Results table
             dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
-        ],
-    )
+        ]
 
 
 def section_two_inputs():
@@ -545,13 +551,6 @@ def section_three():
                 ),
             ),
         ],
-    )
-
-
-def layout():
-    """Return the contents of tab six."""
-    return dmc.Box(
-        children=[section_one(), section_two(), section_three()],
     )
 
 
