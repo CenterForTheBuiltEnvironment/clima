@@ -99,11 +99,12 @@ def sun_path():
                     ),
                 ],
             ),
-            dmc.Center(dcc.Loading(
-                type="circle",
-                children=dmc.Stack(id=ElementIds.CUSTOM_SUNPATH, w="100%"),
-            ),),
-
+            dmc.Center(
+                dcc.Loading(
+                    type="circle",
+                    children=dmc.Stack(id=ElementIds.CUSTOM_SUNPATH, w="100%"),
+                ),
+            ),
         ],
     )
 

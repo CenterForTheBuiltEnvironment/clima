@@ -87,109 +87,105 @@ def section_one_inputs():
 def section_one():
     """Return the graphs for section one"""
     return [
-            section_one_inputs(),
-            title_with_link(
-                text="Yearly chart",
-                id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
-                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-            ),
-            dcc.Loading(
-                type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE, p="sm")
-            ),
-            title_with_link(
-                text="Daily chart",
-                id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
-                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-            ),
-            dcc.Loading(
-                type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY, p="sm")
-            ),
-            title_with_link(
-                text="Heatmap chart",
-                id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
-                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-            ),
-            dcc.Loading(
-                type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP, p="sm")
-            ),
-            title_with_tooltip(
-                text="Descriptive statistics",
-                tooltip_text="count, mean, std, min, max, and percentiles",
-                id_button=IdButtons.TABLE_EXPLORE,
-            ),
-            dmc.Center(
-                children=dmc.Box(
-                    w="33%",
-                    children=dmc.Stack(
-                        children=[
-                            dmc.Button(
-                                "Apply month and hour filter",
-                                id=ElementIds.SEC1_TIME_FILTER_INPUT,
-                                color="blue",
-                            ),
-                            dmc.Group(
-                                children=[
-                                    dmc.Title("Month Range", order=5),
-                                    dmc.Stack(
-                                        flex=1,
-                                        children=dcc.RangeSlider(
-                                            id=ElementIds.SEC1_MONTH_SLIDER,
-                                            min=1,
-                                            max=12,
-                                            step=1,
-                                            value=[1, 12],
-                                            marks={1: "1", 12: "12"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "top",
-                                            },
-                                            allowCross=False,
-                                        ),
+        section_one_inputs(),
+        title_with_link(
+            text="Yearly chart",
+            id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dcc.Loading(
+            type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE, p="sm")
+        ),
+        title_with_link(
+            text="Daily chart",
+            id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dcc.Loading(
+            type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY, p="sm")
+        ),
+        title_with_link(
+            text="Heatmap chart",
+            id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dcc.Loading(
+            type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP, p="sm")
+        ),
+        title_with_tooltip(
+            text="Descriptive statistics",
+            tooltip_text="count, mean, std, min, max, and percentiles",
+            id_button=IdButtons.TABLE_EXPLORE,
+        ),
+        dmc.Center(
+            children=dmc.Box(
+                w="33%",
+                children=dmc.Stack(
+                    children=[
+                        dmc.Button(
+                            "Apply month and hour filter",
+                            id=ElementIds.SEC1_TIME_FILTER_INPUT,
+                            color="blue",
+                        ),
+                        dmc.Group(
+                            children=[
+                                dmc.Title("Month Range", order=5),
+                                dmc.Stack(
+                                    flex=1,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.SEC1_MONTH_SLIDER,
+                                        min=1,
+                                        max=12,
+                                        step=1,
+                                        value=[1, 12],
+                                        marks={1: "1", 12: "12"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "top",
+                                        },
+                                        allowCross=False,
                                     ),
-                                    dcc.Checklist(
-                                        id=ElementIds.INVERT_MONTH_EXPLORE_DESCRIPTIVE,
-                                        options=[
-                                            {"label": "Invert", "value": "invert"}
-                                        ],
-                                        value=[],
+                                ),
+                                dcc.Checklist(
+                                    id=ElementIds.INVERT_MONTH_EXPLORE_DESCRIPTIVE,
+                                    options=[{"label": "Invert", "value": "invert"}],
+                                    value=[],
+                                ),
+                            ],
+                        ),
+                        dmc.Group(
+                            children=[
+                                dmc.Title("Hour Range", order=5),
+                                dmc.Stack(
+                                    flex=1,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.SEC1_HOUR_SLIDER,
+                                        min=0,
+                                        max=24,
+                                        step=1,
+                                        value=[0, 24],
+                                        marks={0: "0", 24: "24"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "topLeft",
+                                        },
+                                        allowCross=False,
                                     ),
-                                ],
-                            ),
-                            dmc.Group(
-                                children=[
-                                    dmc.Title("Hour Range", order=5),
-                                    dmc.Stack(
-                                        flex=1,
-                                        children=dcc.RangeSlider(
-                                            id=ElementIds.SEC1_HOUR_SLIDER,
-                                            min=0,
-                                            max=24,
-                                            step=1,
-                                            value=[0, 24],
-                                            marks={0: "0", 24: "24"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "topLeft",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                    ),
-                                    dcc.Checklist(
-                                        id=ElementIds.INVERT_HOUR_EXPLORE_DESCRIPTIVE,
-                                        options=[
-                                            {"label": "Invert", "value": "invert"}
-                                        ],
-                                        value=[],
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                )
-            ),
-            # Results table
-            dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
-        ]
+                                ),
+                                dcc.Checklist(
+                                    id=ElementIds.INVERT_HOUR_EXPLORE_DESCRIPTIVE,
+                                    options=[{"label": "Invert", "value": "invert"}],
+                                    value=[],
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            )
+        ),
+        # Results table
+        dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
+    ]
 
 
 def section_two_inputs():
