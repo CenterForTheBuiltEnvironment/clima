@@ -3,7 +3,6 @@ import json
 import re
 
 import dash
-import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 import pandas as pd
 import plotly.express as px
@@ -39,8 +38,8 @@ messages_alert = {
 
 def layout():
     """Contents in the first tab 'Select Weather File'"""
-    return html.Div(
-        className="container-col tab-container",
+    return dmc.Stack(
+        p="md",
         children=[
             dcc.Loading(
                 id=ElementIds.LOADING_ONE,
@@ -50,49 +49,59 @@ def layout():
             ),
             dcc.Upload(
                 id=ElementIds.UPLOAD_DATA,
-                children=dbc.Button(
+                children=dmc.Button(
                     [
                         "Drag and Drop or ",
                         html.A("Select an EPW file from your computer"),
                     ],
                     id=ElementIds.UPLOAD_DATA_BUTTON,
-                    outline=True,
-                    color="secondary",
-                    className="mt-2",
-                    style={"borderRadius": "5px", "borderStyle": "dashed"},
+                    variant="outline",
+                    color="gray",
+                    style={"borderStyle": "dashed"},
+                    styles={"label": {"fontWeight": 400}},
                 ),
                 # Allow multiple files to be uploaded
                 multiple=True,
-                className="d-grid",
+                style={"display": "grid"},
             ),
             dmc.Skeleton(
                 visible=False,
                 id=ElementIds.SKELETON_GRAPH_CONTAINER,
                 height=500,
-                children=html.Div(id=ElementIds.TAB_ONE_MAP),
+                children=dmc.Box(id=ElementIds.TAB_ONE_MAP),
             ),
-            dbc.Modal(
-                [
-                    dbc.ModalHeader(id=ElementIds.MODAL_HEADER),
-                    dbc.ModalFooter(
-                        children=[
-                            dbc.Button(
+            dmc.Modal(
+                id=ElementIds.MODAL,
+                title=dmc.Text(id=ElementIds.MODAL_HEADER),
+                opened=False,
+                centered=True,
+                children=[
+                    dmc.Divider(
+                        size="xs",
+                        color="gray",
+                        my="sm",
+                        style={
+                            "borderTop": "1px solid var(--mantine-color-gray-4)",
+                            "marginTop": "-6px",
+                        },
+                    ),
+                    dmc.Group(
+                        [
+                            dmc.Button(
                                 "Close",
                                 id=ElementIds.MODAL_CLOSE_BUTTON,
-                                className="ml-2",
-                                color="light",
+                                color="gray",
+                                variant="outline",
                             ),
-                            dbc.Button(
+                            dmc.Button(
                                 "Yes",
                                 id=ElementIds.MODAL_YES_BUTTON,
-                                className="ml-2",
-                                color="primary",
+                                color="blue",
                             ),
-                        ]
+                        ],
+                        justify="flex-end",
                     ),
                 ],
-                id=ElementIds.MODAL,
-                is_open=False,
             ),
         ],
     )
@@ -100,12 +109,11 @@ def layout():
 
 def alert():
     """Alert layout for the submit button."""
-    return dbc.Alert(
+    return dmc.Alert(
         messages_alert["start"],
-        color="primary",
+        color="blue",
         id=ElementIds.ALERT,
-        dismissable=False,
-        is_open=True,
+        withCloseButton=False,
         style={"maxHeight": "66px"},
     )
 
@@ -115,7 +123,7 @@ def alert():
     [
         Output(ElementIds.ID_SELECT_META_STORE, "data"),
         Output(ElementIds.ID_SELECT_LINES_STORE, "data"),
-        Output(ElementIds.ALERT, "is_open"),
+        Output(ElementIds.ALERT, "visible"),
         Output(ElementIds.ALERT, "children"),
         Output(ElementIds.ALERT, "color"),
     ],
@@ -149,7 +157,7 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["not_available"],
-                "warning",
+                "orange",
             )
         location_info = get_location_info(
             lines, url_store
@@ -159,7 +167,7 @@ def submitted_data(
             lines,
             True,
             messages_alert["success"],
-            "success",
+            "green",
         )
 
     elif (
@@ -183,7 +191,7 @@ def submitted_data(
                     lines,
                     True,
                     messages_alert["success"],
-                    "success",
+                    "green",
                 )
             else:
                 return (
@@ -191,7 +199,7 @@ def submitted_data(
                     None,
                     True,
                     messages_alert["invalid_format"],
-                    "warning",
+                    "orange",
                 )
         except (ValueError, IndexError, KeyError) as e:
             print(f"Error parsing EPW file: {e}")
@@ -200,7 +208,7 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["wrong_extension"],
-                "warning",
+                "orange",
             )
     raise PreventUpdate
 
@@ -236,15 +244,16 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
 
 @callback(
     [
-        Output("/", "disabled"),
-        Output("/summary", "disabled"),
-        Output("/t-rh", "disabled"),
-        Output("/sun", "disabled"),
-        Output("/wind", "disabled"),
-        Output("/psy-chart", "disabled"),
-        Output("/explorer", "disabled"),
-        Output("/outdoor", "disabled"),
-        Output("/natural-ventilation", "disabled"),
+        Output(ElementIds.NAV, "disabled"),
+        Output(ElementIds.NAV_SUMMARY, "disabled"),
+        Output(ElementIds.NAV_T_RH, "disabled"),
+        Output(ElementIds.NAV_SUN, "disabled"),
+        Output(ElementIds.NAV_WIND, "disabled"),
+        Output(ElementIds.NAV_PSY_CHART, "disabled"),
+        Output(ElementIds.NAV_EXPLORER, "disabled"),
+        Output(ElementIds.NAV_OUTDOOR, "disabled"),
+        Output(ElementIds.NAV_NATURAL_VENTILATION, "disabled"),
+        Output(ElementIds.NAV_CHANGELOG, "disabled"),
         Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
@@ -266,6 +275,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
             True,
             True,
             True,
+            True,  # changelog always disabled
             default,
         )
     else:
@@ -279,13 +289,14 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             False,
+            True,  # changelog always disabled
             "Current Location: " + meta[ColNames.CITY] + ", " + meta[ColNames.COUNTRY],
         )
 
 
 @callback(
     [
-        Output(ElementIds.MODAL, "is_open"),
+        Output(ElementIds.MODAL, "opened"),
         Output(ElementIds.ID_SELECT_URL_STORE, "data"),
     ],
     [
@@ -293,30 +304,25 @@ def enable_tabs_when_data_is_loaded(meta, data):
         Input(ElementIds.TAB_ONE_MAP, "clickData"),
         Input(ElementIds.MODAL_CLOSE_BUTTON, "n_clicks"),
     ],
-    [State(ElementIds.MODAL, "is_open")],
+    [State(ElementIds.MODAL, "opened")],
     prevent_initial_call=True,
 )
-def display_modal_when_data_clicked(_, click_map, __, is_open):
+def display_modal_when_data_clicked(_, click_map, __, opened):
     """display the modal to the user and check if he wants to use that file"""
     if click_map:
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
         ).group(1)
-        return not is_open, url
-    return is_open, ""
+        return not opened, url
+    return opened, ""
 
 
 @callback(
-    [
-        Output(ElementIds.MODAL_HEADER, "children"),
-    ],
-    [
-        Input(ElementIds.TAB_ONE_MAP, "clickData"),
-    ],
+    [Output(ElementIds.MODAL_HEADER, "children")],
+    [Input(ElementIds.TAB_ONE_MAP, "clickData")],
     prevent_initial_call=True,
 )
 def change_text_modal(click_map):
-    """change the text of the modal header"""
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
     return ["Analyse data from this location?"]
@@ -324,7 +330,7 @@ def change_text_modal(click_map):
 
 @callback(
     Output(ElementIds.SKELETON_GRAPH_CONTAINER, "children"),
-    Input("url", "pathname"),
+    Input(ElementIds.SELECT_URL, "pathname"),
 )
 def plot_location_epw_files(pathname):
     # print(pathname)
@@ -374,10 +380,8 @@ def plot_location_epw_files(pathname):
     fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
-    return (
-        dcc.Graph(
-            id=ElementIds.TAB_ONE_MAP,
-            figure=fig,
-            config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
-        ),
+    return dcc.Graph(
+        id=ElementIds.TAB_ONE_MAP,
+        figure=fig,
+        config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
     )

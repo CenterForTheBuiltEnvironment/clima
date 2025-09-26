@@ -1,6 +1,6 @@
 import dash
-from dash import dcc, html
-import dash_bootstrap_components as dbc
+from dash import dcc
+import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 from dash.exceptions import PreventUpdate
 
@@ -22,8 +22,6 @@ from pages.lib.global_scheme import (
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
     sun_cloud_tab_explore_dropdown_names,
-    container_row_center_full,
-    container_col_center_one_of_three,
 )
 from pages.lib.template_graphs import (
     heatmap,
@@ -62,12 +60,21 @@ explore_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
 explore_dropdown_names.pop("None", None)
 
 
+def layout():
+    """Return the contents of tab six."""
+    return dmc.Stack(
+        p="md",
+        children=[*section_one(), section_two(), section_three()],
+    )
+
+
 def section_one_inputs():
     """Return the inputs from section one."""
-    return html.Div(
-        className="container-row full-width row-center",
+    return dmc.Group(
+        mt="md",
+        justify="center",
         children=[
-            html.H4(className="text-next-to-input", children=["Select a variable: "]),
+            dmc.Title("Select a variable:", order=5),
             dropdown(
                 id=ElementIds.SEC1_VAR_DROPDOWN,
                 options=explore_dropdown_names,
@@ -79,187 +86,147 @@ def section_one_inputs():
 
 def section_one():
     """Return the graphs for section one"""
-    return html.Div(
-        className="container-col full-width",
-        children=[
-            section_one_inputs(),
-            html.Div(
-                children=title_with_link(
-                    text="Yearly chart",
-                    id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
-                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                ),
-            ),
-            dcc.Loading(
-                type="circle",
-                children=html.Div(id=ElementIds.YEARLY_EXPLORE, className="full-width"),
-            ),
-            html.Div(
-                children=title_with_link(
-                    text="Daily chart",
-                    id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
-                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                ),
-            ),
-            dcc.Loading(
-                html.Div(className="full-width", id=ElementIds.QUERY_DAILY),
-                type="circle",
-            ),
-            html.Div(
-                children=title_with_link(
-                    text="Heatmap chart",
-                    id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
-                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                ),
-            ),
-            dcc.Loading(
-                html.Div(className="full-width", id=ElementIds.QUERY_HEATMAP),
-                type="circle",
-            ),
-            html.Div(
-                children=title_with_tooltip(
-                    text="Descriptive statistics",
-                    tooltip_text="count, mean, std, min, max, and percentiles",
-                    id_button=IdButtons.TABLE_EXPLORE,
-                ),
-            ),
-            html.Div(
-                className="container-row justify-content-center",
-                children=[
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            dbc.Button(
-                                "Apply month and hour filter",
-                                color="primary",
-                                id=ElementIds.SEC1_TIME_FILTER_INPUT,
-                                className="mb-2",
-                                n_clicks=0,
-                            ),
-                            html.Div(
-                                className=(
-                                    "container-row full-width justify-center mt-2"
+    return [
+        section_one_inputs(),
+        title_with_link(
+            text="Yearly chart",
+            id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dcc.Loading(
+            type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE, p="sm")
+        ),
+        title_with_link(
+            text="Daily chart",
+            id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dcc.Loading(
+            type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY, p="sm")
+        ),
+        title_with_link(
+            text="Heatmap chart",
+            id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dcc.Loading(
+            type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP, p="sm")
+        ),
+        title_with_tooltip(
+            text="Descriptive statistics",
+            tooltip_text="count, mean, std, min, max, and percentiles",
+            id_button=IdButtons.TABLE_EXPLORE,
+        ),
+        dmc.Center(
+            children=dmc.Box(
+                w="33%",
+                children=dmc.Stack(
+                    children=[
+                        dmc.Button(
+                            "Apply month and hour filter",
+                            id=ElementIds.SEC1_TIME_FILTER_INPUT,
+                            color="blue",
+                        ),
+                        dmc.Group(
+                            children=[
+                                dmc.Title("Month Range", order=5),
+                                dmc.Stack(
+                                    flex=1,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.SEC1_MONTH_SLIDER,
+                                        min=1,
+                                        max=12,
+                                        step=1,
+                                        value=[1, 12],
+                                        marks={1: "1", 12: "12"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "top",
+                                        },
+                                        allowCross=False,
+                                    ),
                                 ),
-                                children=[
-                                    html.H6("Month Range", style={"flex": "20%"}),
-                                    html.Div(
-                                        dcc.RangeSlider(
-                                            id=ElementIds.SEC1_MONTH_SLIDER,
-                                            min=1,
-                                            max=12,
-                                            step=1,
-                                            value=[1, 12],
-                                            marks={1: "1", 12: "12"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "top",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                        style={"flex": "50%"},
+                                dcc.Checklist(
+                                    id=ElementIds.INVERT_MONTH_EXPLORE_DESCRIPTIVE,
+                                    options=[{"label": "Invert", "value": "invert"}],
+                                    value=[],
+                                ),
+                            ],
+                        ),
+                        dmc.Group(
+                            children=[
+                                dmc.Title("Hour Range", order=5),
+                                dmc.Stack(
+                                    flex=1,
+                                    children=dcc.RangeSlider(
+                                        id=ElementIds.SEC1_HOUR_SLIDER,
+                                        min=0,
+                                        max=24,
+                                        step=1,
+                                        value=[0, 24],
+                                        marks={0: "0", 24: "24"},
+                                        tooltip={
+                                            "always_visible": False,
+                                            "placement": "topLeft",
+                                        },
+                                        allowCross=False,
                                     ),
-                                    dcc.Checklist(
-                                        options=[
-                                            {"label": "Invert", "value": "invert"},
-                                        ],
-                                        value=[],
-                                        id=ElementIds.INVERT_MONTH_EXPLORE_DESCRIPTIVE,
-                                        labelStyle={"flex": "30%"},
-                                    ),
-                                ],
-                            ),
-                            html.Div(
-                                className="container-row justify-center",
-                                children=[
-                                    html.H6("Hour Range", style={"flex": "20%"}),
-                                    html.Div(
-                                        dcc.RangeSlider(
-                                            id=ElementIds.SEC1_HOUR_SLIDER,
-                                            min=0,
-                                            max=24,
-                                            step=1,
-                                            value=[0, 24],
-                                            marks={0: "0", 24: "24"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "topLeft",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                        style={"flex": "50%"},
-                                    ),
-                                    dcc.Checklist(
-                                        options=[
-                                            {"label": "Invert", "value": "invert"},
-                                        ],
-                                        value=[],
-                                        id=ElementIds.INVERT_HOUR_EXPLORE_DESCRIPTIVE,
-                                        labelStyle={"flex": "30%"},
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            html.Div(
-                id=ElementIds.TABLE_DATA_EXPLORER,
-            ),
-        ],
-    )
+                                ),
+                                dcc.Checklist(
+                                    id=ElementIds.INVERT_HOUR_EXPLORE_DESCRIPTIVE,
+                                    options=[{"label": "Invert", "value": "invert"}],
+                                    value=[],
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            )
+        ),
+        # Results table
+        dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
+    ]
 
 
 def section_two_inputs():
     """Return all the input forms from section two."""
-    return html.Div(
+    return dmc.Stack(
+        p="md",
         children=[
-            html.Div(
-                children=title_with_tooltip(
-                    text="Customizable heatmap",
-                    tooltip_text=None,
-                    id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
-                ),
+            title_with_tooltip(
+                text="Customizable heatmap",
+                tooltip_text=None,
+                id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
             ),
-            html.Div(
-                className="container-row full-width three-inputs-container",
+            dmc.SimpleGrid(
+                cols=3,
+                spacing="md",
                 children=[
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Variable:"],
-                                        style={"flex": "30%"},
-                                    ),
-                                    dropdown(
-                                        id=ElementIds.SEC2_VAR_DROPDOWN,
-                                        options=explore_dropdown_names,
-                                        value=ColNames.RH,
-                                        style={"flex": "70%"},
-                                    ),
-                                ],
+                    dmc.Group(
+                        [
+                            dmc.Title("Variable:", order=5),
+                            dmc.Stack(
+                                dropdown(
+                                    id=ElementIds.SEC2_VAR_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value=ColNames.RH,
+                                ),
+                                flex=1,
                             ),
                         ],
+                        align="flex-start",
                     ),
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            dbc.Button(
+                    dmc.Stack(
+                        [
+                            dmc.Button(
                                 "Apply month and hour filter",
-                                color="primary",
                                 id=ElementIds.SEC2_TIME_FILTER_INPUT,
-                                className="mb-2",
-                                n_clicks=0,
+                                color="blue",
                             ),
-                            html.Div(
-                                className=(
-                                    "container-row full-width justify-center mt-2"
-                                ),
-                                children=[
-                                    html.H6("Month Range", style={"flex": "20%"}),
-                                    html.Div(
+                            dmc.Group(
+                                [
+                                    dmc.Title("Month Range", order=5),
+                                    dmc.Stack(
                                         dcc.RangeSlider(
                                             id=ElementIds.SEC2_MONTH_SLIDER,
                                             min=1,
@@ -269,27 +236,24 @@ def section_two_inputs():
                                             marks={1: "1", 12: "12"},
                                             tooltip={
                                                 "always_visible": False,
-                                                "placement": "top",
+                                                "placement": "topLeft",
                                             },
-                                            allowCross=False,
                                         ),
-                                        style={"flex": "50%"},
+                                        flex=1,
                                     ),
                                     dcc.Checklist(
+                                        id=ElementIds.INVERT_MONTH_EXPLORE_HEATMAP,
                                         options=[
-                                            {"label": "Invert", "value": "invert"},
+                                            {"label": "Invert", "value": "invert"}
                                         ],
                                         value=[],
-                                        id=ElementIds.INVERT_MONTH_EXPLORE_HEATMAP,
-                                        labelStyle={"flex": "30%"},
                                     ),
                                 ],
                             ),
-                            html.Div(
-                                className="container-row justify-center",
-                                children=[
-                                    html.H6("Hour Range", style={"flex": "20%"}),
-                                    html.Div(
+                            dmc.Group(
+                                [
+                                    dmc.Title("Hour Range", order=5),
+                                    dmc.Stack(
                                         dcc.RangeSlider(
                                             id=ElementIds.SEC2_HOUR_SLIDER,
                                             min=0,
@@ -301,76 +265,63 @@ def section_two_inputs():
                                                 "always_visible": False,
                                                 "placement": "topLeft",
                                             },
-                                            allowCross=False,
                                         ),
-                                        style={"flex": "50%"},
+                                        flex=1,
                                     ),
                                     dcc.Checklist(
+                                        id=ElementIds.INVERT_HOUR_EXPLORE_HEATMAP,
                                         options=[
-                                            {"label": "Invert", "value": "invert"},
+                                            {"label": "Invert", "value": "invert"}
                                         ],
                                         value=[],
-                                        id=ElementIds.INVERT_HOUR_EXPLORE_HEATMAP,
-                                        labelStyle={"flex": "30%"},
                                     ),
                                 ],
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            dbc.Button(
+                    dmc.Stack(
+                        [
+                            dmc.Button(
                                 "Apply filter",
-                                color="primary",
                                 id=ElementIds.SEC2_DATA_FILTER_INPUT,
-                                className="mb-2",
-                                n_clicks=0,
+                                color="blue",
                             ),
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Filter Variable:"],
-                                        style={"flex": "30%"},
-                                    ),
-                                    dropdown(
-                                        id=ElementIds.SEC2_DATA_FILTER_VAR,
-                                        options=explore_dropdown_names,
-                                        value=ColNames.RH,
-                                        style={"flex": "70%"},
+                            dmc.Group(
+                                [
+                                    dmc.Title("Filter Variable:", order=5),
+                                    dmc.Stack(
+                                        dropdown(
+                                            id=ElementIds.SEC2_DATA_FILTER_VAR,
+                                            options=explore_dropdown_names,
+                                            value=ColNames.RH,
+                                        ),
+                                        flex=1,
                                     ),
                                 ],
                             ),
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Min Value:"], style={"flex": "30%"}
-                                    ),
-                                    dbc.Input(
-                                        id=ElementIds.SEC2_MIN_VAL,
-                                        placeholder="Enter a number for the min val",
-                                        type="number",
-                                        value=0,
-                                        step=1,
-                                        style={"flex": "70%"},
+                            dmc.Group(
+                                [
+                                    dmc.Title("Min Value:", order=5),
+                                    dmc.Stack(
+                                        dmc.NumberInput(
+                                            id=ElementIds.SEC2_MIN_VAL,
+                                            placeholder="Enter a number for the min val",
+                                            value=0,
+                                        ),
+                                        flex=1,
                                     ),
                                 ],
                             ),
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Max Value:"], style={"flex": "30%"}
-                                    ),
-                                    dbc.Input(
-                                        id=ElementIds.SEC2_MAX_VAL,
-                                        placeholder="Enter a number for the max val",
-                                        type="number",
-                                        value=100,
-                                        step=1,
-                                        style={"flex": "70%"},
+                            dmc.Group(
+                                [
+                                    dmc.Title("Max Value:", order=5),
+                                    dmc.Stack(
+                                        dmc.NumberInput(
+                                            id=ElementIds.SEC2_MAX_VAL,
+                                            placeholder="Enter a number for the max val",
+                                            value=100,
+                                        ),
+                                        flex=1,
                                     ),
                                 ],
                             ),
@@ -384,205 +335,184 @@ def section_two_inputs():
 
 def section_two():
     """Return the two graphs in section two."""
-    return html.Div(
+    return dmc.Stack(
         id=ElementIds.TAB6_SEC2_CONTAINER,
-        className="container-col justify-center full-width",
         children=[
             section_two_inputs(),
             dcc.Loading(
                 type="circle",
-                children=html.Div(className="full-width", id=ElementIds.CUSTOM_HEATMAP),
+                children=dmc.Paper(
+                    id=ElementIds.CUSTOM_HEATMAP,
+                    p="sm",
+                ),
             ),
-            dbc.Checklist(
-                options=[
-                    {"label": "Normalize", "value": "normal"},
+            dmc.Group(
+                children=[
+                    dmc.CheckboxGroup(
+                        id=ElementIds.NORMALIZE,
+                        value=[],
+                        children=[
+                            dmc.Checkbox(label="Normalize", value="normal"),
+                        ],
+                    ),
                 ],
-                value=[],
-                id=ElementIds.NORMALIZE,
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        className="full-width",
+                children=dmc.Paper(
+                    children=dcc.Graph(
                         id=ElementIds.CUSTOM_SUMMARY,
                         config=fig_config,
                     ),
-                ],
+                ),
             ),
         ],
     )
 
 
 def section_three_inputs():
-    """"""
-    return html.Div(
-        className="container-row full-width three-inputs-container",
+    return dmc.SimpleGrid(
+        cols=3,
         children=[
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(style={"flex": "30%"}, children=["X Variable:"]),
-                            dropdown(
-                                id=ElementIds.TAB6_SEC3_VAR_X_DROPDOWN,
-                                options=explore_dropdown_names,
-                                value="DBT",
-                                style={"flex": "70%"},
+            dmc.Stack(
+                [
+                    dmc.Group(
+                        [
+                            dmc.Title("X Variable:", order=5),
+                            dmc.Stack(
+                                dropdown(
+                                    id=ElementIds.TAB6_SEC3_VAR_X_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value="DBT",
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(style={"flex": "30%"}, children=["Y Variable:"]),
-                            dropdown(
-                                id=ElementIds.TAB6_SEC3_VAR_Y_DROPDOWN,
-                                options=explore_dropdown_names,
-                                value=ColNames.RH,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Y Variable:", order=5),
+                            dmc.Stack(
+                                dropdown(
+                                    id=ElementIds.TAB6_SEC3_VAR_Y_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value=ColNames.RH,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(style={"flex": "30%"}, children=["Color By:"]),
-                            dropdown(
-                                id=ElementIds.TAB6_SEC3_COLORBY_DROPDOWN,
-                                options=explore_dropdown_names,
-                                value="glob_hor_rad",
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Color By:", order=5),
+                            dmc.Stack(
+                                dropdown(
+                                    id=ElementIds.TAB6_SEC3_COLORBY_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value="glob_hor_rad",
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
                 ],
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
+            dmc.Stack(
+                [
+                    dmc.Button(
                         "Apply month and hour filter",
-                        color="primary",
                         id=ElementIds.TAB6_SEC3_TIME_FILTER_INPUT,
-                        className="mb-2",
-                        n_clicks=0,
+                        color="blue",
                     ),
-                    html.Div(
-                        className="container-row full-width justify-center",
-                        children=[
-                            html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
+                    dmc.Group(
+                        [
+                            dmc.Title("Month Range", order=5),
+                            dmc.Stack(
                                 dcc.RangeSlider(
                                     id=ElementIds.TAB6_SEC3_QUERY_MONTH_SLIDER,
                                     min=1,
                                     max=12,
-                                    step=1,
                                     value=[1, 12],
                                     marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
                                 ),
-                                style={"flex": "50%"},
+                                flex=1,
                             ),
                             dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
                                 id=ElementIds.INVERT_MONTH_EXPLORE_MORE_CHARTS,
-                                labelStyle={"flex": "30%"},
+                                options=[{"label": "Invert", "value": "invert"}],
+                                value=[],
                             ),
                         ],
                     ),
-                    html.Div(
-                        className="container-row full-width justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
+                    dmc.Group(
+                        [
+                            dmc.Title("Hour Range", order=5),
+                            dmc.Stack(
                                 dcc.RangeSlider(
                                     id=ElementIds.TAB6_SEC3_QUERY_HOUR_SLIDER,
                                     min=0,
                                     max=24,
-                                    step=1,
                                     value=[0, 24],
                                     marks={0: "0", 24: "24"},
                                     tooltip={
                                         "always_visible": False,
-                                        "placement": "top",
+                                        "placement": "topLeft",
                                     },
-                                    allowCross=False,
                                 ),
-                                style={"flex": "50%"},
+                                flex=1,
                             ),
                             dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
                                 id=ElementIds.INVERT_HOUR_EXPLORE_MORE_CHARTS,
-                                labelStyle={"flex": "30%"},
+                                options=[{"label": "Invert", "value": "invert"}],
+                                value=[],
                             ),
                         ],
                     ),
                 ],
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
+            dmc.Stack(
+                [
+                    dmc.Button(
                         "Apply filter",
-                        color="primary",
                         id=ElementIds.TAB6_SEC3_DATA_FILTER_INPUT,
-                        className="mb-2",
-                        n_clicks=0,
+                        color="blue",
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Filter Variable:"], style={"flex": "30%"}
-                            ),
-                            dropdown(
-                                id=ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN,
-                                options=explore_dropdown_names,
-                                value=ColNames.RH,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Filter Variable:", order=5),
+                            dmc.Stack(
+                                dropdown(
+                                    id=ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value=ColNames.RH,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                className="num-input",
-                                id=ElementIds.TAB6_SEC3_MIN_VAL,
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                step=1,
-                                value=0,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Min Value:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.TAB6_SEC3_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
+                                    value=0,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                className="num-input",
-                                id=ElementIds.TAB6_SEC3_MAX_VAL,
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=100,
-                                step=1,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Max Value:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.TAB6_SEC3_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=100,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
@@ -594,34 +524,29 @@ def section_three_inputs():
 
 def section_three():
     """Return the two graphs in section three."""
-    return html.Div(
-        className="container-col full-width",
+    return dmc.Stack(
         children=[
-            html.Div(
-                children=title_with_tooltip(
-                    text="More charts",
-                    tooltip_text=None,
-                    id_button=IdButtons.MORE_CHARTS_LABEL,
-                ),
+            title_with_tooltip(
+                text="More charts",
+                tooltip_text=None,
+                id_button=IdButtons.MORE_CHARTS_LABEL,
             ),
             section_three_inputs(),
             dcc.Loading(
-                html.Div(id=ElementIds.THREE_VAR),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.THREE_VAR,
+                    p="sm",
+                ),
             ),
             dcc.Loading(
-                html.Div(id=ElementIds.TWO_VAR),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.TWO_VAR,
+                    p="sm",
+                ),
             ),
         ],
-    )
-
-
-def layout():
-    """Return the contents of tab six."""
-    return html.Div(
-        className="justify-center",
-        children=[section_one(), section_two(), section_three()],
     )
 
 
@@ -643,7 +568,7 @@ def update_tab_yearly(_, var, global_local, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
     if df[var].mean() == 99990.0:
-        return dbc.Alert(
+        return dmc.Alert(
             """The selected variable is not available,
             the Clima tool could not generate the yearly plot""",
             color="warning",
@@ -781,7 +706,7 @@ def update_heatmap(
 
     if not heat_map:
         return (
-            dbc.Alert(
+            dmc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
                 "the filter variable",
@@ -902,7 +827,7 @@ def update_more_charts(
         if not three:
             custom_inputs = f"{var_x}-{var_y}"
             units = generate_units(si_ip)
-            return dbc.Alert(
+            return dmc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
                 "the filter variable",

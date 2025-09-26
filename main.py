@@ -1,38 +1,23 @@
-import dash_bootstrap_components as dbc
-from dash import html, dcc
-from dash_extensions.enrich import Output, Input, callback
+from dash import dcc
+import dash_mantine_components as dmc
 
 from app import app
-from pages.lib.layout import banner, footer, build_tabs
+from pages.lib.layout import create_collapsible_layout
 from config import AppConfig
 from pages.lib.global_element_ids import ElementIds
 
 server = app.server
 
 app.title = AppConfig.TITLE
-app.layout = dbc.Container(
-    fluid=True,
-    style={"padding": "0"},
+app.layout = dmc.MantineProvider(
     children=[
-        dcc.Location(id="url", refresh=False),  # connected to callback below
-        banner(),
-        html.Div(id="page-content", children=build_tabs()),
-        footer(),
+        dcc.Location(id=ElementIds.MAIN_URL, refresh=False),
+        create_collapsible_layout(),
     ],
 )
 
-
-# callback for survey alert (dbc.Toast)
-@callback(
-    Output(ElementIds.ID_MAIN_ALERT_AUTO, "is_open"),
-    Input(ElementIds.ID_MAIN_INTERVAL_COMPONENT, "n_intervals"),
-)
-def display_alert(n):
-    return n == 1
-
-
 if __name__ == "__main__":
-    app.run_server(
+    app.run(
         debug=AppConfig.DEBUG,
         host=AppConfig.HOST,
         port=AppConfig.PORT,

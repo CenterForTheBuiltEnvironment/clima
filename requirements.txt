@@ -7,13 +7,13 @@ certifi==2025.7.14
 charset-normalizer==3.4.2
 cleanpy==0.5.1
 click==8.2.1
-dash==2.15.0
+dash==3.2.0
 dash-bootstrap-components==1.2.0
 dash-core-components==2.0.0
 dash-extensions==1.0.7
 dash-html-components==2.0.0
 dash-iconify==0.1.2
-dash-mantine-components==0.12.1
+dash-mantine-components==2.2.1
 dash-table==5.0.0
 dataclass-wizard==0.22.3
 EditorConfig==0.17.1

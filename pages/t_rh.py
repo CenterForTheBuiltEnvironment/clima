@@ -1,5 +1,7 @@
 import dash
-from dash_extensions.enrich import Output, Input, State, dcc, html, callback
+from dash_extensions.enrich import Output, Input, State, dcc, callback
+import dash_mantine_components as dmc
+
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
@@ -30,71 +32,56 @@ var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
 
 def layout():
-    return html.Div(
-        className="container-col full-width",
+    return dmc.Stack(
+        p="md",
         children=[
-            html.Div(
-                className="container-row full-width align-center justify-center",
-                children=[
-                    html.H4(
-                        className="text-next-to-input", children=["Select a variable: "]
-                    ),
+            dmc.Center(
+                [
+                    dmc.Title("Select a variable:", order=5, mr="md"),
                     dropdown(
                         id=ElementIds.ID_T_RH_DROPDOWN,
-                        className="dropdown-t-rh",
                         options={var: dropdown_names[var] for var in var_to_plot},
                         value=dropdown_names[var_to_plot[0]],
                     ),
-                ],
+                ]
             ),
-            html.Div(
-                className="container-col",
-                children=[
-                    html.Div(
-                        children=title_with_link(
-                            text="Yearly Chart",
-                            id_button=IdButtons.YEARLY_CHART_LABEL,
-                            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                        ),
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(id=ElementIds.YEARLY_CHART),
-                    ),
-                    html.Div(
-                        children=title_with_link(
-                            text="Daily chart",
-                            id_button=IdButtons.DAILY_CHART_LABEL,
-                            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                        ),
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(id=ElementIds.DAILY),
-                    ),
-                    html.Div(
-                        children=title_with_link(
-                            text="Heatmap chart",
-                            id_button=IdButtons.HEATMAP_CHART_LABEL,
-                            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                        ),
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=html.Div(id=ElementIds.HEATMAP),
-                    ),
-                    html.Div(
-                        children=title_with_tooltip(
-                            text="Descriptive statistics",
-                            tooltip_text="count, mean, std, min, max, and percentiles",
-                            id_button=IdButtons.TABLE_TMP_RH,
-                        ),
-                    ),
-                    html.Div(
-                        id=ElementIds.TABLE_TMP_HUM,
-                    ),
-                ],
+            # Yearly Chart
+            title_with_link(
+                text="Yearly Chart",
+                id_button=IdButtons.YEARLY_CHART_LABEL,
+                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
             ),
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(id=ElementIds.YEARLY_CHART),
+            ),
+            # Daily chart
+            title_with_link(
+                text="Daily chart",
+                id_button=IdButtons.DAILY_CHART_LABEL,
+                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+            ),
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(id=ElementIds.DAILY),
+            ),
+            # Heatmap chart
+            title_with_link(
+                text="Heatmap chart",
+                id_button=IdButtons.HEATMAP_CHART_LABEL,
+                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+            ),
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(id=ElementIds.HEATMAP),
+            ),
+            # Descriptive statistics
+            title_with_tooltip(
+                text="Descriptive statistics",
+                tooltip_text="count, mean, std, min, max, and percentiles",
+                id_button=IdButtons.TABLE_TMP_RH,
+            ),
+            dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
         ],
     )
 
@@ -192,7 +179,7 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
 
 
 @callback(
-    [Output(ElementIds.HEATMAP, "children")],
+    Output(ElementIds.HEATMAP, "children"),
     [
         Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
@@ -205,7 +192,7 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
     ],
 )
 def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
-    """Update the contents of tab three. Passing in general info (df, meta)."""
+    """Update heatmap content."""
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
         return dcc.Graph(
@@ -260,7 +247,7 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
     ],
 )
 def update_table(_, dd_value, df, si_ip):
-    """Update the contents of tab three. Passing in general info (df, meta)."""
+    """Update the contents of descriptive statistics table."""
     return summary_table_tmp_rh_tab(
         df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]],
         dd_value,

@@ -3,9 +3,9 @@ import functools
 import time
 import math
 
-import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import html, dash_table, dcc
+import dash_mantine_components as dmc
 
 from config import UnitSystem
 from pages.lib.global_scheme import fig_config, mapping_dictionary, month_lst
@@ -147,38 +147,34 @@ def generate_custom_inputs_psy(
 
 
 def title_with_tooltip(text, tooltip_text, id_button):
-    display_tooltip = "none"
     if tooltip_text:
-        display_tooltip = "block"
-
-    return html.Div(
-        className="container-row",
-        style={"padding": "1rem", "marginTop": "1rem"},
-        children=[
-            html.H5(text, style={"marginRight": "0.5rem"}),
-            html.Div(
-                [
-                    html.Sup(
-                        html.Img(
+        return dmc.Group(
+            children=[
+                dmc.Title(text, order=3),
+                dmc.Tooltip(
+                    label=tooltip_text,
+                    position="right",
+                    withArrow=True,
+                    children=[
+                        dmc.Image(
                             id=id_button,
-                            src="../assets/icons/help.png",
+                            src="/assets/icons/help.png",
                             alt="help",
-                            style={
-                                "width": "1rem",
-                                "height": "1rem",
-                            },
-                        ),
-                    ),
-                    dbc.Tooltip(
-                        tooltip_text,
-                        target=id_button,
-                        placement="right",
-                    ),
-                ],
-                style={"display": display_tooltip},
-            ),
-        ],
-    )
+                            w=16,
+                            h=16,
+                        )
+                    ],
+                ),
+            ],
+        )
+    else:
+        return dmc.Group(
+            mt="md",
+            px="md",
+            children=[
+                dmc.Title(text, order=3),
+            ],
+        )
 
 
 def title_with_link(
@@ -187,33 +183,25 @@ def title_with_link(
     id_button=None,
     doc_link: str = "",
 ):
-    return html.Div(
-        className="container-row",
-        style={"padding": "1rem", "marginTop": "1rem"},
+    return dmc.Group(
         children=[
-            html.H5(text, style={"marginRight": "0.5rem"}),
-            html.Div(
-                [
-                    html.Sup(
-                        html.A(
-                            html.Img(
-                                id=id_button,
-                                src="../assets/icons/book.png",
-                                alt="book",
-                                style={
-                                    "width": "1rem",
-                                    "height": "1rem",
-                                },
-                            ),
-                            href=doc_link,
-                            target="_blank",
+            dmc.Title(text, order=3),
+            dmc.Tooltip(
+                label=tooltip_text,
+                position="right",
+                withArrow=True,
+                children=[
+                    html.A(
+                        dmc.Image(
+                            id=id_button,
+                            src="/assets/icons/book.png",
+                            alt="book",
+                            w=16,
+                            h=16,
                         ),
-                    ),
-                    dbc.Tooltip(
-                        tooltip_text,
-                        target=id_button,
-                        placement="right",
-                    ),
+                        href=doc_link,
+                        target="_blank",
+                    )
                 ],
             ),
         ],
@@ -247,9 +235,11 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
     )
     return dash_table.DataTable(
         columns=[
-            {"name": i, "id": i}
-            if i == ColNames.MONTH
-            else {"name": f"{i} ({unit})", "id": i}
+            (
+                {"name": i, "id": i}
+                if i == ColNames.MONTH
+                else {"name": f"{i} ({unit})", "id": i}
+            )
             for i in df_summary.columns
         ],
         style_table={"overflowX": "auto"},
@@ -288,6 +278,7 @@ def dropdown(options=None, **kwargs):
     return dcc.Dropdown(
         options=[{"label": k, "value": v} for k, v in options.items()],
         clearable=False,
+        style={"width": "14rem"},
         **kwargs,
     )
 

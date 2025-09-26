@@ -1,6 +1,6 @@
 import dash
-from dash import dcc, html
-import dash_bootstrap_components as dbc
+from dash import dcc
+import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 
 from copy import deepcopy
@@ -11,14 +11,11 @@ from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.utils import get_max_min_value
-from pages.lib.extract_df import convert_SI_to_IP
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_column_names import ColNames
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
-    container_row_center_full,
-    container_col_center_one_of_three,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
@@ -60,47 +57,36 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 
 def inputs():
-    """"""
-    return html.Div(
-        className="container-row full-width three-inputs-container",
+    return dmc.SimpleGrid(
+        cols=3,
         children=[
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Color By:"],
-                                style={"flex": "30%"},
-                            ),
-                            dropdown(
-                                id=ElementIds.PSY_COLOR_BY_DROPDOWN,
-                                options=psy_dropdown_names,
-                                value="Frequency",
-                                style={"flex": "70%"},
-                                persistence_type="session",
-                                persistence=True,
-                            ),
-                        ],
+            dmc.Group(
+                [
+                    dmc.Title("Color By:", order=5),
+                    dmc.Stack(
+                        dropdown(
+                            id=ElementIds.PSY_COLOR_BY_DROPDOWN,
+                            options=psy_dropdown_names,
+                            value="Frequency",
+                            persistence=True,
+                            persistence_type="session",
+                        ),
+                        flex=1,
                     ),
                 ],
+                align="flex-start",
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
+            dmc.Stack(
+                [
+                    dmc.Button(
                         "Apply month and hour filter",
-                        color="primary",
                         id=ElementIds.MONTH_HOUR_FILTER,
-                        className="mb-2",
-                        n_clicks=0,
+                        color="blue",
                     ),
-                    html.Div(
-                        className="container-row full-width justify-center mt-2",
-                        children=[
-                            html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
+                    dmc.Group(
+                        [
+                            dmc.Title("Month Range", order=5),
+                            dmc.Stack(
                                 dcc.RangeSlider(
                                     id=ElementIds.PSY_MONTH_SLIDER,
                                     min=1,
@@ -108,29 +94,21 @@ def inputs():
                                     step=1,
                                     value=[1, 12],
                                     marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+                                    tooltip={"always_visible": False},
                                 ),
-                                style={"flex": "50%"},
+                                flex=1,
                             ),
                             dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
                                 id=ElementIds.INVERT_MONTH_PSY,
-                                labelStyle={"flex": "30%"},
+                                options=[{"label": "Invert", "value": "invert"}],
+                                value=[],
                             ),
                         ],
                     ),
-                    html.Div(
-                        className="container-row align-center justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
+                    dmc.Group(
+                        [
+                            dmc.Title("Hour Range", order=5),
+                            dmc.Stack(
                                 dcc.RangeSlider(
                                     id=ElementIds.PSY_HOUR_SLIDER,
                                     min=0,
@@ -138,75 +116,64 @@ def inputs():
                                     step=1,
                                     value=[0, 24],
                                     marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "topLeft",
-                                    },
-                                    allowCross=False,
+                                    tooltip={"always_visible": False},
                                 ),
-                                style={"flex": "50%"},
+                                flex=1,
                             ),
                             dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
                                 id=ElementIds.INVERT_HOUR_PSY,
-                                labelStyle={"flex": "30%"},
+                                options=[{"label": "Invert", "value": "invert"}],
+                                value=[],
                             ),
                         ],
                     ),
                 ],
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
+            dmc.Stack(
+                [
+                    dmc.Button(
                         "Apply filter",
-                        color="primary",
                         id=ElementIds.DATA_FILTER,
-                        className="mb-2",
-                        n_clicks=0,
+                        color="blue",
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Filter Variable:"], style={"flex": "30%"}
-                            ),
-                            dropdown(
-                                id=ElementIds.PSY_VAR_DROPDOWN,
-                                options=dropdown_names,
-                                value=ColNames.RH,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Filter Variable:", order=5),
+                            dmc.Stack(
+                                dropdown(
+                                    id=ElementIds.PSY_VAR_DROPDOWN,
+                                    options=dropdown_names,
+                                    value=ColNames.RH,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id=ElementIds.PSY_MIN_VAL,
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                step=1,
-                                value=0,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Min Value:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.PSY_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
+                                    value=0,
+                                    step=1,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id=ElementIds.PSY_MAX_VAL,
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=100,
-                                step=1,
-                                style={"flex": "70%"},
+                    dmc.Group(
+                        [
+                            dmc.Title("Max Value:", order=5),
+                            dmc.Stack(
+                                dmc.NumberInput(
+                                    id=ElementIds.PSY_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=100,
+                                    step=1,
+                                ),
+                                flex=1,
                             ),
                         ],
                     ),
@@ -217,25 +184,29 @@ def inputs():
 
 
 def layout():
-    return (
-        html.Div(
-            children=title_with_link(
+    return dmc.Stack(
+        p="md",
+        children=[
+            title_with_link(
                 text="Psychrometric Chart",
                 id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
-        ),
-        dcc.Loading(
-            type="circle",
-            children=html.Div(
-                className="container-col",
-                children=[inputs(), html.Div(id=ElementIds.PSYCH_CHART)],
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(
+                    children=[
+                        inputs(),
+                        dmc.Paper(
+                            id=ElementIds.PSYCH_CHART,
+                        ),
+                    ],
+                ),
             ),
-        ),
+        ],
     )
 
 
-# psychrometric chart
 @callback(
     Output(ElementIds.PSYCH_CHART, "children"),
     [
@@ -293,7 +264,7 @@ def update_psych_chart(
 
     if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
         return (
-            dbc.Alert(
+            dmc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
                 "the filter variable",
@@ -357,7 +328,7 @@ def update_psych_chart(
 
         if si_ip == UnitSystem.IP:
             for j in range(len(dbt_list)):
-                convert_SI_to_IP(dbt_list_convert, j)
+                dbt_list_convert[j] = dbt_list_convert[j] * 1.8 + 32
 
         fig.add_trace(
             go.Scatter(

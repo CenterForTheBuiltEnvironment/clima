@@ -71,6 +71,7 @@ def violin(df, var, global_local, si_ip):
         title=title,
         title_x=0.5,
         dragmode=False,
+        height=400,
     )
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(
@@ -642,7 +643,7 @@ def thermal_stress_stacked_barchart(
                 style={"text-align": "center", "marginTop": "2rem"},
             ),
         )
-    isNormalized = True if len(normalize) != 0 else False
+    isNormalized = True if normalize else False
     if isNormalized:
         new_df = (
             df.groupby(ColNames.MONTH)[var]
@@ -674,7 +675,7 @@ def thermal_stress_stacked_barchart(
                     "</b><br>Month: %{x}<br>Category: "
                     + categories[i]
                     + "<br>Count: %{y}<br><extra></extra>"
-                    if len(normalize) == 0
+                    if not normalize
                     else "</b><br>Month: %{x}<br>Category: "
                     + categories[i]
                     + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
