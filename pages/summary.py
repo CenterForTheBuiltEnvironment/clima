@@ -140,10 +140,22 @@ def update_layout(si_ip):
                 id=ElementIds.GRAPH_CONTAINER,
                 gutter="md",
                 children=[
-                    dmc.GridCol(id=ElementIds.TEMP_PROFILE_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
-                    dmc.GridCol(id=ElementIds.HUMIDITY_PROFILE_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
-                    dmc.GridCol(id=ElementIds.SOLAR_RADIATION_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
-                    dmc.GridCol(id=ElementIds.WIND_SPEED_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
+                    dmc.GridCol(
+                        id=ElementIds.TEMP_PROFILE_GRAPH,
+                        span={"base": 12, "sm": 6, "lg": 3},
+                    ),
+                    dmc.GridCol(
+                        id=ElementIds.HUMIDITY_PROFILE_GRAPH,
+                        span={"base": 12, "sm": 6, "lg": 3},
+                    ),
+                    dmc.GridCol(
+                        id=ElementIds.SOLAR_RADIATION_GRAPH,
+                        span={"base": 12, "sm": 6, "lg": 3},
+                    ),
+                    dmc.GridCol(
+                        id=ElementIds.WIND_SPEED_GRAPH,
+                        span={"base": 12, "sm": 6, "lg": 3},
+                    ),
                 ],
             ),
         ],
@@ -237,18 +249,18 @@ def update_location_info(ts, df, meta, si_ip):
     coldest_yearly_tmp = f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} {tmp_unit}"
 
     return [
-            dmc.Text(location, fw=700),
-            dmc.Text(lon),
-            dmc.Text(lat),
-            dmc.Text(elevation),
-            dmc.Text(period) if period else None,
-            dmc.Text(climate_text) if climate_text else None,
-            dmc.Text(average_yearly_tmp),
-            dmc.Text(hottest_yearly_tmp),
-            dmc.Text(coldest_yearly_tmp),
-            dmc.Text(total_solar_rad),
-            dmc.Text(total_diffuse_rad),
-        ]
+        dmc.Text(location, fw=700),
+        dmc.Text(lon),
+        dmc.Text(lat),
+        dmc.Text(elevation),
+        dmc.Text(period) if period else None,
+        dmc.Text(climate_text) if climate_text else None,
+        dmc.Text(average_yearly_tmp),
+        dmc.Text(hottest_yearly_tmp),
+        dmc.Text(coldest_yearly_tmp),
+        dmc.Text(total_solar_rad),
+        dmc.Text(total_diffuse_rad),
+    ]
 
 
 @callback(

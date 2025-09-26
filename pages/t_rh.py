@@ -32,66 +32,57 @@ var_to_plot = ["Dry bulb temperature", "Relative humidity"]
 
 
 def layout():
-    return dmc.Container(
-        fluid=True,
+    return dmc.Stack(
         p="md",
         children=[
-            dmc.Group(
-                justify="center",
-                align="center",
-                wrap="nowrap",
-                children=[
-                    dmc.Title("Select a variable:", order=5),
+            dmc.Center(
+                [
+                    dmc.Title("Select a variable:", order=5, mr="md"),
                     dropdown(
                         id=ElementIds.ID_T_RH_DROPDOWN,
                         options={var: dropdown_names[var] for var in var_to_plot},
                         value=dropdown_names[var_to_plot[0]],
                         style={"width": "14rem"},
                     ),
-                ],
+                ]
             ),
-            dmc.Stack(
-                mt="md",
-                children=[
-                    # Yearly Chart
-                    title_with_link(
-                        text="Yearly Chart",
-                        id_button=IdButtons.YEARLY_CHART_LABEL,
-                        doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=dmc.Stack(id=ElementIds.YEARLY_CHART),
-                    ),
-                    # Daily chart
-                    title_with_link(
-                        text="Daily chart",
-                        id_button=IdButtons.DAILY_CHART_LABEL,
-                        doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=dmc.Stack(id=ElementIds.DAILY),
-                    ),
-                    # Heatmap chart
-                    title_with_link(
-                        text="Heatmap chart",
-                        id_button=IdButtons.HEATMAP_CHART_LABEL,
-                        doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                    ),
-                    dcc.Loading(
-                        type="circle",
-                        children=dmc.Stack(id=ElementIds.HEATMAP),
-                    ),
-                    # Descriptive statistics
-                    title_with_tooltip(
-                        text="Descriptive statistics",
-                        tooltip_text="count, mean, std, min, max, and percentiles",
-                        id_button=IdButtons.TABLE_TMP_RH,
-                    ),
-                    dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
-                ],
+            # Yearly Chart
+            title_with_link(
+                text="Yearly Chart",
+                id_button=IdButtons.YEARLY_CHART_LABEL,
+                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
             ),
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(id=ElementIds.YEARLY_CHART),
+            ),
+            # Daily chart
+            title_with_link(
+                text="Daily chart",
+                id_button=IdButtons.DAILY_CHART_LABEL,
+                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+            ),
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(id=ElementIds.DAILY),
+            ),
+            # Heatmap chart
+            title_with_link(
+                text="Heatmap chart",
+                id_button=IdButtons.HEATMAP_CHART_LABEL,
+                doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+            ),
+            dcc.Loading(
+                type="circle",
+                children=dmc.Stack(id=ElementIds.HEATMAP),
+            ),
+            # Descriptive statistics
+            title_with_tooltip(
+                text="Descriptive statistics",
+                tooltip_text="count, mean, std, min, max, and percentiles",
+                id_button=IdButtons.TABLE_TMP_RH,
+            ),
+            dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
         ],
     )
 
