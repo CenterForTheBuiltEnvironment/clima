@@ -149,8 +149,6 @@ def generate_custom_inputs_psy(
 def title_with_tooltip(text, tooltip_text, id_button):
     if tooltip_text:
         return dmc.Group(
-            mt="md",
-            px="md",
             children=[
                 dmc.Title(text, order=3),
                 dmc.Tooltip(
@@ -186,8 +184,6 @@ def title_with_link(
     doc_link: str = "",
 ):
     return dmc.Group(
-        mt="md",
-        px="md",
         children=[
             dmc.Title(text, order=3),
             dmc.Tooltip(
