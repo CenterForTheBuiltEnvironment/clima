@@ -38,7 +38,8 @@ messages_alert = {
 
 def layout():
     """Contents in the first tab 'Select Weather File'"""
-    return dmc.Box(
+    return dmc.Stack(
+        p="md",
         children=[
             dcc.Loading(
                 id=ElementIds.LOADING_ONE,
@@ -103,13 +104,6 @@ def layout():
                 ],
             ),
         ],
-        p="md",
-        mb="xl",
-        style={
-            "display": "flex",
-            "flexDirection": "column",
-            "gap": "var(--mantine-spacing-md)",
-        },
     )
 
 
@@ -319,8 +313,8 @@ def display_modal_when_data_clicked(_, click_map, __, opened):
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
         ).group(1)
-        return (not opened, url)
-    return (opened, "")
+        return not opened, url
+    return opened, ""
 
 
 @callback(
@@ -390,5 +384,4 @@ def plot_location_epw_files(pathname):
         id=ElementIds.TAB_ONE_MAP,
         figure=fig,
         config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
-        # style={"position": "relative", "zIndex": 5},
     )
