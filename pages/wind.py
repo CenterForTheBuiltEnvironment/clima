@@ -233,7 +233,6 @@ def custom_wind_rose():
                                                 for i, j in enumerate(month_lst)
                                             },
                                             value=1,
-                                            style={"width": "6rem"},
                                         ),
                                     ],
                                 ),
@@ -248,7 +247,6 @@ def custom_wind_rose():
                                                 str(i) + ":00": i for i in range(0, 24)
                                             },
                                             value=0,
-                                            style={"width": "6rem"},
                                         ),
                                     ],
                                 ),
@@ -271,7 +269,6 @@ def custom_wind_rose():
                                                 for i, j in enumerate(month_lst)
                                             },
                                             value=12,
-                                            style={"width": "6rem"},
                                         ),
                                     ],
                                 ),
@@ -286,7 +283,6 @@ def custom_wind_rose():
                                                 str(i) + ":00": i for i in range(1, 25)
                                             },
                                             value=24,
-                                            style={"width": "6rem"},
                                         ),
                                     ],
                                 ),

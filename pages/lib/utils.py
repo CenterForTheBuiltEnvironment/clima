@@ -278,6 +278,7 @@ def dropdown(options=None, **kwargs):
     return dcc.Dropdown(
         options=[{"label": k, "value": v} for k, v in options.items()],
         clearable=False,
+        style={"width": "14rem"},
         **kwargs,
     )
 

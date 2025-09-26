@@ -42,7 +42,6 @@ def layout():
                         id=ElementIds.ID_T_RH_DROPDOWN,
                         options={var: dropdown_names[var] for var in var_to_plot},
                         value=dropdown_names[var_to_plot[0]],
-                        style={"width": "14rem"},
                     ),
                 ]
             ),
