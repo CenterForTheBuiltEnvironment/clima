@@ -338,7 +338,6 @@ def degree_day_chart(ts, n_clicks, df, meta, hdd_value, cdd_value, si_ip):
         template=template,
         dragmode=False,
         legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
-        yaxis=dict(range=[-100, 400]),
     )
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
