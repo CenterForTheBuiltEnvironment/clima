@@ -157,7 +157,7 @@ def create_navbar():
     )
 
     return dmc.ScrollArea(
-        children=dmc.Stack(gap="xs", children=[parent_group, controls_group, doc_link]),
+        children=[parent_group, controls_group, doc_link],
     )
 
 
@@ -300,10 +300,8 @@ def create_footer():
         p="sm",
         c="white",
         bg="#003262",
-        gap="xl",
         justify="flex-start",
         align="center",
-        px="lg",
     )
 
 
