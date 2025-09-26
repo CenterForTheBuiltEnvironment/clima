@@ -94,19 +94,6 @@
     background-color: white;
 }
 
-/* Tab Four */
-#tab-four-container {
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-}
-
-/*#tab-four-custom-sun-container {*/
-/*    justify-content: space-evenly;*/
-/*    align-items: stretch;*/
-/*    align-content: center;*/
-/*}*/
-
 /* Tab Five */
 #tab-five-container {
     justify-content: center;

@@ -54,6 +54,15 @@ sc_dropdown_names.pop("UTCI: Sun & no Wind : categories", None)
 sc_dropdown_names.pop("UTCI: no Sun & no Wind : categories", None)
 
 
+def layout():
+    """Contents of tab four."""
+    return dmc.Stack(
+        p="md",
+        id=ElementIds.TAB_FOUR_CONTAINER,
+        children=[sun_path(), static_section(), explore_daily_heatmap()],
+    )
+
+
 def sun_path():
     """Return the layout for the custom sun path and its dropdowns."""
     return dmc.Stack(
@@ -139,15 +148,6 @@ def static_section():
         children=[
             # ...
         ],
-    )
-
-
-def layout():
-    """Contents of tab four."""
-    return dmc.Stack(
-        p="md",
-        id=ElementIds.TAB_FOUR_CONTAINER,
-        children=[sun_path(), static_section(), explore_daily_heatmap()],
     )
 
 
