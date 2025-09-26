@@ -71,6 +71,7 @@ def violin(df, var, global_local, si_ip):
         title=title,
         title_x=0.5,
         dragmode=False,
+        height=400,
     )
     fig.update_xaxes(showline=True, linewidth=1, linecolor="black", mirror=True)
     fig.update_yaxes(

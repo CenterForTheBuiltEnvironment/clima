@@ -35,13 +35,7 @@ dash.register_page(
 def layout():
     """Contents in the second tab 'Climate Summary'."""
 
-    return dmc.Container(
-        fluid=True,
-        p="md",
-        children=[
-            dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER),
-        ],
-    )
+    return dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER, p="md")
 
 
 @callback(
@@ -63,7 +57,7 @@ def update_layout(si_ip):
                 type="circle",
                 children=dmc.Stack(
                     id=ElementIds.LOCATION_INFO,
-                    p="sm",
+                    gap=0,
                 ),
             ),
             dcc.Loading(
@@ -146,10 +140,10 @@ def update_layout(si_ip):
                 id=ElementIds.GRAPH_CONTAINER,
                 gutter="md",
                 children=[
-                    dmc.GridCol(id=ElementIds.TEMP_PROFILE_GRAPH, span=3),
-                    dmc.GridCol(id=ElementIds.HUMIDITY_PROFILE_GRAPH, span=3),
-                    dmc.GridCol(id=ElementIds.SOLAR_RADIATION_GRAPH, span=3),
-                    dmc.GridCol(id=ElementIds.WIND_SPEED_GRAPH, span=3),
+                    dmc.GridCol(id=ElementIds.TEMP_PROFILE_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
+                    dmc.GridCol(id=ElementIds.HUMIDITY_PROFILE_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
+                    dmc.GridCol(id=ElementIds.SOLAR_RADIATION_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
+                    dmc.GridCol(id=ElementIds.WIND_SPEED_GRAPH, span={"base": 12, "sm": 6, "lg": 3}),
                 ],
             ),
         ],
@@ -242,8 +236,7 @@ def update_location_info(ts, df, meta, si_ip):
     hottest_yearly_tmp = f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} {tmp_unit}"
     coldest_yearly_tmp = f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} {tmp_unit}"
 
-    return dmc.Stack(
-        children=[
+    return [
             dmc.Text(location, fw=700),
             dmc.Text(lon),
             dmc.Text(lat),
@@ -255,8 +248,7 @@ def update_location_info(ts, df, meta, si_ip):
             dmc.Text(coldest_yearly_tmp),
             dmc.Text(total_solar_rad),
             dmc.Text(total_diffuse_rad),
-        ],
-    )
+        ]
 
 
 @callback(
