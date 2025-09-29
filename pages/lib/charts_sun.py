@@ -9,24 +9,27 @@ from config import UnitSystem
 from pages.lib.utils import get_max_min_value
 from pages.lib.global_scheme import (
     template,
-    mapping_dictionary,
     degrees_unit,
     tight_margins,
     month_lst,
 )
 from plotly.subplots import make_subplots
 from pvlib import solarposition
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables, VariableInfo
 
 
 def monthly_solar(epw_df, si_ip):
     g_h_rad_month_ave = (
-        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.GLOB_HOR_RAD]
+        epw_df.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+            Variables.GLOB_HOR_RAD.col_name
+        ]
         .median()
         .reset_index()
     )
     dif_h_rad_month_ave = (
-        epw_df.groupby([ColNames.MONTH, ColNames.HOUR])[ColNames.DIF_HOR_RAD]
+        epw_df.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+            Variables.DIF_HOR_RAD.col_name
+        ]
         .median()
         .reset_index()
     )
@@ -44,10 +47,12 @@ def monthly_solar(epw_df, si_ip):
         fig.add_trace(
             go.Scatter(
                 x=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR
+                    g_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    Variables.HOUR.col_name,
                 ],
                 y=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.GLOB_HOR_RAD
+                    g_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    Variables.GLOB_HOR_RAD.col_name,
                 ],
                 fill="tozeroy",
                 mode="lines",
@@ -56,13 +61,16 @@ def monthly_solar(epw_df, si_ip):
                 name="Global",
                 showlegend=is_first,
                 customdata=epw_df.loc[
-                    epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES
+                    epw_df[Variables.MONTH.col_name] == i + 1,
+                    Variables.MONTH_NAMES.col_name,
                 ],
                 hovertemplate=(
                     "<b>"
                     + "Global Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][ColNames.UNIT]
+                    + VariableInfo.from_col_name(
+                        Variables.GLOB_HOR_RAD.col_name
+                    ).get_unit(si_ip)
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -76,10 +84,12 @@ def monthly_solar(epw_df, si_ip):
         fig.add_trace(
             go.Scatter(
                 x=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.HOUR
+                    dif_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    Variables.HOUR.col_name,
                 ],
                 y=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave[ColNames.MONTH] == i + 1, ColNames.DIF_HOR_RAD
+                    dif_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    Variables.DIF_HOR_RAD.col_name,
                 ],
                 fill="tozeroy",
                 mode="lines",
@@ -88,13 +98,16 @@ def monthly_solar(epw_df, si_ip):
                 name="Diffuse",
                 showlegend=is_first,
                 customdata=epw_df.loc[
-                    epw_df[ColNames.MONTH] == i + 1, ColNames.MONTH_NAMES
+                    epw_df[Variables.MONTH.col_name] == i + 1,
+                    Variables.MONTH_NAMES.col_name,
                 ],
                 hovertemplate=(
                     "<b>"
                     + "Diffuse Horizontal Solar Radiation"
                     + ": %{y:.2f} "
-                    + mapping_dictionary[ColNames.DIF_HOR_RAD][si_ip][ColNames.UNIT]
+                    + VariableInfo.from_col_name(
+                        Variables.DIF_HOR_RAD.col_name
+                    ).get_unit(si_ip)
                     + "</b><br>"
                     + "Month: %{customdata}<br>"
                     + "Hour: %{x}:00<br>"
@@ -121,16 +134,16 @@ def monthly_solar(epw_df, si_ip):
 
 def polar_graph(df, meta, global_local, var, si_ip):
     """Return the figure for the custom sun path."""
-    latitude = float(meta[ColNames.LAT])
-    longitude = float(meta[ColNames.LON])
-    time_zone = float(meta[ColNames.TIME_ZONE])
-    solpos = df.loc[df[ColNames.APPARENT_ELEVATION] > 0, :]
-
+    latitude = float(meta[Variables.LAT.col_name])
+    longitude = float(meta[Variables.LON.col_name])
+    time_zone = float(meta[Variables.TIME_ZONE.col_name])
+    solpos = df.loc[df[Variables.APPARENT_ELEVATION.col_name] > 0, :]
     if var != "None":
-        var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
-        var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
-        var_name = mapping_dictionary[var][ColNames.NAME]
-        var_color = mapping_dictionary[var][ColNames.COLOR]
+        variable = VariableInfo.from_col_name(var)
+        var_unit = variable.get_unit(si_ip)
+        var_range = variable.get_range(si_ip)
+        var_name = variable.get_name()
+        var_color = variable.get_color()
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -145,7 +158,7 @@ def polar_graph(df, meta, global_local, var, si_ip):
     )
     delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
     times = times - delta
-    solpos = df.loc[df[ColNames.APPARENT_ELEVATION] > 0, :]
+    solpos = df.loc[df[Variables.APPARENT_ELEVATION.col_name] > 0, :]
 
     if var == "None":
         var_color = "orange"
@@ -176,19 +189,20 @@ def polar_graph(df, meta, global_local, var, si_ip):
     if var == "None":
         fig.add_trace(
             go.Scatterpolar(
-                r=90 * np.cos(np.radians(90 - solpos[ColNames.APPARENT_ZENITH])),
-                theta=solpos[ColNames.AZIMUTH],
+                r=90
+                * np.cos(np.radians(90 - solpos[Variables.APPARENT_ZENITH.col_name])),
+                theta=solpos[Variables.AZIMUTH.col_name],
                 mode="markers",
                 marker_color="orange",
                 marker_size=marker_size,
                 marker_line_width=0,
                 customdata=np.stack(
                     (
-                        solpos[ColNames.DAY],
-                        solpos[ColNames.MONTH_NAMES],
-                        solpos[ColNames.HOUR],
-                        solpos[ColNames.ELEVATION],
-                        solpos[ColNames.AZIMUTH],
+                        solpos[Variables.DAY.col_name],
+                        solpos[Variables.MONTH_NAMES.col_name],
+                        solpos[Variables.HOUR.col_name],
+                        solpos[Variables.ELEVATION.col_name],
+                        solpos[Variables.AZIMUTH.col_name],
                     ),
                     axis=-1,
                 ),
@@ -206,8 +220,9 @@ def polar_graph(df, meta, global_local, var, si_ip):
     else:
         fig.add_trace(
             go.Scatterpolar(
-                r=90 * np.cos(np.radians(90 - solpos[ColNames.APPARENT_ZENITH])),
-                theta=solpos[ColNames.AZIMUTH],
+                r=90
+                * np.cos(np.radians(90 - solpos[Variables.APPARENT_ZENITH.col_name])),
+                theta=solpos[Variables.AZIMUTH.col_name],
                 mode="markers",
                 marker=dict(
                     color=solpos[var],
@@ -220,11 +235,11 @@ def polar_graph(df, meta, global_local, var, si_ip):
                 ),
                 customdata=np.stack(
                     (
-                        solpos[ColNames.DAY],
-                        solpos[ColNames.MONTH_NAMES],
-                        solpos[ColNames.HOUR],
-                        solpos[ColNames.ELEVATION],
-                        solpos[ColNames.AZIMUTH],
+                        solpos[Variables.DAY.col_name],
+                        solpos[Variables.MONTH_NAMES.col_name],
+                        solpos[Variables.HOUR.col_name],
+                        solpos[Variables.ELEVATION.col_name],
+                        solpos[Variables.AZIMUTH.col_name],
                         solpos[var],
                     ),
                     axis=-1,
@@ -250,13 +265,13 @@ def polar_graph(df, meta, global_local, var, si_ip):
     for date in pd.to_datetime(["2019-03-21", "2019-06-21", "2019-12-21"]):
         times = pd.date_range(
             date,
-            date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR),
-            freq=ColNames.FIVE_MINUTE,
+            date + pd.Timedelta(Variables.TWENTY_FOUR_HOUR.col_name),
+            freq=Variables.FIVE_MINUTE.col_name,
             tz=tz,
         )
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
+        solpos = solpos.loc[solpos[Variables.APPARENT_ELEVATION.col_name] > 0, :]
 
         fig.add_trace(
             go.Scatterpolar(
@@ -279,13 +294,13 @@ def polar_graph(df, meta, global_local, var, si_ip):
     for date in pd.to_datetime(["2019-01-21", "2019-02-21", "2019-4-21", "2019-5-21"]):
         times = pd.date_range(
             date,
-            date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR),
-            freq=ColNames.FIVE_MINUTE,
+            date + pd.Timedelta(Variables.TWENTY_FOUR_HOUR.col_name),
+            freq=Variables.FIVE_MINUTE.col_name,
             tz=tz,
         )
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
+        solpos = solpos.loc[solpos[Variables.APPARENT_ELEVATION.col_name] > 0, :]
 
         fig.add_trace(
             go.Scatterpolar(
@@ -333,16 +348,16 @@ def polar_graph(df, meta, global_local, var, si_ip):
 
 def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     """Return a graph of a latitude and longitude solar diagram."""
-    latitude = float(meta[ColNames.LAT])
-    longitude = float(meta[ColNames.LON])
-    time_zone = float(meta[ColNames.TIME_ZONE])
+    latitude = float(meta[Variables.LAT.col_name])
+    longitude = float(meta[Variables.LON.col_name])
+    time_zone = float(meta[Variables.TIME_ZONE.col_name])
     tz = "UTC"
-
+    variable = VariableInfo.from_col_name(var)
     if var != "None":
-        var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
-        var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
-        var_name = mapping_dictionary[var][ColNames.NAME]
-        var_color = mapping_dictionary[var][ColNames.COLOR]
+        var_unit = variable.get_unit(si_ip)
+        var_range = variable.get_range(si_ip)
+        var_name = variable.get_name()
+        var_color = variable.get_color()
         if global_local == "global":
             # Set Global values for Max and minimum
             range_z = var_range
@@ -364,19 +379,19 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     if var == "None":
         fig.add_trace(
             go.Scatter(
-                y=df[ColNames.ELEVATION],
-                x=df[ColNames.AZIMUTH],
+                y=df[Variables.ELEVATION.col_name],
+                x=df[Variables.AZIMUTH.col_name],
                 mode="markers",
                 marker_color="orange",
                 marker_size=marker_size,
                 marker_line_width=0,
                 customdata=np.stack(
                     (
-                        df[ColNames.DAY],
-                        df[ColNames.MONTH_NAMES],
-                        df[ColNames.HOUR],
-                        df[ColNames.ELEVATION],
-                        df[ColNames.AZIMUTH],
+                        df[Variables.DAY.col_name],
+                        df[Variables.MONTH_NAMES.col_name],
+                        df[Variables.HOUR.col_name],
+                        df[Variables.ELEVATION.col_name],
+                        df[Variables.AZIMUTH.col_name],
                     ),
                     axis=-1,
                 ),
@@ -394,8 +409,8 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     else:
         fig.add_trace(
             go.Scatter(
-                y=df[ColNames.ELEVATION],
-                x=df[ColNames.AZIMUTH],
+                y=df[Variables.ELEVATION.col_name],
+                x=df[Variables.AZIMUTH.col_name],
                 mode="markers",
                 marker=dict(
                     color=df[var],
@@ -408,11 +423,11 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
                 ),
                 customdata=np.stack(
                     (
-                        df[ColNames.DAY],
-                        df[ColNames.MONTH_NAMES],
-                        df[ColNames.HOUR],
-                        df[ColNames.ELEVATION],
-                        df[ColNames.AZIMUTH],
+                        df[Variables.DAY.col_name],
+                        df[Variables.MONTH_NAMES.col_name],
+                        df[Variables.HOUR.col_name],
+                        df[Variables.ELEVATION.col_name],
+                        df[Variables.AZIMUTH.col_name],
                         df[var],
                     ),
                     axis=-1,
@@ -438,14 +453,14 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     for date in pd.to_datetime(["2019-03-21", "2019-06-21", "2019-12-21"]):
         times = pd.date_range(
             date,
-            date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR),
-            freq=ColNames.FIVE_MINUTE,
+            date + pd.Timedelta(Variables.TWENTY_FOUR_HOUR.col_name),
+            freq=Variables.FIVE_MINUTE.col_name,
             tz=tz,
         )
         delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
+        solpos = solpos.loc[solpos[Variables.APPARENT_ELEVATION.col_name] > 0, :]
 
         fig.add_trace(
             go.Scatter(
@@ -467,14 +482,14 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     for date in pd.to_datetime(["2019-01-21", "2019-02-21", "2019-4-21", "2019-5-21"]):
         times = pd.date_range(
             date,
-            date + pd.Timedelta(ColNames.TWENTY_FOUR_HOUR),
-            freq=ColNames.FIVE_MINUTE,
+            date + pd.Timedelta(Variables.TWENTY_FOUR_HOUR.col_name),
+            freq=Variables.FIVE_MINUTE.col_name,
             tz=tz,
         )
         delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
         times = times - delta
         solpos = solarposition.get_solarposition(times, latitude, longitude)
-        solpos = solpos.loc[solpos[ColNames.APPARENT_ELEVATION] > 0, :]
+        solpos = solpos.loc[solpos[Variables.APPARENT_ELEVATION.col_name] > 0, :]
 
         fig.add_trace(
             go.Scatter(

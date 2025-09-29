@@ -8,7 +8,7 @@ import numpy as np
 from dash import dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
@@ -203,7 +203,7 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
 
     # Cloud Cover
     cover = barchart(
-        df, ColNames.TOT_SKY_COVER, [False], [False, "", 3, 7], True, si_ip
+        df, Variables.TOT_SKY_COVER.col_name, [False], [False, "", 3, 7], True, si_ip
     )
     cover = cover.update_layout(
         margin=tight_margins,

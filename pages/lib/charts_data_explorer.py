@@ -2,8 +2,8 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from pages.lib.utils import get_max_min_value
-from pages.lib.global_scheme import template, mapping_dictionary, month_lst
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_scheme import template, month_lst
+from pages.lib.global_variables import Variables, VariableInfo
 
 
 def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si_ip):
@@ -29,12 +29,16 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
     if df.dropna(subset=[var]).shape[0] == 0:
         return None
 
-    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
-    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
-    var_name = mapping_dictionary[var][ColNames.NAME]
-    var_color = mapping_dictionary[var][ColNames.COLOR]
-    filter_name = mapping_dictionary[filter_var][ColNames.NAME]
-    filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]
+    variable = VariableInfo.from_col_name(var)
+    filter_variable = VariableInfo.from_col_name(filter_var)
+
+    var_name = variable.get_name()
+    var_unit = variable.get_unit(si_ip)
+    var_range = variable.get_range(si_ip)
+    var_color = variable.get_color()
+
+    filter_name = filter_variable.get_name()
+    filter_unit = filter_variable.get_unit(si_ip)
 
     if global_local == "global":
         # Set Global values for Max and minimum
@@ -58,15 +62,18 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
 
     fig = go.Figure(
         data=go.Heatmap(
-            y=df[ColNames.HOUR],
-            x=df[ColNames.DOY],
+            y=df[Variables.HOUR.col_name],
+            x=df[Variables.DOY.col_name],
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
             zmax=range_z[1],
             connectgaps=False,
             hoverongaps=False,
-            customdata=np.stack((df[ColNames.MONTH_NAMES], df[ColNames.DAY]), axis=-1),
+            customdata=np.stack(
+                (df[Variables.MONTH_NAMES.col_name], df[Variables.DAY.col_name]),
+                axis=-1,
+            ),
             hovertemplate=(
                 "<b>"
                 + var
@@ -109,12 +116,16 @@ def three_var_graph(
     min_val = data_filter_info3[2]
     max_val = data_filter_info3[3]
 
-    var_unit_x = mapping_dictionary[var_x][si_ip][ColNames.UNIT]
-    var_unit_y = mapping_dictionary[var_y][si_ip][ColNames.UNIT]
+    variable_x = VariableInfo.from_col_name(var_x)
+    variable_y = VariableInfo.from_col_name(var_y)
+    variable_color = VariableInfo.from_col_name(color_by)
+
+    var_unit_x = variable_x.get_unit(si_ip)
+    var_unit_y = variable_y.get_unit(si_ip)
+    var_range = variable_color.get_range(si_ip)
+    var_color = variable_color.get_color()
 
     var = color_by
-    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
-    var_color = mapping_dictionary[var][ColNames.COLOR]
 
     if global_local != "global":
         # Set maximum and minimum according to data
@@ -129,15 +140,15 @@ def three_var_graph(
         else:
             df.loc[(df[filter_var] >= max_val) & (df[filter_var] <= min_val)] = None
 
-    if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
+    if df.dropna(subset=[Variables.MONTH.col_name]).shape[0] == 0:
         return None
 
     title = (
-        mapping_dictionary[var_x][ColNames.NAME]
+        variable_x.get_name()
         + " vs "
-        + mapping_dictionary[var_y][ColNames.NAME]
+        + variable_y.get_name()
         + " colored by "
-        + mapping_dictionary[color_by][ColNames.NAME]
+        + variable_color.get_name()
     )
 
     fig = px.scatter(
@@ -162,15 +173,18 @@ def three_var_graph(
 
 
 def two_var_graph(df, var_x, var_y, si_ip):
+    variable_x = VariableInfo.from_col_name(var_x)
+    variable_y = VariableInfo.from_col_name(var_y)
+
     title = (
         "Simultaneous frequency of "
-        + mapping_dictionary[var_x][ColNames.NAME]
+        + variable_x.get_name()
         + " and  "
-        + mapping_dictionary[var_y][ColNames.NAME]
+        + variable_y.get_name()
     )
 
-    var_unit_x = mapping_dictionary[var_x][si_ip][ColNames.UNIT]
-    var_unit_y = mapping_dictionary[var_y][si_ip][ColNames.UNIT]
+    var_unit_x = variable_x.get_unit(si_ip)
+    var_unit_y = variable_y.get_unit(si_ip)
 
     fig = px.density_heatmap(
         df,

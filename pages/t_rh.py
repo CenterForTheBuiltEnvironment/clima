@@ -5,7 +5,7 @@ import dash_mantine_components as dmc
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_scheme import dropdown_names
 from pages.lib.template_graphs import heatmap, yearly_profile, daily_profile
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
@@ -101,7 +101,7 @@ def layout():
 )
 def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
     if dd_value == dropdown_names[var_to_plot[0]]:
-        dbt_yearly = yearly_profile(df, ColNames.DBT, global_local, si_ip)
+        dbt_yearly = yearly_profile(df, Variables.DBT.col_name, global_local, si_ip)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units_degree(si_ip)
         return dcc.Graph(
@@ -111,7 +111,7 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
             figure=dbt_yearly,
         )
     else:
-        rh_yearly = yearly_profile(df, ColNames.RH, global_local, si_ip)
+        rh_yearly = yearly_profile(df, Variables.RH.col_name, global_local, si_ip)
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units(si_ip)
         return dcc.Graph(
@@ -143,15 +143,15 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
             figure=daily_profile(
                 df[
                     [
-                        ColNames.DBT,
-                        ColNames.HOUR,
-                        ColNames.UTC_TIME,
-                        ColNames.MONTH_NAMES,
-                        ColNames.DAY,
-                        ColNames.MONTH,
+                        Variables.DBT.col_name,
+                        Variables.HOUR.col_name,
+                        Variables.UTC_TIME.col_name,
+                        Variables.MONTH_NAMES.col_name,
+                        Variables.DAY.col_name,
+                        Variables.MONTH.col_name,
                     ]
                 ],
-                ColNames.DBT,
+                Variables.DBT.col_name,
                 global_local,
                 si_ip,
             ),
@@ -163,15 +163,15 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
             figure=daily_profile(
                 df[
                     [
-                        ColNames.RH,
-                        ColNames.HOUR,
-                        ColNames.UTC_TIME,
-                        ColNames.MONTH_NAMES,
-                        ColNames.DAY,
-                        ColNames.MONTH,
+                        Variables.RH.col_name,
+                        Variables.HOUR.col_name,
+                        Variables.UTC_TIME.col_name,
+                        Variables.MONTH_NAMES.col_name,
+                        Variables.DAY.col_name,
+                        Variables.MONTH.col_name,
                     ]
                 ],
-                ColNames.RH,
+                Variables.RH.col_name,
                 global_local,
                 si_ip,
             ),
@@ -202,14 +202,14 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
             figure=heatmap(
                 df[
                     [
-                        ColNames.DBT,
-                        ColNames.HOUR,
-                        ColNames.UTC_TIME,
-                        ColNames.MONTH_NAMES,
-                        ColNames.DAY,
+                        Variables.DBT.col_name,
+                        Variables.HOUR.col_name,
+                        Variables.UTC_TIME.col_name,
+                        Variables.MONTH_NAMES.col_name,
+                        Variables.DAY.col_name,
                     ]
                 ],
-                ColNames.DBT,
+                Variables.DBT.col_name,
                 global_local,
                 si_ip,
             ),
@@ -221,14 +221,14 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
             figure=heatmap(
                 df[
                     [
-                        ColNames.RH,
-                        ColNames.HOUR,
-                        ColNames.UTC_TIME,
-                        ColNames.MONTH_NAMES,
-                        ColNames.DAY,
+                        Variables.RH.col_name,
+                        Variables.HOUR.col_name,
+                        Variables.UTC_TIME.col_name,
+                        Variables.MONTH_NAMES.col_name,
+                        Variables.DAY.col_name,
                     ]
                 ],
-                ColNames.RH,
+                Variables.RH.col_name,
                 global_local,
                 si_ip,
             ),
@@ -249,7 +249,14 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
 def update_table(_, dd_value, df, si_ip):
     """Update the contents of descriptive statistics table."""
     return summary_table_tmp_rh_tab(
-        df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]],
+        df[
+            [
+                Variables.MONTH.col_name,
+                Variables.HOUR.col_name,
+                dd_value,
+                Variables.MONTH_NAMES.col_name,
+            ]
+        ],
         dd_value,
         si_ip,
     )

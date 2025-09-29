@@ -9,9 +9,9 @@ from dash_extensions.enrich import dcc, Output, Input, State, callback
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.charts_summary import world_map
 from pages.lib.extract_df import get_data
-from pages.lib.global_scheme import template, tight_margins, mapping_dictionary
+from pages.lib.global_scheme import template, tight_margins
 from pages.lib.template_graphs import violin
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
@@ -196,11 +196,13 @@ def update_map(meta):
 )
 def update_location_info(ts, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    location = f"Location: {meta[ColNames.CITY]}, {meta[ColNames.COUNTRY]}"
-    lon = f"    Longitude: {meta[ColNames.LON]}"
-    lat = f"Latitude: {meta[ColNames.LAT]}"
+    location = (
+        f"Location: {meta[Variables.CITY.col_name]}, {meta[Variables.COUNTRY.col_name]}"
+    )
+    lon = f"    Longitude: {meta[Variables.LON.col_name]}"
+    lat = f"Latitude: {meta[Variables.LAT.col_name]}"
 
-    site_elevation = round(float(meta[ColNames.SITE_ELEVATION]), 2)
+    site_elevation = round(float(meta[Variables.SITE_ELEVATION.col_name]), 2)
     if si_ip != UnitSystem.SI:
         site_elevation = round(site_elevation * 3.281, 2)
         elevation = f"Elevation above sea level: {site_elevation} ft"
@@ -209,14 +211,14 @@ def update_location_info(ts, df, meta, si_ip):
         elevation = f"Elevation above sea level: {site_elevation} m"
 
     period = ""
-    if meta[ColNames.PERIOD]:
-        start, stop = meta[ColNames.PERIOD].split("-")
+    if meta[Variables.PERIOD.col_name]:
+        start, stop = meta[Variables.PERIOD.col_name].split("-")
         period = f"This file is based on data collected between {start} and {stop}"
 
     climate_text = ""
     try:
         r = requests.get(
-            f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[ColNames.LAT]}/{meta[ColNames.LON]}"
+            f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[Variables.LAT.col_name]}/{meta[Variables.LON.col_name]}"
         )
         if r.status_code == 200:
             j = r.json()["return_values"][0]
@@ -226,27 +228,27 @@ def update_location_info(ts, df, meta, si_ip):
 
     # global horizontal irradiance
     # Note that the value is divided by 1000, so a corresponding change is made in the unit:
-    total_solar_rad_value = round(df[ColNames.GLOB_HOR_RAD].sum() / 1000, 2)
-    total_solar_rad_unit = "k" + mapping_dictionary[ColNames.GLOB_HOR_RAD][si_ip][
-        ColNames.UNIT
-    ].replace("<sup>", "").replace("</sup>", "")
+    total_solar_rad_value = round(df[Variables.GLOB_HOR_RAD.col_name].sum() / 1000, 2)
+    total_solar_rad_unit = "k" + VariableInfo.from_col_name(
+        Variables.GLOB_HOR_RAD.col_name
+    ).get_unit(si_ip).replace("<sup>", "").replace("</sup>", "")
     total_solar_rad = f"Annual cumulative horizontal solar radiation: {total_solar_rad_value} {total_solar_rad_unit}"
 
-    glob_sum = df[ColNames.GLOB_HOR_RAD].sum()
+    glob_sum = df[Variables.GLOB_HOR_RAD.col_name].sum()
     diffuse_percentage = (
-        round(df[ColNames.DIF_HOR_RAD].sum() / glob_sum * 100, 1) if glob_sum > 0 else 0
+        round(df[Variables.DIF_HOR_RAD.col_name].sum() / glob_sum * 100, 1)
+        if glob_sum > 0
+        else 0
     )
     total_diffuse_rad = (
         f"Percentage of diffuse horizontal solar radiation: {diffuse_percentage} %"
     )
 
-    tmp_unit = mapping_dictionary[ColNames.DBT][si_ip][ColNames.UNIT]
+    tmp_unit = VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
 
-    average_yearly_tmp = (
-        f"Average yearly temperature: {df[ColNames.DBT].mean().round(1)} {tmp_unit}"
-    )
-    hottest_yearly_tmp = f"Hottest yearly temperature (99%): {df[ColNames.DBT].quantile(0.99).round(1)} {tmp_unit}"
-    coldest_yearly_tmp = f"Coldest yearly temperature (1%): {df[ColNames.DBT].quantile(0.01).round(1)} {tmp_unit}"
+    average_yearly_tmp = f"Average yearly temperature: {df[Variables.DBT.col_name].mean().round(1)} {tmp_unit}"
+    hottest_yearly_tmp = f"Hottest yearly temperature (99%): {df[Variables.DBT.col_name].quantile(0.99).round(1)} {tmp_unit}"
+    coldest_yearly_tmp = f"Coldest yearly temperature (1%): {df[Variables.DBT.col_name].quantile(0.01).round(1)} {tmp_unit}"
 
     return [
         dmc.Text(location, fw=700),
@@ -298,18 +300,18 @@ def degree_day_chart(ts, n_clicks, df, meta, hdd_value, cdd_value, si_ip):
     color_cdd = "dodgerblue"
 
     hdd_array, cdd_array = [], []
-    months = df[ColNames.MONTH_NAMES].unique()
+    months = df[Variables.MONTH_NAMES.col_name].unique()
 
     for i in range(1, 13):
         query_month = "month=="
 
         a = df.query(query_month + str(i) + " and DBT<=" + str(hdd_setpoint))[
-            ColNames.DBT
+            Variables.DBT.col_name
         ].sub(hdd_setpoint)
         hdd_array.append(int(a.sum(skipna=True) / 24))
 
         a = df.query(query_month + str(i) + " and DBT>=" + str(cdd_setpoint))[
-            ColNames.DBT
+            Variables.DBT.col_name
         ].sub(cdd_setpoint)
         cdd_array.append(int(a.sum(skipna=True) / 24))
 
@@ -383,7 +385,7 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.TDB_PROFILE_GRAPH,
         config=generate_chart_name(TabNames.DRY_BULB_TEMPERATURE, meta, units),
-        figure=violin(df, ColNames.DBT, global_local, si_ip),
+        figure=violin(df, Variables.DBT.col_name, global_local, si_ip),
     )
 
 
@@ -405,7 +407,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.WIND_PROFILE_GRAPH,
         config=generate_chart_name(TabNames.WIND_SPEED, meta, units),
-        figure=violin(df, ColNames.WIND_SPEED, global_local, si_ip),
+        figure=violin(df, Variables.WIND_SPEED.col_name, global_local, si_ip),
     )
 
 
@@ -427,7 +429,7 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.RH_PROFILE_GRAPH,
         config=generate_chart_name(TabNames.RELATIVE_HUMIDITY, meta, units),
-        figure=violin(df, ColNames.RH, global_local, si_ip),
+        figure=violin(df, Variables.RH.col_name, global_local, si_ip),
     )
 
 
@@ -449,7 +451,7 @@ def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
     return dcc.Graph(
         id=ElementIds.GH_RAD_PROFILE_GRAPH,
         config=generate_chart_name(TabNames.GLOBAL_HORIZONTAL_RADIATION, meta, units),
-        figure=violin(df, ColNames.GLOB_HOR_RAD, global_local, si_ip),
+        figure=violin(df, Variables.GLOB_HOR_RAD.col_name, global_local, si_ip),
     )
 
 
@@ -470,12 +472,12 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
         if si_ip == UnitSystem.SI:
             return dcc.send_data_frame(
                 df.to_csv,
-                f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_SIunit.csv",
+                f"df_{meta[Variables.CITY.col_name]}_{meta[Variables.COUNTRY.col_name]}_Clima_SIunit.csv",
             )
         else:
             return dcc.send_data_frame(
                 df.to_csv,
-                f"df_{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_Clima_IPunit.csv",
+                f"df_{meta[Variables.CITY.col_name]}_{meta[Variables.COUNTRY.col_name]}_Clima_IPunit.csv",
             )
     else:
         print("df not loaded yet")
@@ -496,7 +498,7 @@ def download_epw(n_clicks, meta):
         lines[0] = lines[0].replace("b'", "")
         return dict(
             content="\n".join(lines),
-            filename=f"{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}.epw",
+            filename=f"{meta[Variables.CITY.col_name]}_{meta[Variables.COUNTRY.col_name]}.epw",
         )
     else:
         raise PreventUpdate

@@ -8,8 +8,8 @@ from dash import html, dash_table, dcc
 import dash_mantine_components as dmc
 
 from config import UnitSystem
-from pages.lib.global_scheme import fig_config, mapping_dictionary, month_lst
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_scheme import fig_config, month_lst
+from pages.lib.global_variables import Variables, VariableInfo
 
 
 def code_timer(func):
@@ -35,14 +35,14 @@ def generate_chart_name(tab_name, meta=None, custom_inputs=None, units=None):
     if units:
         custom_str += f"_{units}"
     if meta:
-        file_name = (
-            f"{meta[ColNames.CITY]}_{meta[ColNames.COUNTRY]}_{tab_name}{custom_str}"
-        )
-        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = file_name
+        file_name = f"{meta[Variables.CITY.col_name]}_{meta[Variables.COUNTRY.col_name]}_{tab_name}{custom_str}"
+        figure_config[Variables.TO_IMAGE_BUTTON_OPTIONS.col_name][
+            Variables.FILE_NAME.col_name
+        ] = file_name
     else:
-        figure_config[ColNames.TO_IMAGE_BUTTON_OPTIONS][ColNames.FILE_NAME] = (
-            f"{tab_name}{custom_str}"
-        )
+        figure_config[Variables.TO_IMAGE_BUTTON_OPTIONS.col_name][
+            Variables.FILE_NAME.col_name
+        ] = f"{tab_name}{custom_str}"
     return figure_config
 
 
@@ -59,12 +59,13 @@ def generate_units_degree(si_ip):
 
 
 def generate_custom_inputs(var):
-    if var in mapping_dictionary:
-        var_fullname = mapping_dictionary[var][ColNames.NAME]
-        custom_inputs = "".join(word.capitalize() for word in var_fullname.split(" "))
-        return custom_inputs
-    else:
-        return None
+    try:
+        variable = VariableInfo.from_col_name(var)
+        if variable.name:
+            return "".join(word.capitalize() for word in variable.name.split(" "))
+    except KeyError:
+        pass
+    return None
 
 
 def generate_custom_inputs_time(start_month, end_month, start_hour, end_hour):
@@ -93,19 +94,24 @@ def generate_custom_inputs_explorer(
     month_names = [""] + month_lst
     start_month_abbr = month_names[int(start_month)]
     end_month_abbr = month_names[int(end_month)]
-    if var in mapping_dictionary:
-        var_fullname = "".join(
-            word.capitalize()
-            for word in mapping_dictionary[var][ColNames.NAME].split(" ")
+    try:
+        var_name = VariableInfo.from_col_name(var).get_name()
+        var_fullname = (
+            "".join(word.capitalize() for word in var_name.split(" "))
+            if var_name
+            else var
         )
-    else:
+    except KeyError:
         var_fullname = var
-    if filter_var in mapping_dictionary:
-        filter_fullname = "".join(
-            word.capitalize()
-            for word in mapping_dictionary[filter_var][ColNames.NAME].split(" ")
+
+    try:
+        filter_name = VariableInfo.from_col_name(filter_var).get_name()
+        filter_fullname = (
+            "".join(word.capitalize() for word in filter_name.split(" "))
+            if filter_name
+            else filter_var
         )
-    else:
+    except KeyError:
         filter_fullname = filter_var
     custom_inputs = f"{var_fullname}_{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{filter_fullname}_{min_val}-{max_val}"
     return custom_inputs
@@ -124,20 +130,19 @@ def generate_custom_inputs_psy(
     month_names = [""] + month_lst
     start_month_abbr = month_names[int(start_month)]
     end_month_abbr = month_names[int(end_month)]
-    if colorby_var in mapping_dictionary:
-        colorby_fullname = "".join(
-            word.capitalize()
-            for word in mapping_dictionary[colorby_var][ColNames.NAME].split(" ")
-        )
-    else:
-        colorby_fullname = colorby_var
-    if data_filter_var in mapping_dictionary:
-        data_filter_fullname = "".join(
-            word.capitalize()
-            for word in mapping_dictionary[data_filter_var][ColNames.NAME].split(" ")
-        )
-    else:
-        data_filter_fullname = data_filter_var
+
+    def format_variable_name(var: str) -> str:
+        try:
+            variable = VariableInfo.from_col_name(var)
+            name = variable.get_name()
+            return (
+                "".join(word.capitalize() for word in name.split(" ")) if name else var
+            )
+        except KeyError:
+            return var
+
+    colorby_fullname = format_variable_name(colorby_var)
+    data_filter_fullname = format_variable_name(data_filter_var)
 
     if colorby_var == "None":
         custom_inputs = f"{start_month_abbr}-{end_month_abbr}_{start_hour:02d}-{end_hour:02d}_{data_filter_fullname}_{min_val}-{max_val}"
@@ -169,8 +174,6 @@ def title_with_tooltip(text, tooltip_text, id_button):
         )
     else:
         return dmc.Group(
-            mt="md",
-            px="md",
             children=[
                 dmc.Title(text, order=3),
             ],
@@ -210,13 +213,17 @@ def title_with_link(
 
 def summary_table_tmp_rh_tab(df, value, si_ip):
     df_summary = (
-        df.groupby([ColNames.MONTH_NAMES, ColNames.MONTH])[value]
+        df.groupby([Variables.MONTH_NAMES.col_name, Variables.MONTH.col_name])[value]
         .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
         .round(2)
     )
-    df_summary = df_summary.reset_index(level=ColNames.MONTH_NAMES).sort_index()
+    df_summary = df_summary.reset_index(
+        level=Variables.MONTH_NAMES.col_name
+    ).sort_index()
     df_summary = df_summary.drop(["count"], axis=1)
-    df_summary = df_summary.rename(columns={ColNames.MONTH_NAMES: ColNames.MONTH})
+    df_summary = df_summary.rename(
+        columns={Variables.MONTH_NAMES.col_name: Variables.MONTH.col_name}
+    )
 
     df_sum = (
         df[value]
@@ -224,12 +231,15 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
         .round(2)
         .to_frame()
     )
-    df_sum = df_sum.T.assign(count="Year").rename(columns={"count": ColNames.MONTH})
+    df_sum = df_sum.T.assign(count="Year").rename(
+        columns={"count": Variables.MONTH.col_name}
+    )
 
     df_summary = pd.concat([df_summary, df_sum])
 
     unit = (
-        mapping_dictionary[value][si_ip][ColNames.UNIT]
+        VariableInfo.from_col_name(value)
+        .get_unit(si_ip)
         .replace("<sup>", "")
         .replace("</sup>", "")
     )
@@ -237,7 +247,7 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
         columns=[
             (
                 {"name": i, "id": i}
-                if i == ColNames.MONTH
+                if i == Variables.MONTH.col_name
                 else {"name": f"{i} ({unit})", "id": i}
             )
             for i in df_summary.columns
@@ -258,10 +268,14 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
 
 def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
     start_month, end_month = month
-    if invert_month == [ColNames.INVERT] and (start_month != 1 or end_month != 12):
+    if invert_month == [Variables.INVERT.col_name] and (
+        start_month != 1 or end_month != 12
+    ):
         end_month, start_month = month
     start_hour, end_hour = hour
-    if invert_hour == [ColNames.INVERT] and (start_hour != 0 or end_hour != 24):
+    if invert_hour == [Variables.INVERT.col_name] and (
+        start_hour != 0 or end_hour != 24
+    ):
         end_hour, start_hour = hour
 
     return start_month, end_month, start_hour, end_hour

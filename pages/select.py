@@ -10,13 +10,12 @@ from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
 from pandas import json_normalize
 
-from pages.lib.extract_df import convert_data
+from pages.lib.extract_df import convert_df_units
 from pages.lib.extract_df import create_df, get_data, get_location_info
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_tab_names import TabNames
-from pages.lib.global_scheme import mapping_dictionary
-from config import PageUrls, PageInfo, UnitSystem
+from config import PageUrls, PageInfo
 from pages.lib.utils import generate_chart_name
 
 dash.register_page(
@@ -149,7 +148,7 @@ def submitted_data(
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
 
-    if ctx.triggered[0][ColNames.PROP_ID] == "modal-yes-button.n_clicks":
+    if ctx.triggered[0][Variables.PROP_ID.col_name] == "modal-yes-button.n_clicks":
         lines = get_data(url_store)
         if lines is None:
             return (
@@ -171,7 +170,7 @@ def submitted_data(
         )
 
     elif (
-        ctx.triggered[0][ColNames.PROP_ID] == "upload-data.contents"
+        ctx.triggered[0][Variables.PROP_ID.col_name] == "upload-data.contents"
         and list_of_contents is not None
     ):
         content_type, content_string = list_of_contents[0].split(",")
@@ -231,9 +230,9 @@ def submitted_data(
 def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
-        map_json = json.dumps(mapping_dictionary)
-        if si_ip_input == UnitSystem.IP:
-            map_json = convert_data(df, map_json)
+
+        df = convert_df_units(df, si_ip_input)
+
         return Serverside(df), si_ip_input
     else:
         return (
@@ -290,7 +289,10 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             True,  # changelog always disabled
-            "Current Location: " + meta[ColNames.CITY] + ", " + meta[ColNames.COUNTRY],
+            "Current Location: "
+            + meta[Variables.CITY.col_name]
+            + ", "
+            + meta[Variables.COUNTRY.col_name],
         )
 
 
@@ -340,11 +342,11 @@ def plot_location_epw_files(pathname):
     with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
         data = json.load(data_file)
 
-    df = json_normalize(data[ColNames.FEATURES])
-    df[[ColNames.LON, ColNames.LAT]] = pd.DataFrame(
-        df[ColNames.GEOMETRY_COORDINATES].tolist()
+    df = json_normalize(data[Variables.FEATURES.col_name])
+    df[[Variables.LON.col_name, Variables.LAT.col_name]] = pd.DataFrame(
+        df[Variables.GEOMETRY_COORDINATES.col_name].tolist()
     )
-    df[ColNames.LAT] += 0.010
+    df[Variables.LAT.col_name] += 0.010
     df = df.rename(columns={"properties.epw": "Source"})
 
     fig = px.scatter_mapbox(
@@ -363,7 +365,7 @@ def plot_location_epw_files(pathname):
         df_one_building,
         lat="lat",
         lon="lon",
-        hover_name=df_one_building[ColNames.NAME],
+        hover_name=df_one_building[Variables.NAME.col_name],
         color_discrete_sequence=["#4895ef"],
         hover_data=[
             "period",

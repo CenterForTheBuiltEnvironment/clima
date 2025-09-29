@@ -7,7 +7,7 @@ import numpy as np
 
 from config import PageUrls, DocLinks, PageInfo
 from pages.lib.global_element_ids import ElementIds
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
@@ -211,10 +211,10 @@ def update_outdoor_comfort_output(_, df):
         Description of the best weather condition(s).
     """
     cols = [
-        ColNames.UTCI_NOSUN_WIND_CATEGORIES,
-        ColNames.UTCI_NOSUN_NOWIND_CATEGORIES,
-        ColNames.UTCI_SUN_WIND_CATEGORIES,
-        ColNames.UTCI_SUN_NOWIND_CATEGORIES,
+        Variables.UTCI_NOSUN_WIND_CATEGORIES.col_name,
+        Variables.UTCI_NOSUN_NOWIND_CATEGORIES.col_name,
+        Variables.UTCI_SUN_WIND_CATEGORIES.col_name,
+        Variables.UTCI_SUN_NOWIND_CATEGORIES.col_name,
     ]
     cols_with_the_highest_number_of_zero = []
     highest_count = 0

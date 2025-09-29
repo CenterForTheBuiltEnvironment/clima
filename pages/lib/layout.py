@@ -2,7 +2,7 @@ import dash
 from dash import dcc, Input, Output, State, callback
 import dash_mantine_components as dmc
 from dash_iconify import DashIconify
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables
 from config import DocLinks, UnitSystem
 from pages.lib.global_element_ids import ElementIds
 
@@ -59,17 +59,17 @@ def create_navbar():
     # Secondary Menu
     sub_links = [
         dmc.NavLink(
-            label=page[ColNames.NAME],
+            label=page[Variables.NAME.col_name],
             leftSection=DashIconify(
-                icon=NavBarIcons.get_icon(page[ColNames.NAME]), width=20
+                icon=NavBarIcons.get_icon(page[Variables.NAME.col_name]), width=20
             ),
-            href=page[ColNames.PATH],
-            id=f"nav-{page[ColNames.PATH].replace('/', '')}",
+            href=page[Variables.PATH.col_name],
+            id=f"nav-{page[Variables.PATH.col_name].replace('/', '')}",
             active=False,
             styles=nav_link_styles,
         )
         for page in dash.page_registry.values()
-        if page[ColNames.NAME] not in ["404"]
+        if page[Variables.NAME.col_name] not in ["404"]
     ]
 
     parent_group = dmc.NavLink(
@@ -404,18 +404,18 @@ def toggle_navbar_and_width(
 
 @callback(
     [
-        Output(f"nav-{page[ColNames.PATH].replace('/', '')}", "active")
+        Output(f"nav-{page[Variables.PATH.col_name].replace('/', '')}", "active")
         for page in dash.page_registry.values()
-        if page[ColNames.NAME] not in ["404"]
+        if page[Variables.NAME.col_name] not in ["404"]
     ],
     Input(ElementIds.MAIN_URL, "pathname"),
     prevent_initial_call=True,
 )
 def update_nav_active_state(pathname):
     return [
-        pathname == page[ColNames.PATH]
+        pathname == page[Variables.PATH.col_name]
         for page in dash.page_registry.values()
-        if page[ColNames.NAME] not in ["404"]
+        if page[Variables.NAME.col_name] not in ["404"]
     ]
 
 
