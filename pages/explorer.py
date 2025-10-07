@@ -13,7 +13,7 @@ from pages.lib.charts_data_explorer import (
     three_var_graph,
 )
 from pages.lib.global_element_ids import ElementIds
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
@@ -93,25 +93,19 @@ def section_one():
             id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(
-            type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE, p="sm")
-        ),
+        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE)),
         title_with_link(
             text="Daily chart",
             id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(
-            type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY, p="sm")
-        ),
+        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY)),
         title_with_link(
             text="Heatmap chart",
             id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(
-            type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP, p="sm")
-        ),
+        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP)),
         title_with_tooltip(
             text="Descriptive statistics",
             tooltip_text="count, mean, std, min, max, and percentiles",
@@ -209,7 +203,7 @@ def section_two_inputs():
                                 dropdown(
                                     id=ElementIds.SEC2_VAR_DROPDOWN,
                                     options=explore_dropdown_names,
-                                    value=ColNames.RH,
+                                    value=Variables.RH.col_name,
                                 ),
                                 flex=1,
                             ),
@@ -293,7 +287,7 @@ def section_two_inputs():
                                         dropdown(
                                             id=ElementIds.SEC2_DATA_FILTER_VAR,
                                             options=explore_dropdown_names,
-                                            value=ColNames.RH,
+                                            value=Variables.RH.col_name,
                                         ),
                                         flex=1,
                                     ),
@@ -396,7 +390,7 @@ def section_three_inputs():
                                 dropdown(
                                     id=ElementIds.TAB6_SEC3_VAR_Y_DROPDOWN,
                                     options=explore_dropdown_names,
-                                    value=ColNames.RH,
+                                    value=Variables.RH.col_name,
                                 ),
                                 flex=1,
                             ),
@@ -484,7 +478,7 @@ def section_three_inputs():
                                 dropdown(
                                     id=ElementIds.TAB6_SEC3_FILTER_VAR_DROPDOWN,
                                     options=explore_dropdown_names,
-                                    value=ColNames.RH,
+                                    value=Variables.RH.col_name,
                                 ),
                                 flex=1,
                             ),
@@ -536,14 +530,12 @@ def section_three():
                 type="circle",
                 children=dmc.Paper(
                     id=ElementIds.THREE_VAR,
-                    p="sm",
                 ),
             ),
             dcc.Loading(
                 type="circle",
                 children=dmc.Paper(
                     id=ElementIds.TWO_VAR,
-                    p="sm",
                 ),
             ),
         ],
@@ -888,13 +880,20 @@ def update_table(
     )
 
     filtered_df = df[
-        (df[ColNames.MONTH] >= start_month)
-        & (df[ColNames.MONTH] <= end_month)
-        & (df[ColNames.HOUR] >= start_hour)
-        & (df[ColNames.HOUR] <= end_hour)
+        (df[Variables.MONTH.col_name] >= start_month)
+        & (df[Variables.MONTH.col_name] <= end_month)
+        & (df[Variables.HOUR.col_name] >= start_hour)
+        & (df[Variables.HOUR.col_name] <= end_hour)
     ]
     return summary_table_tmp_rh_tab(
-        filtered_df[[ColNames.MONTH, ColNames.HOUR, dd_value, ColNames.MONTH_NAMES]],
+        filtered_df[
+            [
+                Variables.MONTH.col_name,
+                Variables.HOUR.col_name,
+                dd_value,
+                Variables.MONTH_NAMES.col_name,
+            ]
+        ],
         dd_value,
         si_ip,
     )

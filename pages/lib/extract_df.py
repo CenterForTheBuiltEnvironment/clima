@@ -16,10 +16,10 @@ from pythermalcomfort.models import adaptive_ashrae
 from pythermalcomfort.models import solar_gain
 from pythermalcomfort.models import utci
 from pythermalcomfort.utilities import running_mean_outdoor_temperature
-
+from config import UnitSystem
 from pages.lib.global_scheme import month_lst
 from pages.lib.utils import code_timer
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables, VariableInfo
 
 
 @code_timer
@@ -68,7 +68,7 @@ def get_location_info(lst, file_name):
 
     # from OneClimaBuilding files extract info about reference years
     try:
-        location_info[ColNames.PERIOD] = re.search(
+        location_info[Variables.PERIOD.col_name] = re.search(
             r'cord=[\'"]?([^\'" >]+);', lst[5]
         ).group(1)
     except AttributeError:
@@ -87,7 +87,7 @@ def utci_calc(
     t_air_col: str,
     t_rad_col: str,
     wind_col: str,
-    rh_col: str = ColNames.RH,
+    rh_col: str = Variables.RH.col_name,
 ) -> pd.Series:
     """Call utci() using values from df columns."""
     return utci(df[t_air_col], df[t_rad_col], df[wind_col], df[rh_col])
@@ -102,21 +102,25 @@ def add_utci_variants(df: pd.DataFrame) -> pd.DataFrame:
       - Sun_noWind   : DBT + MRT + wind_speed_utci_0
     """
     recipes = {
-        ColNames.UTCI_NO_SUN_WIND: (
-            ColNames.DBT,
-            ColNames.DBT,
-            ColNames.WIND_SPEED_UTCI,
+        Variables.UTCI_NO_SUN_WIND.col_name: (
+            Variables.DBT.col_name,
+            Variables.DBT.col_name,
+            Variables.WIND_SPEED_UTCI.col_name,
         ),
-        ColNames.UTCI_NO_SUN_NO_WIND: (
-            ColNames.DBT,
-            ColNames.DBT,
-            ColNames.WIND_SPEED_UTCI_0,
+        Variables.UTCI_NO_SUN_NO_WIND.col_name: (
+            Variables.DBT.col_name,
+            Variables.DBT.col_name,
+            Variables.WIND_SPEED_UTCI_0.col_name,
         ),
-        ColNames.UTCI_SUN_WIND: (ColNames.DBT, ColNames.MRT, ColNames.WIND_SPEED_UTCI),
-        ColNames.UTCI_SUN_NO_WIND: (
-            ColNames.DBT,
-            ColNames.MRT,
-            ColNames.WIND_SPEED_UTCI_0,
+        Variables.UTCI_SUN_WIND.col_name: (
+            Variables.DBT.col_name,
+            Variables.MRT.col_name,
+            Variables.WIND_SPEED_UTCI.col_name,
+        ),
+        Variables.UTCI_SUN_NO_WIND.col_name: (
+            Variables.DBT.col_name,
+            Variables.MRT.col_name,
+            Variables.WIND_SPEED_UTCI_0.col_name,
         ),
     }
     for out_col, (t_air, t_rad, wind) in recipes.items():
@@ -127,10 +131,10 @@ def add_utci_variants(df: pd.DataFrame) -> pd.DataFrame:
 def add_utci_categories(df: pd.DataFrame) -> pd.DataFrame:
     """Bin the four UTCI columns into categories."""
     mapping = {
-        ColNames.UTCI_NO_SUN_WIND: ColNames.UTCI_NOSUN_WIND_CATEGORIES,
-        ColNames.UTCI_NO_SUN_NO_WIND: ColNames.UTCI_NOSUN_NOWIND_CATEGORIES,
-        ColNames.UTCI_SUN_WIND: ColNames.UTCI_SUN_WIND_CATEGORIES,
-        ColNames.UTCI_SUN_NO_WIND: ColNames.UTCI_SUN_NOWIND_CATEGORIES,
+        Variables.UTCI_NO_SUN_WIND.col_name: Variables.UTCI_NOSUN_WIND_CATEGORIES.col_name,
+        Variables.UTCI_NO_SUN_NO_WIND.col_name: Variables.UTCI_NOSUN_NOWIND_CATEGORIES.col_name,
+        Variables.UTCI_SUN_WIND.col_name: Variables.UTCI_SUN_WIND_CATEGORIES.col_name,
+        Variables.UTCI_SUN_NO_WIND.col_name: Variables.UTCI_SUN_NOWIND_CATEGORIES.col_name,
     }
     for src_col, dst_col in mapping.items():
         df[dst_col] = pd.cut(x=df[src_col], bins=UTCI_BINS, labels=UTCI_LABELS)
@@ -156,7 +160,7 @@ def create_df(lst, file_name):
 
     # from OneClimaBuilding files extract info about reference years
     try:
-        location_info[ColNames.PERIOD] = re.search(
+        location_info[Variables.PERIOD.col_name] = re.search(
             r'cord=[\'"]?([^\'" >]+);', lst[5]
         ).group(1)
     except AttributeError:
@@ -174,35 +178,35 @@ def create_df(lst, file_name):
         del line[-1]
 
     col_names = [
-        "year",
-        "month",
-        "day",
-        "hour",
-        "DBT",
-        "DPT",
-        "RH",
-        "p_atm",
-        "extr_hor_rad",
-        "hor_ir_rad",
-        "glob_hor_rad",
-        "dir_nor_rad",
-        "dif_hor_rad",
-        "glob_hor_ill",
-        "dir_nor_ill",
-        "dif_hor_ill",
-        "Zlumi",
-        "wind_dir",
-        ColNames.WIND_SPEED,
-        "tot_sky_cover",
-        "Oskycover",
-        "Vis",
-        "Cheight",
-        "PWobs",
-        "PWcodes",
-        "Pwater",
-        "AsolOptD",
-        "SnowD",
-        "DaySSnow",
+        Variables.YEAR.col_name,
+        Variables.MONTH.col_name,
+        Variables.DAY.col_name,
+        Variables.HOUR.col_name,
+        Variables.DBT.col_name,
+        Variables.DPT.col_name,
+        Variables.RH.col_name,
+        Variables.P_ATM.col_name,
+        Variables.EXTR_HOR_RAD.col_name,
+        Variables.HOR_IR_RAD.col_name,
+        Variables.GLOB_HOR_RAD.col_name,
+        Variables.DIR_NOR_RAD.col_name,
+        Variables.DIF_HOR_RAD.col_name,
+        Variables.GLOB_HOR_ILL.col_name,
+        Variables.DIR_NOR_ILL.col_name,
+        Variables.DIF_HOR_ILL.col_name,
+        Variables.ZLUMI.col_name,
+        Variables.WIND_DIR.col_name,
+        Variables.WIND_SPEED.col_name,
+        Variables.TOT_SKY_COVER.col_name,
+        Variables.OPAQUE_SKY_COVER.col_name,
+        Variables.VIS.col_name,
+        Variables.CLOUD_HEIGHT.col_name,
+        Variables.PRECIPITATION_OBSERVATION.col_name,
+        Variables.PRECIPITATION_CODES.col_name,
+        Variables.PRECIPITATION_WATER.col_name,
+        Variables.AEROSOL_OPTICAL_DEPTH.col_name,
+        Variables.SNOW_DEPTH.col_name,
+        Variables.DAILY_SNOW.col_name,
     ]
 
     # assign column names, if fewer cols are there than supposed assign 9999 to that col
@@ -214,70 +218,88 @@ def create_df(lst, file_name):
         epw_df = pd.DataFrame(columns=col_names, data=lst)
 
     # from EnergyPlus files extract info about reference years
-    if not location_info[ColNames.PERIOD]:
-        years = epw_df[ColNames.YEAR].astype("int").unique()
+    if not location_info[Variables.PERIOD.col_name]:
+        years = epw_df[Variables.YEAR.col_name].astype("int").unique()
         if len(years) == 1:
             year_rounded_up = int(math.ceil(years[0] / 10.0)) * 10
-            location_info[ColNames.PERIOD] = f"{year_rounded_up - 10}-{year_rounded_up}"
+            location_info[Variables.PERIOD.col_name] = (
+                f"{year_rounded_up - 10}-{year_rounded_up}"
+            )
         else:
             min_year = int(math.floor(min(years) / 10.0)) * 10
             max_year = int(math.ceil(max(years) / 10.0)) * 10
-            location_info[ColNames.PERIOD] = f"{min_year}-{max_year}"
+            location_info[Variables.PERIOD.col_name] = f"{min_year}-{max_year}"
 
     # Add fake_year
-    epw_df[ColNames.FAKE_YEAR] = ColNames.YEAR
+    epw_df[Variables.FAKE_YEAR.col_name] = Variables.YEAR.col_name
 
     # Add in month names
     month_look_up = {ix + 1: month for ix, month in enumerate(month_lst)}
-    epw_df[ColNames.MONTH_NAMES] = (
-        epw_df[ColNames.MONTH].astype("int").map(month_look_up)
+    epw_df[Variables.MONTH_NAMES.col_name] = (
+        epw_df[Variables.MONTH.col_name].astype("int").map(month_look_up)
     )
 
     # Change to int type
-    epw_df[[ColNames.YEAR, ColNames.DAY, ColNames.MONTH, ColNames.HOUR]] = epw_df[
-        [ColNames.YEAR, ColNames.DAY, ColNames.MONTH, ColNames.HOUR]
+    epw_df[
+        [
+            Variables.YEAR.col_name,
+            Variables.DAY.col_name,
+            Variables.MONTH.col_name,
+            Variables.HOUR.col_name,
+        ]
+    ] = epw_df[
+        [
+            Variables.YEAR.col_name,
+            Variables.DAY.col_name,
+            Variables.MONTH.col_name,
+            Variables.HOUR.col_name,
+        ]
     ].astype(int)
 
     # Add in DOY
     df_doy = (
-        epw_df.groupby([ColNames.MONTH, ColNames.DAY])[ColNames.HOUR]
+        epw_df.groupby([Variables.MONTH.col_name, Variables.DAY.col_name])[
+            Variables.HOUR.col_name
+        ]
         .count()
         .reset_index()
     )
-    df_doy[ColNames.DOY] = df_doy.index + 1
+    df_doy[Variables.DOY.col_name] = df_doy.index + 1
     epw_df = pd.merge(
         epw_df,
-        df_doy[[ColNames.MONTH, ColNames.DAY, ColNames.DOY]],
-        on=[ColNames.MONTH, ColNames.DAY],
+        df_doy[
+            [Variables.MONTH.col_name, Variables.DAY.col_name, Variables.DOY.col_name]
+        ],
+        on=[Variables.MONTH.col_name, Variables.DAY.col_name],
         how="left",
     )
 
     change_to_float = [
-        "DBT",
-        "DPT",
-        "RH",
-        "p_atm",
-        "extr_hor_rad",
-        "hor_ir_rad",
-        "glob_hor_rad",
-        "dir_nor_rad",
-        "dif_hor_rad",
-        "glob_hor_ill",
-        "dir_nor_ill",
-        "dif_hor_ill",
-        "Zlumi",
-        "wind_dir",
-        ColNames.WIND_SPEED,
-        "tot_sky_cover",
-        "Oskycover",
-        "Vis",
-        "Cheight",
-        "PWobs",
-        "PWcodes",
-        "Pwater",
-        "AsolOptD",
-        "SnowD",
-        "DaySSnow",
+        Variables.DBT.col_name,
+        Variables.DPT.col_name,
+        Variables.RH.col_name,
+        Variables.P_ATM.col_name,
+        Variables.EXTR_HOR_RAD.col_name,
+        Variables.HOR_IR_RAD.col_name,
+        Variables.GLOB_HOR_RAD.col_name,
+        Variables.DIR_NOR_RAD.col_name,
+        Variables.DIF_HOR_RAD.col_name,
+        Variables.GLOB_HOR_ILL.col_name,
+        Variables.DIR_NOR_ILL.col_name,
+        Variables.DIF_HOR_ILL.col_name,
+        Variables.ZLUMI.col_name,
+        Variables.WIND_DIR.col_name,
+        Variables.WIND_SPEED.col_name,
+        Variables.TOT_SKY_COVER.col_name,
+        Variables.OPAQUE_SKY_COVER.col_name,
+        Variables.VIS.col_name,
+        Variables.CLOUD_HEIGHT.col_name,
+        Variables.PRECIPITATION_OBSERVATION.col_name,
+        Variables.PRECIPITATION_CODES.col_name,
+        Variables.PRECIPITATION_WATER.col_name,
+        Variables.AEROSOL_OPTICAL_DEPTH.col_name,
+        Variables.SNOW_DEPTH.col_name,
+        Variables.DAILY_SNOW.col_name,
     ]
     epw_df[change_to_float] = epw_df[change_to_float].astype(float)
 
@@ -285,24 +307,34 @@ def create_df(lst, file_name):
     times = pd.date_range(
         "2019-01-01 00:00:00", "2020-01-01", inclusive="left", freq="h", tz="UTC"
     )
-    epw_df[ColNames.UTC_TIME] = pd.to_datetime(times)
-    delta = timedelta(days=0, hours=location_info[ColNames.TIME_ZONE] - 1, minutes=0)
+    epw_df[Variables.UTC_TIME.col_name] = pd.to_datetime(times)
+    delta = timedelta(
+        days=0, hours=location_info[Variables.TIME_ZONE.col_name] - 1, minutes=0
+    )
     times = times - delta
-    epw_df[ColNames.TIMES] = times
+    epw_df[Variables.TIMES.col_name] = times
     epw_df.set_index(
-        ColNames.TIMES, drop=False, append=False, inplace=True, verify_integrity=False
+        Variables.TIMES.col_name,
+        drop=False,
+        append=False,
+        inplace=True,
+        verify_integrity=False,
     )
 
     # Add in solar position df
     solar_position = solarposition.get_solarposition(
-        times, location_info[ColNames.LAT], location_info[ColNames.LON]
+        times,
+        location_info[Variables.LAT.col_name],
+        location_info[Variables.LON.col_name],
     )
     epw_df = pd.concat([epw_df, solar_position], axis=1)
 
     # Add in UTCI
-    sol_altitude = epw_df[ColNames.ELEVATION].mask(epw_df[ColNames.ELEVATION] <= 0, 0)
+    sol_altitude = epw_df[Variables.ELEVATION.col_name].mask(
+        epw_df[Variables.ELEVATION.col_name] <= 0, 0
+    )
     sharp = expand_to_hours(45)
-    sol_radiation_dir = epw_df[ColNames.DIR_NOR_RAD]
+    sol_radiation_dir = epw_df[Variables.DIR_NOR_RAD.col_name]
     sol_transmittance = expand_to_hours(1)  # CHECK VALUE
     f_svv = expand_to_hours(1)  # CHECK VALUE
     f_bes = expand_to_hours(1)  # CHECK VALUE
@@ -322,44 +354,52 @@ def create_df(lst, file_name):
         floor_reflectance,
     )
     mrt_df = pd.DataFrame.from_records(mrt)
-    mrt_df[ColNames.DELTA_MRT] = mrt_df[ColNames.DELTA_MRT].mask(
-        mrt_df[ColNames.DELTA_MRT] >= 70, 70
+    mrt_df[Variables.DELTA_MRT.col_name] = mrt_df[Variables.DELTA_MRT.col_name].mask(
+        mrt_df[Variables.DELTA_MRT.col_name] >= 70, 70
     )
     mrt_df = mrt_df.set_index(epw_df.times)
 
     epw_df = epw_df.join(mrt_df)
 
-    epw_df[ColNames.MRT] = epw_df[ColNames.DELTA_MRT] + epw_df[ColNames.DBT]
-    epw_df[ColNames.WIND_SPEED_UTCI] = epw_df[ColNames.WIND_SPEED]
-    epw_df[ColNames.WIND_SPEED_UTCI] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
-        epw_df[ColNames.WIND_SPEED_UTCI] >= 17, 16.9
+    epw_df[Variables.MRT.col_name] = (
+        epw_df[Variables.DELTA_MRT.col_name] + epw_df[Variables.DBT.col_name]
     )
-    epw_df[ColNames.WIND_SPEED_UTCI] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
-        epw_df[ColNames.WIND_SPEED_UTCI] <= 0.5, 0.6
-    )
-    epw_df[ColNames.WIND_SPEED_UTCI_0] = epw_df[ColNames.WIND_SPEED_UTCI].mask(
-        epw_df[ColNames.WIND_SPEED_UTCI] >= 0, 0.5
-    )
+    epw_df[Variables.WIND_SPEED_UTCI.col_name] = epw_df[Variables.WIND_SPEED.col_name]
+    epw_df[Variables.WIND_SPEED_UTCI.col_name] = epw_df[
+        Variables.WIND_SPEED_UTCI.col_name
+    ].mask(epw_df[Variables.WIND_SPEED_UTCI.col_name] >= 17, 16.9)
+    epw_df[Variables.WIND_SPEED_UTCI.col_name] = epw_df[
+        Variables.WIND_SPEED_UTCI.col_name
+    ].mask(epw_df[Variables.WIND_SPEED_UTCI.col_name] <= 0.5, 0.6)
+    epw_df[Variables.WIND_SPEED_UTCI_0.col_name] = epw_df[
+        Variables.WIND_SPEED_UTCI.col_name
+    ].mask(epw_df[Variables.WIND_SPEED_UTCI.col_name] >= 0, 0.5)
 
     epw_df = add_utci_variants(epw_df)
 
     epw_df = add_utci_categories(epw_df)
 
     # Add psy values
-    ta_rh = np.vectorize(psy.psy_ta_rh)(epw_df[ColNames.DBT], epw_df[ColNames.RH])
+    ta_rh = np.vectorize(psy.psy_ta_rh)(
+        epw_df[Variables.DBT.col_name], epw_df[Variables.RH.col_name]
+    )
     psy_df = pd.DataFrame.from_records(ta_rh)
     psy_df = psy_df.set_index(epw_df.times)
     epw_df = epw_df.join(psy_df)
 
     # calculate adaptive data
-    dbt_day_ave = epw_df.groupby([ColNames.DOY])[ColNames.DBT].mean().to_list()
+    dbt_day_ave = (
+        epw_df.groupby([Variables.DOY.col_name])[Variables.DBT.col_name]
+        .mean()
+        .to_list()
+    )
     n = 7
-    epw_df[ColNames.ADAPTIVE_COMFORT] = np.nan
-    epw_df[ColNames.ADAPTIVE_CMF_80_LOW] = np.nan
-    epw_df[ColNames.ADAPTIVE_CMF_80_UP] = np.nan
-    epw_df[ColNames.ADAPTIVE_CMF_90_LOW] = np.nan
-    epw_df[ColNames.ADAPTIVE_CMF_90_UP] = np.nan
-    epw_df[ColNames.ADAPTIVE_CMF_RMT] = np.nan
+    epw_df[Variables.ADAPTIVE_COMFORT.col_name] = np.nan
+    epw_df[Variables.ADAPTIVE_CMF_80_LOW.col_name] = np.nan
+    epw_df[Variables.ADAPTIVE_CMF_80_UP.col_name] = np.nan
+    epw_df[Variables.ADAPTIVE_CMF_90_LOW.col_name] = np.nan
+    epw_df[Variables.ADAPTIVE_CMF_90_UP.col_name] = np.nan
+    epw_df[Variables.ADAPTIVE_CMF_RMT.col_name] = np.nan
     for day in epw_df.DOY.unique():
         i = day - 1
         if i < n:
@@ -380,19 +420,21 @@ def create_df(lst, file_name):
             v=0.5,
             limit_inputs=False,
         )
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_RMT] = rmt
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_COMFORT] = r[ColNames.TMP_CMF]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_LOW] = r[
-            ColNames.TMP_CMF_80_LOW
+        epw_df.loc[epw_df.DOY == day, Variables.ADAPTIVE_CMF_RMT.col_name] = rmt
+        epw_df.loc[epw_df.DOY == day, Variables.ADAPTIVE_COMFORT.col_name] = r[
+            Variables.TMP_CMF.col_name
         ]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_80_UP] = r[
-            ColNames.TMP_CMF_80_UP
+        epw_df.loc[epw_df.DOY == day, Variables.ADAPTIVE_CMF_80_LOW.col_name] = r[
+            Variables.TMP_CMF_80_LOW.col_name
         ]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_LOW] = r[
-            ColNames.TMP_CMF_90_LOW
+        epw_df.loc[epw_df.DOY == day, Variables.ADAPTIVE_CMF_80_UP.col_name] = r[
+            Variables.TMP_CMF_80_UP.col_name
         ]
-        epw_df.loc[epw_df.DOY == day, ColNames.ADAPTIVE_CMF_90_UP] = r[
-            ColNames.TMP_CMF_90_UP
+        epw_df.loc[epw_df.DOY == day, Variables.ADAPTIVE_CMF_90_LOW.col_name] = r[
+            Variables.TMP_CMF_90_LOW.col_name
+        ]
+        epw_df.loc[epw_df.DOY == day, Variables.ADAPTIVE_CMF_90_UP.col_name] = r[
+            Variables.TMP_CMF_90_UP.col_name
         ]
 
     return epw_df, location_info
@@ -408,52 +450,77 @@ def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
         return
     match name:
         case (
-            ColNames.DBT
-            | ColNames.DPT
-            | ColNames.T_WB
-            | ColNames.T_DP
-            | ColNames.UTCI_SUN_WIND
-            | ColNames.UTCI_NO_SUN_WIND
-            | ColNames.UTCI_SUN_NO_WIND
-            | ColNames.UTCI_NO_SUN_NO_WIND
-            | ColNames.ADAPTIVE_COMFORT
-            | ColNames.ADAPTIVE_CMF_80_LOW
-            | ColNames.ADAPTIVE_CMF_80_UP
-            | ColNames.ADAPTIVE_CMF_90_LOW
-            | ColNames.ADAPTIVE_CMF_90_UP
+            Variables.DBT.col_name
+            | Variables.DPT.col_name
+            | Variables.T_WB.col_name
+            | Variables.T_DP.col_name
+            | Variables.UTCI_SUN_WIND.col_name
+            | Variables.UTCI_NO_SUN_WIND.col_name
+            | Variables.UTCI_SUN_NO_WIND.col_name
+            | Variables.UTCI_NO_SUN_NO_WIND.col_name
+            | Variables.ADAPTIVE_COMFORT.col_name
+            | Variables.ADAPTIVE_CMF_80_LOW.col_name
+            | Variables.ADAPTIVE_CMF_80_UP.col_name
+            | Variables.ADAPTIVE_CMF_90_LOW.col_name
+            | Variables.ADAPTIVE_CMF_90_UP.col_name
         ):
             df[name] = df[name] * 1.8 + 32
 
-        case ColNames.P_ATM | ColNames.P_VAP | ColNames.P_SAT:
+        case (
+            Variables.P_ATM.col_name
+            | Variables.P_VAP.col_name
+            | Variables.P_SAT.col_name
+        ):
             df[name] = df[name] * 0.000145038
 
         case (
-            ColNames.EXTR_HOR_RAD
-            | ColNames.HOR_IR_RAD
-            | ColNames.GLOB_HOR_RAD
-            | ColNames.DIR_NOR_RAD
-            | ColNames.DIF_HOR_RAD
+            Variables.EXTR_HOR_RAD.col_name
+            | Variables.HOR_IR_RAD.col_name
+            | Variables.GLOB_HOR_RAD.col_name
+            | Variables.DIR_NOR_RAD.col_name
+            | Variables.DIF_HOR_RAD.col_name
         ):
             df[name] = df[name] * 0.3169983306
 
-        case ColNames.GLOB_HOR_ILL | ColNames.DIR_NOR_ILL | ColNames.DIF_HOR_ILL:
+        case (
+            Variables.GLOB_HOR_ILL.col_name
+            | Variables.DIR_NOR_ILL.col_name
+            | Variables.DIF_HOR_ILL.col_name
+        ):
             df[name] = df[name] * 0.0929
 
-        case ColNames.ZLUMI:
+        case Variables.ZLUMI.col_name:
             df[name] = df[name] * 0.0929
 
-        case ColNames.WIND_SPEED:
+        case Variables.WIND_SPEED.col_name:
             df[name] = df[name] * 196.85039370078738
 
-        case ColNames.VIS:
+        case Variables.VIS.col_name:
             df[name] = df[name] * 0.6215
 
-        case ColNames.EH:
+        case Variables.EH.col_name:
             df[name] = df[name] * 0.000429923
 
         case _:
             # No conversion needed for this column
             pass
+
+
+def convert_df_units(df: pd.DataFrame, unit_system: str) -> pd.DataFrame:
+    """Convert DataFrame columns to the specified unit system."""
+    if unit_system != UnitSystem.IP:
+        return df  # Currently we only support SI → IP
+
+    df_converted = df.copy()
+
+    for attr in dir(Variables):
+        if attr.isupper():
+            var = getattr(Variables, attr)
+            if isinstance(var, VariableInfo):
+                col = var.col_name
+                convert_SI_to_IP(df_converted, col)
+
+    return df_converted
 
 
 def convert_data(df, mapping_json):

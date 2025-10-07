@@ -9,13 +9,12 @@ import plotly.graph_objects as go
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_scheme import (
     template,
-    mapping_dictionary,
     tight_margins,
     month_lst,
 )
 from pages.lib.utils import get_max_min_value
 from pages.lib.template_graphs import filter_df_by_month_and_hour
-from pages.lib.global_column_names import ColNames
+from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
@@ -286,8 +285,8 @@ def nv_heatmap(
         month, hour, invert_month, invert_hour
     )
 
-    var = ColNames.DBT
-    filter_var = ColNames.DPT
+    var = Variables.DBT.col_name
+    filter_var = Variables.DPT.col_name
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
         df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), var] = None
@@ -295,7 +294,7 @@ def nv_heatmap(
     if dpt_data_filter:
         df.loc[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val), var] = None
 
-        if df.dropna(subset=[ColNames.MONTH]).shape[0] == 0:
+        if df.dropna(subset=[Variables.MONTH.col_name]).shape[0] == 0:
             return (
                 dmc.Alert(
                     title="Notice",
@@ -314,17 +313,20 @@ def nv_heatmap(
         df, time_filter, month, hour, invert_month, invert_hour, var
     )
 
-    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
+    variable = VariableInfo.from_col_name(var)
+    filter = VariableInfo.from_col_name(filter_var)
 
-    filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]
+    var_unit = variable.get_unit(si_ip)
 
-    var_range = mapping_dictionary[var][si_ip][ColNames.RANGE]
+    filter_unit = filter.get_unit(si_ip)
 
-    var_name = mapping_dictionary[var][ColNames.NAME]
+    var_range = variable.get_range(si_ip)
 
-    filter_name = mapping_dictionary[filter_var][ColNames.NAME]
+    var_name = variable.get_name()
 
-    var_color = mapping_dictionary[var][ColNames.COLOR]
+    filter_name = filter.get_name()
+
+    var_color = variable.get_color()
 
     if global_local == "global":
         range_z = var_range
@@ -348,15 +350,19 @@ def nv_heatmap(
 
     fig = go.Figure(
         data=go.Heatmap(
-            y=df[ColNames.HOUR] - 0.5,  # Offset by 0.5 to center the hour labels
-            x=df[ColNames.UTC_TIME].dt.date,
+            y=df[Variables.HOUR.col_name]
+            - 0.5,  # Offset by 0.5 to center the hour labels
+            x=df[Variables.UTC_TIME.col_name].dt.date,
             z=df[var],
             colorscale=var_color,
             zmin=range_z[0],
             zmax=range_z[1],
             connectgaps=False,
             hoverongaps=False,
-            customdata=np.stack((df[ColNames.MONTH_NAMES], df[ColNames.DAY]), axis=-1),
+            customdata=np.stack(
+                (df[Variables.MONTH_NAMES.col_name], df[Variables.DAY.col_name]),
+                axis=-1,
+            ),
             hovertemplate=(
                 "<b>"
                 + var
@@ -455,19 +461,22 @@ def nv_bar_chart(
         month, hour, invert_month, invert_hour
     )
 
-    var = ColNames.DBT
-    filter_var = ColNames.DPT
+    var = Variables.DBT.col_name
+    filter_var = Variables.DPT.col_name
 
-    var_unit = mapping_dictionary[var][si_ip][ColNames.UNIT]
-    filter_unit = mapping_dictionary[filter_var][si_ip][ColNames.UNIT]
+    variable = VariableInfo.from_col_name(var)
+    filter = VariableInfo.from_col_name(filter_var)
 
-    var_name = mapping_dictionary[var][ColNames.NAME]
+    var_unit = variable.get_unit(si_ip)
+    filter_unit = filter.get_unit(si_ip)
 
-    filter_name = mapping_dictionary[filter_var][ColNames.NAME]
+    var_name = variable.get_name()
+
+    filter_name = filter.get_name()
 
     color_in = "dodgerblue"
 
-    df[ColNames.NV_ALLOWED] = 1
+    df[Variables.NV_ALLOWED.col_name] = 1
 
     df = filter_df_by_month_and_hour(
         df, time_filter, month, hour, invert_month, invert_hour, "nv_allowed"
@@ -475,20 +484,27 @@ def nv_bar_chart(
 
     # this should be the total after filtering by time
     tot_month_hours = (
-        df.groupby(df[ColNames.UTC_TIME].dt.month)[ColNames.NV_ALLOWED].sum().values
+        df.groupby(df[Variables.UTC_TIME.col_name].dt.month)[
+            Variables.NV_ALLOWED.col_name
+        ]
+        .sum()
+        .values
     )
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
         df.loc[
-            (df[var] < min_dbt_val) | (df[var] > max_dbt_val), ColNames.NV_ALLOWED
+            (df[var] < min_dbt_val) | (df[var] > max_dbt_val),
+            Variables.NV_ALLOWED.col_name,
         ] = 0
 
     if dpt_data_filter:
-        df.loc[(df[filter_var] > max_dpt_val), ColNames.NV_ALLOWED] = 0
+        df.loc[(df[filter_var] > max_dpt_val), Variables.NV_ALLOWED.col_name] = 0
 
     n_hours_nv_allowed = (
-        df.dropna(subset=ColNames.NV_ALLOWED)
-        .groupby(df[ColNames.UTC_TIME].dt.month)[ColNames.NV_ALLOWED]
+        df.dropna(subset=Variables.NV_ALLOWED.col_name)
+        .groupby(df[Variables.UTC_TIME.col_name].dt.month)[
+            Variables.NV_ALLOWED.col_name
+        ]
         .sum()
         .values
     )
@@ -498,7 +514,7 @@ def nv_bar_chart(
     if not normalize:
         fig = go.Figure(
             go.Bar(
-                x=df[ColNames.MONTH_NAMES].unique(),
+                x=df[Variables.MONTH_NAMES.col_name].unique(),
                 y=n_hours_nv_allowed,
                 name="",
                 marker_color=color_in,
@@ -520,7 +536,7 @@ def nv_bar_chart(
 
     else:
         trace1 = go.Bar(
-            x=df[ColNames.MONTH_NAMES].unique(),
+            x=df[Variables.MONTH_NAMES.col_name].unique(),
             y=per_time_nv_allowed,
             name="",
             marker_color=color_in,
