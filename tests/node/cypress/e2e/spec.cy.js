@@ -22,7 +22,7 @@ function click_tab(name) {
 }
 
 function load_epw() {
-  cy.get('input[type=file]').selectFile('test.epw', {force: true});
+  cy.get('input[type=file]').selectFile('test.epw', { force: true });
 }
 
 describe('Clima', () => {

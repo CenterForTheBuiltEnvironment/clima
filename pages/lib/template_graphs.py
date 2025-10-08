@@ -370,6 +370,7 @@ def heatmap_with_filter(
     invert_month,
     invert_hour,
     title,
+    z_range=None,
 ):
     """General function that returns a heatmap."""
     variable = VariableInfo.from_col_name(var)

@@ -5,6 +5,7 @@ import re
 import zipfile
 from datetime import timedelta
 from urllib.request import Request, urlopen
+from functools import lru_cache
 
 import logging
 import numpy as np
@@ -47,6 +48,13 @@ def get_data(source_url):
         except Exception as e:
             logging.error(f"Failed to fetch EPW data: {e}")
             return None
+
+
+@lru_cache(maxsize=64)
+def get_global_temp_range(location: str, col_name: str) -> tuple[float, float]:
+    df_all = get_data(location)  # Take the full-year data
+    series = df_all[col_name].replace([np.inf, -np.inf], np.nan).dropna()
+    return float(series.min()), float(series.max())
 
 
 @code_timer
@@ -254,7 +262,9 @@ def create_df(lst, file_name):
             Variables.MONTH.col_name,
             Variables.HOUR.col_name,
         ]
-    ].astype(int)
+    ].astype(
+        int
+    )
 
     # Add in DOY
     df_doy = (
