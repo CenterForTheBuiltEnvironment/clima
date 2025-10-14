@@ -1,5 +1,6 @@
 import dash
 from dash import dcc
+from dash import no_update
 import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 
@@ -12,7 +13,6 @@ from pages.lib.global_scheme import (
     tight_margins,
     month_lst,
 )
-from pages.lib.utils import get_max_min_value
 from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_element_ids import ElementIds
@@ -278,6 +278,8 @@ def nv_heatmap(
     invert_hour,
     si_ip,
 ):
+    if df is None:
+        return no_update
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
@@ -320,19 +322,16 @@ def nv_heatmap(
 
     filter_unit = filter.get_unit(si_ip)
 
-    var_range = variable.get_range(si_ip)
-
     var_name = variable.get_name()
 
     filter_name = filter.get_name()
 
     var_color = variable.get_color()
 
-    if global_local == "global":
-        range_z = var_range
+    if si_ip == UnitSystem.IP:
+        range_z = [32.0, 86.0]
     else:
-        data_max, data_min = get_max_min_value(df[var])
-        range_z = [data_min, data_max]
+        range_z = [0.0, 30.0]
 
     title = (
         f"Hours when the {var_name} is in the range {min_dbt_val} to"
@@ -420,6 +419,7 @@ def nv_heatmap(
         Input(ElementIds.NV_MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
         Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
+        Input(ElementIds.ID_NATURAL_VENTILATION_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.SWITCHES_INPUT, "checked"),
         Input(ElementIds.ENABLE_CONDENSATION, "value"),
     ],
@@ -441,6 +441,7 @@ def nv_bar_chart(
     time_filter,
     dbt_data_filter,
     click_dpt_filter,
+    global_local,
     normalize,
     condensation_enabled,
     df,
