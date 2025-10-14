@@ -254,9 +254,7 @@ def create_df(lst, file_name):
             Variables.MONTH.col_name,
             Variables.HOUR.col_name,
         ]
-    ].astype(
-        int
-    )
+    ].astype(int)
 
     # Add in DOY
     df_doy = (

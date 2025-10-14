@@ -322,8 +322,6 @@ def nv_heatmap(
 
     filter_unit = filter.get_unit(si_ip)
 
-    var_range = variable.get_range(si_ip)
-
     var_name = variable.get_name()
 
     filter_name = filter.get_name()
