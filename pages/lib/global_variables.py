@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional, List, Any
 from config import UnitSystem
-
+import colorcet as cc
+from plotly.colors import sequential as pseq
 
 @dataclass
 class IP:
@@ -263,25 +264,14 @@ class Variables:
         name="Wind direction",
         unit="°deg",
         range=[0, 360],
-        color=["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"],
+        color=list(pseq.Viridis),
     )
     WIND_SPEED = VariableInfo(
         col_name="wind_speed",
         name="Wind speed",
         unit="m/s",
         range=[0, 20],
-        color=[
-            "#D3D3D3",
-            "#b2f2ff",
-            "#33ddff",
-            "#00aaff",
-            "#0055ff",
-            "#0000ff",
-            "#aa00ff",
-            "#ff00ff",
-            "#cc0000",
-            "#ffaa00",
-        ],
+        color=list(cc.CET_L19),
         IP=IP(unit="fpm", range=[0, 20 * 196.85039370078738]),
     )
 
@@ -291,9 +281,9 @@ class Variables:
         unit="tenths",
         range=[0, 10],
         color=[
+            "#08306b",
             "#7ec9f3",
             "#e6eae9",
-            "#c2c2c2",
         ],
     )
     OPAQUE_SKY_COVER = VariableInfo(
@@ -302,9 +292,9 @@ class Variables:
         unit="tenths",
         range=[0, 10],
         color=[
+            "#08306b",
             "#7ec9f3",
             "#e6eae9",
-            "#c2c2c2",
         ],
     )
     VIS = VariableInfo(
@@ -313,9 +303,9 @@ class Variables:
         unit="km",
         range=[0, 100],
         color=[
+            "#08306b",
             "#7ec9f3",
             "#e6eae9",
-            "#c2c2c2",
         ],
         IP=IP(unit="miles", range=[0, 100 * 0.6215]),
     )

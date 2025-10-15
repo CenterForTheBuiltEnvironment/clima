@@ -1,5 +1,6 @@
 import plotly.io as pio
-
+import colorcet as cc
+from plotly.colors import sequential as pseq
 from pages.lib.global_variables import Variables, VariableInfo
 
 # Colors Dictionary
@@ -16,23 +17,12 @@ sun_colors = [
 ]
 light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
 bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
-wind_speed_color = [
-    "#ffffff",
-    "#b2f2ff",
-    "#33ddff",
-    "#00aaff",
-    "#0055ff",
-    "#0000ff",
-    "#aa00ff",
-    "#ff00ff",
-    "#cc0000",
-    "#ffaa00",
-]
-wind_dir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
+wind_speed_color = list(cc.CET_L19)
+wind_dir_color = list(pseq.Viridis)
 cloud_colors = [
+    "#08306b",
     "#7ec9f3",
     "#e6eae9",
-    "#c2c2c2",
 ]
 utci_categories_color = [
     # Let first 10% (0.1) of the values have color rgb(0, 0, 0)
