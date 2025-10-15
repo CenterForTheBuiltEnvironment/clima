@@ -17,7 +17,7 @@ sun_colors = [
 ]
 light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
 bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
-wind_speed_color = list(cc.CET_L19)
+wind_speed_color = [cc.CET_L19[int(round(i*(len(cc.CET_L19)-1)/(9)))] for i in range(10)]
 wind_dir_color = list(pseq.Viridis)
 cloud_colors = [
     "#08306b",

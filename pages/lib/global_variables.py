@@ -271,7 +271,7 @@ class Variables:
         name="Wind speed",
         unit="m/s",
         range=[0, 20],
-        color=list(cc.CET_L19),
+        color=[cc.CET_L19[int(round(i*(len(cc.CET_L19)-1)/(9)))] for i in range(10)],
         IP=IP(unit="fpm", range=[0, 20 * 196.85039370078738]),
     )
 
