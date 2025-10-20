@@ -430,6 +430,12 @@ def heatmap_with_filter(
         )
     )
 
+    if var == Variables.WIND_SPEED.col_name:
+        spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
+        if si_ip == UnitSystem.IP:
+            spd_bins = convert_bins(spd_bins)
+        fig.update_traces(zmin=0, zmax=spd_bins[-2])
+
     fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
 
     fig.update_yaxes(title_text="Hour")
@@ -491,6 +497,12 @@ def heatmap(df, var, global_local, si_ip):
             colorbar=dict(title=var_unit),
         )
     )
+
+    if var == Variables.WIND_SPEED.col_name:
+        spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
+        if si_ip == UnitSystem.IP:
+            spd_bins = convert_bins(spd_bins)
+        fig.update_traces(zmin=0, zmax=spd_bins[-2])
 
     fig.update_xaxes(dtick="M1", tickformat="%b", ticklabelmode="period")
 

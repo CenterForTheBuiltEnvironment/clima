@@ -17,7 +17,29 @@ sun_colors = [
 ]
 light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
 bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
-wind_speed_color = [cc.CET_L19[int(round(i*(len(cc.CET_L19)-1)/(9)))] for i in range(10)]
+wind_speed_color = [
+    cc.CET_L19[int(round(i * (len(cc.CET_L19) - 1) / (9)))] for i in range(10)
+]
+
+WIND_ROSE_BINS = [0.0, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7]
+
+
+def _stepped_colorscale_from_bins(bins, colors):
+    vmin, vmax = bins[0], bins[-1]
+    span = (vmax - vmin) or 1.0
+    cs = []
+    for i, c in enumerate(colors):
+        left = (bins[i] - vmin) / span
+        right = ((bins[i + 1] if i + 1 < len(bins) else vmax) - vmin) / span
+        cs.append((left, c))
+        cs.append((right, c))
+    return cs
+
+
+wind_speed_colorscale_rose = _stepped_colorscale_from_bins(
+    WIND_ROSE_BINS, wind_speed_color
+)
+
 wind_dir_color = list(pseq.Viridis)
 cloud_colors = [
     "#08306b",
