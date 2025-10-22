@@ -563,7 +563,7 @@ def wind_rose(df, title, month, hour, labels, si_ip):
 
     spd_colors = wind_speed_variable.get_color()
     spd_unit = wind_speed_variable.get_unit(si_ip)
-    spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
+    spd_bins = WIND_ROSE_BINS
     if si_ip == UnitSystem.IP:
         spd_bins = convert_bins(spd_bins)
 
