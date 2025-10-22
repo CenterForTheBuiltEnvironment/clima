@@ -1,5 +1,6 @@
 import plotly.io as pio
 import colorcet as cc
+import numpy as np
 from plotly.colors import sequential as pseq
 from pages.lib.global_variables import Variables, VariableInfo
 
@@ -17,11 +18,12 @@ sun_colors = [
 ]
 light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
 bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
+# Take 10 colors at equal intervals (including both ends)
 wind_speed_color = [
     cc.CET_L19[int(round(i * (len(cc.CET_L19) - 1) / (9)))] for i in range(10)
 ]
 
-WIND_ROSE_BINS = [0.0, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7]
+WIND_ROSE_BINS = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
 
 
 def _stepped_colorscale_from_bins(bins, colors):

@@ -6,7 +6,7 @@ from plotly.subplots import make_subplots
 from config import UnitSystem
 from pages.lib.utils import get_max_min_value
 import dash_bootstrap_components as dbc
-from .global_scheme import month_lst, template, tight_margins
+from .global_scheme import month_lst, template, tight_margins, WIND_ROSE_BINS
 from pages.lib.global_variables import Variables, VariableInfo
 from .utils import code_timer, determine_month_and_hour_filter
 
@@ -431,7 +431,7 @@ def heatmap_with_filter(
     )
 
     if var == Variables.WIND_SPEED.col_name:
-        spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
+        spd_bins = list(WIND_ROSE_BINS)
         if si_ip == UnitSystem.IP:
             spd_bins = convert_bins(spd_bins)
         fig.update_traces(zmin=0, zmax=spd_bins[-2])
@@ -499,7 +499,7 @@ def heatmap(df, var, global_local, si_ip):
     )
 
     if var == Variables.WIND_SPEED.col_name:
-        spd_bins = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
+        spd_bins = list(WIND_ROSE_BINS)
         if si_ip == UnitSystem.IP:
             spd_bins = convert_bins(spd_bins)
         fig.update_traces(zmin=0, zmax=spd_bins[-2])
