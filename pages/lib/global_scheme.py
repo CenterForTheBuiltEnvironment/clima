@@ -1,9 +1,7 @@
 import plotly.io as pio
 import numpy as np
-from pages.lib.global_variables import Variables, VariableInfo, CET_L19_10
+from pages.lib.global_variables import Variables, VariableInfo
 
-# Colors Dictionary
-wind_speed_color = CET_L19_10
 WIND_ROSE_BINS = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
 
 
@@ -51,7 +49,7 @@ def _stepped_colorscale_from_bins(bins, colors):
 
 
 wind_speed_colorscale_rose = _stepped_colorscale_from_bins(
-    WIND_ROSE_BINS, wind_speed_color
+    WIND_ROSE_BINS, Variables.WIND_SPEED.color
 )
 
 # containers

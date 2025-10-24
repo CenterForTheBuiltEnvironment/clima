@@ -1,57 +1,55 @@
 from dataclasses import dataclass
 from typing import Optional, List, Any
+from enum import Enum
 from config import UnitSystem
-import colorcet as cc
 from plotly.colors import sequential as pseq
 
+
 # ---------- Shared palettes & conversion constants ----------
-BLUE_RED_YELLOW = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
-DRY_HUMID = ["#ffe600", "#00c8ff", "#0000ff"]
-SUN_COLORS = [
-    "#293a59",
-    "#960c2c",
-    "#ff0000",
-    "#ff7b00",
-    "#fffc00",
-    "#ffff7b",
-    "#ffffff",
-]
-LIGHT_COLORS = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
-SKY_COVER_TRI = ["#08306b", "#7ec9f3", "#e6eae9"]
+class Common(Enum):
+    # Palettes
+    BLUE_RED_YELLOW = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
+    DRY_HUMID = ["#ffe600", "#00c8ff", "#0000ff"]
+    SUN_COLORS = [
+        "#293a59",
+        "#960c2c",
+        "#ff0000",
+        "#ff7b00",
+        "#fffc00",
+        "#ffff7b",
+        "#ffffff",
+    ]
+    LIGHT_COLORS = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
+    SKY_COVER_TRI = ["#08306b", "#7ec9f3", "#e6eae9"]
 
-# Evenly sample 10 colors (including both endpoints) from CET_L19
-CET_L19_10 = [
-    cc.CET_L19[int(round(i * (len(cc.CET_L19) - 1) / (9)))] for i in range(10)
-]
+    # Unit conversions
+    PA_TO_PSI = 0.000145038
+    WHM2_TO_BTUFT2 = 0.3169983306
+    LUX_TO_FC = 0.0929
 
-# Unit conversions
-PA_TO_PSI = 0.000145038
-WHM2_TO_BTUFT2 = 0.3169983306
-LUX_TO_FC = 0.0929
-
-# UTCI category colorscale
-UTCI_CATEGORIES_SCALE = [
-    [0, "#2B2977"],
-    [0.0555, "#2B2977"],
-    [0.0555, "#38429B"],
-    [0.1665, "#38429B"],
-    [0.1665, "#4253A4"],
-    [0.2775, "#4253A4"],
-    [0.2775, "#4B62AD"],
-    [0.3885, "#4B62AD"],
-    [0.3885, "#68B8E7"],
-    [0.4995, "#68B8E7"],
-    [0.4995, "#53B848"],
-    [0.6105, "#53B848"],
-    [0.6105, "#EE8522"],
-    [0.7215, "#EE8522"],
-    [0.7215, "#EA2C24"],
-    [0.8325, "#EA2C24"],
-    [0.8325, "#B12224"],
-    [0.9435, "#B12224"],
-    [0.9435, "#751613"],
-    [1.0, "#751613"],
-]
+    # UTCI category colorscale
+    UTCI_CATEGORIES_SCALE = [
+        [0, "#2B2977"],
+        [0.0555, "#2B2977"],
+        [0.0555, "#38429B"],
+        [0.1665, "#38429B"],
+        [0.1665, "#4253A4"],
+        [0.2775, "#4253A4"],
+        [0.2775, "#4B62AD"],
+        [0.3885, "#4B62AD"],
+        [0.3885, "#68B8E7"],
+        [0.4995, "#68B8E7"],
+        [0.4995, "#53B848"],
+        [0.6105, "#53B848"],
+        [0.6105, "#EE8522"],
+        [0.7215, "#EE8522"],
+        [0.7215, "#EA2C24"],
+        [0.8325, "#EA2C24"],
+        [0.8325, "#B12224"],
+        [0.9435, "#B12224"],
+        [0.9435, "#751613"],
+        [1.0, "#751613"],
+    ]
 
 
 @dataclass
@@ -152,7 +150,7 @@ class Variables:
         name="Dry bulb temperature",
         unit="°C",
         range=[-40, 50],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-40, 122]),
     )
     DPT = VariableInfo(
@@ -160,7 +158,7 @@ class Variables:
         name="Dew point temperature",
         unit="°C",
         range=[-50, 35],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-58, 95]),
     )
     RH = VariableInfo(
@@ -168,7 +166,7 @@ class Variables:
         name="Relative humidity",
         unit="%",
         range=[0, 100],
-        color=DRY_HUMID,
+        color=Common.DRY_HUMID.value,
     )
 
     P_ATM = VariableInfo(
@@ -188,7 +186,10 @@ class Variables:
             "#cc0000",
             "#ffaa00",
         ],
-        IP=IP(unit="Psi", range=[95000 * PA_TO_PSI, 105000 * PA_TO_PSI]),
+        IP=IP(
+            unit="Psi",
+            range=[95000 * Common.PA_TO_PSI.value, 105000 * Common.PA_TO_PSI.value],
+        ),
     )
 
     # ==================== Radiation Related Variables ====================
@@ -197,40 +198,40 @@ class Variables:
         name="Extraterrestrial horizontal irradiation",
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
-        color=SUN_COLORS,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * WHM2_TO_BTUFT2]),
+        color=Common.SUN_COLORS.value,
+        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * Common.WHM2_TO_BTUFT2.value]),
     )
     HOR_IR_RAD = VariableInfo(
         col_name="hor_ir_rad",
         name="Horizontal infrared radiation",
         unit="Wh/m<sup>2</sup>",
         range=[0, 500],
-        color=SUN_COLORS,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 500 * WHM2_TO_BTUFT2]),
+        color=Common.SUN_COLORS.value,
+        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 500 * Common.WHM2_TO_BTUFT2.value]),
     )
     GLOB_HOR_RAD = VariableInfo(
         col_name="glob_hor_rad",
         name="Global horizontal radiation",
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
-        color=SUN_COLORS,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * WHM2_TO_BTUFT2]),
+        color=Common.SUN_COLORS.value,
+        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * Common.WHM2_TO_BTUFT2.value]),
     )
     DIR_NOR_RAD = VariableInfo(
         col_name="dir_nor_rad",
         name="Direct normal radiation",
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
-        color=SUN_COLORS,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * WHM2_TO_BTUFT2]),
+        color=Common.SUN_COLORS.value,
+        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * Common.WHM2_TO_BTUFT2.value]),
     )
     DIF_HOR_RAD = VariableInfo(
         col_name="dif_hor_rad",
         name="Diffuse horizontal radiation",
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
-        color=SUN_COLORS,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * WHM2_TO_BTUFT2]),
+        color=Common.SUN_COLORS.value,
+        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * Common.WHM2_TO_BTUFT2.value]),
     )
 
     # ==================== Lighting Related Variables ====================
@@ -239,24 +240,24 @@ class Variables:
         name="Global horizontal illuminance",
         unit="lux",
         range=[0, 120000],
-        color=LIGHT_COLORS,
-        IP=IP(unit="fc", range=[0, 120000 * LUX_TO_FC]),
+        color=Common.LIGHT_COLORS.value,
+        IP=IP(unit="fc", range=[0, 120000 * Common.LUX_TO_FC.value]),
     )
     DIR_NOR_ILL = VariableInfo(
         col_name="dir_nor_ill",
         name="Direct normal illuminance",
         unit="lux",
         range=[0, 120000],
-        color=LIGHT_COLORS,
-        IP=IP(unit="fc", range=[0, 120000 * LUX_TO_FC]),
+        color=Common.LIGHT_COLORS.value,
+        IP=IP(unit="fc", range=[0, 120000 * Common.LUX_TO_FC.value]),
     )
     DIF_HOR_ILL = VariableInfo(
         col_name="dif_hor_ill",
         name="Diffuse horizontal illuminance",
         unit="lux",
         range=[0, 120000],
-        color=LIGHT_COLORS,
-        IP=IP(unit="fc", range=[0, 120000 * LUX_TO_FC]),
+        color=Common.LIGHT_COLORS.value,
+        IP=IP(unit="fc", range=[0, 120000 * Common.LUX_TO_FC.value]),
     )
 
     ZLUMI = VariableInfo(
@@ -281,7 +282,18 @@ class Variables:
         name="Wind speed",
         unit="m/s",
         range=[0, 20],
-        color=CET_L19_10,
+        color=[
+            "#feffff",
+            "#dcf0fc",
+            "#c2defe",
+            "#b8cafd",
+            "#beb1f5",
+            "#d093df",
+            "#e272bb",
+            "#eb4f8b",
+            "#e52d51",
+            "#d0210e",
+        ],
         IP=IP(unit="fpm", range=[0, 20 * 196.85039370078738]),
     )
 
@@ -290,21 +302,21 @@ class Variables:
         name="Total sky cover",
         unit="tenths",
         range=[0, 10],
-        color=SKY_COVER_TRI,
+        color=Common.SKY_COVER_TRI.value,
     )
     OPAQUE_SKY_COVER = VariableInfo(
         col_name="Oskycover",
         name="Opaque sky cover",
         unit="tenths",
         range=[0, 10],
-        color=SKY_COVER_TRI,
+        color=Common.SKY_COVER_TRI.value,
     )
     VIS = VariableInfo(
         col_name="Vis",
         name="Visibility",
         unit="km",
         range=[0, 100],
-        color=SKY_COVER_TRI,
+        color=Common.SKY_COVER_TRI.value,
         IP=IP(unit="miles", range=[0, 100 * 0.6215]),
     )
 
@@ -314,42 +326,42 @@ class Variables:
         name="Apparent zenith",
         unit="°deg",
         range=[0, 180],
-        color=SUN_COLORS,
+        color=Common.SUN_COLORS.value,
     )
     ZENITH = VariableInfo(
         col_name="zenith",
         name="Zenith",
         unit="°deg",
         range=[0, 180],
-        color=SUN_COLORS,
+        color=Common.SUN_COLORS.value,
     )
     APPARENT_ELEVATION = VariableInfo(
         col_name="apparent_elevation",
         name="Apparent elevation",
         unit="°deg",
         range=[-90, 90],
-        color=SUN_COLORS,
+        color=Common.SUN_COLORS.value,
     )
     ELEVATION = VariableInfo(
         col_name="elevation",
         name="Elevation",
         unit="°deg",
         range=[-90, 90],
-        color=SUN_COLORS,
+        color=Common.SUN_COLORS.value,
     )
     AZIMUTH = VariableInfo(
         col_name="azimuth",
         name="Azimuth",
         unit="°deg",
         range=[0, 360],
-        color=SUN_COLORS,
+        color=Common.SUN_COLORS.value,
     )
     EQUATION_OF_TIME = VariableInfo(
         col_name="equation_of_time",
         name="Equation of time",
         unit="°deg",
         range=[-20, 20],
-        color=SUN_COLORS,
+        color=Common.SUN_COLORS.value,
     )
 
     # ==================== UTCI Comfort Related Variables ====================
@@ -358,7 +370,7 @@ class Variables:
         name="UTCI: Sun & Wind",
         unit="°C",
         range=[-70, 70],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-94, 158]),
     )
     UTCI_NO_SUN_WIND = VariableInfo(
@@ -366,7 +378,7 @@ class Variables:
         name="UTCI: no Sun & Wind",
         unit="°C",
         range=[-70, 70],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-94, 158]),
     )
     UTCI_SUN_NO_WIND = VariableInfo(
@@ -374,7 +386,7 @@ class Variables:
         name="UTCI: Sun & no Wind",
         unit="°C",
         range=[-70, 70],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-94, 158]),
     )
     UTCI_NO_SUN_NO_WIND = VariableInfo(
@@ -382,7 +394,7 @@ class Variables:
         name="UTCI: no Sun & no Wind",
         unit="°C",
         range=[-70, 70],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-94, 158]),
     )
 
@@ -391,28 +403,28 @@ class Variables:
         name="UTCI: Sun & Wind : categories",
         unit="Thermal stress",
         range=[-5, 4],
-        color=UTCI_CATEGORIES_SCALE,
+        color=Common.UTCI_CATEGORIES_SCALE.value,
     )
     UTCI_NOSUN_WIND_CATEGORIES = VariableInfo(
         col_name="utci_noSun_Wind_categories",
         name="UTCI: no Sun & Wind : categories",
         unit="Thermal stress",
         range=[-5, 4],
-        color=UTCI_CATEGORIES_SCALE,
+        color=Common.UTCI_CATEGORIES_SCALE.value,
     )
     UTCI_SUN_NOWIND_CATEGORIES = VariableInfo(
         col_name="utci_Sun_noWind_categories",
         name="UTCI: Sun & no Wind : categories",
         unit="Thermal stress",
         range=[-5, 4],
-        color=UTCI_CATEGORIES_SCALE,
+        color=Common.UTCI_CATEGORIES_SCALE.value,
     )
     UTCI_NOSUN_NOWIND_CATEGORIES = VariableInfo(
         col_name="utci_noSun_noWind_categories",
         name="UTCI: no Sun & no Wind : categories",
         unit="Thermal stress",
         range=[-5, 4],
-        color=UTCI_CATEGORIES_SCALE,
+        color=Common.UTCI_CATEGORIES_SCALE.value,
     )
 
     # ==================== Additional Meteorological Data ====================
@@ -421,7 +433,7 @@ class Variables:
         name="Vapor partial pressure",
         unit="Pa",
         range=[0, 5000],
-        color=DRY_HUMID,
+        color=Common.DRY_HUMID.value,
         IP=IP(unit="Psi", range=[0, 5000 * 0.000145038]),
     )
     P_SAT = VariableInfo(
@@ -436,7 +448,7 @@ class Variables:
         name="Absolute humidity",
         unit="g water/kg dry air",
         range=[0, 0.03 * 1000],
-        color=DRY_HUMID,
+        color=Common.DRY_HUMID.value,
         IP=IP(unit="lb water/klb dry air", range=[0, 0.03 * 1000]),
     )
     T_WB = VariableInfo(
@@ -444,7 +456,7 @@ class Variables:
         name="Wet bulb temperature",
         unit="°C",
         range=[-40, 50],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-40, 122]),
     )
     T_DP = VariableInfo(
@@ -452,7 +464,7 @@ class Variables:
         name="Dew point temperature",
         unit="°C",
         range=[-40, 50],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="°F", range=[-40, 122]),
     )
     EH = VariableInfo(
@@ -460,7 +472,7 @@ class Variables:
         name="Enthalpy",
         unit="J/kg dry air",
         range=[0, 110000],
-        color=BLUE_RED_YELLOW,
+        color=Common.BLUE_RED_YELLOW.value,
         IP=IP(unit="Btu/lb dry air", range=[0, 110000 * 0.000429923]),
     )
 
