@@ -77,6 +77,7 @@ Available [here](code_of_conduct.md)
 
 ## Code style
 
+### Code Formatting
 We use ruff to enforce the code style and code formatting. You can run it with:
 
 ```bash
@@ -107,6 +108,19 @@ Format your code before committing:
 ```bash
 black .
 ```
+
+### Code Simplicity
+Strive to minimize redundancy in your code.
+- Keep logic as concise as possible.
+- Remove unused variables, imports, and components.
+- Prefer reusable utilities to repeated patterns.
+
+### UI Modifications
+For UI-related changes:
+* Avoid unnecessary custom CSS.
+* [Use DMC (Design Master Components)](https://www.dash-mantine-components.com/) wherever applicable for layout and styling consistency.
+* Ensure visual consistency with existing components.
+
 
 ## Testing
 
@@ -171,6 +185,14 @@ Classification of Common Commit Types:
 - **Type of Change:** Bug fix (non-breaking); New feature (non-breaking); Breaking change; Documentation update.
 
 - **Testing:** Describe how you tested your changes and how we can reproduce them. Include test details if necessary.
+
+**Pull Request Review:**
+
+- After submitting a Pull Request (PR), please @Coderabbit for review.
+- Check all improvement suggestions provided by Coderabbit before requesting a final review.
+
+**Discussion of Solutions:**
+ When needed, seek feedback from collaborators Toby and Giobetti before making major design or logic decisions.
 
 
 ## Thanks
