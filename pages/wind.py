@@ -11,12 +11,9 @@ from pages.lib.global_variables import Variables
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
-    title_with_tooltip,
     generate_chart_name,
     generate_units,
-    generate_custom_inputs_time,
     title_with_link,
-    dropdown,
 )
 
 
@@ -245,7 +242,6 @@ def update_annual_wind_rose(_, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import (
             apply_global_month_hour_filter,
-            get_global_filter_state,
         )
 
         df = apply_global_month_hour_filter(
@@ -469,7 +465,6 @@ def update_daily_graphs(_, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import (
             apply_global_month_hour_filter,
-            get_global_filter_state,
         )
 
         df = apply_global_month_hour_filter(

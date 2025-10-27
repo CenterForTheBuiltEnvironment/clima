@@ -4,7 +4,6 @@ from pages.lib.global_element_ids import ElementIds
 import dash
 import dash_mantine_components as dmc
 
-import numpy as np
 from dash import dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
@@ -22,7 +21,6 @@ from pages.lib.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     dropdown_names,
     tight_margins,
-    month_lst,
 )
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
 from pages.lib.utils import (

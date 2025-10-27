@@ -452,7 +452,6 @@ def heatmap_with_filter(
                 )
             )
 
-        normal_mask = ~filtered_mask
         normal_z = df[var].copy()
         normal_z[filtered_mask] = None
 
@@ -594,7 +593,6 @@ def heatmap(df, var, global_local, si_ip):
                 )
             )
 
-        normal_mask = ~filtered_mask
         normal_z = df[var].copy()
         normal_z[filtered_mask] = None
 

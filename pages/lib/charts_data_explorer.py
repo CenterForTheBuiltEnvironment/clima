@@ -99,7 +99,6 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
                 )
             )
 
-        normal_mask = ~filtered_mask
         normal_z = df[var].copy()
         normal_z[filtered_mask] = None
 

@@ -13,7 +13,6 @@ from pages.lib.global_scheme import (
     tight_margins,
     month_lst,
 )
-from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
