@@ -92,6 +92,7 @@ def layout():
         Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_T_RH_DF_STORE, "data"),
@@ -99,7 +100,14 @@ def layout():
         State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
+def update_yearly_chart(_, global_local, dd_value, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+        target_columns = [Variables.DBT.col_name, Variables.RH.col_name, Variables.ADAPTIVE_CMF_80_LOW.col_name,
+                          Variables.ADAPTIVE_CMF_80_UP.col_name, Variables.ADAPTIVE_CMF_90_LOW.col_name,
+                          Variables.ADAPTIVE_CMF_90_UP.col_name, Variables.ADAPTIVE_CMF_RMT.col_name]
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+
     if dd_value == dropdown_names[var_to_plot[0]]:
         dbt_yearly = yearly_profile(df, Variables.DBT.col_name, global_local, si_ip)
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
@@ -126,6 +134,7 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
         Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_T_RH_DF_STORE, "data"),
@@ -133,7 +142,12 @@ def update_yearly_chart(_, global_local, dd_value, df, meta, si_ip):
         State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_daily(_, global_local, dd_value, df, meta, si_ip):
+def update_daily(_, global_local, dd_value, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+        target_columns = [Variables.DBT.col_name, Variables.RH.col_name]
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+
     if dd_value == dropdown_names[var_to_plot[0]]:
         units = generate_units_degree(si_ip)
         return dcc.Graph(
@@ -184,6 +198,7 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
         Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_T_RH_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_T_RH_DF_STORE, "data"),
@@ -191,43 +206,40 @@ def update_daily(_, global_local, dd_value, df, meta, si_ip):
         State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
+def update_heatmap(_, global_local, dd_value, global_filter_data, df, meta, si_ip):
     """Update heatmap content."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+        target_columns = [Variables.DBT.col_name, Variables.RH.col_name]
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+
+    base_columns = [Variables.HOUR.col_name, Variables.UTC_TIME.col_name, Variables.MONTH_NAMES.col_name, Variables.DAY.col_name]
+    if '_is_filtered' in df.columns:
+        base_columns.append('_is_filtered')
+
     if dd_value == dropdown_names[var_to_plot[0]]:
+        if f'_{Variables.DBT.col_name}_original' in df.columns:
+            base_columns.append(f'_{Variables.DBT.col_name}_original')
         units = generate_units_degree(si_ip)
         return dcc.Graph(
             config=generate_chart_name(
                 TabNames.DRY_BULB_TEMPERATURE_HEATMAP, meta, units
             ),
             figure=heatmap(
-                df[
-                    [
-                        Variables.DBT.col_name,
-                        Variables.HOUR.col_name,
-                        Variables.UTC_TIME.col_name,
-                        Variables.MONTH_NAMES.col_name,
-                        Variables.DAY.col_name,
-                    ]
-                ],
+                df[[Variables.DBT.col_name] + base_columns],
                 Variables.DBT.col_name,
                 global_local,
                 si_ip,
             ),
         )
     else:
+        if f'_{Variables.DBT.col_name}_original' in df.columns:
+            base_columns.append(f'_{Variables.DBT.col_name}_original')
         units = generate_units(si_ip)
         return dcc.Graph(
             config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_HEATMAP, meta, units),
             figure=heatmap(
-                df[
-                    [
-                        Variables.RH.col_name,
-                        Variables.HOUR.col_name,
-                        Variables.UTC_TIME.col_name,
-                        Variables.MONTH_NAMES.col_name,
-                        Variables.DAY.col_name,
-                    ]
-                ],
+                df[[Variables.DBT.col_name] + base_columns],
                 Variables.RH.col_name,
                 global_local,
                 si_ip,
@@ -240,14 +252,23 @@ def update_heatmap(_, global_local, dd_value, df, meta, si_ip):
     [
         Input(ElementIds.ID_T_RH_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_T_RH_DROPDOWN, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_T_RH_DF_STORE, "data"),
         State(ElementIds.ID_T_RH_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_table(_, dd_value, df, si_ip):
+def update_table(_, dd_value, global_filter_data, df, si_ip):
     """Update the contents of descriptive statistics table."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+        target_columns = [Variables.DBT.col_name, Variables.RH.col_name]
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+        # Filter out the filtered rows to avoid empty columns
+        if '_is_filtered' in df.columns:
+            df = df[~df['_is_filtered']]
+
     return summary_table_tmp_rh_tab(
         df[
             [

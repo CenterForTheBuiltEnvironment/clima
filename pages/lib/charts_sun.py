@@ -33,6 +33,8 @@ def monthly_solar(epw_df, si_ip):
         .median()
         .reset_index()
     )
+
+    # Always show 12 months in horizontal layout
     fig = make_subplots(
         rows=1,
         cols=12,
@@ -40,18 +42,19 @@ def monthly_solar(epw_df, si_ip):
         shared_yaxes=True,
     )
 
-    for i in range(12):
+    for month_num in range(1, 13):
+        col_idx = month_num
         # We only need legend entries for the first pair, since the others repeat.
-        is_first = i == 0
+        is_first = col_idx == 1
 
         fig.add_trace(
             go.Scatter(
                 x=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    g_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
                     Variables.HOUR.col_name,
                 ],
                 y=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    g_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
                     Variables.GLOB_HOR_RAD.col_name,
                 ],
                 fill="tozeroy",
@@ -61,7 +64,7 @@ def monthly_solar(epw_df, si_ip):
                 name="Global",
                 showlegend=is_first,
                 customdata=epw_df.loc[
-                    epw_df[Variables.MONTH.col_name] == i + 1,
+                    epw_df[Variables.MONTH.col_name] == month_num,
                     Variables.MONTH_NAMES.col_name,
                 ],
                 hovertemplate=(
@@ -78,17 +81,17 @@ def monthly_solar(epw_df, si_ip):
                 ),
             ),
             row=1,
-            col=i + 1,
+            col=col_idx,
         )
 
         fig.add_trace(
             go.Scatter(
                 x=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    dif_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
                     Variables.HOUR.col_name,
                 ],
                 y=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave[Variables.MONTH.col_name] == i + 1,
+                    dif_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
                     Variables.DIF_HOR_RAD.col_name,
                 ],
                 fill="tozeroy",
@@ -98,7 +101,7 @@ def monthly_solar(epw_df, si_ip):
                 name="Diffuse",
                 showlegend=is_first,
                 customdata=epw_df.loc[
-                    epw_df[Variables.MONTH.col_name] == i + 1,
+                    epw_df[Variables.MONTH.col_name] == month_num,
                     Variables.MONTH_NAMES.col_name,
                 ],
                 hovertemplate=(
@@ -115,10 +118,10 @@ def monthly_solar(epw_df, si_ip):
                 ),
             ),
             row=1,
-            col=i + 1,
+            col=col_idx,
         )
 
-        fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
+        fig.update_xaxes(range=[0, 25], row=1, col=col_idx)
 
     if si_ip == UnitSystem.SI:
         fig.update_yaxes(range=[0, 1000])

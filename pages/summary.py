@@ -51,7 +51,7 @@ def update_layout(si_ip):
         cooling_setpoint = 64
 
     return dmc.Stack(
-        id=ElementIds.TAB2_SCE1_CONTAINER,
+        id=ElementIds.SUMMARY_SCE1_CONTAINER,
         children=[
             dcc.Loading(
                 type="circle",
@@ -273,6 +273,7 @@ def update_location_info(ts, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SUBMIT_SET_POINTS, "n_clicks"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -283,7 +284,7 @@ def update_location_info(ts, df, meta, si_ip):
     ],
     prevent_initial_call=False,
 )
-def degree_day_chart(ts, n_clicks, df, meta, hdd_value, cdd_value, si_ip):
+def degree_day_chart(ts, n_clicks, global_filter_data, df, meta, hdd_value, cdd_value, si_ip):
     """Redraw HDD/CDD chart only when Submit is clicked."""
 
     if df is None or meta is None:
@@ -291,6 +292,11 @@ def degree_day_chart(ts, n_clicks, df, meta, hdd_value, cdd_value, si_ip):
 
     if isinstance(df, (list, tuple, dict)):
         df = pd.DataFrame(df)
+
+    # Apply global filter if active
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+        df = apply_global_month_hour_filter(df, global_filter_data, Variables.DBT.col_name)
 
     hdd_setpoint = hdd_value
     cdd_setpoint = cdd_value

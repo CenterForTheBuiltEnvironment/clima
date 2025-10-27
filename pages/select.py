@@ -125,6 +125,7 @@ def alert():
         Output(ElementIds.ALERT, "visible"),
         Output(ElementIds.ALERT, "children"),
         Output(ElementIds.ALERT, "color"),
+        Output(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data", allow_duplicate=True),
     ],
     [
         Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),
@@ -157,6 +158,13 @@ def submitted_data(
                 True,
                 messages_alert["not_available"],
                 "orange",
+                {
+                    "month_range": [1, 12],
+                    "hour_range": [0, 24],
+                    "invert_month": [],
+                    "invert_hour": [],
+                    "filter_active": False
+                },
             )
         location_info = get_location_info(
             lines, url_store
@@ -167,6 +175,13 @@ def submitted_data(
             True,
             messages_alert["success"],
             "green",
+            {
+                "month_range": [1, 12],
+                "hour_range": [0, 24],
+                "invert_month": [],
+                "invert_hour": [],
+                "filter_active": False
+            },
         )
 
     elif (
@@ -191,6 +206,13 @@ def submitted_data(
                     True,
                     messages_alert["success"],
                     "green",
+                    {
+                        "month_range": [1, 12],
+                        "hour_range": [0, 24],
+                        "invert_month": [],
+                        "invert_hour": [],
+                        "filter_active": False
+                    },
                 )
             else:
                 return (
@@ -199,6 +221,13 @@ def submitted_data(
                     True,
                     messages_alert["invalid_format"],
                     "orange",
+                    {
+                        "month_range": [1, 12],
+                        "hour_range": [0, 24],
+                        "invert_month": [],
+                        "invert_hour": [],
+                        "filter_active": False
+                    },
                 )
         except (ValueError, IndexError, KeyError) as e:
             print(f"Error parsing EPW file: {e}")
@@ -208,6 +237,13 @@ def submitted_data(
                 True,
                 messages_alert["wrong_extension"],
                 "orange",
+                {
+                    "month_range": [1, 12],
+                    "hour_range": [0, 24],
+                    "invert_month": [],
+                    "invert_hour": [],
+                    "filter_active": False
+                },
             )
     raise PreventUpdate
 
@@ -252,7 +288,6 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
         Output(ElementIds.NAV_EXPLORER, "disabled"),
         Output(ElementIds.NAV_OUTDOOR, "disabled"),
         Output(ElementIds.NAV_NATURAL_VENTILATION, "disabled"),
-        Output(ElementIds.NAV_CHANGELOG, "disabled"),
         Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
@@ -274,7 +309,6 @@ def enable_tabs_when_data_is_loaded(meta, data):
             True,
             True,
             True,
-            True,  # changelog always disabled
             default,
         )
     else:
@@ -288,7 +322,6 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             False,
-            True,  # changelog always disabled
             "Current Location: "
             + meta[Variables.CITY.col_name]
             + ", "

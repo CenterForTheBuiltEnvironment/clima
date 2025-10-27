@@ -268,14 +268,10 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
 
 def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
     start_month, end_month = month
-    if invert_month == [Variables.INVERT.col_name] and (
-        start_month != 1 or end_month != 12
-    ):
+    if invert_month and (start_month != 1 or end_month != 12):
         end_month, start_month = month
     start_hour, end_hour = hour
-    if invert_hour == [Variables.INVERT.col_name] and (
-        start_hour != 0 or end_hour != 24
-    ):
+    if invert_hour and (start_hour != 0 or end_hour != 24):
         end_hour, start_hour = hour
 
     return start_month, end_month, start_hour, end_hour

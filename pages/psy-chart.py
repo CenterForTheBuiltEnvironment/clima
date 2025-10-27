@@ -57,7 +57,7 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 def inputs():
     return dmc.SimpleGrid(
-        cols=3,
+        cols=2,
         children=[
             dmc.Group(
                 [
@@ -74,59 +74,6 @@ def inputs():
                     ),
                 ],
                 align="flex-start",
-            ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply month and hour filter",
-                        id=ElementIds.MONTH_HOUR_FILTER,
-                        color="blue",
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Month Range", order=5),
-                            dmc.Stack(
-                                dcc.RangeSlider(
-                                    id=ElementIds.PSY_MONTH_SLIDER,
-                                    min=1,
-                                    max=12,
-                                    step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={"always_visible": False},
-                                ),
-                                flex=1,
-                            ),
-                            dcc.Checklist(
-                                id=ElementIds.INVERT_MONTH_PSY,
-                                options=[{"label": "Invert", "value": "invert"}],
-                                value=[],
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Hour Range", order=5),
-                            dmc.Stack(
-                                dcc.RangeSlider(
-                                    id=ElementIds.PSY_HOUR_SLIDER,
-                                    min=0,
-                                    max=24,
-                                    step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={"always_visible": False},
-                                ),
-                                flex=1,
-                            ),
-                            dcc.Checklist(
-                                id=ElementIds.INVERT_HOUR_PSY,
-                                options=[{"label": "Invert", "value": "invert"}],
-                                value=[],
-                            ),
-                        ],
-                    ),
-                ],
             ),
             dmc.Stack(
                 [
@@ -211,47 +158,53 @@ def layout():
     [
         Input(ElementIds.ID_PSY_CHART_DF_STORE, "modified_timestamp"),
         Input(ElementIds.PSY_COLOR_BY_DROPDOWN, "value"),
-        Input(ElementIds.MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.DATA_FILTER, "n_clicks"),
         Input(ElementIds.ID_PSY_CHART_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_PSY_CHART_DF_STORE, "data"),
-        State(ElementIds.PSY_MONTH_SLIDER, "value"),
-        State(ElementIds.PSY_HOUR_SLIDER, "value"),
         State(ElementIds.PSY_MIN_VAL, "value"),
         State(ElementIds.PSY_MAX_VAL, "value"),
         State(ElementIds.PSY_VAR_DROPDOWN, "value"),
         State(ElementIds.ID_PSY_CHART_META_STORE, "data"),
-        State(ElementIds.INVERT_MONTH_PSY, "value"),
-        State(ElementIds.INVERT_HOUR_PSY, "value"),
         State(ElementIds.ID_PSY_CHART_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_psych_chart(
     ts,
     colorby_var,
-    time_filter,
     data_filter,
     global_local,
+    global_filter_data,
     df,
-    month,
-    hour,
     min_val,
     max_val,
     data_filter_var,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
+        df = apply_global_month_hour_filter(df, global_filter_data)
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, df.columns
-    )
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
+
+        # Use local filtering when global filter is not active
+        df = filter_df_by_month_and_hour(
+            df, True, [1, 12], [0, 24], [], [], df.columns
+        )
 
     if data_filter:
         if min_val <= max_val:

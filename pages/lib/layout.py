@@ -5,6 +5,7 @@ from dash_iconify import DashIconify
 from pages.lib.global_variables import Variables
 from config import DocLinks, UnitSystem
 from pages.lib.global_element_ids import ElementIds
+from pages.lib.utils import determine_month_and_hour_filter
 
 
 class NavBarIcons:
@@ -37,6 +38,110 @@ class NavBarIcons:
         """Get icon for a page name."""
         return cls._ICON_MAP.get(page_name, "tabler:circle")
 
+# global filters
+def create_tools_filter_components():
+    # Apply month and hour filter
+    apply_month_hour_section = dmc.Stack(
+        id=ElementIds.TOOLS_MONTH_HOUR_SECTION,
+        children=[
+            dmc.Divider(
+                label="Filter function", size="xs", color="blue", mb="xs"
+            ),
+            dmc.Button(
+                "Apply month and hour filter",
+                id=ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER,
+                color="blue",
+                variant="light",
+                size="xs",
+                mb="xs",
+            ),
+            dmc.Stack(
+                [
+                    dmc.Text("Month Range:", size="xs", c="dimmed"),
+                    dmc.Stack(
+                        [
+                            dcc.RangeSlider(
+                                id=ElementIds.TOOLS_MONTH_SLIDER,
+                                min=1,
+                                max=12,
+                                step=1,
+                                value=[1, 12],
+                                marks={1: "1", 12: "12"},
+                                tooltip={
+                                    "always_visible": False,
+                                    "placement": "top",
+                                },
+                                allowCross=False,
+                            ),
+                            dmc.Group(
+                                [
+                                    dmc.Switch(
+                                        id=ElementIds.TOOLS_INVERT_MONTH,
+                                        label="Invert",
+                                        checked=False,
+                                        size="xs",
+                                        color="blue",
+                                        style={"fontSize": "0.7rem"},
+                                    ),
+                                ],
+                                justify="flex-end",
+                            ),
+                        ],
+                        gap="xs",
+                    ),
+                ],
+                gap="xs",
+                mb="xs",
+            ),
+            dmc.Stack(
+                [
+                    dmc.Text("Hour Range:", size="xs", c="dimmed"),
+                    dmc.Stack(
+                        [
+                            dcc.RangeSlider(
+                                id=ElementIds.TOOLS_HOUR_SLIDER,
+                                min=0,
+                                max=24,
+                                step=1,
+                                value=[0, 24],
+                                marks={0: "0", 24: "24"},
+                                tooltip={
+                                    "always_visible": False,
+                                    "placement": "top",
+                                },
+                                allowCross=False,
+                            ),
+                            dmc.Group(
+                                [
+                                    dmc.Switch(
+                                        id=ElementIds.TOOLS_INVERT_HOUR,
+                                        label="Invert",
+                                        checked=False,
+                                        size="xs",
+                                        color="blue",
+                                        style={"fontSize": "0.7rem"},
+                                    ),
+                                ],
+                                justify="flex-end",
+                            ),
+                        ],
+                        gap="xs",
+                    ),
+                ],
+                gap="xs",
+            ),
+        ],
+        gap="xs",
+        p="xs",
+        style={"backgroundColor": "#f8f9fa", "borderRadius": "6px", "border": "1px solid #e9ecef"},
+    )
+
+    return dmc.Stack(
+        children=[
+            apply_month_hour_section,
+        ],
+        gap="sm",
+    )
 
 def create_navbar():
     nav_link_styles = {
@@ -69,7 +174,7 @@ def create_navbar():
             styles=nav_link_styles,
         )
         for page in dash.page_registry.values()
-        if page[Variables.NAME.col_name] not in ["404"]
+        if page[Variables.NAME.col_name] not in ["404", "Changelog"]
     ]
 
     parent_group = dmc.NavLink(
@@ -138,10 +243,12 @@ def create_navbar():
         ],
     )
 
+    filter_components = create_tools_filter_components()
+
     # Tools
     controls_group = dmc.NavLink(
         label="Tools Menu",
-        children=[controls_stack],
+        children=[controls_stack, filter_components],
         id=ElementIds.NAV_GROUP_CONTROLS,
         variant="light",
         childrenOffset=0,
@@ -317,6 +424,17 @@ def create_stores():
             dcc.Store(
                 id=ElementIds.TOOLS_MENU_EXPANDED, data=False, storage_type="session"
             ),
+            dcc.Store(
+                id=ElementIds.TOOLS_GLOBAL_FILTER_STORE,
+                data={
+                    "month_range": [1, 12],
+                    "hour_range": [0, 24],
+                    "invert_month": [],
+                    "invert_hour": [],
+                    "filter_active": False
+                },
+                storage_type="session"
+            ),
             dcc.Interval(
                 id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
                 interval=12 * 1000,
@@ -406,7 +524,7 @@ def toggle_navbar_and_width(
     [
         Output(f"nav-{page[Variables.PATH.col_name].replace('/', '')}", "active")
         for page in dash.page_registry.values()
-        if page[Variables.NAME.col_name] not in ["404"]
+        if page[Variables.NAME.col_name] not in ["404", "Changelog"]
     ],
     Input(ElementIds.MAIN_URL, "pathname"),
     prevent_initial_call=True,
@@ -415,7 +533,7 @@ def update_nav_active_state(pathname):
     return [
         pathname == page[Variables.PATH.col_name]
         for page in dash.page_registry.values()
-        if page[Variables.NAME.col_name] not in ["404"]
+        if page[Variables.NAME.col_name] not in ["404", "Changelog"]
     ]
 
 
@@ -426,3 +544,129 @@ def update_nav_active_state(pathname):
 )
 def show_alert_after_delay(n_intervals):
     return {"display": "block" if n_intervals == 1 else "none"}
+
+
+@callback(
+    Output(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
+    [
+        Input(ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER, "n_clicks"),
+    ],
+    [
+        State(ElementIds.TOOLS_MONTH_SLIDER, "value"),
+        State(ElementIds.TOOLS_HOUR_SLIDER, "value"),
+        State(ElementIds.TOOLS_INVERT_MONTH, "checked"),
+        State(ElementIds.TOOLS_INVERT_HOUR, "checked"),
+        State(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
+    ],
+    prevent_initial_call=True,
+)
+def update_global_filter_state(
+        apply_clicks, month_range, hour_range, invert_month, invert_hour, current_data
+):
+    if apply_clicks is None:
+        apply_clicks = 0
+
+    if apply_clicks > 0:
+        current_data["filter_active"] = True
+
+        current_data.update({
+            "month_range": month_range or [1, 12],
+            "hour_range": hour_range or [0, 24],
+            "invert_month": ["invert"] if invert_month else [],
+            "invert_hour": ["invert"] if invert_hour else [],
+        })
+
+    return current_data
+
+
+def get_global_filter_state(filter_store_data):
+    if not filter_store_data:
+        return {
+            "filter_active": False,
+            "month_range": [1, 12],
+            "hour_range": [0, 24],
+            "invert_month": False,
+            "invert_hour": False,
+        }
+
+    return {
+        "filter_active": filter_store_data.get("filter_active", False),
+        "month_range": filter_store_data.get("month_range", [1, 12]),
+        "hour_range": filter_store_data.get("hour_range", [0, 24]),
+        "invert_month": bool(filter_store_data.get("invert_month", [])),
+        "invert_hour": bool(filter_store_data.get("invert_hour", [])),
+    }
+
+
+def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
+    filter_state = get_global_filter_state(filter_store_data)
+
+    if not filter_state["filter_active"]:
+        df_copy = df.copy()
+        df_copy['_is_filtered'] = False
+        return df_copy
+
+    month_range = filter_state["month_range"]
+    hour_range = filter_state["hour_range"]
+    invert_month = filter_state["invert_month"]
+    invert_hour = filter_state["invert_hour"]
+
+    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+        month_range, hour_range, invert_month, invert_hour
+    )
+
+    df_copy = df.copy()
+
+    if target_columns is None:
+        target_columns = [Variables.DBT.col_name]
+    elif isinstance(target_columns, str):
+        target_columns = [target_columns]
+
+    month_mask = None
+    if start_month <= end_month:
+        month_mask = (df_copy[Variables.MONTH.col_name] < start_month) | (df_copy[Variables.MONTH.col_name] > end_month)
+    else:
+        month_mask = (df_copy[Variables.MONTH.col_name] >= end_month) & (df_copy[Variables.MONTH.col_name] <= start_month)
+
+    hour_mask = None
+    if start_hour <= end_hour:
+        hour_mask = (df_copy[Variables.HOUR.col_name] < start_hour) | (df_copy[Variables.HOUR.col_name] > end_hour)
+    else:
+        hour_mask = (df_copy[Variables.HOUR.col_name] >= end_hour) & (df_copy[Variables.HOUR.col_name] <= start_hour)
+
+    df_copy['_is_filtered'] = month_mask | hour_mask
+
+    for target_col in target_columns:
+        df_copy[f'_{target_col}_original'] = df_copy[target_col]
+
+        from pages.lib.template_graphs import time_filtering
+        time_filtering(df_copy, start_month, end_month, Variables.MONTH.col_name, target_col)
+        time_filtering(df_copy, start_hour, end_hour, Variables.MONTH.col_name, target_col)
+
+    return df_copy
+
+
+@callback(
+    [
+        Output(ElementIds.TOOLS_MONTH_SLIDER, "value"),
+        Output(ElementIds.TOOLS_HOUR_SLIDER, "value"),
+        Output(ElementIds.TOOLS_INVERT_MONTH, "checked"),
+        Output(ElementIds.TOOLS_INVERT_HOUR, "checked"),
+    ],
+    [
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
+    ],
+    prevent_initial_call=False,
+)
+def sync_sliders_with_global_state(global_filter_data):
+    if not global_filter_data:
+        return [1, 12], [0, 24], False, False
+
+    return (
+        global_filter_data.get("month_range", [1, 12]),
+        global_filter_data.get("hour_range", [0, 24]),
+        bool(global_filter_data.get("invert_month", [])),
+        bool(global_filter_data.get("invert_hour", [])),
+    )
+
+
