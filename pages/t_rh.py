@@ -103,9 +103,16 @@ def layout():
 def update_yearly_chart(_, global_local, dd_value, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
-        target_columns = [Variables.DBT.col_name, Variables.RH.col_name, Variables.ADAPTIVE_CMF_80_LOW.col_name,
-                          Variables.ADAPTIVE_CMF_80_UP.col_name, Variables.ADAPTIVE_CMF_90_LOW.col_name,
-                          Variables.ADAPTIVE_CMF_90_UP.col_name, Variables.ADAPTIVE_CMF_RMT.col_name]
+
+        target_columns = [
+            Variables.DBT.col_name,
+            Variables.RH.col_name,
+            Variables.ADAPTIVE_CMF_80_LOW.col_name,
+            Variables.ADAPTIVE_CMF_80_UP.col_name,
+            Variables.ADAPTIVE_CMF_90_LOW.col_name,
+            Variables.ADAPTIVE_CMF_90_UP.col_name,
+            Variables.ADAPTIVE_CMF_RMT.col_name,
+        ]
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
     if dd_value == dropdown_names[var_to_plot[0]]:
@@ -145,6 +152,7 @@ def update_yearly_chart(_, global_local, dd_value, global_filter_data, df, meta,
 def update_daily(_, global_local, dd_value, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         target_columns = [Variables.DBT.col_name, Variables.RH.col_name]
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
@@ -210,16 +218,22 @@ def update_heatmap(_, global_local, dd_value, global_filter_data, df, meta, si_i
     """Update heatmap content."""
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         target_columns = [Variables.DBT.col_name, Variables.RH.col_name]
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
-    base_columns = [Variables.HOUR.col_name, Variables.UTC_TIME.col_name, Variables.MONTH_NAMES.col_name, Variables.DAY.col_name]
-    if '_is_filtered' in df.columns:
-        base_columns.append('_is_filtered')
+    base_columns = [
+        Variables.HOUR.col_name,
+        Variables.UTC_TIME.col_name,
+        Variables.MONTH_NAMES.col_name,
+        Variables.DAY.col_name,
+    ]
+    if "_is_filtered" in df.columns:
+        base_columns.append("_is_filtered")
 
     if dd_value == dropdown_names[var_to_plot[0]]:
-        if f'_{Variables.DBT.col_name}_original' in df.columns:
-            base_columns.append(f'_{Variables.DBT.col_name}_original')
+        if f"_{Variables.DBT.col_name}_original" in df.columns:
+            base_columns.append(f"_{Variables.DBT.col_name}_original")
         units = generate_units_degree(si_ip)
         return dcc.Graph(
             config=generate_chart_name(
@@ -233,8 +247,8 @@ def update_heatmap(_, global_local, dd_value, global_filter_data, df, meta, si_i
             ),
         )
     else:
-        if f'_{Variables.DBT.col_name}_original' in df.columns:
-            base_columns.append(f'_{Variables.DBT.col_name}_original')
+        if f"_{Variables.DBT.col_name}_original" in df.columns:
+            base_columns.append(f"_{Variables.DBT.col_name}_original")
         units = generate_units(si_ip)
         return dcc.Graph(
             config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_HEATMAP, meta, units),
@@ -263,11 +277,12 @@ def update_table(_, dd_value, global_filter_data, df, si_ip):
     """Update the contents of descriptive statistics table."""
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         target_columns = [Variables.DBT.col_name, Variables.RH.col_name]
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
         # Filter out the filtered rows to avoid empty columns
-        if '_is_filtered' in df.columns:
-            df = df[~df['_is_filtered']]
+        if "_is_filtered" in df.columns:
+            df = df[~df["_is_filtered"]]
 
     return summary_table_tmp_rh_tab(
         df[

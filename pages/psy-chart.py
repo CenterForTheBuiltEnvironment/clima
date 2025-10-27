@@ -185,7 +185,11 @@ def update_psych_chart(
     si_ip,
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
         df = apply_global_month_hour_filter(df, global_filter_data)
 
         filter_state = get_global_filter_state(global_filter_data)
@@ -202,9 +206,7 @@ def update_psych_chart(
         start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
 
         # Use local filtering when global filter is not active
-        df = filter_df_by_month_and_hour(
-            df, True, [1, 12], [0, 24], [], [], df.columns
-        )
+        df = filter_df_by_month_and_hour(df, True, [1, 12], [0, 24], [], [], df.columns)
 
     if data_filter:
         if min_val <= max_val:

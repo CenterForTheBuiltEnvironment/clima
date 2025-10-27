@@ -390,9 +390,15 @@ def update_tab_yearly(_, var, global_local, global_filter_data, df, meta, si_ip)
 
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
-        target_columns = [var, Variables.ADAPTIVE_CMF_80_LOW.col_name, Variables.ADAPTIVE_CMF_80_UP.col_name,
-                         Variables.ADAPTIVE_CMF_90_LOW.col_name, Variables.ADAPTIVE_CMF_90_UP.col_name,
-                         Variables.ADAPTIVE_CMF_RMT.col_name]
+
+        target_columns = [
+            var,
+            Variables.ADAPTIVE_CMF_80_LOW.col_name,
+            Variables.ADAPTIVE_CMF_80_UP.col_name,
+            Variables.ADAPTIVE_CMF_90_LOW.col_name,
+            Variables.ADAPTIVE_CMF_90_UP.col_name,
+            Variables.ADAPTIVE_CMF_RMT.col_name,
+        ]
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
     if df[var].mean() == 99990.0:
@@ -431,6 +437,7 @@ def update_tab_daily(_, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         df = apply_global_month_hour_filter(df, global_filter_data)
 
     custom_inputs = generate_custom_inputs(var)
@@ -464,6 +471,7 @@ def update_tab_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         df = apply_global_month_hour_filter(df, global_filter_data)
 
     custom_inputs = generate_custom_inputs(var)
@@ -518,7 +526,11 @@ def update_heatmap(
     si_ip,
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
         filter_state = get_global_filter_state(global_filter_data)
@@ -641,12 +653,11 @@ def update_more_charts(
 
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         df = apply_global_month_hour_filter(df, global_filter_data)
     else:
         # Use local filtering when global filter is not active
-        df = filter_df_by_month_and_hour(
-            df, True, [1, 12], [0, 24], [], [], df.columns
-        )
+        df = filter_df_by_month_and_hour(df, True, [1, 12], [0, 24], [], [], df.columns)
 
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
     if data_filter and (min_val is None or max_val is None):
@@ -715,10 +726,11 @@ def update_table(
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         filtered_df = apply_global_month_hour_filter(df, global_filter_data)
         # Filter out the filtered rows to avoid empty columns
-        if '_is_filtered' in filtered_df.columns:
-            filtered_df = filtered_df[~filtered_df['_is_filtered']]
+        if "_is_filtered" in filtered_df.columns:
+            filtered_df = filtered_df[~filtered_df["_is_filtered"]]
     else:
         # Use default values when global filter is not active
         filtered_df = df

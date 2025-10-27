@@ -218,7 +218,11 @@ def update_tab_utci_value(
     si_ip,
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
         filter_state = get_global_filter_state(global_filter_data)
@@ -301,8 +305,14 @@ def update_tab_utci_category(
     si_ip,
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
-        df = apply_global_month_hour_filter(df, global_filter_data, [var, var + "_categories"])
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, [var, var + "_categories"]
+        )
 
         filter_state = get_global_filter_state(global_filter_data)
         month_range = filter_state["month_range"]
@@ -380,11 +390,13 @@ def update_tab_utci_category(
         State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_utci_summary_chart(
-    var, normalize, global_filter_data, df, meta, si_ip
-):
+def update_tab_utci_summary_chart(var, normalize, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
         filter_state = get_global_filter_state(global_filter_data)

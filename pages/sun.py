@@ -200,11 +200,19 @@ def monthly_and_cloud_chart(_, global_filter_data, df, meta, si_ip):
 
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
-        df = apply_global_month_hour_filter(df, global_filter_data,
-                                            [Variables.GLOB_HOR_RAD.col_name, Variables.DIF_HOR_RAD.col_name, Variables.TOT_SKY_COVER.col_name])
+
+        df = apply_global_month_hour_filter(
+            df,
+            global_filter_data,
+            [
+                Variables.GLOB_HOR_RAD.col_name,
+                Variables.DIF_HOR_RAD.col_name,
+                Variables.TOT_SKY_COVER.col_name,
+            ],
+        )
         # Filter out the filtered rows for solar radiation calculations
-        if '_is_filtered' in df.columns:
-            df = df[~df['_is_filtered']]
+        if "_is_filtered" in df.columns:
+            df = df[~df["_is_filtered"]]
 
     # Sun Radiation
     monthly = monthly_solar(df, si_ip)
@@ -253,6 +261,7 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         # For sun path chart, we need to filter all sun position related columns
         target_cols = [
             Variables.GLOB_HOR_RAD.col_name,
@@ -263,7 +272,7 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
             Variables.ELEVATION.col_name,
             Variables.DAY.col_name,
             Variables.MONTH_NAMES.col_name,
-            Variables.HOUR.col_name
+            Variables.HOUR.col_name,
         ]
         # Add the selected variable if it's not "None"
         if var != "None":
@@ -308,6 +317,7 @@ def daily(_, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
     custom_inputs = generate_custom_inputs(var)
@@ -336,6 +346,7 @@ def daily(_, var, global_local, global_filter_data, df, meta, si_ip):
 def update_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
+
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
     custom_inputs = generate_custom_inputs(var)

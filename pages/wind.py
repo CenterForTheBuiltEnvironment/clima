@@ -201,8 +201,6 @@ def daily_wind_rose():
     )
 
 
-
-
 def layout():
     """Contents in the fifth tab 'Wind'."""
     return dmc.Stack(
@@ -245,8 +243,16 @@ def layout():
 )
 def update_annual_wind_rose(_, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
-        df = apply_global_month_hour_filter(df, global_filter_data, [Variables.WIND_SPEED.col_name, Variables.WIND_DIR.col_name])
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df,
+            global_filter_data,
+            [Variables.WIND_SPEED.col_name, Variables.WIND_DIR.col_name],
+        )
 
         months = [1, 12]
         hours = [1, 24]
@@ -280,7 +286,10 @@ def update_annual_wind_rose(_, global_filter_data, df, meta, si_ip):
 def update_tab_wind_speed(_, global_local, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
-        df = apply_global_month_hour_filter(df, global_filter_data, Variables.WIND_SPEED.col_name)
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.WIND_SPEED.col_name
+        )
 
     speed = heatmap(df, Variables.WIND_SPEED.col_name, global_local, si_ip)
     units = generate_units(si_ip)
@@ -306,7 +315,10 @@ def update_tab_wind_speed(_, global_local, global_filter_data, df, meta, si_ip):
 def update_tab_wind_direction(_, global_local, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
-        df = apply_global_month_hour_filter(df, global_filter_data, Variables.WIND_DIR.col_name)
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.WIND_DIR.col_name
+        )
 
     direction = heatmap(df, Variables.WIND_DIR.col_name, global_local, si_ip)
     units = generate_units(si_ip)
@@ -314,8 +326,6 @@ def update_tab_wind_direction(_, global_local, global_filter_data, df, meta, si_
         config=generate_chart_name(TabNames.WIND_DIRECTION, meta, units),
         figure=direction,
     )
-
-
 
 
 @callback(
@@ -457,8 +467,16 @@ def update_seasonal_graphs(_, df, meta, si_ip):
 )
 def update_daily_graphs(_, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
-        df = apply_global_month_hour_filter(df, global_filter_data, [Variables.WIND_SPEED.col_name, Variables.WIND_DIR.col_name])
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df,
+            global_filter_data,
+            [Variables.WIND_SPEED.col_name, Variables.WIND_DIR.col_name],
+        )
 
         months = [1, 12]
     else:

@@ -38,15 +38,14 @@ class NavBarIcons:
         """Get icon for a page name."""
         return cls._ICON_MAP.get(page_name, "tabler:circle")
 
+
 # global filters
 def create_tools_filter_components():
     # Apply month and hour filter
     apply_month_hour_section = dmc.Stack(
         id=ElementIds.TOOLS_MONTH_HOUR_SECTION,
         children=[
-            dmc.Divider(
-                label="Filter function", size="xs", color="blue", mb="xs"
-            ),
+            dmc.Divider(label="Filter function", size="xs", color="blue", mb="xs"),
             dmc.Button(
                 "Apply month and hour filter",
                 id=ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER,
@@ -133,7 +132,11 @@ def create_tools_filter_components():
         ],
         gap="xs",
         p="xs",
-        style={"backgroundColor": "#f8f9fa", "borderRadius": "6px", "border": "1px solid #e9ecef"},
+        style={
+            "backgroundColor": "#f8f9fa",
+            "borderRadius": "6px",
+            "border": "1px solid #e9ecef",
+        },
     )
 
     return dmc.Stack(
@@ -142,6 +145,7 @@ def create_tools_filter_components():
         ],
         gap="sm",
     )
+
 
 def create_navbar():
     nav_link_styles = {
@@ -431,9 +435,9 @@ def create_stores():
                     "hour_range": [0, 24],
                     "invert_month": [],
                     "invert_hour": [],
-                    "filter_active": False
+                    "filter_active": False,
                 },
-                storage_type="session"
+                storage_type="session",
             ),
             dcc.Interval(
                 id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
@@ -561,7 +565,7 @@ def show_alert_after_delay(n_intervals):
     prevent_initial_call=True,
 )
 def update_global_filter_state(
-        apply_clicks, month_range, hour_range, invert_month, invert_hour, current_data
+    apply_clicks, month_range, hour_range, invert_month, invert_hour, current_data
 ):
     if apply_clicks is None:
         apply_clicks = 0
@@ -569,12 +573,14 @@ def update_global_filter_state(
     if apply_clicks > 0:
         current_data["filter_active"] = True
 
-        current_data.update({
-            "month_range": month_range or [1, 12],
-            "hour_range": hour_range or [0, 24],
-            "invert_month": ["invert"] if invert_month else [],
-            "invert_hour": ["invert"] if invert_hour else [],
-        })
+        current_data.update(
+            {
+                "month_range": month_range or [1, 12],
+                "hour_range": hour_range or [0, 24],
+                "invert_month": ["invert"] if invert_month else [],
+                "invert_hour": ["invert"] if invert_hour else [],
+            }
+        )
 
     return current_data
 
@@ -603,7 +609,7 @@ def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
 
     if not filter_state["filter_active"]:
         df_copy = df.copy()
-        df_copy['_is_filtered'] = False
+        df_copy["_is_filtered"] = False
         return df_copy
 
     month_range = filter_state["month_range"]
@@ -624,24 +630,37 @@ def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
 
     month_mask = None
     if start_month <= end_month:
-        month_mask = (df_copy[Variables.MONTH.col_name] < start_month) | (df_copy[Variables.MONTH.col_name] > end_month)
+        month_mask = (df_copy[Variables.MONTH.col_name] < start_month) | (
+            df_copy[Variables.MONTH.col_name] > end_month
+        )
     else:
-        month_mask = (df_copy[Variables.MONTH.col_name] >= end_month) & (df_copy[Variables.MONTH.col_name] <= start_month)
+        month_mask = (df_copy[Variables.MONTH.col_name] >= end_month) & (
+            df_copy[Variables.MONTH.col_name] <= start_month
+        )
 
     hour_mask = None
     if start_hour <= end_hour:
-        hour_mask = (df_copy[Variables.HOUR.col_name] < start_hour) | (df_copy[Variables.HOUR.col_name] > end_hour)
+        hour_mask = (df_copy[Variables.HOUR.col_name] < start_hour) | (
+            df_copy[Variables.HOUR.col_name] > end_hour
+        )
     else:
-        hour_mask = (df_copy[Variables.HOUR.col_name] >= end_hour) & (df_copy[Variables.HOUR.col_name] <= start_hour)
+        hour_mask = (df_copy[Variables.HOUR.col_name] >= end_hour) & (
+            df_copy[Variables.HOUR.col_name] <= start_hour
+        )
 
-    df_copy['_is_filtered'] = month_mask | hour_mask
+    df_copy["_is_filtered"] = month_mask | hour_mask
 
     for target_col in target_columns:
-        df_copy[f'_{target_col}_original'] = df_copy[target_col]
+        df_copy[f"_{target_col}_original"] = df_copy[target_col]
 
         from pages.lib.template_graphs import time_filtering
-        time_filtering(df_copy, start_month, end_month, Variables.MONTH.col_name, target_col)
-        time_filtering(df_copy, start_hour, end_hour, Variables.MONTH.col_name, target_col)
+
+        time_filtering(
+            df_copy, start_month, end_month, Variables.MONTH.col_name, target_col
+        )
+        time_filtering(
+            df_copy, start_hour, end_hour, Variables.MONTH.col_name, target_col
+        )
 
     return df_copy
 
@@ -668,5 +687,3 @@ def sync_sliders_with_global_state(global_filter_data):
         bool(global_filter_data.get("invert_month", [])),
         bool(global_filter_data.get("invert_hour", [])),
     )
-
-

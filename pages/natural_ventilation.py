@@ -224,8 +224,14 @@ def nv_heatmap(
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
-        df = apply_global_month_hour_filter(df, global_filter_data, Variables.DBT.col_name)
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.DBT.col_name
+        )
 
         filter_state = get_global_filter_state(global_filter_data)
         month_range = filter_state["month_range"]
@@ -263,7 +269,6 @@ def nv_heatmap(
                     style={"text-align": "center", "marginTop": "2rem"},
                 ),
             )
-
 
     variable = VariableInfo.from_col_name(var)
     filter = VariableInfo.from_col_name(filter_var)
@@ -419,8 +424,14 @@ def nv_bar_chart(
     df[Variables.NV_ALLOWED.col_name] = 1
 
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import apply_global_month_hour_filter, get_global_filter_state
-        df = apply_global_month_hour_filter(df, global_filter_data, Variables.NV_ALLOWED.col_name)
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.NV_ALLOWED.col_name
+        )
 
         filter_state = get_global_filter_state(global_filter_data)
         month_range = filter_state["month_range"]

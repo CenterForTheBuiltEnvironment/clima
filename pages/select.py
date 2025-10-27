@@ -163,7 +163,7 @@ def submitted_data(
                     "hour_range": [0, 24],
                     "invert_month": [],
                     "invert_hour": [],
-                    "filter_active": False
+                    "filter_active": False,
                 },
             )
         location_info = get_location_info(
@@ -180,7 +180,7 @@ def submitted_data(
                 "hour_range": [0, 24],
                 "invert_month": [],
                 "invert_hour": [],
-                "filter_active": False
+                "filter_active": False,
             },
         )
 
@@ -211,7 +211,7 @@ def submitted_data(
                         "hour_range": [0, 24],
                         "invert_month": [],
                         "invert_hour": [],
-                        "filter_active": False
+                        "filter_active": False,
                     },
                 )
             else:
@@ -226,7 +226,7 @@ def submitted_data(
                         "hour_range": [0, 24],
                         "invert_month": [],
                         "invert_hour": [],
-                        "filter_active": False
+                        "filter_active": False,
                     },
                 )
         except (ValueError, IndexError, KeyError) as e:
@@ -242,7 +242,7 @@ def submitted_data(
                     "hour_range": [0, 24],
                     "invert_month": [],
                     "invert_hour": [],
-                    "filter_active": False
+                    "filter_active": False,
                 },
             )
     raise PreventUpdate
