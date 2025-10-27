@@ -187,7 +187,10 @@ class Variables:
         ],
         IP=IP(
             unit="Psi",
-            range=[95000 * ColorPalettes.PA_TO_PSI.value, 105000 * ColorPalettes.PA_TO_PSI.value],
+            range=[
+                95000 * ColorPalettes.PA_TO_PSI.value,
+                105000 * ColorPalettes.PA_TO_PSI.value,
+            ],
         ),
     )
 
@@ -198,7 +201,10 @@ class Variables:
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
         color=ColorPalettes.SUN_COLORS.value,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value]),
+        IP=IP(
+            unit="Btu/ft<sup>2</sup>",
+            range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value],
+        ),
     )
     HOR_IR_RAD = VariableInfo(
         col_name="hor_ir_rad",
@@ -206,7 +212,10 @@ class Variables:
         unit="Wh/m<sup>2</sup>",
         range=[0, 500],
         color=ColorPalettes.SUN_COLORS.value,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 500 * ColorPalettes.WHM2_TO_BTU_FT2.value]),
+        IP=IP(
+            unit="Btu/ft<sup>2</sup>",
+            range=[0, 500 * ColorPalettes.WHM2_TO_BTU_FT2.value],
+        ),
     )
     GLOB_HOR_RAD = VariableInfo(
         col_name="glob_hor_rad",
@@ -214,7 +223,10 @@ class Variables:
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
         color=ColorPalettes.SUN_COLORS.value,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value]),
+        IP=IP(
+            unit="Btu/ft<sup>2</sup>",
+            range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value],
+        ),
     )
     DIR_NOR_RAD = VariableInfo(
         col_name="dir_nor_rad",
@@ -222,7 +234,10 @@ class Variables:
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
         color=ColorPalettes.SUN_COLORS.value,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value]),
+        IP=IP(
+            unit="Btu/ft<sup>2</sup>",
+            range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value],
+        ),
     )
     DIF_HOR_RAD = VariableInfo(
         col_name="dif_hor_rad",
@@ -230,7 +245,10 @@ class Variables:
         unit="Wh/m<sup>2</sup>",
         range=[0, 1200],
         color=ColorPalettes.SUN_COLORS.value,
-        IP=IP(unit="Btu/ft<sup>2</sup>", range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value]),
+        IP=IP(
+            unit="Btu/ft<sup>2</sup>",
+            range=[0, 1200 * ColorPalettes.WHM2_TO_BTU_FT2.value],
+        ),
     )
 
     # ==================== Lighting Related Variables ====================
