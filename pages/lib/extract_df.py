@@ -444,10 +444,8 @@ def create_df(lst, file_name):
 def convert_SI_to_IP(df: pd.DataFrame, name: str) -> None:
     """Convert SI to IP based on column name."""
     if name not in df.columns:
-        print(
-            f"[convert_SI_to_IP] Column '{name}' not found in DataFrame. Skipping conversion."
-        )
         return
+
     match name:
         case (
             Variables.DBT.col_name

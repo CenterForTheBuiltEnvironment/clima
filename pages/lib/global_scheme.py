@@ -1,62 +1,56 @@
 import plotly.io as pio
-
+import numpy as np
 from pages.lib.global_variables import Variables, VariableInfo
 
-# Colors Dictionary
-blue_red_yellow = ["#00b3ff", "#000082", "#ff0000", "#ffff00"]
-dry_humid = ["#ffe600", "#00c8ff", "#0000ff"]
-sun_colors = [
-    "#293a59",
-    "#960c2c",
-    "#ff0000",
-    "#ff7b00",
-    "#fffc00",
-    "#ffff7b",
-    "#ffffff",
-]
-light_colors = ["#4d6daa", "#a0beed", "#f1e969", "#eb7d05", "#d81600"]
-bright_colors = ["#730a8c", "#0d0db3", "#0f85be", "#0f85be", "#b11421", "#fdf130"]
-wind_speed_color = [
-    "#ffffff",
-    "#b2f2ff",
-    "#33ddff",
-    "#00aaff",
-    "#0055ff",
-    "#0000ff",
-    "#aa00ff",
-    "#ff00ff",
-    "#cc0000",
-    "#ffaa00",
-]
-wind_dir_color = ["#0072dd", "#00c420", "#eded00", "#be00d5", "#0072dd"]
-cloud_colors = [
-    "#7ec9f3",
-    "#e6eae9",
-    "#c2c2c2",
-]
-utci_categories_color = [
-    # Let first 10% (0.1) of the values have color rgb(0, 0, 0)
-    [0, "#2B2977"],
-    [0.0555, "#2B2977"],
-    [0.0555, "#38429B"],
-    [0.0555 + 0.111 * 1, "#38429B"],
-    [0.0555 + 0.111 * 1, "#4253A4"],
-    [0.0555 + 0.111 * 2, "#4253A4"],
-    [0.0555 + 0.111 * 2, "#4B62AD"],
-    [0.0555 + 0.111 * 3, "#4B62AD"],
-    [0.0555 + 0.111 * 3, "#68B8E7"],
-    [0.0555 + 0.111 * 4, "#68B8E7"],
-    [0.0555 + 0.111 * 4, "#53B848"],
-    [0.0555 + 0.111 * 5, "#53B848"],
-    [0.0555 + 0.111 * 5, "#EE8522"],
-    [0.0555 + 0.111 * 6, "#EE8522"],
-    [0.0555 + 0.111 * 6, "#EA2C24"],
-    [0.0555 + 0.111 * 7, "#EA2C24"],
-    [0.0555 + 0.111 * 7, "#B12224"],
-    [0.0555 + 0.111 * 8, "#B12224"],
-    [0.0555 + 0.111 * 8, "#751613"],
-    [1.0, "#751613"],
-]
+WIND_ROSE_BINS = [-1, 0.5, 1.5, 3.3, 5.5, 7.9, 10.7, 13.8, 17.1, 20.7, np.inf]
+
+
+def _stepped_colorscale_from_bins(bins, colors):
+    """
+    Build a stepped colorscale from bin edges and colors.
+
+    Args:
+        bins: sequence/list of N+1 bin edges (ascending). The last edge may be np.inf.
+        colors: sequence/list of N colors, one per interval.
+
+    Returns:
+        List of (position, color) tuples for a Plotly colorscale with positions in [0, 1].
+    """
+    if len(bins) != len(colors) + 1:
+        raise ValueError(
+            f"Expected {len(colors) + 1} bin edges for {len(colors)} colors, "
+            f"got {len(bins)}"
+        )
+
+    if any(b2 < b1 for b1, b2 in zip(bins, bins[1:])):
+        raise ValueError("bins must be in non-decreasing order")
+
+    finite_edges = [b for b in bins if np.isfinite(b)]
+    if not finite_edges:
+        raise ValueError("All bin edges are non-finite; cannot build colorscale.")
+
+    vmin, vmax = finite_edges[0], finite_edges[-1]
+    span = (vmax - vmin) or 1.0
+
+    cs = []
+    for i, c in enumerate(colors):
+        left_edge, right_edge = bins[i], bins[i + 1]
+
+        left = 0.0 if not np.isfinite(left_edge) else (left_edge - vmin) / span
+        right = 1.0 if not np.isfinite(right_edge) else (right_edge - vmin) / span
+
+        left = max(0.0, min(1.0, float(left)))
+        right = max(0.0, min(1.0, float(right)))
+
+        cs.append((left, c))
+        cs.append((right, c))
+
+    return cs
+
+
+wind_speed_colorscale_rose = _stepped_colorscale_from_bins(
+    WIND_ROSE_BINS, Variables.WIND_SPEED.color
+)
 
 # containers
 container_row_center_full = "container-row row-center"
