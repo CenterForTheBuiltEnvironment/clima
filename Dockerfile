@@ -2,18 +2,25 @@
 # https://hub.docker.com/_/python
 FROM python:3.11-slim
 
+# Allow statements and log messages to immediately appear in the Knative logs
+ENV PYTHONUNBUFFERED True
+
 RUN apt-get update \
-&& apt-get install gcc -y \
-&& apt-get clean
+    && apt-get install --no-install-recommends -y gcc \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV APP_HOME /app
-WORKDIR $APP_HOME
+# Install pipenv
+RUN python -m pip install --upgrade pip \
+    && python -m pip install --no-cache-dir "pipenv>=2024.0,<2026.0"
+# Set working directory
+WORKDIR /app
 
-COPY . ./
+# Copy Pipfile and Pipfile.lock
+COPY Pipfile Pipfile.lock ./
 
-# Install production dependencies.
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install dependencies
+RUN pipenv sync --deploy --system
 
 EXPOSE 8080
 

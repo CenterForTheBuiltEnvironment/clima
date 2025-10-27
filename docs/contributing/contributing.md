@@ -115,9 +115,7 @@ Before submitting a Pull Request, please make sure:
 - You have installed project dependencies:
 
 ```bash
-npm install
-
-pipenv install -r requirements.txt
+pipenv sync
 ```
 
 From the root directory, run:
