@@ -130,10 +130,13 @@ Before submitting a Pull Request, please make sure:
 
 ```bash
 pipenv sync
+pipenv run playwright install  # Required to install browsers
 ```
-
-From the root directory, run:
-
+Start the app server:
+```bash
+pipenv run python main.py
+```
+Then, from the root directory, run:
 ```bash
 cd tests
 
