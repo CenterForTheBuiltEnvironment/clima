@@ -118,7 +118,7 @@ Strive to minimize redundancy in your code.
 ### UI Modifications
 For UI-related changes:
 * Avoid unnecessary custom CSS.
-* [Use DMC (Design Master Components)](https://www.dash-mantine-components.com/) wherever applicable for layout and styling consistency.
+* Use [DMC (Dash Mantine Components)](https://www.dash-mantine-components.com/) wherever applicable for layout and styling consistency.
 * Ensure visual consistency with existing components.
 
 
