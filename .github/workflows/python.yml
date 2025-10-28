@@ -33,4 +33,4 @@ jobs:
 
       - name: Test Clima
         run: |-
-          pipenv run python -m pytest
+          pipenv run pytest --base-url=http://127.0.0.1:8080

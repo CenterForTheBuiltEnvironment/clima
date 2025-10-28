@@ -135,9 +135,9 @@ pipenv sync
 From the root directory, run:
 
 ```bash
-cd tests/node
+cd tests
 
-npx cypress run
+pipenv run pytest --base-url=http://127.0.0.1:8080
 ```
 
 ## Submitting changes
