@@ -61,6 +61,6 @@ def test_explorer_dropdown_interaction(page: Page):
     dropdown.click()
     options = page.locator(".VirtualizedSelectOption")
     assert options.count() > 0
-    options.filter(has_text="Relative humidity").first
+    options.filter(has_text="Relative humidity").first.click()
     expect(page.locator("#yearly-explore")).to_be_visible()
     expect(page.locator("#query-heatmap")).to_be_visible()
