@@ -32,9 +32,8 @@ jobs:
           pipenv run ruff format --check .
 
       - name: Install Playwright Browsers
-        uses: microsoft/playwright-github-action@v1
-        with:
-          with-deps: true
+        run: |
+          pipenv run playwright install --with-deps
 
       - name: Start Clima
         run: |-
