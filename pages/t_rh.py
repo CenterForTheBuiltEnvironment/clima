@@ -247,13 +247,13 @@ def update_heatmap(_, global_local, dd_value, global_filter_data, df, meta, si_i
             ),
         )
     else:
-        if f"_{Variables.DBT.col_name}_original" in df.columns:
-            base_columns.append(f"_{Variables.DBT.col_name}_original")
+        if f"_{Variables.RH.col_name}_original" in df.columns:
+            base_columns.append(f"_{Variables.RH.col_name}_original")
         units = generate_units(si_ip)
         return dcc.Graph(
             config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_HEATMAP, meta, units),
             figure=heatmap(
-                df[[Variables.DBT.col_name] + base_columns],
+                df[[Variables.RH.col_name] + base_columns],
                 Variables.RH.col_name,
                 global_local,
                 si_ip,
