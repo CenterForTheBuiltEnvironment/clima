@@ -290,16 +290,14 @@ def create_header():
                 children=[
                     dmc.Title(
                         "CBE Clima Tool",
-                        id=ElementIds.BANNER_TITLE,
                         order=2,
                         lh=1.1,
                         c="white",
                     ),
                     dmc.Text(
                         "Current Location: N/A",
-                        id=ElementIds.ID_LAYOUT_BANNER_SUBTITLE,
+                        id=ElementIds.ID_SELECT_BANNER_SUBTITLE,
                         size="sm",
-                        opacity=0.85,
                         style={"overflow": "hidden"},
                         c="white",
                     ),
