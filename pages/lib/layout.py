@@ -42,108 +42,74 @@ class NavBarIcons:
 # global filters
 def create_tools_filter_components():
     # Apply month and hour filter
-    apply_month_hour_section = dmc.Stack(
+    return dmc.Stack(
         id=ElementIds.TOOLS_MONTH_HOUR_SECTION,
         children=[
-            dmc.Divider(label="Filter function", size="xs", color="blue", mb="xs"),
+            dmc.Divider(label="Filter function", size="xs", color="blue"),
             dmc.Button(
                 "Apply month and hour filter",
                 id=ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER,
                 color="blue",
                 variant="light",
                 size="xs",
-                mb="xs",
             ),
-            dmc.Stack(
+            dmc.Text("Month Range:", size="xs", c="dimmed"),
+            dcc.RangeSlider(
+                id=ElementIds.TOOLS_MONTH_SLIDER,
+                min=1,
+                max=12,
+                step=1,
+                value=[1, 12],
+                marks={1: "1", 12: "12"},
+                tooltip={
+                    "always_visible": False,
+                    "placement": "top",
+                },
+                allowCross=False,
+            ),
+            dmc.Group(
                 [
-                    dmc.Text("Month Range:", size="xs", c="dimmed"),
-                    dmc.Stack(
-                        [
-                            dcc.RangeSlider(
-                                id=ElementIds.TOOLS_MONTH_SLIDER,
-                                min=1,
-                                max=12,
-                                step=1,
-                                value=[1, 12],
-                                marks={1: "1", 12: "12"},
-                                tooltip={
-                                    "always_visible": False,
-                                    "placement": "top",
-                                },
-                                allowCross=False,
-                            ),
-                            dmc.Group(
-                                [
-                                    dmc.Switch(
-                                        id=ElementIds.TOOLS_INVERT_MONTH,
-                                        label="Invert",
-                                        checked=False,
-                                        size="xs",
-                                        color="blue",
-                                        style={"fontSize": "0.7rem"},
-                                    ),
-                                ],
-                                justify="flex-end",
-                            ),
-                        ],
-                        gap="xs",
+                    dmc.Switch(
+                        id=ElementIds.TOOLS_INVERT_MONTH,
+                        label="Invert",
+                        checked=False,
+                        size="xs",
+                        color="blue",
+                        style={"fontSize": "0.7rem"},
                     ),
                 ],
-                gap="xs",
-                mb="xs",
+                justify="flex-end",
             ),
-            dmc.Stack(
+            dmc.Text("Hour Range:", size="xs", c="dimmed"),
+            dcc.RangeSlider(
+                id=ElementIds.TOOLS_HOUR_SLIDER,
+                min=0,
+                max=24,
+                step=1,
+                value=[0, 24],
+                marks={0: "0", 24: "24"},
+                tooltip={
+                    "always_visible": False,
+                    "placement": "top",
+                },
+                allowCross=False,
+            ),
+            dmc.Group(
                 [
-                    dmc.Text("Hour Range:", size="xs", c="dimmed"),
-                    dmc.Stack(
-                        [
-                            dcc.RangeSlider(
-                                id=ElementIds.TOOLS_HOUR_SLIDER,
-                                min=0,
-                                max=24,
-                                step=1,
-                                value=[0, 24],
-                                marks={0: "0", 24: "24"},
-                                tooltip={
-                                    "always_visible": False,
-                                    "placement": "top",
-                                },
-                                allowCross=False,
-                            ),
-                            dmc.Group(
-                                [
-                                    dmc.Switch(
-                                        id=ElementIds.TOOLS_INVERT_HOUR,
-                                        label="Invert",
-                                        checked=False,
-                                        size="xs",
-                                        color="blue",
-                                        style={"fontSize": "0.7rem"},
-                                    ),
-                                ],
-                                justify="flex-end",
-                            ),
-                        ],
-                        gap="xs",
+                    dmc.Switch(
+                        id=ElementIds.TOOLS_INVERT_HOUR,
+                        label="Invert",
+                        checked=False,
+                        size="xs",
+                        color="blue",
+                        style={"fontSize": "0.7rem"},
                     ),
                 ],
-                gap="xs",
+                justify="flex-end",
             ),
         ],
         gap="xs",
         p="xs",
-        style={
-            "backgroundColor": "#f8f9fa",
-            "borderRadius": "6px",
-            "border": "1px solid #e9ecef",
-        },
-    )
-
-    return dmc.Stack(
-        children=[
-            apply_month_hour_section,
-        ],
-        gap="sm",
     )
 
 
