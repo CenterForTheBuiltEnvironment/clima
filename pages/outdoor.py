@@ -36,35 +36,29 @@ dash.register_page(
 
 
 def inputs_outdoor_comfort():
-    return dmc.SimpleGrid(
-        cols=2,
-        children=[
-            dmc.Group(
-                [
-                    dmc.Title("Select a scenario:", order=5),
-                    dmc.Stack(
-                        dropdown(
-                            id=ElementIds.OUTDOOR_DROPDOWN,
-                            options=outdoor_dropdown_names,
-                            value="utci_Sun_Wind",
-                            persistence=True,
-                            persistence_type="session",
-                        ),
-                        flex=1,
-                    ),
-                    dmc.Paper(id=ElementIds.IMAGE_SELECTION),
-                ],
-                align="flex-start",
+    return dmc.Group(
+        [
+            dmc.Title("Select a scenario:", order=5),
+            dropdown(
+                id=ElementIds.OUTDOOR_DROPDOWN,
+                options=outdoor_dropdown_names,
+                value="utci_Sun_Wind",
+                persistence=True,
+                persistence_type="session",
             ),
+            dmc.Paper(id=ElementIds.IMAGE_SELECTION),
         ],
+        gap="xs",
+        justify="center",
     )
 
 
 def outdoor_comfort_chart():
     return dmc.Stack(
         children=[
-            dmc.Paper(
+            dmc.Title(
                 id=ElementIds.OUTDOOR_COMFORT_OUTPUT,
+                order=4
             ),
             title_with_link(
                 text="UTCI heatmap chart",
