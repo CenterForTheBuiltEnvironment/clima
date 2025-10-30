@@ -384,6 +384,7 @@ def degree_day_chart(
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -391,7 +392,14 @@ def degree_day_chart(
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_violin_tdb(ts, global_local, df, meta, si_ip):
+def update_violin_tdb(ts, global_local, global_filter_data, df, meta, si_ip):
+    # Apply global filter if active
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.DBT.col_name
+        )
     units = generate_units_degree(si_ip)
     return dcc.Graph(
         id=ElementIds.TDB_PROFILE_GRAPH,
@@ -405,6 +413,7 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -412,8 +421,14 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_wind(ts, global_local, df, meta, si_ip):
+def update_tab_wind(ts, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.WIND_SPEED.col_name
+        )
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.WIND_PROFILE_GRAPH,
@@ -427,6 +442,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -434,8 +450,14 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_rh(ts, global_local, df, meta, si_ip):
+def update_tab_rh(ts, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.RH.col_name
+        )
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.RH_PROFILE_GRAPH,
@@ -449,6 +471,7 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -456,8 +479,14 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
+def update_tab_gh_rad(ts, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.GLOB_HOR_RAD.col_name
+        )
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.GH_RAD_PROFILE_GRAPH,

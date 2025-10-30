@@ -5,7 +5,11 @@ from dash_iconify import DashIconify
 from pages.lib.global_variables import Variables
 from config import DocLinks, UnitSystem
 from pages.lib.global_element_ids import ElementIds
-from pages.lib.utils import determine_month_and_hour_filter
+from pages.lib.utils import (
+    determine_month_and_hour_filter,
+    get_default_global_filter_store_data,
+    get_global_filter_state,
+)
 
 
 class NavBarIcons:
@@ -41,7 +45,7 @@ class NavBarIcons:
 
 # global filters
 def create_tools_filter_components():
-    # Apply month and hour filter
+    # Apply month and hour filter (reduced nesting, same visual layout)
     return dmc.Stack(
         id=ElementIds.TOOLS_MONTH_HOUR_SECTION,
         children=[
@@ -53,6 +57,7 @@ def create_tools_filter_components():
                 variant="light",
                 size="xs",
             ),
+            # Month controls
             dmc.Text("Month Range:", size="xs", c="dimmed"),
             dcc.RangeSlider(
                 id=ElementIds.TOOLS_MONTH_SLIDER,
@@ -80,6 +85,7 @@ def create_tools_filter_components():
                 ],
                 justify="flex-end",
             ),
+            # Hour controls
             dmc.Text("Hour Range:", size="xs", c="dimmed"),
             dcc.RangeSlider(
                 id=ElementIds.TOOLS_HOUR_SLIDER,
@@ -394,13 +400,7 @@ def create_stores():
             ),
             dcc.Store(
                 id=ElementIds.TOOLS_GLOBAL_FILTER_STORE,
-                data={
-                    "month_range": [1, 12],
-                    "hour_range": [0, 24],
-                    "invert_month": [],
-                    "invert_hour": [],
-                    "filter_active": False,
-                },
+                data=get_default_global_filter_store_data(),
                 storage_type="session",
             ),
             dcc.Interval(
@@ -531,41 +531,22 @@ def show_alert_after_delay(n_intervals):
 def update_global_filter_state(
     apply_clicks, month_range, hour_range, invert_month, invert_hour, current_data
 ):
-    if apply_clicks is None:
-        apply_clicks = 0
+    if not apply_clicks:
+        return current_data or get_default_global_filter_store_data()
 
-    if apply_clicks > 0:
-        current_data["filter_active"] = True
-
-        current_data.update(
-            {
-                "month_range": month_range or [1, 12],
-                "hour_range": hour_range or [0, 24],
-                "invert_month": ["invert"] if invert_month else [],
-                "invert_hour": ["invert"] if invert_hour else [],
-            }
-        )
-
-    return current_data
-
-
-def get_global_filter_state(filter_store_data):
-    if not filter_store_data:
-        return {
-            "filter_active": False,
-            "month_range": [1, 12],
-            "hour_range": [0, 24],
-            "invert_month": False,
-            "invert_hour": False,
-        }
-
-    return {
-        "filter_active": filter_store_data.get("filter_active", False),
-        "month_range": filter_store_data.get("month_range", [1, 12]),
-        "hour_range": filter_store_data.get("hour_range", [0, 24]),
-        "invert_month": bool(filter_store_data.get("invert_month", [])),
-        "invert_hour": bool(filter_store_data.get("invert_hour", [])),
+    # Normalize existing data, then override with inputs
+    base_state = get_global_filter_state(current_data)
+    updated_state = {
+        **base_state,
+        "filter_active": True,
+        "month_range": month_range or base_state["month_range"],
+        "hour_range": hour_range or base_state["hour_range"],
+        # store as booleans; readers use get_global_filter_state for coercion
+        "invert_month": bool(invert_month),
+        "invert_hour": bool(invert_hour),
     }
+
+    return updated_state
 
 
 def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
@@ -592,7 +573,6 @@ def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
     elif isinstance(target_columns, str):
         target_columns = [target_columns]
 
-    month_mask = None
     if start_month <= end_month:
         month_mask = (df_copy[Variables.MONTH.col_name] < start_month) | (
             df_copy[Variables.MONTH.col_name] > end_month
@@ -602,7 +582,6 @@ def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
             df_copy[Variables.MONTH.col_name] <= start_month
         )
 
-    hour_mask = None
     if start_hour <= end_hour:
         hour_mask = (df_copy[Variables.HOUR.col_name] < start_hour) | (
             df_copy[Variables.HOUR.col_name] > end_hour
@@ -623,7 +602,7 @@ def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
             df_copy, start_month, end_month, Variables.MONTH.col_name, target_col
         )
         time_filtering(
-            df_copy, start_hour, end_hour, Variables.MONTH.col_name, target_col
+            df_copy, start_hour, end_hour, Variables.HOUR.col_name, target_col
         )
 
     return df_copy
@@ -642,12 +621,10 @@ def apply_global_month_hour_filter(df, filter_store_data, target_columns=None):
     prevent_initial_call=False,
 )
 def sync_sliders_with_global_state(global_filter_data):
-    if not global_filter_data:
-        return [1, 12], [0, 24], False, False
-
+    state = get_global_filter_state(global_filter_data)
     return (
-        global_filter_data.get("month_range", [1, 12]),
-        global_filter_data.get("hour_range", [0, 24]),
-        bool(global_filter_data.get("invert_month", [])),
-        bool(global_filter_data.get("invert_hour", [])),
+        state["month_range"],
+        state["hour_range"],
+        state["invert_month"],
+        state["invert_hour"],
     )

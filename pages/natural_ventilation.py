@@ -150,19 +150,20 @@ def inputs_tab(t_min, t_max, d_set):
                         variant="link",
                         disabled=True,
                     ),
-                    dcc.Checklist(
-                        options=[
-                            {
-                                "label": (
+                    dmc.CheckboxGroup(
+                        id=ElementIds.ENABLE_CONDENSATION,
+                        value=[],
+                        children=[
+                            dmc.Checkbox(
+                                label=(
                                     "Avoid condensation with radiant systems: If the "
                                     "outdoor dew point temperature is below the radiant "
                                     "system surface temperature, the data point is not plot."
                                 ),
-                                "value": 1,
-                            }
+                                value=1,
+                                size="sm",
+                            )
                         ],
-                        value=[],
-                        id=ElementIds.ENABLE_CONDENSATION,
                     ),
                     dmc.Group(
                         [

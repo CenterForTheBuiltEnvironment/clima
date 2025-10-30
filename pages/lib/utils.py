@@ -217,13 +217,44 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
         .describe(percentiles=[0.01, 0.25, 0.5, 0.75, 0.99])
         .round(2)
     )
-    df_summary = df_summary.reset_index(
-        level=Variables.MONTH_NAMES.col_name
-    ).sort_index()
-    df_summary = df_summary.drop(["count"], axis=1)
-    df_summary = df_summary.rename(
-        columns={Variables.MONTH_NAMES.col_name: Variables.MONTH.col_name}
-    )
+    # Robust reset: when groupby is empty, index level names may be lost (None)
+    df_summary = df_summary.reset_index()
+    # Ensure we have a single human-readable month column named 'month'
+    has_month_num = Variables.MONTH.col_name in df_summary.columns
+    has_month_name = Variables.MONTH_NAMES.col_name in df_summary.columns
+    if has_month_num:
+        df_summary = df_summary.sort_values(by=Variables.MONTH.col_name)
+    if has_month_name and has_month_num:
+        # Keep readable names as 'month', drop numeric to avoid duplicate columns
+        df_summary = df_summary.rename(
+            columns={Variables.MONTH_NAMES.col_name: Variables.MONTH.col_name}
+        )
+        # After rename there will be two 'month' columns; drop the numeric one by position
+        # Keep the leftmost 'month' (the renamed names column)
+        cols = []
+        seen = set()
+        for c in df_summary.columns:
+            if c == Variables.MONTH.col_name:
+                if c in seen:
+                    continue
+                seen.add(c)
+                cols.append(c)
+            else:
+                cols.append(c)
+        df_summary = df_summary.loc[:, cols]
+        # Explicitly drop the numeric month column if still present as a duplicate
+        if df_summary.columns.duplicated().any():
+            df_summary = df_summary.loc[:, ~df_summary.columns.duplicated()]
+    elif has_month_name and not has_month_num:
+        df_summary = df_summary.rename(
+            columns={Variables.MONTH_NAMES.col_name: Variables.MONTH.col_name}
+        )
+    # Drop 'count' if present
+    if "count" in df_summary.columns:
+        df_summary = df_summary.drop(["count"], axis=1)
+    # Guarantee unique columns
+    if df_summary.columns.duplicated().any():
+        df_summary = df_summary.loc[:, ~df_summary.columns.duplicated()]
 
     df_sum = (
         df[value]
@@ -235,7 +266,7 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
         columns={"count": Variables.MONTH.col_name}
     )
 
-    df_summary = pd.concat([df_summary, df_sum])
+    df_summary = pd.concat([df_summary, df_sum], ignore_index=True)
 
     unit = (
         VariableInfo.from_col_name(value)
@@ -288,7 +319,6 @@ def dropdown(options=None, **kwargs):
     return dcc.Dropdown(
         options=[{"label": k, "value": v} for k, v in options.items()],
         clearable=False,
-        style={"width": "14rem"},
         **kwargs,
     )
 
@@ -303,6 +333,63 @@ def get_max_min_value(series: pd.Series, base: int = 5) -> tuple[int, int]:
     Returns:
         Tuple of (max_value, min_value) adjusted to nearest base step.
     """
-    data_max = base * math.ceil(series.max() / base)
-    data_min = base * math.floor(series.min() / base)
+    # Guard against all-NaN series after filtering
+    non_na = series.dropna()
+    if non_na.empty:
+        # Fallback to a symmetric small range to avoid rendering errors
+        return base, -base
+
+    data_max = base * math.ceil(non_na.max() / base)
+    data_min = base * math.floor(non_na.min() / base)
     return data_max, data_min
+
+
+def get_default_global_filter_store_data() -> dict:
+    """Return default data structure for TOOLS_GLOBAL_FILTER_STORE.
+
+    Centralizes the default so it can be reused across pages without duplication.
+    """
+    return {
+        "month_range": [1, 12],
+        "hour_range": [0, 24],
+        "invert_month": [],
+        "invert_hour": [],
+        "filter_active": False,
+    }
+
+
+def get_global_filter_state(filter_store_data: dict | None) -> dict:
+    """Normalize filter store data into a consistent, easy-to-use structure.
+
+    Ensures defaults are applied and types are coerced to booleans where appropriate.
+    """
+    default_data = get_default_global_filter_store_data()
+    data = (
+        default_data if not filter_store_data else {**default_data, **filter_store_data}
+    )
+
+    return {
+        "filter_active": bool(data.get("filter_active", False)),
+        "month_range": data.get("month_range", [1, 12]),
+        "hour_range": data.get("hour_range", [0, 24]),
+        # invert flags may be stored as []/['invert'] or booleans; coerce to bool
+        "invert_month": bool(data.get("invert_month", [])),
+        "invert_hour": bool(data.get("invert_hour", [])),
+    }
+
+
+def get_time_filter_from_store(
+    filter_store_data: dict | None,
+) -> tuple[bool, list[int], list[int], bool, bool]:
+    """Return normalized time filter arguments from the global filter store.
+
+    Returns (time_filter, month, hour, invert_month, invert_hour).
+    """
+    state = get_global_filter_state(filter_store_data)
+    return (
+        True,
+        state["month_range"],
+        state["hour_range"],
+        state["invert_month"],
+        state["invert_hour"],
+    )

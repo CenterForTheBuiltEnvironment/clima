@@ -68,18 +68,15 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
         filtered_mask = df["_is_filtered"]
         if filtered_mask.any():
             original_col = f"_{var}_original"
-            if original_col in df.columns:
-                filtered_z = df[original_col].copy()
-            else:
-                filtered_z = df[var].copy()
-
-            filtered_z[~filtered_mask] = None
+            col_to_use = original_col if original_col in df.columns else var
+            filtered_values = df[col_to_use].copy()
+            filtered_values[~filtered_mask] = None
 
             fig.add_trace(
                 go.Heatmap(
                     y=df[Variables.HOUR.col_name],
                     x=df[Variables.DOY.col_name],
-                    z=filtered_z,
+                    z=filtered_values,
                     colorscale=[[0, "lightgray"], [1, "gray"]],
                     zmin=range_z[0],
                     zmax=range_z[1],
@@ -99,14 +96,14 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
                 )
             )
 
-        normal_z = df[var].copy()
-        normal_z[filtered_mask] = None
+        base_values = df[var].copy()
+        base_values[filtered_mask] = None
 
         fig.add_trace(
             go.Heatmap(
                 y=df[Variables.HOUR.col_name],
                 x=df[Variables.DOY.col_name],
-                z=normal_z,
+                z=base_values,
                 colorscale=var_color,
                 zmin=range_z[0],
                 zmax=range_z[1],
