@@ -56,13 +56,12 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 
 def inputs():
-    return dmc.SimpleGrid(
-        cols=2,
+    return dmc.Grid(
         children=[
-            dmc.Group(
-                [
-                    dmc.Title("Color By:", order=5),
-                    dmc.Stack(
+            dmc.GridCol(
+                dmc.Group(
+                    [
+                        dmc.Title("Color By:", order=5),
                         dropdown(
                             id=ElementIds.PSY_COLOR_BY_DROPDOWN,
                             options=psy_dropdown_names,
@@ -70,60 +69,54 @@ def inputs():
                             persistence=True,
                             persistence_type="session",
                         ),
-                        flex=1,
-                    ),
-                ],
-                align="flex-start",
+                    ],
+                ),
+                span=4,
             ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        id=ElementIds.DATA_FILTER,
-                        color="blue",
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Filter Variable:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Button(
+                            "Apply filter",
+                            id=ElementIds.DATA_FILTER,
+                            color="blue",
+                            w="50%",
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Filter Variable:", order=5),
                                 dropdown(
                                     id=ElementIds.PSY_VAR_DROPDOWN,
                                     options=dropdown_names,
                                     value=Variables.RH.col_name,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Min Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.PSY_MIN_VAL,
                                     placeholder="Enter a number for the min val",
                                     value=0,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Max Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.PSY_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=100,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                    ],
+                ),
+                span=8,
             ),
         ],
     )

@@ -97,89 +97,87 @@ def update_layout(si_ip):
 
 
 def inputs_tab(t_min, t_max, d_set):
-    return dmc.SimpleGrid(
-        cols=2,
-        spacing="md",
+    return dmc.Grid(
         children=[
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        color="blue",
-                        id=ElementIds.NV_DBT_FILTER,
-                        variant="link",
-                        n_clicks=1,
-                    ),
-                    dmc.Title("Outdoor dry-bulb air temperature range", order=5),
-                    dmc.Group(
-                        [
-                            dmc.Title("Min Value:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DBT_FILTER,
+                            variant="link",
+                            n_clicks=1,
+                            w="80%",
+                        ),
+                        dmc.Title("Outdoor dry-bulb air temperature range", order=5),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.NV_TDB_MIN_VAL,
                                     placeholder="Enter a number for the min val",
                                     step=1,
                                     value=t_min,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Max Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.NV_TDB_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=t_max,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ]
+                            ],
+                        ),
+                    ]
+                ),
+                span=4,
             ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        color="blue",
-                        id=ElementIds.NV_DPT_FILTER,
-                        variant="link",
-                        disabled=True,
-                    ),
-                    dmc.CheckboxGroup(
-                        id=ElementIds.ENABLE_CONDENSATION,
-                        value=[],
-                        children=[
-                            dmc.Checkbox(
-                                label=(
-                                    "Avoid condensation with radiant systems: If the "
-                                    "outdoor dew point temperature is below the radiant "
-                                    "system surface temperature, the data point is not plot."
-                                ),
-                                value=1,
-                                size="sm",
-                            )
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Surface temperature:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DPT_FILTER,
+                            variant="link",
+                            disabled=True,
+                            w="70%",
+                        ),
+                        dmc.CheckboxGroup(
+                            id=ElementIds.ENABLE_CONDENSATION,
+                            value=[],
+                            children=[
+                                dmc.Checkbox(
+                                    label=(
+                                        "Avoid condensation with radiant systems: If the "
+                                        "outdoor dew point temperature is below the radiant "
+                                        "system surface temperature, the data point is not plot."
+                                    ),
+                                    value=1,
+                                    size="sm",
+                                    w="70%",
+                                )
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Surface temperature:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.NV_DPT_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=d_set,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ]
+                            ],
+                        ),
+                    ]
+                ),
+                span=8,
             ),
         ],
     )
