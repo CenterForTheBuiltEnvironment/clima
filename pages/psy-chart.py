@@ -57,31 +57,25 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 def inputs():
     return dmc.Grid(
+        justify='center',
         children=[
             dmc.GridCol(
-                dmc.Group(
-                    [
-                        dmc.Title("Color By:", order=5),
-                        dropdown(
-                            id=ElementIds.PSY_COLOR_BY_DROPDOWN,
-                            options=psy_dropdown_names,
-                            value="Frequency",
-                            persistence=True,
-                            persistence_type="session",
-                        ),
-                    ],
-                ),
-                span=4,
+                [
+                    dmc.Title("Color By:", order=5),
+                    dropdown(
+                        id=ElementIds.PSY_COLOR_BY_DROPDOWN,
+                        options=psy_dropdown_names,
+                        value="Frequency",
+                        persistence=True,
+                        persistence_type="session",
+                    ),
+                ],
+                span={"base": 12, "md": 4},
             ),
             dmc.GridCol(
                 dmc.Stack(
                     [
-                        dmc.Button(
-                            "Apply filter",
-                            id=ElementIds.DATA_FILTER,
-                            color="blue",
-                            w="50%",
-                        ),
+
                         dmc.Group(
                             [
                                 dmc.Title("Filter Variable:", order=5),
@@ -113,10 +107,15 @@ def inputs():
                                     step=1,
                                 ),
                             ],
+                        ),dmc.Button(
+                            "Apply filter",
+                            id=ElementIds.DATA_FILTER,
+                            color="blue",
+                            w="50%",
                         ),
                     ],
                 ),
-                span=8,
+                span={"base": 12, "md": 4},
             ),
         ],
     )

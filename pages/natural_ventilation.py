@@ -98,18 +98,11 @@ def update_layout(si_ip):
 
 def inputs_tab(t_min, t_max, d_set):
     return dmc.Grid(
+        justify="center",
         children=[
             dmc.GridCol(
                 dmc.Stack(
                     [
-                        dmc.Button(
-                            "Apply filter",
-                            color="blue",
-                            id=ElementIds.NV_DBT_FILTER,
-                            variant="link",
-                            n_clicks=1,
-                            w="80%",
-                        ),
                         dmc.Title("Outdoor dry-bulb air temperature range", order=5),
                         dmc.Group(
                             [
@@ -133,20 +126,31 @@ def inputs_tab(t_min, t_max, d_set):
                                 ),
                             ],
                         ),
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DBT_FILTER,
+                            variant="link",
+                            n_clicks=1,
+                            w="80%",
+                        ),
                     ]
                 ),
-                span=4,
+                span={"base": 12, "md": 4},
             ),
             dmc.GridCol(
                 dmc.Stack(
                     [
-                        dmc.Button(
-                            "Apply filter",
-                            color="blue",
-                            id=ElementIds.NV_DPT_FILTER,
-                            variant="link",
-                            disabled=True,
-                            w="70%",
+                        dmc.Group(
+                            [
+                                dmc.Title("Surface temperature:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_DPT_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=d_set,
+                                    step=1,
+                                ),
+                            ],
                         ),
                         dmc.CheckboxGroup(
                             id=ElementIds.ENABLE_CONDENSATION,
@@ -164,20 +168,17 @@ def inputs_tab(t_min, t_max, d_set):
                                 )
                             ],
                         ),
-                        dmc.Group(
-                            [
-                                dmc.Title("Surface temperature:", order=5),
-                                dmc.NumberInput(
-                                    id=ElementIds.NV_DPT_MAX_VAL,
-                                    placeholder="Enter a number for the max val",
-                                    value=d_set,
-                                    step=1,
-                                ),
-                            ],
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DPT_FILTER,
+                            variant="link",
+                            disabled=True,
+                            w="70%",
                         ),
                     ]
                 ),
-                span=8,
+                span={"base": 12, "md": 5},
             ),
         ],
     )
