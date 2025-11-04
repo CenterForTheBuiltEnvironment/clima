@@ -3,7 +3,7 @@
 FROM python:3.11-slim
 
 # Allow statements and log messages to immediately appear in the Knative logs
-ENV PYTHONUNBUFFERED True
+ENV PYTHONUNBUFFERED=True
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y gcc \
@@ -20,8 +20,10 @@ WORKDIR /app
 COPY Pipfile Pipfile.lock ./
 
 # Install dependencies
-RUN pipenv sync --deploy --system
+RUN pipenv sync
+
+COPY . .
 
 EXPOSE 8080
 
-CMD python main.py
+CMD ["pipenv", "run", "python", "main.py"]
