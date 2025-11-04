@@ -38,7 +38,7 @@ This ongoing project results from the collaboration and contributions of the peo
 * Wenshu lyu: Coding, code maintenance and review
 * Ziqi Liu: Coding, code maintenance and review
 * Tianchi Liu: Coding, code maintenance and review
-* Qian Liu: Coding, code maintenance and review
+* [Qian Liu](https://www.linkedin.com/in/qian-liu-48b294342): Coding, code maintenance and review
 * Feng Wang: Coding, code maintenance and review
 
 ## Acknowledgment

@@ -49,12 +49,13 @@ def test_nv_apply_filter(page: Page):
 # -------------------- Test Condensation Checkbox Interaction --------------------
 def test_nv_condensation_checkbox(page: Page):
     """Toggle condensation checkbox and verify dew point filter enables"""
-    checklist = page.locator("#enable-condensation")
+    checkbox = page.locator("input#enable-condensation")
     button = page.locator("#nv-dpt-filter")
 
-    # Initially should be disabled
     expect(button).to_be_disabled()
 
-    # Click to enable
-    checklist.get_by_label("Avoid condensation").check()
+    checkbox.click()
     expect(button).to_be_enabled()
+
+    checkbox.click()
+    expect(button).to_be_disabled()

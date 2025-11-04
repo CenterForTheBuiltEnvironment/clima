@@ -161,21 +161,16 @@ def inputs_tab(t_min, t_max, d_set):
                                 ),
                             ],
                         ),
-                        dmc.CheckboxGroup(
+                        dmc.Checkbox(
                             id=ElementIds.ENABLE_CONDENSATION,
-                            value=[],
-                            children=[
-                                dmc.Checkbox(
-                                    label=(
-                                        "Avoid condensation with radiant systems: If the "
-                                        "outdoor dew point temperature is below the radiant "
-                                        "system surface temperature, the data point is not plot."
-                                    ),
-                                    value=1,
-                                    size="sm",
-                                    w="70%",
-                                )
-                            ],
+                            label=(
+                                "Avoid condensation with radiant systems: If the "
+                                "outdoor dew point temperature is below the radiant "
+                                "system surface temperature, the data point is not plot."
+                            ),
+                            checked=False,
+                            size="sm",
+                            w="70%",
                         ),
                         dmc.Button(
                             "Apply filter",
@@ -565,17 +560,17 @@ def nv_bar_chart(
 
 @callback(
     Output(ElementIds.NV_DPT_FILTER, "disabled"),
-    Input(ElementIds.ENABLE_CONDENSATION, "value"),
+    Input(ElementIds.ENABLE_CONDENSATION, "checked"),
 )
-def enable_disable_button_data_filter(state_checklist):
-    if len(state_checklist) == 1:
+def enable_disable_button_data_filter(state_checkbox):
+    if state_checkbox:
         return False
     else:
         return True
 
 
 def enable_dew_point_data_filter(condensation_enabled):
-    if len(condensation_enabled) == 1:
+    if condensation_enabled:
         return True
     else:
         return False
