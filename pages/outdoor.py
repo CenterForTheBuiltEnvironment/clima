@@ -63,8 +63,9 @@ def outdoor_comfort_chart():
                 id_button=IdButtons.UTCI_CHARTS_LABEL,
                 doc_link=DocLinks.UTCI_CHART,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_HEATMAP,
                 ),
@@ -74,8 +75,9 @@ def outdoor_comfort_chart():
                 id_button=IdButtons.UTCI_CHARTS_LABEL,
                 doc_link=DocLinks.UTCI_CHART,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_CATEGORY_HEATMAP,
                 ),
@@ -98,11 +100,11 @@ def outdoor_comfort_chart():
                     ),
                 ],
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_SUMMARY_CHART,
-                    # p="sm",
                 ),
             ),
         ],
@@ -113,27 +115,16 @@ def layout():
     return dmc.Stack(
         p="md",
         children=[
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(
-                    children=[
-                        inputs_outdoor_comfort(),
-                        outdoor_comfort_chart(),
-                    ],
-                ),
-            ),
+            inputs_outdoor_comfort(),
+            outdoor_comfort_chart(),
         ],
     )
 
 
 @callback(
     Output(ElementIds.OUTDOOR_COMFORT_OUTPUT, "children"),
-    [
-        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
-    ],
-    [
-        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-    ],
+    Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+    State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
 )
 def update_outdoor_comfort_output(_, df):
     """

@@ -35,7 +35,14 @@ dash.register_page(
 def layout():
     """Contents in the second tab 'Climate Summary'."""
 
-    return dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER, p="md")
+    return dmc.Stack(
+        id=ElementIds.TAB_TWO_CONTAINER,
+        p="md",
+        children=dmc.Skeleton(  # needed to avoid empty layout on load
+            visible=True,
+            height="100vh",
+        ),
+    )
 
 
 @callback(
@@ -53,15 +60,18 @@ def update_layout(si_ip):
     return dmc.Stack(
         id=ElementIds.SUMMARY_SCE1_CONTAINER,
         children=[
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
                 children=dmc.Stack(
                     id=ElementIds.LOCATION_INFO,
+                    children=[dmc.Text("info")]
+                    * 10,  # placeholder text for height calc
                     gap=0,
                 ),
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=300,
                 children=dmc.Stack(id=ElementIds.WORLD_MAP),
             ),
             title_with_tooltip(
@@ -69,8 +79,8 @@ def update_layout(si_ip):
                 id_button=IdButtons.DOWNLOAD_BUTTON_LABEL,
                 tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
                 children=dmc.Group(
                     children=[
                         dmc.Button(
@@ -127,8 +137,9 @@ def update_layout(si_ip):
                     ),
                 ],
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
             ),
             title_with_link(

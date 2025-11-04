@@ -41,8 +41,7 @@ def layout():
         p="md",
         children=[
             dcc.Loading(
-                id=ElementIds.LOADING_ONE,
-                type="circle",
+                custom_spinner=dmc.Skeleton(visible=True, h="100%"),
                 fullscreen=True,
                 children=alert(),
             ),

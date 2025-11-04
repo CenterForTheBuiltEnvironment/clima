@@ -208,16 +208,19 @@ def layout():
                 id_button=IdButtons.WIND_ROSE_LABEL,
                 doc_link=DocLinks.WIND_ROSE,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.WIND_ROSE),
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.WIND_SPEED),
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.WIND_DIRECTION),
             ),
             seasonal_wind_rose(),

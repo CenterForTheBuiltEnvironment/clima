@@ -57,7 +57,7 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 def inputs():
     return dmc.Grid(
-        justify='center',
+        justify="center",
         children=[
             dmc.GridCol(
                 [
@@ -75,7 +75,6 @@ def inputs():
             dmc.GridCol(
                 dmc.Stack(
                     [
-
                         dmc.Group(
                             [
                                 dmc.Title("Filter Variable:", order=5),
@@ -107,7 +106,8 @@ def inputs():
                                     step=1,
                                 ),
                             ],
-                        ),dmc.Button(
+                        ),
+                        dmc.Button(
                             "Apply filter",
                             id=ElementIds.DATA_FILTER,
                             color="blue",
@@ -130,16 +130,11 @@ def layout():
                 id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(
-                    children=[
-                        inputs(),
-                        dmc.Paper(
-                            id=ElementIds.PSYCH_CHART,
-                        ),
-                    ],
-                ),
+            inputs(),
+            dmc.Skeleton(
+                visible=False,
+                h=450,
+                id=ElementIds.PSYCH_CHART,
             ),
         ],
     )

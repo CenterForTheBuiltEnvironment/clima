@@ -51,8 +51,9 @@ def layout():
                 id_button=IdButtons.YEARLY_CHART_LABEL,
                 doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.YEARLY_CHART),
             ),
             # Daily chart
@@ -61,8 +62,9 @@ def layout():
                 id_button=IdButtons.DAILY_CHART_LABEL,
                 doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.DAILY),
             ),
             # Heatmap chart
@@ -71,8 +73,9 @@ def layout():
                 id_button=IdButtons.HEATMAP_CHART_LABEL,
                 doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.HEATMAP),
             ),
             # Descriptive statistics
@@ -81,7 +84,11 @@ def layout():
                 tooltip_text="count, mean, std, min, max, and percentiles",
                 id_button=IdButtons.TABLE_TMP_RH,
             ),
-            dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
+            dmc.Skeleton(
+                visible=False,
+                h=450,
+                children=dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
+            ),
         ],
     )
 

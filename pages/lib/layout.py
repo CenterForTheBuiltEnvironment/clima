@@ -426,13 +426,11 @@ def create_collapsible_layout():
             ),
             # including main and footer
             dmc.AppShellMain(
-                dmc.ScrollArea(
-                    children=[
-                        create_stores(),
-                        dash.page_container,
-                        create_footer(),
-                    ],
-                ),
+                children=[
+                    create_stores(),
+                    dash.page_container,
+                    create_footer(),
+                ],
                 pos="relative",
                 style={
                     "zIndex": 1,

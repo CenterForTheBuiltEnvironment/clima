@@ -37,7 +37,14 @@ dash.register_page(
 
 
 def layout():
-    return dmc.Stack(p="md", id=ElementIds.MAIN_NV_SECTION)
+    return dmc.Stack(
+        p="md",
+        children=dmc.Skeleton(  # needed to avoid empty layout on load
+            visible=True,
+            height="100vh",
+        ),
+        id=ElementIds.MAIN_NV_SECTION,
+    )
 
 
 @callback(
@@ -61,8 +68,9 @@ def update_layout(si_ip):
             doc_link=DocLinks.NATURAL_VENTILATION,
         ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=450,
             children=dmc.Paper(
                 id=ElementIds.NV_HEATMAP_CHART,
             ),
@@ -87,8 +95,9 @@ def update_layout(si_ip):
                 ),
             ],
         ),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=450,
             children=dmc.Paper(
                 id=ElementIds.NV_BAR_CHART,
             ),

@@ -93,19 +93,25 @@ def section_one():
             id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE)),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE)
+        ),
         title_with_link(
             text="Daily chart",
             id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY)),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.QUERY_DAILY)
+        ),
         title_with_link(
             text="Heatmap chart",
             id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP)),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.QUERY_HEATMAP)
+        ),
         title_with_tooltip(
             text="Descriptive statistics",
             tooltip_text="count, mean, std, min, max, and percentiles",

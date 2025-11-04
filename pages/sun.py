@@ -57,7 +57,14 @@ def layout():
     return dmc.Stack(
         p="md",
         id=ElementIds.TAB_FOUR_CONTAINER,
-        children=[sun_path(), static_section(), explore_daily_heatmap()],
+        children=[
+            sun_path(),
+            dmc.Stack(
+                id=ElementIds.STATIC_SECTION,
+                w="100%",
+            ),
+            explore_daily_heatmap(),
+        ],
     )
 
 
@@ -97,10 +104,11 @@ def sun_path():
                     ),
                 ],
             ),
-            dmc.Center(
-                dcc.Loading(
-                    type="circle",
-                    children=dmc.Stack(id=ElementIds.CUSTOM_SUNPATH, w="100%"),
+            dmc.Skeleton(
+                visible=False,
+                h=450,
+                children=dmc.Center(
+                    id=ElementIds.CUSTOM_SUNPATH,
                 ),
             ),
         ],
@@ -129,21 +137,16 @@ def explore_daily_heatmap():
                     ),
                 ],
             ),
-            dcc.Loading(type="circle", children=dmc.Stack(id=ElementIds.SUN_DAILY)),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=520,
+                children=dmc.Stack(id=ElementIds.SUN_DAILY),
+            ),
+            dmc.Skeleton(
+                visible=False,
+                h=520,
                 children=dmc.Stack(id=ElementIds.SUN_HEATMAP),
             ),
-        ],
-    )
-
-
-def static_section():
-    return dmc.Stack(
-        id=ElementIds.STATIC_SECTION,
-        w="100%",
-        children=[
-            # ...
         ],
     )
 
@@ -162,8 +165,9 @@ def update_static_section(si_ip):
             id_button=IdButtons.MONTHLY_CHART_LABEL,
             doc_link=DocLinks.SOLAR_RADIATION,
         ),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=520,
             children=dmc.Stack(id=ElementIds.MONTHLY_SOLAR),
         ),
         title_with_link(
@@ -171,8 +175,9 @@ def update_static_section(si_ip):
             id_button=IdButtons.CLOUD_CHART_LABEL,
             doc_link=DocLinks.CLOUD_COVER,
         ),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=520,
             children=dmc.Stack(id=ElementIds.CLOUD_COVER),
         ),
     ]
