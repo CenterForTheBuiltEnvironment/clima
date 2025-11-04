@@ -56,74 +56,66 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 
 def inputs():
-    return dmc.SimpleGrid(
-        cols=2,
+    return dmc.Grid(
+        justify="center",
         children=[
-            dmc.Group(
+            dmc.GridCol(
                 [
                     dmc.Title("Color By:", order=5),
-                    dmc.Stack(
-                        dropdown(
-                            id=ElementIds.PSY_COLOR_BY_DROPDOWN,
-                            options=psy_dropdown_names,
-                            value="Frequency",
-                            persistence=True,
-                            persistence_type="session",
-                        ),
-                        flex=1,
+                    dropdown(
+                        id=ElementIds.PSY_COLOR_BY_DROPDOWN,
+                        options=psy_dropdown_names,
+                        value="Frequency",
+                        persistence=True,
+                        persistence_type="session",
                     ),
                 ],
-                align="flex-start",
+                span={"base": 12, "md": 4},
             ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        id=ElementIds.DATA_FILTER,
-                        color="blue",
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Filter Variable:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.Title("Filter Variable:", order=5),
                                 dropdown(
                                     id=ElementIds.PSY_VAR_DROPDOWN,
                                     options=dropdown_names,
                                     value=Variables.RH.col_name,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Min Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.PSY_MIN_VAL,
                                     placeholder="Enter a number for the min val",
                                     value=0,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Max Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.PSY_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=100,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                        dmc.Button(
+                            "Apply filter",
+                            id=ElementIds.DATA_FILTER,
+                            color="blue",
+                            w="50%",
+                        ),
+                    ],
+                ),
+                span={"base": 12, "md": 4},
             ),
         ],
     )
@@ -138,16 +130,11 @@ def layout():
                 id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(
-                    children=[
-                        inputs(),
-                        dmc.Paper(
-                            id=ElementIds.PSYCH_CHART,
-                        ),
-                    ],
-                ),
+            inputs(),
+            dmc.Skeleton(
+                visible=False,
+                h=450,
+                id=ElementIds.PSYCH_CHART,
             ),
         ],
     )

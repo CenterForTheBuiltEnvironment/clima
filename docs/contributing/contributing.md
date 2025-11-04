@@ -23,6 +23,12 @@ git clone https://github.com/Your Account name/clima.git
 cd clima
 ```
 
+Install the dependencies using pipenv. You will need to have pipenv installed on your machine. If you do not have it yet, please refer to [pipenv installation guide](https://pipenv.pypa.io/en/latest/#install-pipenv-today).
+
+```bash
+pipenv sync --dev
+````
+
 Set up the upstream repository and check the output repositories.
 
 ```bash
@@ -97,18 +103,6 @@ pipenv run pre-commit run --all-files
 Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
 More information about pre-commit hooks can be found [here](https://pre-commit.com/).
 
-Install Black:
-
-```bash
-pipenv install black
-```
-
-Format your code before committing:
-
-```bash
-black .
-```
-
 ### Code Simplicity
 Strive to minimize redundancy in your code.
 - Keep logic as concise as possible.
@@ -117,10 +111,9 @@ Strive to minimize redundancy in your code.
 
 ### UI Modifications
 For UI-related changes:
-* Avoid unnecessary custom CSS.
 * Use [DMC (Dash Mantine Components)](https://www.dash-mantine-components.com/) wherever applicable for layout and styling consistency.
+* Do not use CSS, only inline styles are allowed, but still try to minimize their use.
 * Ensure visual consistency with existing components.
-
 
 ## Testing
 
@@ -141,6 +134,13 @@ Then, from the root directory, run:
 cd tests
 
 pipenv run pytest --base-url=http://127.0.0.1:8080
+pipenv sync --dev
+```
+
+- Run tests using pytest:
+
+```bash
+pipenv run pytest
 ```
 
 ## Submitting changes

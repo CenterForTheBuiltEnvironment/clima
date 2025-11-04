@@ -16,7 +16,7 @@ from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_tab_names import TabNames
 from config import PageUrls, PageInfo
-from pages.lib.utils import generate_chart_name
+from pages.lib.utils import generate_chart_name, get_default_global_filter_store_data
 
 dash.register_page(
     __name__,
@@ -41,8 +41,7 @@ def layout():
         p="md",
         children=[
             dcc.Loading(
-                id=ElementIds.LOADING_ONE,
-                type="circle",
+                custom_spinner=dmc.Skeleton(visible=True, h="100%"),
                 fullscreen=True,
                 children=alert(),
             ),
@@ -158,13 +157,7 @@ def submitted_data(
                 True,
                 messages_alert["not_available"],
                 "orange",
-                {
-                    "month_range": [1, 12],
-                    "hour_range": [0, 24],
-                    "invert_month": [],
-                    "invert_hour": [],
-                    "filter_active": False,
-                },
+                get_default_global_filter_store_data(),
             )
         location_info = get_location_info(
             lines, url_store
@@ -175,13 +168,7 @@ def submitted_data(
             True,
             messages_alert["success"],
             "green",
-            {
-                "month_range": [1, 12],
-                "hour_range": [0, 24],
-                "invert_month": [],
-                "invert_hour": [],
-                "filter_active": False,
-            },
+            get_default_global_filter_store_data(),
         )
 
     elif (
@@ -206,13 +193,7 @@ def submitted_data(
                     True,
                     messages_alert["success"],
                     "green",
-                    {
-                        "month_range": [1, 12],
-                        "hour_range": [0, 24],
-                        "invert_month": [],
-                        "invert_hour": [],
-                        "filter_active": False,
-                    },
+                    get_default_global_filter_store_data(),
                 )
             else:
                 return (
@@ -221,13 +202,7 @@ def submitted_data(
                     True,
                     messages_alert["invalid_format"],
                     "orange",
-                    {
-                        "month_range": [1, 12],
-                        "hour_range": [0, 24],
-                        "invert_month": [],
-                        "invert_hour": [],
-                        "filter_active": False,
-                    },
+                    get_default_global_filter_store_data(),
                 )
         except (ValueError, IndexError, KeyError) as e:
             print(f"Error parsing EPW file: {e}")
@@ -237,13 +212,7 @@ def submitted_data(
                 True,
                 messages_alert["wrong_extension"],
                 "orange",
-                {
-                    "month_range": [1, 12],
-                    "hour_range": [0, 24],
-                    "invert_month": [],
-                    "invert_hour": [],
-                    "filter_active": False,
-                },
+                get_default_global_filter_store_data(),
             )
     raise PreventUpdate
 

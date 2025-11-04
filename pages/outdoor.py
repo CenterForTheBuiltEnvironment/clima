@@ -25,6 +25,7 @@ from pages.lib.utils import (
     title_with_link,
     title_with_tooltip,
 )
+from pages.lib.utils import get_time_filter_from_store
 
 
 dash.register_page(
@@ -36,43 +37,35 @@ dash.register_page(
 
 
 def inputs_outdoor_comfort():
-    return dmc.SimpleGrid(
-        cols=2,
-        children=[
-            dmc.Group(
-                [
-                    dmc.Title("Select a scenario:", order=5),
-                    dmc.Stack(
-                        dropdown(
-                            id=ElementIds.OUTDOOR_DROPDOWN,
-                            options=outdoor_dropdown_names,
-                            value="utci_Sun_Wind",
-                            persistence=True,
-                            persistence_type="session",
-                        ),
-                        flex=1,
-                    ),
-                    dmc.Paper(id=ElementIds.IMAGE_SELECTION),
-                ],
-                align="flex-start",
+    return dmc.Group(
+        [
+            dmc.Title("Select a scenario:", order=5),
+            dropdown(
+                id=ElementIds.OUTDOOR_DROPDOWN,
+                options=outdoor_dropdown_names,
+                value="utci_Sun_Wind",
+                persistence=True,
+                persistence_type="session",
             ),
+            dmc.Paper(id=ElementIds.IMAGE_SELECTION),
         ],
+        gap="xs",
+        justify="center",
     )
 
 
 def outdoor_comfort_chart():
     return dmc.Stack(
         children=[
-            dmc.Paper(
-                id=ElementIds.OUTDOOR_COMFORT_OUTPUT,
-            ),
+            dmc.Title(id=ElementIds.OUTDOOR_COMFORT_OUTPUT, order=4),
             title_with_link(
                 text="UTCI heatmap chart",
                 id_button=IdButtons.UTCI_CHARTS_LABEL,
                 doc_link=DocLinks.UTCI_CHART,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_HEATMAP,
                 ),
@@ -82,8 +75,9 @@ def outdoor_comfort_chart():
                 id_button=IdButtons.UTCI_CHARTS_LABEL,
                 doc_link=DocLinks.UTCI_CHART,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_CATEGORY_HEATMAP,
                 ),
@@ -106,11 +100,11 @@ def outdoor_comfort_chart():
                     ),
                 ],
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_SUMMARY_CHART,
-                    # p="sm",
                 ),
             ),
         ],
@@ -121,27 +115,16 @@ def layout():
     return dmc.Stack(
         p="md",
         children=[
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(
-                    children=[
-                        inputs_outdoor_comfort(),
-                        outdoor_comfort_chart(),
-                    ],
-                ),
-            ),
+            inputs_outdoor_comfort(),
+            outdoor_comfort_chart(),
         ],
     )
 
 
 @callback(
     Output(ElementIds.OUTDOOR_COMFORT_OUTPUT, "children"),
-    [
-        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
-    ],
-    [
-        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-    ],
+    Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+    State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
 )
 def update_outdoor_comfort_output(_, df):
     """
@@ -218,32 +201,14 @@ def update_tab_utci_value(
     si_ip,
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import (
-            apply_global_month_hour_filter,
-            get_global_filter_state,
-        )
+        from pages.lib.layout import apply_global_month_hour_filter
 
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
-        filter_state = get_global_filter_state(global_filter_data)
-        month_range = filter_state["month_range"]
-        hour_range = filter_state["hour_range"]
-        invert_month_global = filter_state["invert_month"]
-        invert_hour_global = filter_state["invert_hour"]
-
-        # time_filter is always True for global filter
-        time_filter = True
-        month = month_range
-        hour = hour_range
-        invert_month = invert_month_global
-        invert_hour = invert_hour_global
-    else:
-        # Use default values when global filter is not active
-        time_filter = True
-        month = [1, 12]
-        hour = [0, 24]
-        invert_month = []
-        invert_hour = []
+    # Normalize filter state (handles inactive case with defaults)
+    time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(
+        global_filter_data if global_filter_data else None
+    )
 
     custom_inputs = f"{var}"
     units = generate_units_degree(si_ip)
@@ -305,34 +270,15 @@ def update_tab_utci_category(
     si_ip,
 ):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import (
-            apply_global_month_hour_filter,
-            get_global_filter_state,
-        )
+        from pages.lib.layout import apply_global_month_hour_filter
 
         df = apply_global_month_hour_filter(
             df, global_filter_data, [var, var + "_categories"]
         )
 
-        filter_state = get_global_filter_state(global_filter_data)
-        month_range = filter_state["month_range"]
-        hour_range = filter_state["hour_range"]
-        invert_month_global = filter_state["invert_month"]
-        invert_hour_global = filter_state["invert_hour"]
-
-        # time_filter is always True for global filter
-        time_filter = True
-        month = month_range
-        hour = hour_range
-        invert_month = invert_month_global
-        invert_hour = invert_hour_global
-    else:
-        # time_filter is always True for local filter too
-        time_filter = True
-        month = [1, 12]
-        hour = [0, 24]
-        invert_month = []
-        invert_hour = []
+    time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(
+        global_filter_data if global_filter_data else None
+    )
 
     utci_stress_cat = heatmap_with_filter(
         df,
@@ -392,32 +338,14 @@ def update_tab_utci_category(
 )
 def update_tab_utci_summary_chart(var, normalize, global_filter_data, df, meta, si_ip):
     if global_filter_data and global_filter_data.get("filter_active", False):
-        from pages.lib.layout import (
-            apply_global_month_hour_filter,
-            get_global_filter_state,
-        )
+        from pages.lib.layout import apply_global_month_hour_filter
 
         df = apply_global_month_hour_filter(df, global_filter_data, var)
 
-        filter_state = get_global_filter_state(global_filter_data)
-        month_range = filter_state["month_range"]
-        hour_range = filter_state["hour_range"]
-        invert_month_global = filter_state["invert_month"]
-        invert_hour_global = filter_state["invert_hour"]
-
-        # time_filter is always True for global filter
-        time_filter = True
-        month = month_range
-        hour = hour_range
-        invert_month = invert_month_global
-        invert_hour = invert_hour_global
-    else:
-        # time_filter is always True for local filter too
-        time_filter = True
-        month = [1, 12]
-        hour = [0, 24]
-        invert_month = []
-        invert_hour = []
+    # Unified filter state for both active and inactive cases
+    time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(
+        global_filter_data if global_filter_data else None
+    )
 
     utci_summary_chart = thermal_stress_stacked_barchart(
         df,

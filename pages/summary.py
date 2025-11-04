@@ -35,7 +35,14 @@ dash.register_page(
 def layout():
     """Contents in the second tab 'Climate Summary'."""
 
-    return dmc.Stack(id=ElementIds.TAB_TWO_CONTAINER, p="md")
+    return dmc.Stack(
+        id=ElementIds.TAB_TWO_CONTAINER,
+        p="md",
+        children=dmc.Skeleton(  # needed to avoid empty layout on load
+            visible=True,
+            height="100vh",
+        ),
+    )
 
 
 @callback(
@@ -53,15 +60,18 @@ def update_layout(si_ip):
     return dmc.Stack(
         id=ElementIds.SUMMARY_SCE1_CONTAINER,
         children=[
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
                 children=dmc.Stack(
                     id=ElementIds.LOCATION_INFO,
+                    children=[dmc.Text("info")]
+                    * 10,  # placeholder text for height calc
                     gap=0,
                 ),
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=300,
                 children=dmc.Stack(id=ElementIds.WORLD_MAP),
             ),
             title_with_tooltip(
@@ -69,8 +79,8 @@ def update_layout(si_ip):
                 id_button=IdButtons.DOWNLOAD_BUTTON_LABEL,
                 tooltip_text="Use the following buttons to download either the Clima sourcefile or the EPW file",
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
                 children=dmc.Group(
                     children=[
                         dmc.Button(
@@ -127,8 +137,9 @@ def update_layout(si_ip):
                     ),
                 ],
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.DEGREE_DAYS_CHART_WRAPPER),
             ),
             title_with_link(
@@ -384,6 +395,7 @@ def degree_day_chart(
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -391,7 +403,14 @@ def degree_day_chart(
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_violin_tdb(ts, global_local, df, meta, si_ip):
+def update_violin_tdb(ts, global_local, global_filter_data, df, meta, si_ip):
+    # Apply global filter if active
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.DBT.col_name
+        )
     units = generate_units_degree(si_ip)
     return dcc.Graph(
         id=ElementIds.TDB_PROFILE_GRAPH,
@@ -405,6 +424,7 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -412,8 +432,14 @@ def update_violin_tdb(ts, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_wind(ts, global_local, df, meta, si_ip):
+def update_tab_wind(ts, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.WIND_SPEED.col_name
+        )
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.WIND_PROFILE_GRAPH,
@@ -427,6 +453,7 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -434,8 +461,14 @@ def update_tab_wind(ts, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_rh(ts, global_local, df, meta, si_ip):
+def update_tab_rh(ts, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.RH.col_name
+        )
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.RH_PROFILE_GRAPH,
@@ -449,6 +482,7 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
     [
         Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
@@ -456,8 +490,14 @@ def update_tab_rh(ts, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_gh_rad(ts, global_local, df, meta, si_ip):
+def update_tab_gh_rad(ts, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.GLOB_HOR_RAD.col_name
+        )
     units = generate_units(si_ip)
     return dcc.Graph(
         id=ElementIds.GH_RAD_PROFILE_GRAPH,

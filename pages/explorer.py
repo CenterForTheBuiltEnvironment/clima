@@ -93,33 +93,29 @@ def section_one():
             id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE)),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE)
+        ),
         title_with_link(
             text="Daily chart",
             id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.QUERY_DAILY)),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.QUERY_DAILY)
+        ),
         title_with_link(
             text="Heatmap chart",
             id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
             doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
         ),
-        dcc.Loading(type="circle", children=dmc.Paper(id=ElementIds.QUERY_HEATMAP)),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.QUERY_HEATMAP)
+        ),
         title_with_tooltip(
             text="Descriptive statistics",
             tooltip_text="count, mean, std, min, max, and percentiles",
             id_button=IdButtons.TABLE_EXPLORE,
-        ),
-        dmc.Center(
-            children=dmc.Box(
-                w="33%",
-                children=dmc.Stack(
-                    children=[
-                        # Month and hour filter moved to global sidebar
-                    ],
-                ),
-            )
         ),
         # Results table
         dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
@@ -136,71 +132,64 @@ def section_two_inputs():
                 tooltip_text=None,
                 id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
             ),
-            dmc.SimpleGrid(
-                cols=2,
-                spacing="md",
+            dmc.Grid(
                 children=[
-                    dmc.Group(
-                        [
-                            dmc.Title("Variable:", order=5),
-                            dmc.Stack(
+                    dmc.GridCol(
+                        dmc.Group(
+                            [
+                                dmc.Title("Variable:", order=5),
                                 dropdown(
                                     id=ElementIds.SEC2_VAR_DROPDOWN,
                                     options=explore_dropdown_names,
                                     value=Variables.RH.col_name,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                        align="flex-start",
+                            ],
+                            align="flex-start",
+                        ),
+                        span=4,
                     ),
-                    dmc.Stack(
-                        [
-                            dmc.Button(
-                                "Apply filter",
-                                id=ElementIds.SEC2_DATA_FILTER_INPUT,
-                                color="blue",
-                            ),
-                            dmc.Group(
-                                [
-                                    dmc.Title("Filter Variable:", order=5),
-                                    dmc.Stack(
+                    dmc.GridCol(
+                        dmc.Stack(
+                            children=[
+                                dmc.Button(
+                                    "Apply filter",
+                                    id=ElementIds.SEC2_DATA_FILTER_INPUT,
+                                    color="blue",
+                                    w="50%",
+                                ),
+                                dmc.Group(
+                                    [
+                                        dmc.Title("Filter Variable:", order=5),
                                         dropdown(
                                             id=ElementIds.SEC2_DATA_FILTER_VAR,
                                             options=explore_dropdown_names,
                                             value=Variables.RH.col_name,
                                         ),
-                                        flex=1,
-                                    ),
-                                ],
-                            ),
-                            dmc.Group(
-                                [
-                                    dmc.Title("Min Value:", order=5),
-                                    dmc.Stack(
+                                    ],
+                                ),
+                                dmc.Group(
+                                    [
+                                        dmc.Title("Min Value:", order=5),
                                         dmc.NumberInput(
                                             id=ElementIds.SEC2_MIN_VAL,
                                             placeholder="Enter a number for the min val",
                                             value=0,
                                         ),
-                                        flex=1,
-                                    ),
-                                ],
-                            ),
-                            dmc.Group(
-                                [
-                                    dmc.Title("Max Value:", order=5),
-                                    dmc.Stack(
+                                    ],
+                                ),
+                                dmc.Group(
+                                    [
+                                        dmc.Title("Max Value:", order=5),
                                         dmc.NumberInput(
                                             id=ElementIds.SEC2_MAX_VAL,
                                             placeholder="Enter a number for the max val",
                                             value=100,
                                         ),
-                                        flex=1,
-                                    ),
-                                ],
-                            ),
-                        ],
+                                    ],
+                                ),
+                            ],
+                        ),
+                        span=8,
                     ),
                 ],
             ),
@@ -246,99 +235,87 @@ def section_two():
 
 
 def section_three_inputs():
-    return dmc.SimpleGrid(
-        cols=2,
+    return dmc.Grid(
         children=[
-            dmc.Stack(
-                [
-                    dmc.Group(
-                        [
-                            dmc.Title("X Variable:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.Title("X Variable:", order=5),
                                 dropdown(
                                     id=ElementIds.EXPLORER_SEC3_VAR_X_DROPDOWN,
                                     options=explore_dropdown_names,
                                     value="DBT",
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Y Variable:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Y Variable:", order=5),
                                 dropdown(
                                     id=ElementIds.EXPLORER_SEC3_VAR_Y_DROPDOWN,
                                     options=explore_dropdown_names,
                                     value=Variables.RH.col_name,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Color By:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Color By:", order=5),
                                 dropdown(
                                     id=ElementIds.EXPLORER_SEC3_COLORBY_DROPDOWN,
                                     options=explore_dropdown_names,
                                     value="glob_hor_rad",
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                    ],
+                ),
+                span=4,
             ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        id=ElementIds.EXPLORER_SEC3_DATA_FILTER_INPUT,
-                        color="blue",
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Filter Variable:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Button(
+                            "Apply filter",
+                            id=ElementIds.EXPLORER_SEC3_DATA_FILTER_INPUT,
+                            color="blue",
+                            w="45%",
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Filter Variable:", order=5),
                                 dropdown(
                                     id=ElementIds.EXPLORER_SEC3_FILTER_VAR_DROPDOWN,
                                     options=explore_dropdown_names,
                                     value=Variables.RH.col_name,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Min Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.EXPLORER_SEC3_MIN_VAL,
                                     placeholder="Enter a number for the min val",
                                     value=0,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Max Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.EXPLORER_SEC3_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=100,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                    ],
+                ),
+                span=8,
             ),
         ],
     )
