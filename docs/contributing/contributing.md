@@ -133,7 +133,7 @@ Then, from the root directory, run tests using pytest:
 ```bash
 cd tests
 
-pipenv run pytest --base-url=http://127.0.0.1:8080
+pipenv run pytest --base-url=http://127.0.0.1:8080 -vv -n 2
 ```
 
 ## Submitting changes
