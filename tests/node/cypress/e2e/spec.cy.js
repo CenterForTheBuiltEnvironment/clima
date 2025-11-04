@@ -84,8 +84,6 @@ describe('Clima', () => {
     // TODO
     cy.contains('Daily Wind Rose');
     // TODO
-    cy.contains('Customizable Wind Rose');
-    // TODO
 
     // Psychrometric Chart
     click_tab('Psychrometric Chart');
@@ -102,7 +100,7 @@ describe('Clima', () => {
     // Outdoor Comfort
     click_tab('Outdoor Comfort');
     // TODO
-    cy.contains('The Best Weather Condition is: utci_noSun_noWind_categories');
+    cy.contains('The Best Weather Condition is: UTCI No Sun No Wind Categories');
     // TODO
     cy.contains('UTCI thermal stress chart');
     cy.contains('no thermal stress');

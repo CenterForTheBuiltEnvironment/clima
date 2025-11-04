@@ -11,12 +11,9 @@ from pages.lib.global_variables import Variables
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
-    title_with_tooltip,
     generate_chart_name,
     generate_units,
-    generate_custom_inputs_time,
     title_with_link,
-    dropdown,
 )
 
 
@@ -144,7 +141,7 @@ def seasonal_wind_rose():
 def daily_wind_rose():
     """Return the section for the 3 daily wind rose graphs."""
     return dmc.Stack(
-        id=ElementIds.TAB5_DAILY_CONTAINER,
+        id=ElementIds.WIND_DAILY_CONTAINER,
         children=[
             title_with_link(
                 text="Daily Wind Rose",
@@ -201,104 +198,6 @@ def daily_wind_rose():
     )
 
 
-def custom_wind_rose():
-    return dmc.Stack(
-        children=[
-            title_with_tooltip(
-                text="Customizable Wind Rose",
-                tooltip_text=None,
-                id_button=IdButtons.CUSTOM_ROSE_CHART,
-            ),
-            dmc.Grid(
-                gutter="md",
-                maw=900,
-                mx="auto",
-                children=[
-                    dmc.GridCol(
-                        span=6,
-                        children=dmc.Stack(
-                            children=[
-                                dmc.Group(
-                                    children=[
-                                        dmc.Title(
-                                            "Start Month:",
-                                            order=5,
-                                            w="8rem",
-                                            ta="right",
-                                        ),
-                                        dropdown(
-                                            id=ElementIds.TAB5_CUSTOM_START_MONTH,
-                                            options={
-                                                j: i + 1
-                                                for i, j in enumerate(month_lst)
-                                            },
-                                            value=1,
-                                        ),
-                                    ],
-                                ),
-                                dmc.Group(
-                                    children=[
-                                        dmc.Title(
-                                            "Start Hour:", order=5, w="8rem", ta="right"
-                                        ),
-                                        dropdown(
-                                            id=ElementIds.TAB5_CUSTOM_START_HOUR,
-                                            options={
-                                                str(i) + ":00": i for i in range(0, 24)
-                                            },
-                                            value=0,
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
-                    ),
-                    dmc.GridCol(
-                        span=6,
-                        children=dmc.Stack(
-                            children=[
-                                dmc.Group(
-                                    children=[
-                                        dmc.Title(
-                                            "End Month:", order=5, w="8rem", ta="right"
-                                        ),
-                                        dropdown(
-                                            id=ElementIds.TAB5_CUSTOM_END_MONTH,
-                                            options={
-                                                j: i + 1
-                                                for i, j in enumerate(month_lst)
-                                            },
-                                            value=12,
-                                        ),
-                                    ],
-                                ),
-                                dmc.Group(
-                                    children=[
-                                        dmc.Title(
-                                            "End Hour:", order=5, w="8rem", ta="right"
-                                        ),
-                                        dropdown(
-                                            id=ElementIds.TAB5_CUSTOM_END_HOUR,
-                                            options={
-                                                str(i) + ":00": i for i in range(1, 25)
-                                            },
-                                            value=24,
-                                        ),
-                                    ],
-                                ),
-                            ],
-                        ),
-                    ),
-                ],
-            ),
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(id=ElementIds.CUSTOM_WIND_ROSE, maw=900, mx="auto"),
-            ),
-        ],
-    )
-
-
 def layout():
     """Contents in the fifth tab 'Wind'."""
     return dmc.Stack(
@@ -309,36 +208,60 @@ def layout():
                 id_button=IdButtons.WIND_ROSE_LABEL,
                 doc_link=DocLinks.WIND_ROSE,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.WIND_ROSE),
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.WIND_SPEED),
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Stack(id=ElementIds.WIND_DIRECTION),
             ),
             seasonal_wind_rose(),
             daily_wind_rose(),
-            custom_wind_rose(),
         ],
     )
 
 
 @callback(
     Output(ElementIds.WIND_ROSE, "children"),
-    Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+    [
+        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
+    ],
     [
         State(ElementIds.ID_WIND_DF_STORE, "data"),
         State(ElementIds.ID_WIND_META_STORE, "data"),
         State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_annual_wind_rose(_, df, meta, si_ip):
-    annual = wind_rose(df, "", [1, 12], [1, 24], True, si_ip)
+def update_annual_wind_rose(_, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+        )
+
+        df = apply_global_month_hour_filter(
+            df,
+            global_filter_data,
+            [Variables.WIND_SPEED.col_name, Variables.WIND_DIR.col_name],
+        )
+
+        months = [1, 12]
+        hours = [1, 24]
+    else:
+        months = [1, 12]
+        hours = [1, 24]
+
+    skip_filter = global_filter_data and global_filter_data.get("filter_active", False)
+    annual = wind_rose(df, "", months, hours, True, si_ip, skip_time_filter=skip_filter)
+
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name(TabNames.ANNUAL_WIND_ROSE, meta, units),
@@ -351,6 +274,7 @@ def update_annual_wind_rose(_, df, meta, si_ip):
     [
         Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
         Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_WIND_DF_STORE, "data"),
@@ -358,7 +282,14 @@ def update_annual_wind_rose(_, df, meta, si_ip):
         State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_wind_speed(_, global_local, df, meta, si_ip):
+def update_tab_wind_speed(_, global_local, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.WIND_SPEED.col_name
+        )
+
     speed = heatmap(df, Variables.WIND_SPEED.col_name, global_local, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
@@ -369,78 +300,30 @@ def update_tab_wind_speed(_, global_local, df, meta, si_ip):
 
 @callback(
     Output(ElementIds.WIND_DIRECTION, "children"),
-    [Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value")],
+    [
+        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
+    ],
     [
         State(ElementIds.ID_WIND_DF_STORE, "data"),
         State(ElementIds.ID_WIND_META_STORE, "data"),
         State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_wind_direction(global_local, df, meta, si_ip):
+def update_tab_wind_direction(_, global_local, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.WIND_DIR.col_name
+        )
+
     direction = heatmap(df, Variables.WIND_DIR.col_name, global_local, si_ip)
     units = generate_units(si_ip)
     return dcc.Graph(
         config=generate_chart_name(TabNames.WIND_DIRECTION, meta, units),
         figure=direction,
-    )
-
-
-@callback(
-    Output(ElementIds.CUSTOM_WIND_ROSE, "children"),
-    [
-        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.TAB5_CUSTOM_START_MONTH, "value"),
-        Input(ElementIds.TAB5_CUSTOM_START_HOUR, "value"),
-        Input(ElementIds.TAB5_CUSTOM_END_MONTH, "value"),
-        Input(ElementIds.TAB5_CUSTOM_END_HOUR, "value"),
-    ],
-    [
-        State(ElementIds.ID_WIND_DF_STORE, "data"),
-        State(ElementIds.ID_WIND_META_STORE, "data"),
-        State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
-    ],
-)
-def update_custom_wind_rose(
-    _, start_month, start_hour, end_month, end_hour, df, meta, si_ip
-):
-    start_hour = int(start_hour)
-    end_hour = int(end_hour)
-    start_month = int(start_month)
-    end_month = int(end_month)
-
-    if start_month <= end_month:
-        df = df.loc[
-            (df[Variables.MONTH.col_name] >= start_month)
-            & (df[Variables.MONTH.col_name] <= end_month)
-        ]
-    else:
-        df = df.loc[
-            (df[Variables.MONTH.col_name] <= end_month)
-            | (df[Variables.MONTH.col_name] >= start_month)
-        ]
-    if start_hour <= end_hour:
-        df = df.loc[
-            (df[Variables.HOUR.col_name] >= start_hour)
-            & (df[Variables.HOUR.col_name] <= end_hour)
-        ]
-    else:
-        df = df.loc[
-            (df[Variables.HOUR.col_name] <= end_hour)
-            | (df[Variables.HOUR.col_name] >= start_hour)
-        ]
-
-    custom = wind_rose(
-        df, "", [start_month, end_month], [start_hour, end_hour], True, si_ip
-    )
-    custom_inputs = generate_custom_inputs_time(
-        start_month, end_month, start_hour, end_hour
-    )
-    units = generate_units(si_ip)
-    return dcc.Graph(
-        config=generate_chart_name(
-            TabNames.CUSTOM_WIND_ROSE, meta, custom_inputs, units
-        ),
-        figure=custom,
     )
 
 
@@ -571,15 +454,32 @@ def update_seasonal_graphs(_, df, meta, si_ip):
         Output(ElementIds.NOON_WIND_ROSE_TEXT, "children"),
         Output(ElementIds.NIGHT_WIND_ROSE_TEXT, "children"),
     ],
-    Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+    [
+        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
+    ],
     [
         State(ElementIds.ID_WIND_DF_STORE, "data"),
         State(ElementIds.ID_WIND_META_STORE, "data"),
         State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_daily_graphs(_, df, meta, si_ip):
-    months = [1, 12]
+def update_daily_graphs(_, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+        )
+
+        df = apply_global_month_hour_filter(
+            df,
+            global_filter_data,
+            [Variables.WIND_SPEED.col_name, Variables.WIND_DIR.col_name],
+        )
+
+        months = [1, 12]
+    else:
+        months = [1, 12]
+
     morning_times = [6, 13]
     noon_times = [14, 21]
     night_times = [22, 5]

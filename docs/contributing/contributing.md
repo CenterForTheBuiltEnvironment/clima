@@ -23,6 +23,12 @@ git clone https://github.com/Your Account name/clima.git
 cd clima
 ```
 
+Install the dependencies using pipenv. You will need to have pipenv installed on your machine. If you do not have it yet, please refer to [pipenv installation guide](https://pipenv.pypa.io/en/latest/#install-pipenv-today).
+
+```bash
+pipenv sync --dev
+````
+
 Set up the upstream repository and check the output repositories.
 
 ```bash
@@ -77,6 +83,7 @@ Available [here](code_of_conduct.md)
 
 ## Code style
 
+### Code Formatting
 We use ruff to enforce the code style and code formatting. You can run it with:
 
 ```bash
@@ -96,17 +103,17 @@ pipenv run pre-commit run --all-files
 Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
 More information about pre-commit hooks can be found [here](https://pre-commit.com/).
 
-Install Black:
+### Code Simplicity
+Strive to minimize redundancy in your code.
+- Keep logic as concise as possible.
+- Remove unused variables, imports, and components.
+- Prefer reusable utilities to repeated patterns.
 
-```bash
-pipenv install black
-```
-
-Format your code before committing:
-
-```bash
-black .
-```
+### UI Modifications
+For UI-related changes:
+* Use [DMC (Dash Mantine Components)](https://www.dash-mantine-components.com/) wherever applicable for layout and styling consistency.
+* Do not use CSS, only inline styles are allowed, but still try to minimize their use.
+* Ensure visual consistency with existing components.
 
 ## Testing
 
@@ -115,15 +122,13 @@ Before submitting a Pull Request, please make sure:
 - You have installed project dependencies:
 
 ```bash
-pipenv sync
+pipenv sync --dev
 ```
 
-From the root directory, run:
+- Run tests using pytest:
 
 ```bash
-cd tests/node
-
-npx cypress run
+pipenv run pytest
 ```
 
 ## Submitting changes
@@ -171,6 +176,14 @@ Classification of Common Commit Types:
 - **Type of Change:** Bug fix (non-breaking); New feature (non-breaking); Breaking change; Documentation update.
 
 - **Testing:** Describe how you tested your changes and how we can reproduce them. Include test details if necessary.
+
+**Pull Request Review:**
+
+- After submitting a Pull Request (PR), please @Coderabbit for review.
+- Check all improvement suggestions provided by Coderabbit before requesting a final review.
+
+**Discussion of Solutions:**
+ When needed, seek feedback from collaborators Toby and Giobetti before making major design or logic decisions.
 
 
 ## Thanks

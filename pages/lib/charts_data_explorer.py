@@ -60,34 +60,101 @@ def custom_heatmap(df, global_local, var, time_filter_info, data_filter_info, si
             f" when the {filter_name} is between {min_val} and {max_val} {filter_unit}"
         )
 
-    fig = go.Figure(
-        data=go.Heatmap(
-            y=df[Variables.HOUR.col_name],
-            x=df[Variables.DOY.col_name],
-            z=df[var],
-            colorscale=var_color,
-            zmin=range_z[0],
-            zmax=range_z[1],
-            connectgaps=False,
-            hoverongaps=False,
-            customdata=np.stack(
-                (df[Variables.MONTH_NAMES.col_name], df[Variables.DAY.col_name]),
-                axis=-1,
-            ),
-            hovertemplate=(
-                "<b>"
-                + var
-                + ": %{z:.2f} "
-                + var_unit
-                + "</b><br>"
-                + "Month: %{customdata[0]}<br>"
-                + "Day: %{customdata[1]}<br>"
-                + "Hour: %{y}:00<br>"
-            ),
-            name="",
-            colorbar=dict(title=var_unit),
+    fig = go.Figure()
+
+    has_filter_marker = "_is_filtered" in df.columns
+
+    if has_filter_marker and df["_is_filtered"].any():
+        filtered_mask = df["_is_filtered"]
+        if filtered_mask.any():
+            original_col = f"_{var}_original"
+            col_to_use = original_col if original_col in df.columns else var
+            filtered_values = df[col_to_use].copy()
+            filtered_values[~filtered_mask] = None
+
+            fig.add_trace(
+                go.Heatmap(
+                    y=df[Variables.HOUR.col_name],
+                    x=df[Variables.DOY.col_name],
+                    z=filtered_values,
+                    colorscale=[[0, "lightgray"], [1, "gray"]],
+                    zmin=range_z[0],
+                    zmax=range_z[1],
+                    showscale=False,
+                    connectgaps=False,
+                    hoverongaps=False,
+                    customdata=np.stack(
+                        (df[Variables.MONTH.col_name], df[Variables.DAY.col_name]),
+                        axis=-1,
+                    ),
+                    hovertemplate=(
+                        "<b>Filtered Data</b><br>"
+                        + "Month: %{customdata[0]}<br>Day: %{customdata[1]}<br>Hour:"
+                        " %{y}:00<br>"
+                    ),
+                    name="filtered",
+                )
+            )
+
+        base_values = df[var].copy()
+        base_values[filtered_mask] = None
+
+        fig.add_trace(
+            go.Heatmap(
+                y=df[Variables.HOUR.col_name],
+                x=df[Variables.DOY.col_name],
+                z=base_values,
+                colorscale=var_color,
+                zmin=range_z[0],
+                zmax=range_z[1],
+                connectgaps=False,
+                hoverongaps=False,
+                customdata=np.stack(
+                    (df[Variables.MONTH.col_name], df[Variables.DAY.col_name]), axis=-1
+                ),
+                hovertemplate=(
+                    "<b>"
+                    + var
+                    + ": %{z:.2f} "
+                    + var_unit
+                    + "</b><br>"
+                    + "Month: %{customdata[0]}<br>"
+                    + "Day: %{customdata[1]}<br>"
+                    + "Hour: %{y}:00<br>"
+                ),
+                name="",
+                colorbar=dict(title=var_unit),
+            )
         )
-    )
+    else:
+        fig.add_trace(
+            go.Heatmap(
+                y=df[Variables.HOUR.col_name],
+                x=df[Variables.DOY.col_name],
+                z=df[var],
+                colorscale=var_color,
+                zmin=range_z[0],
+                zmax=range_z[1],
+                connectgaps=False,
+                hoverongaps=False,
+                customdata=np.stack(
+                    (df[Variables.MONTH_NAMES.col_name], df[Variables.DAY.col_name]),
+                    axis=-1,
+                ),
+                hovertemplate=(
+                    "<b>"
+                    + var
+                    + ": %{z:.2f} "
+                    + var_unit
+                    + "</b><br>"
+                    + "Month: %{customdata[0]}<br>"
+                    + "Day: %{customdata[1]}<br>"
+                    + "Hour: %{y}:00<br>"
+                ),
+                name="",
+                colorbar=dict(title=var_unit),
+            )
+        )
     fig.update_layout(
         template=template,
         title=title,

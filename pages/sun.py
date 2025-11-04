@@ -4,7 +4,6 @@ from pages.lib.global_element_ids import ElementIds
 import dash
 import dash_mantine_components as dmc
 
-import numpy as np
 from dash import dcc
 from dash_extensions.enrich import Output, Input, State, callback
 
@@ -22,7 +21,6 @@ from pages.lib.global_scheme import (
     sun_cloud_tab_explore_dropdown_names,
     dropdown_names,
     tight_margins,
-    month_lst,
 )
 from pages.lib.template_graphs import heatmap, barchart, daily_profile
 from pages.lib.utils import (
@@ -59,7 +57,14 @@ def layout():
     return dmc.Stack(
         p="md",
         id=ElementIds.TAB_FOUR_CONTAINER,
-        children=[sun_path(), static_section(), explore_daily_heatmap()],
+        children=[
+            sun_path(),
+            dmc.Stack(
+                id=ElementIds.STATIC_SECTION,
+                w="100%",
+            ),
+            explore_daily_heatmap(),
+        ],
     )
 
 
@@ -99,10 +104,11 @@ def sun_path():
                     ),
                 ],
             ),
-            dmc.Center(
-                dcc.Loading(
-                    type="circle",
-                    children=dmc.Stack(id=ElementIds.CUSTOM_SUNPATH, w="100%"),
+            dmc.Skeleton(
+                visible=False,
+                h=450,
+                children=dmc.Center(
+                    id=ElementIds.CUSTOM_SUNPATH,
                 ),
             ),
         ],
@@ -125,27 +131,22 @@ def explore_daily_heatmap():
                 children=[
                     dmc.Title("Select variable: ", order=5),
                     dropdown(
-                        id=ElementIds.TAB_EXPLORE_DROPDOWN,
+                        id=ElementIds.SUN_EXPLORE_DROPDOWN,
                         options=sun_cloud_tab_explore_dropdown_names,
                         value="glob_hor_rad",
                     ),
                 ],
             ),
-            dcc.Loading(type="circle", children=dmc.Stack(id=ElementIds.TAB4_DAILY)),
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(id=ElementIds.TAB4_HEATMAP),
+            dmc.Skeleton(
+                visible=False,
+                h=520,
+                children=dmc.Stack(id=ElementIds.SUN_DAILY),
             ),
-        ],
-    )
-
-
-def static_section():
-    return dmc.Stack(
-        id=ElementIds.STATIC_SECTION,
-        w="100%",
-        children=[
-            # ...
+            dmc.Skeleton(
+                visible=False,
+                h=520,
+                children=dmc.Stack(id=ElementIds.SUN_HEATMAP),
+            ),
         ],
     )
 
@@ -164,8 +165,9 @@ def update_static_section(si_ip):
             id_button=IdButtons.MONTHLY_CHART_LABEL,
             doc_link=DocLinks.SOLAR_RADIATION,
         ),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=520,
             children=dmc.Stack(id=ElementIds.MONTHLY_SOLAR),
         ),
         title_with_link(
@@ -173,8 +175,9 @@ def update_static_section(si_ip):
             id_button=IdButtons.CLOUD_CHART_LABEL,
             doc_link=DocLinks.CLOUD_COVER,
         ),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=520,
             children=dmc.Stack(id=ElementIds.CLOUD_COVER),
         ),
     ]
@@ -187,6 +190,7 @@ def update_static_section(si_ip):
     ],
     [
         Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUN_DF_STORE, "data"),
@@ -194,8 +198,24 @@ def update_static_section(si_ip):
         State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def monthly_and_cloud_chart(_, df, meta, si_ip):
+def monthly_and_cloud_chart(_, global_filter_data, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
+
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df,
+            global_filter_data,
+            [
+                Variables.GLOB_HOR_RAD.col_name,
+                Variables.DIF_HOR_RAD.col_name,
+                Variables.TOT_SKY_COVER.col_name,
+            ],
+        )
+        # Filter out the filtered rows for solar radiation calculations
+        if "_is_filtered" in df.columns:
+            df = df[~df["_is_filtered"]]
 
     # Sun Radiation
     monthly = monthly_solar(df, si_ip)
@@ -210,9 +230,7 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
         title="",
         legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="right", x=1),
     )
-    cover.update_xaxes(
-        dict(tickmode="array", tickvals=np.arange(0, 12, 1), ticktext=month_lst)
-    )
+    # Remove the hardcoded x-axis update - let barchart handle it dynamically
     units = generate_units(si_ip)
     return dcc.Graph(
         style={"width": "100%", "height": "520px"},
@@ -234,6 +252,7 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
         Input(ElementIds.CUSTOM_SUN_VIEW_DROPDOWN, "value"),
         Input(ElementIds.CUSTOM_SUN_VAR_DROPDOWN, "value"),
         Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUN_DF_STORE, "data"),
@@ -241,8 +260,28 @@ def monthly_and_cloud_chart(_, df, meta, si_ip):
         State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
+def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab four. Passing in the polar selection and the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        # For sun path chart, we need to filter all sun position related columns
+        target_cols = [
+            Variables.GLOB_HOR_RAD.col_name,
+            Variables.DIF_HOR_RAD.col_name,
+            Variables.APPARENT_ELEVATION.col_name,
+            Variables.APPARENT_ZENITH.col_name,
+            Variables.AZIMUTH.col_name,
+            Variables.ELEVATION.col_name,
+            Variables.DAY.col_name,
+            Variables.MONTH_NAMES.col_name,
+            Variables.HOUR.col_name,
+        ]
+        # Add the selected variable if it's not "None"
+        if var != "None":
+            target_cols.append(var)
+        df = apply_global_month_hour_filter(df, global_filter_data, target_cols)
+
     custom_inputs = "" if var == "None" else f"{var}"
     units = "" if var == "None" else generate_units(si_ip)
     if view == "polar":
@@ -264,11 +303,12 @@ def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
 
 
 @callback(
-    Output(ElementIds.TAB4_DAILY, "children"),
+    Output(ElementIds.SUN_DAILY, "children"),
     [
         Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.TAB_EXPLORE_DROPDOWN, "value"),
+        Input(ElementIds.SUN_EXPLORE_DROPDOWN, "value"),
         Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUN_DF_STORE, "data"),
@@ -276,8 +316,13 @@ def sun_path_chart(_, view, var, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def daily(_, var, global_local, df, meta, si_ip):
+def daily(_, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab four section two. Passing in the general info (df, meta)."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data, var)
+
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(
@@ -288,11 +333,12 @@ def daily(_, var, global_local, df, meta, si_ip):
 
 
 @callback(
-    Output(ElementIds.TAB4_HEATMAP, "children"),
+    Output(ElementIds.SUN_HEATMAP, "children"),
     [
         Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.TAB_EXPLORE_DROPDOWN, "value"),
+        Input(ElementIds.SUN_EXPLORE_DROPDOWN, "value"),
         Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_SUN_DF_STORE, "data"),
@@ -300,7 +346,12 @@ def daily(_, var, global_local, df, meta, si_ip):
         State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_heatmap(_, var, global_local, df, meta, si_ip):
+def update_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data, var)
+
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return dcc.Graph(

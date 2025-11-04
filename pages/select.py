@@ -16,7 +16,7 @@ from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_tab_names import TabNames
 from config import PageUrls, PageInfo
-from pages.lib.utils import generate_chart_name
+from pages.lib.utils import generate_chart_name, get_default_global_filter_store_data
 
 dash.register_page(
     __name__,
@@ -41,8 +41,7 @@ def layout():
         p="md",
         children=[
             dcc.Loading(
-                id=ElementIds.LOADING_ONE,
-                type="circle",
+                custom_spinner=dmc.Skeleton(visible=True, h="100%"),
                 fullscreen=True,
                 children=alert(),
             ),
@@ -125,6 +124,7 @@ def alert():
         Output(ElementIds.ALERT, "visible"),
         Output(ElementIds.ALERT, "children"),
         Output(ElementIds.ALERT, "color"),
+        Output(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data", allow_duplicate=True),
     ],
     [
         Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),
@@ -157,6 +157,7 @@ def submitted_data(
                 True,
                 messages_alert["not_available"],
                 "orange",
+                get_default_global_filter_store_data(),
             )
         location_info = get_location_info(
             lines, url_store
@@ -167,6 +168,7 @@ def submitted_data(
             True,
             messages_alert["success"],
             "green",
+            get_default_global_filter_store_data(),
         )
 
     elif (
@@ -191,6 +193,7 @@ def submitted_data(
                     True,
                     messages_alert["success"],
                     "green",
+                    get_default_global_filter_store_data(),
                 )
             else:
                 return (
@@ -199,6 +202,7 @@ def submitted_data(
                     True,
                     messages_alert["invalid_format"],
                     "orange",
+                    get_default_global_filter_store_data(),
                 )
         except (ValueError, IndexError, KeyError) as e:
             print(f"Error parsing EPW file: {e}")
@@ -208,6 +212,7 @@ def submitted_data(
                 True,
                 messages_alert["wrong_extension"],
                 "orange",
+                get_default_global_filter_store_data(),
             )
     raise PreventUpdate
 
@@ -252,7 +257,6 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
         Output(ElementIds.NAV_EXPLORER, "disabled"),
         Output(ElementIds.NAV_OUTDOOR, "disabled"),
         Output(ElementIds.NAV_NATURAL_VENTILATION, "disabled"),
-        Output(ElementIds.NAV_CHANGELOG, "disabled"),
         Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
@@ -274,7 +278,6 @@ def enable_tabs_when_data_is_loaded(meta, data):
             True,
             True,
             True,
-            True,  # changelog always disabled
             default,
         )
     else:
@@ -288,7 +291,6 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             False,
-            True,  # changelog always disabled
             "Current Location: "
             + meta[Variables.CITY.col_name]
             + ", "

@@ -25,6 +25,7 @@ from pages.lib.utils import (
     title_with_link,
     title_with_tooltip,
 )
+from pages.lib.utils import get_time_filter_from_store
 
 
 dash.register_page(
@@ -36,97 +37,35 @@ dash.register_page(
 
 
 def inputs_outdoor_comfort():
-    return dmc.SimpleGrid(
-        cols=2,
-        children=[
-            dmc.Group(
-                [
-                    dmc.Title("Select a scenario:", order=5),
-                    dmc.Stack(
-                        dropdown(
-                            id=ElementIds.TAB7_DROPDOWN,
-                            options=outdoor_dropdown_names,
-                            value="utci_Sun_Wind",
-                            persistence=True,
-                            persistence_type="session",
-                        ),
-                        flex=1,
-                    ),
-                    dmc.Paper(id=ElementIds.IMAGE_SELECTION),
-                ],
-                align="flex-start",
+    return dmc.Group(
+        [
+            dmc.Title("Select a scenario:", order=5),
+            dropdown(
+                id=ElementIds.OUTDOOR_DROPDOWN,
+                options=outdoor_dropdown_names,
+                value="utci_Sun_Wind",
+                persistence=True,
+                persistence_type="session",
             ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply month and hour filter",
-                        id=ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT,
-                        variant="filled",
-                        color="blue",
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Month Range", order=5),
-                            dmc.Stack(
-                                dcc.RangeSlider(
-                                    id=ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER,
-                                    min=1,
-                                    max=12,
-                                    step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={"always_visible": False},
-                                ),
-                                flex=1,
-                            ),
-                            dcc.Checklist(
-                                id=ElementIds.INVERT_MONTH_OUTDOOR_COMFORT,
-                                options=[{"label": "Invert", "value": "invert"}],
-                                value=[],
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Hour Range", order=5),
-                            dmc.Stack(
-                                dcc.RangeSlider(
-                                    id=ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER,
-                                    min=0,
-                                    max=24,
-                                    step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={"always_visible": False},
-                                ),
-                                flex=1,
-                            ),
-                            dcc.Checklist(
-                                id=ElementIds.INVERT_HOUR_OUTDOOR_COMFORT,
-                                options=[{"label": "Invert", "value": "invert"}],
-                                value=[],
-                            ),
-                        ],
-                    ),
-                ],
-            ),
+            dmc.Paper(id=ElementIds.IMAGE_SELECTION),
         ],
+        gap="xs",
+        justify="center",
     )
 
 
 def outdoor_comfort_chart():
     return dmc.Stack(
         children=[
-            dmc.Paper(
-                id=ElementIds.OUTDOOR_COMFORT_OUTPUT,
-            ),
+            dmc.Title(id=ElementIds.OUTDOOR_COMFORT_OUTPUT, order=4),
             title_with_link(
                 text="UTCI heatmap chart",
                 id_button=IdButtons.UTCI_CHARTS_LABEL,
                 doc_link=DocLinks.UTCI_CHART,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_HEATMAP,
                 ),
@@ -136,8 +75,9 @@ def outdoor_comfort_chart():
                 id_button=IdButtons.UTCI_CHARTS_LABEL,
                 doc_link=DocLinks.UTCI_CHART,
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_CATEGORY_HEATMAP,
                 ),
@@ -160,11 +100,11 @@ def outdoor_comfort_chart():
                     ),
                 ],
             ),
-            dcc.Loading(
-                type="circle",
+            dmc.Skeleton(
+                visible=False,
+                h=450,
                 children=dmc.Paper(
                     id=ElementIds.UTCI_SUMMARY_CHART,
-                    # p="sm",
                 ),
             ),
         ],
@@ -175,27 +115,16 @@ def layout():
     return dmc.Stack(
         p="md",
         children=[
-            dcc.Loading(
-                type="circle",
-                children=dmc.Stack(
-                    children=[
-                        inputs_outdoor_comfort(),
-                        outdoor_comfort_chart(),
-                    ],
-                ),
-            ),
+            inputs_outdoor_comfort(),
+            outdoor_comfort_chart(),
         ],
     )
 
 
 @callback(
     Output(ElementIds.OUTDOOR_COMFORT_OUTPUT, "children"),
-    [
-        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
-    ],
-    [
-        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-    ],
+    Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+    State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
 )
 def update_outdoor_comfort_output(_, df):
     """
@@ -230,40 +159,57 @@ def update_outdoor_comfort_output(_, df):
             cols_with_the_highest_number_of_zero.append(col)
         elif count == highest_count:
             cols_with_the_highest_number_of_zero.append(col)
-    return f"The Best Weather Condition is: {', '.join(cols_with_the_highest_number_of_zero)}"
+
+    # Convert column names to display names using string replacement
+    display_names = []
+    for col in cols_with_the_highest_number_of_zero:
+        # Remove utci_ prefix and replace all underscores with spaces
+        display_name = col.replace("utci_", "UTCI ")
+        display_name = display_name.replace("_", " ")
+        display_name = display_name.replace("categories", "Categories")
+        # Fix specific words that need spaces
+        display_name = display_name.replace("noSun", "No Sun")
+        display_name = display_name.replace("noWind", "No Wind")
+        display_name = display_name.replace("Sun", "Sun")  # Keep Sun as is
+        display_name = display_name.replace("Wind", "Wind")  # Keep Wind as is
+        display_names.append(display_name)
+
+    return f"The Best Weather Condition is: {', '.join(display_names)}"
 
 
 @callback(
     Output(ElementIds.UTCI_HEATMAP, "children"),
     [
         Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.TAB7_DROPDOWN, "value"),
+        Input(ElementIds.OUTDOOR_DROPDOWN, "value"),
         Input(ElementIds.ID_OUTDOOR_GLOBAL_LOCAL_RADIO_INPUT, "value"),
-        Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
         State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
         State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
-        State(ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER, "value"),
-        State(ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER, "value"),
-        State(ElementIds.INVERT_MONTH_OUTDOOR_COMFORT, "value"),
-        State(ElementIds.INVERT_HOUR_OUTDOOR_COMFORT, "value"),
     ],
 )
 def update_tab_utci_value(
     _,
     var,
     global_local,
-    time_filter,
+    global_filter_data,
     df,
     meta,
     si_ip,
-    month,
-    hour,
-    invert_month,
-    invert_hour,
 ):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data, var)
+
+    # Normalize filter state (handles inactive case with defaults)
+    time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(
+        global_filter_data if global_filter_data else None
+    )
+
     custom_inputs = f"{var}"
     units = generate_units_degree(si_ip)
     return dcc.Graph(
@@ -285,7 +231,7 @@ def update_tab_utci_value(
 
 @callback(
     Output(ElementIds.IMAGE_SELECTION, "children"),
-    Input(ElementIds.TAB7_DROPDOWN, "value"),
+    Input(ElementIds.OUTDOOR_DROPDOWN, "value"),
 )
 def change_image_based_on_selection(value):
     if value == "utci_Sun_Wind":
@@ -304,33 +250,36 @@ def change_image_based_on_selection(value):
     Output(ElementIds.UTCI_CATEGORY_HEATMAP, "children"),
     [
         Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.TAB7_DROPDOWN, "value"),
+        Input(ElementIds.OUTDOOR_DROPDOWN, "value"),
         Input(ElementIds.ID_OUTDOOR_GLOBAL_LOCAL_RADIO_INPUT, "value"),
-        Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
         State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
         State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
-        State(ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER, "value"),
-        State(ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER, "value"),
-        State(ElementIds.INVERT_MONTH_OUTDOOR_COMFORT, "value"),
-        State(ElementIds.INVERT_HOUR_OUTDOOR_COMFORT, "value"),
     ],
 )
 def update_tab_utci_category(
     _,
     var,
     global_local,
-    time_filter,
+    global_filter_data,
     df,
     meta,
     si_ip,
-    month,
-    hour,
-    invert_month,
-    invert_hour,
 ):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, [var, var + "_categories"]
+        )
+
+    time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(
+        global_filter_data if global_filter_data else None
+    )
+
     utci_stress_cat = heatmap_with_filter(
         df,
         var + "_categories",
@@ -343,7 +292,9 @@ def update_tab_utci_category(
         invert_hour,
         "UTCI thermal stress",
     )
-    utci_stress_cat["data"][0]["colorbar"] = dict(
+    colorbar_index = 1 if len(utci_stress_cat["data"]) > 1 else 0
+
+    utci_stress_cat["data"][colorbar_index]["colorbar"] = dict(
         title="Thermal stress",
         titleside="top",
         tickmode="array",
@@ -375,23 +326,27 @@ def update_tab_utci_category(
 @callback(
     Output(ElementIds.UTCI_SUMMARY_CHART, "children"),
     [
-        Input(ElementIds.TAB7_DROPDOWN, "value"),
-        Input(ElementIds.MONTH_HOUR_FILTER_OUTDOOR_COMFORT, "n_clicks"),
+        Input(ElementIds.OUTDOOR_DROPDOWN, "value"),
         Input(ElementIds.OUTDOOR_COMFORT_SWITCHES_INPUT, "checked"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-        State(ElementIds.OUTDOOR_COMFORT_MONTH_SLIDER, "value"),
-        State(ElementIds.OUTDOOR_COMFORT_HOUR_SLIDER, "value"),
         State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
-        State(ElementIds.INVERT_MONTH_OUTDOOR_COMFORT, "value"),
-        State(ElementIds.INVERT_HOUR_OUTDOOR_COMFORT, "value"),
         State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_utci_summary_chart(
-    var, time_filter, normalize, df, month, hour, meta, invert_month, invert_hour, si_ip
-):
+def update_tab_utci_summary_chart(var, normalize, global_filter_data, df, meta, si_ip):
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data, var)
+
+    # Unified filter state for both active and inactive cases
+    time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(
+        global_filter_data if global_filter_data else None
+    )
+
     utci_summary_chart = thermal_stress_stacked_barchart(
         df,
         var + "_categories",

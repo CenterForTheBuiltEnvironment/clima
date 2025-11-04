@@ -13,7 +13,6 @@ from pages.lib.global_scheme import (
     tight_margins,
     month_lst,
 )
-from pages.lib.template_graphs import filter_df_by_month_and_hour
 from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
@@ -38,7 +37,14 @@ dash.register_page(
 
 
 def layout():
-    return dmc.Stack(p="md", id=ElementIds.MAIN_NV_SECTION)
+    return dmc.Stack(
+        p="md",
+        children=dmc.Skeleton(  # needed to avoid empty layout on load
+            visible=True,
+            height="100vh",
+        ),
+        id=ElementIds.MAIN_NV_SECTION,
+    )
 
 
 @callback(
@@ -62,8 +68,9 @@ def update_layout(si_ip):
             doc_link=DocLinks.NATURAL_VENTILATION,
         ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=450,
             children=dmc.Paper(
                 id=ElementIds.NV_HEATMAP_CHART,
             ),
@@ -88,8 +95,9 @@ def update_layout(si_ip):
                 ),
             ],
         ),
-        dcc.Loading(
-            type="circle",
+        dmc.Skeleton(
+            visible=False,
+            h=450,
             children=dmc.Paper(
                 id=ElementIds.NV_BAR_CHART,
             ),
@@ -98,140 +106,88 @@ def update_layout(si_ip):
 
 
 def inputs_tab(t_min, t_max, d_set):
-    return dmc.SimpleGrid(
-        cols=3,
-        spacing="md",
+    return dmc.Grid(
+        justify="center",
         children=[
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        color="blue",
-                        id=ElementIds.NV_DBT_FILTER,
-                        variant="link",
-                        n_clicks=1,
-                    ),
-                    dmc.Title("Outdoor dry-bulb air temperature range", order=5),
-                    dmc.Group(
-                        [
-                            dmc.Title("Min Value:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Title("Outdoor dry-bulb air temperature range", order=5),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.NV_TDB_MIN_VAL,
                                     placeholder="Enter a number for the min val",
                                     step=1,
                                     value=t_min,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Max Value:", order=5),
-                            dmc.Stack(
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.NV_TDB_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=t_max,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ]
+                            ],
+                        ),
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DBT_FILTER,
+                            variant="link",
+                            n_clicks=1,
+                            w="80%",
+                        ),
+                    ]
+                ),
+                span={"base": 12, "md": 4},
             ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply month and hour filter",
-                        color="blue",
-                        id=ElementIds.NV_MONTH_HOUR_FILTER,
-                        variant="link",
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Month Range", order=5),
-                            dmc.Stack(
-                                dcc.RangeSlider(
-                                    id=ElementIds.NV_MONTH_SLIDER,
-                                    min=1,
-                                    max=12,
-                                    step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                ),
-                                flex=1,
-                            ),
-                            dcc.Checklist(
-                                options=[{"label": "Invert", "value": "invert"}],
-                                value=[],
-                                id=ElementIds.INVERT_MONTH_NV,
-                            ),
-                        ],
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Hour Range", order=5),
-                            dmc.Stack(
-                                dcc.RangeSlider(
-                                    id=ElementIds.NV_HOUR_SLIDER,
-                                    min=0,
-                                    max=24,
-                                    step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                ),
-                                flex=1,
-                            ),
-                            dcc.Checklist(
-                                options=[{"label": "Invert", "value": "invert"}],
-                                value=[],
-                                id=ElementIds.INVERT_HOUR_NV,
-                            ),
-                        ],
-                    ),
-                ]
-            ),
-            dmc.Stack(
-                [
-                    dmc.Button(
-                        "Apply filter",
-                        color="blue",
-                        id=ElementIds.NV_DPT_FILTER,
-                        variant="link",
-                        disabled=True,
-                    ),
-                    dcc.Checklist(
-                        options=[
-                            {
-                                "label": (
-                                    "Avoid condensation with radiant systems: If the "
-                                    "outdoor dew point temperature is below the radiant "
-                                    "system surface temperature, the data point is not plot."
-                                ),
-                                "value": 1,
-                            }
-                        ],
-                        value=[],
-                        id=ElementIds.ENABLE_CONDENSATION,
-                    ),
-                    dmc.Group(
-                        [
-                            dmc.Title("Surface temperature:", order=5),
-                            dmc.Stack(
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.Title("Surface temperature:", order=5),
                                 dmc.NumberInput(
                                     id=ElementIds.NV_DPT_MAX_VAL,
                                     placeholder="Enter a number for the max val",
                                     value=d_set,
                                     step=1,
                                 ),
-                                flex=1,
-                            ),
-                        ],
-                    ),
-                ]
+                            ],
+                        ),
+                        dmc.CheckboxGroup(
+                            id=ElementIds.ENABLE_CONDENSATION,
+                            value=[],
+                            children=[
+                                dmc.Checkbox(
+                                    label=(
+                                        "Avoid condensation with radiant systems: If the "
+                                        "outdoor dew point temperature is below the radiant "
+                                        "system surface temperature, the data point is not plot."
+                                    ),
+                                    value=1,
+                                    size="sm",
+                                    w="70%",
+                                )
+                            ],
+                        ),
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DPT_FILTER,
+                            variant="link",
+                            disabled=True,
+                            w="70%",
+                        ),
+                    ]
+                ),
+                span={"base": 12, "md": 5},
             ),
         ],
     )
@@ -241,41 +197,33 @@ def inputs_tab(t_min, t_max, d_set):
     Output(ElementIds.NV_HEATMAP_CHART, "children"),
     [
         Input(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.NV_MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
         Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
         Input(ElementIds.ID_NATURAL_VENTILATION_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.ENABLE_CONDENSATION, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "data"),
-        State(ElementIds.NV_MONTH_SLIDER, "value"),
-        State(ElementIds.NV_HOUR_SLIDER, "value"),
         State(ElementIds.NV_TDB_MIN_VAL, "value"),
         State(ElementIds.NV_TDB_MAX_VAL, "value"),
         State(ElementIds.NV_DPT_MAX_VAL, "value"),
         State(ElementIds.ID_NATURAL_VENTILATION_META_STORE, "data"),
-        State(ElementIds.INVERT_MONTH_NV, "value"),
-        State(ElementIds.INVERT_HOUR_NV, "value"),
         State(ElementIds.ID_NATURAL_VENTILATION_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def nv_heatmap(
     ts,
-    time_filter,
     dbt_data_filter,
     click_dpt_filter,
     global_local,
     condensation_enabled,
+    global_filter_data,
     df,
-    month,
-    hour,
     min_dbt_val,
     max_dbt_val,
     max_dpt_val,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
     if df is None:
@@ -283,9 +231,28 @@ def nv_heatmap(
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.DBT.col_name
+        )
+
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
 
     var = Variables.DBT.col_name
     filter_var = Variables.DPT.col_name
@@ -311,10 +278,6 @@ def nv_heatmap(
                 ),
             )
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, var
-    )
-
     variable = VariableInfo.from_col_name(var)
     filter = VariableInfo.from_col_name(filter_var)
 
@@ -338,7 +301,8 @@ def nv_heatmap(
         f" {max_dbt_val} {var_unit}"
     )
 
-    if time_filter:
+    # Title will be updated based on global filter state
+    if global_filter_data and global_filter_data.get("filter_active", False):
         title += (
             f" between the months of {month_lst[start_month - 1]} and "
             f"{month_lst[end_month - 1]}<br>and between the hours {start_hour}"
@@ -416,51 +380,39 @@ def nv_heatmap(
     Output(ElementIds.NV_BAR_CHART, "children"),
     [
         Input(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.NV_MONTH_HOUR_FILTER, "n_clicks"),
         Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
         Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
         Input(ElementIds.ID_NATURAL_VENTILATION_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.SWITCHES_INPUT, "checked"),
         Input(ElementIds.ENABLE_CONDENSATION, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
         State(ElementIds.ID_NATURAL_VENTILATION_DF_STORE, "data"),
-        State(ElementIds.NV_MONTH_SLIDER, "value"),
-        State(ElementIds.NV_HOUR_SLIDER, "value"),
         State(ElementIds.NV_TDB_MIN_VAL, "value"),
         State(ElementIds.NV_TDB_MAX_VAL, "value"),
         State(ElementIds.NV_DPT_MAX_VAL, "value"),
         State(ElementIds.ID_NATURAL_VENTILATION_META_STORE, "data"),
-        State(ElementIds.INVERT_MONTH_NV, "value"),
-        State(ElementIds.INVERT_HOUR_NV, "value"),
         State(ElementIds.ID_NATURAL_VENTILATION_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def nv_bar_chart(
     ts,
-    time_filter,
     dbt_data_filter,
     click_dpt_filter,
     global_local,
     normalize,
     condensation_enabled,
+    global_filter_data,
     df,
-    month,
-    hour,
     min_dbt_val,
     max_dbt_val,
     max_dpt_val,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
-
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
 
     var = Variables.DBT.col_name
     filter_var = Variables.DPT.col_name
@@ -479,9 +431,28 @@ def nv_bar_chart(
 
     df[Variables.NV_ALLOWED.col_name] = 1
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, "nv_allowed"
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, Variables.NV_ALLOWED.col_name
+        )
+
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
 
     # this should be the total after filtering by time
     tot_month_hours = (
@@ -558,7 +529,7 @@ def nv_bar_chart(
         )
         fig.update_yaxes(title_text="Percentage (%)", range=[0, 100])
 
-    if time_filter:
+    if global_filter_data and global_filter_data.get("filter_active", False):
         title += (
             f" between the months of {month_lst[start_month - 1]} and "
             f"{month_lst[end_month - 1]} and between<br>the hours {start_hour}"
