@@ -24,6 +24,8 @@ bump2version = "*"
 black = "*"
 ruff = "*"
 pre-commit = "*"
+pytest-playwright = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.11"

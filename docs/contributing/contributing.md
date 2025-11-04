@@ -123,12 +123,17 @@ Before submitting a Pull Request, please make sure:
 
 ```bash
 pipenv sync --dev
+pipenv run playwright install  # Required to install browsers
 ```
-
-- Run tests using pytest:
-
+Start the app server:
 ```bash
-pipenv run pytest
+pipenv run python main.py
+```
+Then, from the root directory, run tests using pytest:
+```bash
+cd tests
+
+pipenv run pytest --base-url=http://127.0.0.1:8080
 ```
 
 ## Submitting changes

@@ -1,5 +1,19 @@
 # Changelog
 
+## Version 0.9.0\(2025-10-30)
+
+Feat:
+
+* Moved the top navigation bar to the left side
+* Extracted the hours and months into a global filter and place it in the Sidebar
+* Migrated testing framework from Cypress to Playwright
+
+Fix:
+
+* Fixed issues #249, #245, #159, #242: Code redundancy and CSS styling issues
+* Fixed issues #248
+* Fixed issues #236, #259: Sidebar issues
+
 ## Version 0.8.5 \(2023-04-12\)
 
 Feat:

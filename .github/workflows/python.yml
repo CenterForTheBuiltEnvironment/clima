@@ -31,6 +31,15 @@ jobs:
         run: |-
           pipenv run ruff format --check .
 
+      - name: Install Playwright Browsers
+        run: |
+          pipenv run playwright install --with-deps
+
+      - name: Start Clima
+        run: |-
+          pipenv run python main.py &
+      
       - name: Test Clima
         run: |-
-          pipenv run python -m pytest
+          cd tests
+          pipenv run pytest --base-url=http://127.0.0.1:8080

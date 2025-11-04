@@ -34,11 +34,11 @@ This ongoing project results from the collaboration and contributions of the peo
 * [Chun Him Lee](https://www.linkedin.com/in/chun-him-lee-01b553129/): Coding and review
 * [Tu Minh Phuong Doan](https://www.linkedin.com/in/harry-doan-legopher/): Coding and review
 * [Yixun Quan](https://www.linkedin.com/in/yixun-quan-929a661a3): Coding and review
-* Yuqing Luo: Coding, code maintenance and review
+* [Yuqing Luo](https://leo-5a2.pages.dev/): Coding, code maintenance and review
 * Wenshu lyu: Coding, code maintenance and review
 * Ziqi Liu: Coding, code maintenance and review
 * Tianchi Liu: Coding, code maintenance and review
-* Qian Liu: Coding, code maintenance and review
+* [Qian Liu](https://www.linkedin.com/in/qian-liu-48b294342): Coding, code maintenance and review
 * Feng Wang: Coding, code maintenance and review
 
 ## Acknowledgment
