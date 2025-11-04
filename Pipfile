@@ -16,7 +16,6 @@ pandas = "==2.2.0"
 numpy = "==1.26.3"
 dash-iconify = "*"
 scipy = "==1.12.0"
-pytest-playwright = "*"
 
 [dev-packages]
 cleanpy = "*"
@@ -25,6 +24,8 @@ bump2version = "*"
 black = "*"
 ruff = "*"
 pre-commit = "*"
+pytest-playwright = "*"
+pytest-xdist = "*"
 
 [requires]
 python_version = "3.11"
