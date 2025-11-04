@@ -12,26 +12,26 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Section Headings --------------------
-def test_section_headings(page: Page):
-    """Check section titles are visible"""
-    expect(page.get_by_text("Yearly Chart")).to_be_visible()
-    expect(page.get_by_text("Daily chart")).to_be_visible()
-    expect(page.get_by_text("Heatmap chart")).to_be_visible()
-    expect(page.get_by_text("Descriptive statistics")).to_be_visible()
+# -------------------- Test Temperature and Humidity Page Core Elements --------------------
+def test_t_rh_core_elements(page: Page):
+    """Test visibility of section titles, chart containers, and statistics table"""
 
+    # Section titles
+    section_titles = [
+        "Yearly Chart",
+        "Daily chart",
+        "Heatmap chart",
+        "Descriptive statistics",
+    ]
+    for title in section_titles:
+        expect(page.get_by_text(title)).to_be_visible()
 
-# -------------------- Test Chart Rendering --------------------
-def test_chart_visibility(page: Page):
-    """Ensure all charts are rendered"""
-    expect(page.locator("#yearly-chart")).to_be_visible()
-    expect(page.locator("#daily")).to_be_visible()
-    expect(page.locator("#heatmap")).to_be_visible()
+    # Charts
+    chart_ids = ["#yearly-chart", "#daily", "#heatmap"]
+    for cid in chart_ids:
+        expect(page.locator(cid)).to_be_visible()
 
-
-# -------------------- Test Table Rendering --------------------
-def test_statistics_table(page: Page):
-    """Ensure the statistics table is visible"""
+    # Table
     table = page.locator("#table-tmp-hum")
     expect(table).to_be_visible()
 

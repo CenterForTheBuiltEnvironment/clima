@@ -12,17 +12,15 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Wind Page Titles --------------------
-def test_wind_titles(page: Page):
-    """Verify main titles of Wind page are visible"""
-    expect(page.get_by_text("Annual Wind Rose")).to_be_visible()
-    expect(page.get_by_text("Seasonal Wind Rose")).to_be_visible()
-    expect(page.get_by_text("Daily Wind Rose")).to_be_visible()
+# -------------------- Test Wind Page Core Elements --------------------
+def test_wind_core_elements(page: Page):
+    """Test core visibility and content on Wind page"""
 
+    # Main titles
+    for title in ["Annual Wind Rose", "Seasonal Wind Rose", "Daily Wind Rose"]:
+        expect(page.get_by_text(title)).to_be_visible()
 
-# -------------------- Test Wind Rose Graphs --------------------
-def test_wind_rose_graphs_visible(page: Page):
-    """Check that all Wind Rose charts are rendered and visible"""
+    # All wind rose charts
     wind_rose_ids = [
         "#wind-rose",
         "#winter-wind-rose",
@@ -36,10 +34,7 @@ def test_wind_rose_graphs_visible(page: Page):
     for wid in wind_rose_ids:
         expect(page.locator(wid)).to_be_visible()
 
-
-# -------------------- Test Wind Rose Text --------------------
-def test_wind_rose_texts(page: Page):
-    """Verify that all Wind Rose description texts"""
+    # Description texts
     expected_texts = {
         "#winter-wind-rose-text": "Dec and Feb",
         "#spring-wind-rose-text": "Mar and May",
@@ -51,5 +46,4 @@ def test_wind_rose_texts(page: Page):
     }
 
     for cid, expected in expected_texts.items():
-        element = page.locator(cid)
-        expect(element).to_contain_text(expected)
+        expect(page.locator(cid)).to_contain_text(expected)

@@ -12,33 +12,40 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Page Titles --------------------
-def test_sun_titles(page: Page):
-    """Verify main Sun page section titles"""
-    expect(page.get_by_text("Sun path chart")).to_be_visible()
-    expect(
-        page.get_by_text("Global and Diffuse Horizontal Solar Radiation")
-    ).to_be_visible()
-    expect(page.get_by_text("Cloud coverage")).to_be_visible()
-    expect(page.get_by_text("Daily charts")).to_be_visible()
+# -------------------- Test Sun Page Core Elements --------------------
+def test_sun_core_elements(page: Page):
+    """
+    Verify core layout elements are visible: titles, dropdowns, charts.
+    """
+    # Titles
+    expected_titles = [
+        "Sun path chart",
+        "Global and Diffuse Horizontal Solar Radiation",
+        "Cloud coverage",
+        "Daily charts",
+    ]
+    for title in expected_titles:
+        expect(page.get_by_text(title)).to_be_visible()
 
+    # Dropdowns
+    dropdown_ids = [
+        "#custom-sun-view-dropdown",
+        "#custom-sun-var-dropdown",
+        "#sun-explore-dropdown",
+    ]
+    for did in dropdown_ids:
+        expect(page.locator(did)).to_be_visible()
 
-# -------------------- Test Dropdown Controls --------------------
-def test_sun_dropdown_controls(page: Page):
-    """Check if all dropdowns for Sun page controls are visible"""
-    expect(page.locator("#custom-sun-view-dropdown")).to_be_visible()
-    expect(page.locator("#custom-sun-var-dropdown")).to_be_visible()
-    expect(page.locator("#sun-explore-dropdown")).to_be_visible()
-
-
-# -------------------- Test Graph Visibility --------------------
-def test_sun_graphs_visible(page: Page):
-    """Ensure all main Sun graphs are rendered correctly"""
-    expect(page.locator("#custom-sunpath")).to_be_visible()  # Sun path chart
-    expect(page.locator("#monthly-solar")).to_be_visible()  # Global & Diffuse
-    expect(page.locator("#cloud-cover")).to_be_visible()  # Cloud coverage
-    expect(page.locator("#sun-daily")).to_be_visible()  # Daily line chart
-    expect(page.locator("#sun-heatmap")).to_be_visible()  # Daily heatmap
+    # Charts
+    chart_ids = [
+        "#custom-sunpath",  # Sun path chart
+        "#monthly-solar",  # Global & Diffuse
+        "#cloud-cover",  # Cloud coverage
+        "#sun-daily",  # Daily line chart
+        "#sun-heatmap",  # Daily heatmap
+    ]
+    for cid in chart_ids:
+        expect(page.locator(cid)).to_be_visible()
 
 
 # -------------------- Test Sun Path Chart View and Variable Switching --------------------

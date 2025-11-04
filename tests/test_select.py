@@ -9,36 +9,34 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Page Load --------------------
-def test_select_page_loads(page: Page):
-    """Verify that the Select Weather File page loads successfully"""
+# -------------------- Test Select Page Core Elements --------------------
+def test_select_core_elements(page: Page):
+    """Verify that the Select Weather File page loads and shows basic elements"""
+    # Main text and alerts
     expect(page.locator("text=Select an EPW file from your computer")).to_be_visible()
-    expect(page.locator("#upload-data")).to_be_visible()
     expect(page.locator("#alert")).to_contain_text("upload an EPW file")
 
-
-# -------------------- Test Upload Button Visible --------------------
-def test_upload_button_visible(page: Page):
-    """Ensure the upload EPW button is visible"""
+    # Upload button
     upload_button = page.locator("#upload-data-button")
     expect(upload_button).to_be_visible()
     expect(upload_button).to_contain_text("Select an EPW file")
 
+    # Upload section container
+    expect(page.locator("#upload-data")).to_be_visible()
 
-# -------------------- Test Upload EPW File --------------------
-def test_upload_epw_file_success(page: Page):
+
+# -------------------- Test EPW pload and Map Rendering --------------------
+def test_upload_and_map_rendering(page: Page):
     """
-    Simulate uploading an EPW file and verify success alert appears.
-    This test uses helper 'upload_epw_file' from utils.py.
+    Simulate uploading an EPW file, verify success message and map rendering
     """
     upload_epw_file(page)
+
+    # Confirm success alert
     alert_box = page.locator("#alert")
     expect(alert_box).to_be_visible()
     expect(alert_box).to_contain_text("EPW was successfully loaded!")
 
-
-# -------------------- Test Map Renders --------------------
-def test_map_renders(page: Page):
-    """Verify that the map (epw_location.json plot) renders properly"""
+    # Map rendered after file upload
     map_container = page.locator("#tab-one-map")
     expect(map_container).to_be_visible()

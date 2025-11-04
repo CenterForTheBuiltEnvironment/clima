@@ -12,31 +12,28 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Page Title --------------------
-def test_psy_title(page: Page):
-    """Check if main Psy Chart title is visible"""
+# -------------------- Test Psy Page Core Elements --------------------
+def test_psy_core_elements(page: Page):
+    """Verify page title, controls, and chart are visible"""
+    # Title
     expect(page.get_by_role("heading", name="Psychrometric Chart")).to_be_visible()
 
-
-# -------------------- Test Dropdowns and Sliders --------------------
-def test_psy_controls_visible(page: Page):
-    """Check all interactive inputs are visible"""
+    # Controls
     expect(page.locator("#psy-var-dropdown")).to_be_visible()
     expect(page.locator("#psy-min-val")).to_be_visible()
     expect(page.locator("#psy-max-val")).to_be_visible()
     expect(page.get_by_role("button", name="Apply filter")).to_be_visible()
 
-
-# -------------------- Test Psy Chart Render --------------------
-def test_psy_chart_rendered(page: Page):
-    """Check that the psy chart is rendered"""
+    # Chart
     expect(page.locator("#psych-chart")).to_be_visible()
 
 
-# -------------------- Test Dropdown Interaction --------------------
+# -------------------- Test Interaction: Dropdown Switch --------------------
 def test_dropdown_change_triggers_chart(page: Page):
-    """Switch dropdown to another variable and check chart still renders"""
+    """Switch dropdown to another variable and ensure chart re-renders"""
     dropdown = page.locator("#psy-color-by-dropdown")
     dropdown.click()
     page.get_by_text("Dry bulb temperature").click()
+
+    # After dropdown change, chart should still be visible
     expect(page.locator("#psych-chart")).to_be_visible()

@@ -12,36 +12,43 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Title & Section Headings --------------------
-def test_outdoor_titles(page: Page):
-    """Verify key outdoor section titles are visible"""
-    expect(page.get_by_text("Select a scenario:")).to_be_visible()
-    expect(page.get_by_text("UTCI heatmap chart")).to_be_visible()
-    expect(page.get_by_text("UTCI thermal stress chart")).to_be_visible()
-    expect(page.get_by_text("Normalize data")).to_be_visible()
-    expect(page.get_by_text("The Best Weather Condition is:")).to_be_visible()
+# -------------------- Test Outdoor Page Core Elements --------------------
+def test_outdoor_core_elements(page: Page):
+    """Verify core UI components (titles, image, charts) are visible"""
+    # Section titles
+    expected_texts = [
+        "Select a scenario:",
+        "UTCI heatmap chart",
+        "UTCI thermal stress chart",
+        "Normalize data",
+        "The Best Weather Condition is:",
+    ]
+    for text in expected_texts:
+        expect(page.get_by_text(text)).to_be_visible()
 
-
-# -------------------- Test Image & Switch Components --------------------
-def test_outdoor_image_and_switch(page: Page):
-    """Verify that image and switch controls are visible"""
+    # Image and switch
     expect(page.locator("#image-selection")).to_be_visible()
 
-
-# -------------------- Test Charts Rendering --------------------
-def test_outdoor_charts_render(page: Page):
-    """Ensure that main UTCI charts are rendered"""
-    expect(page.locator("#utci-heatmap")).to_be_visible()
-    expect(page.locator("#utci-category-heatmap")).to_be_visible()
-    expect(page.locator("#utci-summary-chart")).to_be_visible()
+    # Charts
+    chart_ids = [
+        "#utci-heatmap",
+        "#utci-category-heatmap",
+        "#utci-summary-chart",
+    ]
+    for cid in chart_ids:
+        expect(page.locator(cid)).to_be_visible()
 
 
 # -------------------- Test Dropdown Interaction --------------------
-def test_dropdown_interaction(page: Page):
-    """Switch scenario from dropdown and verify chart reloads"""
+def test_outdoor_dropdown_interaction(page: Page):
+    """Switch scenario in dropdown and verify all charts reload"""
     dropdown = page.locator("#outdoor-dropdown")
     dropdown.click()
-    page.get_by_text("UTCI: Sun & no Wind", exact=True)
-    expect(page.locator("#utci-heatmap")).to_be_visible()
-    expect(page.locator("#utci-category-heatmap")).to_be_visible()
-    expect(page.locator("#utci-summary-chart")).to_be_visible()
+    page.get_by_text("UTCI: Sun & no Wind", exact=True).click()
+
+    for chart_id in [
+        "#utci-heatmap",
+        "#utci-category-heatmap",
+        "#utci-summary-chart",
+    ]:
+        expect(page.locator(chart_id)).to_be_visible()

@@ -33,7 +33,7 @@ jobs:
 
       - name: Install Playwright Browsers
         run: |
-          pipenv run playwright install --with-deps
+          pipenv run playwright install chromium
 
       - name: Start Clima
         run: |-

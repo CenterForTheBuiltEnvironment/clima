@@ -12,12 +12,39 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Section Titles --------------------
-def test_summary_titles(page: Page):
-    """Verify all main section headers are visible"""
+# -------------------- Test Summary Page Core Elements --------------------
+def test_summary_core_elements(page: Page):
+    """
+    Verify all main static elements are visible:
+    - Section titles
+    - Download buttons
+    - Degree day inputs
+    - Climate profile graphs
+    """
+    # Titles
     expect(page.get_by_role("heading", name="Download")).to_be_visible()
     expect(page.get_by_text("Heating and Cooling Degree Days")).to_be_visible()
     expect(page.get_by_text("Climate Profiles")).to_be_visible()
+
+    # Download buttons
+    expect(page.get_by_role("button", name="Download EPW")).to_be_visible()
+    expect(page.get_by_role("button", name="Download Clima dataframe")).to_be_visible()
+
+    # Degree day controls
+    expect(page.locator("#input-hdd-set-point")).to_be_visible()
+    expect(page.locator("#input-cdd-set-point")).to_be_visible()
+    expect(page.locator("#submit-set-points")).to_be_visible()
+    expect(page.locator("#degree-days-chart-wrapper")).to_be_visible()
+
+    # Climate profile graphs
+    profile_graphs = [
+        "#temp-profile-graph",
+        "#humidity-profile-graph",
+        "#solar-radiation-graph",
+        "#wind-speed-graph",
+    ]
+    for graph in profile_graphs:
+        expect(page.locator(graph)).to_be_visible()
 
 
 # -------------------- Test Location Info Load --------------------
@@ -43,37 +70,6 @@ def test_location_info_loaded(page: Page):
         expect(info_section).to_contain_text(text)
 
     expect(page.locator("#world-map")).to_be_visible()
-
-
-# -------------------- Test Download Buttons --------------------
-def test_download_buttons(page: Page, tmp_path):
-    """Verify that both download buttons are visible and clickable"""
-
-    # Locate both download buttons on the page
-    epw_button = page.get_by_role("button", name="Download EPW")
-    clima_button = page.get_by_role("button", name="Download Clima dataframe")
-
-    # Ensure the buttons are visible
-    expect(epw_button).to_be_visible()
-    expect(clima_button).to_be_visible()
-
-
-# -------------------- Test Degree Day Setpoints and Chart --------------------
-def test_degree_day_chart_visible(page: Page):
-    """Ensure degree day chart and input controls are visible"""
-    expect(page.locator("#input-hdd-set-point")).to_be_visible()
-    expect(page.locator("#input-cdd-set-point")).to_be_visible()
-    expect(page.locator("#submit-set-points")).to_be_visible()
-    expect(page.locator("#degree-days-chart-wrapper")).to_be_visible()
-
-
-# -------------------- Test Climate Profile Graphs --------------------
-def test_climate_profile_graphs(page: Page):
-    """Verify that the four climate profile graphs are visible"""
-    expect(page.locator("#temp-profile-graph")).to_be_visible()
-    expect(page.locator("#humidity-profile-graph")).to_be_visible()
-    expect(page.locator("#solar-radiation-graph")).to_be_visible()
-    expect(page.locator("#wind-speed-graph")).to_be_visible()
 
 
 # -------------------- Test SI/IP System Toggle --------------------
