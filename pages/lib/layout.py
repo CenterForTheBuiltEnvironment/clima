@@ -14,7 +14,6 @@ from pages.lib.utils import (
 
 class NavBarIcons:
     _ICON_MAP = {
-        "Select Weather File": "tabler:upload",
         "Climate Summary": "tabler:chart-bar",
         "Temperature and Humidity": "tabler:temperature",
         "Sun and Clouds": "tabler:sun",
@@ -26,7 +25,6 @@ class NavBarIcons:
         "Changelog": "tabler:history",
     }
 
-    SELECT_WEATHER_FILE = _ICON_MAP["Select Weather File"]
     CLIMATE_SUMMARY = _ICON_MAP["Climate Summary"]
     TEMPERATURE_AND_HUMIDITY = _ICON_MAP["Temperature and Humidity"]
     SUN_AND_CLOUDS = _ICON_MAP["Sun and Clouds"]
@@ -54,7 +52,7 @@ def create_tools_filter_components():
                 "Apply month and hour filter",
                 id=ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER,
                 color="blue",
-                variant="light",
+                variant="filled",
                 size="xs",
             ),
             # Month controls
@@ -137,7 +135,21 @@ def create_navbar():
         }
     }
 
-    # Secondary Menu
+    # Select weather file - top-level menu item
+    select_weather_file_page = next(
+        (page for page in dash.page_registry.values()
+         if page[Variables.NAME.col_name] == "Select weather file"),
+        None
+    )
+    select_weather_file_link = dmc.NavLink(
+        label=select_weather_file_page[Variables.NAME.col_name],
+        href=select_weather_file_page[Variables.PATH.col_name],
+        id=f"nav-{select_weather_file_page[Variables.PATH.col_name].replace('/', '')}",
+        active=False,
+        styles=nav_link_styles,
+    ) if select_weather_file_page else None
+
+    # Secondary Menu - exclude "Select weather file" as it will be a top-level menu
     sub_links = [
         dmc.NavLink(
             label=page[Variables.NAME.col_name],
@@ -150,11 +162,11 @@ def create_navbar():
             styles=nav_link_styles,
         )
         for page in dash.page_registry.values()
-        if page[Variables.NAME.col_name] not in ["404", "Changelog"]
+        if page[Variables.NAME.col_name] not in ["404", "Changelog", "Select weather file"]
     ]
 
     parent_group = dmc.NavLink(
-        label="Pages Menu",
+        label="Visualize weather file",
         children=sub_links,
         id=ElementIds.NAV_GROUP_MAIN,
         variant="light",
@@ -168,8 +180,9 @@ def create_navbar():
 
     controls_stack = dmc.Stack(
         gap="xs",
-        py="xs",
+        p="xs",
         children=[
+            dmc.Divider(label="Unit function", size="xs", color="blue"),
             dmc.Tooltip(
                 label=dmc.Stack(
                     gap="xs",
@@ -189,7 +202,7 @@ def create_navbar():
                         {"label": "Global", "value": "global"},
                         {"label": "Local", "value": "local"},
                     ],
-                    w=220,
+                    w=210,
                     size="sm",
                     styles=segmented_control_styles,
                 ),
@@ -211,7 +224,7 @@ def create_navbar():
                         {"label": "SI", "value": UnitSystem.SI},
                         {"label": "IP", "value": UnitSystem.IP},
                     ],
-                    w=220,
+                    w=210,
                     size="sm",
                     styles=segmented_control_styles,
                 ),
@@ -223,11 +236,12 @@ def create_navbar():
 
     # Tools
     controls_group = dmc.NavLink(
-        label="Tools Menu",
-        children=[controls_stack, filter_components],
+        label="Filters and units",
+        children=[filter_components, controls_stack],
         id=ElementIds.NAV_GROUP_CONTROLS,
         variant="light",
         childrenOffset=0,
+        opened=True,
     )
 
     # Documentation
@@ -240,7 +254,12 @@ def create_navbar():
     )
 
     return dmc.ScrollArea(
-        children=[parent_group, controls_group, doc_link],
+        children=[
+            select_weather_file_link,
+            parent_group,
+            controls_group,
+            doc_link,
+        ],
     )
 
 

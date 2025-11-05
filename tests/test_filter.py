@@ -26,19 +26,8 @@ def ensure_local_mode_and_invert_off(page: Page):
 
 
 def open_tools_menu_and_filter_section(page: Page):
-    """Open Tools Menu → Filter function, using the simplest reliable click."""
-    header = page.get_by_text("Tools Menu", exact=False).first
-    header.scroll_into_view_if_needed()
-    header.click()
-
-    try:
-        page.get_by_text("Filter function", exact=False).first.click()
-    except Exception:
-        pass
-
-    expect(
-        page.get_by_text("Apply month and hour filter", exact=False).first
-    ).to_be_visible()
+    apply_btn = page.get_by_text("Apply month and hour filter", exact=False)
+    expect(apply_btn.first).to_be_visible()
     ensure_local_mode_and_invert_off(page)
 
 

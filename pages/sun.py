@@ -286,7 +286,7 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
     units = "" if var == "None" else generate_units(si_ip)
     if view == "polar":
         return dcc.Graph(
-            style={"width": "100%", "height": "520px"},
+            style={"maxWidth": "50em", "height": "32.5em"},
             config=generate_chart_name(
                 TabNames.SPHERICAL_SUNPATH, meta, custom_inputs, units
             ),
@@ -294,7 +294,7 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
         )
     else:
         return dcc.Graph(
-            style={"width": "100%", "height": "520px"},
+            style={"maxWidth": "50em", "height": "32.5em"},
             config=generate_chart_name(
                 TabNames.CARTESIAN_SUNPATH, meta, custom_inputs, units
             ),

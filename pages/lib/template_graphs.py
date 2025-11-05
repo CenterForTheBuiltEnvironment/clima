@@ -405,7 +405,9 @@ def heatmap_with_filter(
             ),
         )
 
-    if global_local == "global":
+    # For category variables (e.g., UTCI categories), always use global range
+    # to ensure consistent color mapping regardless of data range
+    if "_categories" in var or global_local == "global":
         # Set Global values for Max and minimum
         range_z = var_range
     else:
@@ -712,7 +714,9 @@ def wind_rose(df, title, month, hour, labels, si_ip, skip_time_filter=False):
 
     spd_colors = wind_speed_variable.get_color()
     spd_unit = wind_speed_variable.get_unit(si_ip)
-    spd_bins = WIND_ROSE_BINS
+    spd_bins = list(
+        WIND_ROSE_BINS
+    )  # Create a copy to avoid modifying the global constant
     if si_ip == UnitSystem.IP:
         spd_bins = convert_bins(spd_bins)
 
@@ -810,12 +814,18 @@ def wind_rose(df, title, month, hour, labels, si_ip, skip_time_filter=False):
 
 
 def convert_bins(sbins):
-    i = 0
+    """Convert wind speed bins from m/s to fpm (feet per minute).
+
+    Returns a new list without modifying the input list.
+    """
+    result = []
     for x in sbins:
-        x = x * 196.85039370078738
-        sbins[i] = round(x, 1)
-        i = i + 1
-    return sbins
+        if np.isfinite(x):
+            converted = round(x * 196.85039370078738, 1)
+            result.append(converted)
+        else:
+            result.append(x)  # Preserve np.inf
+    return result
 
 
 def thermal_stress_stacked_barchart(
