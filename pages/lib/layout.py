@@ -137,17 +137,24 @@ def create_navbar():
 
     # Select weather file - top-level menu item
     select_weather_file_page = next(
-        (page for page in dash.page_registry.values()
-         if page[Variables.NAME.col_name] == "Select weather file"),
-        None
+        (
+            page
+            for page in dash.page_registry.values()
+            if page[Variables.NAME.col_name] == "Select weather file"
+        ),
+        None,
     )
-    select_weather_file_link = dmc.NavLink(
-        label=select_weather_file_page[Variables.NAME.col_name],
-        href=select_weather_file_page[Variables.PATH.col_name],
-        id=f"nav-{select_weather_file_page[Variables.PATH.col_name].replace('/', '')}",
-        active=False,
-        styles=nav_link_styles,
-    ) if select_weather_file_page else None
+    select_weather_file_link = (
+        dmc.NavLink(
+            label=select_weather_file_page[Variables.NAME.col_name],
+            href=select_weather_file_page[Variables.PATH.col_name],
+            id=f"nav-{select_weather_file_page[Variables.PATH.col_name].replace('/', '')}",
+            active=False,
+            styles=nav_link_styles,
+        )
+        if select_weather_file_page
+        else None
+    )
 
     # Secondary Menu - exclude "Select weather file" as it will be a top-level menu
     sub_links = [
@@ -162,7 +169,8 @@ def create_navbar():
             styles=nav_link_styles,
         )
         for page in dash.page_registry.values()
-        if page[Variables.NAME.col_name] not in ["404", "Changelog", "Select weather file"]
+        if page[Variables.NAME.col_name]
+        not in ["404", "Changelog", "Select weather file"]
     ]
 
     parent_group = dmc.NavLink(
