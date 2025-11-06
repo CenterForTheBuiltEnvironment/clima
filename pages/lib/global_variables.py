@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional, List, Any
 from enum import Enum
 from config import UnitSystem
-from plotly.colors import sequential as pseq
+from plotly.colors import cyclical
 
 
 class ColorPalettes(Enum):
@@ -292,7 +292,7 @@ class Variables:
         name="Wind direction",
         unit="°deg",
         range=[0, 360],
-        color=list(pseq.Viridis),
+        color=list(cyclical.mrybm),
     )
     WIND_SPEED = VariableInfo(
         col_name="wind_speed",
