@@ -47,14 +47,7 @@ def create_tools_filter_components():
     return dmc.Stack(
         id=ElementIds.TOOLS_MONTH_HOUR_SECTION,
         children=[
-            dmc.Divider(label="Filter function", size="xs", color="blue"),
-            dmc.Button(
-                "Apply month and hour filter",
-                id=ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER,
-                color="blue",
-                variant="filled",
-                size="xs",
-            ),
+            dmc.Divider(label="Filters", size="xs", color="blue"),
             # Month controls
             dmc.Text("Month Range:", size="xs", c="dimmed"),
             dcc.RangeSlider(
@@ -110,6 +103,13 @@ def create_tools_filter_components():
                     ),
                 ],
                 justify="flex-end",
+            ),
+            dmc.Button(
+                "Apply month and hour filter",
+                id=ElementIds.TOOLS_APPLY_MONTH_HOUR_FILTER,
+                color="blue",
+                variant="filled",
+                size="xs",
             ),
         ],
         gap="xs",
@@ -190,16 +190,9 @@ def create_navbar():
         gap="xs",
         p="xs",
         children=[
-            dmc.Divider(label="Unit function", size="xs", color="blue"),
+            dmc.Divider(label="Units and Ranges", size="xs", color="blue"),
             dmc.Tooltip(
-                label=dmc.Stack(
-                    gap="xs",
-                    children=[
-                        dmc.Text(
-                            "You can choose value ranges between Global and Local"
-                        ),
-                    ],
-                ),
+                label=dmc.Text("You can choose value ranges between Global and Local"),
                 position="right",
                 withArrow=True,
                 children=dmc.SegmentedControl(
@@ -216,12 +209,7 @@ def create_navbar():
                 ),
             ),
             dmc.Tooltip(
-                label=dmc.Stack(
-                    gap="xs",
-                    children=[
-                        dmc.Text("You can choose units between SI and IP"),
-                    ],
-                ),
+                label=dmc.Text("You can choose units between SI and IP"),
                 position="right",
                 withArrow=True,
                 children=dmc.SegmentedControl(
