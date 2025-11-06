@@ -25,6 +25,7 @@ from pages.lib.utils import (
     generate_custom_inputs_nv,
     determine_month_and_hour_filter,
     title_with_link,
+    separate_filtered_data,
 )
 
 
@@ -306,15 +307,12 @@ def nv_heatmap(
     if dpt_data_filter:
         title += f" and when the {filter_name} is below {max_dpt_val} {filter_unit}."
 
-    # Check if there's a filter marker
-    has_filter_marker = "_is_filtered" in df.columns
-    filtered_mask = None
-    if has_filter_marker:
-        filtered_mask = df["_is_filtered"]
-
-    # Get original values if available
-    original_var_col = f"_{var}_original"
-    use_original_for_filtered = has_filter_marker and original_var_col in df.columns
+    # Separate filtered and unfiltered data using utility function
+    filter_info = separate_filtered_data(df, var)
+    has_filter_marker = filter_info["has_filter_marker"]
+    filtered_mask = filter_info["filtered_mask"]
+    original_var_col = filter_info["original_var_col"]
+    use_original_for_filtered = filter_info["use_original_for_filtered"]
 
     fig = go.Figure()
 
@@ -590,19 +588,12 @@ def nv_bar_chart(
         # Use default values when global filter is not active
         start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
 
-    # Check if there's a filter marker
-    has_filter_marker = "_is_filtered" in df.columns
-    filtered_mask = None
-    if has_filter_marker:
-        filtered_mask = df["_is_filtered"]
-
-    # Separate filtered and unfiltered data
-    if has_filter_marker and filtered_mask is not None:
-        df_unfiltered = df[~filtered_mask].copy()
-        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
-    else:
-        df_unfiltered = df
-        df_filtered = None
+    # Separate filtered and unfiltered data using utility function
+    filter_info = separate_filtered_data(df, Variables.DBT.col_name)
+    has_filter_marker = filter_info["has_filter_marker"]
+    filtered_mask = filter_info["filtered_mask"]
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
 
     # Calculate total hours per month (for both filtered and unfiltered) - ensure all 12 months are included
     # This should be calculated BEFORE applying DBT/DPT filters, as it represents total hours in the selected time range

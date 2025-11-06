@@ -16,6 +16,7 @@ from pages.lib.global_scheme import (
 from plotly.subplots import make_subplots
 from pvlib import solarposition
 from pages.lib.global_variables import Variables, VariableInfo
+from pages.lib.utils import separate_filtered_data
 
 
 def monthly_solar(epw_df, si_ip):
@@ -85,10 +86,14 @@ def monthly_solar(epw_df, si_ip):
         shared_yaxes=True,
     )
 
+    # Track which legend entries have been shown (only show once)
+    legend_shown = {
+        "Global": False,
+        "Diffuse": False,
+    }
+
     for month_num in range(1, 13):
         col_idx = month_num
-        # We only need legend entries for the first pair, since the others repeat.
-        is_first = col_idx == 1
 
         # Add filtered data traces (gray) if any
         if (
@@ -115,7 +120,7 @@ def monthly_solar(epw_df, si_ip):
                         line_color="gray",
                         line_width=1,
                         name="Global (Filtered)",
-                        showlegend=is_first and month_num == 1,
+                        showlegend=False,
                         customdata=[month_lst[month_num - 1]] * len(month_glob_filtered)
                         if len(month_glob_filtered) > 0
                         else [],
@@ -155,7 +160,7 @@ def monthly_solar(epw_df, si_ip):
                         line_color="lightgray",
                         line_width=1,
                         name="Diffuse (Filtered)",
-                        showlegend=is_first and month_num == 1,
+                        showlegend=False,
                         customdata=[month_lst[month_num - 1]] * len(month_dif_filtered)
                         if len(month_dif_filtered) > 0
                         else [],
@@ -190,7 +195,8 @@ def monthly_solar(epw_df, si_ip):
                     line_color="orange",
                     line_width=2,
                     name="Global",
-                    showlegend=is_first,
+                    legendgroup="Global",
+                    showlegend=not legend_shown["Global"],
                     customdata=[month_lst[month_num - 1]] * len(month_glob_unfiltered),
                     hovertemplate=(
                         "<b>"
@@ -208,6 +214,8 @@ def monthly_solar(epw_df, si_ip):
                 row=1,
                 col=col_idx,
             )
+            if not legend_shown["Global"]:
+                legend_shown["Global"] = True
 
         month_dif_unfiltered = dif_h_rad_month_ave.loc[
             dif_h_rad_month_ave[Variables.MONTH.col_name] == month_num
@@ -222,7 +230,8 @@ def monthly_solar(epw_df, si_ip):
                     line_color="dodgerblue",
                     line_width=2,
                     name="Diffuse",
-                    showlegend=is_first,
+                    legendgroup="Diffuse",
+                    showlegend=not legend_shown["Diffuse"],
                     customdata=[month_lst[month_num - 1]] * len(month_dif_unfiltered),
                     hovertemplate=(
                         "<b>"
@@ -240,6 +249,8 @@ def monthly_solar(epw_df, si_ip):
                 row=1,
                 col=col_idx,
             )
+            if not legend_shown["Diffuse"]:
+                legend_shown["Diffuse"] = True
 
         fig.update_xaxes(range=[0, 25], row=1, col=col_idx)
 
@@ -261,28 +272,18 @@ def polar_graph(df, meta, global_local, var, si_ip):
     longitude = float(meta[Variables.LON.col_name])
     time_zone = float(meta[Variables.TIME_ZONE.col_name])
 
-    # Check if there's a filter marker
-    has_filter_marker = "_is_filtered" in df.columns
-    filtered_mask = None
-    if has_filter_marker:
-        filtered_mask = df["_is_filtered"]
-
-    # Get original values if available
-    original_var_col = f"_{var}_original" if var != "None" else None
-    use_original_for_filtered = (
-        has_filter_marker
-        and var != "None"
-        and original_var_col is not None
-        and original_var_col in df.columns
-    )
-
-    # Separate filtered and unfiltered data
-    if has_filter_marker and filtered_mask is not None:
-        df_unfiltered = df[~filtered_mask].copy()
-        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
-    else:
-        df_unfiltered = df
-        df_filtered = None
+    # Separate filtered and unfiltered data using utility function
+    # Note: For "None" variable, pass None to avoid checking for original column
+    filter_var = None if var == "None" else var
+    filter_info = separate_filtered_data(df, filter_var)
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+    original_var_col = filter_info["original_var_col"]
+    use_original_for_filtered = filter_info["use_original_for_filtered"]
+    # Adjust for "None" case
+    if var == "None":
+        original_var_col = None
+        use_original_for_filtered = False
 
     solpos_unfiltered = df_unfiltered.loc[
         df_unfiltered[Variables.APPARENT_ELEVATION.col_name] > 0, :
@@ -612,28 +613,18 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     time_zone = float(meta[Variables.TIME_ZONE.col_name])
     tz = "UTC"
 
-    # Check if there's a filter marker
-    has_filter_marker = "_is_filtered" in df.columns
-    filtered_mask = None
-    if has_filter_marker:
-        filtered_mask = df["_is_filtered"]
-
-    # Get original values if available
-    original_var_col = f"_{var}_original" if var != "None" else None
-    use_original_for_filtered = (
-        has_filter_marker
-        and var != "None"
-        and original_var_col is not None
-        and original_var_col in df.columns
-    )
-
-    # Separate filtered and unfiltered data
-    if has_filter_marker and filtered_mask is not None:
-        df_unfiltered = df[~filtered_mask].copy()
-        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
-    else:
-        df_unfiltered = df
-        df_filtered = None
+    # Separate filtered and unfiltered data using utility function
+    # Note: For "None" variable, pass None to avoid checking for original column
+    filter_var = None if var == "None" else var
+    filter_info = separate_filtered_data(df, filter_var)
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+    original_var_col = filter_info["original_var_col"]
+    use_original_for_filtered = filter_info["use_original_for_filtered"]
+    # Adjust for "None" case
+    if var == "None":
+        original_var_col = None
+        use_original_for_filtered = False
 
     variable = VariableInfo.from_col_name(var)
     if var != "None":

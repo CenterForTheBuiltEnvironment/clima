@@ -394,3 +394,54 @@ def get_time_filter_from_store(
         state["invert_month"],
         state["invert_hour"],
     )
+
+
+def separate_filtered_data(df, var=None):
+    """Separate filtered and unfiltered data from a DataFrame.
+
+    This is a utility function to extract the common pattern of checking for
+    filter markers and separating data into filtered and unfiltered subsets.
+
+    Args:
+        df: DataFrame that may contain filter markers
+        var: Optional variable name to check for original values column.
+             If None, only checks for filter marker, not original values.
+
+    Returns:
+        A dictionary with the following keys:
+        - has_filter_marker: bool, whether filter marker exists
+        - filtered_mask: Series or None, the filter mask
+        - df_unfiltered: DataFrame, unfiltered data subset
+        - df_filtered: DataFrame or None, filtered data subset
+        - original_var_col: str or None, name of original values column
+        - use_original_for_filtered: bool, whether to use original values
+    """
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = df["_is_filtered"]
+
+    # Get original values if available
+    original_var_col = None
+    use_original_for_filtered = False
+    if var is not None:
+        original_var_col = f"_{var}_original"
+        use_original_for_filtered = has_filter_marker and original_var_col in df.columns
+
+    # Separate filtered and unfiltered data
+    if has_filter_marker and filtered_mask is not None:
+        df_unfiltered = df[~filtered_mask].copy()
+        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
+    else:
+        df_unfiltered = df
+        df_filtered = None
+
+    return {
+        "has_filter_marker": has_filter_marker,
+        "filtered_mask": filtered_mask,
+        "df_unfiltered": df_unfiltered,
+        "df_filtered": df_filtered,
+        "original_var_col": original_var_col,
+        "use_original_for_filtered": use_original_for_filtered,
+    }

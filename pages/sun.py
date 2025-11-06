@@ -233,18 +233,16 @@ def monthly_and_cloud_chart(_, global_filter_data, df, meta, si_ip):
     monthly = monthly_solar(df[base_columns], si_ip)
     monthly = monthly.update_layout(margin=tight_margins)
 
-    # Cloud Cover - ensure all necessary columns are included
+    # Cloud Cover - remove filtered columns to disable gray filtering effect
     cloud_base_columns = [
         Variables.TOT_SKY_COVER.col_name,
         Variables.MONTH.col_name,
         Variables.DOY.col_name,
     ]
-    if "_is_filtered" in df.columns:
-        cloud_base_columns.append("_is_filtered")
-    if f"_{Variables.TOT_SKY_COVER.col_name}_original" in df.columns:
-        cloud_base_columns.append(f"_{Variables.TOT_SKY_COVER.col_name}_original")
+    # Create a copy without filtered columns to disable gray filtering
+    cloud_df = df[cloud_base_columns].copy()
     cover = barchart(
-        df[cloud_base_columns],
+        cloud_df,
         Variables.TOT_SKY_COVER.col_name,
         [False],
         [False, "", 3, 7],

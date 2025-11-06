@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
-from pages.lib.utils import get_max_min_value
+from pages.lib.utils import get_max_min_value, separate_filtered_data
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_id_buttons import IdButtons
@@ -300,130 +300,17 @@ def update_psych_chart(
             )
         )
 
-    # Check if there's a filter marker
-    has_filter_marker = "_is_filtered" in df.columns
-    filtered_mask = None
-    if has_filter_marker:
-        filtered_mask = df["_is_filtered"]
-
-    # Get original values if available
-    original_dbt_col = f"_{Variables.DBT.col_name}_original"
-    original_hr_col = f"_{Variables.HR.col_name}_original"
-    original_var_col = f"_{var}_original" if var not in ["None", "Frequency"] else None
-    use_original_for_filtered = (
-        has_filter_marker
-        and original_dbt_col in df.columns
-        and original_hr_col in df.columns
-    )
-
-    # Separate filtered and unfiltered data
-    if has_filter_marker and filtered_mask is not None:
-        df_unfiltered = df[~filtered_mask].copy()
-        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
-    else:
-        df_unfiltered = df
-        df_filtered = None
+    # Separate filtered and unfiltered data using utility function
+    # Note: psy-chart needs to check multiple original columns (DBT, HR, and var)
+    filter_info = separate_filtered_data(df, Variables.DBT.col_name)
+    df_unfiltered = filter_info["df_unfiltered"]
 
     # Process HR for unfiltered data
     df_unfiltered_hr_multiply = list(df_unfiltered[Variables.HR.col_name])
     for k in range(len(df_unfiltered_hr_multiply)):
         df_unfiltered_hr_multiply[k] = df_unfiltered_hr_multiply[k] * 1000
 
-    # Process HR for filtered data (using original values)
-    df_filtered_hr_multiply = None
-    df_filtered_dbt = None
-    df_filtered_var = None
-    if df_filtered is not None and len(df_filtered) > 0 and use_original_for_filtered:
-        df_filtered_hr_multiply = list(df_filtered[original_hr_col])
-        for k in range(len(df_filtered_hr_multiply)):
-            df_filtered_hr_multiply[k] = df_filtered_hr_multiply[k] * 1000
-        df_filtered_dbt = df_filtered[original_dbt_col]
-        if original_var_col is not None and original_var_col in df_filtered.columns:
-            df_filtered_var = df_filtered[original_var_col]
-        elif var not in ["None", "Frequency"]:
-            df_filtered_var = df_filtered[var]
-
-    # Add filtered data traces (gray) if any
-    # Note: For Frequency mode, filtered data is added after the histogram
-    if (
-        df_filtered is not None
-        and len(df_filtered) > 0
-        and df_filtered_hr_multiply is not None
-        and var != "Frequency"
-    ):
-        if var == "None":
-            fig.add_trace(
-                go.Scatter(
-                    x=df_filtered_dbt,
-                    y=df_filtered_hr_multiply,
-                    showlegend=False,
-                    mode="markers",
-                    marker=dict(
-                        size=4,
-                        color="gray",
-                        showscale=False,
-                        opacity=0.3,
-                    ),
-                    hovertemplate="<b>Filtered Data</b><br>"
-                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_name()
-                    + ": %{x:.2f}"
-                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
-                        si_ip
-                    ),
-                    name="Filtered",
-                )
-            )
-        else:
-            # For variable coloring, use gray for filtered data
-            fig.add_trace(
-                go.Scatter(
-                    x=df_filtered_dbt,
-                    y=df_filtered_hr_multiply,
-                    showlegend=False,
-                    mode="markers",
-                    marker=dict(
-                        size=4,
-                        color="gray",
-                        showscale=False,
-                        opacity=0.3,
-                    ),
-                    customdata=np.stack(
-                        (
-                            _safe_get_column(df_filtered, Variables.RH.col_name),
-                            _safe_get_column(df_filtered, "h"),
-                            df_filtered_var
-                            if df_filtered_var is not None
-                            else [0] * len(df_filtered),
-                            _safe_get_column(df_filtered, "t_dp"),
-                        ),
-                        axis=-1,
-                    )
-                    if len(df_filtered) > 0
-                    else None,
-                    hovertemplate="<b>Filtered Data</b><br>"
-                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_name()
-                    + ": %{x:.2f}"
-                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
-                    + "<br>"
-                    + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
-                    + ": %{customdata[0]:.2f}"
-                    + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
-                    + "<br>"
-                    + VariableInfo.from_col_name("h").get_name()
-                    + ": %{customdata[1]:.2f}"
-                    + VariableInfo.from_col_name("h").get_unit(si_ip)
-                    + "<br>"
-                    + VariableInfo.from_col_name("t_dp").get_name()
-                    + ": %{customdata[3]:.2f}"
-                    + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
-                    + "<br>"
-                    + "<br>"
-                    + var_name
-                    + ": %{customdata[2]:.2f}"
-                    + var_unit,
-                    name="Filtered",
-                )
-            )
+    # Filtered data traces removed - no gray filtering effect for psychrometric chart
 
     # Add unfiltered data traces (normal colors)
     if len(df_unfiltered) > 0:
@@ -462,33 +349,7 @@ def update_psych_chart(
                     xbins=dict(start=-50, end=100, size=1),
                 )
             )
-            # Also add filtered data as gray scatter on top of histogram
-            if (
-                df_filtered is not None
-                and len(df_filtered) > 0
-                and df_filtered_hr_multiply is not None
-            ):
-                fig.add_trace(
-                    go.Scatter(
-                        x=df_filtered_dbt,
-                        y=df_filtered_hr_multiply,
-                        showlegend=False,
-                        mode="markers",
-                        marker=dict(
-                            size=3,
-                            color="gray",
-                            showscale=False,
-                            opacity=0.3,
-                        ),
-                        hovertemplate="<b>Filtered Data</b><br>"
-                        + VariableInfo.from_col_name(Variables.DBT.col_name).get_name()
-                        + ": %{x:.2f}"
-                        + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
-                            si_ip
-                        ),
-                        name="Filtered",
-                    )
-                )
+            # Filtered data removed - no gray filtering effect for psychrometric chart
 
         else:
             var_colorbar = dict(
