@@ -340,7 +340,11 @@ def update_tab_utci_summary_chart(var, normalize, global_filter_data, df, meta, 
     if global_filter_data and global_filter_data.get("filter_active", False):
         from pages.lib.layout import apply_global_month_hour_filter
 
-        df = apply_global_month_hour_filter(df, global_filter_data, var)
+        # Include both the original UTCI variable and the categories column
+        # so we can preserve original values for filtered data
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, [var, var + "_categories"]
+        )
 
     # Unified filter state for both active and inactive cases
     time_filter, month, hour, invert_month, invert_hour = get_time_filter_from_store(

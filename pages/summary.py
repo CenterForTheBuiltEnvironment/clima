@@ -321,31 +321,100 @@ def degree_day_chart(
     color_hdd = "red"
     color_cdd = "dodgerblue"
 
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = df["_is_filtered"]
+
+    # Get original DBT values if available
+    original_dbt_col = f"_{Variables.DBT.col_name}_original"
+    use_original_for_filtered = has_filter_marker and original_dbt_col in df.columns
+
     hdd_array, cdd_array = [], []
+    hdd_array_filtered, cdd_array_filtered = [], []
     months = df[Variables.MONTH_NAMES.col_name].unique()
 
     for i in range(1, 13):
         query_month = "month=="
+        month_query = query_month + str(i)
+        month_df = df.query(month_query)
 
-        a = df.query(query_month + str(i) + " and DBT<=" + str(hdd_setpoint))[
-            Variables.DBT.col_name
-        ].sub(hdd_setpoint)
-        hdd_array.append(int(a.sum(skipna=True) / 24))
+        # Calculate HDD and CDD for unfiltered data
+        if has_filter_marker and filtered_mask is not None:
+            unfiltered_mask = ~month_df["_is_filtered"]
+            unfiltered_dbt = month_df[Variables.DBT.col_name][unfiltered_mask]
+        else:
+            unfiltered_dbt = month_df[Variables.DBT.col_name]
 
-        a = df.query(query_month + str(i) + " and DBT>=" + str(cdd_setpoint))[
-            Variables.DBT.col_name
-        ].sub(cdd_setpoint)
-        cdd_array.append(int(a.sum(skipna=True) / 24))
+        # Calculate HDD for unfiltered data
+        a_unfiltered_hdd = unfiltered_dbt[unfiltered_dbt <= hdd_setpoint].sub(
+            hdd_setpoint
+        )
+        hdd_array.append(int(a_unfiltered_hdd.sum(skipna=True) / 24))
 
-    trace1 = go.Bar(
-        x=months,
-        y=hdd_array,
-        name="Heating Degree Days",
-        marker_color=color_hdd,
-        customdata=[abs(x) for x in hdd_array],
-        hovertemplate=" Heating Degree Days: <br>%{customdata} per month<br><extra></extra>",
-    )
+        # Calculate CDD for unfiltered data
+        a_unfiltered_cdd = unfiltered_dbt[unfiltered_dbt >= cdd_setpoint].sub(
+            cdd_setpoint
+        )
+        cdd_array.append(int(a_unfiltered_cdd.sum(skipna=True) / 24))
 
+        # Calculate HDD and CDD for filtered data (if any)
+        if (
+            has_filter_marker
+            and filtered_mask is not None
+            and month_df["_is_filtered"].any()
+        ):
+            filtered_mask_month = month_df["_is_filtered"]
+
+            if use_original_for_filtered:
+                # Use original DBT values for filtered data
+                month_indices = month_df[filtered_mask_month].index
+                filtered_dbt = df.loc[month_indices, original_dbt_col]
+            else:
+                # Fallback to current DBT values (shouldn't happen if filter is applied correctly)
+                filtered_dbt = month_df[Variables.DBT.col_name][filtered_mask_month]
+
+            # Calculate HDD for filtered data
+            a_filtered_hdd = filtered_dbt[filtered_dbt <= hdd_setpoint].sub(
+                hdd_setpoint
+            )
+            hdd_array_filtered.append(int(a_filtered_hdd.sum(skipna=True) / 24))
+
+            # Calculate CDD for filtered data
+            a_filtered_cdd = filtered_dbt[filtered_dbt >= cdd_setpoint].sub(
+                cdd_setpoint
+            )
+            cdd_array_filtered.append(int(a_filtered_cdd.sum(skipna=True) / 24))
+        else:
+            hdd_array_filtered.append(0)
+            cdd_array_filtered.append(0)
+
+    traces = []
+
+    # Add filtered data traces (gray) if any filtered data exists
+    if has_filter_marker and filtered_mask is not None and filtered_mask.any():
+        trace_cdd_filtered = go.Bar(
+            x=months,
+            y=cdd_array_filtered,
+            name="Cooling Degree Days (Filtered)",
+            marker_color="gray",
+            customdata=cdd_array_filtered,
+            hovertemplate="<b>Filtered Data</b><br>Cooling Degree Days: <br>%{customdata} per month<br><extra></extra>",
+        )
+        traces.append(trace_cdd_filtered)
+
+        trace_hdd_filtered = go.Bar(
+            x=months,
+            y=hdd_array_filtered,
+            name="Heating Degree Days (Filtered)",
+            marker_color="lightgray",
+            customdata=[abs(x) for x in hdd_array_filtered],
+            hovertemplate="<b>Filtered Data</b><br>Heating Degree Days: <br>%{customdata} per month<br><extra></extra>",
+        )
+        traces.append(trace_hdd_filtered)
+
+    # Add unfiltered data traces (normal colors)
     trace2 = go.Bar(
         x=months,
         y=cdd_array,
@@ -354,8 +423,19 @@ def degree_day_chart(
         customdata=cdd_array,
         hovertemplate="Cooling Degree Days: <br>%{customdata} per month<br><extra></extra>",
     )
+    traces.append(trace2)
 
-    fig = go.Figure(data=[trace2, trace1])
+    trace1 = go.Bar(
+        x=months,
+        y=hdd_array,
+        name="Heating Degree Days",
+        marker_color=color_hdd,
+        customdata=[abs(x) for x in hdd_array],
+        hovertemplate="Heating Degree Days: <br>%{customdata} per month<br><extra></extra>",
+    )
+    traces.append(trace1)
+
+    fig = go.Figure(data=traces)
     fig.update_layout(
         barmode="relative",
         margin=tight_margins,

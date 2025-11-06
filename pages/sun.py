@@ -213,17 +213,43 @@ def monthly_and_cloud_chart(_, global_filter_data, df, meta, si_ip):
                 Variables.TOT_SKY_COVER.col_name,
             ],
         )
-        # Filter out the filtered rows for solar radiation calculations
-        if "_is_filtered" in df.columns:
-            df = df[~df["_is_filtered"]]
+        # Don't filter out the filtered rows - keep them for gray display
+        # The monthly_solar and barchart functions will handle filtering
 
-    # Sun Radiation
-    monthly = monthly_solar(df, si_ip)
+    # Sun Radiation - ensure all necessary columns are included
+    base_columns = [
+        Variables.GLOB_HOR_RAD.col_name,
+        Variables.DIF_HOR_RAD.col_name,
+        Variables.MONTH.col_name,
+        Variables.HOUR.col_name,
+        Variables.MONTH_NAMES.col_name,
+    ]
+    if "_is_filtered" in df.columns:
+        base_columns.append("_is_filtered")
+    if f"_{Variables.GLOB_HOR_RAD.col_name}_original" in df.columns:
+        base_columns.append(f"_{Variables.GLOB_HOR_RAD.col_name}_original")
+    if f"_{Variables.DIF_HOR_RAD.col_name}_original" in df.columns:
+        base_columns.append(f"_{Variables.DIF_HOR_RAD.col_name}_original")
+    monthly = monthly_solar(df[base_columns], si_ip)
     monthly = monthly.update_layout(margin=tight_margins)
 
-    # Cloud Cover
+    # Cloud Cover - ensure all necessary columns are included
+    cloud_base_columns = [
+        Variables.TOT_SKY_COVER.col_name,
+        Variables.MONTH.col_name,
+        Variables.DOY.col_name,
+    ]
+    if "_is_filtered" in df.columns:
+        cloud_base_columns.append("_is_filtered")
+    if f"_{Variables.TOT_SKY_COVER.col_name}_original" in df.columns:
+        cloud_base_columns.append(f"_{Variables.TOT_SKY_COVER.col_name}_original")
     cover = barchart(
-        df, Variables.TOT_SKY_COVER.col_name, [False], [False, "", 3, 7], True, si_ip
+        df[cloud_base_columns],
+        Variables.TOT_SKY_COVER.col_name,
+        [False],
+        [False, "", 3, 7],
+        True,
+        si_ip,
     )
     cover = cover.update_layout(
         margin=tight_margins,
@@ -282,6 +308,23 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
             target_cols.append(var)
         df = apply_global_month_hour_filter(df, global_filter_data, target_cols)
 
+    # Ensure all necessary columns are included for filtered data display
+    base_columns = [
+        Variables.APPARENT_ELEVATION.col_name,
+        Variables.APPARENT_ZENITH.col_name,
+        Variables.AZIMUTH.col_name,
+        Variables.ELEVATION.col_name,
+        Variables.DAY.col_name,
+        Variables.MONTH_NAMES.col_name,
+        Variables.HOUR.col_name,
+    ]
+    if "_is_filtered" in df.columns:
+        base_columns.append("_is_filtered")
+    if var != "None" and f"_{var}_original" in df.columns:
+        base_columns.append(f"_{var}_original")
+    if var != "None":
+        base_columns.append(var)
+
     custom_inputs = "" if var == "None" else f"{var}"
     units = "" if var == "None" else generate_units(si_ip)
     if view == "polar":
@@ -290,7 +333,7 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
             config=generate_chart_name(
                 TabNames.SPHERICAL_SUNPATH, meta, custom_inputs, units
             ),
-            figure=polar_graph(df, meta, global_local, var, si_ip),
+            figure=polar_graph(df[base_columns], meta, global_local, var, si_ip),
         )
     else:
         return dcc.Graph(
@@ -298,7 +341,9 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
             config=generate_chart_name(
                 TabNames.CARTESIAN_SUNPATH, meta, custom_inputs, units
             ),
-            figure=custom_cartesian_solar(df, meta, global_local, var, si_ip),
+            figure=custom_cartesian_solar(
+                df[base_columns], meta, global_local, var, si_ip
+            ),
         )
 
 

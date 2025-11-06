@@ -100,58 +100,192 @@ def yearly_profile(df, var, global_local, si_ip):
 
     var_single_color = var_color[len(var_color) // 2]
     custom_ylim = range_y
-    # Get min, max, and mean of each day
-    dbt_day = df.groupby(np.arange(len(df.index)) // 24)[var].agg(
-        ["min", "max", "mean"]
-    )
 
-    trace1 = go.Bar(
-        x=df[Variables.UTC_TIME.col_name].dt.date.unique(),
-        y=dbt_day["max"] - dbt_day["min"],
-        base=dbt_day["min"],
-        marker_color=var_single_color,
-        marker_opacity=0.3,
-        name=var_name + " Range",
-        customdata=np.stack(
-            (
-                dbt_day["mean"],
-                df.iloc[::24, :][Variables.MONTH_NAMES.col_name],
-                df.iloc[::24, :][Variables.DAY.col_name],
-            ),
-            axis=-1,
-        ),
-        hovertemplate=(
-            "Max: %{y:.2f} "
-            + var_unit
-            + "<br>Min: %{base:.2f} "
-            + var_unit
-            + "<br><b>Ave : %{customdata[0]:.2f} "
-            + var_unit
-            + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
-        ),
-    )
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = df["_is_filtered"]
 
-    trace2 = go.Scatter(
-        x=df[Variables.UTC_TIME.col_name].dt.date.unique(),
-        y=dbt_day["mean"],
-        name="Average " + var_name,
-        mode="lines",
-        marker_color=var_single_color,
-        marker_opacity=1,
-        customdata=np.stack(
-            (
-                dbt_day["mean"],
-                df.iloc[::24, :][Variables.MONTH_NAMES.col_name],
-                df.iloc[::24, :][Variables.DAY.col_name],
+    # Get original values if available
+    original_var_col = f"_{var}_original"
+    use_original_for_filtered = has_filter_marker and original_var_col in df.columns
+
+    # Get min, max, and mean of each day for unfiltered data
+    if has_filter_marker and filtered_mask is not None:
+        # Create separate dataframes for filtered and unfiltered
+        df_unfiltered = df[~filtered_mask].copy()
+        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
+
+        # Calculate statistics for unfiltered data
+        if len(df_unfiltered) > 0:
+            dbt_day_unfiltered = df_unfiltered.groupby(
+                np.arange(len(df_unfiltered.index)) // 24
+            )[var].agg(["min", "max", "mean"])
+        else:
+            dbt_day_unfiltered = pd.DataFrame({"min": [], "max": [], "mean": []})
+
+        # Calculate statistics for filtered data (using original values)
+        if (
+            df_filtered is not None
+            and len(df_filtered) > 0
+            and use_original_for_filtered
+        ):
+            filtered_var = df_filtered[original_var_col]
+            dbt_day_filtered = filtered_var.groupby(
+                np.arange(len(df_filtered.index)) // 24
+            ).agg(["min", "max", "mean"])
+        else:
+            dbt_day_filtered = None
+    else:
+        df_unfiltered = df
+        dbt_day_unfiltered = df_unfiltered.groupby(
+            np.arange(len(df_unfiltered.index)) // 24
+        )[var].agg(["min", "max", "mean"])
+        dbt_day_filtered = None
+
+    traces = []
+
+    # Add filtered data traces (gray) if any filtered data exists
+    if (
+        has_filter_marker
+        and filtered_mask is not None
+        and filtered_mask.any()
+        and dbt_day_filtered is not None
+        and len(dbt_day_filtered) > 0
+    ):
+        # Get unique dates for filtered data - need to align with groupby results
+        # Since we grouped by consecutive 24-hour periods, we need to get dates accordingly
+        filtered_dates = []
+        filtered_month_names = []
+        filtered_day_names = []
+
+        # Get dates for each day in filtered data
+        for day_idx in range(len(dbt_day_filtered)):
+            day_start_idx = day_idx * 24
+            if day_start_idx < len(df_filtered):
+                day_end_idx = min(day_start_idx + 24, len(df_filtered))
+                day_data = df_filtered.iloc[day_start_idx:day_end_idx]
+                if len(day_data) > 0:
+                    filtered_dates.append(
+                        day_data[Variables.UTC_TIME.col_name].dt.date.iloc[0]
+                    )
+                    filtered_month_names.append(
+                        day_data[Variables.MONTH_NAMES.col_name].iloc[0]
+                    )
+                    filtered_day_names.append(day_data[Variables.DAY.col_name].iloc[0])
+
+        if len(filtered_dates) == len(dbt_day_filtered):
+            trace1_filtered = go.Bar(
+                x=filtered_dates,
+                y=dbt_day_filtered["max"] - dbt_day_filtered["min"],
+                base=dbt_day_filtered["min"],
+                marker_color="gray",
+                marker_opacity=0.3,
+                name=var_name + " Range (Filtered)",
+                customdata=np.stack(
+                    (
+                        dbt_day_filtered["mean"],
+                        filtered_month_names,
+                        filtered_day_names,
+                    ),
+                    axis=-1,
+                ),
+                hovertemplate=(
+                    "<b>Filtered Data</b><br>Max: %{y:.2f} "
+                    + var_unit
+                    + "<br>Min: %{base:.2f} "
+                    + var_unit
+                    + "<br><b>Ave : %{customdata[0]:.2f} "
+                    + var_unit
+                    + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
+                ),
+            )
+            traces.append(trace1_filtered)
+
+            trace2_filtered = go.Scatter(
+                x=filtered_dates,
+                y=dbt_day_filtered["mean"],
+                name="Average " + var_name + " (Filtered)",
+                mode="lines",
+                marker_color="lightgray",
+                marker_opacity=1,
+                line=dict(color="lightgray", width=2),
+                customdata=np.stack(
+                    (
+                        dbt_day_filtered["mean"],
+                        filtered_month_names,
+                        filtered_day_names,
+                    ),
+                    axis=-1,
+                ),
+                hovertemplate=(
+                    "<b>Filtered Data</b><br><b>Ave : %{customdata[0]:.2f} "
+                    + var_unit
+                    + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
+                ),
+            )
+            traces.append(trace2_filtered)
+
+    # Add unfiltered data traces (normal colors)
+    if len(dbt_day_unfiltered) > 0:
+        trace1 = go.Bar(
+            x=df_unfiltered[Variables.UTC_TIME.col_name].dt.date.unique(),
+            y=dbt_day_unfiltered["max"] - dbt_day_unfiltered["min"],
+            base=dbt_day_unfiltered["min"],
+            marker_color=var_single_color,
+            marker_opacity=0.3,
+            name=var_name + " Range",
+            customdata=np.stack(
+                (
+                    dbt_day_unfiltered["mean"],
+                    df_unfiltered.iloc[::24, :][Variables.MONTH_NAMES.col_name]
+                    if len(df_unfiltered) >= 24
+                    else df_unfiltered[Variables.MONTH_NAMES.col_name],
+                    df_unfiltered.iloc[::24, :][Variables.DAY.col_name]
+                    if len(df_unfiltered) >= 24
+                    else df_unfiltered[Variables.DAY.col_name],
+                ),
+                axis=-1,
             ),
-            axis=-1,
-        ),
-        hovertemplate=(
-            "<b>Ave : %{customdata[0]:.2f} "
-            + var_unit
-            + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
-        ),
-    )
+            hovertemplate=(
+                "Max: %{y:.2f} "
+                + var_unit
+                + "<br>Min: %{base:.2f} "
+                + var_unit
+                + "<br><b>Ave : %{customdata[0]:.2f} "
+                + var_unit
+                + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
+            ),
+        )
+        traces.append(trace1)
+
+        trace2 = go.Scatter(
+            x=df_unfiltered[Variables.UTC_TIME.col_name].dt.date.unique(),
+            y=dbt_day_unfiltered["mean"],
+            name="Average " + var_name,
+            mode="lines",
+            marker_color=var_single_color,
+            marker_opacity=1,
+            customdata=np.stack(
+                (
+                    dbt_day_unfiltered["mean"],
+                    df_unfiltered.iloc[::24, :][Variables.MONTH_NAMES.col_name]
+                    if len(df_unfiltered) >= 24
+                    else df_unfiltered[Variables.MONTH_NAMES.col_name],
+                    df_unfiltered.iloc[::24, :][Variables.DAY.col_name]
+                    if len(df_unfiltered) >= 24
+                    else df_unfiltered[Variables.DAY.col_name],
+                ),
+                axis=-1,
+            ),
+            hovertemplate=(
+                "<b>Ave : %{customdata[0]:.2f} "
+                + var_unit
+                + "</b><br>Month: %{customdata[1]}<br>Day: %{customdata[2]}<br>"
+            ),
+        )
+        traces.append(trace2)
 
     if var == Variables.DBT.col_name:
         # plot ashrae adaptive comfort limits (80%)
@@ -208,7 +342,8 @@ def yearly_profile(df, var, global_local, si_ip):
                 "Max: %{y:.2f} " + var_unit + "Min: %{base:.2f} " + var_unit
             ),
         )
-        data = [trace3, trace4, trace1, trace2]
+        # Insert ASHRAE traces before the main traces
+        traces = [trace3, trace4] + traces
 
     elif var == Variables.RH.col_name:
         # plot relative Humidity limits (30-70%)
@@ -226,13 +361,13 @@ def yearly_profile(df, var, global_local, si_ip):
             marker_color="silver",
         )
 
-        data = [trace3, trace1, trace2]
+        # Insert humidity comfort band before the main traces
+        traces = [trace3] + traces
 
-    else:
-        data = [trace1, trace2]
+    # traces already contains the main traces (trace1, trace2, and filtered versions if any)
 
     fig = go.Figure(
-        data=data, layout=go.Layout(barmode="overlay", bargap=0, margin=tight_margins)
+        data=traces, layout=go.Layout(barmode="overlay", bargap=0, margin=tight_margins)
     )
 
     fig.update_xaxes(
@@ -279,11 +414,43 @@ def daily_profile(df, var, global_local, si_ip):
         range_y = [data_min, data_max]
 
     var_single_color = var_color[len(var_color) // 2]
+
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = df["_is_filtered"]
+
+    # Get original values if available
+    original_var_col = f"_{var}_original"
+    use_original_for_filtered = has_filter_marker and original_var_col in df.columns
+
+    # Separate filtered and unfiltered data
+    if has_filter_marker and filtered_mask is not None:
+        df_unfiltered = df[~filtered_mask].copy()
+        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
+    else:
+        df_unfiltered = df
+        df_filtered = None
+
+    # Calculate monthly averages for unfiltered data
     var_month_ave = (
-        df.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[var]
+        df_unfiltered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[var]
         .median()
         .reset_index()
     )
+
+    # Calculate monthly averages for filtered data (using original values)
+    var_month_ave_filtered = None
+    if df_filtered is not None and len(df_filtered) > 0 and use_original_for_filtered:
+        var_month_ave_filtered = (
+            df_filtered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+                original_var_col
+            ]
+            .median()
+            .reset_index()
+        )
+
     fig = make_subplots(
         rows=1,
         cols=12,
@@ -292,55 +459,122 @@ def daily_profile(df, var, global_local, si_ip):
     )
 
     for i in range(12):
-        fig.add_trace(
-            go.Scatter(
-                x=df.loc[
-                    df[Variables.MONTH.col_name] == i + 1, Variables.HOUR.col_name
-                ],
-                y=df.loc[df[Variables.MONTH.col_name] == i + 1, var],
-                mode="markers",
-                marker_color=var_single_color,
-                opacity=0.5,
-                marker_size=3,
-                name=month_lst[i],
-                showlegend=False,
-                customdata=df.loc[
-                    df[Variables.MONTH.col_name] == i + 1,
-                    Variables.MONTH_NAMES.col_name,
-                ],
-                hovertemplate=(
-                    "<b>"
-                    + var
-                    + ": %{y:.2f} "
-                    + var_unit
-                    + "</b><br>Month: %{customdata}<br>Hour: %{x}:00<br>"
-                ),
-            ),
-            row=1,
-            col=i + 1,
-        )
+        month_data_unfiltered = df_unfiltered.loc[
+            df_unfiltered[Variables.MONTH.col_name] == i + 1
+        ]
+        month_data_filtered = None
+        if df_filtered is not None and len(df_filtered) > 0:
+            month_data_filtered = df_filtered.loc[
+                df_filtered[Variables.MONTH.col_name] == i + 1
+            ]
 
-        fig.add_trace(
-            go.Scatter(
-                x=var_month_ave.loc[
-                    var_month_ave[Variables.MONTH.col_name] == i + 1,
-                    Variables.HOUR.col_name,
-                ],
-                y=var_month_ave.loc[
-                    var_month_ave[Variables.MONTH.col_name] == i + 1, var
-                ],
-                mode="lines",
-                line_color=var_single_color,
-                line_width=3,
-                name=None,
-                showlegend=False,
-                hovertemplate=(
-                    "<b>" + var + ": %{y:.2f} " + var_unit + "</b><br>Hour: %{x}:00<br>"
+        # Add filtered data scatter (gray) if any
+        if month_data_filtered is not None and len(month_data_filtered) > 0:
+            filtered_var_values = (
+                month_data_filtered[original_var_col]
+                if use_original_for_filtered
+                else month_data_filtered[var]
+            )
+            fig.add_trace(
+                go.Scatter(
+                    x=month_data_filtered[Variables.HOUR.col_name],
+                    y=filtered_var_values,
+                    mode="markers",
+                    marker_color="gray",
+                    opacity=0.3,
+                    marker_size=2,
+                    name=month_lst[i] + " (Filtered)",
+                    showlegend=False,
+                    customdata=month_data_filtered[Variables.MONTH_NAMES.col_name],
+                    hovertemplate=(
+                        "<b>Filtered Data</b><br>"
+                        + var
+                        + ": %{y:.2f} "
+                        + var_unit
+                        + "</b><br>Month: %{customdata}<br>Hour: %{x}:00<br>"
+                    ),
                 ),
-            ),
-            row=1,
-            col=i + 1,
-        )
+                row=1,
+                col=i + 1,
+            )
+
+            # Add filtered data median line (lightgray) if available
+            if var_month_ave_filtered is not None and len(var_month_ave_filtered) > 0:
+                month_ave_filtered = var_month_ave_filtered.loc[
+                    var_month_ave_filtered[Variables.MONTH.col_name] == i + 1
+                ]
+                if len(month_ave_filtered) > 0:
+                    fig.add_trace(
+                        go.Scatter(
+                            x=month_ave_filtered[Variables.HOUR.col_name],
+                            y=month_ave_filtered[original_var_col],
+                            mode="lines",
+                            line_color="lightgray",
+                            line_width=2,
+                            name=None,
+                            showlegend=False,
+                            hovertemplate=(
+                                "<b>Filtered Data</b><br>"
+                                + var
+                                + ": %{y:.2f} "
+                                + var_unit
+                                + "</b><br>Hour: %{x}:00<br>"
+                            ),
+                        ),
+                        row=1,
+                        col=i + 1,
+                    )
+
+        # Add unfiltered data scatter (normal color)
+        if len(month_data_unfiltered) > 0:
+            fig.add_trace(
+                go.Scatter(
+                    x=month_data_unfiltered[Variables.HOUR.col_name],
+                    y=month_data_unfiltered[var],
+                    mode="markers",
+                    marker_color=var_single_color,
+                    opacity=0.5,
+                    marker_size=3,
+                    name=month_lst[i],
+                    showlegend=False,
+                    customdata=month_data_unfiltered[Variables.MONTH_NAMES.col_name],
+                    hovertemplate=(
+                        "<b>"
+                        + var
+                        + ": %{y:.2f} "
+                        + var_unit
+                        + "</b><br>Month: %{customdata}<br>Hour: %{x}:00<br>"
+                    ),
+                ),
+                row=1,
+                col=i + 1,
+            )
+
+        # Add unfiltered data median line (normal color)
+        month_ave_unfiltered = var_month_ave.loc[
+            var_month_ave[Variables.MONTH.col_name] == i + 1
+        ]
+        if len(month_ave_unfiltered) > 0:
+            fig.add_trace(
+                go.Scatter(
+                    x=month_ave_unfiltered[Variables.HOUR.col_name],
+                    y=month_ave_unfiltered[var],
+                    mode="lines",
+                    line_color=var_single_color,
+                    line_width=3,
+                    name=None,
+                    showlegend=False,
+                    hovertemplate=(
+                        "<b>"
+                        + var
+                        + ": %{y:.2f} "
+                        + var_unit
+                        + "</b><br>Hour: %{x}:00<br>"
+                    ),
+                ),
+                row=1,
+                col=i + 1,
+            )
 
         fig.update_xaxes(range=[0, 25], row=1, col=i + 1)
         fig.update_yaxes(range=range_y, row=1, col=i + 1)
@@ -856,9 +1090,21 @@ def thermal_stress_stacked_barchart(
         "#A3302B",
         "#6B1F18",
     ]
+
+    # Check if there's a filter marker before applying time filter
+    has_filter_marker = "_is_filtered" in df.columns
+    global_filter_mask = None
+    if has_filter_marker:
+        global_filter_mask = df["_is_filtered"].copy()
+
     df = filter_df_by_month_and_hour(
         df, time_filter, month, hour, invert_month, invert_hour, var
     )
+
+    # Restore filter marker after time filtering
+    if has_filter_marker and global_filter_mask is not None:
+        df["_is_filtered"] = global_filter_mask
+
     start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
         month, hour, invert_month, invert_hour
     )
@@ -873,33 +1119,144 @@ def thermal_stress_stacked_barchart(
                 style={"text-align": "center", "marginTop": "2rem"},
             ),
         )
+
+    # Separate filtered and unfiltered data
+    has_filtered_data = False
+    if (
+        has_filter_marker
+        and global_filter_mask is not None
+        and global_filter_mask.any()
+    ):
+        df_unfiltered = df[~global_filter_mask].copy()
+        df_filtered = (
+            df[global_filter_mask].copy() if global_filter_mask.any() else None
+        )
+        has_filtered_data = df_filtered is not None and len(df_filtered) > 0
+    else:
+        df_unfiltered = df
+        df_filtered = None
+
     isNormalized = True if normalize else False
+
+    # Calculate data for unfiltered
     if isNormalized:
-        new_df = (
-            df.groupby(Variables.MONTH.col_name)[var]
+        new_df_unfiltered = (
+            df_unfiltered.groupby(Variables.MONTH.col_name)[var]
             .value_counts(normalize=True)
             .unstack(var)
             .fillna(0)
         )
-        new_df = new_df.set_axis(categories, axis=1)
-        new_df.reset_index(inplace=True)
+        new_df_unfiltered = new_df_unfiltered.set_axis(categories, axis=1)
+        new_df_unfiltered.reset_index(inplace=True)
     else:
-        new_df = (
-            df.groupby(Variables.MONTH.col_name)[var]
+        new_df_unfiltered = (
+            df_unfiltered.groupby(Variables.MONTH.col_name)[var]
             .value_counts()
             .unstack(var)
             .fillna(0)
         )
-        new_df = new_df.set_axis(categories, axis=1)
-        new_df.reset_index(inplace=True)
+        new_df_unfiltered = new_df_unfiltered.set_axis(categories, axis=1)
+        new_df_unfiltered.reset_index(inplace=True)
+
+    # Calculate data for filtered (if any)
+    new_df_filtered = None
+    if has_filtered_data:
+        # Use original values for filtered data if available
+        original_var_col = f"_{var}_original"
+        use_original = original_var_col in df_filtered.columns
+
+        if use_original:
+            # Create a temporary column with original values for calculation
+            df_filtered_temp = df_filtered.copy()
+            df_filtered_temp[var] = df_filtered_temp[original_var_col]
+        else:
+            df_filtered_temp = df_filtered
+
+        if isNormalized:
+            new_df_filtered = (
+                df_filtered_temp.groupby(Variables.MONTH.col_name)[var]
+                .value_counts(normalize=True)
+                .unstack(var)
+                .fillna(0)
+            )
+            new_df_filtered = new_df_filtered.set_axis(categories, axis=1)
+            new_df_filtered.reset_index(inplace=True)
+        else:
+            new_df_filtered = (
+                df_filtered_temp.groupby(Variables.MONTH.col_name)[var]
+                .value_counts()
+                .unstack(var)
+                .fillna(0)
+            )
+            new_df_filtered = new_df_filtered.set_axis(categories, axis=1)
+            new_df_filtered.reset_index(inplace=True)
 
     go.Figure()
     data = []
+
+    # Add filtered data traces (gray) if any filtered data exists
+    if has_filtered_data and new_df_filtered is not None:
+        for i in range(len(categories)):
+            x_data = list(range(0, 12))
+            y_data_filtered = []
+            for mth in range(0, 12):
+                month_idx = mth + 1  # month index (1-12)
+                # Check if this month exists in filtered data
+                month_rows = new_df_filtered[
+                    new_df_filtered[Variables.MONTH.col_name] == month_idx
+                ]
+                if len(month_rows) > 0:
+                    try:
+                        val = month_rows.iloc[0][categories[i]]
+                        y_data_filtered.append(val if not pd.isna(val) else 0)
+                    except (KeyError, IndexError, TypeError):
+                        y_data_filtered.append(0)
+                else:
+                    y_data_filtered.append(0)
+
+            # Only add trace if there's any non-zero data
+            if any(y > 0 for y in y_data_filtered):
+                data.append(
+                    go.Bar(
+                        x=x_data,
+                        y=y_data_filtered,
+                        name=categories[i],
+                        marker_color="gray"
+                        if i < 5
+                        else "lightgray"
+                        if i < 8
+                        else "silver",
+                        hovertemplate=(
+                            "<b>Filtered Data</b><br>Month: %{x}<br>Category: "
+                            + categories[i]
+                            + "<br>Count: %{y}<br><extra></extra>"
+                            if not normalize
+                            else "<b>Filtered Data</b><br>Month: %{x}<br>Category: "
+                            + categories[i]
+                            + "<br>Proportion: %{y:.1f}%<br><extra></extra>"
+                        ),
+                        showlegend=False,  # Don't show filtered data in legend to avoid duplicates
+                    )
+                )
+
+    # Add unfiltered data traces (normal colors)
     for i in range(len(categories)):
         x_data = list(range(0, 12))
-        y_data = [
-            catch(lambda: new_df.iloc[mth][categories[i]]) for mth in range(0, 12)
-        ]
+        y_data = []
+        for mth in range(0, 12):
+            month_idx = mth + 1  # month index (1-12)
+            # Check if this month exists in unfiltered data
+            month_rows = new_df_unfiltered[
+                new_df_unfiltered[Variables.MONTH.col_name] == month_idx
+            ]
+            if len(month_rows) > 0:
+                try:
+                    val = month_rows.iloc[0][categories[i]]
+                    y_data.append(val if not pd.isna(val) else 0)
+                except (KeyError, IndexError, TypeError):
+                    y_data.append(0)
+            else:
+                y_data.append(0)
         data.append(
             go.Bar(
                 x=x_data,
@@ -943,8 +1300,11 @@ def thermal_stress_stacked_barchart(
         linecolor="black",
         mirror=True,
     )
-    # Get available months from filtered data
-    available_months = sorted(new_df[Variables.MONTH.col_name].unique())
+    # Get available months from unfiltered data (or combined if no filter)
+    available_months = sorted(new_df_unfiltered[Variables.MONTH.col_name].unique())
+    if has_filtered_data and new_df_filtered is not None:
+        filtered_months = sorted(new_df_filtered[Variables.MONTH.col_name].unique())
+        available_months = sorted(set(available_months + filtered_months))
 
     fig.update_xaxes(
         dict(
@@ -987,9 +1347,31 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
     color_in = var_color[len(var_color) // 2]
 
     new_df = df.copy()
+
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in new_df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = new_df["_is_filtered"]
+
+    # Get original values if available
+    original_var_col = f"_{var}_original"
+    use_original_for_filtered = has_filter_marker and original_var_col in new_df.columns
+
+    # Separate filtered and unfiltered data
+    if has_filter_marker and filtered_mask is not None:
+        df_unfiltered = new_df[~filtered_mask].copy()
+        df_filtered = new_df[filtered_mask].copy() if filtered_mask.any() else None
+    else:
+        df_unfiltered = new_df
+        df_filtered = None
+
     month_in = []
     month_below = []
     month_above = []
+    month_in_filtered = []
+    month_below_filtered = []
+    month_above_filtered = []
 
     min_val = str(min_val)
     max_val = str(max_val)
@@ -1002,25 +1384,98 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
 
     for month_num in range(1, 13):
         if month_num in available_months_set:
-            query = f"month=={str(month_num)} and ({filter_var}>={min_val} and {filter_var}<={max_val})"
-            a = new_df.query(query)[Variables.DOY.col_name].count()
-            month_in.append(a)
-            query = f"month=={str(month_num)} and ({filter_var}<{min_val})"
-            b = new_df.query(query)[Variables.DOY.col_name].count()
-            month_below.append(b)
-            query = f"month=={str(month_num)} and {filter_var}>{max_val}"
-            c = new_df.query(query)[Variables.DOY.col_name].count()
-            month_above.append(c)
+            # Calculate for unfiltered data
+            month_unfiltered = df_unfiltered[
+                df_unfiltered[Variables.MONTH.col_name] == month_num
+            ]
+            if len(month_unfiltered) > 0:
+                query = f"month=={str(month_num)} and ({filter_var}>={min_val} and {filter_var}<={max_val})"
+                a = month_unfiltered.query(query)[Variables.DOY.col_name].count()
+                month_in.append(a)
+                query = f"month=={str(month_num)} and ({filter_var}<{min_val})"
+                b = month_unfiltered.query(query)[Variables.DOY.col_name].count()
+                month_below.append(b)
+                query = f"month=={str(month_num)} and {filter_var}>{max_val}"
+                c = month_unfiltered.query(query)[Variables.DOY.col_name].count()
+                month_above.append(c)
+            else:
+                month_in.append(0)
+                month_below.append(0)
+                month_above.append(0)
+
+            # Calculate for filtered data (using original values)
+            if (
+                df_filtered is not None
+                and len(df_filtered) > 0
+                and use_original_for_filtered
+            ):
+                month_filtered = df_filtered[
+                    df_filtered[Variables.MONTH.col_name] == month_num
+                ]
+                if len(month_filtered) > 0:
+                    filtered_var_col = original_var_col
+                    query = f"month=={str(month_num)} and ({filtered_var_col}>={min_val} and {filtered_var_col}<={max_val})"
+                    a = month_filtered.query(query)[Variables.DOY.col_name].count()
+                    month_in_filtered.append(a)
+                    query = (
+                        f"month=={str(month_num)} and ({filtered_var_col}<{min_val})"
+                    )
+                    b = month_filtered.query(query)[Variables.DOY.col_name].count()
+                    month_below_filtered.append(b)
+                    query = f"month=={str(month_num)} and {filtered_var_col}>{max_val}"
+                    c = month_filtered.query(query)[Variables.DOY.col_name].count()
+                    month_above_filtered.append(c)
+                else:
+                    month_in_filtered.append(0)
+                    month_below_filtered.append(0)
+                    month_above_filtered.append(0)
+            else:
+                month_in_filtered.append(0)
+                month_below_filtered.append(0)
+                month_above_filtered.append(0)
         else:
             # No data for this month, append zeros
             month_in.append(0)
             month_below.append(0)
             month_above.append(0)
+            month_in_filtered.append(0)
+            month_below_filtered.append(0)
+            month_above_filtered.append(0)
 
     go.Figure()
 
     month_names = month_lst
 
+    data = []
+
+    # Add filtered data traces (gray) if any filtered data exists
+    if (
+        has_filter_marker
+        and filtered_mask is not None
+        and filtered_mask.any()
+        and any(month_in_filtered + month_below_filtered + month_above_filtered)
+    ):
+        trace1_filtered = go.Bar(
+            x=month_names,
+            y=month_in_filtered,
+            name="IN range (Filtered)",
+            marker_color="gray",
+        )
+        trace2_filtered = go.Bar(
+            x=month_names,
+            y=month_below_filtered,
+            name="BELOW range (Filtered)",
+            marker_color="lightgray",
+        )
+        trace3_filtered = go.Bar(
+            x=month_names,
+            y=month_above_filtered,
+            name="ABOVE range (Filtered)",
+            marker_color="silver",
+        )
+        data = [trace2_filtered, trace1_filtered, trace3_filtered]
+
+    # Add unfiltered data traces (normal colors)
     trace1 = go.Bar(x=month_names, y=month_in, name="IN range", marker_color=color_in)
     trace2 = go.Bar(
         x=month_names,
@@ -1034,7 +1489,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
         name="ABOVE range",
         marker_color=color_above,
     )
-    data = [trace2, trace1, trace3]
+    data = data + [trace2, trace1, trace3]
 
     fig = go.Figure(data=data)
     fig.update_layout(barmode="stack", dragmode=False)

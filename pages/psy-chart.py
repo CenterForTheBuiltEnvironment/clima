@@ -177,7 +177,14 @@ def update_psych_chart(
             get_global_filter_state,
         )
 
-        df = apply_global_month_hour_filter(df, global_filter_data)
+        # Determine which columns to filter - need DBT and HR at minimum, plus colorby_var if it's not None/Frequency
+        target_columns = [Variables.DBT.col_name, Variables.HR.col_name]
+        if colorby_var not in ["None", "Frequency"]:
+            target_columns.append(colorby_var)
+        if data_filter and data_filter_var:
+            target_columns.append(data_filter_var)
+
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
         filter_state = get_global_filter_state(global_filter_data)
         month_range = filter_state["month_range"]
@@ -286,117 +293,271 @@ def update_psych_chart(
             )
         )
 
-    df_hr_multiply = list(df[Variables.HR.col_name])
-    for k in range(len(df_hr_multiply)):
-        df_hr_multiply[k] = df_hr_multiply[k] * 1000
-    if var == "None":
-        fig.add_trace(
-            go.Scatter(
-                x=df[Variables.DBT.col_name],
-                y=df_hr_multiply,
-                showlegend=False,
-                mode="markers",
-                marker=dict(
-                    size=6,
-                    color=var_color,
-                    showscale=False,
-                    opacity=0.2,
-                ),
-                hovertemplate=VariableInfo.from_col_name(
-                    Variables.DBT.col_name
-                ).get_name()
-                + ": %{x:.2f}"
-                + VariableInfo.from_col_name(Variables.DBT.col_name).get_name(),
-                name="",
-            )
-        )
-    elif var == "Frequency":
-        fig.add_trace(
-            go.Histogram2d(
-                x=df[Variables.DBT.col_name],
-                y=df_hr_multiply,
-                name="",
-                colorscale=var_color,
-                hovertemplate="",
-                autobinx=False,
-                xbins=dict(start=-50, end=100, size=1),
-            )
-        )
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x=dbt_list,
-        #         y=rh_df["rh100"],
-        #         showlegend=False,
-        #         mode="none",
-        #         name="",
-        #         fill="toself",
-        #         fillcolor="#fff",
-        #     )
-        # )
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = df["_is_filtered"]
 
+    # Get original values if available
+    original_dbt_col = f"_{Variables.DBT.col_name}_original"
+    original_hr_col = f"_{Variables.HR.col_name}_original"
+    original_var_col = f"_{var}_original" if var not in ["None", "Frequency"] else None
+    use_original_for_filtered = (
+        has_filter_marker
+        and original_dbt_col in df.columns
+        and original_hr_col in df.columns
+    )
+
+    # Separate filtered and unfiltered data
+    if has_filter_marker and filtered_mask is not None:
+        df_unfiltered = df[~filtered_mask].copy()
+        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
     else:
-        var_colorbar = dict(
-            thickness=30,
-            title=var_unit + "<br>  ",
-        )
+        df_unfiltered = df
+        df_filtered = None
 
-        if var_unit == "Thermal stress":
-            var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
-            var_colorbar["ticktext"] = [
-                "extreme heat stress",
-                "very strong heat stress",
-                "strong heat stress",
-                "moderate heat stress",
-                "no thermal stress",
-                "slight cold stress",
-                "moderate cold stress",
-                "strong cold stress",
-                "very strong cold stress",
-                "extreme cold stress",
-            ]
+    # Process HR for unfiltered data
+    df_unfiltered_hr_multiply = list(df_unfiltered[Variables.HR.col_name])
+    for k in range(len(df_unfiltered_hr_multiply)):
+        df_unfiltered_hr_multiply[k] = df_unfiltered_hr_multiply[k] * 1000
 
-        fig.add_trace(
-            go.Scatter(
-                x=df[Variables.DBT.col_name],
-                y=df_hr_multiply,
-                showlegend=False,
-                mode="markers",
-                marker=dict(
-                    size=5,
-                    color=df[var],
-                    showscale=True,
-                    opacity=0.3,
-                    colorscale=var_color,
-                    colorbar=var_colorbar,
-                ),
-                customdata=np.stack(
-                    (df[Variables.RH.col_name], df["h"], df[var], df["t_dp"]), axis=-1
-                ),
-                hovertemplate=VariableInfo.from_col_name(
-                    Variables.DBT.col_name
-                ).get_name()
-                + ": %{x:.2f}"
-                + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
-                + "<br>"
-                + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
-                + ": %{customdata[0]:.2f}"
-                + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
-                + "<br>"
-                + VariableInfo.from_col_name("h").get_name()
-                + ": %{customdata[1]:.2f}"
-                + VariableInfo.from_col_name("h").get_unit(si_ip)
-                + "<br>"
-                + VariableInfo.from_col_name("t_dp").get_name()
-                + ": %{customdata[3]:.2f}"
-                + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
-                + "<br>"
-                + "<br>"
-                + var_name
-                + ": %{customdata[2]:.2f}"
-                + var_unit,
-                name="",
+    # Process HR for filtered data (using original values)
+    df_filtered_hr_multiply = None
+    df_filtered_dbt = None
+    df_filtered_var = None
+    if df_filtered is not None and len(df_filtered) > 0 and use_original_for_filtered:
+        df_filtered_hr_multiply = list(df_filtered[original_hr_col])
+        for k in range(len(df_filtered_hr_multiply)):
+            df_filtered_hr_multiply[k] = df_filtered_hr_multiply[k] * 1000
+        df_filtered_dbt = df_filtered[original_dbt_col]
+        if original_var_col is not None and original_var_col in df_filtered.columns:
+            df_filtered_var = df_filtered[original_var_col]
+        elif var not in ["None", "Frequency"]:
+            df_filtered_var = df_filtered[var]
+
+    # Add filtered data traces (gray) if any
+    # Note: For Frequency mode, filtered data is added after the histogram
+    if (
+        df_filtered is not None
+        and len(df_filtered) > 0
+        and df_filtered_hr_multiply is not None
+        and var != "Frequency"
+    ):
+        if var == "None":
+            fig.add_trace(
+                go.Scatter(
+                    x=df_filtered_dbt,
+                    y=df_filtered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=4,
+                        color="gray",
+                        showscale=False,
+                        opacity=0.3,
+                    ),
+                    hovertemplate="<b>Filtered Data</b><br>"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
+                        si_ip
+                    ),
+                    name="Filtered",
+                )
             )
-        )
+        else:
+            # For variable coloring, use gray for filtered data
+            fig.add_trace(
+                go.Scatter(
+                    x=df_filtered_dbt,
+                    y=df_filtered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=4,
+                        color="gray",
+                        showscale=False,
+                        opacity=0.3,
+                    ),
+                    customdata=np.stack(
+                        (
+                            df_filtered[Variables.RH.col_name]
+                            if Variables.RH.col_name in df_filtered.columns
+                            else [0] * len(df_filtered),
+                            df_filtered["h"]
+                            if "h" in df_filtered.columns
+                            else [0] * len(df_filtered),
+                            df_filtered_var
+                            if df_filtered_var is not None
+                            else [0] * len(df_filtered),
+                            df_filtered["t_dp"]
+                            if "t_dp" in df_filtered.columns
+                            else [0] * len(df_filtered),
+                        ),
+                        axis=-1,
+                    )
+                    if len(df_filtered) > 0
+                    else None,
+                    hovertemplate="<b>Filtered Data</b><br>"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
+                    + ": %{customdata[0]:.2f}"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("h").get_name()
+                    + ": %{customdata[1]:.2f}"
+                    + VariableInfo.from_col_name("h").get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("t_dp").get_name()
+                    + ": %{customdata[3]:.2f}"
+                    + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
+                    + "<br>"
+                    + "<br>"
+                    + var_name
+                    + ": %{customdata[2]:.2f}"
+                    + var_unit,
+                    name="Filtered",
+                )
+            )
+
+    # Add unfiltered data traces (normal colors)
+    if len(df_unfiltered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatter(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=6,
+                        color=var_color,
+                        showscale=False,
+                        opacity=0.2,
+                    ),
+                    hovertemplate=VariableInfo.from_col_name(
+                        Variables.DBT.col_name
+                    ).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
+                        si_ip
+                    ),
+                    name="",
+                )
+            )
+        elif var == "Frequency":
+            fig.add_trace(
+                go.Histogram2d(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    name="",
+                    colorscale=var_color,
+                    hovertemplate="",
+                    autobinx=False,
+                    xbins=dict(start=-50, end=100, size=1),
+                )
+            )
+            # Also add filtered data as gray scatter on top of histogram
+            if (
+                df_filtered is not None
+                and len(df_filtered) > 0
+                and df_filtered_hr_multiply is not None
+            ):
+                fig.add_trace(
+                    go.Scatter(
+                        x=df_filtered_dbt,
+                        y=df_filtered_hr_multiply,
+                        showlegend=False,
+                        mode="markers",
+                        marker=dict(
+                            size=3,
+                            color="gray",
+                            showscale=False,
+                            opacity=0.3,
+                        ),
+                        hovertemplate="<b>Filtered Data</b><br>"
+                        + VariableInfo.from_col_name(Variables.DBT.col_name).get_name()
+                        + ": %{x:.2f}"
+                        + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
+                            si_ip
+                        ),
+                        name="Filtered",
+                    )
+                )
+
+        else:
+            var_colorbar = dict(
+                thickness=30,
+                title=var_unit + "<br>  ",
+            )
+
+            if var_unit == "Thermal stress":
+                var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+                var_colorbar["ticktext"] = [
+                    "extreme heat stress",
+                    "very strong heat stress",
+                    "strong heat stress",
+                    "moderate heat stress",
+                    "no thermal stress",
+                    "slight cold stress",
+                    "moderate cold stress",
+                    "strong cold stress",
+                    "very strong cold stress",
+                    "extreme cold stress",
+                ]
+
+            fig.add_trace(
+                go.Scatter(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=5,
+                        color=df_unfiltered[var],
+                        showscale=True,
+                        opacity=0.3,
+                        colorscale=var_color,
+                        colorbar=var_colorbar,
+                    ),
+                    customdata=np.stack(
+                        (
+                            df_unfiltered[Variables.RH.col_name],
+                            df_unfiltered["h"],
+                            df_unfiltered[var],
+                            df_unfiltered["t_dp"],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate=VariableInfo.from_col_name(
+                        Variables.DBT.col_name
+                    ).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
+                    + ": %{customdata[0]:.2f}"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("h").get_name()
+                    + ": %{customdata[1]:.2f}"
+                    + VariableInfo.from_col_name("h").get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("t_dp").get_name()
+                    + ": %{customdata[3]:.2f}"
+                    + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
+                    + "<br>"
+                    + "<br>"
+                    + var_name
+                    + ": %{customdata[2]:.2f}"
+                    + var_unit,
+                    name="",
+                )
+            )
 
     xtitle_name = (
         "Temperature"
