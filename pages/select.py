@@ -248,7 +248,6 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
 
 @callback(
     [
-        Output(ElementIds.NAV, "disabled"),
         Output(ElementIds.NAV_SUMMARY, "disabled"),
         Output(ElementIds.NAV_T_RH, "disabled"),
         Output(ElementIds.NAV_SUN, "disabled"),
@@ -277,12 +276,10 @@ def enable_tabs_when_data_is_loaded(meta, data):
             True,
             True,
             True,
-            True,
             default,
         )
     else:
         return (
-            False,
             False,
             False,
             False,
