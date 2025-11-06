@@ -12,46 +12,42 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Title & Section Headings --------------------
-def test_explorer_titles(page: Page):
-    """Check key titles and headings are visible"""
-    expect(page.get_by_text("Select a variable:")).to_be_visible()
-    expect(page.get_by_text("Yearly chart")).to_be_visible()
-    expect(page.get_by_text("Daily chart")).to_be_visible()
-    expect(page.get_by_text("Heatmap chart")).to_be_visible()
-    expect(page.get_by_text("Descriptive statistics")).to_be_visible()
-    expect(page.get_by_text("Customizable heatmap")).to_be_visible()
-    expect(page.get_by_text("More charts")).to_be_visible()
+# -------------------- Test Explorer Core Elements --------------------
+def test_explorer_core_elements(page: Page):
+    """Check key titles and section one & two charts"""
+    # Titles
+    for text in [
+        "Select a variable:",
+        "Yearly chart",
+        "Daily chart",
+        "Heatmap chart",
+        "Descriptive statistics",
+        "Customizable heatmap",
+        "More charts",
+    ]:
+        expect(page.get_by_text(text)).to_be_visible()
+    # Charts
+    for chart in [
+        "#yearly-explore",
+        "#query-daily",
+        "#query-heatmap",
+        "#table-data-explorer",
+        "#custom-heatmap",
+    ]:
+        expect(page.locator(chart)).to_be_visible()
 
 
-# -------------------- Test Section One Charts --------------------
-def test_section_one_charts(page: Page):
-    """Check if Section One charts render properly"""
-    expect(page.locator("#yearly-explore")).to_be_visible()
-    expect(page.locator("#query-daily")).to_be_visible()
-    expect(page.locator("#query-heatmap")).to_be_visible()
-    expect(page.locator("#table-data-explorer")).to_be_visible()
-
-
-# -------------------- Test Section Two Charts --------------------
-def test_section_two_charts(page: Page):
-    """Ensure Section Two charts and summary elements appear"""
-    expect(page.locator("#custom-heatmap")).to_be_visible()
-
-
-# -------------------- Test Section Three Controls --------------------
-def test_section_three_controls(page: Page):
-    """Check 'More charts' section inputs and controls"""
-    expect(page.locator("#explorer-sec3-var-x-dropdown")).to_be_visible()
-    expect(page.locator("#explorer-sec3-var-y-dropdown")).to_be_visible()
-    expect(page.locator("#explorer-sec3-colorby-dropdown")).to_be_visible()
-
-
-# -------------------- Test Section Three Charts --------------------
-def test_section_three_charts(page: Page):
-    """Check if 2-variable and 3-variable graphs are rendered"""
-    expect(page.locator("#three-var")).to_be_visible()
-    expect(page.locator("#two-var")).to_be_visible()
+# -------------------- Test Section Three --------------------
+def test_explorer_section_three(page: Page):
+    """Section 3 dropdowns and chart visibility"""
+    for selector in [
+        "#explorer-sec3-var-x-dropdown",
+        "#explorer-sec3-var-y-dropdown",
+        "#explorer-sec3-colorby-dropdown",
+        "#three-var",
+        "#two-var",
+    ]:
+        expect(page.locator(selector)).to_be_visible()
 
 
 # -------------------- Test Dropdown Interaction --------------------

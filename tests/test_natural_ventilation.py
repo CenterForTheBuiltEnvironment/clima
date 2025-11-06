@@ -12,50 +12,47 @@ def setup(page: Page, base_url):
     yield
 
 
-# -------------------- Test Title and Main Sections --------------------
-def test_nv_title(page: Page):
-    """Verify the title and main chart sections are visible"""
+# -------------------- Test Core Elements --------------------
+def test_nv_core_elements(page: Page):
+    """Verify title, charts, filters, and switch are visible"""
+
+    # Main title and charts
     expect(page.get_by_text("Natural Ventilation Potential")).to_be_visible()
     expect(page.locator("#nv-heatmap-chart")).to_be_visible()
     expect(page.locator("#nv-bar-chart")).to_be_visible()
 
+    # Filters and inputs
+    element_ids = [
+        "#nv-dbt-filter",
+        "#nv-dpt-filter",
+        "#nv-tdb-min-val",
+        "#nv-tdb-max-val",
+        "#nv-dpt-max-val",
+        "#enable-condensation",
+    ]
+    for eid in element_ids:
+        expect(page.locator(eid)).to_be_visible()
 
-# -------------------- Test Input Controls --------------------
-def test_nv_input_controls(page: Page):
-    """Check input controls for temperature and dew point filters"""
-    expect(page.locator("#nv-dbt-filter")).to_be_visible()
-    expect(page.locator("#nv-dpt-filter")).to_be_visible()
-    expect(page.locator("#nv-tdb-min-val")).to_be_visible()
-    expect(page.locator("#nv-tdb-max-val")).to_be_visible()
-    expect(page.locator("#nv-dpt-max-val")).to_be_visible()
-    expect(page.locator("#enable-condensation")).to_be_visible()
-
-
-# -------------------- Test Normalize Switch --------------------
-def test_nv_normalize_switch(page: Page):
-    """Ensure normalize switch and tooltip are visible"""
+    # Switch label
     expect(page.get_by_text("Normalize data")).to_be_visible()
 
 
-# -------------------- Test Apply Filter Button Interaction --------------------
+# -------------------- Test Filter Button Triggers Chart --------------------
 def test_nv_apply_filter(page: Page):
-    """Click Apply Filter and check that the heatmap updates"""
+    """Click Dry Bulb filter and verify heatmap still renders"""
     button = page.locator("#nv-dbt-filter")
-    expect(button).to_be_visible()
     button.click()
     expect(page.locator("#nv-heatmap-chart")).to_be_visible()
 
 
-# -------------------- Test Condensation Checkbox Interaction --------------------
-def test_nv_condensation_checkbox(page: Page):
-    """Toggle condensation checkbox and verify dew point filter enables"""
+# -------------------- Test Condensation Toggle Effect --------------------
+def test_nv_condensation_checkbox_toggle(page: Page):
+    """Toggling checkbox should enable/disable dew point filter"""
     checkbox = page.locator("input#enable-condensation")
-    button = page.locator("#nv-dpt-filter")
+    dewpoint_button = page.locator("#nv-dpt-filter")
 
-    expect(button).to_be_disabled()
-
+    expect(dewpoint_button).to_be_disabled()
     checkbox.click()
-    expect(button).to_be_enabled()
-
+    expect(dewpoint_button).to_be_enabled()
     checkbox.click()
-    expect(button).to_be_disabled()
+    expect(dewpoint_button).to_be_disabled()
