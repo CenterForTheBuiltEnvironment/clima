@@ -77,12 +77,12 @@ def test_unit_switch(page: Page):
     """
     Verify that the banner radio buttons (SI/IP) correctly toggle.
     """
-    nav_controls = page.locator("#nav-group-controls")
-    nav_controls.click(force=True)
+    #     nav_controls = page.locator("#nav-group-controls")
+    #     nav_controls.click(force=True)
 
     # Click the "IP" option
     ip_button = page.get_by_text("IP", exact=True)
-    expect(ip_button).to_be_visible()
+    expect(ip_button).to_be_enabled()
     ip_button.scroll_into_view_if_needed()
     ip_button.wait_for(state="visible")
     ip_button.click(force=True)
