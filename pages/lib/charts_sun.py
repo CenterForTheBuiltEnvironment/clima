@@ -20,13 +20,15 @@ from pages.lib.utils import separate_filtered_data
 
 
 def monthly_solar(epw_df, si_ip):
-    # Check if there's a filter marker
-    has_filter_marker = "_is_filtered" in epw_df.columns
-    filtered_mask = None
-    if has_filter_marker:
-        filtered_mask = epw_df["_is_filtered"]
+    # Separate filtered and unfiltered data
+    # Note: monthly_solar uses two original columns (GLOB_HOR_RAD and DIF_HOR_RAD)
+    # so we can't use the utility function directly, but we can still use it for separation
+    filter_info = separate_filtered_data(epw_df)
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+    has_filter_marker = filter_info["has_filter_marker"]
 
-    # Get original values if available
+    # Get original values if available (for two specific columns)
     original_glob_col = f"_{Variables.GLOB_HOR_RAD.col_name}_original"
     original_dif_col = f"_{Variables.DIF_HOR_RAD.col_name}_original"
     use_original_for_filtered = (
@@ -34,14 +36,6 @@ def monthly_solar(epw_df, si_ip):
         and original_glob_col in epw_df.columns
         and original_dif_col in epw_df.columns
     )
-
-    # Separate filtered and unfiltered data
-    if has_filter_marker and filtered_mask is not None:
-        df_unfiltered = epw_df[~filtered_mask].copy()
-        df_filtered = epw_df[filtered_mask].copy() if filtered_mask.any() else None
-    else:
-        df_unfiltered = epw_df
-        df_filtered = None
 
     # Calculate monthly averages for unfiltered data
     g_h_rad_month_ave = (

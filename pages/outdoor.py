@@ -298,7 +298,7 @@ def update_tab_utci_category(
         title="Thermal stress",
         titleside="top",
         tickmode="array",
-        tickvals=np.linspace(4.75, -4.75, 10),
+        tickvals=np.linspace(4, -5, 10),
         ticktext=[
             "extreme heat stress",
             "very strong heat stress",

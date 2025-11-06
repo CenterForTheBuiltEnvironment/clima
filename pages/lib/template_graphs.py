@@ -4,7 +4,15 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 from config import UnitSystem
-from pages.lib.utils import get_max_min_value
+from pages.lib.utils import (
+    get_max_min_value,
+    has_filtered_data,
+    get_variable_info,
+    get_variable_range,
+    get_original_column_values,
+    calculate_daily_statistics,
+    unpack_variable_info,
+)
 import dash_bootstrap_components as dbc
 from .global_scheme import month_lst, template, tight_margins, WIND_ROSE_BINS
 from pages.lib.global_variables import Variables, VariableInfo
@@ -15,10 +23,10 @@ def violin(df, var, global_local, si_ip):
     """Return day night violin based on the 'var' col"""
     mask_day = (df[Variables.HOUR.col_name] >= 8) & (df[Variables.HOUR.col_name] < 20)
     mask_night = (df[Variables.HOUR.col_name] < 8) | (df[Variables.HOUR.col_name] >= 20)
-    variable = VariableInfo.from_col_name(var)
-    var_unit = variable.get_unit(si_ip)
-    var_range = variable.get_range(si_ip)
-    var_name = variable.get_name()
+    var_info = get_variable_info(var, si_ip)
+    var_unit, var_range, var_name = unpack_variable_info(
+        var_info, ["var_unit", "var_range", "var_name"]
+    )
 
     data_day = df.loc[mask_day, var]
     data_night = df.loc[mask_night, var]
@@ -84,11 +92,8 @@ def violin(df, var, global_local, si_ip):
 @code_timer
 def yearly_profile(df, var, global_local, si_ip):
     """Return yearly profile figure based on the 'var' col."""
-    variable = VariableInfo.from_col_name(var)
-    var_unit = variable.get_unit(si_ip)
-    var_range = variable.get_range(si_ip)
-    var_name = variable.get_name()
-    var_color = variable.get_color()
+    var_info = get_variable_info(var, si_ip)
+    var_unit, var_range, var_name, var_color = unpack_variable_info(var_info)
 
     # Separate filtered and unfiltered data using utility function
     filter_info = separate_filtered_data(df, var)
@@ -104,24 +109,30 @@ def yearly_profile(df, var, global_local, si_ip):
     else:
         # Set maximum and minimum according to data
         # If filtering is active, use original values to maintain consistent y-axis range
-        if has_filter_marker and use_original_for_filtered:
+        if (
+            has_filter_marker
+            and use_original_for_filtered
+            and filtered_mask is not None
+            and filtered_mask.any()
+        ):
             # Combine unfiltered values and original filtered values for range calculation
             values_for_range = pd.concat(
                 [
-                    df[~filtered_mask][var] if filtered_mask is not None else df[var],
-                    df[filtered_mask][original_var_col]
-                    if filtered_mask is not None and filtered_mask.any()
-                    else pd.Series(dtype=float),
+                    df[~filtered_mask][var],
+                    df[filtered_mask][original_var_col],
                 ]
             ).dropna()
-            if len(values_for_range) > 0:
-                data_max, data_min = get_max_min_value(values_for_range)
-            else:
-                # Fallback to current values if no data available
-                data_max, data_min = get_max_min_value(df[var])
+            # Use combined values if available, otherwise fallback to current values
+            range_y = get_variable_range(
+                var,
+                df,
+                "local",
+                si_ip,
+                use_original_for_range=len(values_for_range) > 0,
+                original_values=values_for_range if len(values_for_range) > 0 else None,
+            )
         else:
-            data_max, data_min = get_max_min_value(df[var])
-        range_y = [data_min, data_max]
+            range_y = get_variable_range(var, df, "local", si_ip)
 
     var_single_color = var_color[len(var_color) // 2]
     custom_ylim = range_y
@@ -129,49 +140,25 @@ def yearly_profile(df, var, global_local, si_ip):
     # Get all unique dates from the full dataframe for consistent x-axis alignment
     all_dates = sorted(df[Variables.UTC_TIME.col_name].dt.date.unique())
 
-    # Get min, max, and mean of each day for unfiltered data
+    # Get min, max, and mean of each day for unfiltered and filtered data
     if has_filter_marker and filtered_mask is not None:
         # Use already separated data from filter_info
         df_unfiltered = filter_info["df_unfiltered"]
         df_filtered = filter_info["df_filtered"]
 
-        # Calculate statistics for unfiltered data - group by date instead of index position
-        if len(df_unfiltered) > 0:
-            # Group by date to ensure we get statistics for each day
-            df_unfiltered_with_date = df_unfiltered.copy()
-            df_unfiltered_with_date["_date"] = df_unfiltered_with_date[
-                Variables.UTC_TIME.col_name
-            ].dt.date
-            dbt_day_unfiltered = df_unfiltered_with_date.groupby("_date")[var].agg(
-                ["min", "max", "mean"]
-            )
-        else:
-            dbt_day_unfiltered = pd.DataFrame({"min": [], "max": [], "mean": []})
+        # Calculate statistics for unfiltered data
+        dbt_day_unfiltered = calculate_daily_statistics(df_unfiltered, var)
 
         # Calculate statistics for filtered data (using original values)
-        if (
-            df_filtered is not None
-            and len(df_filtered) > 0
-            and use_original_for_filtered
-        ):
-            df_filtered_with_date = df_filtered.copy()
-            df_filtered_with_date["_date"] = df_filtered_with_date[
-                Variables.UTC_TIME.col_name
-            ].dt.date
-            dbt_day_filtered = df_filtered_with_date.groupby("_date")[
-                original_var_col
-            ].agg(["min", "max", "mean"])
+        if has_filtered_data(df_filtered) and use_original_for_filtered:
+            dbt_day_filtered = calculate_daily_statistics(df_filtered, original_var_col)
         else:
             dbt_day_filtered = None
     else:
+        # No filtering, use full dataframe
         df_unfiltered = df
-        df_unfiltered_with_date = df_unfiltered.copy()
-        df_unfiltered_with_date["_date"] = df_unfiltered_with_date[
-            Variables.UTC_TIME.col_name
-        ].dt.date
-        dbt_day_unfiltered = df_unfiltered_with_date.groupby("_date")[var].agg(
-            ["min", "max", "mean"]
-        )
+        df_filtered = None
+        dbt_day_unfiltered = calculate_daily_statistics(df, var)
         dbt_day_filtered = None
 
     traces = []
@@ -482,18 +469,11 @@ def yearly_profile(df, var, global_local, si_ip):
 # @code_timer
 def daily_profile(df, var, global_local, si_ip):
     """Return the daily profile based on the 'var' col."""
-    variable = VariableInfo.from_col_name(var)
-    var_name = variable.get_name()
-    var_unit = variable.get_unit(si_ip)
-    var_range = variable.get_range(si_ip)
-    var_color = variable.get_color()
-    if global_local == "global":
-        # Set Global values for Max and minimum
-        range_y = var_range
-    else:
-        # Set maximum and minimum according to data
-        data_max, data_min = get_max_min_value(df[var])
-        range_y = [data_min, data_max]
+    var_info = get_variable_info(var, si_ip)
+    var_name, var_unit, var_color = unpack_variable_info(
+        var_info, ["var_name", "var_unit", "var_color"]
+    )
+    range_y = get_variable_range(var, df, global_local, si_ip)
 
     var_single_color = var_color[len(var_color) // 2]
 
@@ -513,7 +493,7 @@ def daily_profile(df, var, global_local, si_ip):
 
     # Calculate monthly averages for filtered data (using original values)
     var_month_ave_filtered = None
-    if df_filtered is not None and len(df_filtered) > 0 and use_original_for_filtered:
+    if has_filtered_data(df_filtered) and use_original_for_filtered:
         var_month_ave_filtered = (
             df_filtered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
                 original_var_col
@@ -534,7 +514,7 @@ def daily_profile(df, var, global_local, si_ip):
             df_unfiltered[Variables.MONTH.col_name] == i + 1
         ]
         month_data_filtered = None
-        if df_filtered is not None and len(df_filtered) > 0:
+        if has_filtered_data(df_filtered):
             month_data_filtered = df_filtered.loc[
                 df_filtered[Variables.MONTH.col_name] == i + 1
             ]
@@ -678,10 +658,10 @@ def heatmap_with_filter(
     z_range=None,
 ):
     """General function that returns a heatmap."""
-    variable = VariableInfo.from_col_name(var)
-    var_unit = variable.get_unit(si_ip)
-    var_range = variable.get_range(si_ip)
-    var_color = variable.get_color()
+    var_info = get_variable_info(var, si_ip)
+    var_unit, var_range, var_color = unpack_variable_info(
+        var_info, ["var_unit", "var_range", "var_color"]
+    )
 
     has_global_filter_marker = "_is_filtered" in df.columns
     global_filter_mask = None
@@ -712,13 +692,10 @@ def heatmap_with_filter(
 
     # For category variables (e.g., UTCI categories), always use global range
     # to ensure consistent color mapping regardless of data range
-    if "_categories" in var or global_local == "global":
-        # Set Global values for Max and minimum
+    if "_categories" in var:
         range_z = var_range
     else:
-        # Set maximum and minimum according to data
-        data_max, data_min = get_max_min_value(df[var])
-        range_z = [data_min, data_max]
+        range_z = get_variable_range(var, df, global_local, si_ip)
     fig = go.Figure()
 
     has_filter_marker = "_is_filtered" in df.columns
@@ -726,11 +703,7 @@ def heatmap_with_filter(
     if has_filter_marker and df["_is_filtered"].any():
         filtered_mask = df["_is_filtered"]
         if filtered_mask.any():
-            original_col = f"_{var}_original"
-            if original_col in df.columns:
-                filtered_values = df[original_col].copy()
-            else:
-                filtered_values = df[var].copy()
+            filtered_values = get_original_column_values(df, var)
 
             filtered_values[~filtered_mask] = None
 
@@ -848,18 +821,11 @@ def heatmap_with_filter(
 
 def heatmap(df, var, global_local, si_ip):
     """General function that returns a heatmap."""
-    variable = VariableInfo.from_col_name(var)
-    var_unit = variable.get_unit(si_ip)
-    var_range = variable.get_range(si_ip)
-    var_color = variable.get_color()
-
-    if global_local == "global":
-        # Set Global values for Max and minimum
-        range_z = var_range
-    else:
-        # Set maximum and minimum according to data
-        data_max, data_min = get_max_min_value(df[var])
-        range_z = [data_min, data_max]
+    var_info = get_variable_info(var, si_ip)
+    var_unit, var_range, var_color = unpack_variable_info(
+        var_info, ["var_unit", "var_range", "var_color"]
+    )
+    range_z = get_variable_range(var, df, global_local, si_ip)
     fig = go.Figure()
 
     has_filter_marker = "_is_filtered" in df.columns
@@ -867,11 +833,7 @@ def heatmap(df, var, global_local, si_ip):
     if has_filter_marker and df["_is_filtered"].any():
         filtered_mask = df["_is_filtered"]
         if filtered_mask.any():
-            original_col = f"_{var}_original"
-            if original_col in df.columns:
-                filtered_values = df[original_col].copy()
-            else:
-                filtered_values = df[var].copy()
+            filtered_values = get_original_column_values(df, var)
 
             filtered_values[~filtered_mask] = None
 
@@ -1195,7 +1157,7 @@ def thermal_stress_stacked_barchart(
     filter_info = separate_filtered_data(df, var)
     df_unfiltered = filter_info["df_unfiltered"]
     df_filtered = filter_info["df_filtered"]
-    has_filtered_data = df_filtered is not None and len(df_filtered) > 0
+    has_filtered_data_flag = has_filtered_data(df_filtered)
 
     isNormalized = True if normalize else False
 
@@ -1221,7 +1183,7 @@ def thermal_stress_stacked_barchart(
 
     # Calculate data for filtered (if any)
     new_df_filtered = None
-    if has_filtered_data:
+    if has_filtered_data_flag:
         # Use original values for filtered data if available
         original_var_col = f"_{var}_original"
         use_original = original_var_col in df_filtered.columns
@@ -1320,7 +1282,7 @@ def thermal_stress_stacked_barchart(
     )
     # Get available months from unfiltered data (or combined if no filter)
     available_months = sorted(new_df_unfiltered[Variables.MONTH.col_name].unique())
-    if has_filtered_data and new_df_filtered is not None:
+    if has_filtered_data_flag and new_df_filtered is not None:
         filtered_months = sorted(new_df_filtered[Variables.MONTH.col_name].unique())
         available_months = sorted(set(available_months + filtered_months))
 
@@ -1355,10 +1317,10 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
         filter_name = filter_variable.get_name()
         filter_unit = filter_variable.get_unit(si_ip)
 
-    var_variable = VariableInfo.from_col_name(var)
-    var_unit = var_variable.get_unit(si_ip)
-    var_name = var_variable.get_name()
-    var_color = var_variable.get_color()
+    var_info = get_variable_info(var, si_ip)
+    var_unit, var_name, var_color = unpack_variable_info(
+        var_info, ["var_unit", "var_name", "var_color"]
+    )
 
     color_below = var_color[0]
     color_above = var_color[-1]
@@ -1413,11 +1375,7 @@ def barchart(df, var, time_filter_info, data_filter_info, normalize, si_ip):
                 month_above.append(0)
 
             # Calculate for filtered data (using original values)
-            if (
-                df_filtered is not None
-                and len(df_filtered) > 0
-                and use_original_for_filtered
-            ):
+            if has_filtered_data(df_filtered) and use_original_for_filtered:
                 month_filtered = df_filtered[
                     df_filtered[Variables.MONTH.col_name] == month_num
                 ]

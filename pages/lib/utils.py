@@ -397,25 +397,6 @@ def get_time_filter_from_store(
 
 
 def separate_filtered_data(df, var=None):
-    """Separate filtered and unfiltered data from a DataFrame.
-
-    This is a utility function to extract the common pattern of checking for
-    filter markers and separating data into filtered and unfiltered subsets.
-
-    Args:
-        df: DataFrame that may contain filter markers
-        var: Optional variable name to check for original values column.
-             If None, only checks for filter marker, not original values.
-
-    Returns:
-        A dictionary with the following keys:
-        - has_filter_marker: bool, whether filter marker exists
-        - filtered_mask: Series or None, the filter mask
-        - df_unfiltered: DataFrame, unfiltered data subset
-        - df_filtered: DataFrame or None, filtered data subset
-        - original_var_col: str or None, name of original values column
-        - use_original_for_filtered: bool, whether to use original values
-    """
     # Check if there's a filter marker
     has_filter_marker = "_is_filtered" in df.columns
     filtered_mask = None
@@ -445,3 +426,56 @@ def separate_filtered_data(df, var=None):
         "original_var_col": original_var_col,
         "use_original_for_filtered": use_original_for_filtered,
     }
+
+
+def has_filtered_data(df_filtered):
+    return df_filtered is not None and len(df_filtered) > 0
+
+
+def get_variable_info(var, si_ip):
+    variable = VariableInfo.from_col_name(var)
+    return {
+        "var_unit": variable.get_unit(si_ip),
+        "var_range": variable.get_range(si_ip),
+        "var_name": variable.get_name(),
+        "var_color": variable.get_color(),
+    }
+
+
+def unpack_variable_info(var_info, keys=None):
+    if keys is None:
+        keys = ["var_unit", "var_range", "var_name", "var_color"]
+    return tuple(var_info[key] for key in keys)
+
+
+def get_variable_range(
+    var, df, global_local, si_ip, use_original_for_range=False, original_values=None
+):
+    var_info = get_variable_info(var, si_ip)
+    var_range = var_info["var_range"]
+
+    if global_local == "global":
+        return var_range
+    else:
+        if use_original_for_range and original_values is not None:
+            data_max, data_min = get_max_min_value(original_values)
+        else:
+            data_max, data_min = get_max_min_value(df[var])
+        return [data_min, data_max]
+
+
+def get_original_column_values(df, var):
+    original_col = f"_{var}_original"
+    if original_col in df.columns:
+        return df[original_col].copy()
+    else:
+        return df[var].copy()
+
+
+def calculate_daily_statistics(df, var_col, date_col=Variables.UTC_TIME.col_name):
+    if len(df) == 0:
+        return pd.DataFrame({"min": [], "max": [], "mean": []})
+
+    df_with_date = df.copy()
+    df_with_date["_date"] = df_with_date[date_col].dt.date
+    return df_with_date.groupby("_date")[var_col].agg(["min", "max", "mean"])
