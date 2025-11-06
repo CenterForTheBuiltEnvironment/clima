@@ -34,6 +34,13 @@ from pages.lib.utils import (
 )
 
 
+def _safe_get_column(df, column_name, default_value=0):
+    if column_name in df.columns:
+        return df[column_name]
+    else:
+        return [default_value] * len(df)
+
+
 dash.register_page(
     __name__,
     name=PageInfo.PSYCHROMETRIC_NAME,
@@ -382,18 +389,12 @@ def update_psych_chart(
                     ),
                     customdata=np.stack(
                         (
-                            df_filtered[Variables.RH.col_name]
-                            if Variables.RH.col_name in df_filtered.columns
-                            else [0] * len(df_filtered),
-                            df_filtered["h"]
-                            if "h" in df_filtered.columns
-                            else [0] * len(df_filtered),
+                            _safe_get_column(df_filtered, Variables.RH.col_name),
+                            _safe_get_column(df_filtered, "h"),
                             df_filtered_var
                             if df_filtered_var is not None
                             else [0] * len(df_filtered),
-                            df_filtered["t_dp"]
-                            if "t_dp" in df_filtered.columns
-                            else [0] * len(df_filtered),
+                            _safe_get_column(df_filtered, "t_dp"),
                         ),
                         axis=-1,
                     )
