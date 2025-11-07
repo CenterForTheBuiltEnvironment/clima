@@ -19,7 +19,7 @@ If you have a general feedback about our project, please do not open an issue bu
 First fork the origin repository to your own github repository, then clone the repository to your local computer.
 
 ```bash
-git clone https://github.com/Your Account name/clima.git
+git clone https://github.com/<your-account-name>/clima.git
 cd clima
 ```
 
@@ -60,7 +60,7 @@ The terminal will show a list of branches:
 Pull the development branch first, and if the terminal does not notice you that you should try the second command.
 
 ```bash
-git checktout development
+git checkout development
 
 git checkout -b development origin/development
 ```
@@ -68,13 +68,13 @@ git checkout -b development origin/development
 Create a new branch in the development branch.
 
 ```bash
-git checkout -b (your branch name)
+git checkout -b <your-branch-name>
 ```
 
 Finally update and push to your repository branch if you modify the files.
 
 ```bash
-git push origin (your branch name)
+git push origin <your-branch-name>
 ```
 
 ## Code of Conduct

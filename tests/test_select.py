@@ -25,7 +25,7 @@ def test_select_core_elements(page: Page):
     expect(page.locator("#upload-data")).to_be_visible()
 
 
-# -------------------- Test EPW pload and Map Rendering --------------------
+# -------------------- Test EPW Upload and Map Rendering --------------------
 def test_upload_and_map_rendering(page: Page):
     """
     Simulate uploading an EPW file, verify success message and map rendering

@@ -498,8 +498,8 @@ def update_daily_graphs(_, global_filter_data, df, meta, si_ip):
     morning_calm_count = morning_df.query(query_calm_wind).shape[0]
 
     noon_df = df.loc[
-        (df[Variables.HOUR.col_name] >= morning_times[0])
-        & (df[Variables.HOUR.col_name] <= morning_times[1])
+        (df[Variables.HOUR.col_name] >= noon_times[0])
+        & (df[Variables.HOUR.col_name] <= noon_times[1])
     ]
     noon_total_count = noon_df.shape[0]
     noon_calm_count = noon_df.query(query_calm_wind).shape[0]

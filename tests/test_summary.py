@@ -88,6 +88,6 @@ def test_unit_switch(page: Page):
     ip_button.click(force=True)
 
     info_section = page.locator("#location-info")
-    expect(info_section.get_by_text("°F")).to_be_visible
-    expect(info_section.get_by_text("ft")).to_be_visible
-    expect(info_section.get_by_text("kBtu/ft2")).to_be_visible
+    expect(info_section.get_by_text("°F")).to_be_visible()
+    expect(info_section.get_by_text("ft")).to_be_visible()
+    expect(info_section.get_by_text("kBtu/ft2")).to_be_visible()

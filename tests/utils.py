@@ -2,22 +2,25 @@ from pathlib import Path
 from playwright.sync_api import Page, expect
 
 
-def upload_epw_file(page: Page, filename: str = "test.epw"):
+def upload_epw_file(
+    page: Page,
+    filename: str = "test.epw",
+    expected_location: str = "Bologna Marconi AP, ITA",
+):
     """
     Upload an EPW file and verify that the success message appears.
 
     Parameters:
     - page: The Playwright Page object.
     - filename: Path to the EPW file (defaults to tests/test.epw).
+    - expected_location: Expected location string to verify after upload.
     """
     epw_path = Path(filename).resolve()
     page.set_input_files('input[type="file"]', str(epw_path))
 
     # Verify that the upload success messages are displayed
     expect(page.get_by_text("The EPW was successfully loaded!")).to_be_visible()
-    expect(
-        page.get_by_text("Current Location: Bologna Marconi AP, ITA")
-    ).to_be_visible()
+    expect(page.get_by_text(f"Current Location: {expected_location}")).to_be_visible()
 
 
 def open_tab(page: Page, tab_name: str):

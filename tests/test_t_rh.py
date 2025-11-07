@@ -61,6 +61,6 @@ def test_banner_unit_switch(page: Page):
     global_button = page.get_by_text("Global", exact=True)
     global_button.scroll_into_view_if_needed()
     global_button.wait_for(state="visible")
-    global_button.click(force=True)
+    global_button.click()
 
     expect(page.get_by_text("-40", exact=False)).to_be_visible()
