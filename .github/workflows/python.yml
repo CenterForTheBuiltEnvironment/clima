@@ -42,4 +42,4 @@ jobs:
       - name: Test Clima
         run: |-
           cd tests
-          pipenv run pytest --base-url=http://127.0.0.1:8080 -vv
+          pipenv run pytest --base-url=http://127.0.0.1:8080 -vv --numprocesses 4
