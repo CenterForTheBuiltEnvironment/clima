@@ -196,7 +196,7 @@ def create_navbar():
                 position="right",
                 withArrow=True,
                 children=dmc.SegmentedControl(
-                    id=ElementIds.ID_LAYOUT_GLOBAL_LOCAL_RADIO_INPUT,
+                    id=ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT,
                     value="local",
                     color="blue",
                     data=[
@@ -213,7 +213,7 @@ def create_navbar():
                 position="right",
                 withArrow=True,
                 children=dmc.SegmentedControl(
-                    id=ElementIds.ID_LAYOUT_SI_IP_RADIO_INPUT,
+                    id=ElementIds.SHARED_SI_IP_RADIO_INPUT,
                     value=UnitSystem.SI,
                     color="blue",
                     data=[
@@ -405,11 +405,11 @@ def create_stores():
     return dmc.Box(
         id=ElementIds.STORE,
         children=[
-            dcc.Store(id=ElementIds.ID_LAYOUT_DF_STORE, storage_type="session"),
-            dcc.Store(id=ElementIds.ID_LAYOUT_META_STORE, storage_type="session"),
-            dcc.Store(id=ElementIds.ID_LAYOUT_URL_STORE, storage_type="session"),
-            dcc.Store(id=ElementIds.ID_LAYOUT_SI_IP_UNIT_STORE, storage_type="session"),
-            dcc.Store(id=ElementIds.ID_LAYOUT_LINES_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.SHARED_DF_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.SHARED_META_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.SHARED_URL_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.SHARED_SI_IP_UNIT_STORE, storage_type="session"),
+            dcc.Store(id=ElementIds.SHARED_LINES_STORE, storage_type="session"),
             dcc.Store(
                 id=ElementIds.TOOLS_MENU_EXPANDED, data=False, storage_type="session"
             ),

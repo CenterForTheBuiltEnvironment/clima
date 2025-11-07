@@ -47,7 +47,7 @@ def layout():
 
 @callback(
     Output(ElementIds.TAB_TWO_CONTAINER, "children"),
-    [Input(ElementIds.ID_SUMMARY_SI_IP_RADIO_INPUT, "value")],
+    [Input(ElementIds.SHARED_SI_IP_RADIO_INPUT, "value")],
 )
 def update_layout(si_ip):
     if si_ip == UnitSystem.SI:
@@ -186,7 +186,7 @@ def update_layout(si_ip):
 
 @callback(
     Output(ElementIds.WORLD_MAP, "children"),
-    Input(ElementIds.ID_SUMMARY_META_STORE, "data"),
+    Input(ElementIds.SHARED_META_STORE, "data"),
 )
 def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
@@ -198,11 +198,11 @@ def update_map(meta):
 
 @callback(
     Output(ElementIds.LOCATION_INFO, "children"),
-    Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+    Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_location_info(ts, df, meta, si_ip):
@@ -282,16 +282,16 @@ def update_location_info(ts, df, meta, si_ip):
         Output(ElementIds.WARNING_CDD_HIGHER_HDD, "is-open"),
     ],
     [
-        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SUBMIT_SET_POINTS, "n_clicks"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
         State(ElementIds.INPUT_HDD_SET_POINT, "value"),
         State(ElementIds.INPUT_CDD_SET_POINT, "value"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
     prevent_initial_call=False,
 )
@@ -473,14 +473,14 @@ def degree_day_chart(
 @callback(
     Output(ElementIds.TEMP_PROFILE_GRAPH, "children"),
     [
-        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_violin_tdb(ts, global_local, global_filter_data, df, meta, si_ip):
@@ -502,14 +502,14 @@ def update_violin_tdb(ts, global_local, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.WIND_SPEED_GRAPH, "children"),
     [
-        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_wind(ts, global_local, global_filter_data, df, meta, si_ip):
@@ -531,14 +531,14 @@ def update_tab_wind(ts, global_local, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.HUMIDITY_PROFILE_GRAPH, "children"),
     [
-        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_rh(ts, global_local, global_filter_data, df, meta, si_ip):
@@ -560,14 +560,14 @@ def update_tab_rh(ts, global_local, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.SOLAR_RADIATION_GRAPH, "children"),
     [
-        Input(ElementIds.ID_SUMMARY_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_SUMMARY_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_gh_rad(ts, global_local, global_filter_data, df, meta, si_ip):
@@ -590,9 +590,9 @@ def update_tab_gh_rad(ts, global_local, global_filter_data, df, meta, si_ip):
     Output(ElementIds.DOWNLOAD_DATAFRAME_CSV, "data"),
     [Input(ElementIds.DOWNLOAD_BUTTON, "n_clicks")],
     [
-        State(ElementIds.ID_SUMMARY_DF_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_META_STORE, "data"),
-        State(ElementIds.ID_SUMMARY_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
     prevent_initial_call=True,
 )
@@ -617,7 +617,7 @@ def download_clima_dataframe(n_clicks, df, meta, si_ip):
 @callback(
     Output(ElementIds.DOWNLOAD_EPW, "data"),
     [Input(ElementIds.DOWN_EPW_BUTTON, "n_clicks")],
-    [State(ElementIds.ID_SUMMARY_META_STORE, "data")],
+    [State(ElementIds.SHARED_META_STORE, "data")],
     prevent_initial_call=True,
 )
 def download_epw(n_clicks, meta):

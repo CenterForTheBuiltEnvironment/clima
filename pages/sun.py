@@ -153,7 +153,7 @@ def explore_daily_heatmap():
 
 @callback(
     Output(ElementIds.STATIC_SECTION, "children"),
-    [Input(ElementIds.ID_SUN_SI_IP_RADIO_INPUT, "value")],
+    [Input(ElementIds.SHARED_SI_IP_RADIO_INPUT, "value")],
 )
 def update_static_section(si_ip):
     hor_unit = "Wh/m²"
@@ -189,13 +189,13 @@ def update_static_section(si_ip):
         Output(ElementIds.CLOUD_COVER, "children"),
     ],
     [
-        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUN_DF_STORE, "data"),
-        State(ElementIds.ID_SUN_META_STORE, "data"),
-        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def monthly_and_cloud_chart(_, global_filter_data, df, meta, si_ip):
@@ -272,16 +272,16 @@ def monthly_and_cloud_chart(_, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.CUSTOM_SUNPATH, "children"),
     [
-        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.CUSTOM_SUN_VIEW_DROPDOWN, "value"),
         Input(ElementIds.CUSTOM_SUN_VAR_DROPDOWN, "value"),
-        Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUN_DF_STORE, "data"),
-        State(ElementIds.ID_SUN_META_STORE, "data"),
-        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_ip):
@@ -348,15 +348,15 @@ def sun_path_chart(_, view, var, global_local, global_filter_data, df, meta, si_
 @callback(
     Output(ElementIds.SUN_DAILY, "children"),
     [
-        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SUN_EXPLORE_DROPDOWN, "value"),
-        Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUN_DF_STORE, "data"),
-        State(ElementIds.ID_SUN_META_STORE, "data"),
-        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def daily(_, var, global_local, global_filter_data, df, meta, si_ip):
@@ -378,15 +378,15 @@ def daily(_, var, global_local, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.SUN_HEATMAP, "children"),
     [
-        Input(ElementIds.ID_SUN_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SUN_EXPLORE_DROPDOWN, "value"),
-        Input(ElementIds.ID_SUN_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_SUN_DF_STORE, "data"),
-        State(ElementIds.ID_SUN_META_STORE, "data"),
-        State(ElementIds.ID_SUN_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip):

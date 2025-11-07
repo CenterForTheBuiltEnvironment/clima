@@ -232,13 +232,13 @@ def layout():
 @callback(
     Output(ElementIds.WIND_ROSE, "children"),
     [
-        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_WIND_DF_STORE, "data"),
-        State(ElementIds.ID_WIND_META_STORE, "data"),
-        State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_annual_wind_rose(_, global_filter_data, df, meta, si_ip):
@@ -272,14 +272,14 @@ def update_annual_wind_rose(_, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.WIND_SPEED, "children"),
     [
-        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_WIND_DF_STORE, "data"),
-        State(ElementIds.ID_WIND_META_STORE, "data"),
-        State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_wind_speed(_, global_local, global_filter_data, df, meta, si_ip):
@@ -301,14 +301,14 @@ def update_tab_wind_speed(_, global_local, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.WIND_DIRECTION, "children"),
     [
-        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_WIND_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_WIND_DF_STORE, "data"),
-        State(ElementIds.ID_WIND_META_STORE, "data"),
-        State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_wind_direction(_, global_local, global_filter_data, df, meta, si_ip):
@@ -338,11 +338,11 @@ def update_tab_wind_direction(_, global_local, global_filter_data, df, meta, si_
         Output(ElementIds.SUMMER_WIND_ROSE_TEXT, "children"),
         Output(ElementIds.FALL_WIND_ROSE_TEXT, "children"),
     ],
-    [Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp")],
+    [Input(ElementIds.SHARED_DF_STORE, "modified_timestamp")],
     [
-        State(ElementIds.ID_WIND_DF_STORE, "data"),
-        State(ElementIds.ID_WIND_META_STORE, "data"),
-        State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_seasonal_graphs(_, df, meta, si_ip):
@@ -455,13 +455,13 @@ def update_seasonal_graphs(_, df, meta, si_ip):
         Output(ElementIds.NIGHT_WIND_ROSE_TEXT, "children"),
     ],
     [
-        Input(ElementIds.ID_WIND_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_WIND_DF_STORE, "data"),
-        State(ElementIds.ID_WIND_META_STORE, "data"),
-        State(ElementIds.ID_WIND_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_daily_graphs(_, global_filter_data, df, meta, si_ip):

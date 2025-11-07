@@ -119,8 +119,8 @@ def alert():
 # add si-ip and map dictionary in the output
 @callback(
     [
-        Output(ElementIds.ID_SELECT_META_STORE, "data"),
-        Output(ElementIds.ID_SELECT_LINES_STORE, "data"),
+        Output(ElementIds.SHARED_META_STORE, "data"),
+        Output(ElementIds.SHARED_LINES_STORE, "data"),
         Output(ElementIds.ALERT, "visible"),
         Output(ElementIds.ALERT, "children"),
         Output(ElementIds.ALERT, "color"),
@@ -133,7 +133,7 @@ def alert():
     ],
     [
         State(ElementIds.UPLOAD_DATA, "filename"),
-        State(ElementIds.ID_SELECT_URL_STORE, "data"),
+        State(ElementIds.SHARED_URL_STORE, "data"),
     ],
     prevent_initial_call=True,
 )
@@ -220,16 +220,16 @@ def submitted_data(
 # add switch_si_ip function and convert the data-store
 @callback(
     [
-        Output(ElementIds.ID_SELECT_DF_STORE, "data"),
-        Output(ElementIds.ID_SELECT_SI_IP_UNIT_STORE, "data"),
+        Output(ElementIds.SHARED_DF_STORE, "data"),
+        Output(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
     [
-        Input(ElementIds.ID_SELECT_LINES_STORE, "modified_timestamp"),
-        Input(ElementIds.ID_SELECT_SI_IP_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_LINES_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_SI_IP_RADIO_INPUT, "value"),
     ],
     [
-        State(ElementIds.ID_SELECT_URL_STORE, "data"),
-        State(ElementIds.ID_SELECT_LINES_STORE, "data"),
+        State(ElementIds.SHARED_URL_STORE, "data"),
+        State(ElementIds.SHARED_LINES_STORE, "data"),
     ],
 )
 def switch_si_ip(_, si_ip_input, url_store, lines):
@@ -259,8 +259,8 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
         Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
-        Input(ElementIds.ID_SELECT_META_STORE, "data"),
-        Input(ElementIds.ID_SELECT_DF_STORE, "data"),
+        Input(ElementIds.SHARED_META_STORE, "data"),
+        Input(ElementIds.SHARED_DF_STORE, "data"),
     ],
 )
 def enable_tabs_when_data_is_loaded(meta, data):
@@ -298,7 +298,7 @@ def enable_tabs_when_data_is_loaded(meta, data):
 @callback(
     [
         Output(ElementIds.MODAL, "opened"),
-        Output(ElementIds.ID_SELECT_URL_STORE, "data"),
+        Output(ElementIds.SHARED_URL_STORE, "data"),
     ],
     [
         Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),

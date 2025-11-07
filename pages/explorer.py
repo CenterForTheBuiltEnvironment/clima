@@ -351,15 +351,15 @@ def section_three():
     Output(ElementIds.YEARLY_EXPLORE, "children"),
     # Section One
     [
-        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_yearly(_, var, global_local, global_filter_data, df, meta, si_ip):
@@ -399,15 +399,15 @@ def update_tab_yearly(_, var, global_local, global_filter_data, df, meta, si_ip)
 @callback(
     Output(ElementIds.QUERY_DAILY, "children"),
     [
-        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_daily(_, var, global_local, global_filter_data, df, meta, si_ip):
@@ -432,15 +432,15 @@ def update_tab_daily(_, var, global_local, global_filter_data, df, meta, si_ip):
 @callback(
     Output(ElementIds.QUERY_HEATMAP, "children"),
     [
-        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
-        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip):
@@ -471,21 +471,21 @@ def update_tab_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip
         Output(ElementIds.NORMALIZE, "style"),
     ],
     [
-        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC2_VAR_DROPDOWN, "value"),
         Input(ElementIds.SEC2_DATA_FILTER_INPUT, "n_clicks"),
         Input(ElementIds.NORMALIZE, "value"),
-        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     # General
     [
-        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
         State(ElementIds.SEC2_DATA_FILTER_VAR, "value"),
         State(ElementIds.SEC2_MIN_VAL, "value"),
         State(ElementIds.SEC2_MAX_VAL, "value"),
-        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_heatmap(
@@ -591,21 +591,21 @@ def update_heatmap(
 @callback(
     [Output(ElementIds.THREE_VAR, "children"), Output(ElementIds.TWO_VAR, "children")],
     [
-        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.EXPLORER_SEC3_VAR_X_DROPDOWN, "value"),
         Input(ElementIds.EXPLORER_SEC3_VAR_Y_DROPDOWN, "value"),
         Input(ElementIds.EXPLORER_SEC3_COLORBY_DROPDOWN, "value"),
         Input(ElementIds.EXPLORER_SEC3_DATA_FILTER_INPUT, "n_clicks"),
-        Input(ElementIds.ID_EXPLORER_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
         State(ElementIds.EXPLORER_SEC3_FILTER_VAR_DROPDOWN, "value"),
         State(ElementIds.EXPLORER_SEC3_MIN_VAL, "value"),
         State(ElementIds.EXPLORER_SEC3_MAX_VAL, "value"),
-        State(ElementIds.ID_EXPLORER_META_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_more_charts(
@@ -685,13 +685,13 @@ def update_more_charts(
 @callback(
     Output(ElementIds.TABLE_DATA_EXPLORER, "children"),
     [
-        Input(ElementIds.ID_EXPLORER_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_EXPLORER_DF_STORE, "data"),
-        State(ElementIds.ID_EXPLORER_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_table(

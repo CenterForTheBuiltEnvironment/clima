@@ -123,8 +123,8 @@ def layout():
 
 @callback(
     Output(ElementIds.OUTDOOR_COMFORT_OUTPUT, "children"),
-    Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
-    State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
+    Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+    State(ElementIds.SHARED_DF_STORE, "data"),
 )
 def update_outdoor_comfort_output(_, df):
     """
@@ -180,15 +180,15 @@ def update_outdoor_comfort_output(_, df):
 @callback(
     Output(ElementIds.UTCI_HEATMAP, "children"),
     [
-        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.OUTDOOR_DROPDOWN, "value"),
-        Input(ElementIds.ID_OUTDOOR_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-        State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
-        State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_utci_value(
@@ -249,15 +249,15 @@ def change_image_based_on_selection(value):
 @callback(
     Output(ElementIds.UTCI_CATEGORY_HEATMAP, "children"),
     [
-        Input(ElementIds.ID_OUTDOOR_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.OUTDOOR_DROPDOWN, "value"),
-        Input(ElementIds.ID_OUTDOOR_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-        State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
-        State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_utci_category(
@@ -331,9 +331,9 @@ def update_tab_utci_category(
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_OUTDOOR_DF_STORE, "data"),
-        State(ElementIds.ID_OUTDOOR_META_STORE, "data"),
-        State(ElementIds.ID_OUTDOOR_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_tab_utci_summary_chart(var, normalize, global_filter_data, df, meta, si_ip):

@@ -150,19 +150,19 @@ def layout():
 @callback(
     Output(ElementIds.PSYCH_CHART, "children"),
     [
-        Input(ElementIds.ID_PSY_CHART_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
         Input(ElementIds.PSY_COLOR_BY_DROPDOWN, "value"),
         Input(ElementIds.DATA_FILTER, "n_clicks"),
-        Input(ElementIds.ID_PSY_CHART_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
         Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State(ElementIds.ID_PSY_CHART_DF_STORE, "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
         State(ElementIds.PSY_MIN_VAL, "value"),
         State(ElementIds.PSY_MAX_VAL, "value"),
         State(ElementIds.PSY_VAR_DROPDOWN, "value"),
-        State(ElementIds.ID_PSY_CHART_META_STORE, "data"),
-        State(ElementIds.ID_PSY_CHART_SI_IP_UNIT_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_psych_chart(
