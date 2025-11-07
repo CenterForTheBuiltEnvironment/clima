@@ -57,9 +57,6 @@ def test_banner_unit_switch(page: Page):
     """
     Verify that the banner radio buttons (Global/Local) correctly toggle.
     """
-    nav_controls = page.locator("#nav-group-controls")
-    nav_controls.click(force=True)
-
     # Click the "Global" option
     global_button = page.get_by_text("Global", exact=True)
     global_button.scroll_into_view_if_needed()

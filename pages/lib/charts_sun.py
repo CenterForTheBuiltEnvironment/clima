@@ -16,23 +16,61 @@ from pages.lib.global_scheme import (
 from plotly.subplots import make_subplots
 from pvlib import solarposition
 from pages.lib.global_variables import Variables, VariableInfo
+from pages.lib.utils import separate_filtered_data
 
 
 def monthly_solar(epw_df, si_ip):
+    # Separate filtered and unfiltered data
+    # Note: monthly_solar uses two original columns (GLOB_HOR_RAD and DIF_HOR_RAD)
+    # so we can't use the utility function directly, but we can still use it for separation
+    filter_info = separate_filtered_data(epw_df)
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+    has_filter_marker = filter_info["has_filter_marker"]
+
+    # Get original values if available (for two specific columns)
+    original_glob_col = f"_{Variables.GLOB_HOR_RAD.col_name}_original"
+    original_dif_col = f"_{Variables.DIF_HOR_RAD.col_name}_original"
+    use_original_for_filtered = (
+        has_filter_marker
+        and original_glob_col in epw_df.columns
+        and original_dif_col in epw_df.columns
+    )
+
+    # Calculate monthly averages for unfiltered data
     g_h_rad_month_ave = (
-        epw_df.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+        df_unfiltered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
             Variables.GLOB_HOR_RAD.col_name
         ]
         .median()
         .reset_index()
     )
     dif_h_rad_month_ave = (
-        epw_df.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+        df_unfiltered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
             Variables.DIF_HOR_RAD.col_name
         ]
         .median()
         .reset_index()
     )
+
+    # Calculate monthly averages for filtered data (using original values)
+    g_h_rad_month_ave_filtered = None
+    dif_h_rad_month_ave_filtered = None
+    if df_filtered is not None and len(df_filtered) > 0 and use_original_for_filtered:
+        g_h_rad_month_ave_filtered = (
+            df_filtered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+                original_glob_col
+            ]
+            .median()
+            .reset_index()
+        )
+        dif_h_rad_month_ave_filtered = (
+            df_filtered.groupby([Variables.MONTH.col_name, Variables.HOUR.col_name])[
+                original_dif_col
+            ]
+            .median()
+            .reset_index()
+        )
 
     # Always show 12 months in horizontal layout
     fig = make_subplots(
@@ -42,84 +80,171 @@ def monthly_solar(epw_df, si_ip):
         shared_yaxes=True,
     )
 
+    # Track which legend entries have been shown (only show once)
+    legend_shown = {
+        "Global": False,
+        "Diffuse": False,
+    }
+
     for month_num in range(1, 13):
         col_idx = month_num
-        # We only need legend entries for the first pair, since the others repeat.
-        is_first = col_idx == 1
 
-        fig.add_trace(
-            go.Scatter(
-                x=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
-                    Variables.HOUR.col_name,
-                ],
-                y=g_h_rad_month_ave.loc[
-                    g_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
-                    Variables.GLOB_HOR_RAD.col_name,
-                ],
-                fill="tozeroy",
-                mode="lines",
-                line_color="orange",
-                line_width=2,
-                name="Global",
-                showlegend=is_first,
-                customdata=epw_df.loc[
-                    epw_df[Variables.MONTH.col_name] == month_num,
-                    Variables.MONTH_NAMES.col_name,
-                ],
-                hovertemplate=(
-                    "<b>"
-                    + "Global Horizontal Solar Radiation"
-                    + ": %{y:.2f} "
-                    + VariableInfo.from_col_name(
-                        Variables.GLOB_HOR_RAD.col_name
-                    ).get_unit(si_ip)
-                    + "</b><br>"
-                    + "Month: %{customdata}<br>"
-                    + "Hour: %{x}:00<br>"
-                    + "<extra></extra>"  # Hides the "secondary box"
-                ),
-            ),
-            row=1,
-            col=col_idx,
-        )
+        # Add filtered data traces (gray) if any
+        if (
+            df_filtered is not None
+            and len(df_filtered) > 0
+            and g_h_rad_month_ave_filtered is not None
+        ):
+            month_glob_filtered = g_h_rad_month_ave_filtered.loc[
+                g_h_rad_month_ave_filtered[Variables.MONTH.col_name] == month_num
+            ]
+            if len(month_glob_filtered) > 0:
+                # Get the column name from the groupby result (it should be the original column name)
+                filtered_glob_col = (
+                    original_glob_col
+                    if original_glob_col in month_glob_filtered.columns
+                    else Variables.GLOB_HOR_RAD.col_name
+                )
+                fig.add_trace(
+                    go.Scatter(
+                        x=month_glob_filtered[Variables.HOUR.col_name],
+                        y=month_glob_filtered[filtered_glob_col],
+                        fill="tozeroy",
+                        mode="lines",
+                        line_color="gray",
+                        line_width=1,
+                        name="Global (Filtered)",
+                        showlegend=False,
+                        customdata=[month_lst[month_num - 1]] * len(month_glob_filtered)
+                        if len(month_glob_filtered) > 0
+                        else [],
+                        hovertemplate=(
+                            "<b>Filtered Data</b><br>"
+                            + "Global Horizontal Solar Radiation"
+                            + ": %{y:.2f} "
+                            + VariableInfo.from_col_name(
+                                Variables.GLOB_HOR_RAD.col_name
+                            ).get_unit(si_ip)
+                            + "</b><br>"
+                            + "Month: %{customdata}<br>"
+                            + "Hour: %{x}:00<br>"
+                            + "<extra></extra>"
+                        ),
+                    ),
+                    row=1,
+                    col=col_idx,
+                )
 
-        fig.add_trace(
-            go.Scatter(
-                x=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
-                    Variables.HOUR.col_name,
-                ],
-                y=dif_h_rad_month_ave.loc[
-                    dif_h_rad_month_ave[Variables.MONTH.col_name] == month_num,
-                    Variables.DIF_HOR_RAD.col_name,
-                ],
-                fill="tozeroy",
-                mode="lines",
-                line_color="dodgerblue",
-                line_width=2,
-                name="Diffuse",
-                showlegend=is_first,
-                customdata=epw_df.loc[
-                    epw_df[Variables.MONTH.col_name] == month_num,
-                    Variables.MONTH_NAMES.col_name,
-                ],
-                hovertemplate=(
-                    "<b>"
-                    + "Diffuse Horizontal Solar Radiation"
-                    + ": %{y:.2f} "
-                    + VariableInfo.from_col_name(
-                        Variables.DIF_HOR_RAD.col_name
-                    ).get_unit(si_ip)
-                    + "</b><br>"
-                    + "Month: %{customdata}<br>"
-                    + "Hour: %{x}:00<br>"
-                    + "<extra></extra>"  # Hides the "secondary box"
+            month_dif_filtered = dif_h_rad_month_ave_filtered.loc[
+                dif_h_rad_month_ave_filtered[Variables.MONTH.col_name] == month_num
+            ]
+            if len(month_dif_filtered) > 0:
+                # Get the column name from the groupby result (it should be the original column name)
+                filtered_dif_col = (
+                    original_dif_col
+                    if original_dif_col in month_dif_filtered.columns
+                    else Variables.DIF_HOR_RAD.col_name
+                )
+                fig.add_trace(
+                    go.Scatter(
+                        x=month_dif_filtered[Variables.HOUR.col_name],
+                        y=month_dif_filtered[filtered_dif_col],
+                        fill="tozeroy",
+                        mode="lines",
+                        line_color="lightgray",
+                        line_width=1,
+                        name="Diffuse (Filtered)",
+                        showlegend=False,
+                        customdata=[month_lst[month_num - 1]] * len(month_dif_filtered)
+                        if len(month_dif_filtered) > 0
+                        else [],
+                        hovertemplate=(
+                            "<b>Filtered Data</b><br>"
+                            + "Diffuse Horizontal Solar Radiation"
+                            + ": %{y:.2f} "
+                            + VariableInfo.from_col_name(
+                                Variables.DIF_HOR_RAD.col_name
+                            ).get_unit(si_ip)
+                            + "</b><br>"
+                            + "Month: %{customdata}<br>"
+                            + "Hour: %{x}:00<br>"
+                            + "<extra></extra>"
+                        ),
+                    ),
+                    row=1,
+                    col=col_idx,
+                )
+
+        # Add unfiltered data traces (normal colors)
+        month_glob_unfiltered = g_h_rad_month_ave.loc[
+            g_h_rad_month_ave[Variables.MONTH.col_name] == month_num
+        ]
+        if len(month_glob_unfiltered) > 0:
+            fig.add_trace(
+                go.Scatter(
+                    x=month_glob_unfiltered[Variables.HOUR.col_name],
+                    y=month_glob_unfiltered[Variables.GLOB_HOR_RAD.col_name],
+                    fill="tozeroy",
+                    mode="lines",
+                    line_color="orange",
+                    line_width=2,
+                    name="Global",
+                    legendgroup="Global",
+                    showlegend=not legend_shown["Global"],
+                    customdata=[month_lst[month_num - 1]] * len(month_glob_unfiltered),
+                    hovertemplate=(
+                        "<b>"
+                        + "Global Horizontal Solar Radiation"
+                        + ": %{y:.2f} "
+                        + VariableInfo.from_col_name(
+                            Variables.GLOB_HOR_RAD.col_name
+                        ).get_unit(si_ip)
+                        + "</b><br>"
+                        + "Month: %{customdata}<br>"
+                        + "Hour: %{x}:00<br>"
+                        + "<extra></extra>"  # Hides the "secondary box"
+                    ),
                 ),
-            ),
-            row=1,
-            col=col_idx,
-        )
+                row=1,
+                col=col_idx,
+            )
+            if not legend_shown["Global"]:
+                legend_shown["Global"] = True
+
+        month_dif_unfiltered = dif_h_rad_month_ave.loc[
+            dif_h_rad_month_ave[Variables.MONTH.col_name] == month_num
+        ]
+        if len(month_dif_unfiltered) > 0:
+            fig.add_trace(
+                go.Scatter(
+                    x=month_dif_unfiltered[Variables.HOUR.col_name],
+                    y=month_dif_unfiltered[Variables.DIF_HOR_RAD.col_name],
+                    fill="tozeroy",
+                    mode="lines",
+                    line_color="dodgerblue",
+                    line_width=2,
+                    name="Diffuse",
+                    legendgroup="Diffuse",
+                    showlegend=not legend_shown["Diffuse"],
+                    customdata=[month_lst[month_num - 1]] * len(month_dif_unfiltered),
+                    hovertemplate=(
+                        "<b>"
+                        + "Diffuse Horizontal Solar Radiation"
+                        + ": %{y:.2f} "
+                        + VariableInfo.from_col_name(
+                            Variables.DIF_HOR_RAD.col_name
+                        ).get_unit(si_ip)
+                        + "</b><br>"
+                        + "Month: %{customdata}<br>"
+                        + "Hour: %{x}:00<br>"
+                        + "<extra></extra>"  # Hides the "secondary box"
+                    ),
+                ),
+                row=1,
+                col=col_idx,
+            )
+            if not legend_shown["Diffuse"]:
+                legend_shown["Diffuse"] = True
 
         fig.update_xaxes(range=[0, 25], row=1, col=col_idx)
 
@@ -140,7 +265,29 @@ def polar_graph(df, meta, global_local, var, si_ip):
     latitude = float(meta[Variables.LAT.col_name])
     longitude = float(meta[Variables.LON.col_name])
     time_zone = float(meta[Variables.TIME_ZONE.col_name])
-    solpos = df.loc[df[Variables.APPARENT_ELEVATION.col_name] > 0, :]
+
+    # Separate filtered and unfiltered data using utility function
+    # Note: For "None" variable, pass None to avoid checking for original column
+    filter_var = None if var == "None" else var
+    filter_info = separate_filtered_data(df, filter_var)
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+    original_var_col = filter_info["original_var_col"]
+    use_original_for_filtered = filter_info["use_original_for_filtered"]
+    # Adjust for "None" case
+    if var == "None":
+        original_var_col = None
+        use_original_for_filtered = False
+
+    solpos_unfiltered = df_unfiltered.loc[
+        df_unfiltered[Variables.APPARENT_ELEVATION.col_name] > 0, :
+    ]
+    solpos_filtered = None
+    if df_filtered is not None and len(df_filtered) > 0:
+        solpos_filtered = df_filtered.loc[
+            df_filtered[Variables.APPARENT_ELEVATION.col_name] > 0, :
+        ]
+
     if var != "None":
         variable = VariableInfo.from_col_name(var)
         var_unit = variable.get_unit(si_ip)
@@ -152,7 +299,10 @@ def polar_graph(df, meta, global_local, var, si_ip):
             range_z = var_range
         else:
             # Set maximum and minimum according to data
-            data_max, data_min = get_max_min_value(solpos[var])
+            if len(solpos_unfiltered) > 0:
+                data_max, data_min = get_max_min_value(solpos_unfiltered[var])
+            else:
+                data_max, data_min = var_range
             range_z = [data_min, data_max]
 
     tz = "UTC"
@@ -161,14 +311,16 @@ def polar_graph(df, meta, global_local, var, si_ip):
     )
     delta = timedelta(days=0, hours=time_zone - 1, minutes=0)
     times = times - delta
-    solpos = df.loc[df[Variables.APPARENT_ELEVATION.col_name] > 0, :]
 
     if var == "None":
         var_color = "orange"
         marker_size = 3
     else:
-        vals = solpos[var]
-        marker_size = ((vals - vals.min()) / (vals.max() - vals.min()) + 1) * 4
+        if len(solpos_unfiltered) > 0:
+            vals = solpos_unfiltered[var]
+            marker_size = ((vals - vals.min()) / (vals.max() - vals.min()) + 1) * 4
+        else:
+            marker_size = 3
 
     fig = go.Figure()
     # draw altitude circles
@@ -188,81 +340,180 @@ def polar_graph(df, meta, global_local, var, si_ip):
                 name="",
             )
         )
-    # Draw annalemma
-    if var == "None":
-        fig.add_trace(
-            go.Scatterpolar(
-                r=90
-                * np.cos(np.radians(90 - solpos[Variables.APPARENT_ZENITH.col_name])),
-                theta=solpos[Variables.AZIMUTH.col_name],
-                mode="markers",
-                marker_color="orange",
-                marker_size=marker_size,
-                marker_line_width=0,
-                customdata=np.stack(
-                    (
-                        solpos[Variables.DAY.col_name],
-                        solpos[Variables.MONTH_NAMES.col_name],
-                        solpos[Variables.HOUR.col_name],
-                        solpos[Variables.ELEVATION.col_name],
-                        solpos[Variables.AZIMUTH.col_name],
+
+    # Draw filtered data (gray) if any
+    if solpos_filtered is not None and len(solpos_filtered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=90
+                    * np.cos(
+                        np.radians(
+                            90 - solpos_filtered[Variables.APPARENT_ZENITH.col_name]
+                        )
                     ),
-                    axis=-1,
-                ),
-                hovertemplate="month: %{customdata[1]}"
-                + "<br>day: %{customdata[0]:.0f}"
-                + "<br>hour: %{customdata[2]:.0f}:00"
-                + "<br>sun altitude: %{customdata[3]:.2f}"
-                + degrees_unit
-                + "<br>sun azimuth: %{customdata[4]:.2f}"
-                + degrees_unit
-                + "<br>",
-                name="",
-            )
-        )
-    else:
-        fig.add_trace(
-            go.Scatterpolar(
-                r=90
-                * np.cos(np.radians(90 - solpos[Variables.APPARENT_ZENITH.col_name])),
-                theta=solpos[Variables.AZIMUTH.col_name],
-                mode="markers",
-                marker=dict(
-                    color=solpos[var],
-                    size=marker_size,
-                    line_width=0,
-                    colorscale=var_color,
-                    cmin=range_z[0],
-                    cmax=range_z[1],
-                    colorbar=dict(thickness=30, title=var_unit + "<br>  "),
-                ),
-                customdata=np.stack(
-                    (
-                        solpos[Variables.DAY.col_name],
-                        solpos[Variables.MONTH_NAMES.col_name],
-                        solpos[Variables.HOUR.col_name],
-                        solpos[Variables.ELEVATION.col_name],
-                        solpos[Variables.AZIMUTH.col_name],
-                        solpos[var],
+                    theta=solpos_filtered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker_color="gray",
+                    marker_size=marker_size * 0.7,
+                    marker_opacity=0.5,
+                    marker_line_width=0,
+                    customdata=np.stack(
+                        (
+                            solpos_filtered[Variables.DAY.col_name],
+                            solpos_filtered[Variables.MONTH_NAMES.col_name],
+                            solpos_filtered[Variables.HOUR.col_name],
+                            solpos_filtered[Variables.ELEVATION.col_name],
+                            solpos_filtered[Variables.AZIMUTH.col_name],
+                        ),
+                        axis=-1,
                     ),
-                    axis=-1,
-                ),
-                hovertemplate="month: %{customdata[1]}"
-                + "<br>day: %{customdata[0]:.0f}"
-                + "<br>hour: %{customdata[2]:.0f}:00"
-                + "<br>sun altitude: %{customdata[3]:.2f}"
-                + degrees_unit
-                + "<br>sun azimuth: %{customdata[4]:.2f}"
-                + degrees_unit
-                + "<br>"
-                + "<br><b>"
-                + var_name
-                + ": %{customdata[5]:.2f}"
-                + var_unit
-                + "</b>",
-                name="",
+                    hovertemplate="<b>Filtered Data</b><br>month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>",
+                    name="Filtered",
+                )
             )
-        )
+        else:
+            # For filtered data with variable, use original values
+            if use_original_for_filtered:
+                filtered_var_vals = solpos_filtered[original_var_col]
+            else:
+                filtered_var_vals = solpos_filtered[var]
+
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=90
+                    * np.cos(
+                        np.radians(
+                            90 - solpos_filtered[Variables.APPARENT_ZENITH.col_name]
+                        )
+                    ),
+                    theta=solpos_filtered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker=dict(
+                        color="gray",
+                        size=marker_size * 0.7,
+                        opacity=0.5,
+                        line_width=0,
+                    ),
+                    customdata=np.stack(
+                        (
+                            solpos_filtered[Variables.DAY.col_name],
+                            solpos_filtered[Variables.MONTH_NAMES.col_name],
+                            solpos_filtered[Variables.HOUR.col_name],
+                            solpos_filtered[Variables.ELEVATION.col_name],
+                            solpos_filtered[Variables.AZIMUTH.col_name],
+                            filtered_var_vals,
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate="<b>Filtered Data</b><br>month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>"
+                    + "<br><b>"
+                    + var_name
+                    + ": %{customdata[5]:.2f}"
+                    + var_unit
+                    + "</b>",
+                    name="Filtered",
+                )
+            )
+
+    # Draw unfiltered data (normal colors)
+    if len(solpos_unfiltered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=90
+                    * np.cos(
+                        np.radians(
+                            90 - solpos_unfiltered[Variables.APPARENT_ZENITH.col_name]
+                        )
+                    ),
+                    theta=solpos_unfiltered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker_color="orange",
+                    marker_size=marker_size,
+                    marker_line_width=0,
+                    customdata=np.stack(
+                        (
+                            solpos_unfiltered[Variables.DAY.col_name],
+                            solpos_unfiltered[Variables.MONTH_NAMES.col_name],
+                            solpos_unfiltered[Variables.HOUR.col_name],
+                            solpos_unfiltered[Variables.ELEVATION.col_name],
+                            solpos_unfiltered[Variables.AZIMUTH.col_name],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate="month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>",
+                    name="",
+                )
+            )
+        else:
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=90
+                    * np.cos(
+                        np.radians(
+                            90 - solpos_unfiltered[Variables.APPARENT_ZENITH.col_name]
+                        )
+                    ),
+                    theta=solpos_unfiltered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker=dict(
+                        color=solpos_unfiltered[var],
+                        size=marker_size,
+                        line_width=0,
+                        colorscale=var_color,
+                        cmin=range_z[0],
+                        cmax=range_z[1],
+                        colorbar=dict(thickness=30, title=var_unit + "<br>  "),
+                    ),
+                    customdata=np.stack(
+                        (
+                            solpos_unfiltered[Variables.DAY.col_name],
+                            solpos_unfiltered[Variables.MONTH_NAMES.col_name],
+                            solpos_unfiltered[Variables.HOUR.col_name],
+                            solpos_unfiltered[Variables.ELEVATION.col_name],
+                            solpos_unfiltered[Variables.AZIMUTH.col_name],
+                            solpos_unfiltered[var],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate="month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>"
+                    + "<br><b>"
+                    + var_name
+                    + ": %{customdata[5]:.2f}"
+                    + var_unit
+                    + "</b>",
+                    name="",
+                )
+            )
 
     # draw equinox and sostices
     for date in pd.to_datetime(["2019-03-21", "2019-06-21", "2019-12-21"]):
@@ -355,6 +606,20 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
     longitude = float(meta[Variables.LON.col_name])
     time_zone = float(meta[Variables.TIME_ZONE.col_name])
     tz = "UTC"
+
+    # Separate filtered and unfiltered data using utility function
+    # Note: For "None" variable, pass None to avoid checking for original column
+    filter_var = None if var == "None" else var
+    filter_info = separate_filtered_data(df, filter_var)
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+    original_var_col = filter_info["original_var_col"]
+    use_original_for_filtered = filter_info["use_original_for_filtered"]
+    # Adjust for "None" case
+    if var == "None":
+        original_var_col = None
+        use_original_for_filtered = False
+
     variable = VariableInfo.from_col_name(var)
     if var != "None":
         var_unit = variable.get_unit(si_ip)
@@ -366,91 +631,177 @@ def custom_cartesian_solar(df, meta, global_local, var, si_ip):
             range_z = var_range
         else:
             # Set maximum and minimum according to data
-            data_max, data_min = get_max_min_value(df[var])
+            if len(df_unfiltered) > 0:
+                data_max, data_min = get_max_min_value(df_unfiltered[var])
+            else:
+                data_max, data_min = var_range
             range_z = [data_min, data_max]
 
     if var == "None":
         var_color = "orange"
         marker_size = 3
     else:
-        vals = df[var]
-        marker_size = ((vals - vals.min()) / (vals.max() - vals.min()) + 1) * 4
+        if len(df_unfiltered) > 0:
+            vals = df_unfiltered[var]
+            marker_size = ((vals - vals.min()) / (vals.max() - vals.min()) + 1) * 4
+        else:
+            marker_size = 3
 
     fig = go.Figure()
 
-    # draw annalemma
-    if var == "None":
-        fig.add_trace(
-            go.Scatter(
-                y=df[Variables.ELEVATION.col_name],
-                x=df[Variables.AZIMUTH.col_name],
-                mode="markers",
-                marker_color="orange",
-                marker_size=marker_size,
-                marker_line_width=0,
-                customdata=np.stack(
-                    (
-                        df[Variables.DAY.col_name],
-                        df[Variables.MONTH_NAMES.col_name],
-                        df[Variables.HOUR.col_name],
-                        df[Variables.ELEVATION.col_name],
-                        df[Variables.AZIMUTH.col_name],
+    # Draw filtered data (gray) if any
+    if df_filtered is not None and len(df_filtered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatter(
+                    y=df_filtered[Variables.ELEVATION.col_name],
+                    x=df_filtered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker_color="gray",
+                    marker_size=marker_size * 0.7,
+                    marker_opacity=0.5,
+                    marker_line_width=0,
+                    customdata=np.stack(
+                        (
+                            df_filtered[Variables.DAY.col_name],
+                            df_filtered[Variables.MONTH_NAMES.col_name],
+                            df_filtered[Variables.HOUR.col_name],
+                            df_filtered[Variables.ELEVATION.col_name],
+                            df_filtered[Variables.AZIMUTH.col_name],
+                        ),
+                        axis=-1,
                     ),
-                    axis=-1,
-                ),
-                hovertemplate="month: %{customdata[1]}"
-                + "<br>day: %{customdata[0]:.0f}"
-                + "<br>hour: %{customdata[2]:.0f}:00"
-                + "<br>sun altitude: %{customdata[3]:.2f}"
-                + degrees_unit
-                + "<br>sun azimuth: %{customdata[4]:.2f}"
-                + degrees_unit
-                + "<br>",
-                name="",
+                    hovertemplate="<b>Filtered Data</b><br>month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>",
+                    name="Filtered",
+                )
             )
-        )
-    else:
-        fig.add_trace(
-            go.Scatter(
-                y=df[Variables.ELEVATION.col_name],
-                x=df[Variables.AZIMUTH.col_name],
-                mode="markers",
-                marker=dict(
-                    color=df[var],
-                    size=marker_size,
-                    line_width=0,
-                    colorscale=var_color,
-                    cmin=range_z[0],
-                    cmax=range_z[1],
-                    colorbar=dict(thickness=30, title=var_unit + "<br>  "),
-                ),
-                customdata=np.stack(
-                    (
-                        df[Variables.DAY.col_name],
-                        df[Variables.MONTH_NAMES.col_name],
-                        df[Variables.HOUR.col_name],
-                        df[Variables.ELEVATION.col_name],
-                        df[Variables.AZIMUTH.col_name],
-                        df[var],
+        else:
+            # For filtered data with variable, use original values
+            if use_original_for_filtered:
+                filtered_var_vals = df_filtered[original_var_col]
+            else:
+                filtered_var_vals = df_filtered[var]
+
+            fig.add_trace(
+                go.Scatter(
+                    y=df_filtered[Variables.ELEVATION.col_name],
+                    x=df_filtered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker=dict(
+                        color="gray",
+                        size=marker_size * 0.7,
+                        opacity=0.5,
+                        line_width=0,
                     ),
-                    axis=-1,
-                ),
-                hovertemplate="month: %{customdata[1]}"
-                + "<br>day: %{customdata[0]:.0f}"
-                + "<br>hour: %{customdata[2]:.0f}:00"
-                + "<br>sun altitude: %{customdata[3]:.2f}"
-                + degrees_unit
-                + "<br>sun azimuth: %{customdata[4]:.2f}"
-                + degrees_unit
-                + "<br>"
-                + "<br><b>"
-                + var_name
-                + ": %{customdata[5]:.2f}"
-                + var_unit
-                + "</b>",
-                name="",
+                    customdata=np.stack(
+                        (
+                            df_filtered[Variables.DAY.col_name],
+                            df_filtered[Variables.MONTH_NAMES.col_name],
+                            df_filtered[Variables.HOUR.col_name],
+                            df_filtered[Variables.ELEVATION.col_name],
+                            df_filtered[Variables.AZIMUTH.col_name],
+                            filtered_var_vals,
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate="<b>Filtered Data</b><br>month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>"
+                    + "<br><b>"
+                    + var_name
+                    + ": %{customdata[5]:.2f}"
+                    + var_unit
+                    + "</b>",
+                    name="Filtered",
+                )
             )
-        )
+
+    # Draw unfiltered data (normal colors)
+    if len(df_unfiltered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatter(
+                    y=df_unfiltered[Variables.ELEVATION.col_name],
+                    x=df_unfiltered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker_color="orange",
+                    marker_size=marker_size,
+                    marker_line_width=0,
+                    customdata=np.stack(
+                        (
+                            df_unfiltered[Variables.DAY.col_name],
+                            df_unfiltered[Variables.MONTH_NAMES.col_name],
+                            df_unfiltered[Variables.HOUR.col_name],
+                            df_unfiltered[Variables.ELEVATION.col_name],
+                            df_unfiltered[Variables.AZIMUTH.col_name],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate="month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>",
+                    name="",
+                )
+            )
+        else:
+            fig.add_trace(
+                go.Scatter(
+                    y=df_unfiltered[Variables.ELEVATION.col_name],
+                    x=df_unfiltered[Variables.AZIMUTH.col_name],
+                    mode="markers",
+                    marker=dict(
+                        color=df_unfiltered[var],
+                        size=marker_size,
+                        line_width=0,
+                        colorscale=var_color,
+                        cmin=range_z[0],
+                        cmax=range_z[1],
+                        colorbar=dict(thickness=30, title=var_unit + "<br>  "),
+                    ),
+                    customdata=np.stack(
+                        (
+                            df_unfiltered[Variables.DAY.col_name],
+                            df_unfiltered[Variables.MONTH_NAMES.col_name],
+                            df_unfiltered[Variables.HOUR.col_name],
+                            df_unfiltered[Variables.ELEVATION.col_name],
+                            df_unfiltered[Variables.AZIMUTH.col_name],
+                            df_unfiltered[var],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate="month: %{customdata[1]}"
+                    + "<br>day: %{customdata[0]:.0f}"
+                    + "<br>hour: %{customdata[2]:.0f}:00"
+                    + "<br>sun altitude: %{customdata[3]:.2f}"
+                    + degrees_unit
+                    + "<br>sun azimuth: %{customdata[4]:.2f}"
+                    + degrees_unit
+                    + "<br>"
+                    + "<br><b>"
+                    + var_name
+                    + ": %{customdata[5]:.2f}"
+                    + var_unit
+                    + "</b>",
+                    name="",
+                )
+            )
 
     # draw equinox and sostices
     for date in pd.to_datetime(["2019-03-21", "2019-06-21", "2019-12-21"]):

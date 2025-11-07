@@ -123,7 +123,26 @@ def update_yearly_chart(_, global_local, dd_value, global_filter_data, df, meta,
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
     if dd_value == dropdown_names[var_to_plot[0]]:
-        dbt_yearly = yearly_profile(df, Variables.DBT.col_name, global_local, si_ip)
+        # Ensure all necessary columns are included for filtered data display
+        required_cols = [
+            Variables.DBT.col_name,
+            Variables.UTC_TIME.col_name,
+            Variables.MONTH_NAMES.col_name,
+            Variables.DAY.col_name,
+            Variables.DOY.col_name,
+            Variables.ADAPTIVE_CMF_80_LOW.col_name,
+            Variables.ADAPTIVE_CMF_80_UP.col_name,
+            Variables.ADAPTIVE_CMF_90_LOW.col_name,
+            Variables.ADAPTIVE_CMF_90_UP.col_name,
+            Variables.ADAPTIVE_CMF_RMT.col_name,
+        ]
+        if "_is_filtered" in df.columns:
+            required_cols.append("_is_filtered")
+        if f"_{Variables.DBT.col_name}_original" in df.columns:
+            required_cols.append(f"_{Variables.DBT.col_name}_original")
+        dbt_yearly = yearly_profile(
+            df[required_cols], Variables.DBT.col_name, global_local, si_ip
+        )
         dbt_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units_degree(si_ip)
         return dcc.Graph(
@@ -133,7 +152,20 @@ def update_yearly_chart(_, global_local, dd_value, global_filter_data, df, meta,
             figure=dbt_yearly,
         )
     else:
-        rh_yearly = yearly_profile(df, Variables.RH.col_name, global_local, si_ip)
+        # Ensure all necessary columns are included for filtered data display
+        required_cols = [
+            Variables.RH.col_name,
+            Variables.UTC_TIME.col_name,
+            Variables.MONTH_NAMES.col_name,
+            Variables.DAY.col_name,
+        ]
+        if "_is_filtered" in df.columns:
+            required_cols.append("_is_filtered")
+        if f"_{Variables.RH.col_name}_original" in df.columns:
+            required_cols.append(f"_{Variables.RH.col_name}_original")
+        rh_yearly = yearly_profile(
+            df[required_cols], Variables.RH.col_name, global_local, si_ip
+        )
         rh_yearly.update_layout(xaxis=dict(rangeslider=dict(visible=True)))
         units = generate_units(si_ip)
         return dcc.Graph(
@@ -164,42 +196,50 @@ def update_daily(_, global_local, dd_value, global_filter_data, df, meta, si_ip)
         df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
     if dd_value == dropdown_names[var_to_plot[0]]:
+        # Ensure all necessary columns are included for filtered data display
+        base_columns = [
+            Variables.DBT.col_name,
+            Variables.HOUR.col_name,
+            Variables.UTC_TIME.col_name,
+            Variables.MONTH_NAMES.col_name,
+            Variables.DAY.col_name,
+            Variables.MONTH.col_name,
+        ]
+        if "_is_filtered" in df.columns:
+            base_columns.append("_is_filtered")
+        if f"_{Variables.DBT.col_name}_original" in df.columns:
+            base_columns.append(f"_{Variables.DBT.col_name}_original")
         units = generate_units_degree(si_ip)
         return dcc.Graph(
             config=generate_chart_name(
                 TabNames.DRY_BULB_TEMPERATURE_DAILY, meta, units
             ),
             figure=daily_profile(
-                df[
-                    [
-                        Variables.DBT.col_name,
-                        Variables.HOUR.col_name,
-                        Variables.UTC_TIME.col_name,
-                        Variables.MONTH_NAMES.col_name,
-                        Variables.DAY.col_name,
-                        Variables.MONTH.col_name,
-                    ]
-                ],
+                df[base_columns],
                 Variables.DBT.col_name,
                 global_local,
                 si_ip,
             ),
         )
     else:
+        # Ensure all necessary columns are included for filtered data display
+        base_columns = [
+            Variables.RH.col_name,
+            Variables.HOUR.col_name,
+            Variables.UTC_TIME.col_name,
+            Variables.MONTH_NAMES.col_name,
+            Variables.DAY.col_name,
+            Variables.MONTH.col_name,
+        ]
+        if "_is_filtered" in df.columns:
+            base_columns.append("_is_filtered")
+        if f"_{Variables.RH.col_name}_original" in df.columns:
+            base_columns.append(f"_{Variables.RH.col_name}_original")
         units = generate_units(si_ip)
         return dcc.Graph(
             config=generate_chart_name(TabNames.RELATIVE_HUMIDITY_DAILY, meta, units),
             figure=daily_profile(
-                df[
-                    [
-                        Variables.RH.col_name,
-                        Variables.HOUR.col_name,
-                        Variables.UTC_TIME.col_name,
-                        Variables.MONTH_NAMES.col_name,
-                        Variables.DAY.col_name,
-                        Variables.MONTH.col_name,
-                    ]
-                ],
+                df[base_columns],
                 Variables.RH.col_name,
                 global_local,
                 si_ip,

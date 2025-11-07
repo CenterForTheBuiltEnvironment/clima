@@ -394,3 +394,88 @@ def get_time_filter_from_store(
         state["invert_month"],
         state["invert_hour"],
     )
+
+
+def separate_filtered_data(df, var=None):
+    # Check if there's a filter marker
+    has_filter_marker = "_is_filtered" in df.columns
+    filtered_mask = None
+    if has_filter_marker:
+        filtered_mask = df["_is_filtered"]
+
+    # Get original values if available
+    original_var_col = None
+    use_original_for_filtered = False
+    if var is not None:
+        original_var_col = f"_{var}_original"
+        use_original_for_filtered = has_filter_marker and original_var_col in df.columns
+
+    # Separate filtered and unfiltered data
+    if has_filter_marker and filtered_mask is not None:
+        df_unfiltered = df[~filtered_mask].copy()
+        df_filtered = df[filtered_mask].copy() if filtered_mask.any() else None
+    else:
+        df_unfiltered = df
+        df_filtered = None
+
+    return {
+        "has_filter_marker": has_filter_marker,
+        "filtered_mask": filtered_mask,
+        "df_unfiltered": df_unfiltered,
+        "df_filtered": df_filtered,
+        "original_var_col": original_var_col,
+        "use_original_for_filtered": use_original_for_filtered,
+    }
+
+
+def has_filtered_data(df_filtered):
+    return df_filtered is not None and len(df_filtered) > 0
+
+
+def get_variable_info(var, si_ip):
+    variable = VariableInfo.from_col_name(var)
+    return {
+        "var_unit": variable.get_unit(si_ip),
+        "var_range": variable.get_range(si_ip),
+        "var_name": variable.get_name(),
+        "var_color": variable.get_color(),
+    }
+
+
+def unpack_variable_info(var_info, keys=None):
+    if keys is None:
+        keys = ["var_unit", "var_range", "var_name", "var_color"]
+    return tuple(var_info[key] for key in keys)
+
+
+def get_variable_range(
+    var, df, global_local, si_ip, use_original_for_range=False, original_values=None
+):
+    var_info = get_variable_info(var, si_ip)
+    var_range = var_info["var_range"]
+
+    if global_local == "global":
+        return var_range
+    else:
+        if use_original_for_range and original_values is not None:
+            data_max, data_min = get_max_min_value(original_values)
+        else:
+            data_max, data_min = get_max_min_value(df[var])
+        return [data_min, data_max]
+
+
+def get_original_column_values(df, var):
+    original_col = f"_{var}_original"
+    if original_col in df.columns:
+        return df[original_col].copy()
+    else:
+        return df[var].copy()
+
+
+def calculate_daily_statistics(df, var_col, date_col=Variables.UTC_TIME.col_name):
+    if len(df) == 0:
+        return pd.DataFrame({"min": [], "max": [], "mean": []})
+
+    df_with_date = df.copy()
+    df_with_date["_date"] = df_with_date[date_col].dt.date
+    return df_with_date.groupby("_date")[var_col].agg(["min", "max", "mean"])

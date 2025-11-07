@@ -130,13 +130,26 @@ def _chart_state_hash(page: Page, chart_selector: str) -> str:
     return str(hash(html))
 
 
+def _wait_dom_change(page: Page, chart_selector: str, prev_html: str):
+    """
+    Wait until the target chart element's innerHTML changes from prev_html.
+    """
+    page.wait_for_function(
+        "(args) => { const [sel, prev] = args; const el = document.querySelector(sel); return el && el.innerHTML !== prev; }",
+        arg=[chart_selector, prev_html],
+    )
+
+
 def assert_chart_changes_by_three_steps(page: Page, chart_selector: str):
-    """Test chart reactivity across month/hour/both filter changes without screenshots."""
+    """Test chart reactivity across month/hour/both filter changes."""
     base_hash = _chart_state_hash(page, chart_selector)
+    base_html = page.locator(chart_selector).first.inner_html()
 
     changed = False
     for months in NARROW_MONTHS:
         apply_filter(page, months, BASELINE_HOUR)
+        _wait_dom_change(page, chart_selector, base_html)
+        base_html = page.locator(chart_selector).first.inner_html()
         if _chart_state_hash(page, chart_selector) != base_hash:
             changed = True
             break
@@ -144,6 +157,8 @@ def assert_chart_changes_by_three_steps(page: Page, chart_selector: str):
     if not changed:
         for hours in NARROW_HOURS:
             apply_filter(page, BASELINE_MONTH, hours)
+            _wait_dom_change(page, chart_selector, base_html)
+            base_html = page.locator(chart_selector).first.inner_html()
             if _chart_state_hash(page, chart_selector) != base_hash:
                 changed = True
                 break
@@ -151,6 +166,8 @@ def assert_chart_changes_by_three_steps(page: Page, chart_selector: str):
     if not changed:
         months, hours = NARROW_MONTHS[0], NARROW_HOURS[0]
         apply_filter(page, months, hours)
+        _wait_dom_change(page, chart_selector, base_html)
+        page.locator(chart_selector).first.inner_html()
         if _chart_state_hash(page, chart_selector) != base_hash:
             changed = True
 

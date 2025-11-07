@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
-from pages.lib.utils import get_max_min_value
+from pages.lib.utils import get_max_min_value, separate_filtered_data
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_variables import Variables, VariableInfo
 from pages.lib.global_id_buttons import IdButtons
@@ -32,6 +32,13 @@ from pages.lib.utils import (
     title_with_link,
     dropdown,
 )
+
+
+def _safe_get_column(df, column_name, default_value=0):
+    if column_name in df.columns:
+        return df[column_name]
+    else:
+        return [default_value] * len(df)
 
 
 dash.register_page(
@@ -177,7 +184,14 @@ def update_psych_chart(
             get_global_filter_state,
         )
 
-        df = apply_global_month_hour_filter(df, global_filter_data)
+        # Determine which columns to filter - need DBT and HR at minimum, plus colorby_var if it's not None/Frequency
+        target_columns = [Variables.DBT.col_name, Variables.HR.col_name]
+        if colorby_var not in ["None", "Frequency"]:
+            target_columns.append(colorby_var)
+        if data_filter and data_filter_var:
+            target_columns.append(data_filter_var)
+
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
 
         filter_state = get_global_filter_state(global_filter_data)
         month_range = filter_state["month_range"]
@@ -286,117 +300,126 @@ def update_psych_chart(
             )
         )
 
-    df_hr_multiply = list(df[Variables.HR.col_name])
-    for k in range(len(df_hr_multiply)):
-        df_hr_multiply[k] = df_hr_multiply[k] * 1000
-    if var == "None":
-        fig.add_trace(
-            go.Scatter(
-                x=df[Variables.DBT.col_name],
-                y=df_hr_multiply,
-                showlegend=False,
-                mode="markers",
-                marker=dict(
-                    size=6,
-                    color=var_color,
-                    showscale=False,
-                    opacity=0.2,
-                ),
-                hovertemplate=VariableInfo.from_col_name(
-                    Variables.DBT.col_name
-                ).get_name()
-                + ": %{x:.2f}"
-                + VariableInfo.from_col_name(Variables.DBT.col_name).get_name(),
-                name="",
+    # Separate filtered and unfiltered data using utility function
+    # Note: psy-chart needs to check multiple original columns (DBT, HR, and var)
+    filter_info = separate_filtered_data(df, Variables.DBT.col_name)
+    df_unfiltered = filter_info["df_unfiltered"]
+
+    # Process HR for unfiltered data
+    df_unfiltered_hr_multiply = list(df_unfiltered[Variables.HR.col_name])
+    for k in range(len(df_unfiltered_hr_multiply)):
+        df_unfiltered_hr_multiply[k] = df_unfiltered_hr_multiply[k] * 1000
+
+    # Filtered data traces removed - no gray filtering effect for psychrometric chart
+
+    # Add unfiltered data traces (normal colors)
+    if len(df_unfiltered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatter(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=6,
+                        color=var_color,
+                        showscale=False,
+                        opacity=0.2,
+                    ),
+                    hovertemplate=VariableInfo.from_col_name(
+                        Variables.DBT.col_name
+                    ).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
+                        si_ip
+                    ),
+                    name="",
+                )
             )
-        )
-    elif var == "Frequency":
-        fig.add_trace(
-            go.Histogram2d(
-                x=df[Variables.DBT.col_name],
-                y=df_hr_multiply,
-                name="",
-                colorscale=var_color,
-                hovertemplate="",
-                autobinx=False,
-                xbins=dict(start=-50, end=100, size=1),
-            )
-        )
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x=dbt_list,
-        #         y=rh_df["rh100"],
-        #         showlegend=False,
-        #         mode="none",
-        #         name="",
-        #         fill="toself",
-        #         fillcolor="#fff",
-        #     )
-        # )
-
-    else:
-        var_colorbar = dict(
-            thickness=30,
-            title=var_unit + "<br>  ",
-        )
-
-        if var_unit == "Thermal stress":
-            var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
-            var_colorbar["ticktext"] = [
-                "extreme heat stress",
-                "very strong heat stress",
-                "strong heat stress",
-                "moderate heat stress",
-                "no thermal stress",
-                "slight cold stress",
-                "moderate cold stress",
-                "strong cold stress",
-                "very strong cold stress",
-                "extreme cold stress",
-            ]
-
-        fig.add_trace(
-            go.Scatter(
-                x=df[Variables.DBT.col_name],
-                y=df_hr_multiply,
-                showlegend=False,
-                mode="markers",
-                marker=dict(
-                    size=5,
-                    color=df[var],
-                    showscale=True,
-                    opacity=0.3,
+        elif var == "Frequency":
+            fig.add_trace(
+                go.Histogram2d(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    name="",
                     colorscale=var_color,
-                    colorbar=var_colorbar,
-                ),
-                customdata=np.stack(
-                    (df[Variables.RH.col_name], df["h"], df[var], df["t_dp"]), axis=-1
-                ),
-                hovertemplate=VariableInfo.from_col_name(
-                    Variables.DBT.col_name
-                ).get_name()
-                + ": %{x:.2f}"
-                + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
-                + "<br>"
-                + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
-                + ": %{customdata[0]:.2f}"
-                + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
-                + "<br>"
-                + VariableInfo.from_col_name("h").get_name()
-                + ": %{customdata[1]:.2f}"
-                + VariableInfo.from_col_name("h").get_unit(si_ip)
-                + "<br>"
-                + VariableInfo.from_col_name("t_dp").get_name()
-                + ": %{customdata[3]:.2f}"
-                + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
-                + "<br>"
-                + "<br>"
-                + var_name
-                + ": %{customdata[2]:.2f}"
-                + var_unit,
-                name="",
+                    hovertemplate="",
+                    autobinx=False,
+                    xbins=dict(start=-50, end=100, size=1),
+                )
             )
-        )
+            # Filtered data removed - no gray filtering effect for psychrometric chart
+
+        else:
+            var_colorbar = dict(
+                thickness=30,
+                title=var_unit + "<br>  ",
+            )
+
+            if var_unit == "Thermal stress":
+                var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+                var_colorbar["ticktext"] = [
+                    "extreme heat stress",
+                    "very strong heat stress",
+                    "strong heat stress",
+                    "moderate heat stress",
+                    "no thermal stress",
+                    "slight cold stress",
+                    "moderate cold stress",
+                    "strong cold stress",
+                    "very strong cold stress",
+                    "extreme cold stress",
+                ]
+
+            fig.add_trace(
+                go.Scatter(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=5,
+                        color=df_unfiltered[var],
+                        showscale=True,
+                        opacity=0.3,
+                        colorscale=var_color,
+                        colorbar=var_colorbar,
+                    ),
+                    customdata=np.stack(
+                        (
+                            df_unfiltered[Variables.RH.col_name],
+                            df_unfiltered["h"],
+                            df_unfiltered[var],
+                            df_unfiltered["t_dp"],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate=VariableInfo.from_col_name(
+                        Variables.DBT.col_name
+                    ).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
+                    + ": %{customdata[0]:.2f}"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("h").get_name()
+                    + ": %{customdata[1]:.2f}"
+                    + VariableInfo.from_col_name("h").get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("t_dp").get_name()
+                    + ": %{customdata[3]:.2f}"
+                    + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
+                    + "<br>"
+                    + "<br>"
+                    + var_name
+                    + ": %{customdata[2]:.2f}"
+                    + var_unit,
+                    name="",
+                )
+            )
 
     xtitle_name = (
         "Temperature"
