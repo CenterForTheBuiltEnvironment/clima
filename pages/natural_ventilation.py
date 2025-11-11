@@ -1,8 +1,7 @@
-import math
-
 import dash
-from dash import dcc, html
-import dash_bootstrap_components as dbc
+from dash import dcc
+from dash import no_update
+import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 
 import numpy as np
@@ -11,13 +10,13 @@ import plotly.graph_objects as go
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
 from pages.lib.global_scheme import (
     template,
-    mapping_dictionary,
     tight_margins,
     month_lst,
-    container_row_center_full,
-    container_col_center_one_of_three,
 )
-from pages.lib.template_graphs import filter_df_by_month_and_hour
+from pages.lib.global_variables import Variables, VariableInfo
+from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
     title_with_tooltip,
     generate_chart_name,
@@ -26,6 +25,7 @@ from pages.lib.utils import (
     generate_custom_inputs_nv,
     determine_month_and_hour_filter,
     title_with_link,
+    separate_filtered_data,
 )
 
 
@@ -38,16 +38,20 @@ dash.register_page(
 
 
 def layout():
-    return html.Div(
-        className="container-col",
-        id="main-nv-section",
-        children=[
-            #
-        ],
+    return dmc.Stack(
+        p="md",
+        children=dmc.Skeleton(  # needed to avoid empty layout on load
+            visible=True,
+            height="100vh",
+        ),
+        id=ElementIds.MAIN_NV_SECTION,
     )
 
 
-@callback(Output("main-nv-section", "children"), [Input("si-ip-radio-input", "value")])
+@callback(
+    Output(ElementIds.MAIN_NV_SECTION, "children"),
+    [Input(ElementIds.SHARED_SI_IP_RADIO_INPUT, "value")],
+)
 def update_layout(si_ip):
     if si_ip == UnitSystem.IP:
         tdb_set_min = 50
@@ -59,275 +63,195 @@ def update_layout(si_ip):
         dpt_set = 16
 
     return [
-        html.Div(
-            children=title_with_link(
-                text="Natural Ventilation Potential",
-                id_button="natural-ventilation-label",
-                doc_link=DocLinks.NATURAL_VENTILATION,
-            ),
+        title_with_link(
+            text="Natural Ventilation Potential",
+            id_button=IdButtons.NATURAL_VENTILATION_LABEL,
+            doc_link=DocLinks.NATURAL_VENTILATION,
         ),
         inputs_tab(tdb_set_min, tdb_set_max, dpt_set),
-        dcc.Loading(
-            html.Div(
-                id="nv-heatmap-chart",
-                style={"marginTop": "1rem"},
+        dmc.Skeleton(
+            visible=False,
+            h=450,
+            children=dmc.Paper(
+                id=ElementIds.NV_HEATMAP_CHART,
             ),
-            type="circle",
         ),
-        html.Div(
-            className="container-row align-center justify-center",
+        dmc.Group(
+            justify="center",
             children=[
-                dbc.Checklist(
-                    options=[
-                        {"label": "", "value": 1},
-                    ],
-                    value=[1],
-                    id="switches-input",
-                    switch=True,
-                    style={
-                        "padding": "1rem",
-                        "marginTop": "1rem",
-                        "marginRight": "-2rem",
-                    },
+                dmc.Switch(
+                    id=ElementIds.SWITCHES_INPUT,
+                    label="",
+                    checked=True,
+                    color="blue",
+                    style={"padding": "1rem", "marginRight": "-2rem"},
                 ),
-                html.Div(
-                    children=title_with_tooltip(
-                        text="Normalize data",
-                        tooltip_text=(
-                            "If normalized is enabled it calculates the % "
-                            "time otherwise it calculates the total number of hours"
-                        ),
-                        id_button="nv_normalize",
+                title_with_tooltip(
+                    text="Normalize data",
+                    tooltip_text=(
+                        "If normalized is enabled it calculates the % "
+                        "time otherwise it calculates the total number of hours"
                     ),
+                    id_button=IdButtons.NV_NORMALIZE,
                 ),
             ],
         ),
-        dcc.Loading(
-            html.Div(
-                id="nv-bar-chart",
-                style={"marginTop": "1rem"},
+        dmc.Skeleton(
+            visible=False,
+            h=450,
+            children=dmc.Paper(
+                id=ElementIds.NV_BAR_CHART,
             ),
-            type="circle",
         ),
     ]
 
 
 def inputs_tab(t_min, t_max, d_set):
-    return html.Div(
-        className="container-row full-width three-inputs-container",
+    return dmc.Grid(
+        justify="center",
         children=[
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply filter",
-                        color="primary",
-                        id="nv-dbt-filter",
-                        className="mb-2",
-                        n_clicks=1,
-                    ),
-                    html.H6("Outdoor dry-bulb air temperature range"),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id="nv-tdb-min-val",
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                step=1,
-                                value=t_min,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id="nv-tdb-max-val",
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=t_max,
-                                step=1,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply month and hour filter",
-                        color="primary",
-                        id="nv-month-hour-filter",
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    html.Div(
-                        className="container-row full-width justify-center mt-2",
-                        children=[
-                            html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
-                                dcc.RangeSlider(
-                                    id="nv-month-slider",
-                                    min=1,
-                                    max=12,
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Title("Outdoor dry-bulb air temperature range", order=5),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_TDB_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
                                     step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+                                    value=t_min,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id="invert-month-nv",
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className="container-row align-center justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
-                                dcc.RangeSlider(
-                                    id="nv-hour-slider",
-                                    min=0,
-                                    max=24,
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_TDB_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=t_max,
                                     step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "topLeft",
-                                    },
-                                    allowCross=False,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id="invert-hour-nv",
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DBT_FILTER,
+                            variant="link",
+                            n_clicks=1,
+                            w="80%",
+                        ),
+                    ]
+                ),
+                span={"base": 12, "md": 4},
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply filter",
-                        color="primary",
-                        id="nv-dpt-filter",
-                        className="mb-2",
-                        n_clicks=0,
-                        disabled=True,
-                    ),
-                    dbc.Checklist(
-                        options=[
-                            {
-                                "label": (
-                                    "Avoid condensation with radiant systems: If the"
-                                    " outdoor dew point temperature is below the"
-                                    " radiant system surface temperature, the data"
-                                    " point is not plot."
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.Title("Surface temperature:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.NV_DPT_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=d_set,
+                                    step=1,
                                 ),
-                                "value": 1,
-                            },
-                        ],
-                        value=[],
-                        id="enable-condensation",
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Surface temperature:"],
-                                style={"marginRight": "1rem"},
+                            ],
+                        ),
+                        dmc.Checkbox(
+                            id=ElementIds.ENABLE_CONDENSATION,
+                            label=(
+                                "Avoid condensation with radiant systems: If the "
+                                "outdoor dew point temperature is below the radiant "
+                                "system surface temperature, the data point is not plot."
                             ),
-                            dbc.Input(
-                                id="nv-dpt-max-val",
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=d_set,
-                                step=1,
-                                style={"flex": "1"},
-                            ),
-                        ],
-                    ),
-                ],
+                            checked=False,
+                            size="sm",
+                            w="70%",
+                        ),
+                        dmc.Button(
+                            "Apply filter",
+                            color="blue",
+                            id=ElementIds.NV_DPT_FILTER,
+                            variant="link",
+                            disabled=True,
+                            w="70%",
+                        ),
+                    ]
+                ),
+                span={"base": 12, "md": 5},
             ),
         ],
     )
 
 
 @callback(
-    Output("nv-heatmap-chart", "children"),
+    Output(ElementIds.NV_HEATMAP_CHART, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("nv-month-hour-filter", "n_clicks"),
-        Input("nv-dbt-filter", "n_clicks"),
-        Input("nv-dpt-filter", "n_clicks"),
-        Input("global-local-radio-input", "value"),
-        Input("enable-condensation", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
+        Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.ENABLE_CONDENSATION, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("nv-month-slider", "value"),
-        State("nv-hour-slider", "value"),
-        State("nv-tdb-min-val", "value"),
-        State("nv-tdb-max-val", "value"),
-        State("nv-dpt-max-val", "value"),
-        State("meta-store", "data"),
-        State("invert-month-nv", "value"),
-        State("invert-hour-nv", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.NV_TDB_MIN_VAL, "value"),
+        State(ElementIds.NV_TDB_MAX_VAL, "value"),
+        State(ElementIds.NV_DPT_MAX_VAL, "value"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def nv_heatmap(
     ts,
-    time_filter,
     dbt_data_filter,
     click_dpt_filter,
     global_local,
     condensation_enabled,
+    global_filter_data,
     df,
-    month,
-    hour,
     min_dbt_val,
     max_dbt_val,
     max_dpt_val,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
+    if df is None:
+        return no_update
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
 
-    var = "DBT"
-    filter_var = "DPT"
+        # Ensure DBT and DPT are included for filtering
+        target_columns = [Variables.DBT.col_name, Variables.DPT.col_name]
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
+
+    var = Variables.DBT.col_name
+    filter_var = Variables.DPT.col_name
 
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
         df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), var] = None
@@ -335,47 +259,46 @@ def nv_heatmap(
     if dpt_data_filter:
         df.loc[(df[filter_var] < -200) | (df[filter_var] > max_dpt_val), var] = None
 
-        if df.dropna(subset=["month"]).shape[0] == 0:
+        if df.dropna(subset=[Variables.MONTH.col_name]).shape[0] == 0:
             return (
-                dbc.Alert(
-                    "Natural ventilation is not available in this location under these"
-                    " conditions. Please either select a different outdoor dry-bulb air"
-                    " temperature range, change the month and hour filter, or increase"
-                    " thedew-point temperature.",
-                    color="danger",
+                dmc.Alert(
+                    title="Notice",
+                    color="red",
+                    children=(
+                        "Natural ventilation is not available in this location under these "
+                        "conditions. Please either select a different outdoor dry-bulb air "
+                        "temperature range, change the month and hour filter, or increase "
+                        "the dew-point temperature."
+                    ),
                     style={"text-align": "center", "marginTop": "2rem"},
                 ),
             )
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, var
-    )
+    variable = VariableInfo.from_col_name(var)
+    filter = VariableInfo.from_col_name(filter_var)
 
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
+    var_unit = variable.get_unit(si_ip)
 
-    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
+    filter_unit = filter.get_unit(si_ip)
 
-    var_range = mapping_dictionary[var][si_ip]["range"]
+    var_name = variable.get_name()
 
-    var_name = mapping_dictionary[var]["name"]
+    filter_name = filter.get_name()
 
-    filter_name = mapping_dictionary[filter_var]["name"]
+    var_color = variable.get_color()
 
-    var_color = mapping_dictionary[var]["color"]
-
-    if global_local == "global":
-        range_z = var_range
+    if si_ip == UnitSystem.IP:
+        range_z = [32.0, 86.0]
     else:
-        data_max = 5 * math.ceil(df[var].max() / 5)
-        data_min = 5 * math.floor(df[var].min() / 5)
-        range_z = [data_min, data_max]
+        range_z = [0.0, 30.0]
 
     title = (
         f"Hours when the {var_name} is in the range {min_dbt_val} to"
         f" {max_dbt_val} {var_unit}"
     )
 
-    if time_filter:
+    # Title will be updated based on global filter state
+    if global_filter_data and global_filter_data.get("filter_active", False):
         title += (
             f" between the months of {month_lst[start_month - 1]} and "
             f"{month_lst[end_month - 1]}<br>and between the hours {start_hour}"
@@ -384,31 +307,147 @@ def nv_heatmap(
     if dpt_data_filter:
         title += f" and when the {filter_name} is below {max_dpt_val} {filter_unit}."
 
-    fig = go.Figure(
-        data=go.Heatmap(
-            y=df["hour"] - 0.5,  # Offset by 0.5 to center the hour labels
-            x=df["UTC_time"].dt.date,
-            z=df[var],
-            colorscale=var_color,
-            zmin=range_z[0],
-            zmax=range_z[1],
-            connectgaps=False,
-            hoverongaps=False,
-            customdata=np.stack((df["month_names"], df["day"]), axis=-1),
-            hovertemplate=(
-                "<b>"
-                + var
-                + ": %{z:.2f} "
-                + var_unit
-                + "</b><br>"
-                + "Month: %{customdata[0]}<br>"
-                + "Day: %{customdata[1]}<br>"
-                + "Hour: %{y}:00<br>"
-            ),
-            colorbar=dict(title=var_unit),
-            name="",
+    # Separate filtered and unfiltered data using utility function
+    filter_info = separate_filtered_data(df, var)
+    has_filter_marker = filter_info["has_filter_marker"]
+    filtered_mask = filter_info["filtered_mask"]
+    original_var_col = filter_info["original_var_col"]
+    use_original_for_filtered = filter_info["use_original_for_filtered"]
+
+    fig = go.Figure()
+
+    # Add filtered data trace (gray) if any filtered data exists
+    # Only show gray where there is actual data (not None), not in blank areas
+    if has_filter_marker and filtered_mask is not None and filtered_mask.any():
+        if use_original_for_filtered:
+            # Use original DBT values for filtered data
+            filtered_values = df[original_var_col].copy()
+            # Apply DBT filter to original values to check if they're in range
+            if dbt_data_filter and (min_dbt_val <= max_dbt_val):
+                # Only show gray where original DBT is in range
+                in_range_mask = (filtered_values >= min_dbt_val) & (
+                    filtered_values <= max_dbt_val
+                )
+                # Also check if DPT filter applies
+                if dpt_data_filter:
+                    original_filter_var_col = f"_{filter_var}_original"
+                    if original_filter_var_col in df.columns:
+                        dpt_values = df[original_filter_var_col]
+                        in_range_mask = (
+                            in_range_mask
+                            & (dpt_values >= -200)
+                            & (dpt_values <= max_dpt_val)
+                        )
+                    else:
+                        dpt_values = df[filter_var]
+                        in_range_mask = (
+                            in_range_mask
+                            & (dpt_values >= -200)
+                            & (dpt_values <= max_dpt_val)
+                        )
+                filtered_values[~in_range_mask] = None
+        else:
+            filtered_values = df[var].copy()
+
+        # Only show gray for filtered data points
+        filtered_values[~filtered_mask] = None
+
+        # Only add trace if there are any valid filtered values
+        if filtered_values.notna().any():
+            fig.add_trace(
+                go.Heatmap(
+                    y=df[Variables.HOUR.col_name] - 0.5,
+                    x=df[Variables.UTC_TIME.col_name].dt.date,
+                    z=filtered_values,
+                    colorscale=[[0, "lightgray"], [1, "gray"]],
+                    zmin=range_z[0],
+                    zmax=range_z[1],
+                    showscale=False,
+                    connectgaps=False,
+                    hoverongaps=False,
+                    customdata=np.stack(
+                        (
+                            df[Variables.MONTH_NAMES.col_name],
+                            df[Variables.DAY.col_name],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate=(
+                        "<b>Filtered Data</b><br>"
+                        + var
+                        + ": %{z:.2f} "
+                        + var_unit
+                        + "</b><br>"
+                        + "Month: %{customdata[0]}<br>"
+                        + "Day: %{customdata[1]}<br>"
+                        + "Hour: %{y}:00<br>"
+                    ),
+                    name="filtered",
+                )
+            )
+
+        # Add unfiltered data trace (normal color)
+        base_values = df[var].copy()
+        base_values[filtered_mask] = None
+
+        fig.add_trace(
+            go.Heatmap(
+                y=df[Variables.HOUR.col_name] - 0.5,
+                x=df[Variables.UTC_TIME.col_name].dt.date,
+                z=base_values,
+                colorscale=var_color,
+                zmin=range_z[0],
+                zmax=range_z[1],
+                connectgaps=False,
+                hoverongaps=False,
+                customdata=np.stack(
+                    (df[Variables.MONTH_NAMES.col_name], df[Variables.DAY.col_name]),
+                    axis=-1,
+                ),
+                hovertemplate=(
+                    "<b>"
+                    + var
+                    + ": %{z:.2f} "
+                    + var_unit
+                    + "</b><br>"
+                    + "Month: %{customdata[0]}<br>"
+                    + "Day: %{customdata[1]}<br>"
+                    + "Hour: %{y}:00<br>"
+                ),
+                colorbar=dict(title=var_unit),
+                name="",
+            )
         )
-    )
+    else:
+        # No filtered data, use normal heatmap
+        fig.add_trace(
+            go.Heatmap(
+                y=df[Variables.HOUR.col_name] - 0.5,
+                x=df[Variables.UTC_TIME.col_name].dt.date,
+                z=df[var],
+                colorscale=var_color,
+                zmin=range_z[0],
+                zmax=range_z[1],
+                connectgaps=False,
+                hoverongaps=False,
+                customdata=np.stack(
+                    (df[Variables.MONTH_NAMES.col_name], df[Variables.DAY.col_name]),
+                    axis=-1,
+                ),
+                hovertemplate=(
+                    "<b>"
+                    + var
+                    + ": %{z:.2f} "
+                    + var_unit
+                    + "</b><br>"
+                    + "Month: %{customdata[0]}<br>"
+                    + "Day: %{customdata[1]}<br>"
+                    + "Hour: %{y}:00<br>"
+                ),
+                colorbar=dict(title=var_unit),
+                name="",
+            )
+        )
 
     fig.update_layout(
         template=template,
@@ -440,109 +479,316 @@ def nv_heatmap(
     )
     units = generate_units_degree(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("heatmap", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
         figure=fig,
     )
 
 
 @callback(
-    Output("nv-bar-chart", "children"),
+    Output(ElementIds.NV_BAR_CHART, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("nv-month-hour-filter", "n_clicks"),
-        Input("nv-dbt-filter", "n_clicks"),
-        Input("nv-dpt-filter", "n_clicks"),
-        Input("switches-input", "value"),
-        Input("enable-condensation", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.NV_DBT_FILTER, "n_clicks"),
+        Input(ElementIds.NV_DPT_FILTER, "n_clicks"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.SWITCHES_INPUT, "checked"),
+        Input(ElementIds.ENABLE_CONDENSATION, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("nv-month-slider", "value"),
-        State("nv-hour-slider", "value"),
-        State("nv-tdb-min-val", "value"),
-        State("nv-tdb-max-val", "value"),
-        State("nv-dpt-max-val", "value"),
-        State("meta-store", "data"),
-        State("invert-month-nv", "value"),
-        State("invert-hour-nv", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.NV_TDB_MIN_VAL, "value"),
+        State(ElementIds.NV_TDB_MAX_VAL, "value"),
+        State(ElementIds.NV_DPT_MAX_VAL, "value"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def nv_bar_chart(
     ts,
-    time_filter,
     dbt_data_filter,
     click_dpt_filter,
+    global_local,
     normalize,
     condensation_enabled,
+    global_filter_data,
     df,
-    month,
-    hour,
     min_dbt_val,
     max_dbt_val,
     max_dpt_val,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
     # enable or disable button apply filter DPT
     dpt_data_filter = enable_dew_point_data_filter(condensation_enabled)
 
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
+    var = Variables.DBT.col_name
+    filter_var = Variables.DPT.col_name
 
-    var = "DBT"
-    filter_var = "DPT"
+    variable = VariableInfo.from_col_name(var)
+    filter = VariableInfo.from_col_name(filter_var)
 
-    var_unit = mapping_dictionary[var][si_ip]["unit"]
-    filter_unit = mapping_dictionary[filter_var][si_ip]["unit"]
+    var_unit = variable.get_unit(si_ip)
+    filter_unit = filter.get_unit(si_ip)
 
-    var_name = mapping_dictionary[var]["name"]
+    var_name = variable.get_name()
 
-    filter_name = mapping_dictionary[filter_var]["name"]
+    filter_name = filter.get_name()
 
     color_in = "dodgerblue"
 
-    df["nv_allowed"] = 1
+    df[Variables.NV_ALLOWED.col_name] = 1
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, "nv_allowed"
-    )
+    # Store original data info before applying global filter (to know which months originally had data)
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        # Create a copy to check which months have data after DBT/DPT filtering (but before global filter)
+        df_temp = df.copy()
+        df_temp[Variables.NV_ALLOWED.col_name] = 1
 
-    # this should be the total after filtering by time
-    tot_month_hours = df.groupby(df["UTC_time"].dt.month)["nv_allowed"].sum().values
+        # Apply DBT/DPT filters to the temporary copy
+        if dbt_data_filter and (min_dbt_val <= max_dbt_val):
+            df_temp.loc[
+                (df_temp[var] < min_dbt_val) | (df_temp[var] > max_dbt_val),
+                Variables.NV_ALLOWED.col_name,
+            ] = 0
 
+        if dpt_data_filter:
+            df_temp.loc[
+                (df_temp[filter_var] > max_dpt_val), Variables.NV_ALLOWED.col_name
+            ] = 0
+
+        # Check which months have data (NV_ALLOWED > 0) after DBT/DPT filtering
+        months_with_nv = df_temp[df_temp[Variables.NV_ALLOWED.col_name] > 0]
+        if len(months_with_nv) > 0:
+            set(months_with_nv[Variables.UTC_TIME.col_name].dt.month.unique())
+
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
+
+        # Include DBT and DPT in target_columns to preserve original values for filtered data
+        # Note: Do NOT include NV_ALLOWED in target_columns, as it will be set to None by time_filtering
+        # for filtered months, which would break the calculation of n_hours_nv_allowed_filtered
+        df = apply_global_month_hour_filter(
+            df, global_filter_data, [Variables.DBT.col_name, Variables.DPT.col_name]
+        )
+
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
+
+    # Separate filtered and unfiltered data using utility function
+    filter_info = separate_filtered_data(df, Variables.DBT.col_name)
+    has_filter_marker = filter_info["has_filter_marker"]
+    filtered_mask = filter_info["filtered_mask"]
+    df_unfiltered = filter_info["df_unfiltered"]
+    df_filtered = filter_info["df_filtered"]
+
+    # Calculate total hours per month (for both filtered and unfiltered) - ensure all 12 months are included
+    # This should be calculated BEFORE applying DBT/DPT filters, as it represents total hours in the selected time range
+    tot_month_hours_unfiltered = np.zeros(12)
+    tot_unfiltered_grouped = df_unfiltered.groupby(
+        df_unfiltered[Variables.UTC_TIME.col_name].dt.month
+    )[Variables.NV_ALLOWED.col_name].sum()
+    for month_idx in range(1, 13):
+        if month_idx in tot_unfiltered_grouped.index:
+            tot_month_hours_unfiltered[month_idx - 1] = tot_unfiltered_grouped[
+                month_idx
+            ]
+
+    # Calculate total filtered hours BEFORE applying DBT/DPT filters
+    # This represents all hours that were filtered by the global month/hour filter
+    # Simply count the number of rows in df_filtered for each month (each row = 1 hour)
+    tot_month_hours_filtered = np.zeros(12)
+    if df_filtered is not None and len(df_filtered) > 0:
+        # Count rows per month (each row represents 1 hour)
+        # This is the most reliable way as it doesn't depend on NV_ALLOWED being set
+        tot_filtered_grouped = df_filtered.groupby(
+            df_filtered[Variables.UTC_TIME.col_name].dt.month
+        ).size()
+        for month_idx in range(1, 13):
+            if month_idx in tot_filtered_grouped.index:
+                tot_month_hours_filtered[month_idx - 1] = tot_filtered_grouped[
+                    month_idx
+                ]
+
+    # Apply DBT and DPT filters to unfiltered data
     if dbt_data_filter and (min_dbt_val <= max_dbt_val):
-        df.loc[(df[var] < min_dbt_val) | (df[var] > max_dbt_val), "nv_allowed"] = 0
+        df_unfiltered.loc[
+            (df_unfiltered[var] < min_dbt_val) | (df_unfiltered[var] > max_dbt_val),
+            Variables.NV_ALLOWED.col_name,
+        ] = 0
 
     if dpt_data_filter:
-        df.loc[(df[filter_var] > max_dpt_val), "nv_allowed"] = 0
+        df_unfiltered.loc[
+            (df_unfiltered[filter_var] > max_dpt_val), Variables.NV_ALLOWED.col_name
+        ] = 0
 
-    n_hours_nv_allowed = (
-        df.dropna(subset="nv_allowed")
-        .groupby(df["UTC_time"].dt.month)["nv_allowed"]
+    # Apply DBT and DPT filters to filtered data (using original values if available)
+    if df_filtered is not None and len(df_filtered) > 0:
+        original_var_col = f"_{var}_original"
+        original_filter_var_col = f"_{filter_var}_original"
+        use_original_var = original_var_col in df_filtered.columns
+        use_original_filter_var = original_filter_var_col in df_filtered.columns
+
+        if dbt_data_filter and (min_dbt_val <= max_dbt_val):
+            filter_var_to_use = original_var_col if use_original_var else var
+            df_filtered.loc[
+                (df_filtered[filter_var_to_use] < min_dbt_val)
+                | (df_filtered[filter_var_to_use] > max_dbt_val),
+                Variables.NV_ALLOWED.col_name,
+            ] = 0
+
+        if dpt_data_filter:
+            filter_var_to_use = (
+                original_filter_var_col if use_original_filter_var else filter_var
+            )
+            df_filtered.loc[
+                (df_filtered[filter_var_to_use] > max_dpt_val),
+                Variables.NV_ALLOWED.col_name,
+            ] = 0
+
+    # Calculate hours for unfiltered data - ensure all 12 months are included
+    n_hours_nv_allowed_unfiltered = np.zeros(12)
+    n_hours_unfiltered_grouped = (
+        df_unfiltered.dropna(subset=Variables.NV_ALLOWED.col_name)
+        .groupby(df_unfiltered[Variables.UTC_TIME.col_name].dt.month)[
+            Variables.NV_ALLOWED.col_name
+        ]
         .sum()
-        .values
     )
+    for month_idx in range(1, 13):
+        if month_idx in n_hours_unfiltered_grouped.index:
+            n_hours_nv_allowed_unfiltered[month_idx - 1] = n_hours_unfiltered_grouped[
+                month_idx
+            ]
 
-    per_time_nv_allowed = np.round(100 * (n_hours_nv_allowed / tot_month_hours))
+    # Calculate hours for filtered data - ensure all 12 months are included
+    n_hours_nv_allowed_filtered = np.zeros(12)
+    if df_filtered is not None and len(df_filtered) > 0:
+        n_hours_filtered_grouped = (
+            df_filtered.dropna(subset=Variables.NV_ALLOWED.col_name)
+            .groupby(df_filtered[Variables.UTC_TIME.col_name].dt.month)[
+                Variables.NV_ALLOWED.col_name
+            ]
+            .sum()
+        )
+        for month_idx in range(1, 13):
+            if month_idx in n_hours_filtered_grouped.index:
+                n_hours_nv_allowed_filtered[month_idx - 1] = n_hours_filtered_grouped[
+                    month_idx
+                ]
 
-    if len(normalize) == 0:
-        fig = go.Figure(
-            go.Bar(
-                x=df["month_names"].unique(),
-                y=n_hours_nv_allowed,
-                name="",
-                marker_color=color_in,
-                customdata=np.stack((n_hours_nv_allowed, per_time_nv_allowed), axis=-1),
+    # Calculate percentages - handle division by zero
+    per_time_nv_allowed_unfiltered = np.zeros(12)
+    for i in range(12):
+        if tot_month_hours_unfiltered[i] > 0:
+            per_time_nv_allowed_unfiltered[i] = np.round(
+                100 * (n_hours_nv_allowed_unfiltered[i] / tot_month_hours_unfiltered[i])
+            )
+
+    per_time_nv_allowed_filtered = np.zeros(12)
+    # Calculate percentages for all months where filtered hours exist
+    # Even if nv_allowed is 0, we should still show the gray bar (with 0% value)
+    for i in range(12):
+        if tot_month_hours_filtered[i] > 0:
+            per_time_nv_allowed_filtered[i] = np.round(
+                100 * (n_hours_nv_allowed_filtered[i] / tot_month_hours_filtered[i])
+            )
+
+    month_names = month_lst  # Use month_lst to ensure all 12 months are included
+    traces = []
+
+    # Add filtered data traces (gray) if any filtered data exists
+    # For normalize mode: Show gray bars for months that have data but are outside the global filter range
+    # For non-normalize mode: Show gray bars for all filtered months
+    has_filtered_data = False
+    if has_filter_marker and filtered_mask is not None and filtered_mask.any():
+        # Show gray bars if there are any filtered hours in any month
+        has_filtered_data = np.any(tot_month_hours_filtered > 0)
+
+    if has_filtered_data:
+        if not normalize:
+            trace_filtered = go.Bar(
+                x=month_names,
+                y=n_hours_nv_allowed_filtered,
+                name="Natural Ventilation (Filtered)",
+                marker_color="gray",
+                customdata=np.stack(
+                    (n_hours_nv_allowed_filtered, per_time_nv_allowed_filtered), axis=-1
+                ),
                 hovertemplate=(
-                    "natural ventilation possible for: <br>%{customdata[0]} hrs or"
+                    "<b>Filtered Data</b><br>natural ventilation possible for: <br>%{customdata[0]} hrs or"
                     " <br>%{customdata[1]}% of selected time<br>"
                 ),
             )
+            traces.append(trace_filtered)
+        else:
+            # For normalize mode: Show gray bars for months outside the global filter range
+            # Use actual percentage values, but for 0% values, use a minimal visible height (0.1%)
+            # so users can see that these months have filtered data
+            per_time_display_filtered = per_time_nv_allowed_filtered.copy()
+
+            # Set None for months without filtered data (so they don't show gray bars)
+            # For months with filtered data but 0% NV, use 0.1% for minimal visibility
+            for i in range(12):
+                if tot_month_hours_filtered[i] == 0:
+                    per_time_display_filtered[i] = None
+                elif per_time_nv_allowed_filtered[i] == 0:
+                    # Use 0.1% for months with filtered data but 0% NV (very small but visible)
+                    per_time_display_filtered[i] = 0.1
+
+            trace_filtered = go.Bar(
+                x=month_names,
+                y=per_time_display_filtered,
+                name="Natural Ventilation (Filtered)",
+                marker_color="gray",
+                marker_line_color="gray",
+                marker_line_width=1,
+                customdata=np.stack(
+                    (
+                        n_hours_nv_allowed_filtered,
+                        per_time_nv_allowed_filtered,
+                        tot_month_hours_filtered,
+                    ),
+                    axis=-1,
+                ),
+                hovertemplate=(
+                    "<b>Filtered Data</b><br>natural ventilation possible for: <br>%{customdata[0]} hrs or <br>%{"
+                    "customdata[1]:.2f}% of filtered time range<br>Total filtered hours: %{customdata[2]:.0f}<br>"
+                ),
+                base=0,
+                opacity=0.8,
+            )
+            traces.append(trace_filtered)
+
+    # Add unfiltered data traces (normal colors)
+    if not normalize:
+        trace_unfiltered = go.Bar(
+            x=month_names,
+            y=n_hours_nv_allowed_unfiltered,
+            name="Natural Ventilation",
+            marker_color=color_in,
+            customdata=np.stack(
+                (n_hours_nv_allowed_unfiltered, per_time_nv_allowed_unfiltered), axis=-1
+            ),
+            hovertemplate=(
+                "natural ventilation possible for: <br>%{customdata[0]} hrs or"
+                " <br>%{customdata[1]}% of selected time<br>"
+            ),
         )
+        traces.append(trace_unfiltered)
 
         title = (
             f"Number of hours the {var_name}"
@@ -550,22 +796,21 @@ def nv_bar_chart(
             + " to "
             + f" {max_dbt_val} {var_unit}"
         )
-        fig.update_yaxes(title_text="hours", range=[0, 744])
-
     else:
-        trace1 = go.Bar(
-            x=df["month_names"].unique(),
-            y=per_time_nv_allowed,
-            name="",
+        trace_unfiltered = go.Bar(
+            x=month_names,
+            y=per_time_nv_allowed_unfiltered,
+            name="Natural Ventilation",
             marker_color=color_in,
-            customdata=np.stack((n_hours_nv_allowed, per_time_nv_allowed), axis=-1),
+            customdata=np.stack(
+                (n_hours_nv_allowed_unfiltered, per_time_nv_allowed_unfiltered), axis=-1
+            ),
             hovertemplate=(
                 "natural ventilation possible for: <br>%{customdata[0]} hrs or <br>%{"
                 "customdata[1]}% of selected time<br>"
             ),
         )
-
-        fig = go.Figure(data=trace1)
+        traces.append(trace_unfiltered)
 
         title = (
             f"Percentage of hours the {var_name}"
@@ -573,9 +818,15 @@ def nv_bar_chart(
             + f" to {max_dbt_val}"
             + f" {var_unit}"
         )
+
+    fig = go.Figure(data=traces)
+
+    if not normalize:
+        fig.update_yaxes(title_text="hours", range=[0, 744])
+    else:
         fig.update_yaxes(title_text="Percentage (%)", range=[0, 100])
 
-    if time_filter:
+    if global_filter_data and global_filter_data.get("filter_active", False):
         title += (
             f" between the months of {month_lst[start_month - 1]} and "
             f"{month_lst[end_month - 1]} and between<br>the hours {start_hour}"
@@ -584,12 +835,15 @@ def nv_bar_chart(
     if dpt_data_filter:
         title += f" when the {filter_name} is below {max_dpt_val} {filter_unit}."
 
+    # Use barmode="relative" to show filtered and unfiltered bars side by side
+    # Only use relative mode if we have filtered data (non-normalize mode only)
     fig.update_layout(
         template=template,
         title=title,
         barnorm="",
         dragmode=False,
         margin=tight_margins.copy().update({"t": 55}),
+        barmode="relative" if has_filtered_data else "group",
     )
 
     fig.update_xaxes(
@@ -604,21 +858,24 @@ def nv_bar_chart(
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("barchart", meta, custom_inputs, units),
+        config=generate_chart_name(TabNames.BARCHART, meta, custom_inputs, units),
         figure=fig,
     )
 
 
-@callback(Output("nv-dpt-filter", "disabled"), Input("enable-condensation", "value"))
-def enable_disable_button_data_filter(state_checklist):
-    if len(state_checklist) == 1:
+@callback(
+    Output(ElementIds.NV_DPT_FILTER, "disabled"),
+    Input(ElementIds.ENABLE_CONDENSATION, "checked"),
+)
+def enable_disable_button_data_filter(state_checkbox):
+    if state_checkbox:
         return False
     else:
         return True
 
 
 def enable_dew_point_data_filter(condensation_enabled):
-    if len(condensation_enabled) == 1:
+    if condensation_enabled:
         return True
     else:
         return False

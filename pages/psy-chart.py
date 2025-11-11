@@ -1,8 +1,6 @@
-from math import ceil, floor
-
 import dash
-from dash import dcc, html
-import dash_bootstrap_components as dbc
+from dash import dcc
+import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 
 from copy import deepcopy
@@ -12,15 +10,17 @@ import plotly.graph_objects as go
 from pythermalcomfort import psychrometrics as psy
 
 from config import PageUrls, DocLinks, PageInfo, UnitSystem
+from pages.lib.utils import get_max_min_value, separate_filtered_data
+from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_variables import Variables, VariableInfo
+from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
-    container_row_center_full,
-    container_col_center_one_of_three,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
     sun_cloud_tab_explore_dropdown_names,
     template,
-    mapping_dictionary,
     tight_margins,
 )
 from pages.lib.template_graphs import filter_df_by_month_and_hour
@@ -32,6 +32,13 @@ from pages.lib.utils import (
     title_with_link,
     dropdown,
 )
+
+
+def _safe_get_column(df, column_name, default_value=0):
+    if column_name in df.columns:
+        return df[column_name]
+    else:
+        return [default_value] * len(df)
 
 
 dash.register_page(
@@ -56,228 +63,151 @@ psy_dropdown_names.pop("Saturation pressure", None)
 
 
 def inputs():
-    """"""
-    return html.Div(
-        className="container-row full-width three-inputs-container",
+    return dmc.Grid(
+        justify="center",
         children=[
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Color By:"],
-                                style={"flex": "30%"},
-                            ),
-                            dropdown(
-                                id="psy-color-by-dropdown",
-                                options=psy_dropdown_names,
-                                value="Frequency",
-                                style={"flex": "70%"},
-                                persistence_type="session",
-                                persistence=True,
-                            ),
-                        ],
+            dmc.GridCol(
+                [
+                    dmc.Title("Color By:", order=5),
+                    dropdown(
+                        id=ElementIds.PSY_COLOR_BY_DROPDOWN,
+                        options=psy_dropdown_names,
+                        value="Frequency",
+                        persistence=True,
+                        persistence_type="session",
                     ),
                 ],
+                span={"base": 12, "md": 4},
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply month and hour filter",
-                        color="primary",
-                        id="month-hour-filter",
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    html.Div(
-                        className="container-row full-width justify-center mt-2",
-                        children=[
-                            html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
-                                dcc.RangeSlider(
-                                    id="psy-month-slider",
-                                    min=1,
-                                    max=12,
-                                    step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.Title("Filter Variable:", order=5),
+                                dropdown(
+                                    id=ElementIds.PSY_VAR_DROPDOWN,
+                                    options=dropdown_names,
+                                    value=Variables.RH.col_name,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id="invert-month-psy",
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className="container-row align-center justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
-                                dcc.RangeSlider(
-                                    id="psy-hour-slider",
-                                    min=0,
-                                    max=24,
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.PSY_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
+                                    value=0,
                                     step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "topLeft",
-                                    },
-                                    allowCross=False,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id="invert-hour-psy",
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply filter",
-                        color="primary",
-                        id="data-filter",
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Filter Variable:"], style={"flex": "30%"}
-                            ),
-                            dropdown(
-                                id="psy-var-dropdown",
-                                options=dropdown_names,
-                                value="RH",
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id="psy-min-val",
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                step=1,
-                                value=0,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                id="psy-max-val",
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=100,
-                                step=1,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.PSY_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=100,
+                                    step=1,
+                                ),
+                            ],
+                        ),
+                        dmc.Button(
+                            "Apply filter",
+                            id=ElementIds.DATA_FILTER,
+                            color="blue",
+                            w="50%",
+                        ),
+                    ],
+                ),
+                span={"base": 12, "md": 4},
             ),
         ],
     )
 
 
 def layout():
-    return (
-        html.Div(
-            children=title_with_link(
+    return dmc.Stack(
+        p="md",
+        children=[
+            title_with_link(
                 text="Psychrometric Chart",
-                id_button="Psychrometric-Chart-chart",
+                id_button=IdButtons.PSYCHROMETRIC_CHART_CHART,
                 doc_link=DocLinks.PSYCHROMETRIC_CHART,
             ),
-        ),
-        dcc.Loading(
-            type="circle",
-            children=html.Div(
-                className="container-col",
-                children=[inputs(), html.Div(id="psych-chart")],
+            inputs(),
+            dmc.Skeleton(
+                visible=False,
+                h=450,
+                id=ElementIds.PSYCH_CHART,
             ),
-        ),
+        ],
     )
 
 
-# psychrometric chart
 @callback(
-    Output("psych-chart", "children"),
+    Output(ElementIds.PSYCH_CHART, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("psy-color-by-dropdown", "value"),
-        Input("month-hour-filter", "n_clicks"),
-        Input("data-filter", "n_clicks"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.PSY_COLOR_BY_DROPDOWN, "value"),
+        Input(ElementIds.DATA_FILTER, "n_clicks"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("psy-month-slider", "value"),
-        State("psy-hour-slider", "value"),
-        State("psy-min-val", "value"),
-        State("psy-max-val", "value"),
-        State("psy-var-dropdown", "value"),
-        State("meta-store", "data"),
-        State("invert-month-psy", "value"),
-        State("invert-hour-psy", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.PSY_MIN_VAL, "value"),
+        State(ElementIds.PSY_MAX_VAL, "value"),
+        State(ElementIds.PSY_VAR_DROPDOWN, "value"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_psych_chart(
     ts,
     colorby_var,
-    time_filter,
     data_filter,
     global_local,
+    global_filter_data,
     df,
-    month,
-    hour,
     min_val,
     max_val,
     data_filter_var,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, df.columns
-    )
+        # Determine which columns to filter - need DBT and HR at minimum, plus colorby_var if it's not None/Frequency
+        target_columns = [Variables.DBT.col_name, Variables.HR.col_name]
+        if colorby_var not in ["None", "Frequency"]:
+            target_columns.append(colorby_var)
+        if data_filter and data_filter_var:
+            target_columns.append(data_filter_var)
+
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
+
+        # Use local filtering when global filter is not active
+        df = filter_df_by_month_and_hour(df, True, [1, 12], [0, 24], [], [], df.columns)
 
     if data_filter:
         if min_val <= max_val:
@@ -287,9 +217,9 @@ def update_psych_chart(
             mask = (df[data_filter_var] >= max_val) & (df[data_filter_var] <= min_val)
             df[mask] = None
 
-    if df.dropna(subset=["month"]).shape[0] == 0:
+    if df.dropna(subset=[Variables.MONTH.col_name]).shape[0] == 0:
         return (
-            dbc.Alert(
+            dmc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
                 "the filter variable",
@@ -304,25 +234,27 @@ def update_psych_chart(
     elif var == "Frequency":
         var_color = ["rgba(255,255,255,0)", "rgb(0,150,255)", "rgb(0,0,150)"]
     else:
-        var_unit = mapping_dictionary[var][si_ip]["unit"]
+        var_unit = VariableInfo.from_col_name(var).get_unit(si_ip)
 
-        var_name = mapping_dictionary[var]["name"]
+        var_name = VariableInfo.from_col_name(var).get_name()
 
-        var_color = mapping_dictionary[var]["color"]
+        var_color = VariableInfo.from_col_name(var).get_color()
 
     if global_local == "global":
         # Set Global values for Max and minimum
-        var_range_x = mapping_dictionary["DBT"][si_ip]["range"]
-        var_range_y = mapping_dictionary["hr"][si_ip]["range"]
+        variable_x = VariableInfo.from_col_name(Variables.DBT.col_name)
+        variable_y = VariableInfo.from_col_name(Variables.HR.col_name)
+
+        var_range_x = variable_x.get_range(si_ip)
+        var_range_y = variable_y.get_range(si_ip)
 
     else:
         # Set maximum and minimum according to data
-        data_max = 5 * ceil(df["DBT"].max() / 5)
-        data_min = 5 * floor(df["DBT"].min() / 5)
+        data_max, data_min = get_max_min_value(df[Variables.DBT.col_name])
         var_range_x = [data_min, data_max]
 
-        data_max = round(df["hr"].max(), 4)
-        data_min = round(df["hr"].min(), 4)
+        data_max = round(df[Variables.HR.col_name].max(), 4)
+        data_min = round(df[Variables.HR.col_name].min(), 4)
         var_range_y = [data_min * 1000, data_max * 1000]
 
     title = "Psychrometric Chart"
@@ -338,7 +270,7 @@ def update_psych_chart(
         hr_list = np.vectorize(psy.psy_ta_rh)(dbt_list, rh)
         hr_df = pd.DataFrame.from_records(hr_list)
         name = "rh" + str(rh)
-        rh_df[name] = hr_df["hr"]
+        rh_df[name] = hr_df[Variables.HR.col_name]
 
     fig = go.Figure()
 
@@ -368,114 +300,137 @@ def update_psych_chart(
             )
         )
 
-    df_hr_multiply = list(df["hr"])
-    for k in range(len(df_hr_multiply)):
-        df_hr_multiply[k] = df_hr_multiply[k] * 1000
-    if var == "None":
-        fig.add_trace(
-            go.Scatter(
-                x=df["DBT"],
-                y=df_hr_multiply,
-                showlegend=False,
-                mode="markers",
-                marker=dict(
-                    size=6,
-                    color=var_color,
-                    showscale=False,
-                    opacity=0.2,
-                ),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
-                + ": %{x:.2f}"
-                + mapping_dictionary["DBT"]["name"],
-                name="",
+    # Separate filtered and unfiltered data using utility function
+    # Note: psy-chart needs to check multiple original columns (DBT, HR, and var)
+    filter_info = separate_filtered_data(df, Variables.DBT.col_name)
+    df_unfiltered = filter_info["df_unfiltered"]
+
+    # Process HR for unfiltered data
+    df_unfiltered_hr_multiply = list(df_unfiltered[Variables.HR.col_name])
+    for k in range(len(df_unfiltered_hr_multiply)):
+        df_unfiltered_hr_multiply[k] = df_unfiltered_hr_multiply[k] * 1000
+
+    # Filtered data traces removed - no gray filtering effect for psychrometric chart
+
+    # Add unfiltered data traces (normal colors)
+    if len(df_unfiltered) > 0:
+        if var == "None":
+            fig.add_trace(
+                go.Scatter(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=6,
+                        color=var_color,
+                        showscale=False,
+                        opacity=0.2,
+                    ),
+                    hovertemplate=VariableInfo.from_col_name(
+                        Variables.DBT.col_name
+                    ).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(
+                        si_ip
+                    ),
+                    name="",
+                )
             )
-        )
-    elif var == "Frequency":
-        fig.add_trace(
-            go.Histogram2d(
-                x=df["DBT"],
-                y=df_hr_multiply,
-                name="",
-                colorscale=var_color,
-                hovertemplate="",
-                autobinx=False,
-                xbins=dict(start=-50, end=100, size=1),
-            )
-        )
-        # fig.add_trace(
-        #     go.Scatter(
-        #         x=dbt_list,
-        #         y=rh_df["rh100"],
-        #         showlegend=False,
-        #         mode="none",
-        #         name="",
-        #         fill="toself",
-        #         fillcolor="#fff",
-        #     )
-        # )
-
-    else:
-        var_colorbar = dict(
-            thickness=30,
-            title=var_unit + "<br>  ",
-        )
-
-        if var_unit == "Thermal stress":
-            var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
-            var_colorbar["ticktext"] = [
-                "extreme heat stress",
-                "very strong heat stress",
-                "strong heat stress",
-                "moderate heat stress",
-                "no thermal stress",
-                "slight cold stress",
-                "moderate cold stress",
-                "strong cold stress",
-                "very strong cold stress",
-                "extreme cold stress",
-            ]
-
-        fig.add_trace(
-            go.Scatter(
-                x=df["DBT"],
-                y=df_hr_multiply,
-                showlegend=False,
-                mode="markers",
-                marker=dict(
-                    size=5,
-                    color=df[var],
-                    showscale=True,
-                    opacity=0.3,
+        elif var == "Frequency":
+            fig.add_trace(
+                go.Histogram2d(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    name="",
                     colorscale=var_color,
-                    colorbar=var_colorbar,
-                ),
-                customdata=np.stack((df["RH"], df["h"], df[var], df["t_dp"]), axis=-1),
-                hovertemplate=mapping_dictionary["DBT"]["name"]
-                + ": %{x:.2f}"
-                + mapping_dictionary["DBT"][si_ip]["unit"]
-                + "<br>"
-                + mapping_dictionary["RH"]["name"]
-                + ": %{customdata[0]:.2f}"
-                + mapping_dictionary["RH"][si_ip]["unit"]
-                + "<br>"
-                + mapping_dictionary["h"]["name"]
-                + ": %{customdata[1]:.2f}"
-                + mapping_dictionary["h"][si_ip]["unit"]
-                + "<br>"
-                + mapping_dictionary["t_dp"]["name"]
-                + ": %{customdata[3]:.2f}"
-                + mapping_dictionary["t_dp"][si_ip]["unit"]
-                + "<br>"
-                + "<br>"
-                + var_name
-                + ": %{customdata[2]:.2f}"
-                + var_unit,
-                name="",
+                    hovertemplate="",
+                    autobinx=False,
+                    xbins=dict(start=-50, end=100, size=1),
+                )
             )
-        )
+            # Filtered data removed - no gray filtering effect for psychrometric chart
 
-    xtitle_name = "Temperature" + "  " + mapping_dictionary["DBT"][si_ip]["unit"]
-    ytitle_name = "Humidity Ratio" + "  " + mapping_dictionary["hr"][si_ip]["unit"]
+        else:
+            var_colorbar = dict(
+                thickness=30,
+                title=var_unit + "<br>  ",
+            )
+
+            if var_unit == "Thermal stress":
+                var_colorbar["tickvals"] = [4, 3, 2, 1, 0, -1, -2, -3, -4, -5]
+                var_colorbar["ticktext"] = [
+                    "extreme heat stress",
+                    "very strong heat stress",
+                    "strong heat stress",
+                    "moderate heat stress",
+                    "no thermal stress",
+                    "slight cold stress",
+                    "moderate cold stress",
+                    "strong cold stress",
+                    "very strong cold stress",
+                    "extreme cold stress",
+                ]
+
+            fig.add_trace(
+                go.Scatter(
+                    x=df_unfiltered[Variables.DBT.col_name],
+                    y=df_unfiltered_hr_multiply,
+                    showlegend=False,
+                    mode="markers",
+                    marker=dict(
+                        size=5,
+                        color=df_unfiltered[var],
+                        showscale=True,
+                        opacity=0.3,
+                        colorscale=var_color,
+                        colorbar=var_colorbar,
+                    ),
+                    customdata=np.stack(
+                        (
+                            df_unfiltered[Variables.RH.col_name],
+                            df_unfiltered["h"],
+                            df_unfiltered[var],
+                            df_unfiltered["t_dp"],
+                        ),
+                        axis=-1,
+                    ),
+                    hovertemplate=VariableInfo.from_col_name(
+                        Variables.DBT.col_name
+                    ).get_name()
+                    + ": %{x:.2f}"
+                    + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_name()
+                    + ": %{customdata[0]:.2f}"
+                    + VariableInfo.from_col_name(Variables.RH.col_name).get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("h").get_name()
+                    + ": %{customdata[1]:.2f}"
+                    + VariableInfo.from_col_name("h").get_unit(si_ip)
+                    + "<br>"
+                    + VariableInfo.from_col_name("t_dp").get_name()
+                    + ": %{customdata[3]:.2f}"
+                    + VariableInfo.from_col_name("t_dp").get_unit(si_ip)
+                    + "<br>"
+                    + "<br>"
+                    + var_name
+                    + ": %{customdata[2]:.2f}"
+                    + var_unit,
+                    name="",
+                )
+            )
+
+    xtitle_name = (
+        "Temperature"
+        + "  "
+        + VariableInfo.from_col_name(Variables.DBT.col_name).get_unit(si_ip)
+    )
+    ytitle_name = (
+        "Humidity Ratio"
+        + "  "
+        + VariableInfo.from_col_name(Variables.HR.col_name).get_unit(si_ip)
+    )
     fig.update_layout(template=template, margin=tight_margins)
     fig.update_xaxes(
         title_text=xtitle_name,
@@ -505,5 +460,5 @@ def update_psych_chart(
     )
     units = generate_units(si_ip)
     return dcc.Graph(
-        config=generate_chart_name("psy", meta, custom_inputs, units), figure=fig
+        config=generate_chart_name(TabNames.PSY, meta, custom_inputs, units), figure=fig
     )

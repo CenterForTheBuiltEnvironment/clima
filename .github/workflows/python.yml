@@ -31,6 +31,19 @@ jobs:
         run: |-
           pipenv run ruff format --check .
 
+      - name: Install Playwright Browsers
+        run: |
+          pipenv run playwright install chromium
+
+      - name: Start Clima
+        run: |-
+          pipenv run python main.py &
+      
+      - name: Wait for Clima to be ready
+        run: |
+          timeout 60 bash -c 'until curl -f http://127.0.0.1:8080; do sleep 1; done'
+
       - name: Test Clima
         run: |-
-          pipenv run python -m pytest
+          cd tests
+          pipenv run pytest --base-url=http://127.0.0.1:8080 -vv

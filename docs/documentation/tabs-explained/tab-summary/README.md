@@ -14,4 +14,3 @@ Learn more about the Climate Summary tab by watching the following video.
 
 <!-- markdownlint-disable-next-line MD034 -->
 {% embed url="https://youtu.be/VJ_wOHadVdw?si=H-93XRhh5Neuby_b&t=220" %}
-

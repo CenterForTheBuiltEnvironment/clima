@@ -3,7 +3,6 @@ import json
 import re
 
 import dash
-import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 import pandas as pd
 import plotly.express as px
@@ -11,11 +10,13 @@ from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
 from pandas import json_normalize
 
-from pages.lib.extract_df import convert_data
+from pages.lib.extract_df import convert_df_units
 from pages.lib.extract_df import create_df, get_data, get_location_info
-from pages.lib.global_scheme import mapping_dictionary
-from config import PageUrls, PageInfo, UnitSystem
-from pages.lib.utils import generate_chart_name
+from pages.lib.global_variables import Variables
+from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_tab_names import TabNames
+from config import PageUrls, PageInfo
+from pages.lib.utils import generate_chart_name, get_default_global_filter_store_data
 
 dash.register_page(
     __name__,
@@ -36,60 +37,69 @@ messages_alert = {
 
 def layout():
     """Contents in the first tab 'Select Weather File'"""
-    return html.Div(
-        className="container-col tab-container",
+    return dmc.Stack(
+        p="md",
         children=[
             dcc.Loading(
-                id="loading-1",
-                type="circle",
+                custom_spinner=dmc.Skeleton(visible=True, h="100%"),
                 fullscreen=True,
                 children=alert(),
             ),
             dcc.Upload(
-                id="upload-data",
-                children=dbc.Button(
+                id=ElementIds.UPLOAD_DATA,
+                children=dmc.Button(
                     [
                         "Drag and Drop or ",
                         html.A("Select an EPW file from your computer"),
                     ],
-                    id="upload-data-button",
-                    outline=True,
-                    color="secondary",
-                    className="mt-2",
-                    style={"borderRadius": "5px", "borderStyle": "dashed"},
+                    id=ElementIds.UPLOAD_DATA_BUTTON,
+                    variant="outline",
+                    color="gray",
+                    style={"borderStyle": "dashed"},
+                    styles={"label": {"fontWeight": 400}},
                 ),
                 # Allow multiple files to be uploaded
                 multiple=True,
-                className="d-grid",
+                style={"display": "grid"},
             ),
             dmc.Skeleton(
                 visible=False,
-                id="skeleton-graph-container",
+                id=ElementIds.SKELETON_GRAPH_CONTAINER,
                 height=500,
-                children=html.Div(id="tab-one-map"),
+                children=dmc.Box(id=ElementIds.TAB_ONE_MAP),
             ),
-            dbc.Modal(
-                [
-                    dbc.ModalHeader(id="modal-header"),
-                    dbc.ModalFooter(
-                        children=[
-                            dbc.Button(
+            dmc.Modal(
+                id=ElementIds.MODAL,
+                title=dmc.Text(id=ElementIds.MODAL_HEADER),
+                opened=False,
+                centered=True,
+                children=[
+                    dmc.Divider(
+                        size="xs",
+                        color="gray",
+                        my="sm",
+                        style={
+                            "borderTop": "1px solid var(--mantine-color-gray-4)",
+                            "marginTop": "-6px",
+                        },
+                    ),
+                    dmc.Group(
+                        [
+                            dmc.Button(
                                 "Close",
-                                id="modal-close-button",
-                                className="ml-2",
-                                color="light",
+                                id=ElementIds.MODAL_CLOSE_BUTTON,
+                                color="gray",
+                                variant="outline",
                             ),
-                            dbc.Button(
+                            dmc.Button(
                                 "Yes",
-                                id="modal-yes-button",
-                                className="ml-2",
-                                color="primary",
+                                id=ElementIds.MODAL_YES_BUTTON,
+                                color="blue",
                             ),
-                        ]
+                        ],
+                        justify="flex-end",
                     ),
                 ],
-                id="modal",
-                is_open=False,
             ),
         ],
     )
@@ -97,12 +107,11 @@ def layout():
 
 def alert():
     """Alert layout for the submit button."""
-    return dbc.Alert(
+    return dmc.Alert(
         messages_alert["start"],
-        color="primary",
-        id="alert",
-        dismissable=False,
-        is_open=True,
+        color="blue",
+        id=ElementIds.ALERT,
+        withCloseButton=False,
         style={"maxHeight": "66px"},
     )
 
@@ -110,20 +119,21 @@ def alert():
 # add si-ip and map dictionary in the output
 @callback(
     [
-        Output("meta-store", "data"),
-        Output("lines-store", "data"),
-        Output("alert", "is_open"),
-        Output("alert", "children"),
-        Output("alert", "color"),
+        Output(ElementIds.SHARED_META_STORE, "data"),
+        Output(ElementIds.SHARED_LINES_STORE, "data"),
+        Output(ElementIds.ALERT, "visible"),
+        Output(ElementIds.ALERT, "children"),
+        Output(ElementIds.ALERT, "color"),
+        Output(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data", allow_duplicate=True),
     ],
     [
-        Input("modal-yes-button", "n_clicks"),
-        Input("upload-data-button", "n_clicks"),
-        Input("upload-data", "contents"),
+        Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),
+        Input(ElementIds.UPLOAD_DATA_BUTTON, "n_clicks"),
+        Input(ElementIds.UPLOAD_DATA, "contents"),
     ],
     [
-        State("upload-data", "filename"),
-        State("url-store", "data"),
+        State(ElementIds.UPLOAD_DATA, "filename"),
+        State(ElementIds.SHARED_URL_STORE, "data"),
     ],
     prevent_initial_call=True,
 )
@@ -138,7 +148,7 @@ def submitted_data(
     """Process the uploaded file or download the EPW from the URL"""
     ctx = dash.callback_context
 
-    if ctx.triggered[0]["prop_id"] == "modal-yes-button.n_clicks":
+    if ctx.triggered[0][Variables.PROP_ID.col_name] == "modal-yes-button.n_clicks":
         lines = get_data(url_store)
         if lines is None:
             return (
@@ -146,7 +156,8 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["not_available"],
-                "warning",
+                "orange",
+                get_default_global_filter_store_data(),
             )
         location_info = get_location_info(
             lines, url_store
@@ -156,11 +167,12 @@ def submitted_data(
             lines,
             True,
             messages_alert["success"],
-            "success",
+            "green",
+            get_default_global_filter_store_data(),
         )
 
     elif (
-        ctx.triggered[0]["prop_id"] == "upload-data.contents"
+        ctx.triggered[0][Variables.PROP_ID.col_name] == "upload-data.contents"
         and list_of_contents is not None
     ):
         content_type, content_string = list_of_contents[0].split(",")
@@ -180,7 +192,8 @@ def submitted_data(
                     lines,
                     True,
                     messages_alert["success"],
-                    "success",
+                    "green",
+                    get_default_global_filter_store_data(),
                 )
             else:
                 return (
@@ -188,7 +201,8 @@ def submitted_data(
                     None,
                     True,
                     messages_alert["invalid_format"],
-                    "warning",
+                    "orange",
+                    get_default_global_filter_store_data(),
                 )
         except (ValueError, IndexError, KeyError) as e:
             print(f"Error parsing EPW file: {e}")
@@ -197,7 +211,8 @@ def submitted_data(
                 None,
                 True,
                 messages_alert["wrong_extension"],
-                "warning",
+                "orange",
+                get_default_global_filter_store_data(),
             )
     raise PreventUpdate
 
@@ -205,21 +220,24 @@ def submitted_data(
 # add switch_si_ip function and convert the data-store
 @callback(
     [
-        Output("df-store", "data"),
-        Output("si-ip-unit-store", "data"),
+        Output(ElementIds.SHARED_DF_STORE, "data"),
+        Output(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
     [
-        Input("lines-store", "modified_timestamp"),
-        Input("si-ip-radio-input", "value"),
+        Input(ElementIds.SHARED_LINES_STORE, "modified_timestamp"),
+        Input(ElementIds.SHARED_SI_IP_RADIO_INPUT, "value"),
     ],
-    [State("url-store", "data"), State("lines-store", "data")],
+    [
+        State(ElementIds.SHARED_URL_STORE, "data"),
+        State(ElementIds.SHARED_LINES_STORE, "data"),
+    ],
 )
 def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
-        map_json = json.dumps(mapping_dictionary)
-        if si_ip_input == UnitSystem.IP:
-            map_json = convert_data(df, map_json)
+
+        df = convert_df_units(df, si_ip_input)
+
         return Serverside(df), si_ip_input
     else:
         return (
@@ -230,20 +248,19 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
 
 @callback(
     [
-        Output("/", "disabled"),
-        Output("/summary", "disabled"),
-        Output("/t-rh", "disabled"),
-        Output("/sun", "disabled"),
-        Output("/wind", "disabled"),
-        Output("/psy-chart", "disabled"),
-        Output("/explorer", "disabled"),
-        Output("/outdoor", "disabled"),
-        Output("/natural-ventilation", "disabled"),
-        Output("banner-subtitle", "children"),
+        Output(ElementIds.NAV_SUMMARY, "disabled"),
+        Output(ElementIds.NAV_T_RH, "disabled"),
+        Output(ElementIds.NAV_SUN, "disabled"),
+        Output(ElementIds.NAV_WIND, "disabled"),
+        Output(ElementIds.NAV_PSY_CHART, "disabled"),
+        Output(ElementIds.NAV_EXPLORER, "disabled"),
+        Output(ElementIds.NAV_OUTDOOR, "disabled"),
+        Output(ElementIds.NAV_NATURAL_VENTILATION, "disabled"),
+        Output(ElementIds.ID_SELECT_BANNER_SUBTITLE, "children"),
     ],
     [
-        Input("meta-store", "data"),
-        Input("df-store", "data"),
+        Input(ElementIds.SHARED_META_STORE, "data"),
+        Input(ElementIds.SHARED_DF_STORE, "data"),
     ],
 )
 def enable_tabs_when_data_is_loaded(meta, data):
@@ -251,7 +268,6 @@ def enable_tabs_when_data_is_loaded(meta, data):
     default = "Current Location: N/A"
     if data is None:
         return (
-            True,
             True,
             True,
             True,
@@ -272,53 +288,50 @@ def enable_tabs_when_data_is_loaded(meta, data):
             False,
             False,
             False,
-            False,
-            "Current Location: " + meta["city"] + ", " + meta["country"],
+            "Current Location: "
+            + meta[Variables.CITY.col_name]
+            + ", "
+            + meta[Variables.COUNTRY.col_name],
         )
 
 
 @callback(
     [
-        Output("modal", "is_open"),
-        Output("url-store", "data"),
+        Output(ElementIds.MODAL, "opened"),
+        Output(ElementIds.SHARED_URL_STORE, "data"),
     ],
     [
-        Input("modal-yes-button", "n_clicks"),
-        Input("tab-one-map", "clickData"),
-        Input("modal-close-button", "n_clicks"),
+        Input(ElementIds.MODAL_YES_BUTTON, "n_clicks"),
+        Input(ElementIds.TAB_ONE_MAP, "clickData"),
+        Input(ElementIds.MODAL_CLOSE_BUTTON, "n_clicks"),
     ],
-    [State("modal", "is_open")],
+    [State(ElementIds.MODAL, "opened")],
     prevent_initial_call=True,
 )
-def display_modal_when_data_clicked(_, click_map, __, is_open):
+def display_modal_when_data_clicked(_, click_map, __, opened):
     """display the modal to the user and check if he wants to use that file"""
     if click_map:
         url = re.search(
             r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
         ).group(1)
-        return not is_open, url
-    return is_open, ""
+        return not opened, url
+    return opened, ""
 
 
 @callback(
-    [
-        Output("modal-header", "children"),
-    ],
-    [
-        Input("tab-one-map", "clickData"),
-    ],
+    [Output(ElementIds.MODAL_HEADER, "children")],
+    [Input(ElementIds.TAB_ONE_MAP, "clickData")],
     prevent_initial_call=True,
 )
 def change_text_modal(click_map):
-    """change the text of the modal header"""
     if click_map:
         return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
     return ["Analyse data from this location?"]
 
 
 @callback(
-    Output("skeleton-graph-container", "children"),
-    Input("url", "pathname"),
+    Output(ElementIds.SKELETON_GRAPH_CONTAINER, "children"),
+    Input(ElementIds.SELECT_URL, "pathname"),
 )
 def plot_location_epw_files(pathname):
     # print(pathname)
@@ -328,9 +341,11 @@ def plot_location_epw_files(pathname):
     with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
         data = json.load(data_file)
 
-    df = json_normalize(data["features"])
-    df[["lon", "lat"]] = pd.DataFrame(df["geometry.coordinates"].tolist())
-    df["lat"] += 0.010
+    df = json_normalize(data[Variables.FEATURES.col_name])
+    df[[Variables.LON.col_name, Variables.LAT.col_name]] = pd.DataFrame(
+        df[Variables.GEOMETRY_COORDINATES.col_name].tolist()
+    )
+    df[Variables.LAT.col_name] += 0.010
     df = df.rename(columns={"properties.epw": "Source"})
 
     fig = px.scatter_mapbox(
@@ -349,7 +364,7 @@ def plot_location_epw_files(pathname):
         df_one_building,
         lat="lat",
         lon="lon",
-        hover_name=df_one_building["name"],
+        hover_name=df_one_building[Variables.NAME.col_name],
         color_discrete_sequence=["#4895ef"],
         hover_data=[
             "period",
@@ -366,10 +381,8 @@ def plot_location_epw_files(pathname):
     fig.update_layout(mapbox_style="carto-positron")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
-    return (
-        dcc.Graph(
-            id="tab-one-map",
-            figure=fig,
-            config=generate_chart_name("epw_location_select"),
-        ),
+    return dcc.Graph(
+        id=ElementIds.TAB_ONE_MAP,
+        figure=fig,
+        config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
     )

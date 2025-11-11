@@ -90,19 +90,41 @@ First make sure you that:
 * that you are logged in with the right account
 * you have updated the Pipfile.lock.
 
-```text
+First test the application.
+
+```bash
+cd tests
+pipenv run pytest --base-url=http://127.0.0.1:8080 -vv --numprocesses 4
+```
+
+### Deploy test version manually using gcloud and docker locally - quicker and great to test small changes
+
+```bash
 gcloud components update --quiet
-pipenv requirements > requirements.txt
+gcloud auth login  # or gcloud config set account ACCOUNT
+gcloud config set project clima-316917
+gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+docker buildx build --platform linux/amd64 -t us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest .
+
+# run locally to test
+docker run --platform linux/amd64 --rm -p 8080:8080 us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest
+# Run detached, give a name, set env vars, and print logs
+docker run -d --platform linux/amd64 --name clima-test -p 8080:8080 -e ENV=dev us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest
+docker logs -f clima-test
+
+# if everything is ok push to google container registry
+docker push us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest
+gcloud run deploy clima-test --image us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest --region us-central1 --memory 4Gi --cpu 2 --platform managed --allow-unauthenticated
 ```
 
 ### Deploy test version of the project
 
-```text
+```bash
 gcloud builds submit --project=clima-316917 --substitutions=_REPO_NAME="clima-test",_PROJ_NAME="clima-316917",_IMG_NAME="test",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"
 ```
 
 ### Deploy main version of the project
 
-```text
+```bash
 gcloud builds submit --project=clima-316917 --substitutions=_REPO_NAME="clima",_PROJ_NAME="clima-316917",_IMG_NAME="main",_GCR="us.gcr.io",_REGION="us-central1",_MEMORY="4Gi",_CPU="2"
 ```

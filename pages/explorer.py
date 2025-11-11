@@ -1,6 +1,6 @@
 import dash
-from dash import dcc, html
-import dash_bootstrap_components as dbc
+from dash import dcc
+import dash_mantine_components as dmc
 from dash_extensions.enrich import Output, Input, State, callback
 from dash.exceptions import PreventUpdate
 
@@ -12,14 +12,16 @@ from pages.lib.charts_data_explorer import (
     two_var_graph,
     three_var_graph,
 )
+from pages.lib.global_element_ids import ElementIds
+from pages.lib.global_variables import Variables
+from pages.lib.global_id_buttons import IdButtons
+from pages.lib.global_tab_names import TabNames
 from pages.lib.global_scheme import (
     fig_config,
     dropdown_names,
     sun_cloud_tab_dropdown_names,
     more_variables_dropdown,
     sun_cloud_tab_explore_dropdown_names,
-    container_row_center_full,
-    container_col_center_one_of_three,
 )
 from pages.lib.template_graphs import (
     heatmap,
@@ -58,14 +60,23 @@ explore_dropdown_names.update(deepcopy(sun_cloud_tab_explore_dropdown_names))
 explore_dropdown_names.pop("None", None)
 
 
+def layout():
+    """Return the contents of tab six."""
+    return dmc.Stack(
+        p="md",
+        children=[*section_one(), section_two(), section_three()],
+    )
+
+
 def section_one_inputs():
     """Return the inputs from section one."""
-    return html.Div(
-        className="container-row full-width row-center",
+    return dmc.Group(
+        mt="md",
+        justify="center",
         children=[
-            html.H4(className="text-next-to-input", children=["Select a variable: "]),
+            dmc.Title("Select a variable:", order=5),
             dropdown(
-                id="sec1-var-dropdown",
+                id=ElementIds.SEC1_VAR_DROPDOWN,
                 options=explore_dropdown_names,
                 value="DBT",
             ),
@@ -75,302 +86,110 @@ def section_one_inputs():
 
 def section_one():
     """Return the graphs for section one"""
-    return html.Div(
-        className="container-col full-width",
-        children=[
-            section_one_inputs(),
-            html.Div(
-                children=title_with_link(
-                    text="Yearly chart",
-                    id_button="explore-yearly-chart-label",
-                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                ),
-            ),
-            dcc.Loading(
-                type="circle",
-                children=html.Div(id="yearly-explore", className="full-width"),
-            ),
-            html.Div(
-                children=title_with_link(
-                    text="Daily chart",
-                    id_button="explore-daily-chart-label",
-                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                ),
-            ),
-            dcc.Loading(
-                html.Div(className="full-width", id="query-daily"),
-                type="circle",
-            ),
-            html.Div(
-                children=title_with_link(
-                    text="Heatmap chart",
-                    id_button="explore-heatmap-chart-label",
-                    doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
-                ),
-            ),
-            dcc.Loading(
-                html.Div(className="full-width", id="query-heatmap"),
-                type="circle",
-            ),
-            html.Div(
-                children=title_with_tooltip(
-                    text="Descriptive statistics",
-                    tooltip_text="count, mean, std, min, max, and percentiles",
-                    id_button="table-explore",
-                ),
-            ),
-            html.Div(
-                className="container-row justify-content-center",
-                children=[
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            dbc.Button(
-                                "Apply month and hour filter",
-                                color="primary",
-                                id="sec1-time-filter-input",
-                                className="mb-2",
-                                n_clicks=0,
-                            ),
-                            html.Div(
-                                className=(
-                                    "container-row full-width justify-center mt-2"
-                                ),
-                                children=[
-                                    html.H6("Month Range", style={"flex": "20%"}),
-                                    html.Div(
-                                        dcc.RangeSlider(
-                                            id="sec1-month-slider",
-                                            min=1,
-                                            max=12,
-                                            step=1,
-                                            value=[1, 12],
-                                            marks={1: "1", 12: "12"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "top",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                        style={"flex": "50%"},
-                                    ),
-                                    dcc.Checklist(
-                                        options=[
-                                            {"label": "Invert", "value": "invert"},
-                                        ],
-                                        value=[],
-                                        id="invert-month-explore-descriptive",
-                                        labelStyle={"flex": "30%"},
-                                    ),
-                                ],
-                            ),
-                            html.Div(
-                                className="container-row justify-center",
-                                children=[
-                                    html.H6("Hour Range", style={"flex": "20%"}),
-                                    html.Div(
-                                        dcc.RangeSlider(
-                                            id="sec1-hour-slider",
-                                            min=0,
-                                            max=24,
-                                            step=1,
-                                            value=[0, 24],
-                                            marks={0: "0", 24: "24"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "topLeft",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                        style={"flex": "50%"},
-                                    ),
-                                    dcc.Checklist(
-                                        options=[
-                                            {"label": "Invert", "value": "invert"},
-                                        ],
-                                        value=[],
-                                        id="invert-hour-explore-descriptive",
-                                        labelStyle={"flex": "30%"},
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            html.Div(
-                id="table-data-explorer",
-            ),
-        ],
-    )
+    return [
+        section_one_inputs(),
+        title_with_link(
+            text="Yearly chart",
+            id_button=IdButtons.EXPLORE_YEARLY_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.YEARLY_EXPLORE)
+        ),
+        title_with_link(
+            text="Daily chart",
+            id_button=IdButtons.EXPLORE_DAILY_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.QUERY_DAILY)
+        ),
+        title_with_link(
+            text="Heatmap chart",
+            id_button=IdButtons.EXPLORE_HEATMAP_CHART_LABEL,
+            doc_link=DocLinks.TEMP_HUMIDITY_EXPLAINED,
+        ),
+        dmc.Skeleton(
+            visible=False, h=450, children=dmc.Paper(id=ElementIds.QUERY_HEATMAP)
+        ),
+        title_with_tooltip(
+            text="Descriptive statistics",
+            tooltip_text="count, mean, std, min, max, and percentiles",
+            id_button=IdButtons.TABLE_EXPLORE,
+        ),
+        # Results table
+        dmc.Paper(id=ElementIds.TABLE_DATA_EXPLORER, p="sm"),
+    ]
 
 
 def section_two_inputs():
     """Return all the input forms from section two."""
-    return html.Div(
+    return dmc.Stack(
+        p="md",
         children=[
-            html.Div(
-                children=title_with_tooltip(
-                    text="Customizable heatmap",
-                    tooltip_text=None,
-                    id_button="custom-heatmap-chart-label",
-                ),
+            title_with_tooltip(
+                text="Customizable heatmap",
+                tooltip_text=None,
+                id_button=IdButtons.CUSTOM_HEATMAP_CHART_LABEL,
             ),
-            html.Div(
-                className="container-row full-width three-inputs-container",
+            dmc.Grid(
                 children=[
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Variable:"],
-                                        style={"flex": "30%"},
-                                    ),
-                                    dropdown(
-                                        id="sec2-var-dropdown",
-                                        options=explore_dropdown_names,
-                                        value="RH",
-                                        style={"flex": "70%"},
-                                    ),
-                                ],
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            dbc.Button(
-                                "Apply month and hour filter",
-                                color="primary",
-                                id="sec2-time-filter-input",
-                                className="mb-2",
-                                n_clicks=0,
-                            ),
-                            html.Div(
-                                className=(
-                                    "container-row full-width justify-center mt-2"
+                    dmc.GridCol(
+                        dmc.Group(
+                            [
+                                dmc.Title("Variable:", order=5),
+                                dropdown(
+                                    id=ElementIds.SEC2_VAR_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value=Variables.RH.col_name,
                                 ),
-                                children=[
-                                    html.H6("Month Range", style={"flex": "20%"}),
-                                    html.Div(
-                                        dcc.RangeSlider(
-                                            id="sec2-month-slider",
-                                            min=1,
-                                            max=12,
-                                            step=1,
-                                            value=[1, 12],
-                                            marks={1: "1", 12: "12"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "top",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                        style={"flex": "50%"},
-                                    ),
-                                    dcc.Checklist(
-                                        options=[
-                                            {"label": "Invert", "value": "invert"},
-                                        ],
-                                        value=[],
-                                        id="invert-month-explore-heatmap",
-                                        labelStyle={"flex": "30%"},
-                                    ),
-                                ],
-                            ),
-                            html.Div(
-                                className="container-row justify-center",
-                                children=[
-                                    html.H6("Hour Range", style={"flex": "20%"}),
-                                    html.Div(
-                                        dcc.RangeSlider(
-                                            id="sec2-hour-slider",
-                                            min=0,
-                                            max=24,
-                                            step=1,
-                                            value=[0, 24],
-                                            marks={0: "0", 24: "24"},
-                                            tooltip={
-                                                "always_visible": False,
-                                                "placement": "topLeft",
-                                            },
-                                            allowCross=False,
-                                        ),
-                                        style={"flex": "50%"},
-                                    ),
-                                    dcc.Checklist(
-                                        options=[
-                                            {"label": "Invert", "value": "invert"},
-                                        ],
-                                        value=[],
-                                        id="invert-hour-explore-heatmap",
-                                        labelStyle={"flex": "30%"},
-                                    ),
-                                ],
-                            ),
-                        ],
+                            ],
+                            align="flex-start",
+                        ),
+                        span=4,
                     ),
-                    html.Div(
-                        className=container_col_center_one_of_three,
-                        children=[
-                            dbc.Button(
-                                "Apply filter",
-                                color="primary",
-                                id="sec2-data-filter-input",
-                                className="mb-2",
-                                n_clicks=0,
-                            ),
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Filter Variable:"],
-                                        style={"flex": "30%"},
-                                    ),
-                                    dropdown(
-                                        id="sec2-data-filter-var",
-                                        options=explore_dropdown_names,
-                                        value="RH",
-                                        style={"flex": "70%"},
-                                    ),
-                                ],
-                            ),
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Min Value:"], style={"flex": "30%"}
-                                    ),
-                                    dbc.Input(
-                                        id="sec2-min-val",
-                                        placeholder="Enter a number for the min val",
-                                        type="number",
-                                        value=0,
-                                        step=1,
-                                        style={"flex": "70%"},
-                                    ),
-                                ],
-                            ),
-                            html.Div(
-                                className=container_row_center_full,
-                                children=[
-                                    html.H6(
-                                        children=["Max Value:"], style={"flex": "30%"}
-                                    ),
-                                    dbc.Input(
-                                        id="sec2-max-val",
-                                        placeholder="Enter a number for the max val",
-                                        type="number",
-                                        value=100,
-                                        step=1,
-                                        style={"flex": "70%"},
-                                    ),
-                                ],
-                            ),
-                        ],
+                    dmc.GridCol(
+                        dmc.Stack(
+                            children=[
+                                dmc.Button(
+                                    "Apply filter",
+                                    id=ElementIds.SEC2_DATA_FILTER_INPUT,
+                                    color="blue",
+                                    w="50%",
+                                ),
+                                dmc.Group(
+                                    [
+                                        dmc.Title("Filter Variable:", order=5),
+                                        dropdown(
+                                            id=ElementIds.SEC2_DATA_FILTER_VAR,
+                                            options=explore_dropdown_names,
+                                            value=Variables.RH.col_name,
+                                        ),
+                                    ],
+                                ),
+                                dmc.Group(
+                                    [
+                                        dmc.Title("Min Value:", order=5),
+                                        dmc.NumberInput(
+                                            id=ElementIds.SEC2_MIN_VAL,
+                                            placeholder="Enter a number for the min val",
+                                            value=0,
+                                        ),
+                                    ],
+                                ),
+                                dmc.Group(
+                                    [
+                                        dmc.Title("Max Value:", order=5),
+                                        dmc.NumberInput(
+                                            id=ElementIds.SEC2_MAX_VAL,
+                                            placeholder="Enter a number for the max val",
+                                            value=100,
+                                        ),
+                                    ],
+                                ),
+                            ],
+                        ),
+                        span=8,
                     ),
                 ],
             ),
@@ -380,207 +199,123 @@ def section_two_inputs():
 
 def section_two():
     """Return the two graphs in section two."""
-    return html.Div(
-        id="tab6-sec2-container",
-        className="container-col justify-center full-width",
+    return dmc.Stack(
+        id=ElementIds.EXPLORER_SEC2_CONTAINER,
         children=[
             section_two_inputs(),
             dcc.Loading(
                 type="circle",
-                children=html.Div(className="full-width", id="custom-heatmap"),
+                children=dmc.Paper(
+                    id=ElementIds.CUSTOM_HEATMAP,
+                    p="sm",
+                ),
             ),
-            dbc.Checklist(
-                options=[
-                    {"label": "Normalize", "value": "normal"},
+            dmc.Group(
+                children=[
+                    dmc.CheckboxGroup(
+                        id=ElementIds.NORMALIZE,
+                        value=[],
+                        children=[
+                            dmc.Checkbox(label="Normalize", value="normal"),
+                        ],
+                    ),
                 ],
-                value=[],
-                id="normalize",
             ),
             dcc.Loading(
                 type="circle",
-                children=[
-                    dcc.Graph(
-                        className="full-width", id="custom-summary", config=fig_config
+                children=dmc.Paper(
+                    children=dcc.Graph(
+                        id=ElementIds.CUSTOM_SUMMARY,
+                        config=fig_config,
                     ),
-                ],
+                ),
             ),
         ],
     )
 
 
 def section_three_inputs():
-    """"""
-    return html.Div(
-        className="container-row full-width three-inputs-container",
+    return dmc.Grid(
         children=[
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(style={"flex": "30%"}, children=["X Variable:"]),
-                            dropdown(
-                                id="tab6-sec3-var-x-dropdown",
-                                options=explore_dropdown_names,
-                                value="DBT",
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(style={"flex": "30%"}, children=["Y Variable:"]),
-                            dropdown(
-                                id="tab6-sec3-var-y-dropdown",
-                                options=explore_dropdown_names,
-                                value="RH",
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(style={"flex": "30%"}, children=["Color By:"]),
-                            dropdown(
-                                id="tab6-sec3-colorby-dropdown",
-                                options=explore_dropdown_names,
-                                value="glob_hor_rad",
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply month and hour filter",
-                        color="primary",
-                        id="tab6-sec3-time-filter-input",
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    html.Div(
-                        className="container-row full-width justify-center",
-                        children=[
-                            html.H6("Month Range", style={"flex": "20%"}),
-                            html.Div(
-                                dcc.RangeSlider(
-                                    id="tab6-sec3-query-month-slider",
-                                    min=1,
-                                    max=12,
-                                    step=1,
-                                    value=[1, 12],
-                                    marks={1: "1", 12: "12"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Group(
+                            [
+                                dmc.Title("X Variable:", order=5),
+                                dropdown(
+                                    id=ElementIds.EXPLORER_SEC3_VAR_X_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value="DBT",
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id="invert-month-explore-more-charts",
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className="container-row full-width justify-center",
-                        children=[
-                            html.H6("Hour Range", style={"flex": "20%"}),
-                            html.Div(
-                                dcc.RangeSlider(
-                                    id="tab6-sec3-query-hour-slider",
-                                    min=0,
-                                    max=24,
-                                    step=1,
-                                    value=[0, 24],
-                                    marks={0: "0", 24: "24"},
-                                    tooltip={
-                                        "always_visible": False,
-                                        "placement": "top",
-                                    },
-                                    allowCross=False,
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Y Variable:", order=5),
+                                dropdown(
+                                    id=ElementIds.EXPLORER_SEC3_VAR_Y_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value=Variables.RH.col_name,
                                 ),
-                                style={"flex": "50%"},
-                            ),
-                            dcc.Checklist(
-                                options=[
-                                    {"label": "Invert", "value": "invert"},
-                                ],
-                                value=[],
-                                id="invert-hour-explore-more-charts",
-                                labelStyle={"flex": "30%"},
-                            ),
-                        ],
-                    ),
-                ],
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Color By:", order=5),
+                                dropdown(
+                                    id=ElementIds.EXPLORER_SEC3_COLORBY_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value="glob_hor_rad",
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                span=4,
             ),
-            html.Div(
-                className=container_col_center_one_of_three,
-                children=[
-                    dbc.Button(
-                        "Apply filter",
-                        color="primary",
-                        id="tab6-sec3-data-filter-input",
-                        className="mb-2",
-                        n_clicks=0,
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(
-                                children=["Filter Variable:"], style={"flex": "30%"}
-                            ),
-                            dropdown(
-                                id="tab6-sec3-filter-var-dropdown",
-                                options=explore_dropdown_names,
-                                value="RH",
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Min Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                className="num-input",
-                                id="tab6-sec3-min-val",
-                                placeholder="Enter a number for the min val",
-                                type="number",
-                                step=1,
-                                value=0,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                    html.Div(
-                        className=container_row_center_full,
-                        children=[
-                            html.H6(children=["Max Value:"], style={"flex": "30%"}),
-                            dbc.Input(
-                                className="num-input",
-                                id="tab6-sec3-max-val",
-                                placeholder="Enter a number for the max val",
-                                type="number",
-                                value=100,
-                                step=1,
-                                style={"flex": "70%"},
-                            ),
-                        ],
-                    ),
-                ],
+            dmc.GridCol(
+                dmc.Stack(
+                    [
+                        dmc.Button(
+                            "Apply filter",
+                            id=ElementIds.EXPLORER_SEC3_DATA_FILTER_INPUT,
+                            color="blue",
+                            w="45%",
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Filter Variable:", order=5),
+                                dropdown(
+                                    id=ElementIds.EXPLORER_SEC3_FILTER_VAR_DROPDOWN,
+                                    options=explore_dropdown_names,
+                                    value=Variables.RH.col_name,
+                                ),
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Min Value:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.EXPLORER_SEC3_MIN_VAL,
+                                    placeholder="Enter a number for the min val",
+                                    value=0,
+                                ),
+                            ],
+                        ),
+                        dmc.Group(
+                            [
+                                dmc.Title("Max Value:", order=5),
+                                dmc.NumberInput(
+                                    id=ElementIds.EXPLORER_SEC3_MAX_VAL,
+                                    placeholder="Enter a number for the max val",
+                                    value=100,
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+                span=8,
             ),
         ],
     )
@@ -588,56 +323,63 @@ def section_three_inputs():
 
 def section_three():
     """Return the two graphs in section three."""
-    return html.Div(
-        className="container-col full-width",
+    return dmc.Stack(
         children=[
-            html.Div(
-                children=title_with_tooltip(
-                    text="More charts",
-                    tooltip_text=None,
-                    id_button="more-charts-label",
-                ),
+            title_with_tooltip(
+                text="More charts",
+                tooltip_text=None,
+                id_button=IdButtons.MORE_CHARTS_LABEL,
             ),
             section_three_inputs(),
             dcc.Loading(
-                html.Div(id="three-var"),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.THREE_VAR,
+                ),
             ),
             dcc.Loading(
-                html.Div(id="two-var"),
                 type="circle",
+                children=dmc.Paper(
+                    id=ElementIds.TWO_VAR,
+                ),
             ),
         ],
     )
 
 
-def layout():
-    """Return the contents of tab six."""
-    return html.Div(
-        className="justify-center",
-        children=[section_one(), section_two(), section_three()],
-    )
-
-
 @callback(
-    Output("yearly-explore", "children"),
+    Output(ElementIds.YEARLY_EXPLORE, "children"),
     # Section One
     [
-        Input("df-store", "modified_timestamp"),
-        Input("sec1-var-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_yearly(_, var, global_local, df, meta, si_ip):
+def update_tab_yearly(_, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
 
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        target_columns = [
+            var,
+            Variables.ADAPTIVE_CMF_80_LOW.col_name,
+            Variables.ADAPTIVE_CMF_80_UP.col_name,
+            Variables.ADAPTIVE_CMF_90_LOW.col_name,
+            Variables.ADAPTIVE_CMF_90_UP.col_name,
+            Variables.ADAPTIVE_CMF_RMT.col_name,
+        ]
+        df = apply_global_month_hour_filter(df, global_filter_data, target_columns)
+
     if df[var].mean() == 99990.0:
-        return dbc.Alert(
+        return dmc.Alert(
             """The selected variable is not available,
             the Clima tool could not generate the yearly plot""",
             color="warning",
@@ -647,56 +389,75 @@ def update_tab_yearly(_, var, global_local, df, meta, si_ip):
         custom_inputs = generate_custom_inputs(var)
         units = generate_units(si_ip)
         return dcc.Graph(
-            config=generate_chart_name("yearly_explore", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.YEARLY_EXPLORE, meta, custom_inputs, units
+            ),
             figure=yearly_profile(df, var, global_local, si_ip),
         )
 
 
 @callback(
-    Output("query-daily", "children"),
+    Output(ElementIds.QUERY_DAILY, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("sec1-var-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_daily(_, var, global_local, df, meta, si_ip):
+def update_tab_daily(_, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data)
+
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("daily_explore", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.DAILY_EXPLORE, meta, custom_inputs, units
+            ),
             figure=daily_profile(df, var, global_local, si_ip),
         ),
     )
 
 
 @callback(
-    Output("query-heatmap", "children"),
+    Output(ElementIds.QUERY_HEATMAP, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("sec1-var-dropdown", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("meta-store", "data"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
-def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
+def update_tab_heatmap(_, var, global_local, global_filter_data, df, meta, si_ip):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data)
+
     custom_inputs = generate_custom_inputs(var)
     units = generate_units(si_ip)
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap_explore", meta, custom_inputs, units),
+            config=generate_chart_name(
+                TabNames.HEATMAP_EXPLORE, meta, custom_inputs, units
+            ),
             figure=heatmap(df, var, global_local, si_ip),
         ),
     )
@@ -704,62 +465,68 @@ def update_tab_heatmap(_, var, global_local, df, meta, si_ip):
 
 @callback(
     [
-        Output("custom-heatmap", "children"),
-        Output("custom-summary", "style"),
-        Output("custom-summary", "figure"),
-        Output("normalize", "style"),
+        Output(ElementIds.CUSTOM_HEATMAP, "children"),
+        Output(ElementIds.CUSTOM_SUMMARY, "style"),
+        Output(ElementIds.CUSTOM_SUMMARY, "figure"),
+        Output(ElementIds.NORMALIZE, "style"),
     ],
     [
-        Input("df-store", "modified_timestamp"),
-        Input("sec2-var-dropdown", "value"),
-        Input("sec2-time-filter-input", "n_clicks"),
-        Input("sec2-data-filter-input", "n_clicks"),
-        Input("normalize", "value"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SEC2_VAR_DROPDOWN, "value"),
+        Input(ElementIds.SEC2_DATA_FILTER_INPUT, "n_clicks"),
+        Input(ElementIds.NORMALIZE, "value"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     # General
     [
-        State("df-store", "data"),
-        State("sec2-month-slider", "value"),
-        State("sec2-hour-slider", "value"),
-        State("sec2-data-filter-var", "value"),
-        State("sec2-min-val", "value"),
-        State("sec2-max-val", "value"),
-        State("meta-store", "data"),
-        State("invert-month-explore-heatmap", "value"),
-        State("invert-hour-explore-heatmap", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SEC2_DATA_FILTER_VAR, "value"),
+        State(ElementIds.SEC2_MIN_VAL, "value"),
+        State(ElementIds.SEC2_MAX_VAL, "value"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_heatmap(
     _,
     var,
-    time_filter,
     data_filter,
     normalize,
     global_local,
+    global_filter_data,
     df,
-    month,
-    hour,
     filter_var,
     min_val,
     max_val,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, var
-    )
-    data_filter_info = [data_filter, filter_var, min_val, max_val]
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import (
+            apply_global_month_hour_filter,
+            get_global_filter_state,
+        )
 
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month, hour, invert_month, invert_hour
-    )
+        df = apply_global_month_hour_filter(df, global_filter_data, var)
+
+        filter_state = get_global_filter_state(global_filter_data)
+        month_range = filter_state["month_range"]
+        hour_range = filter_state["hour_range"]
+        invert_month_global = filter_state["invert_month"]
+        invert_hour_global = filter_state["invert_hour"]
+
+        start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
+            month_range, hour_range, invert_month_global, invert_hour_global
+        )
+    else:
+        # Use default values when global filter is not active
+        start_month, end_month, start_hour, end_hour = 1, 12, 0, 24
+
+    data_filter_info = [data_filter, filter_var, min_val, max_val]
     month = [start_month, end_month]
     hour = [start_hour, end_hour]
-    time_filter_info = [time_filter, month, hour]
+    time_filter_info = [True, month, hour]
 
     heat_map = custom_heatmap(
         df, global_local, var, time_filter_info, data_filter_info, si_ip
@@ -769,7 +536,7 @@ def update_heatmap(
 
     if not heat_map:
         return (
-            dbc.Alert(
+            dmc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
                 "the filter variable",
@@ -795,7 +562,9 @@ def update_heatmap(
         units = generate_units(si_ip)
         return (
             dcc.Graph(
-                config=generate_chart_name("heatmap", meta, custom_inputs, units),
+                config=generate_chart_name(
+                    TabNames.HEATMAP, meta, custom_inputs, units
+                ),
                 figure=heat_map,
             ),
             {},
@@ -810,7 +579,7 @@ def update_heatmap(
 
     return (
         dcc.Graph(
-            config=generate_chart_name("heatmap", meta, custom_inputs, units),
+            config=generate_chart_name(TabNames.HEATMAP, meta, custom_inputs, units),
             figure=heat_map,
         ),
         no_display,
@@ -820,27 +589,23 @@ def update_heatmap(
 
 
 @callback(
-    [Output("three-var", "children"), Output("two-var", "children")],
+    [Output(ElementIds.THREE_VAR, "children"), Output(ElementIds.TWO_VAR, "children")],
     [
-        Input("df-store", "modified_timestamp"),
-        Input("tab6-sec3-var-x-dropdown", "value"),
-        Input("tab6-sec3-var-y-dropdown", "value"),
-        Input("tab6-sec3-colorby-dropdown", "value"),
-        Input("tab6-sec3-time-filter-input", "n_clicks"),
-        Input("tab6-sec3-data-filter-input", "n_clicks"),
-        Input("global-local-radio-input", "value"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.EXPLORER_SEC3_VAR_X_DROPDOWN, "value"),
+        Input(ElementIds.EXPLORER_SEC3_VAR_Y_DROPDOWN, "value"),
+        Input(ElementIds.EXPLORER_SEC3_COLORBY_DROPDOWN, "value"),
+        Input(ElementIds.EXPLORER_SEC3_DATA_FILTER_INPUT, "n_clicks"),
+        Input(ElementIds.SHARED_GLOBAL_LOCAL_RADIO_INPUT, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("tab6-sec3-query-month-slider", "value"),
-        State("tab6-sec3-query-hour-slider", "value"),
-        State("tab6-sec3-filter-var-dropdown", "value"),
-        State("tab6-sec3-min-val", "value"),
-        State("tab6-sec3-max-val", "value"),
-        State("meta-store", "data"),
-        State("invert-month-explore-more-charts", "value"),
-        State("invert-hour-explore-more-charts", "value"),
-        State("si-ip-unit-store", "data"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.EXPLORER_SEC3_FILTER_VAR_DROPDOWN, "value"),
+        State(ElementIds.EXPLORER_SEC3_MIN_VAL, "value"),
+        State(ElementIds.EXPLORER_SEC3_MAX_VAL, "value"),
+        State(ElementIds.SHARED_META_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_more_charts(
@@ -848,18 +613,14 @@ def update_more_charts(
     var_x,
     var_y,
     color_by,
-    time_filter,
     data_filter,
     global_local,
+    global_filter_data,
     df,
-    month,
-    hour,
     data_filter_var,
     min_val,
     max_val,
     meta,
-    invert_month,
-    invert_hour,
     si_ip,
 ):
     """Update the contents of tab size. Passing in the info from the dropdown and the general info."""
@@ -867,9 +628,13 @@ def update_more_charts(
     # if (min_val3 is None or max_val3 is None) and data_filter3:
     #     raise PreventUpdate
 
-    df = filter_df_by_month_and_hour(
-        df, time_filter, month, hour, invert_month, invert_hour, df.columns
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
+
+        df = apply_global_month_hour_filter(df, global_filter_data)
+    else:
+        # Use local filtering when global filter is not active
+        df = filter_df_by_month_and_hour(df, True, [1, 12], [0, 24], [], [], df.columns)
 
     data_filter_info = [data_filter, data_filter_var, min_val, max_val]
     if data_filter and (min_val is None or max_val is None):
@@ -888,14 +653,16 @@ def update_more_charts(
         if not three:
             custom_inputs = f"{var_x}-{var_y}"
             units = generate_units(si_ip)
-            return dbc.Alert(
+            return dmc.Alert(
                 "No data is available in this location under these conditions. Please "
                 "either change the month and hour filters, or select a wider range for "
                 "the filter variable",
                 color="danger",
                 style={"text-align": "center", "marginTop": "2rem"},
             ), dcc.Graph(
-                config=generate_chart_name("scatter", meta, custom_inputs, units),
+                config=generate_chart_name(
+                    TabNames.SCATTER, meta, custom_inputs, units
+                ),
                 figure=two,
             )
         else:
@@ -903,51 +670,57 @@ def update_more_charts(
             custom_inputs_two = f"{var_x}-{var_y}"
             units = generate_units(si_ip)
             return dcc.Graph(
-                config=generate_chart_name("scatter", meta, custom_inputs_three, units),
+                config=generate_chart_name(
+                    TabNames.SCATTER, meta, custom_inputs_three, units
+                ),
                 figure=three,
             ), dcc.Graph(
-                config=generate_chart_name("scatter", meta, custom_inputs_two, units),
+                config=generate_chart_name(
+                    TabNames.SCATTER, meta, custom_inputs_two, units
+                ),
                 figure=two,
             )
 
 
 @callback(
-    Output("table-data-explorer", "children"),
+    Output(ElementIds.TABLE_DATA_EXPLORER, "children"),
     [
-        Input("df-store", "modified_timestamp"),
-        Input("sec1-var-dropdown", "value"),
-        Input("sec1-time-filter-input", "n_clicks"),
+        Input(ElementIds.SHARED_DF_STORE, "modified_timestamp"),
+        Input(ElementIds.SEC1_VAR_DROPDOWN, "value"),
+        Input(ElementIds.TOOLS_GLOBAL_FILTER_STORE, "data"),
     ],
     [
-        State("df-store", "data"),
-        State("si-ip-unit-store", "data"),
-        State("sec1-month-slider", "value"),
-        State("sec1-hour-slider", "value"),
-        State("invert-month-explore-descriptive", "value"),
-        State("invert-hour-explore-descriptive", "value"),
+        State(ElementIds.SHARED_DF_STORE, "data"),
+        State(ElementIds.SHARED_SI_IP_UNIT_STORE, "data"),
     ],
 )
 def update_table(
     _,
     dd_value,
-    __,
+    global_filter_data,
     df,
     si_ip,
-    month_range,
-    hour_range,
-    invert_month,
-    invert_hour,
 ):
-    start_month, end_month, start_hour, end_hour = determine_month_and_hour_filter(
-        month_range, hour_range, invert_month, invert_hour
-    )
+    if global_filter_data and global_filter_data.get("filter_active", False):
+        from pages.lib.layout import apply_global_month_hour_filter
 
-    filtered_df = df[
-        (df["month"] >= start_month)
-        & (df["month"] <= end_month)
-        & (df["hour"] >= start_hour)
-        & (df["hour"] <= end_hour)
-    ]
+        filtered_df = apply_global_month_hour_filter(df, global_filter_data)
+        # Filter out the filtered rows to avoid empty columns
+        if "_is_filtered" in filtered_df.columns:
+            filtered_df = filtered_df[~filtered_df["_is_filtered"]]
+    else:
+        # Use default values when global filter is not active
+        filtered_df = df
+
     return summary_table_tmp_rh_tab(
-        filtered_df[["month", "hour", dd_value, "month_names"]], dd_value, si_ip
+        filtered_df[
+            [
+                Variables.MONTH.col_name,
+                Variables.HOUR.col_name,
+                dd_value,
+                Variables.MONTH_NAMES.col_name,
+            ]
+        ],
+        dd_value,
+        si_ip,
     )

@@ -54,7 +54,7 @@ class Assets:
 class PageInfo:
     """Stores page names and orders for registration."""
 
-    SELECT_NAME = "Select Weather File"
+    SELECT_NAME = "Select weather file"
     SELECT_ORDER = 0
     SUMMARY_NAME = "Climate Summary"
     SUMMARY_ORDER = 1

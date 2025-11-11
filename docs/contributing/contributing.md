@@ -5,10 +5,77 @@ description: Guide on how to contribute to this project
 # How to contribute
 
 First off, thanks for taking the time to contribute!
+We use GitHub as our main collaboration platform. Please work from the `development` branch, create small feature branches, and open focused pull requests. Follow Conventional Commit messages (e.g., `feat:`, `fix:`, `docs:`), format Python code with Black, and add tests where needed. Never merge your own PR—wait for review and address all comments (including AI reviewer suggestions). Use Issues and Projects to track tasks and discussions.
+
+> This project requires Python 3.11. Do not use Python 3.12 or newer, as it may cause dependency incompatibilities, build failure or runtime errors
+
 
 ## General Feedback
 
 If you have a general feedback about our project, please do not open an issue but instead please fill in this [form](https://forms.gle/LRUq3vsFnE1QCLiA6)
+
+## Fork & branch processing
+
+First fork the origin repository to your own github repository, then clone the repository to your local computer.
+
+```bash
+git clone https://github.com/<your-account-name>/clima.git
+cd clima
+```
+
+Install the dependencies using pipenv. You will need to have pipenv installed on your machine. If you do not have it yet, please refer to [pipenv installation guide](https://pipenv.pypa.io/en/latest/#install-pipenv-today).
+
+```bash
+pipenv sync --dev
+````
+
+Set up the upstream repository and check the output repositories.
+
+```bash
+git remote add upstream https://github.com/CenterForTheBuiltEnvironment/clima.git
+
+git remote -v
+```
+
+The terminal should output a list:
+
+- `origin → your Fork repository`
+- `upstream → origin repository`
+
+Check all branches.
+
+```bash
+git branch -a
+```
+
+The terminal will show a list of branches:
+
+```bash
+> * main
+  	remotes/origin/HEAD -> origin/main
+  	remotes/origin/development
+  	remotes/origin/main
+```
+
+Pull the development branch first, and if the terminal does not notice you that you should try the second command.
+
+```bash
+git checkout development
+
+git checkout -b development origin/development
+```
+
+Create a new branch in the development branch.
+
+```bash
+git checkout -b <your-branch-name>
+```
+
+Finally update and push to your repository branch if you modify the files.
+
+```bash
+git push origin <your-branch-name>
+```
 
 ## Code of Conduct
 
@@ -16,6 +83,7 @@ Available [here](code_of_conduct.md)
 
 ## Code style
 
+### Code Formatting
 We use ruff to enforce the code style and code formatting. You can run it with:
 
 ```bash
@@ -35,6 +103,39 @@ pipenv run pre-commit run --all-files
 Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
 More information about pre-commit hooks can be found [here](https://pre-commit.com/).
 
+### Code Simplicity
+Strive to minimize redundancy in your code.
+- Keep logic as concise as possible.
+- Remove unused variables, imports, and components.
+- Prefer reusable utilities to repeated patterns.
+
+### UI Modifications
+For UI-related changes:
+* Use [DMC (Dash Mantine Components)](https://www.dash-mantine-components.com/) wherever applicable for layout and styling consistency.
+* Do not use CSS, only inline styles are allowed, but still try to minimize their use.
+* Ensure visual consistency with existing components.
+
+## Testing
+
+Before submitting a Pull Request, please make sure:
+- All tests should pass.
+- You have installed project dependencies:
+
+```bash
+pipenv sync --dev
+pipenv run playwright install  # Required to install browsers
+```
+Start the app server:
+```bash
+pipenv run python main.py
+```
+Then, from the root directory, run tests using pytest:
+```bash
+cd tests
+
+pipenv run pytest --base-url=http://127.0.0.1:8080 -vv -n 2
+```
+
 ## Submitting changes
 
 Please send a Pull Request with a clear list of what you've done. Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
@@ -44,6 +145,51 @@ $ git commit -m "A brief summary of the commit
 > 
 > A paragraph describing what changed and its impact."
 ```
+
+> Detailed requirements for submitting a PR are described in the [Pull Request Regulation](#pull-request-regulation) section below
+
+Classification of Common Commit Types:
+
+- `Main (Master)`: Stable branch, merge code that passes review and CI; merge and release every time,
+- `Develop`: Continuous Integration branch for daily integration with multiple collaborators.
+- `Feature/*`: feature development branch, cut out from main or develop, send PR to merge in after completing the feature.
+- `Fix/*`: defect repair branch, the same process as feature
+- `Release/*`: release preparation branch for freezing versions, fixing documentation, doing regressions and tagging.
+- `docs/*`, `chore/*`, `refactor/*`, `test/*`: documentation, miscellaneous, refactor, test type branches.
+- `Style`: style modification (does not affect the function): code formatting, space adjustment, naming rules unity.
+- `Refactor`: Code Refactoring: Refactor existing code to improve maintainability.
+- `Test`: Add or modify tests: add unit tests, integration tests, or modify test logic.
+- `Chore`: Build Configuration, Dependency Management, CI/CD Configuration Updates.
+- `Perf`: Performance Optimisation: Optimising code execution efficiency or memory usage.
+- `Ci`: CI Configuration Related: Changing Continuous Integration Configurations for Github Actions, Travis, Jenkins, etc.
+- `Build`: build system related: modify build scripts, packaging configuration.
+- `Revert`: Rollback Commit: Undoing a Previous Commit
+- `Security`: Security fixes, fixing security vulnerabilities, updating dependencies to prevent attacks.
+- `Deps`: Dependency Management: Dependency Management/Adding, updating, and removing dependency libraries
+- `Infra`: Infrastructure related: changes to development environments, containers, server configurations, etc.
+
+## Pull Request Regulation
+**Time to submit PR:**
+
+- User requirements/issues have been addressed or discussed in Issue and consensus has been reached.
+- Changes have been minimised (small steps/phased submission) to avoid "mega PRs".
+
+**The pull request should include the following information:**
+
+- **Description:** Provide a brief summary of the changes, related issues, and motivation. List any required dependencies. **Fixes # (issue)**
+
+- **Type of Change:** Bug fix (non-breaking); New feature (non-breaking); Breaking change; Documentation update.
+
+- **Testing:** Describe how you tested your changes and how we can reproduce them. Include test details if necessary.
+
+**Pull Request Review:**
+
+- After submitting a Pull Request (PR), please @Coderabbit for review.
+- Check all improvement suggestions provided by Coderabbit before requesting a final review.
+
+**Discussion of Solutions:**
+ When needed, seek feedback from collaborators Toby and Giobetti before making major design or logic decisions.
+
 
 ## Thanks
 
