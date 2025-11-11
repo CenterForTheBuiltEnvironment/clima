@@ -331,7 +331,7 @@ def create_footer():
 
     footer_links = [
         (
-            "Version: 0.10.0",
+            "Version: 0.10.1",
             "https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
         ),
         ("Contributors", "https://cbe-berkeley.gitbook.io/clima/#contributions"),
