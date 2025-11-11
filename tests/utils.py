@@ -20,7 +20,7 @@ def upload_epw_file(
 
     # Verify that the upload success messages are displayed
     expect(page.get_by_text("The EPW was successfully loaded!")).to_be_visible()
-    expect(page.get_by_text(f"Current Location: {expected_location}")).to_be_visible()
+    expect(page.get_by_text(f"Location: {expected_location}")).to_be_visible()
 
 
 def open_tab(page: Page, tab_name: str):
