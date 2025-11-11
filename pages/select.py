@@ -265,34 +265,23 @@ def switch_si_ip(_, si_ip_input, url_store, lines):
 )
 def enable_tabs_when_data_is_loaded(meta, data):
     """Hide tabs when data are not loaded"""
-    default = "Current Location: N/A"
-    if data is None:
-        return (
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            True,
-            default,
-        )
-    else:
-        return (
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            False,
-            "Current Location: "
-            + meta[Variables.CITY.col_name]
-            + ", "
-            + meta[Variables.COUNTRY.col_name],
-        )
+    location_string = "Location: N/A"
+    disable_links = True
+    if data is not None:
+        location_string = f"Location: {meta[Variables.CITY.col_name]}, {meta[Variables.COUNTRY.col_name]}"
+        disable_links = False
+
+    return (
+        disable_links,
+        disable_links,
+        disable_links,
+        disable_links,
+        disable_links,
+        disable_links,
+        disable_links,
+        disable_links,
+        location_string,
+    )
 
 
 @callback(
