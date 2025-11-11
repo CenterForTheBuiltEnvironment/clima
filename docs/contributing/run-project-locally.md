@@ -114,7 +114,10 @@ docker logs -f clima-test
 
 # if everything is ok push to google container registry
 docker push us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest
-gcloud run deploy clima-test --image us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest --region us-central1 --memory 4Gi --cpu 2 --platform managed --allow-unauthenticated
+gcloud run deploy clima-test --image us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest --region us-central1 --memory 4Gi --cpu 2 --platform managed --allow-unauthenticated --tag "v0-10-2"
+
+# you can then deploy the main version changing the name and tag
+gcloud run deploy clima --image us-central1-docker.pkg.dev/clima-316917/cloud-run-source-deploy/clima:latest --region us-central1 --memory 4Gi --cpu 2 --platform managed --allow-unauthenticated --tag "v0-10-2"
 ```
 
 ### Deploy test version of the project
