@@ -53,6 +53,7 @@ def test_location_info_loaded(page: Page):
     """Verify that location info section shows correct values"""
     info_section = page.locator("#location-info")
     expect(info_section).to_be_visible()
+    expect(info_section).not_to_have_attribute("data-dash-is-loading", "true", timeout=20000)
     expected_texts = [
         "Location: Bologna Marconi AP, ITA",
         "Longitude: 11.2969",
@@ -88,6 +89,7 @@ def test_unit_switch(page: Page):
     ip_button.click(force=True)
 
     info_section = page.locator("#location-info")
+    expect(info_section).not_to_have_attribute("data-dash-is-loading", "true", timeout=20000)
     expect(info_section.get_by_text("58.0 °F")).to_be_visible()
     expect(info_section.get_by_text("121.4 ft")).to_be_visible()
     expect(info_section.get_by_text("kBtu/ft2")).to_be_visible()
