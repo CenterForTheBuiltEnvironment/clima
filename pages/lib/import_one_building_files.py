@@ -12,6 +12,9 @@ def import_kml_files(file_name):
 
     data = []
     for location in locations:
+        url_match = re.findall(r"<td>URL (.+?)<\/td>", location)
+        if not url_match:
+            continue
         location_info = []
         # lat
         location_info.append(
@@ -26,7 +29,7 @@ def import_kml_files(file_name):
         # url
         location_info.append(
             "<a href="
-            + re.findall(r"<td>URL (.+?)<\/td>", location)[0]
+            + url_match[0]
             + ' style="color: #fff">Climate.OneBuilding.Org</a>'
         )
         # description
