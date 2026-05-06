@@ -229,7 +229,8 @@ def update_location_info(ts, df, meta, si_ip):
     climate_text = ""
     try:
         r = requests.get(
-            f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[Variables.LAT.col_name]}/{meta[Variables.LON.col_name]}"
+            f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[Variables.LAT.col_name]}/{meta[Variables.LON.col_name]}",
+            timeout=5,
         )
         if r.status_code == 200:
             j = r.json()["return_values"][0]
