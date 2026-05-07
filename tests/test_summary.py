@@ -91,6 +91,9 @@ def test_unit_switch(page: Page):
     ip_button.click(force=True)
 
     info_section = page.locator("#location-info")
+    expect(info_section).to_have_attribute(
+        "data-dash-is-loading", "true", timeout=10000
+    )
     expect(info_section).not_to_have_attribute(
         "data-dash-is-loading", "true", timeout=20000
     )
