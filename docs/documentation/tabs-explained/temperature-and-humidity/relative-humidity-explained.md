@@ -4,7 +4,7 @@
 
 The annual graph allows the different months' relative humidity ranges to be evaluated. Moreover, overlaying the average value trend for each day helps visualize the differences between the minimum and maximum daily values for the investigated location.
 
-The humidity band, defined as 30–70% RH per [ANSI/ASHRAE Standard 160](https://webstore.ansi.org/standards/ashrae/ansiashrae1602021)**,** is overlaid to provide a baseline for analysis. These trends allow users to assess whether a climate is excessively dry or humid and evaluate design solutions, such as integrated humidification or dehumidification systems, to control for mold, static electricity, skin comfort, and other potential humidity-related issues.
+The humidity band, defined as 30–70% RH per [ANSI/ASHRAE Standard 160](https://webstore.ansi.org/standards/ashrae/ansiashrae1602021), is overlaid to provide a baseline for analysis. These trends allow users to assess whether a climate is excessively dry or humid and evaluate design solutions, such as integrated humidification or dehumidification systems, to control for mold, static electricity, skin comfort, and other potential humidity-related issues.
 
 <figure><img src="../../../.gitbook/assets/RH yearly.png" alt=""><figcaption><p>Yearly relative humidity trend in four common climatic conditions: hot dry, tropical, temperate, and continental</p></figcaption></figure>
 
