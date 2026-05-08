@@ -263,7 +263,9 @@ def update_location_info(ts, df, meta, si_ip):
 
     climate_text = ""
     try:
-        zone = lookupCZ(float(meta[Variables.LAT.col_name]), float(meta[Variables.LON.col_name]))
+        zone = lookupCZ(
+            float(meta[Variables.LAT.col_name]), float(meta[Variables.LON.col_name])
+        )
         desc = KG_DESCRIPTIONS.get(zone, "")
         if zone and desc:
             climate_text = f"Köppen-Geiger climate zone: {zone}. {desc}."
