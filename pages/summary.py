@@ -2,7 +2,7 @@ import dash
 import pandas as pd
 import dash_mantine_components as dmc
 import plotly.graph_objects as go
-import requests
+from kgcpy import lookupCZ
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import dcc, Output, Input, State, callback
@@ -22,6 +22,41 @@ from pages.lib.utils import (
     title_with_tooltip,
     title_with_link,
 )
+
+
+KG_DESCRIPTIONS = {
+    "Af": "Tropical rainforest",
+    "Am": "Tropical monsoon",
+    "Aw": "Tropical savanna, dry winter",
+    "As": "Tropical savanna, dry summer",
+    "BWh": "Hot desert",
+    "BWk": "Cold desert",
+    "BSh": "Hot semi-arid steppe",
+    "BSk": "Cold semi-arid steppe",
+    "Csa": "Hot-summer Mediterranean",
+    "Csb": "Warm-summer Mediterranean",
+    "Csc": "Cold-summer Mediterranean",
+    "Cwa": "Monsoon-influenced humid subtropical",
+    "Cwb": "Subtropical highland",
+    "Cwc": "Cold subtropical highland",
+    "Cfa": "Humid subtropical, no dry season",
+    "Cfb": "Temperate oceanic",
+    "Cfc": "Subpolar oceanic",
+    "Dsa": "Hot-summer continental",
+    "Dsb": "Warm-summer continental",
+    "Dsc": "Subarctic",
+    "Dsd": "Extremely cold subarctic",
+    "Dwa": "Monsoon-influenced hot-summer continental",
+    "Dwb": "Monsoon-influenced warm-summer continental",
+    "Dwc": "Monsoon-influenced subarctic",
+    "Dwd": "Monsoon-influenced extremely cold subarctic",
+    "Dfa": "Hot-summer humid continental",
+    "Dfb": "Warm-summer humid continental",
+    "Dfc": "Subarctic boreal",
+    "Dfd": "Extremely cold subarctic boreal",
+    "ET": "Tundra",
+    "EF": "Ice cap",
+}
 
 
 dash.register_page(
@@ -228,12 +263,10 @@ def update_location_info(ts, df, meta, si_ip):
 
     climate_text = ""
     try:
-        r = requests.get(
-            f"http://climateapi.scottpinkelman.com/api/v1/location/{meta[Variables.LAT.col_name]}/{meta[Variables.LON.col_name]}"
-        )
-        if r.status_code == 200:
-            j = r.json()["return_values"][0]
-            climate_text = f"Köppen-Geiger climate zone: {j['koppen_geiger_zone']}. {j['zone_description']}."
+        zone = lookupCZ(meta[Variables.LAT.col_name], meta[Variables.LON.col_name])
+        desc = KG_DESCRIPTIONS.get(zone, "")
+        if zone and desc:
+            climate_text = f"Köppen-Geiger climate zone: {zone}. {desc}."
     except Exception:
         pass
 
