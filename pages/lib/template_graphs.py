@@ -425,7 +425,7 @@ def yearly_profile(df, var, global_local, si_ip):
             x=all_dates,
             y=np.array(hi_rh) - np.array(lo_rh),
             base=lo_rh,
-            name="humidity comfort band",
+            name="ASHRAE 160 humidity range",
             marker_opacity=0.3,
             marker_color="silver",
         )

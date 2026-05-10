@@ -86,7 +86,7 @@ def layout():
             ),
             dmc.Skeleton(
                 visible=False,
-                h=450,
+                h=550,
                 children=dmc.Stack(id=ElementIds.TABLE_TMP_HUM),
             ),
         ],

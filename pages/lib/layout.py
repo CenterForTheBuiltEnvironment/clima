@@ -260,8 +260,14 @@ def create_navbar():
 
 
 def create_header():
-    return dmc.Group(
-        [
+    return dmc.Flex(
+        justify="flex-start",
+        align="center",
+        gap={"base": "xs", "md": "lg"},
+        wrap="nowrap",
+        direction="row",
+        p="xs",
+        children=[
             dmc.Burger(
                 id=ElementIds.BURGER_BUTTON,
                 size="sm",
@@ -282,14 +288,13 @@ def create_header():
                         c="white",
                     ),
                     dmc.Text(
-                        "Current Location: N/A",
+                        "Location: N/A",
                         id=ElementIds.ID_SELECT_BANNER_SUBTITLE,
                         size="sm",
-                        style={"overflow": "hidden"},
+                        truncate="end",
                         c="white",
                     ),
                 ],
-                p="xs",
             ),
             dmc.Alert(
                 [
@@ -318,7 +323,6 @@ def create_header():
                 style={"zIndex": 1002, "display": "none"},
             ),
         ],
-        pl="md",
     )
 
 
@@ -331,7 +335,7 @@ def create_footer():
 
     footer_links = [
         (
-            "Version: 0.10.1",
+            "Version: 0.10.2",
             "https://center-for-the-built-environment.gitbook.io/clima/version/changelog",
         ),
         ("Contributors", "https://cbe-berkeley.gitbook.io/clima/#contributions"),

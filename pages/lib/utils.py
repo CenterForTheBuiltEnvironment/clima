@@ -2,9 +2,10 @@ import copy
 import functools
 import time
 import math
+from typing import Optional, Tuple, List
 
 import pandas as pd
-from dash import html, dash_table, dcc
+from dash import html, dcc
 import dash_mantine_components as dmc
 
 from config import UnitSystem
@@ -274,27 +275,36 @@ def summary_table_tmp_rh_tab(df, value, si_ip):
         .replace("<sup>", "")
         .replace("</sup>", "")
     )
-    return dash_table.DataTable(
-        columns=[
-            (
-                {"name": i, "id": i}
-                if i == Variables.MONTH.col_name
-                else {"name": f"{i} ({unit})", "id": i}
-            )
-            for i in df_summary.columns
-        ],
-        style_table={"overflowX": "auto"},
-        data=df_summary.to_dict("records"),
-        style_cell={"textAlign": "center", "padding": "5px 10px"},
-        style_cell_conditional=[{"if": {"column_id": "month"}, "textAlign": "right"}],
-        style_header={"backgroundColor": "rgb(220, 220, 220)", "fontWeight": "bold"},
-        style_data_conditional=[
-            {"if": {"row_index": "odd"}, "backgroundColor": "white"},
-            {"if": {"row_index": "even"}, "backgroundColor": "rgb(250, 250, 250)"},
-            {"if": {"row_index": [12]}, "backgroundColor": "rgb(220, 220, 220)"},
-        ],
-        style_as_list_view=True,
-    )
+
+    # Build Mantine table head (add unit to non-month headers)
+    header_cells = []
+    for col in df_summary.columns:
+        if col == Variables.MONTH.col_name:
+            header_cells.append(dmc.TableTh(col))
+        else:
+            header_cells.append(dmc.TableTh(f"{col} ({unit})"))
+    head = dmc.TableThead(dmc.TableTr(header_cells))
+
+    # Build rows from the DataFrame records
+    records = df_summary.round(1).to_dict("records")
+    rows = []
+    for rec in records:
+        cells = []
+        for col in df_summary.columns:
+            val = rec.get(col, "")
+            # Convert NaN to empty string to avoid 'nan' in table
+            if pd.isna(val):
+                display_val = ""
+            else:
+                display_val = val
+            cells.append(dmc.TableTd(display_val))
+        rows.append(dmc.TableTr(cells, tableProps={"align": "center"}))
+
+    body = dmc.TableTbody(rows)
+
+    # Wrap table in a ScrollArea to mimic overflowX:auto behavior
+    table = dmc.Table([head, body], striped=True, highlightOnHover=True)
+    return dmc.ScrollArea(table, style={"width": "100%"})
 
 
 def determine_month_and_hour_filter(month, hour, invert_month, invert_hour):
@@ -359,7 +369,7 @@ def get_default_global_filter_store_data() -> dict:
     }
 
 
-def get_global_filter_state(filter_store_data: dict | None) -> dict:
+def get_global_filter_state(filter_store_data: Optional[dict]) -> dict:
     """Normalize filter store data into a consistent, easy-to-use structure.
 
     Ensures defaults are applied and types are coerced to booleans where appropriate.
@@ -380,8 +390,8 @@ def get_global_filter_state(filter_store_data: dict | None) -> dict:
 
 
 def get_time_filter_from_store(
-    filter_store_data: dict | None,
-) -> tuple[bool, list[int], list[int], bool, bool]:
+    filter_store_data: Optional[dict],
+) -> Tuple[bool, List[int], List[int], bool, bool]:
     """Return normalized time filter arguments from the global filter store.
 
     Returns (time_filter, month, hour, invert_month, invert_hour).

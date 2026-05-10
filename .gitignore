@@ -1,6 +1,10 @@
 # This pickle file is produced by test runs:
 epw_test.pkl
 
+# Data maintenance scripts
+check_links.py
+fix_broken_urls.py
+
 venv
 .idea
 cache-directory
