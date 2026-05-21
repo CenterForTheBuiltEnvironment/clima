@@ -14,13 +14,18 @@ TIMEOUT = 600
 
 @app.server.route("/geojson/locations")
 def serve_locations_geojson():
-    return send_file(
-        "assets/data/locations.geojson.gz",
-        mimetype="application/json",
-        as_attachment=False,
-        download_name="locations.geojson",
-        conditional=True,
-    ), 200, {"Content-Encoding": "gzip", "Cache-Control": "no-cache"}
+    return (
+        send_file(
+            "assets/data/locations.geojson.gz",
+            mimetype="application/json",
+            as_attachment=False,
+            download_name="locations.geojson",
+            conditional=True,
+        ),
+        200,
+        {"Content-Encoding": "gzip", "Cache-Control": "no-cache"},
+    )
+
 
 app.index_string = """<!DOCTYPE html>
 <html lang="en-US">

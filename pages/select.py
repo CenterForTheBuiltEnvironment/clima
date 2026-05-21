@@ -31,7 +31,9 @@ messages_alert = {
     "wrong_extension": "The file you have uploaded is not an EPW file",
 }
 
-_GEO_URL = "/geojson/locations?v=" + str(int(os.path.getmtime("assets/data/locations.geojson.gz")))
+_GEO_URL = "/geojson/locations?v=" + str(
+    int(os.path.getmtime("assets/data/locations.geojson.gz"))
+)
 
 # Create marker and bind tooltip in one function — pointToLayer is only ever called
 # for individual point features, never for cluster markers, so properties are always complete.

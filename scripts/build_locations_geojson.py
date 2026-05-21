@@ -43,34 +43,41 @@ def build():
     for feat in epw_data["features"][:2585]:
         props = feat["properties"]
         lon, lat = feat["geometry"]["coordinates"]
-        features.append({
-            "type": "Feature",
-            "properties": {
-                "title": props["title"],
-                "url": extract_url(props["epw"]),
-                "source": "ep",
-            },
-            "geometry": {"type": "Point", "coordinates": [lon, lat]},
-        })
+        features.append(
+            {
+                "type": "Feature",
+                "properties": {
+                    "title": props["title"],
+                    "url": extract_url(props["epw"]),
+                    "source": "ep",
+                },
+                "geometry": {"type": "Point", "coordinates": [lon, lat]},
+            }
+        )
 
     # OneBuilding locations — exclude future-climate scenario files (_Future/ in URL)
     df = pd.read_csv(ONE_BUILDING_CSV, compression="gzip")
     df = df[~df["Source"].str.contains("_Future/", na=False)]
     for _, row in df.iterrows():
-        features.append({
-            "type": "Feature",
-            "properties": {
-                "title": row["name"],
-                "url": extract_url(str(row["Source"])),
-                "source": "ob",
-                "period": _clean(row.get("period")),
-                "elev": _clean(row.get("elevation (m)")),
-                "tz": _clean(row.get("time zone (GMT)")),
-                "heat99": _clean(row.get("99% Heating DB")),
-                "cool1": _clean(row.get("1% Cooling DB ")),
-            },
-            "geometry": {"type": "Point", "coordinates": [float(row["lon"]), float(row["lat"])]},
-        })
+        features.append(
+            {
+                "type": "Feature",
+                "properties": {
+                    "title": row["name"],
+                    "url": extract_url(str(row["Source"])),
+                    "source": "ob",
+                    "period": _clean(row.get("period")),
+                    "elev": _clean(row.get("elevation (m)")),
+                    "tz": _clean(row.get("time zone (GMT)")),
+                    "heat99": _clean(row.get("99% Heating DB")),
+                    "cool1": _clean(row.get("1% Cooling DB ")),
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [float(row["lon"]), float(row["lat"])],
+                },
+            }
+        )
 
     geojson = {"type": "FeatureCollection", "features": features}
     payload = json.dumps(geojson, separators=(",", ":")).encode("utf-8")
@@ -78,7 +85,9 @@ def build():
     with gzip.open(OUT, "wb", compresslevel=9) as f:
         f.write(payload)
 
-    print(f"Written {len(features)} features → {OUT} ({OUT.stat().st_size / 1024:.0f} KB gzipped)")
+    print(
+        f"Written {len(features)} features → {OUT} ({OUT.stat().st_size / 1024:.0f} KB gzipped)"
+    )
     ep = sum(1 for feat in features if feat["properties"]["source"] == "ep")
     ob = sum(1 for feat in features if feat["properties"]["source"] == "ob")
     print(f"  EnergyPlus: {ep}  OneBuilding: {ob}")
