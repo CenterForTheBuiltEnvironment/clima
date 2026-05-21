@@ -1,22 +1,19 @@
 import base64
-import json
-import re
+import os
 
 import dash
+import dash_leaflet as dl
 import dash_mantine_components as dmc
-import pandas as pd
-import plotly.express as px
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Serverside, Output, Input, State, html, dcc, callback
-from pandas import json_normalize
+from dash_extensions.javascript import assign
 
 from pages.lib.extract_df import convert_df_units
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
-from pages.lib.global_tab_names import TabNames
 from config import PageUrls, PageInfo
-from pages.lib.utils import generate_chart_name, get_default_global_filter_store_data
+from pages.lib.utils import get_default_global_filter_store_data
 
 dash.register_page(
     __name__,
@@ -33,6 +30,33 @@ messages_alert = {
     "invalid_format": "The format of the EPW file you have uploaded is invalid.",
     "wrong_extension": "The file you have uploaded is not an EPW file",
 }
+
+_GEO_URL = "/geojson/locations?v=" + str(int(os.path.getmtime("assets/data/locations.geojson.gz")))
+
+# Create marker and bind tooltip in one function — pointToLayer is only ever called
+# for individual point features, never for cluster markers, so properties are always complete.
+_point_to_layer = assign("""function(feature, latlng, ctx) {
+    const p = feature.properties;
+    const color = p.source === "ep" ? "#3a0ca3" : "#4895ef";
+    const marker = L.circleMarker(latlng, {
+        radius: 5, color: color, fillColor: color, fillOpacity: 0.8, weight: 1
+    });
+
+    let html = '<b>' + (p.title || '') + '</b><br/>'
+             + 'Lat: ' + latlng.lat.toFixed(2) + ', Lon: ' + latlng.lng.toFixed(2) + '<br/>';
+    if (p.source === 'ob') {
+        html += 'Period: '         + (p.period || 'N/A') + '<br/>'
+              + 'Elevation: '      + (p.elev   || 'N/A') + ' m<br/>'
+              + 'Time zone: GMT'   + (p.tz     || 'N/A') + '<br/>'
+              + '99% Heating DB: ' + (p.heat99 || 'N/A') + '<br/>'
+              + '1% Cooling DB: '  + (p.cool1  || 'N/A') + '<br/>'
+              + 'Source: Climate.OneBuilding.Org';
+    } else {
+        html += 'Source: EnergyPlus';
+    }
+    marker.bindTooltip(html, {sticky: true, opacity: 0.9});
+    return marker;
+}""")
 
 
 def layout():
@@ -58,15 +82,31 @@ def layout():
                     style={"borderStyle": "dashed"},
                     styles={"label": {"fontWeight": 400}},
                 ),
-                # Allow multiple files to be uploaded
                 multiple=True,
                 style={"display": "grid"},
             ),
-            dmc.Skeleton(
-                visible=False,
-                id=ElementIds.SKELETON_GRAPH_CONTAINER,
-                height=500,
-                children=dmc.Box(id=ElementIds.TAB_ONE_MAP),
+            dl.Map(
+                id="map-container",
+                center=[20, 0],
+                zoom=2,
+                style={"height": "500px", "width": "100%"},
+                children=[
+                    dl.TileLayer(
+                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                        attribution=(
+                            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                            ' contributors &copy; <a href="https://carto.com/">CARTO</a>'
+                        ),
+                    ),
+                    dl.GeoJSON(
+                        id=ElementIds.TAB_ONE_MAP,
+                        url=_GEO_URL,
+                        cluster=True,
+                        zoomToBoundsOnClick=True,
+                        pointToLayer=_point_to_layer,
+                        superClusterOptions={"radius": 80, "maxZoom": 15},
+                    ),
+                ],
             ),
             dmc.Modal(
                 id=ElementIds.MODAL,
@@ -137,7 +177,6 @@ def alert():
     ],
     prevent_initial_call=True,
 )
-# @code_timer
 def submitted_data(
     _,
     __,
@@ -159,9 +198,7 @@ def submitted_data(
                 "orange",
                 get_default_global_filter_store_data(),
             )
-        location_info = get_location_info(
-            lines, url_store
-        )  # we might need to split this call into two, one returns df and one returns location_info
+        location_info = get_location_info(lines, url_store)
         return (
             location_info,
             lines,
@@ -180,7 +217,6 @@ def submitted_data(
         decoded_bytes = base64.b64decode(content_string)
         try:
             if "epw" in list_of_names[0]:
-                # Assume that the user uploaded a CSV file
                 try:
                     decoded_string = decoded_bytes.decode("utf-8")
                 except UnicodeDecodeError:
@@ -235,15 +271,10 @@ def submitted_data(
 def switch_si_ip(_, si_ip_input, url_store, lines):
     if lines is not None:
         df, _ = create_df(lines, url_store)
-
         df = convert_df_units(df, si_ip_input)
-
         return Serverside(df), si_ip_input
     else:
-        return (
-            None,
-            None,
-        )
+        return (None, None)
 
 
 @callback(
@@ -298,12 +329,11 @@ def enable_tabs_when_data_is_loaded(meta, data):
     prevent_initial_call=True,
 )
 def display_modal_when_data_clicked(_, click_map, __, opened):
-    """display the modal to the user and check if he wants to use that file"""
+    """Display the modal when a map location is clicked."""
     if click_map:
-        url = re.search(
-            r'href=[\'"]?([^\'" >]+)', click_map["points"][0]["customdata"][-1]
-        ).group(1)
-        return not opened, url
+        url = (click_map.get("properties") or {}).get("url")
+        if url:
+            return not opened, url
     return opened, ""
 
 
@@ -314,64 +344,7 @@ def display_modal_when_data_clicked(_, click_map, __, opened):
 )
 def change_text_modal(click_map):
     if click_map:
-        return [f"Analyse data from {click_map['points'][0]['hovertext']}?"]
+        title = (click_map.get("properties") or {}).get("title")
+        if title:
+            return [f"Analyse data from {title}?"]
     return ["Analyse data from this location?"]
-
-
-@callback(
-    Output(ElementIds.SKELETON_GRAPH_CONTAINER, "children"),
-    Input(ElementIds.SELECT_URL, "pathname"),
-)
-def plot_location_epw_files(pathname):
-    # print(pathname)
-    if pathname != "/":
-        raise PreventUpdate
-
-    with open("./assets/data/epw_location.json", encoding="utf8") as data_file:
-        data = json.load(data_file)
-
-    df = json_normalize(data[Variables.FEATURES.col_name])
-    df[[Variables.LON.col_name, Variables.LAT.col_name]] = pd.DataFrame(
-        df[Variables.GEOMETRY_COORDINATES.col_name].tolist()
-    )
-    df[Variables.LAT.col_name] += 0.010
-    df = df.rename(columns={"properties.epw": "Source"})
-
-    fig = px.scatter_mapbox(
-        df.head(2585),
-        lat="lat",
-        lon="lon",
-        hover_name="properties.title",
-        color_discrete_sequence=["#3a0ca3"],
-        hover_data=["Source"],
-        zoom=2,
-        height=500,
-    )
-    df_one_building = pd.read_csv("./assets/data/one_building.csv", compression="gzip")
-
-    fig2 = px.scatter_mapbox(
-        df_one_building,
-        lat="lat",
-        lon="lon",
-        hover_name=df_one_building[Variables.NAME.col_name],
-        color_discrete_sequence=["#4895ef"],
-        hover_data=[
-            "period",
-            "elevation (m)",
-            "time zone (GMT)",
-            "99% Heating DB",
-            "1% Cooling DB ",
-            "Source",
-        ],
-        zoom=2,
-        height=500,
-    )
-    fig.add_trace(fig2.data[0])
-    fig.update_layout(mapbox_style="carto-positron")
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-
-    return dcc.Graph(
-        id=ElementIds.TAB_ONE_MAP,
-        figure=fig,
-        config=generate_chart_name(TabNames.EPW_LOCATION_SELECT),
-    )

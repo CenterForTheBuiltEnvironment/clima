@@ -1,5 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import DashProxy, ServersideOutputTransform
+from flask import send_file
 
 app = DashProxy(
     __name__,
@@ -9,6 +10,17 @@ app = DashProxy(
     suppress_callback_exceptions=True,
 )
 TIMEOUT = 600
+
+
+@app.server.route("/geojson/locations")
+def serve_locations_geojson():
+    return send_file(
+        "assets/data/locations.geojson.gz",
+        mimetype="application/json",
+        as_attachment=False,
+        download_name="locations.geojson",
+        conditional=True,
+    ), 200, {"Content-Encoding": "gzip", "Cache-Control": "no-cache"}
 
 app.index_string = """<!DOCTYPE html>
 <html lang="en-US">

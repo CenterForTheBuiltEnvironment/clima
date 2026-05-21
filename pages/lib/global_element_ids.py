@@ -132,7 +132,6 @@ class ElementIds(str, Enum):
     UPLOAD_DATA = "upload-data"
     UPLOAD_DATA_BUTTON = "upload-data-button"
     TAB_ONE_MAP = "tab-one-map"
-    SKELETON_GRAPH_CONTAINER = "skeleton-graph-container"
     MODAL_HEADER = "modal-header"
     MODAL_CLOSE_BUTTON = "modal-close-button"
     MODAL_YES_BUTTON = "modal-yes-button"
