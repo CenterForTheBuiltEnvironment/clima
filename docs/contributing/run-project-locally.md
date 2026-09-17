@@ -87,7 +87,7 @@ You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed o
 > **Important:** this repository's deployment workflow is `gcloud`-only and does not use `gsutil`.
 > Google Cloud CLI distributions may stop bundling `gsutil` by default. If you have standalone scripts that still depend on `gsutil`, migrate them to `gcloud storage` (see [Transitioning from gsutil to gcloud storage](https://cloud.google.com/storage/docs/gsutil-transition-to-gcloud)).
 
-First make sure you that:
+First make sure that you:
 
 * gcloud is up-to-date
 * that you are logged in with the right account
