@@ -84,6 +84,9 @@ Secondly, you should describe the changes in `CHANGELOG.md`
 
 You need to have [gcloud](https://cloud.google.com/sdk/docs/install) installed on your computer. A short guide on how to deploy on Google Cloud Run can be found [here](https://youtu.be/FPFDg5znLTM).
 
+> **Important:** this repository's deployment workflow is `gcloud`-only and does not use `gsutil`.
+> Google Cloud CLI distributions may stop bundling `gsutil` by default. If you have standalone scripts that still depend on `gsutil`, migrate them to `gcloud storage` (see [Transitioning from gsutil to gcloud storage](https://cloud.google.com/storage/docs/gsutil-transition-to-gcloud)).
+
 First make sure you that:
 
 * gcloud is up-to-date
