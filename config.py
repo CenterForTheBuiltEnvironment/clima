@@ -1,4 +1,5 @@
 from enum import Enum
+import os
 import platform
 
 
@@ -11,6 +12,7 @@ class AppConfig:
     PORT = 8080
     PROCESSES = 1
     THREADED = True
+    CARTO_API_KEY = os.environ.get("CARTO_API_KEY", "")
 
 
 class UnitSystem(str, Enum):

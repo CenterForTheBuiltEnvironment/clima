@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 from pages.lib.global_variables import Variables
+from pages.lib.utils import apply_carto_basemap
 
 
 def world_map(meta):
@@ -32,6 +33,6 @@ def world_map(meta):
         height=300,
         size="Size",
     )
-    fig.update_layout(mapbox_style="carto-positron")
+    apply_carto_basemap(fig)
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     return fig
