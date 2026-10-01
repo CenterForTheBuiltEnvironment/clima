@@ -474,22 +474,14 @@
   "screenshots": [],
   "shortcuts": [],
   "url_handlers": [
-        {
-            "origin": "https://clima.cbe.berkeley.edu/"
-        }
-    ],
-  "lang": "en",
-  "categories": [
-    "education",
-    "utilities",
-    "weather"
+    {
+      "origin": "https://clima.cbe.berkeley.edu/"
+    }
   ],
+  "lang": "en",
+  "categories": ["education", "utilities", "weather"],
   "dir": "ltr",
   "prefer_related_applications": false,
   "display": "standalone",
-  "display_override": [
-  "window-controls-overlay",
-  "standalone",
-  "browser"
-]
+  "display_override": ["window-controls-overlay", "standalone", "browser"]
 }

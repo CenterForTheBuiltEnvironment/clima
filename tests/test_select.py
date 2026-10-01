@@ -38,5 +38,5 @@ def test_upload_and_map_rendering(page: Page):
     expect(alert_box).to_contain_text("EPW was successfully loaded!")
 
     # Map rendered after file upload
-    map_container = page.locator("#tab-one-map")
+    map_container = page.locator("#map-container")
     expect(map_container).to_be_visible()

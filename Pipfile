@@ -17,6 +17,7 @@ numpy = "==1.26.3"
 dash-iconify = "*"
 scipy = "==1.12.0"
 kgcpy = "*"
+dash-leaflet = "*"
 
 [dev-packages]
 cleanpy = "*"
