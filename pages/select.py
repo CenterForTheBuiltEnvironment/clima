@@ -12,7 +12,7 @@ from pages.lib.extract_df import convert_df_units
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
-from config import PageUrls, PageInfo
+from config import AppConfig, PageUrls, PageInfo
 from pages.lib.utils import get_default_global_filter_store_data
 
 dash.register_page(
@@ -91,10 +91,13 @@ def layout():
                 id="map-container",
                 center=[20, 0],
                 zoom=2,
-                style={"height": "500px", "width": "100%"},
+                style={"height": "650px", "width": "100%"},
                 children=[
                     dl.TileLayer(
-                        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                        url=(
+                            "https://basemaps.cartocdn.com/rastertiles/light_all"
+                            f"/{{z}}/{{x}}/{{y}}{{r}}.png?key={AppConfig.CARTO_API_KEY}"
+                        ),
                         attribution=(
                             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                             ' contributors &copy; <a href="https://carto.com/">CARTO</a>'
