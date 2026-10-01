@@ -22,7 +22,6 @@ def serve_locations_geojson():
             download_name="locations.geojson",
             conditional=True,
         ),
-        200,
         {
             "Content-Encoding": "gzip",
             "Cache-Control": "public, max-age=31536000, immutable",

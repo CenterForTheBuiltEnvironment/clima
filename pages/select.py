@@ -25,7 +25,7 @@ dash.register_page(
 
 
 messages_alert = {
-    "start": "To start, upload an EPW file or click on a point on the map!",
+    "start": "To start, upload an EPW file, search for a location, or click on a point on the map!",
     "not_available": "The EPW for this location is not available",
     "success": "The EPW was successfully loaded!",
     "invalid_format": "The format of the EPW file you have uploaded is invalid.",
@@ -133,7 +133,7 @@ def layout():
                             "top": 10,
                             "right": 10,
                             "zIndex": 1000,
-                            "width": 280,
+                            "width": 365,
                         },
                     ),
                 ],
