@@ -21,7 +21,7 @@ def apply_carto_basemap(fig):
             {
                 "below": "traces",
                 "sourcetype": "raster",
-+               "sourceattribution": "© OpenStreetMap contributors, © CARTO",
+                +"sourceattribution": "© OpenStreetMap contributors, © CARTO",
                 "source": [
                     f"https://basemaps.cartocdn.com/rastertiles/light_all/{{z}}/{{x}}/{{y}}.png?key={AppConfig.CARTO_API_KEY}"
                 ],
