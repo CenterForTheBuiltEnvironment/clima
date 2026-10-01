@@ -106,7 +106,7 @@ def layout():
                         cluster=True,
                         zoomToBoundsOnClick=True,
                         pointToLayer=_point_to_layer,
-                        superClusterOptions={"radius": 80, "maxZoom": 15},
+                        superClusterOptions={"radius": 80, "maxZoom": 12},
                     ),
                 ],
             ),
