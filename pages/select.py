@@ -1,4 +1,5 @@
 import base64
+import json
 import os
 
 import dash
@@ -34,6 +35,10 @@ messages_alert = {
 _GEO_URL = "/geojson/locations?v=" + str(
     int(os.path.getmtime("assets/data/locations.geojson.gz"))
 )
+
+with open("assets/data/location_names.json", encoding="utf-8") as _f:
+    _LOCATION_NAMES: dict = json.load(_f)
+_LOCATION_NAMES_LOWER = {title.lower(): title for title in _LOCATION_NAMES}
 
 # Create marker and bind tooltip in one function — pointToLayer is only ever called
 # for individual point features, never for cluster markers, so properties are always complete.
@@ -87,29 +92,49 @@ def layout():
                 multiple=True,
                 style={"display": "grid"},
             ),
-            dl.Map(
-                id="map-container",
-                center=[20, 0],
-                zoom=2,
-                style={"height": "650px", "width": "100%"},
+            dmc.Box(
+                pos="relative",
                 children=[
-                    dl.TileLayer(
-                        url=(
-                            "https://basemaps.cartocdn.com/rastertiles/light_all"
-                            f"/{{z}}/{{x}}/{{y}}{{r}}.png?key={AppConfig.CARTO_API_KEY}"
-                        ),
-                        attribution=(
-                            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                            ' contributors &copy; <a href="https://carto.com/">CARTO</a>'
-                        ),
+                    dl.Map(
+                        id="map-container",
+                        center=[20, 0],
+                        zoom=2,
+                        style={"height": "650px", "width": "100%"},
+                        children=[
+                            dl.TileLayer(
+                                url=(
+                                    "https://basemaps.cartocdn.com/rastertiles/light_all"
+                                    f"/{{z}}/{{x}}/{{y}}{{r}}.png?key={AppConfig.CARTO_API_KEY}"
+                                ),
+                                attribution=(
+                                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                                    ' contributors &copy; <a href="https://carto.com/">CARTO</a>'
+                                ),
+                            ),
+                            dl.GeoJSON(
+                                id=ElementIds.TAB_ONE_MAP,
+                                url=_GEO_URL,
+                                cluster=True,
+                                zoomToBoundsOnClick=True,
+                                pointToLayer=_point_to_layer,
+                                superClusterOptions={"radius": 80, "maxZoom": 12},
+                            ),
+                        ],
                     ),
-                    dl.GeoJSON(
-                        id=ElementIds.TAB_ONE_MAP,
-                        url=_GEO_URL,
-                        cluster=True,
-                        zoomToBoundsOnClick=True,
-                        pointToLayer=_point_to_layer,
-                        superClusterOptions={"radius": 80, "maxZoom": 12},
+                    dmc.Autocomplete(
+                        id=ElementIds.TAB_ONE_MAP_SEARCH,
+                        placeholder="Search city or station...",
+                        data=[],
+                        limit=20,
+                        clearable=True,
+                        comboboxProps={"withinPortal": True},
+                        style={
+                            "position": "absolute",
+                            "top": 10,
+                            "right": 10,
+                            "zIndex": 1000,
+                            "width": 280,
+                        },
                     ),
                 ],
             ),
@@ -353,3 +378,23 @@ def change_text_modal(click_map):
         if title:
             return [f"Analyse data from {title}?"]
     return ["Analyse data from this location?"]
+
+
+@callback(
+    Output(ElementIds.TAB_ONE_MAP_SEARCH, "data"),
+    Output("map-container", "viewport"),
+    Input(ElementIds.TAB_ONE_MAP_SEARCH, "value"),
+    prevent_initial_call=True,
+)
+def search_location(value):
+    if not value:
+        return [], dash.no_update
+    needle = value.strip().lower()
+    matches = [orig for low, orig in _LOCATION_NAMES_LOWER.items() if needle in low][
+        :20
+    ]
+    exact = _LOCATION_NAMES_LOWER.get(needle)
+    if exact:
+        lon, lat = _LOCATION_NAMES[exact]
+        return matches, {"center": [lat, lon], "zoom": 12, "transition": "flyTo"}
+    return matches, dash.no_update

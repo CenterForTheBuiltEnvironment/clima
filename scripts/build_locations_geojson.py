@@ -14,6 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 EPW_JSON = REPO_ROOT / "assets" / "data" / "epw_location.json"
 ONE_BUILDING_CSV = REPO_ROOT / "assets" / "data" / "one_building.csv"
 OUT = REPO_ROOT / "assets" / "data" / "locations.geojson.gz"
+NAMES_OUT = REPO_ROOT / "assets" / "data" / "location_names.json"
 
 URL_RE = re.compile(r'href=[\'"]?([^\'" >]+)')
 
@@ -101,6 +102,19 @@ def _drop_undated_tmyx_aliases(rows):
             continue
         kept.append(row)
     return kept, dropped
+
+
+def _build_name_index(features):
+    """Map station title -> [lon, lat], first occurrence wins. features is already
+    sorted by (lat, lon, title) at the call site, so this is deterministic across
+    rebuilds. Called before jitter runs, so coordinates are the true station
+    location rather than a jittered offset."""
+    index = {}
+    for feat in features:
+        title = feat["properties"]["title"]
+        if title and title not in index:
+            index[title] = feat["geometry"]["coordinates"]
+    return index
 
 
 def _jitter_duplicates(features, radius_m=150):
@@ -202,6 +216,11 @@ def build():
             f["properties"]["title"],
         )
     )
+
+    name_index = _build_name_index(features)
+    with open(NAMES_OUT, "w", encoding="utf-8") as f:
+        json.dump(name_index, f, separators=(",", ":"))
+
     features = _jitter_duplicates(features)
 
     geojson = {"type": "FeatureCollection", "features": features}
@@ -217,6 +236,10 @@ def build():
     ob = sum(1 for feat in features if feat["properties"]["source"] == "ob")
     print(f"  EnergyPlus: {ep}  OneBuilding: {ob}")
     print(f"  Dropped {dropped} undated-TMYx alias rows (dated edition already kept)")
+    print(
+        f"  Name index: {len(name_index)} unique titles → {NAMES_OUT} "
+        f"({NAMES_OUT.stat().st_size / 1024:.0f} KB)"
+    )
 
 
 if __name__ == "__main__":
