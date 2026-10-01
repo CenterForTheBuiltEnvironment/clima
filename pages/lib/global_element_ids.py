@@ -161,8 +161,6 @@ class ElementIds(str, Enum):
     WIND_PROFILE_GRAPH = "wind-profile-graph"
     TDB_PROFILE_GRAPH = "tdb-profile-graph"
     RH_PROFILE_GRAPH = "rh-profile-graph"
-    ID_LAYOUT_ALERT_AUTO = "alert-auto"
-    ID_LAYOUT_INTERVAL_COMPONENT = "interval-component"
     FOOTER_CONTAINER = "footer-container"
     STORE = "store"
     BURGER_BUTTON = "burger-button"

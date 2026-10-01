@@ -8,9 +8,27 @@ import pandas as pd
 from dash import html, dcc
 import dash_mantine_components as dmc
 
-from config import UnitSystem
+from config import AppConfig, UnitSystem
 from pages.lib.global_scheme import fig_config, month_lst
 from pages.lib.global_variables import Variables, VariableInfo
+
+
+def apply_carto_basemap(fig):
+    """Apply the Carto Positron basemap, authenticated with our API key."""
+    fig.update_layout(
+        mapbox_style="white-bg",
+        mapbox_layers=[
+            {
+                "below": "traces",
+                "sourcetype": "raster",
+                "sourceattribution": "© OpenStreetMap contributors, © CARTO",
+                "source": [
+                    f"https://basemaps.cartocdn.com/rastertiles/light_all/{{z}}/{{x}}/{{y}}.png?key={AppConfig.CARTO_API_KEY}"
+                ],
+            }
+        ],
+    )
+    return fig
 
 
 def code_timer(func):
