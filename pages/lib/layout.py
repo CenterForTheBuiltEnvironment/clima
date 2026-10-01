@@ -296,32 +296,6 @@ def create_header():
                     ),
                 ],
             ),
-            dmc.Alert(
-                [
-                    "If you have a moment, help us improve Clima and take a ",
-                    dmc.Anchor(
-                        "quick user survey",
-                        href="https://forms.gle/k289zP3R92jdu14M7",
-                        target="_blank",
-                        c="white",
-                        underline="always",
-                    ),
-                    "! ☀️",
-                ],
-                id=ElementIds.ID_LAYOUT_ALERT_AUTO,
-                title="CBE Clima User Survey",
-                icon=dmc.ThemeIcon(
-                    DashIconify(icon="tabler:info-circle", color="white"),
-                ),
-                color="blue",
-                variant="filled",
-                withCloseButton=True,
-                w=400,
-                pos="fixed",
-                top="1em",
-                right="1em",
-                style={"zIndex": 1002, "display": "none"},
-            ),
         ],
     )
 
@@ -422,11 +396,6 @@ def create_stores():
                 data=get_default_global_filter_store_data(),
                 storage_type="session",
             ),
-            dcc.Interval(
-                id=ElementIds.ID_LAYOUT_INTERVAL_COMPONENT,
-                interval=12 * 1000,
-                n_intervals=0,
-            ),
         ],
     )
 
@@ -520,15 +489,6 @@ def update_nav_active_state(pathname):
         for page in dash.page_registry.values()
         if page[Variables.NAME.col_name] not in ["404", "Changelog"]
     ]
-
-
-@callback(
-    Output(ElementIds.ID_LAYOUT_ALERT_AUTO, "style"),
-    Input(ElementIds.ID_LAYOUT_INTERVAL_COMPONENT, "n_intervals"),
-    prevent_initial_call=True,
-)
-def show_alert_after_delay(n_intervals):
-    return {"display": "block" if n_intervals == 1 else "none"}
 
 
 @callback(

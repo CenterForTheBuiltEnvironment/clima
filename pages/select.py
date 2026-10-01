@@ -16,7 +16,11 @@ from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_tab_names import TabNames
 from config import PageUrls, PageInfo
-from pages.lib.utils import generate_chart_name, get_default_global_filter_store_data
+from pages.lib.utils import (
+    apply_carto_basemap,
+    generate_chart_name,
+    get_default_global_filter_store_data,
+)
 
 dash.register_page(
     __name__,
@@ -367,7 +371,7 @@ def plot_location_epw_files(pathname):
         height=500,
     )
     fig.add_trace(fig2.data[0])
-    fig.update_layout(mapbox_style="carto-positron")
+    apply_carto_basemap(fig)
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
 
     return dcc.Graph(
