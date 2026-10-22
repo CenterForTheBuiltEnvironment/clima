@@ -8,27 +8,33 @@ import pandas as pd
 from dash import html, dcc
 import dash_mantine_components as dmc
 
-from config import AppConfig, UnitSystem
+from config import UnitSystem
+from pages.lib.basemap import CARTO_STYLE_ROUTE
 from pages.lib.global_scheme import fig_config, month_lst
 from pages.lib.global_variables import Variables, VariableInfo
 
 
 def apply_carto_basemap(fig):
-    """Apply the Carto Positron basemap, authenticated with our API key."""
-    fig.update_layout(
-        mapbox_style="white-bg",
-        mapbox_layers=[
-            {
-                "below": "traces",
-                "sourcetype": "raster",
-                "sourceattribution": "© OpenStreetMap contributors, © CARTO",
-                "source": [
-                    f"https://basemaps.cartocdn.com/rastertiles/light_all/{{z}}/{{x}}/{{y}}.png?key={AppConfig.CARTO_API_KEY}"
-                ],
-            }
-        ],
-    )
+    """Apply the Carto Positron vector basemap, served with our API key."""
+    fig.update_layout(map_style=CARTO_STYLE_ROUTE)
     return fig
+
+
+def carto_logo_badge():
+    """CARTO logo linked to carto.com, overlaid on the bottom left of a map."""
+    return html.A(
+        html.Img(src="/assets/img/carto-logo.svg", alt="CARTO", height=20),
+        href="https://carto.com/",
+        target="_blank",
+        rel="noopener",
+        style={
+            "position": "absolute",
+            "bottom": 8,
+            "left": 8,
+            "zIndex": 1000,
+            "lineHeight": 0,
+        },
+    )
 
 
 def code_timer(func):
