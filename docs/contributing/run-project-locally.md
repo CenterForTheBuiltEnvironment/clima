@@ -8,10 +8,9 @@ description: >-
 
 ## Prerequisites
 
-Python 3 installed on your machine and [pipenv](https://docs.pipenv.org).
+[uv](https://docs.astral.sh/uv/) installed on your machine. You can install it by following the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
-* If you do not have Python installed on your machine you can follow [this guide](https://wiki.python.org/moin/BeginnersGuide/Download)
-* You can install `pipenv` using the following command `pip install pipenv`.
+* uv reads the Python version from `.python-version` (3.11) and downloads it if it is not already installed, so you do not need to install Python separately.
 
 ## Installation
 
@@ -24,61 +23,65 @@ This guide is for Mac OSX, Linux, or Windows.
    $ cd clima
    ```
 
-2. **Create a virtual environment using pipenv and install dependencies:**
+2. **Create a virtual environment and install dependencies:**
 
    ```text
-    pipenv install --dev
+    uv sync
    ```
 
 3.  **Run tool locally**
 
    Now you should be ready to run the tool locally.
 
-   `pipenv run python main.py`
+   `uv run python main.py`
 
-Visit [http://localhost:8080](http://localhost:8080) in your browser to check it out. Note that whenever you want to run the tool, you have to activate the virtualenv first.
+Visit [http://localhost:8080](http://localhost:8080) in your browser to check it out. `uv run` uses the project's virtual environment, so you do not need to activate it first.
 
 ### Adding new dependencies
 
-Pipfiles contain information about the dependencies of your project, and supersede the requirements.txt file that is typically used in Python projects.
+`pyproject.toml` lists the dependencies of the project, and `uv.lock` records the exact version of every package that gets installed.
 
-To install a Python package for your project use the `install` keyword. For example,
+To add a Python package to the project use the `add` command. For example,
 
-`pipenv install beautifulsoup4`
+`uv add beautifulsoup4`
 
-The package name, together with its version and a list of its own dependencies, can be frozen by updating the Pipfile.lock. This is done using the lock keyword,
+`uv add` updates both `pyproject.toml` and `uv.lock`. If you edit `pyproject.toml` by hand, update the lock file with
 
-`pipenv lock`
+`uv lock`
 
 ### Managing your development environment
 
-There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. Pipenv will let you keep the two environments separate using the --dev flag. For example,
+There are usually some Python packages that are only required in your development environment and not in your production environment, such as unit testing packages. uv keeps them in a separate `dev` dependency group using the --dev flag. For example,
 
-`pipenv install --dev nose2`
+`uv add --dev nose2`
 
 ## Testing
 
-This project runs both Python unit tests, and Cypress end-to-end tests in CI.
+The tests are end-to-end tests written with pytest and [Playwright](https://playwright.dev/python/). CI runs them on every push and pull request to `development`.
 
-To run Python tests locally:
-- If you haven't already, install Python dev dependencies.
-- Then: `pipenv run python -m pytest`
+To run them locally:
+- Install the browser Playwright uses (only needed once): `uv run playwright install chromium`
+- Start the Clima application with `uv run python main.py` and confirm that http://localhost:8080/ is up.
+- In a second terminal, run the tests:
 
-To run Cypress locally:
-- If you haven't already, start the Clima application and confirm that http://localhost:8080/ is up.
-- Then: `cd tests/node; npm install; npm run cy:open`
+```bash
+cd tests
+uv run pytest --base-url=http://127.0.0.1:8080 -vv --numprocesses 4
+```
 
 ## Versioning
 
-When you release a new version of the tool you should first use `bumpversion` to update the version of the tool. You can use the following command:
+When you release a new version of the tool you should first use `bump2version` to update the version of the tool. You can use the following command:
 
 ```text
-bumpversion patch  # alternatively you can use minor or major instead of patch
+uv run bump2version patch  # alternatively you can use minor or major instead of patch
 ```
 
-If the above command do not work even if you have committed all the files try with `bumpversion patch --allow-dirty`
+`bump2version` updates the version in `pyproject.toml`, `uv.lock`, `pages/lib/layout.py` and `assets/manifest.json`, then commits the change and tags it. The settings are in `.bumpversion.cfg`.
 
-Secondly, you should describe the changes in `CHANGELOG.md`
+If the above command does not work even if you have committed all the files try with `uv run bump2version patch --allow-dirty`
+
+Secondly, you should describe the changes in `docs/version/changelog.md`
 
 ## Deploy to Google Cloud Run
 
@@ -88,13 +91,13 @@ First make sure you that:
 
 * gcloud is up-to-date
 * that you are logged in with the right account
-* you have updated the Pipfile.lock.
+* you have updated `uv.lock` (`uv lock`) and committed it.
 
 First test the application.
 
 ```bash
 cd tests
-pipenv run pytest --base-url=http://127.0.0.1:8080 -vv --numprocesses 4
+uv run pytest --base-url=http://127.0.0.1:8080 -vv --numprocesses 4
 ```
 
 ### Deploy test version manually using gcloud and docker locally - quicker and great to test small changes

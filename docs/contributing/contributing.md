@@ -23,10 +23,10 @@ git clone https://github.com/<your-account-name>/clima.git
 cd clima
 ```
 
-Install the dependencies using pipenv. You will need to have pipenv installed on your machine. If you do not have it yet, please refer to [pipenv installation guide](https://pipenv.pypa.io/en/latest/#install-pipenv-today).
+Install the dependencies using uv. You will need to have uv installed on your machine. If you do not have it yet, please refer to the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/).
 
 ```bash
-pipenv sync --dev
+uv sync
 ````
 
 Set up the upstream repository and check the output repositories.
@@ -87,17 +87,17 @@ Available [here](code_of_conduct.md)
 We use ruff to enforce the code style and code formatting. You can run it with:
 
 ```bash
-pipenv run ruff check .
-pipenv run ruff format .
+uv run ruff check .
+uv run ruff format .
 ```
 
 To ensure that the code is formatted correctly, we use a pre-commit hook that runs Ruff before every commit.
 Run the following once to enable hooks in your local repo:
 
 ```bash
-pipenv run pre-commit install
+uv run pre-commit install
 # optional: run on all files
-pipenv run pre-commit run --all-files
+uv run pre-commit run --all-files
 ```
 
 Hence, you will need to make sure that the code is formatted correctly before committing your changes; otherwise, the commit will fail.
@@ -122,18 +122,18 @@ Before submitting a Pull Request, please make sure:
 - You have installed project dependencies:
 
 ```bash
-pipenv sync --dev
-pipenv run playwright install  # Required to install browsers
+uv sync
+uv run playwright install  # Required to install browsers
 ```
 Start the app server:
 ```bash
-pipenv run python main.py
+uv run python main.py
 ```
 Then, from the root directory, run tests using pytest:
 ```bash
 cd tests
 
-pipenv run pytest --base-url=http://127.0.0.1:8080 -vv -n 2
+uv run pytest --base-url=http://127.0.0.1:8080 -vv -n 2
 ```
 
 ## Submitting changes
