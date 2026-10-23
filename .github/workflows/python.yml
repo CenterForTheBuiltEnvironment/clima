@@ -13,31 +13,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v10.3.1
 
       - name: Build Clima
         run: |-
-          pip install pipenv
-          pipenv install --dev
+          uv sync --frozen
 
       - name: Ruff Check
         run: |-
-          pipenv run ruff check . --output-format=github
+          uv run ruff check . --output-format=github
 
       - name: Ruff Format (verify)
         run: |-
-          pipenv run ruff format --check .
+          uv run ruff format --check .
 
       - name: Install Playwright Browsers
         run: |
-          pipenv run playwright install chromium
+          uv run playwright install chromium
 
       - name: Start Clima
         run: |-
-          pipenv run python main.py &
+          uv run python main.py &
       
       - name: Wait for Clima to be ready
         run: |
@@ -46,4 +43,4 @@ jobs:
       - name: Test Clima
         run: |-
           cd tests
-          pipenv run pytest --base-url=http://127.0.0.1:8080 -vv
+          uv run pytest --base-url=http://127.0.0.1:8080 -vv
