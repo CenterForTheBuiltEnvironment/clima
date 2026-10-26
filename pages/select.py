@@ -13,8 +13,8 @@ from pages.lib.extract_df import convert_df_units
 from pages.lib.extract_df import create_df, get_data, get_location_info
 from pages.lib.global_variables import Variables
 from pages.lib.global_element_ids import ElementIds
-from config import AppConfig, PageUrls, PageInfo
-from pages.lib.utils import get_default_global_filter_store_data
+from config import PageUrls, PageInfo
+from pages.lib.utils import carto_logo_badge, get_default_global_filter_store_data
 
 dash.register_page(
     __name__,
@@ -99,18 +99,12 @@ def layout():
                         id="map-container",
                         center=[20, 0],
                         zoom=2,
+                        minZoom=2,
+                        maxBounds=[[-85, -180], [85, 180]],
+                        maxBoundsViscosity=1,
                         style={"height": "650px", "width": "100%"},
+                        className="carto-basemap",  # see assets/carto_basemap.js
                         children=[
-                            dl.TileLayer(
-                                url=(
-                                    "https://basemaps.cartocdn.com/rastertiles/light_all"
-                                    f"/{{z}}/{{x}}/{{y}}{{r}}.png?key={AppConfig.CARTO_API_KEY}"
-                                ),
-                                attribution=(
-                                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                                    ' contributors &copy; <a href="https://carto.com/">CARTO</a>'
-                                ),
-                            ),
                             dl.GeoJSON(
                                 id=ElementIds.TAB_ONE_MAP,
                                 url=_GEO_URL,
@@ -121,6 +115,7 @@ def layout():
                             ),
                         ],
                     ),
+                    carto_logo_badge(),
                     dmc.Autocomplete(
                         id=ElementIds.TAB_ONE_MAP_SEARCH,
                         placeholder="Search city or station...",
