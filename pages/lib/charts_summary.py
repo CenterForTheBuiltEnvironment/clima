@@ -22,7 +22,7 @@ def world_map(meta):
         }
     )
 
-    fig = px.scatter_mapbox(
+    fig = px.scatter_map(
         lat_long_df,
         lat="Lat",
         lon="Long",

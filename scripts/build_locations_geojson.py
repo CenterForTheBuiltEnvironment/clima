@@ -1,6 +1,6 @@
 """
 Build assets/data/locations.geojson.gz from the two source data files.
-Run from the repo root: pipenv run python scripts/build_locations_geojson.py
+Run from the repo root: uv run python scripts/build_locations_geojson.py
 """
 
 import gzip

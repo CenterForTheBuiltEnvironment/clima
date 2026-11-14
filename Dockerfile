@@ -10,20 +10,26 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install pipenv
-RUN python -m pip install --upgrade pip \
-    && python -m pip install --no-cache-dir "pipenv>=2024.0,<2026.0"
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.1 /uv /usr/local/bin/uv
+
+# Use the image's Python 3.11 and keep the environment inside /app
+ENV UV_PYTHON_DOWNLOADS=never \
+    UV_LINK_MODE=copy \
+    UV_PROJECT_ENVIRONMENT=/app/.venv \
+    PATH="/app/.venv/bin:$PATH"
+
 # Set working directory
 WORKDIR /app
 
-# Copy Pipfile and Pipfile.lock
-COPY Pipfile Pipfile.lock ./
+# Copy the dependency files first so this layer is cached
+COPY pyproject.toml uv.lock ./
 
-# Install dependencies
-RUN pipenv sync
+# Install the locked production dependencies
+RUN uv sync --frozen --no-dev
 
 COPY . .
 
 EXPOSE 8080
 
-CMD ["pipenv", "run", "python", "main.py"]
+CMD ["python", "main.py"]

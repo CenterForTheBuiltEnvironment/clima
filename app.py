@@ -1,6 +1,8 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import DashProxy, ServersideOutputTransform
-from flask import send_file
+from flask import jsonify, send_file
+
+from pages.lib.basemap import CARTO_STYLE_ROUTE, keyed_style
 
 app = DashProxy(
     __name__,
@@ -27,6 +29,11 @@ def serve_locations_geojson():
             "Cache-Control": "public, max-age=31536000, immutable",
         },
     )
+
+
+@app.server.route(CARTO_STYLE_ROUTE)
+def serve_carto_style():
+    return jsonify(keyed_style()), {"Cache-Control": "public, max-age=86400"}
 
 
 app.index_string = """<!DOCTYPE html>

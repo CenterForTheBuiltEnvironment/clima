@@ -16,6 +16,7 @@ from pages.lib.global_element_ids import ElementIds
 from pages.lib.global_id_buttons import IdButtons
 from pages.lib.global_tab_names import TabNames
 from pages.lib.utils import (
+    carto_logo_badge,
     generate_chart_name,
     generate_units,
     generate_units_degree,
@@ -225,9 +226,15 @@ def update_layout(si_ip):
 )
 def update_map(meta):
     """Update the contents of tab two. Passing in the general info (df, meta)."""
-    return dcc.Graph(
-        config=generate_chart_name(TabNames.MAP, meta),
-        figure=world_map(meta),
+    return dmc.Box(
+        pos="relative",
+        children=[
+            dcc.Graph(
+                config=generate_chart_name(TabNames.MAP, meta),
+                figure=world_map(meta),
+            ),
+            carto_logo_badge(),
+        ],
     )
 
 

@@ -20,3 +20,4 @@ assets/data/OneBuilding*.zip
 
 assets/data/Region*.kml
 file_system_store
+.venv
